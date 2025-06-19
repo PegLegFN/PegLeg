@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://wy0yh5wkf4u4"]
+[gd_scene load_steps=31 format=3 uid="uid://wy0yh5wkf4u4"]
 
 [ext_resource type="Texture2D" uid="uid://3atkm5dd5sh1" path="res://Images/AspectRatios/2x3Aspect.png" id="1_fvh8r"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="2_tffkh"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://07k0gr21gs5e" path="res://Images/InterfaceIcons/T_UI_VKConnectionIndicator_Error_Icon.png" id="12_lmvnc"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="15_cxgs0"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="16_6w01o"]
+[ext_resource type="Resource" uid="uid://dyqo6r13rubag" path="res://Scripts/ContextMenu/ComponentLists/InventoryItemCtxList.tres" id="18_2dd5x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_740hm"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -87,7 +88,7 @@ border_width_bottom = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yfccu"]
 shader = ExtResource("10_acofu")
-shader_parameter/time = 0.446
+shader_parameter/time = 0.384
 
 [node name="InventoryEntry" type="MarginContainer" node_paths=PackedStringArray("selectionGraphics")]
 custom_minimum_size = Vector2(80, 120)
@@ -297,6 +298,7 @@ visible = false
 layout_mode = 2
 text = "999"
 horizontal_alignment = 2
+text_overrun_behavior = 3
 
 [node name="TierAndXp" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem"]
 layout_mode = 2
@@ -396,7 +398,7 @@ alignment_vertical = 0
 layout_mode = 2
 
 [node name="FavouriteBanner" type="TextureRect" parent="ItemContent/RarityOutline/AspectRatioContainer/Control"]
-self_modulate = Color(0.00474242, 0.193957, 0.838453, 1)
+self_modulate = Color(0.36, 0.370667, 1, 1)
 layout_mode = 1
 anchors_preset = -1
 anchor_top = -0.4
@@ -468,12 +470,21 @@ stretch_mode = 5
 [node name="Tooltip" type="Control" parent="."]
 layout_mode = 2
 
+[node name="InvEntryTooltipCtx" type="Node" parent="Tooltip" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("16_6w01o")
+itemSource = NodePath("../..")
+attachHorizontally = true
+componentList = ExtResource("18_2dd5x")
+
 [node name="Responsive Button Area" parent="." instance=ExtResource("10_psg1y")]
 layout_mode = 2
 outlinePadding = 0.0
 
-[node name="Node" type="Node" parent="Responsive Button Area"]
+[node name="InvEntryCtx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
 script = ExtResource("16_6w01o")
+itemSource = NodePath("../..")
+attachHorizontally = true
+componentList = ExtResource("18_2dd5x")
 
 [node name="OverflowWarningPopup" type="Control" parent="."]
 visible = false
@@ -556,5 +567,6 @@ text = "Overflow"
 [connection signal="TooltipChanged" from="." to="Tooltip" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="toggled" from="ItemContent/SelectionVisuals" to="ItemContent/SelectionVisuals/SelectionFX" method="set_visible"]
+[connection signal="ContextMenuTriggered" from="Tooltip/InvEntryTooltipCtx" to="." method="Inspect" unbinds=1]
 [connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]
-[connection signal="ContextMenuTriggered" from="Responsive Button Area/Node" to="." method="Inspect" unbinds=1]
+[connection signal="ContextMenuTriggered" from="Responsive Button Area/InvEntryCtx" to="." method="Inspect" unbinds=1]

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvodww6qg44sb"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_prynw"]
+[ext_resource type="Script" uid="uid://bhpnkuorfy3fh" path="res://Scripts/ContextMenu/Components/InspectOfferCtx.cs" id="2_prynw"]
+
+[node name="InspectOfferCtx" node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_prynw")]
+script = ExtResource("2_prynw")
+disabledPanel = NodePath("Disabled")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
+text = "Inspect"
+
+[connection signal="pressed" from="TextureButton" to="." method="Inspect"]

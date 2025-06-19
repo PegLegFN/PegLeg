@@ -38,7 +38,7 @@ public struct QuestGroupCollectionData
                 return questGroups =
                 [
                     new("Campaign", mainQuestLines.Select(GameItemTemplate.Get).ToArray()),
-                    ..eventQuestLines.Select(kvp=>new QuestGroupData(kvp.Key, kvp.Value.Quests.Select(GameItemTemplate.Get).ToArray(), kvp.Value.EventFlag))
+                    ..eventQuestLines.Select(kvp=>new QuestGroupData(kvp.Key, kvp.Value.Quests.Select(GameItemTemplate.Get).ToArray(), kvp.Value.EventTag))
                 ];
             }
             if (PegLegResourceManager.ResourceExists(content))
@@ -54,7 +54,7 @@ public struct QuestGroupCollectionData
 
     struct EventQuestLine
     {
-        public string EventFlag { get; set; }
+        public string EventTag { get; set; }
         public string[][] QuestPages { get; set; }
         [JsonIgnore]
         public IEnumerable<string> Quests => QuestPages.SelectMany(arr => arr);

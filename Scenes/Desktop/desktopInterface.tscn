@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://u5ag0k8n6eqm"]
+[gd_scene load_steps=73 format=3 uid="uid://u5ag0k8n6eqm"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_3bqtb"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="2_34fsc"]
@@ -47,6 +47,7 @@
 [ext_resource type="Texture2D" uid="uid://cj7hjf5jc1l2t" path="res://Images/InterfaceIcons/FortPlayBtn.png" id="31_retv3"]
 [ext_resource type="PackedScene" uid="uid://c4lt6qwfc4cou" path="res://Scenes/Desktop/Overlays/loading_overlay.tscn" id="31_v6low"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="35_ix213"]
+[ext_resource type="Script" uid="uid://b2m32bbt5x733" path="res://Scripts/UserInterface/EpicFixesInterface.cs" id="35_s7yuu"]
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/InterfaceIcons/PegLegIcon256.png" id="37_5b0rm"]
 [ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/card_pack_opener_window.tscn" id="41_alhak"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="41_kf5nt"]
@@ -229,9 +230,10 @@ one_shot = true
 auto_translate_mode = 1
 transparent_bg = true
 use_hdr_2d = true
-position = Vector2i(-415, 0)
 size = Vector2i(400, 135)
 mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
+visible = false
+wrap_controls = true
 exclusive = true
 borderless = true
 always_on_top = true
@@ -251,6 +253,7 @@ shopIcon = ExtResource("18_s7yuu")
 shopSound = ExtResource("19_s7yuu")
 
 [node name="DesktopContextMenu" parent="NonUI" instance=ExtResource("20_ayavh")]
+mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
 visible = false
 
 [node name="BGController" type="Control" parent="." node_paths=PackedStringArray("bgMain", "bgOverlay")]
@@ -314,7 +317,7 @@ grow_vertical = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 4
+current_tab = 7
 script = ExtResource("16_hsemp")
 
 [node name="Dashboard" parent="Content/MainTabs" instance=ExtResource("10_xfiw1")]
@@ -338,6 +341,7 @@ layout_mode = 2
 metadata/_tab_index = 3
 
 [node name="Armory" type="TabContainer" parent="Content/MainTabs"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
@@ -394,29 +398,92 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 6
 
-[node name="Extra" type="MarginContainer" parent="Content/MainTabs"]
-visible = false
+[node name="Collection Book Fix" type="MarginContainer" parent="Content/MainTabs"]
 layout_mode = 2
 metadata/_tab_index = 7
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/MainTabs/Extra"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/MainTabs/Collection Book Fix"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Content/MainTabs/Extra/VBoxContainer"]
+[node name="Label" type="Label" parent="Content/MainTabs/Collection Book Fix/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 64
 text = "Under Construction"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Content/MainTabs/Extra/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="Content/MainTabs/Collection Book Fix/VBoxContainer"]
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("20_k0gyk")
+
+[node name="EpicFixes" type="Node" parent="Content/MainTabs/Collection Book Fix" node_paths=PackedStringArray("spinbox")]
+script = ExtResource("35_s7yuu")
+spinbox = NodePath("../PanelContainer/VBoxContainer2/SpinBox")
+
+[node name="PanelContainer" type="PanelContainer" parent="Content/MainTabs/Collection Book Fix"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Content/MainTabs/Collection Book Fix/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="Label4" type="Label" parent="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 48
+text = "Collection Book Fix"
+autowrap_mode = 3
+
+[node name="Label" type="Label" parent="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 24
+text = "In Fortnite 36.10, the game thinks everyones Collection Book is one level higher than it actually is, causing it to infinitely try to grant rewards you havent earned yet.
+Which is annoying.
+
+This button will attempt to claim the ACTUAL next level of your collection book as many times as it can. Use it if your game keeps displaying the Collection Book Rewards screen"
+autowrap_mode = 3
+
+[node name="Label2" type="Label" parent="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.949987, 0.683798, 0, 1)
+text = "If a reward is a selectable reward, it will display an error. 
+Use the number selector to pick a valid choice, then try again."
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = -1.0
+max_value = 8.0
+value = -1.0
+alignment = 1
+
+[node name="Button" type="Button" parent="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = " Try Fix Collection Book "
+
+[node name="Label3" type="Label" parent="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.949987, 0.683798, 0, 1)
+text = "If an \"error\" appears stating \"Insufficiant XP\", you have now claimed all your rewards."
+horizontal_alignment = 1
 
 [node name="StatusBar" type="MarginContainer" parent="Content"]
 z_index = 5
@@ -758,6 +825,7 @@ lifetime = 1.5
 process_material = SubResource("ParticleProcessMaterial_s7yuu")
 
 [connection signal="pressed" from="NonUI/StatusIndicator/TutorialWindow/MarginContainer/PanelContainer/HBoxContainer/Button" to="NonUI/StatusIndicator/TutorialWindow" method="set_visible" binds= [false]]
+[connection signal="pressed" from="Content/MainTabs/Collection Book Fix/PanelContainer/VBoxContainer2/Button" to="Content/MainTabs/Collection Book Fix/EpicFixes" method="ClaimCollectionRewards"]
 [connection signal="IconChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="Content/OverlayWindows/AccountSwitcher" method="OpenWindow"]

@@ -76,6 +76,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void NotificationChangedEventHandler(bool isNotificationVisible);
 
     [Signal]
+    public delegate void BookmarkChangedEventHandler(bool isBookmarkVisible);
+
+    [Signal]
     public delegate void FavoriteChangedEventHandler(bool isFavoriteVisible);
 
     [Signal]
@@ -112,8 +115,6 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public bool includeDescriptionInTooltip = false;
     [Export]
     public bool preventInteractability;
-    [Export]
-    public bool preventDevInteractability;
     [Export]
     public bool forceInteractability;
     [Export]
@@ -152,11 +153,19 @@ public partial class GameItemEntry : Control, IRecyclableEntry
             Pressed += PerformRecycleSelection;
         EmitSignal(SignalName.InteractableChanged, interactableWhenEmpty);
         AppConfig.OnConfigChanged += OnConfigChanged;
+        GameAccount.BookmarksChanged += UpdateBookmark;
     }
 
-    private void OnConfigChanged(string arg1, string arg2, JsonValue arg3)
+
+    private void OnConfigChanged(string section, string key, JsonValue value)
     {
         SetInteractable();
+    }
+
+    private void UpdateBookmark()
+    {
+        if (currentItem is not null)
+            EmitSignalBookmarkChanged(GameAccount.activeAccount.IsBookmarked(currentItem.template));
     }
 
     public override void _ExitTree()
@@ -226,7 +235,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         if (item.template?.Type == "Accolades")
             amount = item.template?["AccoladeXP"]?.GetValue<int>() ?? 1;
-        string amountText = compactifyAmount ? amount.Compactify() : amount.ToString();
+        string amountText = compactifyAmount ? amount.Compactify() : amount.Notate();
 
         if (addXToAmount)
             amountText = "x" + amountText;
@@ -294,7 +303,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.TypeChanged, type ?? item.templateId?.Split(":")[0]);
         EmitSignal(SignalName.RarityChanged, item.template?.RarityColor ?? missingRarityColor);
 
-        var tooltipAmount = amountNeeded ? ((addXToAmount ? "x" : "") + amount) : null;
+        var tooltipAmount = amountNeeded ? ((addXToAmount ? "x" : "") + amount.Notate()) : null;
         if (type == "Ingredient" && inspectorOverride is null)
             tooltipAmount = item.TotalQuantity.ToString();
 
@@ -350,7 +359,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.LevelMaxChanged, maxLevel);
         EmitSignal(SignalName.LevelProgressChanged, levelProgress);
 
-        SetInteractable(autoInteractableTypes.Contains(currentItem.template?.Type.ToLower()));
+        SetInteractable(autoInteractableTypes.Contains(currentItem.template?.Type.ToLower()) || currentItem.CardPackChoices is not null);
 
         //if survivor, set personality icons
 
@@ -367,6 +376,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         EmitSignal(SignalName.OverflowWarning, item.attributes?["inventory_overflow_date"]?.GetValueKind()==System.Text.Json.JsonValueKind.String);
         EmitSignal(SignalName.NotificationChanged, !item.IsSeen);
+        EmitSignal(SignalName.BookmarkChanged, GameAccount.activeAccount.IsBookmarked(item.template));
         EmitSignal(SignalName.FavoriteChanged, item.IsFavourited);
         EmitSignal(SignalName.MaxTierChanged, Mathf.Min((item.template?.RarityLevel ?? 0) + 1, 5));
         EmitSignal(SignalName.TierChanged, tier);
@@ -389,8 +399,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         "weapon",
         "trap",
         "hero",
-        "defender",
-        "cardpack"
+        "defender"
     ];
 
     bool interactableState;
@@ -403,7 +412,6 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
     bool IsInteractable =>
         ForceInteractability ||
-        (AppConfig.Get("advanced", "developer", false) && !preventDevInteractability) ||
         (
             interactableState &&
             (

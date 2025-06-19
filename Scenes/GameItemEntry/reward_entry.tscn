@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://byv58kd1qnkw5"]
+[gd_scene load_steps=15 format=3 uid="uid://byv58kd1qnkw5"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_ww2ku"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="2_jy1bu"]
@@ -11,6 +11,8 @@
 [ext_resource type="Script" uid="uid://hfqwad6httyj" path="res://Scripts/UIElements/Signal Logic/VariantIsNotNull.cs" id="9_xa0w7"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="10_1eq7g"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="11_tkmrp"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="12_tj077"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="13_4i2dj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kfwxn"]
 resource_local_to_scene = true
@@ -189,9 +191,19 @@ mouse_filter = 2
 texture = ExtResource("8_oce35")
 expand_mode = 1
 
+[node name="CtxNoInteract" type="Node" parent="Overlays" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("12_tj077")
+itemSource = NodePath("../..")
+componentList = ExtResource("13_4i2dj")
+
 [node name="Responsive Button Area" parent="." instance=ExtResource("11_tkmrp")]
 visible = false
 layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("12_tj077")
+itemSource = NodePath("../..")
+componentList = ExtResource("13_4i2dj")
 
 [connection signal="AmmoIconChanged" from="." to="Overlays/AmountContainer/LeftIconContainer/LeftNullCheck" method="Check"]
 [connection signal="AmmoIconChanged" from="." to="Overlays/AmountContainer/LeftIconContainer/LeftIcon" method="set_texture"]

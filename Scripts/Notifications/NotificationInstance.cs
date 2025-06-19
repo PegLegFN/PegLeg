@@ -196,6 +196,12 @@ public partial class NotificationInstance : Control
         superBtn.Text = data.superAction;
     }
 
+	public void PerformAction(string actionType)
+	{
+		currentContainer.data.SubmitAction(actionType);
+		Dismiss();
+	}
+
 	public void AnimateStage(float toStage, double duration, double delay = 0, float? fromStage = null)
     {
 		GD.Print("animating stage");

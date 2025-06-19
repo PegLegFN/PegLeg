@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5q5lt4tovbhd"]
+
+[ext_resource type="PackedScene" uid="uid://bk6fttr5h8nvm" path="res://Scenes/ContextComponents/toggle_ctx.tscn" id="1_7p6dw"]
+[ext_resource type="Script" uid="uid://bhkfa18wtng6y" path="res://Scripts/ContextMenu/Components/BookmarkItemCtx.cs" id="2_28rkn"]
+[ext_resource type="Texture2D" uid="uid://c1wkw3srpf7m" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_Alt_128.png" id="3_7myyx"]
+[ext_resource type="Texture2D" uid="uid://b3m1n41ikas8t" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_128.png" id="4_eeo2m"]
+
+[node name="BookmarkItemCtx" node_paths=PackedStringArray("toggleIcon", "disabledPanel") instance=ExtResource("1_7p6dw")]
+script = ExtResource("2_28rkn")
+toggleIcon = NodePath("MarginContainer/HBoxContainer/ToggleIconArea")
+disabledPanel = NodePath("Disabled")
+
+[node name="OffIcon" parent="MarginContainer/HBoxContainer/ToggleIconArea" index="0"]
+texture = ExtResource("3_7myyx")
+
+[node name="OnIcon" parent="MarginContainer/HBoxContainer/ToggleIconArea" index="1"]
+texture = ExtResource("4_eeo2m")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="2"]
+text = "Reminder"
+
+[connection signal="pressed" from="TextureButton" to="." method="ToggleBookmark"]

@@ -644,6 +644,11 @@ public class GameItemTemplate
         "Hero" or "Worker" or "Defender" or "Schematic" or "Quest" or "AccountResource" or "ConsumableAccountItem" or "CardPack" => true,
         _ => false
     };
+    public bool CanBeFavourited => Type switch
+    {
+        "Hero" or "Worker" or "Defender" or "Schematic" => true,
+        _ => false
+    };
 
     public string CollectionProfile => Type == "Schematic" ? FnProfileTypes.SchematicCollection : FnProfileTypes.PeopleCollection;
     public string Name => rawData["Name"].ToString();
@@ -765,8 +770,8 @@ public class GameItemTemplate
 
     public GameItemTemplate TryGetNextTier()
     {
-        if (rawData["TierUpRecipe"]?["Result"]?.ToString() is string rarityUpResult)
-            return Get(rarityUpResult);
+        if (rawData["TierUpRecipe"]?["Result"]?.ToString() is string tierUpResult)
+            return Get(tierUpResult);
         return null;
     }
 

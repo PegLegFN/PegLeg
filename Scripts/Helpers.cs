@@ -350,6 +350,25 @@ static class Helpers
         return combinedNumber + (milestoneLevel==0 ? "" : compactNumberMilestones[milestoneLevel-1]);
     }
 
+    public static string Notate(this int number)
+    {
+        if (number == int.MaxValue)
+            return "Max";
+        string soFar = "";
+        string raw = new([.. number.ToString().Reverse()]);
+        int milestones = (raw.Length - 1)/3;
+        for (int i = 0; i < milestones; i++)
+        {
+            int m = i * 3;
+            soFar = "," + new string([..raw[m..(m + 3)].Reverse()]) + soFar;
+        }
+        for (int i = milestones*3; i < raw.Length; i++)
+        {
+            soFar = raw[i] + soFar;
+        }
+        return soFar;
+    }
+
     public static string FormatTimeSeconds(this int timeInSeconds) =>
         TimeSpan.FromSeconds(timeInSeconds).FormatTime();
 
@@ -495,14 +514,6 @@ static class Helpers
             weights = weights[..source.Length];
         int lastIdx = Array.IndexOf(source, prev);
         return source[weights.RandomIndexFromWeights(lastIdx)];
-    }
-
-    [DllImport("user32.dll")]
-    static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-    public static IntPtr WindowHandle => new(DisplayServer.WindowGetNativeHandle(DisplayServer.HandleType.WindowHandle));
-    public static void SetMainWindowVisible(bool visible = true)
-    {
-        ShowWindow(WindowHandle, visible ? 5 : 0);
     }
 
     //workaround for bug introduced in 4.3

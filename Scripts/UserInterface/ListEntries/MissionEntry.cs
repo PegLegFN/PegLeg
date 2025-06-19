@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
-using System.Xml.Linq;
 
 public partial class MissionEntry : Control, IRecyclableEntry
 {
@@ -58,7 +57,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
     [Export]
     Texture2D defaultBackground;
 
-    GameMission currentMission = null;
+    public GameMission currentMission { get; private set; } = null;
     IMissionHighlightProvider highlightedItemProvider;
 
     public Control node => this;
@@ -75,7 +74,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
         if (section != "missions")
             return;
         if (key == "show_background")
-            EmitSignal(SignalName.BackgroundVisible, val.TryGetValue(out bool show) ? show : true);
+            EmitSignal(SignalName.BackgroundVisible, !val.TryGetValue(out bool show) || show);
     }
 
     public override void _ExitTree()

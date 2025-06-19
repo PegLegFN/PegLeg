@@ -1,11 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxxycun2kva7"]
+[gd_scene load_steps=11 format=3 uid="uid://bxxycun2kva7"]
 
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_n2fx7"]
 [ext_resource type="Script" uid="uid://duejkncuis5w3" path="res://Scripts/UserInterface/ListEntries/MissionRewardEntry.cs" id="1_woexs"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="2_isv5j"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="2_lyutd"]
+[ext_resource type="Resource" uid="uid://da112m72yfpe2" path="res://Scripts/ContextMenu/ComponentLists/MissionRewardCtxList.tres" id="3_b0eut"]
 [ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="3_vd1o8"]
 [ext_resource type="PackedScene" uid="uid://dbrrcnce14w8h" path="res://Scenes/GameItemEntry/mission_collection_highlight_item.tscn" id="4_lffv6"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_bof5f"]
+[ext_resource type="Texture2D" uid="uid://b3m1n41ikas8t" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_128.png" id="9_qt2jc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("2_isv5j")
@@ -15,8 +18,8 @@ custom_minimum_size = Vector2(260, 30)
 offset_right = 556.0
 offset_bottom = 30.0
 script = ExtResource("1_woexs")
-missionEntry = NodePath("MarginContainer")
-itemEntry = NodePath("MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem")
+missionEntry = NodePath("MissionEntry")
+itemEntry = NodePath("MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem")
 
 [node name="Button" type="Button" parent="."]
 show_behind_parent = true
@@ -24,7 +27,13 @@ custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="Ctx" type="Node" parent="Button" node_paths=PackedStringArray("missionSource", "itemSource")]
+script = ExtResource("2_lyutd")
+missionSource = NodePath("../../MissionEntry")
+itemSource = NodePath("../../MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem")
+componentList = ExtResource("3_b0eut")
+
+[node name="MissionEntry" type="MarginContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -33,11 +42,11 @@ theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 script = ExtResource("1_n2fx7")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TheaterCat" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="TheaterCat" type="Label" parent="MissionEntry/HBoxContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 theme_override_constants/outline_size = 4
@@ -46,7 +55,7 @@ text = "T"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="MarginContainer/HBoxContainer/TheaterCat"]
+[node name="TextureRect" type="ColorRect" parent="MissionEntry/HBoxContainer/TheaterCat"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -57,73 +66,83 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.688, 0.28, 1, 1)
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="MissionEntry/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("3_vd1o8")
 expand_mode = 3
 
-[node name="PowerLevel" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="PowerLevel" type="Label" parent="MissionEntry/HBoxContainer"]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "144"
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MissionEntry/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry/HBoxContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MissionCollectionHighlightItem" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("4_lffv6")]
+[node name="MissionCollectionHighlightItem" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource("4_lffv6")]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 compactifyAmount = true
 
-[node name="Label" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon" index="0"]
+[node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon" index="0"]
 theme_override_font_sizes/font_size = 10
 
-[node name="NotificationLabel" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon" index="1"]
-layout_mode = 0
+[node name="NotificationLabel" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon" index="1"]
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 16.0
 offset_bottom = 29.0
 theme_override_font_sizes/font_size = 8
 
-[node name="Responsive Button Area" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon" index="2"]
+[node name="Responsive Button Area" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon" index="3"]
 visible = false
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Ctx" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem/Icon/Responsive Button Area" index="1" node_paths=PackedStringArray("missionSource")]
+missionSource = NodePath("../../../../../../..")
+
+[node name="Label" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Shadowshard Shadowshard Shadowshard "
 text_overrun_behavior = 3
 
-[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Control" type="Control" parent="MissionEntry/HBoxContainer/MarginContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Responsive Button Area2" parent="MarginContainer/HBoxContainer/MarginContainer" instance=ExtResource("6_bof5f")]
+[node name="Responsive Button Area2" parent="MissionEntry/HBoxContainer/MarginContainer" instance=ExtResource("6_bof5f")]
 layout_mode = 2
 mouse_filter = 2
 outlinePadding = 3.0
 
-[connection signal="pressed" from="Button" to="MarginContainer" method="InspectMission"]
-[connection signal="IconChanged" from="MarginContainer" to="MarginContainer/HBoxContainer/Icon" method="set_texture"]
-[connection signal="PowerLevelChanged" from="MarginContainer" to="MarginContainer/HBoxContainer/PowerLevel" method="set_text"]
-[connection signal="TheaterCategoryChanged" from="MarginContainer" to="MarginContainer/HBoxContainer/TheaterCat" method="set_text"]
-[connection signal="TheaterColorChanged" from="MarginContainer" to="MarginContainer/HBoxContainer/TheaterCat/TextureRect" method="set_color"]
-[connection signal="TooltipChanged" from="MarginContainer" to="Button" method="set_tooltip_text"]
-[connection signal="InteractableChanged" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MarginContainer/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_visible"]
-[connection signal="NameChanged" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
-[connection signal="TooltipChanged" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MarginContainer/HBoxContainer/MarginContainer/Control" method="set_tooltip_text"]
-[connection signal="TooltipChanged" from="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MarginContainer/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_tooltip_text"]
-[connection signal="pressed" from="MarginContainer/HBoxContainer/MarginContainer/Responsive Button Area2" to="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" method="Inspect"]
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("9_qt2jc")
+expand_mode = 1
 
-[editable path="MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem"]
+[connection signal="pressed" from="Button" to="MissionEntry" method="InspectMission"]
+[connection signal="IconChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/Icon" method="set_texture"]
+[connection signal="PowerLevelChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/PowerLevel" method="set_text"]
+[connection signal="TheaterCategoryChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/TheaterCat" method="set_text"]
+[connection signal="TheaterColorChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/TheaterCat/TextureRect" method="set_color"]
+[connection signal="TooltipChanged" from="MissionEntry" to="Button" method="set_tooltip_text"]
+[connection signal="BookmarkChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/TextureRect" method="set_visible"]
+[connection signal="InteractableChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_visible"]
+[connection signal="NameChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Control" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_tooltip_text"]
+[connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" to="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem" method="Inspect"]
+
+[editable path="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MissionCollectionHighlightItem"]

@@ -72,6 +72,9 @@ shader_parameter/VerticalMask = 0.0
 shader_parameter/Frame = 29
 shader_parameter/scriptTime = false
 shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
 [node name="DesktopNotificationV2Panel" type="Control" node_paths=PackedStringArray("canvasGroup", "interactionBlocker", "buttons", "headerLabel", "bodyLabel", "itemIcon", "flipbookIcon", "firstBtn", "secondBtn", "superBtn", "sfxPlayer")]
 layout_mode = 3
@@ -83,14 +86,14 @@ script = ExtResource("1_hhscf")
 itemAnimCurve = SubResource("Curve_0wru6")
 canvasGroup = NodePath("CanvasGroup")
 interactionBlocker = NodePath("CanvasGroup/MarginContainer/InteractionBlocker")
-buttons = [NodePath("CanvasGroup/MarginContainer/Content/Overlay/Button"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer/FirstAction"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer/SecondAction"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer/PrimaryAction")]
+buttons = [NodePath("CanvasGroup/MarginContainer/Content/Overlay/Button"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/FirstAction"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/SecondAction"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/PrimaryAction")]
 headerLabel = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Header")
-bodyLabel = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body")
+bodyLabel = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/BodyText")
 itemIcon = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/TextureRect/ItemIcon")
 flipbookIcon = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/TextureRect/FlipbookIcon")
-firstBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer/FirstAction")
-secondBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer/SecondAction")
-superBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer/PrimaryAction")
+firstBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/FirstAction")
+secondBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/SecondAction")
+superBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/PrimaryAction")
 sfxPlayer = NodePath("AudioStreamPlayer")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="."]
@@ -223,182 +226,190 @@ layout_mode = 2
 text = "Item Shops Have Updated!"
 text_overrun_behavior = 3
 
-[node name="Body" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="Body" type="VBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/line_spacing = 1
+theme_override_constants/separation = 2
+
+[node name="BodyText" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 12
-text = "V-Bucks: 30,  Legendary Survivors: 2, Upgrade Llamas: 3"
+text = "V-Bucks: 30,  Legendary Survivors: 2, 
+Upgrade Llamas: 3
+Line 3"
 autowrap_mode = 3
 text_overrun_behavior = 3
 
-[node name="ItemRow1" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="ItemRow1" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/separation = 2
 
-[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1"]
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1"]
 visible = false
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Weekly Shop:"
 
-[node name="NotificationHighlightItem" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem2" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem2" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem3" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem3" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem4" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem4" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem5" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem5" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem6" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem6" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem7" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem7" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem8" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem8" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow1"]
+[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1"]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "+99"
 
-[node name="ItemRow2" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="ItemRow2" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2"]
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2"]
 visible = false
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Event Shop:"
 
-[node name="NotificationHighlightItem9" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem9" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem10" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem10" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem11" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem11" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem12" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem12" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem13" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem13" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem14" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem14" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem15" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem15" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem16" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem16" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ItemRow2"]
+[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "+99"
 
-[node name="Buttons" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
-visible = false
+[node name="ButtonRow" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 8
 theme_override_constants/separation = 0
 
-[node name="InInventory" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="InInventory" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow"]
+visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 script = ExtResource("8_5edey")
 compactifyAmount = true
 showSingleItemAmount = true
 
-[node name="Panel" type="Panel" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory"]
+[node name="Panel" type="Panel" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0wru6")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory"]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="Icon" type="TextureRect" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer/MarginContainer2"]
+[node name="Icon" type="TextureRect" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer/MarginContainer2"]
 layout_mode = 2
 texture = ExtResource("9_0wru6")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = ": "
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Icon" type="TextureRect" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("9_l1o1y")
 expand_mode = 3
 
-[node name="AmountText" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer"]
+[node name="AmountText" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "2.56k"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = " / 500"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="FirstAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer"]
+[node name="FirstAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "First"
 
-[node name="SecondAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer"]
+[node name="SecondAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Second"
 
-[node name="PrimaryAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/HBoxContainer"]
+[node name="PrimaryAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"SlantedActionButton"
 theme_override_font_sizes/font_size = 12
@@ -482,7 +493,10 @@ max_polyphony = 10
 bus = &"Notifications"
 
 [connection signal="pressed" from="CanvasGroup/MarginContainer/Content" to="." method="Dismiss"]
-[connection signal="AmountChanged" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory" to="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
-[connection signal="IconChanged" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory" to="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
-[connection signal="TooltipChanged" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory" to="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Buttons/InInventory" method="set_tooltip_text"]
+[connection signal="AmountChanged" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory" to="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
+[connection signal="IconChanged" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory" to="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="TooltipChanged" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory" to="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/InInventory" method="set_tooltip_text"]
+[connection signal="pressed" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/FirstAction" to="." method="PerformAction" binds= ["first"]]
+[connection signal="pressed" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/SecondAction" to="." method="PerformAction" binds= ["second"]]
+[connection signal="pressed" from="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/PrimaryAction" to="." method="PerformAction" binds= ["super"]]
 [connection signal="pressed" from="CanvasGroup/MarginContainer/Content/Overlay/Button" to="." method="Dismiss"]

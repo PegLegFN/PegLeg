@@ -95,6 +95,18 @@ autowrap_mode = 3
 [node name="Control" type="Control" parent="."]
 layout_mode = 2
 
+[node name="NotificationLabel" type="Label" parent="Control"]
+visible = false
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 12.0
+offset_bottom = 25.0
+rotation = -0.1309
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+text = " ! "
+
 [node name="CheckButton" type="CheckButton" parent="Control"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -132,6 +144,7 @@ layout_mode = 2
 
 [connection signal="AmountChanged" from="." to="PanelContainer/IconContainer/Pinata/AmountLabel" method="set_text"]
 [connection signal="IconChanged" from="." to="PanelContainer/IconContainer/Pinata" method="set_texture"]
+[connection signal="NotificationChanged" from="." to="Control/NotificationLabel" method="set_visible"]
 [connection signal="RarityChanged" from="." to="PanelContainer/GradientContainer/Gradient" method="set_self_modulate"]
 [connection signal="SubtypeIconChanged" from="." to="PanelContainer/IconContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]

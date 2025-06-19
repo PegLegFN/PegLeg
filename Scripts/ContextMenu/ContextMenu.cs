@@ -1,90 +1,118 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-public partial class ContextMenu : PopupPanel
+public partial class ContextMenu : Window
 {
+    static ContextMenu inst;
     [Export]
-    Control searchOn;
-    [Export]
-    BaseContextComponent[] contextComponents;
+    Control contextComponentsSource;
     [Export]
     Control componentParent;
+    [Export]
+    Control listTarget;
+    [Export]
+    Control listAnimation;
+    [Export]
+    Control scaleAnimation;
     Dictionary<string, BaseContextComponent> contextComponentDict = [];
+    static readonly Vector2[] fullPassthrough = new Vector2[2];
 
     public override void _Ready()
     {
-        if (searchOn is null)
-            return;
-        searchOn.ChildEnteredTree += TryAddHook;
-        foreach (var item in searchOn.FindChildren("*", "", true))
-            TryAddHook(item);
-        Transparent = true;
-        foreach (var item in contextComponents)
+        inst = this;
+        Visible = true;
+        this.Win64RemoveFromTaskbar();
+        MousePassthroughPolygon = fullPassthrough;
+        int chCount = contextComponentsSource.GetChildCount();
+
+        for (int i = 0; i < chCount; i++)
         {
-            contextComponentDict.TryAdd(item.Id, item);
-            if(item.GetParent() is Node parent)
-                parent.RemoveChild(item);
+            var cNode = contextComponentsSource.GetChild(0);
+            if (cNode is not BaseContextComponent comp)
+            {
+                contextComponentsSource.RemoveChild(cNode);
+                cNode.QueueFree();
+                continue;
+            }
+            contextComponentDict.TryAdd(comp.Id, comp);
+            contextComponentsSource.RemoveChild(comp);
+            comp.menu = this;
         }
 
-        CloseRequested += OnClosed;
-    }
-
-    List<ContextMenuHook> attachedHooks = [];
-    void TryAddHook(Node hookNode)
-    {
-        if (hookNode is not ContextMenuHook hook || attachedHooks.Contains(hook))
-            return;
-        attachedHooks.Add(hook);
-        hook.ContextMenuTriggered += ShowMenu;
-    }
-
-    void RemoveHook(ContextMenuHook hook)
-    {
-        if (!attachedHooks.Contains(hook))
-            return;
-        attachedHooks.Remove(hook);
-        hook.ContextMenuTriggered -= ShowMenu;
-    }
-
-    public override void _ExitTree()
-    {
-        foreach (var item in attachedHooks)
-        {
-            item.ContextMenuTriggered -= ShowMenu;
-        }
-        attachedHooks.Clear();
+        FocusExited += CloseMenu;
     }
 
     List<HSeparator> activeSeparators = [];
     List<BaseContextComponent> activeComponents = [];
-    void ShowMenu(ContextMenuHook hook)
+    Tween animTween;
+    bool open;
+    bool isOpening = false;
+
+    public static void ShowMenu(ContextMenuHook hook) => inst?.ShowMenuInst(hook);
+    async void ShowMenuInst(ContextMenuHook hook)
     {
-        OnClosed();
-        foreach (var item in hook.contextComponents)
+        scaleAnimation.Scale = Vector2.Zero;
+        await Helpers.WaitForFrame();
+        MousePassthroughPolygon = fullPassthrough;
+        var compList = hook.componentList.components;
+        bool hasComps = false;
+        for (int i = 0; i < compList.Length; i++)
         {
-            if (item == "-")
+            string componentId = compList[i];
+            if (componentId.StartsWith("d_"))
+            {
+                if (!AppConfig.Get("advanced", "developer", false))
+                    continue;
+                componentId = componentId[2..];
+            }
+            hasComps = true;
+            if (componentId == "-")
             {
                 HSeparator sep = new();
                 componentParent.AddChild(sep);
                 activeSeparators.Add(sep);
                 continue;
             }
-            if(contextComponentDict.TryGetValue(item, out var comp) && !activeComponents.Contains(comp))
+            if (contextComponentDict.TryGetValue(componentId, out var comp) && !activeComponents.Contains(comp))
             {
                 componentParent.AddChild(comp);
+                activeComponents.Add(comp);
                 comp.Update(hook);
             }
         }
+        if (!hasComps)
+            return;
 
+        if (open)
+            Clear();
+        open = true;
+        isOpening = true;
+
+        if (animTween?.IsRunning() == true)
+            animTween.Stop();
+
+        Position = Vector2I.One*-100;
+        listTarget.Size = Vector2.Zero;
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
+
+        //var targetListSize = listTarget.GetCombinedMinimumSize();
+        var targetListSize = listTarget.Size;
+        //GD.Print("tar: " + targetListSize);
+        listAnimation.CustomMinimumSize = targetListSize;
+        scaleAnimation.Size = Vector2.Zero;
+        Size = (Vector2I)scaleAnimation.Size;
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
 
         var ds = DisplayServer.Singleton;
         var targetPos = ds.MouseGetPosition();
-        var oobPush = -Size;
+        var fullSize = Size;
+        var oobPush = -fullSize;
         if (hook.attachTo is not null)
         {
-            var window = GetWindow();
+            var window = hook.attachTo.GetWindow();
             var hscale = (float)window.ContentScaleSize.X / window.Size.X;
             var vscale = (float)window.ContentScaleSize.Y / window.Size.Y;
             var scale = Mathf.Max(hscale, vscale);
@@ -109,10 +137,18 @@ public partial class ContextMenu : PopupPanel
         var clamp = ds.ScreenGetUsableRect(screen);
         var clampMax = clamp.Position + (clamp.Size - Size);
 
+        bool flipH = false;
+        bool flipV = false;
         if (targetPos.X > clampMax.X)
+        {
+            flipH = true;
             targetPos.X += oobPush.X;
+        }
         if (targetPos.Y > clampMax.Y)
+        {
+            flipV = true;
             targetPos.Y += oobPush.Y;
+        }
 
         targetPos.X = Mathf.Min(targetPos.X, clampMax.X);
         targetPos.Y = Mathf.Min(targetPos.Y, clampMax.Y);
@@ -120,13 +156,58 @@ public partial class ContextMenu : PopupPanel
         targetPos.X = Mathf.Max(targetPos.X, clamp.Position.X);
         targetPos.Y = Mathf.Max(targetPos.Y, clamp.Position.Y);
 
+        listAnimation.CustomMinimumSize = targetListSize * Vector2.Right;
+        scaleAnimation.Size = Vector2.Zero;
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
+        scaleAnimation.Position = Vector2.Zero;
+        if (flipH)
+        {
+            scaleAnimation.Position += scaleAnimation.Size * Vector2.Right;
+        }
+        if (flipV)
+        {
+            scaleAnimation.Position += (fullSize - scaleAnimation.Size) * Vector2.Down;
+        }
+        Size = (Vector2I)scaleAnimation.Size;
+
         Position = targetPos;
-        Visible = true;
+        MousePassthroughPolygon = [];
         GrabFocus();
+        isOpening = false;
+
+        animTween = CreateTween().SetParallel().SetTrans(Tween.TransitionType.Sine);
+        animTween.TweenProperty(scaleAnimation, "scale", Vector2.One, 0.1f).SetEase(Tween.EaseType.Out);
+        if (flipH)
+        {
+            animTween.TweenProperty(scaleAnimation, "position:x", 0, 0.1f).SetEase(Tween.EaseType.Out);
+        }
+        if (flipV)
+        {
+            animTween.TweenProperty(scaleAnimation, "position:y", 0, 0.1f).SetDelay(0.05f);
+        }
+        animTween.TweenProperty(listAnimation, "custom_minimum_size", targetListSize, 0.1f).SetDelay(0.05f);
+        animTween.Finished += () =>
+        {
+            Size = (Vector2I)scaleAnimation.Size;
+        };
     }
 
+    public async void CloseMenu()
+    {
+        if (!open)
+            return;
+        await Helpers.WaitForFrame();
+        if (isOpening)
+            return;
+        scaleAnimation.Scale = Vector2.Zero;
+        await Helpers.WaitForFrame();
+        MousePassthroughPolygon = fullPassthrough;
+        open = false;
+        Clear();
+    }
 
-    private void OnClosed()
+    void Clear()
     {
         foreach (var sep in activeSeparators)
         {

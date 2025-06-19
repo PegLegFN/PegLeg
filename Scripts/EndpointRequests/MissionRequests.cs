@@ -429,6 +429,7 @@ public class GameMission
             "v" => 4,
             _ => 0
         };
+    public int TileIdx => missionData["tileIndex"]?.GetValue<int>() ?? -1;
     public bool IsFourPlayer => difficultyInfo?["DisplayName"]?.ToString().EndsWith("4 Players") ?? false;
     public JsonArray SearchTags => missionData["searchTags"]?.AsArray();
 

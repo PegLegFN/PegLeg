@@ -26,18 +26,6 @@ public partial class WindowSizeDragger : Control
         Right = 3
     }
 
-    public void Magic()
-    {
-        Helpers.SetMainWindowVisible(false);
-        statusIndicator.Visible = true;
-    }
-
-    public void Unmagic()
-    {
-        Helpers.SetMainWindowVisible(true);
-        statusIndicator.Visible = false;
-    }
-
     public override void _GuiInput(InputEvent @event)
     {
         if (@event is InputEventMouseButton mouseEvent)

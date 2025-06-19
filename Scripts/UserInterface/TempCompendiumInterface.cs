@@ -44,7 +44,7 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
         template.GenerateSearchTags();
 
         uniqueTemplates.AddOrUpdate(
-            template.DisplayName,
+            template.TemplateId, //use DisplayName for deduplication, or TemplateId to prevent deduplication
             template,
             (k, v) => v.RarityLevel < template.RarityLevel ? template : v
         );

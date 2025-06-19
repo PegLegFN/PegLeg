@@ -1,11 +1,10 @@
 using Godot;
-using System;
+using System.Text.Json.Nodes;
 
 public partial class TrayIcon : StatusIndicator
 {
-
-    static NotificationData? _tutorialNotif;
-    static NotificationData tutorialNotif => _tutorialNotif ??= new()
+    NotificationData? _tutorialNotif;
+    NotificationData tutorialNotif => _tutorialNotif ??= new()
     {
         header = "PegLeg minimised to Tray",
         body = "Click the Tray Icon or reopen PegLeg to resume.\nNotifications will still be delivered when minimised.\nRight-click the tray icon to fully close PegLeg.",
@@ -13,6 +12,7 @@ public partial class TrayIcon : StatusIndicator
         urgent = true,
         firstAction = "Don't Show Again",
         itemColor = Color.FromHtml("#ffcc00"),
+        OnAction = RespondToAction
     };
 
     bool minimised = false;
@@ -38,11 +38,24 @@ public partial class TrayIcon : StatusIndicator
         menu.AddItem("Close PegLeg", 404);
         if (OS.HasFeature("test"))
             Icon = testBuildIcon;
+        hasShownTutorial = !AppConfig.Get("notification", "on_minimised", true);
         if (OS.HasFeature("editor"))
         {
             Visible = false;
             Icon = editorIcon;
         }
+        AppConfig.OnConfigChanged += OnConfigChanged;
+    }
+
+    private void OnConfigChanged(string section, string key, JsonValue value)
+    {
+        if (section == "notification" && key == "on_minimised" && value.TryGetValue(out bool showTutoriel))
+            hasShownTutorial = !showTutoriel;
+    }
+
+    private void RespondToAction(string _)
+    {
+        AppConfig.Set("notification", "on_minimised", false);
     }
 
     public void HandleMenu(long id)
@@ -61,7 +74,7 @@ public partial class TrayIcon : StatusIndicator
         if (!minimised)
         {
             minimised = true;
-            Helpers.SetMainWindowVisible(false);
+            GetWindow().Win64SetVisible(false);
             if (mainAppRoot is not null)
             {
                 mainAppRoot.Visible = false;
@@ -94,7 +107,7 @@ public partial class TrayIcon : StatusIndicator
         if (minimised)
         {
             minimised = false;
-            Helpers.SetMainWindowVisible(true);
+            window.Win64SetVisible(true);
             if (mainAppRoot is not null)
             {
                 mainAppRoot.ProcessMode = ProcessModeEnum.Inherit;

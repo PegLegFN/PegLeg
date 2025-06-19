@@ -12,6 +12,8 @@ public partial class VolumeHook : Node
     public delegate void UpdateMuteIconEventHandler(Texture2D icon);
 
     [Export]
+    Slider volSlider;
+    [Export]
 	string targetBusName;
 
     static readonly Texture2D soundOnTexture = ResourceLoader.Load<Texture2D>("res://Images/InterfaceIcons/T-Icon-Sound-On-L.png");
@@ -19,12 +21,19 @@ public partial class VolumeHook : Node
 
     public override void _Ready()
     {
+        if(volSlider is not null)
+        {
+            volSlider.ValueChanged += SetVolume;
+            volSlider.DragEnded += PrintVolume;
+        }
         if (string.IsNullOrWhiteSpace(targetBusName))
             targetBusName = Name;
         EmitSignal(SignalName.UpdateBusName, targetBusName);
         AppConfig.OnConfigChanged += CheckConfigUpdate;
 
         EmitSignal(SignalName.UpdateMuteIcon, VolumeController.GetBusMuted(targetBusName) ? soundOffTexture : soundOnTexture);
+        if (volSlider is not null)
+            volSlider.SetValueNoSignal(VolumeController.GetBusVolume(targetBusName));
         EmitSignal(SignalName.UpdateVolumeState, VolumeController.GetBusVolume(targetBusName));
     }
 
@@ -39,8 +48,11 @@ public partial class VolumeHook : Node
             EmitSignal(SignalName.UpdateVolumeState, value.GetValue<float>());
     }
 
-    public void SetVolume(float newValue) => 
-        VolumeController.SetBusVolume(targetBusName, newValue);
+    public void SetVolume(double newValue) => 
+        VolumeController.SetBusVolume(targetBusName, (float)newValue);
+
+    public void PrintVolume(bool _) =>
+        VolumeController.SetBusVolume(targetBusName, (float)volSlider.Value, true);
 
     public void ToggleMute() => 
         VolumeController.ToggleBusMuted(targetBusName);

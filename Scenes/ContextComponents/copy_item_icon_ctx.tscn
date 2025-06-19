@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://bu6qougeyqaig"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_j4dxs"]
+[ext_resource type="Script" uid="uid://hxulhjn0285p" path="res://Scripts/ContextMenu/Components/CopyItemIconCtx.cs" id="2_v3mwx"]
+[ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="3_v3mwx"]
+[ext_resource type="Texture2D" uid="uid://bu8o0vuqpgyt2" path="res://Images/SDF/MSDF/T_UI_Icon_UIKit_LobbyImage_MSDF.png" id="4_2xt8c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wyyog"]
+shader = ExtResource("3_v3mwx")
+shader_parameter/blendAmount = 1.0
+shader_parameter/threshold = 0.35
+shader_parameter/smoothness = 0.35
+shader_parameter/msdf = true
+shader_parameter/skipSDF = false
+
+[node name="CopyItemIconCtx" node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_j4dxs")]
+script = ExtResource("2_v3mwx")
+disabledPanel = NodePath("Disabled")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" index="0"]
+material = SubResource("ShaderMaterial_wyyog")
+texture = ExtResource("4_2xt8c")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
+text = "Copy Item Icon"
+
+[connection signal="pressed" from="TextureButton" to="." method="Copy"]

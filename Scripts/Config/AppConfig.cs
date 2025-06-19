@@ -20,14 +20,14 @@ public static class AppConfig
         return fallback;
     }
 
-    public static void Set(string section, string key, AdaptiveJsonValue value)
+    public static void Set(string section, string key, AdaptiveJsonValue value, bool print = true)
     {
         LoadConfig();
         configData[section] ??= new JsonObject();
         configData[section][key] = value.JsonValue;
         OnConfigChanged?.Invoke(section, key, configData[section][key].AsValue());
-
-        GD.Print($"Set Config ({section}:{key} = {value.JsonValue})");
+        if (print)
+            GD.Print($"Set Config ({section}:{key} = {value.JsonValue})");
         using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Write);
         configFile.StoreString(configData.ToString());
     }

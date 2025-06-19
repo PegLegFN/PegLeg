@@ -39,6 +39,10 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     Control confirmButton;
     [Export]
     Control skipButton;
+    [Export]
+    LineEdit searchInput;
+    [Export]
+    Control survivorFilters;
 
     public override void _Ready()
 	{
@@ -51,6 +55,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     bool isSelecting;
     bool isCancelling;
     List<GameItem> items;
+    List<GameItem> filteredItems;
     List<GameItem> selectedItems = [];
 
     public bool multiselectMode;

@@ -61,6 +61,7 @@ public partial class CardPackEntry : GameItemEntry
 
         EmitSignal(SignalName.NameChanged, (includeAmountInName && shopAmount >= 0) ? nameWithAmount : name);
         EmitSignal(SignalName.DescriptionChanged, description);
+        EmitSignal(SignalName.NotificationChanged, !item.IsSeen);
 
         string amountText = amount.ToString();
         if (addXToAmount)

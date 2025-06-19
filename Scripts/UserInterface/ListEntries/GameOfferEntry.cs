@@ -41,6 +41,8 @@ public partial class GameOfferEntry : Control
     [Export]
     bool showSingleStockAmount = false;
     [Export]
+    bool showSoldOutAmount = true;
+    [Export]
     bool cosmeticMode = false;
 
     public GameOffer currentOffer { get; private set; }
@@ -241,7 +243,7 @@ public partial class GameOfferEntry : Control
         //8339003D26B24F70878EE280B70C340D: offerId of Winter free llamas that restock daily for (14?) days
         //8339003D26B24F70878EE280B70C340D: offerId of Winter free llamas that restock daily for (14?) days
 
-        if (currentStockLimit >= 0)
+        if (currentStockLimit >= (showSoldOutAmount ? 0 : 1))
         {
             string stockText = "x" + currentStockLimit;
             if (currentStockLimit == 0)
@@ -303,5 +305,10 @@ public partial class GameOfferEntry : Control
         if (selectionGraphics is not null)
             selectionGraphics.ButtonPressed = true;
         EmitSignal(SignalName.Pressed, currentOffer.OfferId);
+    }
+
+    public void Inspect()
+    {
+        GameItemViewer.Instance.ShowOffer(currentOffer);
     }
 }

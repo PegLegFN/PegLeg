@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dljot1ntapg7q"]
+[gd_scene load_steps=13 format=3 uid="uid://dljot1ntapg7q"]
 
 [ext_resource type="Texture2D" uid="uid://3atkm5dd5sh1" path="res://Images/AspectRatios/2x3Aspect.png" id="1_gryht"]
 [ext_resource type="Script" uid="uid://dwe8uvqinb63r" path="res://Scripts/UserInterface/ListEntries/InventoryItemSlot.cs" id="1_t20bs"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="7_aq3yn"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="7_s27a0"]
 [ext_resource type="Texture2D" uid="uid://csbd78stcd271" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Magnifier_128.png" id="8_1c0uy"]
+[ext_resource type="Resource" uid="uid://brxldc0n32230" path="res://Scripts/ContextMenu/ComponentLists/InventorySlotCtxList.tres" id="9_c6qth"]
 [ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="9_xjln0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0uapl"]
@@ -18,7 +19,7 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 
-[node name="InventorySlot" type="MarginContainer" node_paths=PackedStringArray("entry", "inspectArea", "open", "locked", "buttonControl")]
+[node name="InventorySlot" type="MarginContainer" node_paths=PackedStringArray("entry", "inspectArea", "open", "locked", "buttonControl", "ctxMenuHook")]
 custom_minimum_size = Vector2(100, 0)
 offset_right = 100.0
 offset_bottom = 150.0
@@ -29,6 +30,8 @@ inspectArea = NodePath("Control/FakeInspector")
 open = NodePath("OpenEntry")
 locked = NodePath("LockedEntry")
 buttonControl = NodePath("Responsive Button Area")
+ctxMenuHook = NodePath("Responsive Button Area/InvSlotCtx")
+itemCtx = ExtResource("9_c6qth")
 
 [node name="AspectTexture" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0)
@@ -81,7 +84,6 @@ stretch_mode = 5
 [node name="InventoryEntry" parent="." instance=ExtResource("3_2k13d")]
 layout_mode = 2
 preventInteractability = true
-preventDevInteractability = true
 autoLinkToRecycleSelection = false
 
 [node name="ClickBlocker" type="Control" parent="."]
@@ -91,8 +93,9 @@ layout_mode = 2
 layout_mode = 2
 outlinePadding = 0.0
 
-[node name="Node" type="Node" parent="Responsive Button Area"]
+[node name="InvSlotCtx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
 script = ExtResource("7_s27a0")
+itemSource = NodePath("../../InventoryEntry")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 2
@@ -182,5 +185,4 @@ mouse_filter = 2
 
 [connection signal="TooltipChanged" from="InventoryEntry" to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="pressed" from="Responsive Button Area" to="." method="RequestChange"]
-[connection signal="ContextMenuTriggered" from="Responsive Button Area/Node" to="." method="Inspect" unbinds=1]
 [connection signal="pressed" from="Control/InspectArea/TextureRect/Responsive Button Circle" to="InventoryEntry" method="Inspect"]

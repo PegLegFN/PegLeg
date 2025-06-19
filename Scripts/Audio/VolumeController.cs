@@ -43,7 +43,7 @@ public partial class VolumeController : Node
     static void RefreshMusicVolume()
     {
         var idx = AudioServer.GetBusIndex("Music");
-        AudioServer.SetBusVolumeDb(idx, GetBusMuted("Music") ? -80 : GetBusVolume("Music"));
+        AudioServer.SetBusVolumeDb(idx, GetBusMuted("Music") ? -80 : GetBusVolume("Music", true));
     }
 
     public static void RefreshVolumeLevels()
@@ -51,17 +51,14 @@ public partial class VolumeController : Node
         for (int i = 0; i < AudioServer.BusCount; i++)
         {
             string busName = AudioServer.GetBusName(i);
-            AudioServer.SetBusVolumeDb(i, GetBusMuted(busName) ? -80 : GetBusVolume(busName));
+            AudioServer.SetBusVolumeDb(i, GetBusMuted(busName) ? -80 : GetBusVolume(busName, true));
         }
     }
 
-    public static float GetBusVolume(string busName)
+    public static float GetBusVolume(string busName, bool processed = false)
     {
-        var baseValue = AppConfig.Get("audio", $"{busName}_volume", busName == "Master" ? -20 : 0);
-        var invScalar = 1 - musicVolumeScalar;
-        if (busName == "Music")
-            return Mathf.Lerp(-80, baseValue, 1 - (invScalar * invScalar));
-        return baseValue;
+        var baseVal = AppConfig.Get<float>("audio", $"{busName}_volume", busName == "Master" ? -20 : 0);
+        return processed ? ProcessBusVolume(busName, baseVal) : baseVal;
     }
 
     public static bool GetBusMuted(string busName)
@@ -69,22 +66,29 @@ public partial class VolumeController : Node
         return AppConfig.Get("audio", $"{busName}_muted", false);
     }
 
-    public static void SetBusVolume(string busName, float newValue)
+    public static void SetBusVolume(string busName, float newValue, bool print=false)
     {
         if (!GetBusMuted(busName))
-            AudioServer.SetBusVolumeDb(AudioServer.GetBusIndex(busName), newValue);
-        else
-            GD.Print($"bus {busName} is muted");
-        AppConfig.Set("audio", $"{busName}_volume", newValue);
+            AudioServer.SetBusVolumeDb(AudioServer.GetBusIndex(busName), ProcessBusVolume(busName, newValue));
+        AppConfig.Set("audio", $"{busName}_volume", newValue, print);
     }
 
     public static void SetBusMuted(string busName, bool newValue)
     {
         int busIdx = AudioServer.GetBusIndex(busName);
-        float currentVol = GetBusVolume(busName);
-        GD.Print($"setting mute of {busName}({busIdx}) to {newValue} ({(newValue ? -80 : currentVol)})");
-        AudioServer.SetBusVolumeDb(busIdx, newValue ? -80 : currentVol);
+        AudioServer.SetBusVolumeDb(busIdx, newValue ? -80 : GetBusVolume(busName, true));
         AppConfig.Set("audio", $"{busName}_muted", newValue);
+    }
+
+    static float ProcessBusVolume(string busName, float baseValue)
+    {
+        if (busName != "Music")
+            return baseValue;
+        var invScalar = 1 - musicVolumeScalar;
+        var expScalar = 1 - (invScalar * invScalar);
+        var lerped = Mathf.Lerp(-80, baseValue, expScalar);
+        //GD.Print($"lerp to {baseValue} ({musicVolumeScalar}) = {lerped}");
+        return lerped;
     }
 
     public static void ToggleBusMuted(string busName) =>

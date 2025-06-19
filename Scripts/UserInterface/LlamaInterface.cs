@@ -76,6 +76,15 @@ public partial class LlamaInterface : Control
     [Export]
     Control soldOutResultPanel;
 
+    [Export]
+    Control choicePanel;
+
+    [Export]
+    GameItemEntry firstChoice;
+
+    [Export]
+    GameItemEntry secondChoice;
+
 
     List<GameOfferEntry> llamaOfferEntries = [];
     Queue<CardPackEntry> llamaItemEntries = new();
@@ -419,6 +428,7 @@ public partial class LlamaInterface : Control
         resultEntriesParent.Visible = false;
         surpriseResultPanel.Visible = false;
         soldOutResultPanel.Visible = false;
+        choicePanel.Visible = false;
 
         currentOfferSelection = null;
         currentCardpackSelection = null;
@@ -486,16 +496,45 @@ public partial class LlamaInterface : Control
         if (!inStock)
         {
             soldOutResultPanel.Visible = true;
+            return;
         }
-        else
+
+        purchaseButton.Visible = true;
+
+        var items = prerollData?.attributes?["items"].AsArray().Select(node => new GameItem(null, null, node.AsObject())).ToArray() ?? null;
+        if (items is null)
         {
-            var resultItems = prerollData?.attributes?["items"].AsArray().Select(node => new GameItem(null, null, node.AsObject())).ToArray() ?? null;
-            if (resultItems != null)
-                purchaseLimit = 1;
-            purchaseButton.Visible = offer.Price is not null;
+            //it's a surprise
             quantitySpinner.MaxValue = Mathf.Max(purchaseLimit, 1);
             quantitySpinner.Visible = purchaseButton.Visible && purchaseLimit > 1;
-            SetSelectedLlamaResults(resultItems);
+            surpriseResultPanel.Visible = true;
+            return;
+        }
+
+        var sortedItems = items
+            .OrderBy(item => -item.template?.RarityLevel)
+            .ThenBy(item => item.template?.Type)
+            .ThenBy(item => item.template?.DisplayName)
+            .ToArray();
+        //fill out item list
+        resultEntriesParent.Visible = true;
+
+        while (llamaResultEntries.Count <= items.Length)
+        {
+            var newEntry = itemEntryScene.Instantiate<GameItemEntry>();
+            resultEntriesParent.AddChild(newEntry);
+            llamaResultEntries.Add(newEntry);
+        }
+        for (int i = 0; i < items.Length; i++)
+        {
+            string templateId = sortedItems[i].templateId;
+            llamaResultEntries[i].Visible = true;
+            llamaResultEntries[i].SetItem(sortedItems[i]);
+            sortedItems[i].SetRewardNotification();
+        }
+        for (int i = items.Length; i < llamaResultEntries.Count; i++)
+        {
+            llamaResultEntries[i].Visible = false;
         }
     }
 
@@ -516,63 +555,31 @@ public partial class LlamaInterface : Control
             return;
 
         currentCardpackSelection = cardPackStack;
-        purchaseButton.Visible = false;
         openButton.Visible = true;
-        soldOutResultPanel.Visible = false;
-        
+
         var maxAmount = currentCardpackSelection.DisplayAmount;
         quantitySpinner.MaxValue = Mathf.Max(maxAmount, 1);
         quantitySpinner.Visible = maxAmount > 1;
-
-        GameItem[] items = null;
-        if (cardPackItem.attributes.ContainsKey("options"))
-        {
-            items = new GameItem[] { cardPackItem };
-        }
-        cardPackItem.SetSeenLocal(true);
-        items ??= Array.Empty<GameItem>();
-
-        SetSelectedLlamaResults(items);
+        cardPackItem.MarkItemSeen();
         currentCardpackEntry.SetItem(cardPackItem);
+
+        if (cardPackItem.CardPackChoices is not GameItem[] choices)
+        {
+            surpriseResultPanel.Visible = true;
+            return;
+        }
+
+        choicePanel.Visible = true;
+        firstChoice.SetItem(choices[0]);
+        secondChoice.SetItem(choices[1]);
     }
 
-    void SetSelectedLlamaResults(GameItem[] items)
+    public void InspectChoiceLlama(int choiceIndex)
     {
-        if (items is not null)
-        {
-            var sortedItems = items
-                .OrderBy(item => -item.template?.RarityLevel)
-                .ThenBy(item => item.template?.Type)
-                .ThenBy(item => item.template?.DisplayName)
-                .ToArray();
-            //fill out item list
-            surpriseResultPanel.Visible = false;
-            resultEntriesParent.Visible = true;
-
-            while (llamaResultEntries.Count <= items.Length)
-            {
-                var newEntry = itemEntryScene.Instantiate<GameItemEntry>();
-                resultEntriesParent.AddChild(newEntry);
-                llamaResultEntries.Add(newEntry);
-            }
-            for (int i = 0; i < items.Length; i++)
-            {
-                string templateId = sortedItems[i].templateId;
-                llamaResultEntries[i].Visible = true;
-                llamaResultEntries[i].SetItem(sortedItems[i]);
-                sortedItems[i].SetRewardNotification();
-            }
-            for (int i = items.Length; i < llamaResultEntries.Count; i++)
-            {
-                llamaResultEntries[i].Visible = false;
-            }
-        }
-        else
-        {
-            //it's a surprise
-            surpriseResultPanel.Visible = true;
-            resultEntriesParent.Visible = false;
-        }
+        if (currentCardpackSelection is null)
+            return;
+        var cardPackItem = currentCardpackSelection.GetDisplayItem();
+        GameItemViewer.Instance.ShowItem(cardPackItem, choiceIndex);
     }
 
     public async void PurchaseLlama()

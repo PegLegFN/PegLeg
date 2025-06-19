@@ -28,6 +28,16 @@ public partial class InventoryItemSlot : Node
     [Export]
     Control buttonControl;
 
+    [Export]
+    ContextMenuHook ctxMenuHook;
+
+    [ExportGroup("ContextMenus")]
+
+    [Export]
+    ContextComponentList itemCtx;
+
+    [Export]
+    ContextComponentList emptyCtx;
 
     [ExportGroup("Defaults")]
     [Export]
@@ -190,6 +200,7 @@ public partial class InventoryItemSlot : Node
     void SetEmpty(bool value)
     {
         buttonControl.Visible = overrideAccount is null;
+        ctxMenuHook.componentList = value ? emptyCtx : itemCtx;
         isEmpty = value;
         entry.Visible = !isEmpty;
         inspectArea.Visible = !isEmpty && showInspector;

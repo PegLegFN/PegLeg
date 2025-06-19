@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6ip4jr8v8ku8"]
+
+[ext_resource type="PackedScene" uid="uid://bk6fttr5h8nvm" path="res://Scenes/ContextComponents/toggle_ctx.tscn" id="1_w67kj"]
+[ext_resource type="Script" uid="uid://cle5ka1qiukh" path="res://Scripts/ContextMenu/Components/FavouriteItemCtx.cs" id="2_ibl4a"]
+[ext_resource type="Texture2D" uid="uid://cdmhjq1s2wpky" path="res://Images/InterfaceIcons/T_Icon_FavoriteTabAlt_64.png" id="3_w7u33"]
+[ext_resource type="Texture2D" uid="uid://frsfbmj2qyxu" path="res://Images/InterfaceIcons/T_Icon_FavoriteTab_64.png" id="4_vy3ok"]
+
+[node name="FavouriteItemCtx" node_paths=PackedStringArray("toggleIcon", "disabledPanel") instance=ExtResource("1_w67kj")]
+script = ExtResource("2_ibl4a")
+toggleIcon = NodePath("MarginContainer/HBoxContainer/ToggleIconArea")
+disabledPanel = NodePath("Disabled")
+
+[node name="OffIcon" parent="MarginContainer/HBoxContainer/ToggleIconArea" index="0"]
+texture = ExtResource("3_w7u33")
+
+[node name="OnIcon" parent="MarginContainer/HBoxContainer/ToggleIconArea" index="1"]
+texture = ExtResource("4_vy3ok")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="2"]
+text = "Favourite"
+
+[connection signal="pressed" from="TextureButton" to="." method="ToggleFavourite"]

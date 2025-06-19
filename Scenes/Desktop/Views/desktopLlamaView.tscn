@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://4hei03rcfvmu"]
+[gd_scene load_steps=32 format=3 uid="uid://4hei03rcfvmu"]
 
 [ext_resource type="Script" uid="uid://4x8mjwjel8g5" path="res://Scripts/UserInterface/LlamaInterface.cs" id="1_n8h1q"]
 [ext_resource type="PackedScene" uid="uid://b0uxwtxndd6x3" path="res://Scenes/LlamaEntries/llama_offer_entry.tscn" id="2_eeobp"]
@@ -6,12 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="4_1u5ij"]
 [ext_resource type="Texture2D" uid="uid://c4ixuk0fofeej" path="res://Images/InterfaceIcons/PinataStandardPack-Upgrade.png" id="5_1nhqt"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="5_bcyag"]
-[ext_resource type="AudioStream" uid="uid://cueximnj2vdji" path="res://Audio/SFX/UI/Appear/Fort_UI_RewardEarned_02.ogg" id="6_dm3r4"]
-[ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="6_lypfg"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_wlhx3"]
 [ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="8_4nkxo"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="8_ffqoy"]
-[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="9_ayge5"]
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="9_cn6d8"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="9_hb2ve"]
 [ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="9_hhjpb"]
@@ -29,6 +26,8 @@
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="18_8e8fw"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="19_h7xtb"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="22_jia5b"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="24_lpoky"]
+[ext_resource type="Texture2D" uid="uid://oo036o6whl2w" path="res://Images/InterfaceIcons/OrArrowHD.png" id="25_jae7j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_osi5s"]
 shader = ExtResource("8_ffqoy")
@@ -59,7 +58,7 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="Llamas" type="HSplitContainer" node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorIcon", "llamaScrollArea", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent", "selectedLlamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "altOfferEntry", "altPurchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel")]
+[node name="Llamas" type="HSplitContainer" node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorIcon", "llamaScrollArea", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent", "selectedLlamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "altOfferEntry", "altPurchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -87,8 +86,9 @@ quantitySpinner = NodePath("Llama Contents/MarginContainer/CardPackEntry/VBoxCon
 resultEntriesParent = NodePath("Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContainer")
 surpriseResultPanel = NodePath("Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer")
 soldOutResultPanel = NodePath("Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer")
-freeLlamaNotifIcon = ExtResource("5_1nhqt")
-freeLlamaSound = ExtResource("6_dm3r4")
+choicePanel = NodePath("Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer")
+firstChoice = NodePath("Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry")
+secondChoice = NodePath("Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(435, 0)
@@ -360,34 +360,6 @@ theme_override_font_sizes/font_size = 32
 text = "Select a Llama"
 text_overrun_behavior = 3
 
-[node name="TestNotif" type="Button" parent="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer"]
-custom_minimum_size = Vector2(36, 0)
-layout_mode = 2
-tooltip_text = "Debug Notification"
-theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/TestNotif"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_lypfg")
-expand_mode = 1
-
-[node name="CheckButton" type="CheckButton" parent="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/TestNotif"]
-self_modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-mouse_filter = 2
-script = ExtResource("9_ayge5")
-section = "advanced"
-key = "developer"
-
 [node name="MarginContainer" type="MarginContainer" parent="Llama Contents/MarginContainer/CardPackEntry"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -447,6 +419,80 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Sold Out"
 horizontal_alignment = 1
+
+[node name="ChoiceContainer" type="MarginContainer" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 50
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer"]
+layout_mode = 2
+ratio = 2.75
+
+[node name="Control" type="MarginContainer" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("24_lpoky")
+expand_mode = 3
+
+[node name="RewardEntry" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("4_1u5ij")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+autoLinkToViewer = false
+
+[node name="TextureRect2" type="TextureRect" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("24_lpoky")
+expand_mode = 3
+
+[node name="RewardEntry" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("4_1u5ij")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+autoLinkToViewer = false
+
+[node name="TextureRect3" type="TextureRect" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("25_jae7j")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 48
+text = "OR"
 
 [node name="VBoxContainer" type="HBoxContainer" parent="Llama Contents/MarginContainer/CardPackEntry"]
 layout_mode = 2
@@ -737,8 +783,8 @@ value = 1.0
 [connection signal="IconChanged" from="Llama Contents/MarginContainer/CardPackEntry" to="Llama Contents/MarginContainer/Pinata" method="set_texture"]
 [connection signal="NameChanged" from="Llama Contents/MarginContainer/CardPackEntry" to="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/LlamaName" method="set_text"]
 [connection signal="SubtypeIconChanged" from="Llama Contents/MarginContainer/CardPackEntry" to="Llama Contents/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
-[connection signal="pressed" from="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/TestNotif" to="." method="FakeFreeLlamas"]
-[connection signal="ConfigValueChanged" from="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/TestNotif/CheckButton" to="Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/TestNotif" method="set_visible"]
+[connection signal="Pressed" from="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="." method="InspectChoiceLlama" binds= [0]]
+[connection signal="Pressed" from="Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="." method="InspectChoiceLlama" binds= [1]]
 [connection signal="AmountChanged" from="Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
 [connection signal="IconChanged" from="Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
 [connection signal="TooltipChanged" from="Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" method="set_tooltip_text"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://khtmsxilpw3n"]
+[gd_scene load_steps=28 format=3 uid="uid://khtmsxilpw3n"]
 
 [ext_resource type="Script" uid="uid://b3dwgyqw1ptf1" path="res://Scripts/UserInterface/ListEntries/CosmeticShopOfferEntry.cs" id="1_a2plt"]
 [ext_resource type="Shader" uid="uid://dwr30ie6yoste" path="res://Shaders/AdaptivePanel.tres" id="2_655vb"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="9_7kwsg"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="11_wpcy6"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="12_am3j1"]
+[ext_resource type="Resource" uid="uid://wni7vjnevytl" path="res://Scripts/ContextMenu/ComponentLists/CosmeticCtxList.tres" id="13_uwc4i"]
 [ext_resource type="Texture2D" uid="uid://bwn62my2lt8k" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Calendar_128.png" id="14_n2okj"]
 [ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="16_4iqq1"]
 
@@ -52,6 +53,9 @@ shader_parameter/VerticalMask = 0.0
 shader_parameter/Frame = -1
 shader_parameter/scriptTime = false
 shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2nlk"]
 content_margin_left = 3.0
@@ -124,7 +128,7 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="CosmeticShopEntry" type="MarginContainer" node_paths=PackedStringArray("expiryTimerText", "loadingCubes", "backgroundGradientTexture", "resourceTarget")]
+[node name="CosmeticOfferEntry" type="MarginContainer" node_paths=PackedStringArray("expiryTimerText", "loadingCubes", "backgroundGradientTexture", "resourceTarget")]
 custom_minimum_size = Vector2(150, 150)
 offset_right = 150.0
 offset_bottom = 150.0
@@ -324,8 +328,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_tkqcf")
 layout_mode = 2
 outlinePadding = 20.0
 
-[node name="Node" type="Node" parent="Responsive Button Area"]
+[node name="Ctx" type="Node" parent="Responsive Button Area"]
 script = ExtResource("12_am3j1")
+componentList = ExtResource("13_uwc4i")
 
 [node name="Button" type="Button" parent="." groups=["ExcludeHoverSounds"]]
 visible = false
@@ -565,5 +570,4 @@ expand_mode = 1
 [connection signal="TooltipChanged" from="." to="Button" method="set_tooltip_text"]
 [connection signal="TypeChanged" from="." to="DetailsArea/NameBox/VBoxContainer/TypeLabel" method="set_text"]
 [connection signal="pressed" from="Responsive Button Area" to="." method="Interact"]
-[connection signal="ContextMenuTriggered" from="Responsive Button Area/Node" to="." method="ContextMenu" unbinds=1]
 [connection signal="pressed" from="Button" to="." method="OpenImageInBrowser"]

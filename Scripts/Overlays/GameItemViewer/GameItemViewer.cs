@@ -108,7 +108,7 @@ public partial class GameItemViewer : ModalWindow
     int itemTier = 1;
     int itemLevel = 1;
 
-    public void ShowItem(GameItem newItem)
+    public void ShowItem(GameItem newItem, int prioritiseChoice = 0)
     {
         itemChoiceParent.Visible = false;
         currentItem = newItem;
@@ -124,30 +124,22 @@ public partial class GameItemViewer : ModalWindow
         upgrader.SetItem(currentItem);
 
         //if choice cardpack, display choices instead
-        if (currentItem.template?.Type == "CardPack" && (currentItem.attributes?.ContainsKey("options") ?? false))
+        if (currentItem.template?.Type == "CardPack" && currentItem.CardPackChoices is GameItem[] itemChoices)
         {
             itemChoiceParent.Visible = true;
-            var optionsArr = currentItem.attributes["options"].AsArray();
-            choices = new GameItem[optionsArr.Count];
+            choices = itemChoices;
 
-            for (int i = 0; i < optionsArr.Count; i++)
-            {
-                var thisChoice = optionsArr[i];
-                var templateId = thisChoice["itemType"].ToString().Replace("Weapon:w", "Schematic:s");
-                var template = GameItemTemplate.Get(templateId);
-                var choiceItem = template.CreateInstance(thisChoice["quantity"].GetValue<int>(), thisChoice["attributes"]?.AsObject().SafeDeepClone());
-                itemChoiceEntries[i].SetItem(choiceItem);
-                choiceItem.SetRewardNotification(null, true);
-                choices[i] = choiceItem;
-            }
-
-            for (int i = 0; i < optionsArr.Count-2; i++)
+            for (int i = 0; i < choices.Length; i++)
+                itemChoiceEntries[i].SetItem(choices[i]);
+            for (int i = 0; i < choices.Length - 2; i++)
                 itemChoiceLayoutSections[i].Visible = true;
-            for (int i = optionsArr.Count - 2; i < itemChoiceLayoutSections.Length; i++)
+            for (int i = choices.Length - 2; i < itemChoiceLayoutSections.Length; i++)
                 itemChoiceLayoutSections[i].Visible = false;
+            if (prioritiseChoice < 0 || prioritiseChoice >= choices.Length)
+                prioritiseChoice = 0;
 
-            SetDisplayItem(choices[0]);
-            itemChoiceEntries[0].EmitPressedSignal();
+            SetDisplayItem(choices[prioritiseChoice]);
+            itemChoiceEntries[prioritiseChoice].EmitPressedSignal();
         }
         else
         {

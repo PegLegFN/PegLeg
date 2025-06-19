@@ -1,7 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://kgl0dydu0mtf"]
+[gd_scene load_steps=18 format=3 uid="uid://kgl0dydu0mtf"]
 
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="1_atr3d"]
 [ext_resource type="Script" uid="uid://ct11mvw5gpi7l" path="res://Scripts/ContextMenu/ContextMenu.cs" id="1_epbn8"]
+[ext_resource type="PackedScene" uid="uid://dvodww6qg44sb" path="res://Scenes/ContextComponents/inspect_offer_ctx.tscn" id="2_2pdw5"]
+[ext_resource type="PackedScene" uid="uid://c6ip4jr8v8ku8" path="res://Scenes/ContextComponents/favourite_item_ctx.tscn" id="2_850gp"]
+[ext_resource type="PackedScene" uid="uid://c8ptdx301yus7" path="res://Scenes/ContextComponents/inspect_item_ctx.tscn" id="2_y3yb8"]
+[ext_resource type="PackedScene" uid="uid://b5q5lt4tovbhd" path="res://Scenes/ContextComponents/bookmark_item_ctx.tscn" id="3_epbn8"]
+[ext_resource type="PackedScene" uid="uid://bwmeksn5ae2s4" path="res://Scenes/ContextComponents/copy_item_uuid_ctx.tscn" id="5_q8muj"]
+[ext_resource type="PackedScene" uid="uid://lgsv2ucxrcu6" path="res://Scenes/ContextComponents/copy_template_id_ctx.tscn" id="6_taiaa"]
+[ext_resource type="PackedScene" uid="uid://8f735g4fo3wh" path="res://Scenes/ContextComponents/copy_offer_id_ctx.tscn" id="8_n3g7q"]
+[ext_resource type="PackedScene" uid="uid://c5a2r24tp1bf1" path="res://Scenes/ContextComponents/recycle_item_ctx.tscn" id="9_cbvtg"]
+[ext_resource type="PackedScene" uid="uid://bu6qougeyqaig" path="res://Scenes/ContextComponents/copy_item_icon_ctx.tscn" id="10_6f8fp"]
+[ext_resource type="PackedScene" uid="uid://blpchxjwv3gym" path="res://Scenes/ContextComponents/item_title_ctx.tscn" id="11_ysndk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xuii"]
 bg_color = Color(0.101961, 0.101961, 0.101961, 1)
@@ -33,17 +43,174 @@ fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0)
 metadata/_snap_enabled = true
 
-[node name="DesktopContextMenu" type="PopupPanel" node_paths=PackedStringArray("contextComponents")]
-size = Vector2i(112, 65)
-visible = true
+[node name="DesktopContextMenu" type="Window" node_paths=PackedStringArray("contextComponentsSource", "componentParent", "listTarget", "listAnimation", "scaleAnimation")]
+transparent_bg = true
+size = Vector2i(116, 105)
+wrap_controls = true
+borderless = true
+always_on_top = true
+transparent = true
 script = ExtResource("1_epbn8")
-contextComponents = []
+contextComponentsSource = NodePath("Components")
+componentParent = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget/VBoxContainer")
+listTarget = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget")
+listAnimation = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim")
+scaleAnimation = NodePath("ScaleAnim")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="Components" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 112.0
 offset_bottom = 65.0
+scale = Vector2(1e-05, 1e-05)
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer"]
+[node name="InspectOfferCtx" parent="Components" instance=ExtResource("2_2pdw5")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="InspectItemCtx" parent="Components" instance=ExtResource("2_y3yb8")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = -22.0
+offset_right = 122.0
+offset_bottom = 14.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="FavouriteItemCtx" parent="Components" instance=ExtResource("2_850gp")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="BookmarkItemCtx" parent="Components" instance=ExtResource("3_epbn8")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="CopyItemUuidCtx" parent="Components" instance=ExtResource("5_q8muj")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="CopyTemplateIdCtx" parent="Components" instance=ExtResource("6_taiaa")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="CopyOfferIdCtx" parent="Components" instance=ExtResource("8_n3g7q")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="RecycleItemCtx" parent="Components" instance=ExtResource("9_cbvtg")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="CopyItemIconCtx" parent="Components" instance=ExtResource("10_6f8fp")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="ItemTitleCtx" parent="Components" instance=ExtResource("11_ysndk")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 122.0
+offset_bottom = 36.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="ScaleAnim" type="MarginContainer" parent="."]
+offset_right = 71.0
+offset_bottom = 65.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="ScaleAnim"]
 layout_mode = 2
 texture = ExtResource("1_atr3d")
 patch_margin_left = 12
@@ -51,47 +218,46 @@ patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="Content" type="MarginContainer" parent="MarginContainer"]
+[node name="Content" type="MarginContainer" parent="ScaleAnim"]
 layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 7
+theme_override_constants/margin_bottom = 6
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Content"]
+[node name="PanelContainer" type="PanelContainer" parent="ScaleAnim/Content"]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5xuii")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Content/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Control" type="Control" parent="MarginContainer/Content/PanelContainer/MarginContainer"]
+[node name="ListAnim" type="Control" parent="ScaleAnim/Content/PanelContainer/MarginContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(100, 52)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Content/PanelContainer/MarginContainer/Control"]
+[node name="ListTarget" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim"]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-grow_horizontal = 2
+offset_right = 100.0
+offset_bottom = 28.0
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Content/PanelContainer/MarginContainer/Control/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget"]
 layout_mode = 2
 theme = SubResource("Theme_epbn8")
 theme_override_constants/separation = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/Content/PanelContainer/MarginContainer/Control"]
+[node name="MarginContainer2" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -106,7 +272,7 @@ theme_override_constants/margin_left = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = -1
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/Content/PanelContainer/MarginContainer/Control/MarginContainer2"]
+[node name="TextureRect" type="TextureRect" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/MarginContainer2"]
 self_modulate = Color(0.101961, 0.101961, 0.101961, 1)
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2

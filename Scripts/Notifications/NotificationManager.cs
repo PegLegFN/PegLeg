@@ -37,6 +37,7 @@ public partial class NotificationManager : Control
         window = GetWindow();
         window.MousePassthroughPolygon = fullPassthrough;
         baseSize = window.Size;
+        window.Visible = AppConfig.Get("experimental", "notifications", false);
         SetScale((float)AppConfig.Get("notification", "scale", 1.0));
 
         foreach (var notification in notificationInstances)
@@ -55,8 +56,10 @@ public partial class NotificationManager : Control
 
     private void OnConfigChanged(string section, string key, JsonValue value)
     {
+        if (section == "experimental" && key == "notifications" && value.TryGetValue(out bool notifsVisible))
+            window.Visible = notifsVisible;
         if (section == "notification" && key == "scale")
-            SetScale(value.TryGetValue(out double val) ? (float)val : 1);
+            SetScale(value.TryGetValue(out double scale) ? (float)scale : 1);
     }
 
     public override void _ExitTree()
@@ -218,6 +221,8 @@ public partial class NotificationManager : Control
 
     public override void _Process(double delta)
     {
+        if (!window.Visible)
+            return;
         if (ListProgress == listTarget)
         {
             mouseBlocker.Visible = false;
@@ -392,7 +397,7 @@ public record struct NotificationData()
     public string firstAction;
     public string secondAction;
     public string superAction;
-    public event Action<string> OnAction;//first, second, super
+    public Action<string> OnAction;//first, second, super
 
     public void SubmitAction(string action)=>
         OnAction?.Invoke(action);

@@ -6,16 +6,21 @@ public partial class ContextMenuHook : Node
     [Signal]
     public delegate void ContextMenuTriggeredEventHandler(ContextMenuHook test);
     [Export]
-	public GameItemEntry itemContext;
+    public MissionEntry missionSource;
     [Export]
-    public GameOfferEntry offerContext;
+	public GameItemEntry itemSource;
+    [Export]
+    public GameOfferEntry offerSource;
+    [Export]
+    public CosmeticShopOfferEntry cosmeticSource;
     [Export]
     public Control attachTo;
     [Export]
     public bool attachHorizontally;
     [Export]
-    public string[] contextComponents;
+    public ContextComponentList componentList;
 
+    static ContextMenuHook currentHover;
     bool hover;
 
     public override void _Ready()
@@ -25,6 +30,7 @@ public partial class ContextMenuHook : Node
         {
             ctrlParent.MouseEntered += () =>
             {
+                currentHover = this;
                 rClickWasPressed = false;
                 hover = true;
             };
@@ -47,7 +53,6 @@ public partial class ContextMenuHook : Node
             bool rClickJustPressed = rClickPressed && !rClickWasPressed;
             bool rClickJustReleased = !rClickPressed && rClickWasPressed;
             rClickWasPressed = rClickPressed;
-
             if (hover && !halfTriggered && rClickJustPressed)
             {
                 halfTriggered = true;
@@ -56,8 +61,22 @@ public partial class ContextMenuHook : Node
             if (halfTriggered && rClickJustReleased)
             {
                 halfTriggered = false;
-                EmitSignalContextMenuTriggered(this);
+                Trigger();
             }
         }
+    }
+
+    public static void TriggerHovered()
+    {
+        currentHover?.Trigger();
+    }
+
+    void Trigger()
+    {
+        //GD.Print($"Triggering {Name} ({componentList?.ResourceName.Split("/")[^1]})");
+        if ((componentList?.components?.Length ?? 0) == 0)
+            EmitSignalContextMenuTriggered(this);
+        else
+            ContextMenu.ShowMenu(this);
     }
 }

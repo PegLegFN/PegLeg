@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwmeksn5ae2s4"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_g85q4"]
+[ext_resource type="Script" uid="uid://c0kjimp06dfrs" path="res://Scripts/ContextMenu/Components/CopyItemUuidCtx.cs" id="2_g4i1b"]
+[ext_resource type="Texture2D" uid="uid://dufklwoq1w2k" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Clipboard_128.png" id="3_nollb"]
+
+[node name="CopyItemUuidCtx" node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_g85q4")]
+script = ExtResource("2_g4i1b")
+disabledPanel = NodePath("Disabled")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" index="0"]
+texture = ExtResource("3_nollb")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
+text = "Copy Item UUID"
+
+[connection signal="pressed" from="TextureButton" to="." method="Copy"]

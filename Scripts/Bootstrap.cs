@@ -41,7 +41,7 @@ public partial class Bootstrap : Node
     {
         var window = GetWindow();
         window.Position = new(-100, -100);
-        Helpers.SetMainWindowVisible(false);
+        window.Win64SetVisible(false);
 
         if (FileAccess.FileExists(processLockPath))
         {
@@ -135,7 +135,7 @@ public partial class Bootstrap : Node
             }
             curtain.Visible = true;
             await Helpers.WaitForFrame();
-            Helpers.SetMainWindowVisible(true);
+            window.Win64SetVisible(false);
             window.Size = windowSize;
             window.MoveToCenter();
             window.Transparent = false;

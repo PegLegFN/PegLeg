@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using System.Text.Json;
+using System.Security.Cryptography;
 
 
 public enum OrderRange
@@ -53,7 +55,7 @@ static class FnProfileTypes
     public const string Common = "common_core";
 }
 
-public class GameAccount
+public partial class GameAccount
 {
     const string accountDataPath = "user://accounts";
     const string betaAccountDataPath = "../../accounts";
@@ -225,6 +227,7 @@ public class GameAccount
     public static GameAccount activeAccount => _activeAccount ??= new(null);
     public static event Action ActiveAccountChangedEarly;
     public static event Action ActiveAccountChanged;
+    public static event Action BookmarksChanged;
 
     public static async Task<bool> SetActiveAccount(string accountId)
     {
@@ -241,6 +244,7 @@ public class GameAccount
             _activeAccount = account;
             ActiveAccountChangedEarly?.Invoke();
             ActiveAccountChanged?.Invoke();
+            BookmarksChanged?.Invoke();
             AppConfig.Set("account", "lastUsed", accountId);
             return true;
         }
@@ -831,7 +835,70 @@ public class GameAccount
         return true;
     }
 
-    List<GameItem> localPinnedQuests;
+    HashSet<string> bookmarkedItems;
+
+    public void ToggleBookmarked(GameItemTemplate template)
+    {
+        if (!isOwned || template?.CanBeFavourited != true)
+            return;
+        if (template.Tier > 1)
+        {
+            template = GameItemTemplate.Get(TierSubstitute().Replace(template.TemplateId, "_t01"));
+        }
+        bookmarkedItems ??= GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        var tid = template.TemplateId.ToLower();
+        bool isBookmarked = bookmarkedItems.Contains(tid);
+        //GD.Print($"already: {isBookmarked} ({tid})");
+        if (isBookmarked)
+        {
+            var tidSearch = RaritySubstitute().Replace(tid, "_..?_");
+            tidSearch = TierSubstitute().Replace(tidSearch, "_t0\\d");
+            //GD.Print("reminder removal search " + tidSearch);
+            var toRemove = bookmarkedItems.Where(x => Regex.IsMatch(x, tidSearch));
+            foreach (var item in toRemove)
+            {
+                bookmarkedItems.Remove(item);
+                GD.Print("reminder removed " + item);
+            }
+        }
+        else
+        {
+            bookmarkedItems.Add(tid);
+            GD.Print("reminder added " + tid);
+            while (template.TryGetNextRarity() is GameItemTemplate upgradedTemplate)
+            {
+                tid = upgradedTemplate.TemplateId.ToLower();
+                if (!bookmarkedItems.Contains(tid))
+                {
+                    bookmarkedItems.Add(tid);
+                    GD.Print("reminder added " + tid);
+                }
+                else
+                {
+                    break;
+                }
+                template = upgradedTemplate;
+            }
+        }
+        SetLocalData("bookmarkedItems", JsonSerializer.SerializeToNode(bookmarkedItems));
+        BookmarksChanged?.Invoke();
+    }
+
+    public bool IsBookmarked(GameItemTemplate template)
+    {
+        if (template?.CanBeFavourited != true)
+            return false;
+        bookmarkedItems ??= GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        var result = bookmarkedItems.Contains(TierSubstitute().Replace(template.TemplateId, "_t01").ToLower());
+        return result;
+    }
+
+    [GeneratedRegex("_(?:(?:c)|(?:uc)|(?:r)|(?:vr)|(?:sr)|(?:ur))_")]
+    private static partial Regex RaritySubstitute();
+    [GeneratedRegex("_t0\\d")]
+    private static partial Regex TierSubstitute();
+
+    HashSet<string> localPinnedQuests = [];
     DateTime questsLastRefreshedAt = DateTime.MinValue;
     async Task<GameProfile> CheckLocalPinnedQuests()
     {
@@ -841,10 +908,7 @@ public class GameAccount
             return accountItems;
 
         await accountItems.Query();
-        localPinnedQuests = accountItems.statAttributes["client_settings"]["pinnedQuestInstances"]
-            .AsArray()
-            .Select(q => accountItems.GetItem(q.ToString()))
-            .ToList();
+        localPinnedQuests = accountItems.statAttributes["client_settings"]["pinnedQuestInstances"].Deserialize<HashSet<string>>();
         return accountItems;
     }
 
@@ -857,9 +921,9 @@ public class GameAccount
     public async Task AddPinnedQuest(GameItem item)
     {
         var accountItems = await CheckLocalPinnedQuests();
-        if (item.profile == accountItems && !localPinnedQuests.Contains(item))
+        if (item.profile == accountItems && !localPinnedQuests.Contains(item.uuid))
         {
-            localPinnedQuests.Add(item);
+            localPinnedQuests.Add(item.uuid);
             accountItems.SendItemUpdate(item);
             SendLocalPinnedQuests(accountItems);
         }
@@ -868,9 +932,9 @@ public class GameAccount
     public async Task RemovePinnedQuest(GameItem item)
     {
         var accountItems = await CheckLocalPinnedQuests();
-        if (localPinnedQuests.Contains(item))
+        if (localPinnedQuests.Contains(item.uuid))
         {
-            localPinnedQuests.Remove(item);
+            localPinnedQuests.Remove(item.uuid);
             accountItems.SendItemUpdate(item);
             SendLocalPinnedQuests(accountItems);
         }
@@ -879,37 +943,26 @@ public class GameAccount
     public void ClearPinnedQuests()
     {
         GD.Print("clearing all pinned");
-        var unpinnedQuests = localPinnedQuests?.ToArray() ?? Array.Empty<GameItem>();
+        var unpinnedQuests = localPinnedQuests?.ToArray() ?? [];
         localPinnedQuests?.Clear();
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
         foreach (var item in unpinnedQuests)
         {
-            accountItems.SendItemUpdate(item);
+            accountItems.SendItemUpdate(accountItems.GetItem(item));
         }
         SendLocalPinnedQuests(accountItems);
     }
 
     async void SendLocalPinnedQuests(GameProfile accountItems)
     {
-        localPinnedQuests ??= [];
         JsonObject content = new()
         {
-            ["pinnedQuestIds"] = new JsonArray(localPinnedQuests.Select(q => (JsonValue)q.uuid).ToArray())
+            ["pinnedQuestIds"] = new JsonArray(localPinnedQuests.Select(q => (JsonValue)q).ToArray())
         };
         await accountItems.PerformOperation("SetPinnedQuests", content.ToString());
     }
 
-    public bool HasPinnedQuest(string uuid)
-    {
-        localPinnedQuests ??= [];
-        return localPinnedQuests.Exists(q=>q.uuid==uuid);
-    }
-
-    public bool HasPinnedQuest(GameItem item)
-    {
-        localPinnedQuests ??= [];
-        return localPinnedQuests.Contains(item);
-    }
+    public bool HasPinnedQuest(GameItem item) => localPinnedQuests.Contains(item.uuid);
 
     public async Task<GameItem> RerollQuest(GameItem item)
     {
@@ -1010,7 +1063,7 @@ public class GameProfile
 
     public void SendItemUpdate(GameItem item)
     {
-        if (item.profile == this)
+        if (item?.profile == this)
         {
             OnItemUpdated?.Invoke(item);
             item.NotifyChanged();
@@ -1132,7 +1185,8 @@ public class GameProfile
             {
                 if (item.attributes["item_seen"] is null)
                 {
-                    OnItemUpdated?.Invoke(item.SetSeenLocal());
+                    item.SetSeenLocal();
+                    OnItemUpdated?.Invoke(item);
                     hasUnseen = true;
                 }
             }
@@ -1567,6 +1621,17 @@ public class GameItem
 
     public string Personality=> attributes?["personality"]?.ToString() is string rawPersonality ? ParseSurvivorAttribute(rawPersonality) : null;
     public string SetBonus => attributes?["set_bonus"]?.ToString() is string rawSetBonus ? ParseSurvivorAttribute(rawSetBonus) : null;
+
+    public GameItem[] CardPackChoices => attributes?["options"]?
+                .AsArray()
+                .Select(c =>
+                {
+                    var template = GameItemTemplate.Get(c["itemType"].ToString());
+                    var choiceItem = template.CreateInstance(c["quantity"].GetValue<int>(), c["attributes"]?.AsObject().SafeDeepClone());
+                    choiceItem.SetRewardNotification(null, true);
+                    return choiceItem;
+                })
+                .ToArray();
     static string ParseSurvivorAttribute(string survivorAttr)
     {
         survivorAttr = survivorAttr.Split(".")[^1][2..];
@@ -1632,29 +1697,50 @@ public class GameItem
         _searchTags = null;
         textures.Clear();
     }
-    public bool IsFavourited => attributes?["favorite"]?.GetValue<bool>() ?? false;
-    bool? isSeenLocal = null;
-    public bool IsSeen => isSeenLocal ?? (attributes?["item_seen"]?.GetValue<bool>() ?? false || template?.CanBeUnseen != true);
-    public GameItem SetSeenLocal(bool? newVal = true)
+
+    bool? isFavouritedLocal = null;
+    public bool IsFavourited => isFavouritedLocal ?? attributes?["favorite"]?.GetValue<bool>() == true;
+    public void SetFavouritedLocal(bool? newVal)
     {
-        if (isSeenLocal == newVal)
-            return this;
+        if (isFavouritedLocal == newVal || template?.CanBeFavourited != true)
+            return;
+        bool realVal = attributes?["favorite"]?.GetValue<bool>() ?? false;
+        bool update = (newVal ?? realVal) != (isFavouritedLocal ?? realVal);
+        isFavouritedLocal = newVal;
+        if (update)
+            NotifyChanged();
+    }
+
+    public void SetFavourited(bool newVal)
+    {
+        if (template?.CanBeFavourited != true)
+            return;
+        SetFavouritedLocal(newVal);
+        string content = @$"{{""targetItemId"": ""{uuid}"", ""bFavorite"":{newVal.ToString().ToLower()}}}";
+        GD.Print("FAV: " + content);
+        profile.PerformOperation("SetItemFavoriteStatus", content).StartTask();
+    }
+
+    bool? isSeenLocal = null;
+    public bool IsSeen => isSeenLocal ?? attributes?["item_seen"]?.GetValue<bool>() ?? false || template?.CanBeUnseen != true;
+    public void SetSeenLocal(bool? newVal = true)
+    {
+        if (isSeenLocal == newVal || template?.CanBeUnseen != true)
+            return;
         bool realVal = attributes?["item_seen"]?.GetValue<bool>() ?? false;
         bool update = (newVal ?? realVal) != (isSeenLocal ?? realVal);
         isSeenLocal = newVal;
         if (update)
             NotifyChanged();
-        return this;
     }
 
-    public GameItem MarkItemSeen()
+    public void MarkItemSeen()
     {
         if (attributes?["item_seen"] is not null || template?.CanBeUnseen != true)
-            return this;
+            return;
         SetSeenLocal();
         string content = @$"{{""itemIds"": [""{uuid}""]}}";
         profile.PerformOperation("MarkItemSeen", content).StartTask();
-        return this;
     }
 
     public async void SetRewardNotification(GameAccount account = null, bool force = false)
@@ -1814,7 +1900,7 @@ public class GameItem
             if (matchedSquadID == survivorSquad)
                 rating *= 2;
         }
-        else if (profile.profileId == FnProfileTypes.AccountItems)
+        else if (profile?.profileId == FnProfileTypes.AccountItems)
         {
             var leadSurvivor = profile.GetItems("Worker", item =>
                 item.attributes?["squad_id"]?.ToString() == survivorSquad &&

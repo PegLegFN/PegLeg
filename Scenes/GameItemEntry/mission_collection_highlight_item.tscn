@@ -1,14 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://dbrrcnce14w8h"]
+[gd_scene load_steps=9 format=3 uid="uid://dbrrcnce14w8h"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_1qlyc"]
 [ext_resource type="Texture2D" uid="uid://docjdjoems0ia" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Black-L.png" id="1_5c4d1"]
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="2_4k5sn"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_jrnxm"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="5_htaww"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="6_dkobx"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="7_ipwjr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dk7yu"]
 shader = ExtResource("2_4k5sn")
-shader_parameter/ControlSize = Vector2(34, 34)
+shader_parameter/ControlSize = Vector2(24, 24)
 shader_parameter/CornerRadius = 3.0
 shader_parameter/Fit = true
 
@@ -60,9 +62,19 @@ theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 16
 text = " ! "
 
+[node name="CtxNoInteract" type="Node" parent="Icon" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("6_dkobx")
+itemSource = NodePath("../..")
+componentList = ExtResource("7_ipwjr")
+
 [node name="Responsive Button Area" parent="Icon" instance=ExtResource("5_htaww")]
 layout_mode = 1
 outlinePadding = 3.0
+
+[node name="Ctx" type="Node" parent="Icon/Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("6_dkobx")
+itemSource = NodePath("../../..")
+componentList = ExtResource("7_ipwjr")
 
 [connection signal="AmountChanged" from="." to="Icon/Label" method="set_text"]
 [connection signal="AmountVisibility" from="." to="Icon/Label" method="set_visible"]

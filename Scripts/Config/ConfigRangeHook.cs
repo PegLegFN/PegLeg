@@ -39,6 +39,10 @@ public partial class ConfigRangeHook : Node
             {
                 Connect("value_changed", Callable.From<double>(SetValue));
             }
+            if (HasSignal("drag_ended"))
+            {
+                Connect("drag_ended", Callable.From<bool>(SetValue));
+            }
             if ((double?)Get("value") is double)
             {
                 ConfigValueChanged += newVal => Set("value", (double)newVal);
@@ -48,7 +52,9 @@ public partial class ConfigRangeHook : Node
         base._Ready();
         EmitSignal(SignalName.AppliedChanged, true);
         AppConfig.OnConfigChanged += UpdateValue;
-        EmitSignal(SignalName.ConfigValueChanged, AppConfig.Get(section, key, defaultValue));
+        var startValue = AppConfig.Get(section, key, defaultValue);
+        EmitSignal(SignalName.ConfigValueChanged, startValue);
+        EmitSignal(SignalName.UnappliedLabelChanged, startValue.ToString()[..Mathf.Min(startValue.ToString().Length, 4)]);
     }
 
     private void UpdateValue(string section, string key, JsonValue val)
@@ -70,9 +76,16 @@ public partial class ConfigRangeHook : Node
     {
         if (requireApply)
         {
-            ApplyValueTyped(unappliedValue);
+            ApplyValueTyped(unappliedValue, true);
             EmitSignal(SignalName.AppliedChanged, true);
         }
+    }
+
+    public void SetValue(bool sliderChanged)
+    {
+        if (requireApply || valueIsChanging || !sliderChanged)
+            return;
+        ApplyValueTyped((double)Get("value"), true);
     }
 
     bool valueIsChanging;
@@ -82,7 +95,7 @@ public partial class ConfigRangeHook : Node
         {
             if (!requireApply)
             {
-                ApplyValueTyped(newValue);
+                ApplyValueTyped(newValue, false);
                 EmitSignal(SignalName.UnappliedLabelChanged, newValue.ToString()[..Mathf.Min(newValue.ToString().Length, 4)]);
                 EmitSignal(SignalName.AppliedChanged, true);
             }
@@ -95,11 +108,11 @@ public partial class ConfigRangeHook : Node
         }
     }
 
-    void ApplyValueTyped(double newValue)
+    void ApplyValueTyped(double newValue, bool print)
     {
         if(asInt)
-            AppConfig.Set(section, key, (int)newValue);
+            AppConfig.Set(section, key, (int)newValue, print);
         else
-            AppConfig.Set(section, key, newValue);
+            AppConfig.Set(section, key, newValue, print);
     }
 }

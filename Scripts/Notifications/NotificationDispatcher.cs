@@ -6,9 +6,11 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Frozen;
 using System.Text;
+using System.Text.Json;
 
 public partial class NotificationDispatcher : Node
 {
+    const string notifTimerPath = "user://notifTimes.json";
     class RefreshTimeContainer
     {
         public DateTime lastDailyCheck { get; set; }
@@ -33,7 +35,12 @@ public partial class NotificationDispatcher : Node
     public override void _Ready()
     {
         refreshTimes = new();
-        //load times from file
+        if (FileAccess.FileExists(notifTimerPath))
+        {
+            //load times from file
+            using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Read);
+            refreshTimes = JsonSerializer.Deserialize<RefreshTimeContainer>(timerFile.GetAsText());
+        }
         RefreshTimerController.OnHourChanged += HourlyNotifs;
         HourlyNotifs();
         GameMission.CheckMissions().StartTask();
@@ -52,8 +59,8 @@ public partial class NotificationDispatcher : Node
         icon = freeLlamaIcon,
         sound = freeLlamaSound,
         urgent = true,
-        firstAction = "View",
-        superAction = "Claim All",
+        //firstAction = "View",
+        //superAction = "Claim All",
         itemColor = Color.FromHtml("#bf00ff"),
     };
 
@@ -71,6 +78,8 @@ public partial class NotificationDispatcher : Node
     CancellationTokenSource notifCTS;
     async void HourlyNotifs()
     {
+        if (!AppConfig.Get("experimental", "notifications", false))
+            return;
         var hour = DateTime.UtcNow.Date.AddHours(DateTime.UtcNow.Hour);
         if (refreshTimes.lastHourlyCheck == hour)
             return;
@@ -88,6 +97,8 @@ public partial class NotificationDispatcher : Node
         ];
 
         //save refresh times
+        using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Write);
+        timerFile.StoreString(JsonSerializer.Serialize(refreshTimes));
 
         var notifs = (await Task.WhenAll(notifTasks)).SelectMany(n => n);
         if (ct.IsCancellationRequested)

@@ -90,7 +90,6 @@ public partial class ItemShopInterface : Control
     void SpawnShopEntry()
     {
         var newEntry = shopOfferEntryScene.Instantiate<GameOfferEntry>();
-        newEntry.Pressed += SelectShopItem;
         shopOfferEntryParent.AddChild(newEntry);
         inactiveEntries.Add(newEntry);
     }
@@ -116,7 +115,4 @@ public partial class ItemShopInterface : Control
         activeEntries.Remove(oldOffer.OfferId);
         inactiveEntries.Add(entry);
     }
-
-    void SelectShopItem(string offerId) => 
-        GameItemViewer.Instance.ShowOffer(activeEntries[offerId].currentOffer);
 }

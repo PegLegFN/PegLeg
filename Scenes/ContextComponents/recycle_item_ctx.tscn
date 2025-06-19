@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5a2r24tp1bf1"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_owjva"]
+[ext_resource type="Script" uid="uid://df7pcc15pr0ut" path="res://Scripts/ContextMenu/Components/RecycleItemCtx.cs" id="2_owjva"]
+[ext_resource type="Texture2D" uid="uid://l44adw334xao" path="res://Images/InterfaceIcons/T-SlotIcon-Recycle-128.png" id="3_owjva"]
+
+[node name="RecycleItemCtx" node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_owjva")]
+script = ExtResource("2_owjva")
+disabledPanel = NodePath("Disabled")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" index="0"]
+texture = ExtResource("3_owjva")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
+text = "Recycle"
+
+[connection signal="pressed" from="TextureButton" to="." method="Recycle"]

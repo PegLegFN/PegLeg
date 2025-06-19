@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://wb5ukb74fot1"]
+[gd_scene load_steps=23 format=3 uid="uid://wb5ukb74fot1"]
 
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="1_hvr15"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="1_io7lf"]
@@ -9,7 +9,12 @@
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="5_wjuhi"]
 [ext_resource type="Texture2D" uid="uid://bkj1uu2syehgg" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Item-GoldBars.png" id="7_bv0ye"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="8_ahbeu"]
+[ext_resource type="Texture2D" uid="uid://hskfanlp03l8" path="res://Images/InterfaceIcons/T-UI-SoldOut.png" id="8_e6bid"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="8_gu5mh"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="8_ocl4j"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="9_2uptj"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="11_mgblp"]
+[ext_resource type="Resource" uid="uid://7km1btwc7syu" path="res://Scripts/ContextMenu/ComponentLists/ShopOfferCtxList.tres" id="12_j05ur"]
 
 [sub_resource type="Gradient" id="Gradient_rxla7"]
 colors = PackedColorArray(0.9, 0.9, 0.9, 1, 0.6, 0.6, 0.6, 1)
@@ -59,7 +64,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="RegularShopEntry" type="MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+[node name="GameOfferEntry" type="MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
 custom_minimum_size = Vector2(175, 0)
 offset_right = 75.0
 offset_bottom = 75.0
@@ -115,6 +120,41 @@ layout_mode = 2
 texture = ExtResource("5_wjuhi")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="SoldOut" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="TextureRect" type="TextureRect" parent="SoldOut"]
+material = ExtResource("8_gu5mh")
+layout_mode = 2
+texture = ExtResource("8_e6bid")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="SoldOut/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.523599
+pivot_offset = Vector2(63.5, 19)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 36
+text = "Sold Out"
+
+[node name="InStock" type="Node" parent="SoldOut/TextureRect"]
+script = ExtResource("9_2uptj")
 
 [node name="DetailsArea" type="VBoxContainer" parent="."]
 clip_contents = true
@@ -196,17 +236,26 @@ self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3n3on")
 
-[node name="StockPanel" type="PanelContainer" parent="Outline"]
+[node name="Control" type="Control" parent="Outline"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+
+[node name="StockPanel" type="PanelContainer" parent="Outline/Control"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
+offset_left = -32.0
 offset_top = 5.0
 offset_right = -5.0
+offset_bottom = 19.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
 
-[node name="Stock" type="Label" parent="Outline/StockPanel"]
+[node name="Stock" type="Label" parent="Outline/Control/StockPanel"]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
@@ -217,11 +266,18 @@ text = "x999"
 layout_mode = 2
 outlinePadding = 0.0
 
-[node name="CtxHook" type="Node" parent="Responsive Button Area"]
+[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource", "offerSource")]
+script = ExtResource("11_mgblp")
+itemSource = NodePath("../../DetailsArea")
+offerSource = NodePath("../..")
+componentList = ExtResource("12_j05ur")
 
-[connection signal="IsLimitedStockChanged" from="." to="Outline/StockPanel" method="set_visible"]
+[connection signal="IsInStockChanged" from="." to="SoldOut/TextureRect/InStock" method="EmitInverted"]
+[connection signal="IsInStockChanged" from="." to="Outline/Control" method="set_visible"]
+[connection signal="IsLimitedStockChanged" from="." to="Outline/Control/StockPanel" method="set_visible"]
 [connection signal="NameChanged" from="." to="DetailsArea/NameBox/VBoxContainer/NameLabel" method="set_text"]
-[connection signal="StockChanged" from="." to="Outline/StockPanel/Stock" method="set_text"]
+[connection signal="StockChanged" from="." to="Outline/Control/StockPanel/Stock" method="set_text"]
+[connection signal="InvertedValue" from="SoldOut/TextureRect/InStock" to="SoldOut/TextureRect" method="set_visible"]
 [connection signal="IconChanged" from="DetailsArea" to="ItemIcon" method="set_texture"]
 [connection signal="RarityChanged" from="DetailsArea" to="RarityGradient" method="set_self_modulate"]
 [connection signal="RarityChanged" from="DetailsArea" to="Outline" method="set_self_modulate"]
@@ -230,4 +286,4 @@ outlinePadding = 0.0
 [connection signal="TypeChanged" from="DetailsArea" to="DetailsArea/NameBox/VBoxContainer/TypeLabel" method="set_text"]
 [connection signal="AmountChanged" from="DetailsArea/PriceBox" to="DetailsArea/PriceBox/MarginContainer/HBoxContainer/PriceAmount" method="set_text"]
 [connection signal="IconChanged" from="DetailsArea/PriceBox" to="DetailsArea/PriceBox/MarginContainer/HBoxContainer/CurrencyIcon" method="set_texture"]
-[connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="Inspect"]
