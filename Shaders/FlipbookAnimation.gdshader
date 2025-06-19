@@ -28,10 +28,10 @@ void fragment() {
 	float hmask = HorizontalMask>0.0 ? min(UV.x/HorizontalMask, -(UV.x/HorizontalMask)+(1.0/HorizontalMask)) : 1.0;
 	float vmask = VerticalMask>0.0 ? min(UV.y/VerticalMask, -(UV.y/VerticalMask)+(1.0/VerticalMask)) : 1.0;
 	float totalMask = min(hmask, vmask);
-	
+
 	float ratio=SliceAmount.x/SliceAmount.y;
 	vec2 ratioScale = ratio>1.0?vec2(1,ratio):vec2(1.0/ratio,1);
-	
+
 	vec2 adaptedUV = Fit ? adaptToAspect(ControlSize, vec2(0.5),ratioScale/TEXTURE_PIXEL_SIZE,UV, true) : UV;
 	vec2 slicedUV = flipbookSlice(adaptedUV, SliceAmount, float(CellCount), Frame<0 ? FPS*(scriptTime ? time : TIME) : float(Frame),Repeat);
 	COLOR = texture(TEXTURE, slicedUV) * modulate;

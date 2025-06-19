@@ -135,13 +135,17 @@ public partial class Bootstrap : Node
             }
             curtain.Visible = true;
             await Helpers.WaitForFrame();
-            window.Win64SetVisible(false);
+            window.Win64SetVisible(true);
             window.Size = windowSize;
             window.MoveToCenter();
             window.Transparent = false;
             window.TransparentBg = true;
             window.Borderless = false;
             window.Unfocusable = false;
+
+            var iconPath = ProjectSettings.GetSettingWithOverride("application/config/icon").ToString();
+            DisplayServer.SetIcon(ResourceLoader.Load<Texture2D>(iconPath).GetImage());
+
             await Helpers.WaitForFrame();
             await Helpers.WaitForFrame();
 
