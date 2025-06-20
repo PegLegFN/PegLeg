@@ -52,6 +52,14 @@ public partial class NotificationManager : Control
         queueTimer.Timeout += AppendFromQueue;
         ListProgress = _listProgress;
         AppConfig.OnConfigChanged += OnConfigChanged;
+        MouseEntered += CheckPassthrough;
+    }
+
+    private void CheckPassthrough()
+    {
+        if ((window.MousePassthroughPolygon.Length == 0) == (activeNotifications.Count == 0))
+            GD.Print("Mismatching notification window state. Correcting...");
+        window.MousePassthroughPolygon = activeNotifications.Count == 0 ? fullPassthrough : [];
     }
 
     private void OnConfigChanged(string section, string key, JsonValue value)
