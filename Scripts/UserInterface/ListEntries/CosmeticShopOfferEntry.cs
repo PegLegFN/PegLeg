@@ -179,20 +179,20 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             OS.ShellOpen(shopUrl);
     }
 
-    public void ContextMenu()
+    public void LoadOrOpenImage()
     {
         if (imageUrl is not null)
         {
             OS.ShellOpen(imageUrl);
         }
-        else if (!displayAssetLoadStarted)
-        {
-            displayAssetLoadStarted = true;
-            resourceLoadStarted = false;
-            loadingCubes.Visible = true;
-            resourceTarget.Visible = false;
-            StartResourceLoadSequence();
-        }
+        //else if (!displayAssetLoadStarted)
+        //{
+        //    displayAssetLoadStarted = true;
+        //    resourceLoadStarted = false;
+        //    loadingCubes.Visible = true;
+        //    resourceTarget.Visible = false;
+        //    StartResourceLoadSequence();
+        //}
     }
 
     void ApplyResource() => 
@@ -269,6 +269,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         currentOfferData = null;
     }
 
+    public bool HasImage => imageUrl is not null;
     string shopUrl = null;
     string layoutId = null;
     string imageUrl = null;
@@ -539,8 +540,6 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         string tooltip = mainName + " - " + mainType;
         if (fullExtraItemsText is not null)
             tooltip += "\nContents include: " + fullExtraItemsText;
-        if (entryData["isFallback"] is not null)
-            tooltip += "\nShift+Click to force download the Image";
 
         EmitSignal(SignalName.TooltipChanged, tooltip);
     }

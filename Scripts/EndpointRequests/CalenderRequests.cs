@@ -94,10 +94,14 @@ public static class CalenderRequests
 
         if (!hasCalender && FileAccess.FileExists(calenderCachePath))
         {
-            using FileAccess calenderFile = FileAccess.Open(calenderCachePath, FileAccess.ModeFlags.Read);
-            currentCalender = JsonSerializer.Deserialize<Calender>(calenderFile.GetAsText());
-            notify = true;
-            hasCalender = true;
+            try
+            {
+                using FileAccess calenderFile = FileAccess.Open(calenderCachePath, FileAccess.ModeFlags.Read);
+                currentCalender = JsonSerializer.Deserialize<Calender>(calenderFile.GetAsText());
+                notify = true;
+                hasCalender = true;
+            }
+            catch (JsonException) { }
         }
 
         GD.Print($"cal: {currentCalender.cacheExpire}   now: {DateTime.UtcNow}   request:{currentCalender.cacheExpire < DateTime.UtcNow}");
@@ -136,8 +140,7 @@ public static class CalenderRequests
         }
 
         var clientEvents = newData["channels"]["client-events"];
-        var oldState = currentCalender.GetLatestState();
-        currentCalender = new()
+        var newCalender = new Calender()
         {
             cacheExpire = clientEvents["cacheExpire"].AsTime(),
             states = [..clientEvents["states"].AsArray().Select(s => new EventState
@@ -154,9 +157,13 @@ public static class CalenderRequests
             })]
         };
 
+        if (JsonSerializer.Serialize(newCalender) is not string calenderFileData)
+            return false;
         using FileAccess calenderFile = FileAccess.Open(calenderCachePath, FileAccess.ModeFlags.Write);
-        calenderFile.StoreString(JsonSerializer.Serialize(currentCalender));
+        calenderFile.StoreString(calenderFileData);
 
+        var oldState = currentCalender.GetLatestState();
+        currentCalender = newCalender;
         var newState = currentCalender.GetCurrentState(true);
         return !oldState.Equals(newState) ? true : null;
     }
