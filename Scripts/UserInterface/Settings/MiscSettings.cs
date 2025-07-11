@@ -5,6 +5,13 @@ public partial class MiscSettings : Control
 {
 	[Export(PropertyHint.File, "*.tscn")]
 	string loginSceneFilePath;
+    [Export]
+    Control accountImportButton;
+
+    public override void _Ready()
+    {
+        accountImportButton.Visible = DirAccess.DirExistsAbsolute("user://../accounts");
+    }
 
     void SetInterfaceScale(float newInterfaceScale)
     {
@@ -14,6 +21,21 @@ public partial class MiscSettings : Control
     {
         if (@event is InputEventKey keyEvent && !keyEvent.IsEcho() && keyEvent.Pressed && keyEvent.Keycode == Key.M && keyEvent.CtrlPressed)
             VolumeController.ToggleBusMuted("Master");
+    }
+
+    void ImportAccounts()
+    {
+        foreach (var file in DirAccess.GetFilesAt("user://../accounts"))
+        {
+            DirAccess.CopyAbsolute($"user://../accounts/{file}", $"user://accounts/{file}");
+        }
+        GameAccount.UpdateAccountCache();
+        accountImportButton.Visible = false;
+    }
+
+    void OpenAppData()
+    {
+        OS.ShellOpen(ProjectSettings.GlobalizePath("user://"));
     }
 
     void ReturnToLogin()

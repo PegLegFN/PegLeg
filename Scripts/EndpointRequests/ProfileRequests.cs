@@ -12,7 +12,6 @@ using System.Threading;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Text.Json;
-using System.Security.Cryptography;
 
 
 public enum OrderRange
@@ -57,11 +56,7 @@ static class FnProfileTypes
 
 public partial class GameAccount
 {
-    const string accountDataPath = "user://accounts";
-    const string betaAccountDataPath = "../../accounts";
-    static string absoluteBetaAccountDataPath;
-    static string AbsoluteBetaAccountDataPath => absoluteBetaAccountDataPath ??=
-        System.IO.Path.GetFullPath(System.IO.Path.Combine(ProjectSettings.GlobalizePath(accountDataPath), betaAccountDataPath));
+    public const string accountDataPath = "user://accounts";
     static readonly AesContext deviceDetailEncryptor = new();
 
     static string GetDeviceDetailsKey()
@@ -130,62 +125,27 @@ public partial class GameAccount
 
     static GameAccount[] LoadStoredAccounts()
     {
-        if (!OS.HasFeature("test"))
-        {
-            if (!DirAccess.DirExistsAbsolute(accountDataPath))
-                return [];
+        if (!DirAccess.DirExistsAbsolute(accountDataPath))
+            return [];
 
-            using var accountDir = DirAccess.Open(accountDataPath);
-            return accountDir.GetFiles().Where(f => !f.Contains('.')).Select(f => new GameAccount(f)).ToArray();
-        }
-
-        Dictionary<string, ulong> regularAccountDates = [];
-        if (DirAccess.DirExistsAbsolute(accountDataPath))
-        {
-            using var mainAccountDir = DirAccess.Open(accountDataPath);
-            regularAccountDates = mainAccountDir
-                .GetFiles()
-                .Where(f => !f.Contains('.') && f is not null)
-                .Select(f => KeyValuePair.Create(
-                    f, 
-                    FileAccess.GetModifiedTime(accountDataPath+"/"+f)
-                ))
-                .ToDictionary();
-        }
-        Dictionary<string, ulong> betaAccountDates = [];
-
-        if (DirAccess.DirExistsAbsolute(AbsoluteBetaAccountDataPath))
-        {
-            using var betaAccountDir = DirAccess.Open(AbsoluteBetaAccountDataPath);
-            if(DirAccess.GetOpenError() is Error err && err != Error.Ok)
-            {
-                GD.Print(err);
-            }
-            betaAccountDates = betaAccountDir
-                .GetFiles()
-                .Where(f => !f.Contains('.') && f is not null)
-                .Select(f => KeyValuePair.Create(
-                    f,
-                    FileAccess.GetModifiedTime(AbsoluteBetaAccountDataPath + "/" + f)
-                ))
-                .ToDictionary();
-        }
-
-        foreach(var key in regularAccountDates.Keys.Intersect(betaAccountDates.Keys).ToArray())
-        {
-            if (regularAccountDates[key] < betaAccountDates[key])
-            {
-                regularAccountDates.Remove(key);
-            }
-            else
-            {
-                betaAccountDates.Remove(key);
-            }
-        }
-        return regularAccountDates.Keys.Select(k => new GameAccount(k)).Union(betaAccountDates.Keys.Select(k => new GameAccount(k, true))).ToArray();
+        using var accountDir = DirAccess.Open(accountDataPath);
+        return accountDir.GetFiles().Where(f => !f.Contains('.') && gameAccountCache?.ContainsKey(f) != true).Select(f => new GameAccount(f)).ToArray();
     }
 
-    static readonly Dictionary<string, GameAccount> gameAccountCache = LoadStoredAccounts().ToDictionary(a => a.accountId);
+    static Dictionary<string, GameAccount> gameAccountCache = LoadStoredAccounts().ToDictionary(a => a.accountId);
+    public static void UpdateAccountCache()
+    {
+        var newCache = LoadStoredAccounts();
+        foreach (var item in newCache)
+        {
+            gameAccountCache.TryAdd(item.accountId, item);
+        }
+        foreach (var item in gameAccountCache)
+        {
+            item.Value.localData = null;
+        }
+    }
+
     public static GameAccount[] OwnedAccounts => gameAccountCache.Values.Where(a => a.isOwned).ToArray();
     public static GameAccount GetOrCreateAccount(string accountId) => gameAccountCache.ContainsKey(accountId) ? gameAccountCache[accountId] : gameAccountCache[accountId] = new(accountId);
     public static async Task<bool> RemoveAccount(string accountId, bool force = false)
@@ -274,10 +234,9 @@ public partial class GameAccount
         account.SetAuthentication(accountAuthResponse);
     }
 
-    public GameAccount(string accountId, bool? isBeta=null)
+    public GameAccount(string accountId)
     {
         this.accountId = accountId;
-        this.isBeta = isBeta ?? OS.HasFeature("test");
     }
 
     public Action OnAccountUpdated;
@@ -574,14 +533,13 @@ public partial class GameAccount
     JsonObject localData;
     void LoadLocalData()
     {
-        var targetPath = isBeta ? AbsoluteBetaAccountDataPath : accountDataPath;
-        if (!isValid || !DirAccess.DirExistsAbsolute(targetPath))
+        if (!isValid || !DirAccess.DirExistsAbsolute(accountDataPath))
         {
             GD.Print("invalid or no folder");
             localData = [];
             return;
         }
-        using FileAccess localDataFile = FileAccess.Open($"{targetPath}/{accountId}", FileAccess.ModeFlags.Read);
+        using FileAccess localDataFile = FileAccess.Open($"{accountDataPath}/{accountId}", FileAccess.ModeFlags.Read);
         if (localDataFile is null)
         {
             GD.Print("no file");

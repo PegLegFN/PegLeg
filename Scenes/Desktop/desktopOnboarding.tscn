@@ -60,7 +60,7 @@ stretch_mode = 6
 stream = ExtResource("4_xqkmk")
 volume_db = -20.0
 
-[node name="CenterContainer" type="CenterContainer" parent="." node_paths=PackedStringArray("curtain", "music", "loginLabel", "retryLoginButton", "continueButton")]
+[node name="CenterContainer" type="CenterContainer" parent="." node_paths=PackedStringArray("curtain", "music", "loadingWheel", "loginCodeContent", "loginLabel", "retryLoginButton", "continueButton", "importButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -71,9 +71,12 @@ script = ExtResource("5_p8lju")
 mainInterfacePath = "res://Scenes/Desktop/desktopInterface.tscn"
 curtain = NodePath("../Curtain")
 music = NodePath("../Music")
-loginLabel = NodePath("MarginContainer/Content/LoginCode/LinkCodeText")
+loadingWheel = NodePath("MarginContainer/LoadingIcon")
+loginCodeContent = NodePath("MarginContainer/Content")
+loginLabel = NodePath("MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText")
 retryLoginButton = NodePath("MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/RetryLogn")
 continueButton = NodePath("MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/CompleteLogin")
+importButton = NodePath("MarginContainer/Content/LoginCode/ImportButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer"]
 custom_minimum_size = Vector2(300, 320)
@@ -123,13 +126,18 @@ theme_override_font_sizes/font_size = 15
 text = "To log in to your Epic Games account, click the link and enter in the code shown below."
 autowrap_mode = 3
 
-[node name="LinkCodeText" type="LineEdit" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+layout_mode = 2
+theme_override_constants/margin_bottom = -10
+
+[node name="LinkCodeText" type="LineEdit" parent="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/selection_color = Color(1, 1, 1, 1)
 theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
 theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_tyimv")
 placeholder_text = "########"
@@ -143,6 +151,13 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "https://www.epicgames.com/id/activate"
 uri = "https://www.epicgames.com/id/activate"
+
+[node name="ImportButton" type="Button" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 12
+text = "Import accounts from PegLeg (Release)"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
 layout_mode = 2
@@ -469,11 +484,11 @@ volume_db = -12.0
 max_polyphony = 2
 bus = &"SFX"
 
-[connection signal="LoginFailed" from="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" to="CenterContainer" method="LoginCodeFail"]
-[connection signal="LoginStarted" from="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" method="set_placeholder" binds= ["########"]]
-[connection signal="LoginSucceeded" from="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" method="set_placeholder" binds= ["Success"]]
-[connection signal="LoginSuccess" from="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" to="CenterContainer" method="LoginCodeSuccess"]
-[connection signal="UserCodeChanged" from="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/LinkCodeText" method="set_text"]
+[connection signal="LoginFailed" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer" method="LoginCodeFail"]
+[connection signal="LoginStarted" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="set_placeholder" binds= ["########"]]
+[connection signal="LoginSucceeded" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="set_placeholder" binds= ["Success"]]
+[connection signal="LoginSuccess" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer" method="LoginCodeSuccess"]
+[connection signal="UserCodeChanged" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="set_text"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/CompleteLogin" to="CenterContainer" method="ComplateCodeLogin"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/RetryLogn" to="CenterContainer" method="StartLogin"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/ErrorMessage/ErrorContent/VBoxContainer/Button" to="CenterContainer/MarginContainer/Content/ErrorMessage" method="set_visible" binds= [false]]

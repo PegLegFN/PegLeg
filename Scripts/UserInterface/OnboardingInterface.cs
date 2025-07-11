@@ -10,14 +10,20 @@ public partial class OnboardingInterface : Control
     ShaderHook curtain;
     [Export]
     AudioStreamPlayer music;
+    [Export]
+    Control loadingWheel;
 
     [ExportGroup("Login Code")]
+    [Export]
+    Control loginCodeContent;
     [Export]
     CodeLoginLabel loginLabel;
     [Export]
     Button retryLoginButton;
     [Export]
     Button continueButton;
+    [Export]
+    Button importButton;
 
     [ExportGroup("Account Selection")]
     [Export]
@@ -30,6 +36,8 @@ public partial class OnboardingInterface : Control
         continueButton.Text = "";
         curtain.SetShaderFloat(0, "RevealScale");
         curtain.Visible = true;
+
+        importButton.Visible = DirAccess.DirExistsAbsolute("user://../accounts");
 
         MusicController.StopMusic();
         music.VolumeDb = -80;
@@ -44,6 +52,46 @@ public partial class OnboardingInterface : Control
         curtain.Visible = false;
 
         StartLogin();
+    }
+
+    async void ImportAccounts()
+    {
+        loginCodeContent.Visible = false;
+        loadingWheel.Visible = true;
+        bool hasAccount = false;
+
+        try
+        {
+            foreach (var file in DirAccess.GetFilesAt("user://../accounts"))
+            {
+                DirAccess.CopyAbsolute($"user://../accounts/{file}", $"user://accounts/{file}");
+            }
+            GameAccount.UpdateAccountCache();
+
+            if (!hasAccount)
+            {
+                foreach (var a in GameAccount.OwnedAccounts)
+                {
+                    if (!await a.SetAsActiveAccount())
+                        continue;
+                    hasAccount = true;
+                    break;
+                }
+            }
+            if (hasAccount)
+            {
+                ContinueToMainScene();
+            }
+        }
+        finally
+        {
+            if (!hasAccount)
+            {
+                loginCodeContent.Visible = true;
+                loadingWheel.Visible = false;
+                importButton.Disabled = true;
+            }
+        }
     }
 
     void TweenCurtain(bool open)

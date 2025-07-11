@@ -114,7 +114,6 @@ theme_override_constants/margin_right = 10
 layout_mode = 2
 theme_type_variation = &"VTab"
 toggle_mode = true
-button_pressed = true
 button_group = SubResource("ButtonGroup_w03hs")
 text = "Interface"
 alignment = 0
@@ -154,6 +153,7 @@ theme_override_constants/margin_left = 10
 layout_mode = 2
 theme_type_variation = &"VTab"
 toggle_mode = true
+button_pressed = true
 button_group = SubResource("ButtonGroup_w03hs")
 text = "Misc"
 alignment = 0
@@ -209,6 +209,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="0"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface" index="0"]
@@ -896,11 +897,11 @@ layout_mode = 1
 useHold = true
 outlinePadding = 20.0
 
-[node name="Misc" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="3"]
-visible = false
+[node name="Misc" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="3" node_paths=PackedStringArray("accountImportButton")]
 layout_mode = 2
 script = ExtResource("2_dybhj")
 loginSceneFilePath = "res://Scenes/Desktop/desktopLogin.tscn"
+accountImportButton = NodePath("VBoxContainer/ImportButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" index="0"]
 layout_mode = 2
@@ -966,6 +967,30 @@ section = "missions"
 key = "reset_detection"
 defaultValue = true
 
+[node name="UserDataButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="8"]
+layout_mode = 2
+text = "Open AppData folder"
+
+[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="9"]
+visible = false
+layout_mode = 2
+text = "Import accounts from PegLeg (Release)"
+
+[node name="ImportButton" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="10"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_type_variation = &"PanelContainerButton"
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButton" index="0"]
+layout_mode = 2
+text = "Import accounts from PegLeg (Release)"
+horizontal_alignment = 1
+
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButton" index="1" instance=ExtResource("9_yv42k")]
+layout_mode = 2
+useHold = true
+holdTime = 2.5
+
 [node name="FileDialog" type="FileDialog" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" index="1"]
 title = "Open a Directory"
 size = Vector2i(374, 175)
@@ -977,8 +1002,6 @@ use_native_dialog = true
 [node name="Advanced" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="4"]
 visible = false
 layout_mode = 2
-script = ExtResource("2_dybhj")
-loginSceneFilePath = "res://Scenes/Desktop/desktopOnboarding.tscn"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced" index="0"]
 layout_mode = 2
@@ -1105,4 +1128,7 @@ key = "beastmode"
 [connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/HSlider" method="set_value_no_signal"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" method="ToggleMute"]
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="ApplyTheme"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenAppData"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
+[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButton/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/ExperimentalNotifs" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection" method="set_visible"]
