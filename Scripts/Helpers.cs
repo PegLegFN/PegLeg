@@ -40,6 +40,27 @@ static class Helpers
         group.AllowUnpress = allowUnpress;
     }
 
+    public static bool TryGetImage(this Dictionary<string, WeakRef> refDict, string key, out ImageTexture image)
+    {
+        if (refDict.TryGetValue(key, out var wRef) && wRef?.GetRef().Obj is ImageTexture cachedTexture)
+        {
+            image = cachedTexture;
+            return true;
+        }
+        image = null;
+        return false;
+    }
+    public static bool TryGetImage(this WeakRef wRef, out ImageTexture image)
+    {
+        if(wRef?.GetRef().Obj is ImageTexture cachedTexture)
+        {
+            image = cachedTexture;
+            return true;
+        }
+        image = null;
+        return false;
+    }
+
     public static int ConvertRarityString(this string rarity)=> rarity switch
     {
         "Common" => 1,

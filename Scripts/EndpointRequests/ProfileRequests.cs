@@ -447,7 +447,7 @@ public partial class GameAccount
 
             var skinData = await Helpers.MakeRequest(
                 HttpMethod.Get,
-                ExternalWebAddresses.fnApi,
+                WebClients.fnApi,
                 $"/v2/cosmetics/br/{skinId}",
                 "{}",
                 null,

@@ -39,7 +39,7 @@ static class FnWebAddresses
     };
 }
 
-static class ExternalWebAddresses
+static class WebClients
 {
     public static readonly HttpClient fnApi = new()
     {
@@ -48,6 +48,10 @@ static class ExternalWebAddresses
     public static readonly HttpClient fnApiJamTrakcs = new()
     {
         BaseAddress = new Uri("https://cdn.fortnite-api.com")
+    };
+    public static readonly HttpClient dillyApi = new()
+    {
+        BaseAddress = new Uri("https://export-service.dillyapis.com")
     };
     public static readonly HttpClient fnCentral = new()
     {

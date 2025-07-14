@@ -203,12 +203,15 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         bool fit = tex is not null && resourceFit;
         tex ??= fallbackTexture;
         //resourceTarget.SetShaderTexture(tex, "Cosmetic");
-        resourceTarget.Texture = tex;
-        resourceTarget.SetShaderVector(shift, "ShiftDirection");
-        resourceTarget.SetShaderBool(fit, "Fit");
+        if (resourceTarget.IsInsideTree())
+        {
+            resourceTarget.Texture = tex;
+            resourceTarget.SetShaderVector(shift, "ShiftDirection");
+            resourceTarget.SetShaderBool(fit, "Fit");
+            resourceTarget.Visible = true;
+        }
         resourceLoadStarted = true;
         loadingCubes.Visible = false;
-        resourceTarget.Visible = true;
     }
 
     void ApplyOfferResource() => 

@@ -1,12 +1,10 @@
 using Godot;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -477,7 +475,7 @@ static class CatalogRequests
         GD.Print("retrieving cosmetic visuals from fortnite-api...");
         JsonNode cosmeticDisplayData = await Helpers.MakeRequest(
                 HttpMethod.Get,
-                ExternalWebAddresses.fnApi,
+                WebClients.fnApi,
                 "v2/shop?responseFlags=4", // 1 = paths, 2 = gameplayTags, 4 = shop history
                 "",
                 null,
@@ -525,7 +523,7 @@ static class CatalogRequests
     {
         lock (activeResourceCache)
         {
-            if (activeResourceCache.ContainsKey(serverPath) && activeResourceCache[serverPath]?.GetRef().Obj is ImageTexture cachedTexture)
+            if (activeResourceCache.TryGetImage(serverPath, out var cachedTexture))
                 return cachedTexture;
         }
         
@@ -587,16 +585,16 @@ static class CatalogRequests
         //}
         string localPath = imageCacheFolderPath;
         string halfPath = "";
-        var client = ExternalWebAddresses.fnApi;
+        var client = WebClients.fnApi;
         if (isFNCentral)
         {
-            client = ExternalWebAddresses.fnCentral;
+            client = WebClients.fnCentral;
             localPath += "/" + serverPath.Split('/')[^1] + ".webp";
             halfPath = "/api/v1/export?path=" + serverPath[fnCentralPrefix.Length..];
         }
         else if (isJamTrack)
         {
-            client = ExternalWebAddresses.fnApiJamTrakcs;
+            client = WebClients.fnApiJamTrakcs;
             localPath += serverPath[fnapiJamTrackPrefix.Length..].Replace("/", "-");
             halfPath = "/tracks/" + serverPath[fnapiJamTrackPrefix.Length..];
         }
@@ -689,7 +687,7 @@ static class CatalogRequests
             GD.Print("Meta: "+pathOrTemplateID.Split('.')[0]);
             JsonNode resultObject = await Helpers.MakeRequest(
                 HttpMethod.Get,
-                ExternalWebAddresses.fnCentral,
+                WebClients.fnCentral,
                 $"api/v1/export?path={pathOrTemplateID.Split('.')[0]}",
                 "",
                 null
@@ -708,7 +706,7 @@ static class CatalogRequests
             {
                 JsonNode resultObject = await Helpers.MakeRequest(
                     HttpMethod.Get,
-                    ExternalWebAddresses.fnCentral,
+                    WebClients.fnCentral,
                     $"api/v1/export?path={remotePath}",
                     "",
                     null
@@ -1141,10 +1139,11 @@ public class GameOffer
         personalPrice = null;
     }
 
-    //public async Task GetCosmeticData()
-    //{
+    public
+    public async Task LoadCosmeticData()
+    {
 
-    //}
+    }
 
     GameItem GetRegularPrice()
     {
