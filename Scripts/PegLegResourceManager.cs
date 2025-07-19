@@ -646,7 +646,7 @@ public class GameItemTemplate
     };
     public bool CanBeFavourited => Type switch
     {
-        "Hero" or "Worker" or "Defender" or "Schematic" => true,
+        "Hero" or "Worker" or "Defender" or "Schematic" or "AccountResource"=> true,
         _ => false
     };
 

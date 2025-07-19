@@ -8,7 +8,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-static class CosmeticRequests
+public static class CosmeticRequests
 {
     public static Dictionary<string, FNAPIOffer> CosmeticOffers { get; private set; } = [];
     public static Dictionary<string, DillyDisplayAsset> DisplayAssets { get; private set; } = [];
@@ -72,6 +72,9 @@ static class CosmeticRequests
 
     public static RawCosmetic LoadLocalRawCosmetic(string itemId)
     {
+        if (itemId is null)
+            return null;
+
         lock (rawCosmetics)
         {
             if (rawCosmetics.TryGetValue(itemId, out var cached))
@@ -152,12 +155,8 @@ static class CosmeticRequests
     static ImageTexture LoadLocalImageFromGamePath(string path, out string filename)
     {
         filename = null;
-
-        lock (imageCache)
-        {
-            if (imageCache.TryGetImage(path, out var cachedImage))
-                return cachedImage;
-        }
+        if (path is null)
+            return null;
 
         int substringStart = path.LastIndexOf('/');
         int substringEnd = path.LastIndexOf('.');
@@ -165,10 +164,39 @@ static class CosmeticRequests
             substringEnd = path.Length;
         filename = path[substringStart..substringEnd];
 
-        if (FileAccess.FileExists($"user://cosmetic_images/{filename}.png"))
+        return LoadLocalImage(filename);
+    }
+
+    public static async Task<ImageTexture> LoadImageFromGamePath(string path)
+    {
+        if (path is null)
+            return null;
+
+        if (LoadLocalImageFromGamePath(path, out var filename) is ImageTexture cachedImage)
+            return cachedImage;
+
+        if (!CanAffordRequests())
+            return null;
+        exportTimestamps.Enqueue(DateTime.Now);
+
+        return await LoadRemoteImage(() => WebClients.dillyApi.MakeRequest($"v1/export?Path={path}"), filename);
+    }
+
+    static ImageTexture LoadLocalImage(string identifier)
+    {
+        if (identifier is null)
+            return null;
+
+        lock (imageCache)
+        {
+            if (imageCache.TryGetImage(identifier, out var cachedImage))
+                return cachedImage;
+        }
+
+        if (FileAccess.FileExists($"user://cosmetic_images/{identifier}.png"))
         {
             Image image = new();
-            using var imageFile = FileAccess.Open($"user://cosmetic_images/{filename}.png", FileAccess.ModeFlags.ReadWrite);
+            using var imageFile = FileAccess.Open($"user://cosmetic_images/{identifier}.png", FileAccess.ModeFlags.ReadWrite);
             if (image.LoadPngFromBuffer(imageFile.GetBuffer((long)imageFile.GetLength())) == Error.Ok)
             {
                 //make a fake modification to change the modified date when the file is disposed
@@ -178,10 +206,10 @@ static class CosmeticRequests
                 imageFile.Store8(temp);
 
                 var imageTex = ImageTexture.CreateFromImage(image);
-                imageTex.ResourceName = path;
+                imageTex.ResourceName = identifier;
                 lock (imageCache)
                 {
-                    imageCache[path] = GodotObject.WeakRef(imageTex);
+                    imageCache[identifier] = GodotObject.WeakRef(imageTex);
                 }
                 return imageTex;
             }
@@ -189,18 +217,11 @@ static class CosmeticRequests
         return null;
     }
 
-    public static async Task<ImageTexture> LoadImageFromGamePath(string path)
+    static async Task<ImageTexture> LoadRemoteImage(Func<WebHelpers.BoundHttpsRequestMessage> requestBuilder, string identifier)
     {
-        if (LoadLocalImageFromGamePath(path, out var filename) is ImageTexture localImg)
-            return localImg;
-
-        if (!CanAffordRequests())
-            return null;
-        exportTimestamps.Enqueue(DateTime.Now);
-
         try
         {
-            var rawResponse = await WebClients.dillyApi.MakeRequest($"v1/export?Path={path}").Send();
+            var rawResponse = await requestBuilder().Send();
             Image image = new();
             byte[] imageBuffer = await rawResponse.Content.ReadAsByteArrayAsync();
             if (image.LoadPngFromBuffer(imageBuffer) == Error.Ok)
@@ -209,16 +230,16 @@ static class CosmeticRequests
                 if (!DirAccess.DirExistsAbsolute("user://cosmetic_images"))
                     DirAccess.MakeDirAbsolute("user://cosmetic_images");
 
-                using (var imageFile = FileAccess.Open($"user://cosmetic_images/{filename}.png", FileAccess.ModeFlags.Write))
+                using (var imageFile = FileAccess.Open($"user://cosmetic_images/{identifier}.png", FileAccess.ModeFlags.Write))
                 {
                     imageFile.StoreBuffer(imageBuffer);
                 }
 
                 var imageTex = ImageTexture.CreateFromImage(image);
-                imageTex.ResourceName = path;
+                imageTex.ResourceName = identifier;
                 lock (imageCache)
                 {
-                    imageCache[path] = GodotObject.WeakRef(imageTex);
+                    imageCache[identifier] = GodotObject.WeakRef(imageTex);
                 }
             }
         }
@@ -232,11 +253,87 @@ static class CosmeticRequests
         public string offerId;
         public LayoutData? layout;
         public DisplayData? newDisplayAsset;
+        public BundleData? bundle;
         public FNAPICosmetic[] brItems;
         public FNAPICosmetic[] cars;
         public FNAPICosmetic[] instruments;
         public FNAPITrack[] tracks;
+        [JsonInclude]
+        DateTime inDate;
+        [JsonInclude]
+        DateTime outDate;
 
+        [JsonIgnore]
+        FNAPICosmetic FirstCosmeticInternal =>
+            (brItems.Length > 0 ? brItems[0] : null) ??
+            (cars.Length > 0 ? cars[0] : null) ??
+            (instruments.Length > 0 ? instruments[0] : null);
+
+        [JsonIgnore]
+        public IFNAPICosmetic FirstCosmetic =>
+            (brItems.Length > 0 ? brItems[0] : null) ??
+            (cars.Length > 0 ? cars[0] : null) ??
+            (instruments.Length > 0 ? instruments[0] : null) ??
+            (tracks.Length > 0 ? (IFNAPICosmetic)tracks[0] : null);
+
+        public IFNAPICosmetic[] AllCosmetics =>
+            brItems.Cast<IFNAPICosmetic>()
+                .Concat(cars.Cast<IFNAPICosmetic>())
+                .Concat(instruments.Cast<IFNAPICosmetic>())
+                .Concat(tracks.Cast<IFNAPICosmetic>())
+                .ToArray();
+
+        public string DisplayName=>
+            bundle?.name ?? FirstCosmetic?.Name ?? "<Unknown>";
+        public string DisplayType
+        {
+            get
+            {
+                var items = AllCosmetics;
+                if (items.Length == 0)
+                    return "<Empty?>";
+                if (bundle is not null)
+                    return $"Bundle [{items.Length} item{(items.Length > 1 ? "s" : "")}]";
+                return $"{items[0].DisplayType}" + (items.Length > 1 ? $" [+{items.Length - 1} item{(items.Length > 2 ? "s" : "")}]" : "");
+            }
+        }
+
+
+        public ImageTexture GetLocalOfferImage()
+        {
+            if(newDisplayAsset is not null)
+                return LoadLocalImage(newDisplayAsset?.id);
+            if(FirstCosmeticInternal is FNAPICosmetic first)
+                return LoadLocalImage(first.Id);
+            if (tracks?.Length > 0)
+                return LoadLocalImage(tracks[0].Id);
+            return null;
+        }
+
+        public async Task<ImageTexture> LoadOfferImage()
+        {
+            if (GetLocalOfferImage() is ImageTexture cached)
+                return cached;
+
+            if (newDisplayAsset is not null)
+                return await LoadRemoteImage(() => WebClients.fnApi.MakeLinkRequest(newDisplayAsset?.renderImages[0].image), newDisplayAsset?.id);
+            if (FirstCosmeticInternal is FNAPICosmetic first)
+                return await LoadRemoteImage(() => WebClients.fnApi.MakeLinkRequest(first.images?.featured), first.Id);
+            if (tracks?.Length > 0)
+                return await LoadRemoteImage(() => WebClients.fnApiJamTrakcs.MakeLinkRequest(tracks[0].albumArt), tracks[0].Id);
+            return null;
+        }
+
+        public CosmeticMeta GenerateCosmeticMeta()
+        {
+            return new(AllCosmetics.Select(c=>c.GenerateCosmeticMeta(inDate, outDate)).ToArray());
+        }
+
+        public record struct BundleData
+        {
+            public string name;
+            public string info;
+        }
         public record struct LayoutData
         {
             public string id;
@@ -267,15 +364,77 @@ static class CosmeticRequests
         }
     }
 
-    public record FNAPICosmetic
+    public interface IFNAPICosmetic
     {
-        public string id;
-        public string name;
-        public string description;
+        public string Id { get; }
+        public string Name { get; }
+        public string Description { get; }
+        public string DisplayType { get; }
+        protected DateTime[] History { get; }
+
+        public DateTime? LastSeen(DateTime inDate)
+        {
+            var shopHistory = History;
+
+            for (int i = shopHistory.Length - 1; i >= 0; i--)
+            {
+                DateTime utcDate = shopHistory[i].ToUniversalTime();
+                if (utcDate.CompareTo(inDate) == -1)
+                {
+                    return utcDate;
+                }
+            }
+
+            return null;
+        }
+
+        public bool IntroducedRecently(int dayThreshold = 7)
+        {
+            var shopHistory = History;
+            if (shopHistory.Length == 0)
+                return true;
+            return (shopHistory[0].ToUniversalTime() - DateTime.UtcNow.Date).TotalDays < 7;
+        }
+
+        public CosmeticMeta GenerateCosmeticMeta(DateTime inDate, DateTime outDate)
+        {
+            var lastSeen = LastSeen(inDate);
+            var introducedRecently = IntroducedRecently();
+            return new()
+            {
+                lastSeenDaysAgo = lastSeen is null ? 0 : (int)(DateTime.UtcNow.Date - lastSeen.Value).TotalDays,
+                isRecentlyNew = introducedRecently,
+                isAddedToday = inDate == DateTime.UtcNow.Date,
+                isLeavingSoon = (outDate - DateTime.UtcNow.Date).TotalHours < 24,
+                lastAddedDate = lastSeen is null ? DateTime.UtcNow.Date : lastSeen.Value
+            };
+        }
+    }
+
+    public record FNAPICosmetic : IFNAPICosmetic
+    {
+        [JsonInclude]
+        string id;
+        [JsonInclude]
+        string name;
+        [JsonInclude]
+        string description;
         public TypeData? type;
         public IntroductionData? introduction;
         public ImagePathData? images;
-        public DateTime[] shopHistory;
+        [JsonInclude]
+        DateTime[] shopHistory;
+
+        [JsonIgnore]
+        public string Id => id;
+        [JsonIgnore]
+        public string Name => name;
+        [JsonIgnore]
+        public string Description => description;
+        [JsonIgnore]
+        public string DisplayType => type?.displayValue;
+        [JsonIgnore]
+        public DateTime[] History => shopHistory;
 
         public record struct TypeData
         {
@@ -292,21 +451,39 @@ static class CosmeticRequests
         }
         public record struct ImagePathData
         {
-            public string value;
-            public string displayValue;
-            public string backendValue;
+            public string smallIcon;
+            public string icon;
+            public string featured;
+
+            [JsonIgnore]
+            public string Main => featured ?? icon ?? smallIcon;
         }
     }
 
-    public record FNAPITrack
+    public record FNAPITrack : IFNAPICosmetic
     {
-        public string id;
+        [JsonInclude]
+        string id;
+        [JsonInclude]
         public string title;
         public string artist;
         public string album;
         public int releaseYear;
         public string albumArt;
-        public DateTime[] shopHistory;
+        [JsonInclude]
+        DateTime[] shopHistory;
+
+
+        [JsonIgnore]
+        public string Id => id;
+        [JsonIgnore]
+        public string Name => title;
+        [JsonIgnore]
+        public string Description => $"{artist}\n{releaseYear}";
+        [JsonIgnore]
+        public string DisplayType => "Jam Track";
+        [JsonIgnore]
+        public DateTime[] History => shopHistory;
     }
     #endregion
 
@@ -320,6 +497,24 @@ static class CosmeticRequests
         {
             public string productTag;
             public string imagePath;
+        }
+        public ImageTexture GetLocalOfferImage() => GetLocalOfferImage(out _);
+        ImageTexture GetLocalOfferImage(out string targetPath)
+        {
+            targetPath = null;
+            if (renderImages.Length == 0)
+                return null;
+            DisplayImage? target = renderImages.FirstOrDefault(i => i.productTag == "Product.BR");
+            target ??= renderImages[0];
+            targetPath = target?.imagePath;
+            return LoadLocalImageFromGamePath(targetPath);
+        }
+
+        public async Task<ImageTexture> LoadOfferImage()
+        {
+            if (GetLocalOfferImage(out var path) is ImageTexture cached)
+                return cached;
+            return await LoadImageFromGamePath(path);
         }
     }
 
@@ -362,9 +557,9 @@ static class CosmeticRequests
         public async Task<bool> LoadVariantIcons()
         {
             var unloaded = variants.Where(v => v.Options.Any(o => o.LocalImage == null));
-            if(!unloaded.Any())
+            if (!unloaded.Any())
                 return true;
-            var imageTotal = unloaded.Select(v=>v.Options.Length).Sum();
+            var imageTotal = unloaded.Select(v => v.Options.Length).Sum();
             if (!CanAffordRequests(imageTotal))
             {
                 var firstUnloaded = unloaded.FirstOrDefault();
@@ -401,7 +596,7 @@ static class CosmeticRequests
                     if (hasCheckedForLocalImage)
                         return imageTexture;
                     hasCheckedForLocalImage = true;
-                    return imageTexture = LoadLocalImageFromGamePath(PreviewImage.FormattedAssetPathName);
+                    return imageTexture = LoadLocalImageFromGamePath(PreviewImage.AssetPathName);
                 }
             }
 
@@ -409,21 +604,12 @@ static class CosmeticRequests
             {
                 if (LocalImage is not null)
                     return;
-                imageTexture = await LoadImageFromGamePath(PreviewImage.FormattedAssetPathName);
+                imageTexture = await LoadImageFromGamePath(PreviewImage.AssetPathName);
             }
 
             public record struct PreviewImagePath
             {
                 public string AssetPathName;
-                public string FormattedAssetPathName
-                {
-                    get
-                    {
-                        var noDot = AssetPathName[AssetPathName.IndexOf('.')..];
-                        var splitBySlash = noDot.Split('/');
-                        return $"FortniteGame/Plugins/GameFeatures/{splitBySlash[0]}/Content/{splitBySlash[1..].Join("/")}";
-                    }
-                }
                 public string SubPathString;
             }
         }
@@ -434,4 +620,32 @@ static class CosmeticRequests
         public string localizedString;
     }
     #endregion
+
+    public record struct CosmeticMeta
+    {
+        public int lastSeenDaysAgo;
+        public bool isRecentlyNew;
+        public bool isAddedToday;
+        public bool isLeavingSoon;
+        public bool isBestseller;
+        public DateTime? lastAddedDate;
+
+        public CosmeticMeta() { }
+
+        public CosmeticMeta(CosmeticMeta[] itemMetadatas)
+        {
+            if (itemMetadatas.Length == 0)
+            {
+                this = default;
+                return;
+            }
+            lastSeenDaysAgo = itemMetadatas.Select(m => m.lastSeenDaysAgo).Max();
+            isRecentlyNew = itemMetadatas.Any(m => m.isRecentlyNew);
+            isAddedToday = itemMetadatas.Any(m => m.isAddedToday);
+            isLeavingSoon = itemMetadatas.Any(m => m.isLeavingSoon);
+            isBestseller = itemMetadatas.Any(m => m.isBestseller);
+
+            lastAddedDate = itemMetadatas.Select(m => m.lastAddedDate).OrderBy(d => d).FirstOrDefault();
+        }
+    }
 }

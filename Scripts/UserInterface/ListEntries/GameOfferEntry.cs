@@ -59,27 +59,20 @@ public partial class GameOfferEntry : Control
     public override void _Ready()
     {
         VisibilityChanged += CheckForRefresh;
-        GameAccount.ActiveAccountChangedEarly += OnActiveAccountChanged;
+        GameAccount.ActiveAccountChangedEarly += MarkDirty;
     }
 
     public override void _ExitTree()
     {
         VisibilityChanged -= CheckForRefresh;
-        GameAccount.ActiveAccountChangedEarly -= OnActiveAccountChanged;
+        GameAccount.ActiveAccountChangedEarly -= MarkDirty;
     }
 
-    private void OnActiveAccountChanged()
+    private void MarkDirty()
     {
         offerDirty = true;
         CheckForRefresh();
     }
-
-    private void OnOfferChanged(GameOffer _)
-    {
-        offerDirty = true;
-        CheckForRefresh();
-    }
-    private void OnOfferRemoved(GameOffer _) => ClearOffer();
 
     private void CheckForRefresh()
     {
@@ -105,11 +98,11 @@ public partial class GameOfferEntry : Control
         {
             if(currentOffer is not null)
             {
-                currentOffer.OnChanged -= OnOfferChanged;
-                currentOffer.OnRemoved -= OnOfferRemoved;
+                currentOffer.OnChanged -= MarkDirty;
+                currentOffer.OnRemoved -= ClearOffer;
             }
-            shopOffer.OnChanged += OnOfferChanged;
-            shopOffer.OnRemoved += OnOfferRemoved;
+            shopOffer.OnChanged += MarkDirty;
+            shopOffer.OnRemoved += ClearOffer;
         }
 
         EmitSignal(SignalName.IsErrored, false);

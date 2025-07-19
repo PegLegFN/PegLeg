@@ -38,6 +38,11 @@ public partial class MiscSettings : Control
         OS.ShellOpen(ProjectSettings.GlobalizePath("user://"));
     }
 
+    void CloseApp()
+    {
+        GetTree().Quit();
+    }
+
     void ReturnToLogin()
     {
         GetTree().ChangeSceneToFile(loginSceneFilePath);

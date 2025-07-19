@@ -967,18 +967,14 @@ section = "missions"
 key = "reset_detection"
 defaultValue = true
 
-[node name="UserDataButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="8"]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="8"]
 layout_mode = 2
-text = "Open AppData folder"
+size_flags_vertical = 3
 
-[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="9"]
-visible = false
+[node name="ImportButton" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="9"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "Import accounts from PegLeg (Release)"
-
-[node name="ImportButton" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="10"]
-layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 8
 theme_type_variation = &"PanelContainerButton"
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButton" index="0"]
@@ -990,6 +986,20 @@ horizontal_alignment = 1
 layout_mode = 2
 useHold = true
 holdTime = 2.5
+
+[node name="UserDataButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="10"]
+layout_mode = 2
+text = "Open AppData folder"
+
+[node name="CloseAppButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="11"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Close PegLeg"
+
+[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="12"]
+visible = false
+layout_mode = 2
+text = "Import accounts from PegLeg (Release)"
 
 [node name="FileDialog" type="FileDialog" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" index="1"]
 title = "Open a Directory"
@@ -1128,7 +1138,8 @@ key = "beastmode"
 [connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/HSlider" method="set_value_no_signal"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" method="ToggleMute"]
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="ApplyTheme"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenAppData"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButton/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenAppData"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/CloseAppButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="CloseApp"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/ExperimentalNotifs" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection" method="set_visible"]

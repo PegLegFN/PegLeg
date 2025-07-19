@@ -1021,9 +1021,9 @@ public class GameStorefront
 
 public class GameOffer
 {
-    public event Action<GameOffer> OnChanged;
-    public event Action<GameOffer> OnRemoving;
-    public event Action<GameOffer> OnRemoved;
+    public event Action OnChanged;
+    public event Action OnRemoving;
+    public event Action OnRemoved;
 
     public GameStorefront storefront { get; private set; }
     public JsonObject rawData { get; private set; }
@@ -1046,22 +1046,25 @@ public class GameOffer
     }
 
     public string Title => rawData["title"]?.ToString();
-    public bool IsXRayLlama => GetMeta("Preroll")?.ToString() == "True";
+    public bool IsXRayLlama => GetMeta("Preroll") == "True";
 
     public int SimultaniousLimit => GetMetaInt("MaxConcurrentPurchases") ?? -1;
     public int DailyLimit => rawData["dailyLimit"]?.GetValue<int>() ?? -1;
     public int WeeklyLimit => rawData["weeklyLimit"]?.GetValue<int>() ?? -1;
     public int MonthlyLimit => rawData["monthlyLimit"]?.GetValue<int>() ?? -1;
     public int EventLimit => GetMetaInt("EventLimit") ?? -1;
-    public string EventId => GetMeta("PurchaseLimitingEventId")?.ToString();
+    public string EventId => GetMeta("PurchaseLimitingEventId");
 
-    public string Color0 => GetMeta("textBackgroundColor")?.ToString();
-    public string Color1 => GetMeta("color1")?.ToString();
-    public string Color2 => GetMeta("color2")?.ToString();
+    public string Color0 => GetMeta("textBackgroundColor");
+    public string Color1 => GetMeta("color1");
+    public string Color2 => GetMeta("color2");
+
+    public DateTime? InDate => GetMeta("inDate") is string inDate ? DateTime.Parse(inDate) : null;
+    public DateTime? OutDate => GetMeta("outDate") is string outDate ? DateTime.Parse(outDate) : null;
 
     public string CosmeticDisplayAssetPath => rawData["displayAssetPath"]?.ToString();
-    public string CosmeticNewDisplayAssetPath => GetMeta("NewDisplayAssetPath")?.ToString();
-    public string CosmeticLayoutId => GetMeta("LayoutId")?.ToString();
+    public string CosmeticNewDisplayAssetPath => GetMeta("NewDisplayAssetPath");
+    public string CosmeticLayoutId => GetMeta("LayoutId");
     public int SortPriority => rawData["sortPriority"]?.GetValue<int>() ?? 0;
 
     Dictionary<string, int> GenerateRequirementList(string type) =>
@@ -1139,10 +1142,66 @@ public class GameOffer
         personalPrice = null;
     }
 
-    public
+
+    public CosmeticRequests.FNAPIOffer fnapiOfferData;
+    public CosmeticRequests.DillyDisplayAsset dillyDisplayAssetData;
+    public CosmeticRequests.DillyCosmetic dillyCosmeticData;
+
+    ImageTexture cosmeticImage;
+    public ImageTexture CosmeticImage => cosmeticImage ??=
+        fnapiOfferData?.GetLocalOfferImage() ??
+        dillyDisplayAssetData?.GetLocalOfferImage();
+
+    public string CosmeticName
+    {
+        get
+        {
+            if (fnapiOfferData is not null)
+                return fnapiOfferData.DisplayName;
+            if (dillyCosmeticData is not null)
+                return dillyCosmeticData.name;
+            return "<Unknown>";
+        }
+    }
+
+    public string CosmeticType
+    {
+        get
+        {
+            if (fnapiOfferData is not null)
+                return fnapiOfferData.DisplayType;
+            if (dillyCosmeticData is not null)
+                return dillyCosmeticData.type.name;
+            return "<Unknown>";
+        }
+    }
+
+    CosmeticRequests.CosmeticMeta? cosmeticMetaData;
+    public CosmeticRequests.CosmeticMeta CosmeticMetaData
+    {
+        get
+        {
+            if (cosmeticMetaData is not null)
+                return (cosmeticMetaData).Value;
+            if (fnapiOfferData is not null)
+                return (cosmeticMetaData = fnapiOfferData.GenerateCosmeticMeta()).Value;
+            return (cosmeticMetaData = new()
+            {
+                lastSeenDaysAgo = 0,
+                isRecentlyNew = GetMeta("ViolatorTag") == "New",
+                isAddedToday = InDate.Value == DateTime.UtcNow.Date,
+                isLeavingSoon = (OutDate.Value - DateTime.UtcNow.Date).TotalHours < 24,
+                lastAddedDate = DateTime.UtcNow.Date
+            }).Value;
+        }
+    }
+
     public async Task LoadCosmeticData()
     {
-
+        if (fnapiOfferData is not null)
+            cosmeticImage = await fnapiOfferData.LoadOfferImage();
+        if (dillyDisplayAssetData is not null)
+            cosmeticImage = await dillyDisplayAssetData.LoadOfferImage();
     }
 
     GameItem GetRegularPrice()
@@ -1221,13 +1280,13 @@ public class GameOffer
 
     public void NotifyChanged()
     {
-        OnChanged?.Invoke(this);
+        OnChanged?.Invoke();
     }
 
-    public void NotifyRemoving() => OnRemoving?.Invoke(this);
+    public void NotifyRemoving() => OnRemoving?.Invoke();
     public void DisconnectFromStorefront()
     {
         storefront = null;
-        OnRemoved?.Invoke(this);
+        OnRemoved?.Invoke();
     }
 }

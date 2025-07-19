@@ -13,7 +13,10 @@ public static class WebHelpers
 
     public static BoundHttpsRequestMessage MakeRequest(this HttpClient client, string uri, HttpMethod method = null) =>
         new(client, method ?? HttpMethod.Get, uri);
-    
+
+    public static BoundHttpsRequestMessage MakeLinkRequest(this HttpClient client, string link, HttpMethod method = null) =>
+        new(client, method ?? HttpMethod.Get, link[client.BaseAddress.OriginalString.Length..]);
+
 
     public static HttpRequestMessage MakeRequest(string uri, HttpMethod method = null) => new(method ?? HttpMethod.Get, uri);
     public static T SetAuthorisation<T>(this T msg, AuthenticationHeaderValue auth) where T: HttpRequestMessage
