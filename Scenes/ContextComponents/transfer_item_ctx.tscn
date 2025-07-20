@@ -1,0 +1,171 @@
+[gd_scene load_steps=10 format=3 uid="uid://u7q0ajqtxice"]
+
+[ext_resource type="Script" uid="uid://dawqbguavnwka" path="res://Scripts/ContextMenu/Components/TransferItemCtx.cs" id="1_c063f"]
+[ext_resource type="Script" uid="uid://b7pscn4x4hphs" path="res://Scripts/UIElements/ContextButtonPanel.cs" id="1_w1jn5"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_c063f"]
+[ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="3_w1jn5"]
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="4_8xknv"]
+[ext_resource type="Texture2D" uid="uid://qfp8atpjqj8m" path="res://Images/Flipbook/LoadingIconV2/BlugloLoadSheet.png" id="5_j5efv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w1jn5"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_al0wg"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_naf1d"]
+shader = ExtResource("4_8xknv")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/SliceAmount = Vector2(6, 5)
+shader_parameter/FPS = 15.0
+shader_parameter/CellCount = 0
+shader_parameter/Fit = false
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = true
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
+
+[node name="TransferItemCtx" type="MarginContainer" node_paths=PackedStringArray("disabledPanel")]
+custom_minimum_size = Vector2(0, 24)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -16.0
+offset_right = 60.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c063f")
+disabledPanel = NodePath("Disabled")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+modulate = Color(0.3, 0.3, 0.3, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_w1jn5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MainBtn" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/MainBtn"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/MainBtn/Control" node_paths=PackedStringArray("button")]
+modulate = Color(0.194349, 0.194349, 0.194349, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_al0wg")
+script = ExtResource("1_w1jn5")
+button = NodePath("../../TextureButton")
+baseMargin = 3.0
+pressMargin = 1.0
+duration = 0.05
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MainBtn"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MainBtn/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="IconArea" type="TextureRect" parent="VBoxContainer/MainBtn/MarginContainer/HBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+texture = ExtResource("2_c063f")
+expand_mode = 3
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/MainBtn/MarginContainer/HBoxContainer/IconArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_w1jn5")
+expand_mode = 3
+
+[node name="Loading" type="TextureRect" parent="VBoxContainer/MainBtn/MarginContainer/HBoxContainer/IconArea"]
+visible = false
+material = SubResource("ShaderMaterial_naf1d")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(9, 9)
+texture = ExtResource("5_j5efv")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/MainBtn/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Transfer Item"
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/MainBtn" groups=["ExcludeButtonSounds"]]
+layout_mode = 2
+
+[node name="Slider" type="MarginContainer" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Slider"]
+layout_mode = 2
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/Slider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 200.0
+rounded = true
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="VBoxContainer/Slider/HBoxContainer"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+text = "200"
+horizontal_alignment = 1
+
+[node name="Disabled" type="Panel" parent="."]
+visible = false
+self_modulate = Color(0, 0, 0, 0.588235)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_al0wg")
+
+[connection signal="pressed" from="VBoxContainer/MainBtn/TextureButton" to="." method="Transfer"]

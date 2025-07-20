@@ -1,16 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://cjge5ubc1hppf"]
+[gd_scene load_steps=10 format=3 uid="uid://cjge5ubc1hppf"]
 
-[ext_resource type="PackedScene" uid="uid://udk47ipcpsbq" path="res://Scenes/Desktop/Views/desktopInventoryView.tscn" id="1_rmpt8"]
+[ext_resource type="PackedScene" uid="uid://udk47ipcpsbq" path="res://Scenes/Desktop/Views/Armory/desktopInventoryView.tscn" id="1_rmpt8"]
 [ext_resource type="Texture2D" uid="uid://c0r4xvm7cbo3u" path="res://Images/InterfaceIcons/T-Icon-Nav-Armory-64.png" id="2_8da1x"]
 [ext_resource type="Texture2D" uid="uid://r3avhn5m2bxk" path="res://Images/InterfaceIcons/Icon-Soldier-WasteNotWantNot-128.png" id="3_4b2mk"]
 [ext_resource type="Texture2D" uid="uid://dc3tlokw50j6q" path="res://Images/InterfaceIcons/T-Icon-Harvesting-128.png" id="4_q4rx2"]
 [ext_resource type="Texture2D" uid="uid://c2dqm0vsrcexk" path="res://Images/InterfaceIcons/T-Icon-Traps-128.png" id="5_cy863"]
-[ext_resource type="PackedScene" uid="uid://jsu6mxwb40t6" path="res://Scenes/GameItemEntry/inventory_entry_large_square.tscn" id="6_osdn8"]
+[ext_resource type="PackedScene" uid="uid://jsu6mxwb40t6" path="res://Scenes/GameItemEntry/backpack_entry.tscn" id="6_osdn8"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_0odak"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_3xnev"]
+resource_name = "InventoryTypeFilter"
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_8hsi3"]
 resource_name = "InventoryTypeFilter"
 
 [node name="Backpack" instance=ExtResource("1_rmpt8")]
@@ -74,6 +77,7 @@ text = "Ingredients"
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" index="0"]
 tooltip_text = "Traps"
+theme_type_variation = &"RightCheckButton"
 button_group = SubResource("ButtonGroup_0odak")
 
 [node name="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer" index="0"]
@@ -81,6 +85,12 @@ texture = ExtResource("5_cy863")
 
 [node name="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer" index="1"]
 text = "Traps"
+
+[node name="Tab5" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" index="6"]
+visible = false
+
+[node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" index="0"]
+button_group = SubResource("ButtonGroup_8hsi3")
 
 [node name="MarkAllSeen" parent="VBoxContainer/HBoxContainer2/HBoxContainer" index="4"]
 visible = false

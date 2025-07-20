@@ -215,7 +215,8 @@ public partial class GameAccount
     {
         if (!await activeAccount.Authenticate())
             return;
-        _activeAccount.fortStatsDirty = true;
+        _activeAccount.fortStats = null;
+        _activeAccount.ventureFortStats = null;
         _activeAccount.localData = null;
         _activeAccount.localPinnedQuests = null;
         foreach (var profile in _activeAccount.profiles.Values)
@@ -594,12 +595,12 @@ public partial class GameAccount
 
     public event Action<GameAccount> OnFortStatsChanged;
     FORTStats? fortStats;
-    bool fortStatsDirty = true;
     public FORTStats FortStats => GetFORTStats();
-    public FORTStats GetFORTStats(bool force = false) => (force || fortStatsDirty) ? CalculateFORTStats() : fortStats ?? CalculateFORTStats();
-
-    FORTStats CalculateFORTStats()
+    public FORTStats GetFORTStats(bool force = false)
     {
+        if (!force && fortStats is not null)
+            return fortStats.Value;
+
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
         var researchStats = accountItems.statAttributes["research_levels"];
         var statItems = accountItems.GetItems("Stat");
@@ -620,16 +621,36 @@ public partial class GameAccount
         float resistance = LookupStatItem("Stat:resistance") + LookupStatItem("Stat:resistance_team") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
         float technology = LookupStatItem("Stat:technology") + LookupStatItem("Stat:technology_team") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
 
-
-        GD.Print($"FORTITUDE: {fortitude}");
-        GD.Print($"OFFENCE: {offense}");
-        GD.Print($"RESISTANCE: {resistance}");
-        GD.Print($"TECH: {technology}");
+        GD.Print($"Main FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
 
         fortStats = new(fortitude, offense, resistance, technology);
-        fortStatsDirty = false;
         OnFortStatsChanged?.Invoke(this);
         return fortStats.Value;
+    }
+
+    public event Action<GameAccount> OnVentureFortStatsChanged;
+    FORTStats? ventureFortStats;
+    public FORTStats VentureFortStats => GetVentureFortStats();
+    public FORTStats GetVentureFortStats(bool force = false)
+    {
+        if (!force && ventureFortStats is not null)
+            return ventureFortStats.Value;
+
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        var statItems = accountItems.GetItems("Stat");
+        int LookupStatItem(string statId) => statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
+
+        //+ profileStats["fortitude"].GetValue<int>()
+        float fortitude = LookupStatItem("Stat:fortitude_phoenix") + LookupStatItem("Stat:fortitude_team_phoenix");
+        float offense = LookupStatItem("Stat:offense_phoenix") + LookupStatItem("Stat:resistance_team_phoenix");
+        float resistance = LookupStatItem("Stat:resistance_phoenix") + LookupStatItem("Stat:resistance_team_phoenix");
+        float technology = LookupStatItem("Stat:technology_phoenix") + LookupStatItem("Stat:technology_team_phoenix");
+
+        GD.Print($"Venture FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
+
+        ventureFortStats = new(fortitude, offense, resistance, technology);
+        OnVentureFortStatsChanged?.Invoke(this);
+        return ventureFortStats.Value;
     }
 
     public async Task GenerateXRayLlamaResults() => await GetProfile(FnProfileTypes.AccountItems).PerformOperation("PopulatePrerolledOffers");
@@ -971,6 +992,7 @@ public class GameProfile
     Dictionary<string, GameItem> items = [];
     Dictionary<string, List<GameItem>> groupedItems = [];
 
+    public event Action OnProfileChanged;
     public event Action OnStatsChanged;
     public event Action<string> OnStatChanged;
     public event Action<GameItem> OnItemAdded;
@@ -1224,17 +1246,27 @@ public class GameProfile
                     additionChange["changeType"] = "itemUpgraded";
                 }
             }
+            else if (operation == "")
+            {
+
+            }
             ApplyProfileChanges(changes);
         }
         rvn = result["profileRevision"].GetValue<int>();
 
         if (result.ContainsKey("multiUpdate"))
         {
+            if (printChanges)
+                GD.Print("multiupdate");
             foreach (var profileUpdate in result["multiUpdate"].AsArray())
             {
                 string profileId = profileUpdate["profileId"].ToString();
+                if (printChanges)
+                    GD.Print("multiupdating: " + profileId);
                 if (account.HasProfile(profileId))
                 {
+                    if (printChanges)
+                        GD.Print("has profile");
                     var profile = account.GetProfile(profileId);
                     profile.ApplyProfileChanges(profileUpdate["profileChanges"].AsArray());
                     profile.rvn = profileUpdate["profileRevision"].GetValue<int>();
@@ -1309,18 +1341,21 @@ public class GameProfile
         return profileChanges;
     }
 
-    public bool printChanges = false;
+    public static bool printChanges = false;
 
     public void ApplyProfileChanges(JsonArray profileChanges)
     {
         List<GameItem> itemsToNotify = [];
         List<GameItem> itemsToIgnore = [];
         Dictionary<string, GameItem> reassociations = [];
+        if (printChanges)
+            GD.Print($"Applying {profileChanges.Count} changes");
         foreach (var change in profileChanges)
         {
             string changeType = change["changeType"].ToString();
             string uuid = change["itemId"]?.ToString();
-
+            if(printChanges)
+                GD.Print($"Applying \"{changeType}\"");
             //ProfileItemId profileItemId = new(profileId, uuid);
             GameItem targetItem;
             switch (changeType)
@@ -1433,6 +1468,8 @@ public class GameProfile
                 GD.Print($"Reassociating : {kvp.Key} => {kvp.Value.uuid}");
             OnItemReassociated?.Invoke(kvp.Key, kvp.Value);
         }
+        if (profileChanges.Count > 0)
+            OnProfileChanged?.Invoke();
     }
 }
 
@@ -1724,6 +1761,37 @@ public class GameItem
 
         if (!exists)
             SetSeenLocal(false);
+    }
+
+    public async Task TransferStorage(int amount = 0)
+    {
+        if (profile?.profileId != "theater0" && profile?.profileId != "outpost0")
+            return;
+        if (amount < 1)
+            amount = quantity;
+        bool toStorage = profile?.profileId == "theater0";
+        amount = Mathf.Max(amount, quantity);
+        var backpack = await profile.account.GetProfile("theater0").Query();
+        var storage = await profile.account.GetProfile("outpost0").Query();
+        var dest = toStorage ? storage : backpack;
+
+        var firstEmptyStack = dest.GetTemplateItems(templateId).OrderBy(i => i.quantity).FirstOrDefault();
+
+        JsonObject transfer = new()
+        {
+            ["itemId"] = uuid,
+            ["quantity"] = amount,
+            ["toStorage"] = toStorage,
+        };
+        if (!string.IsNullOrWhiteSpace(firstEmptyStack?.uuid))
+            transfer["newItemIdHint"] = firstEmptyStack.uuid;
+
+        JsonObject content = new()
+        {
+            ["transferOperations"] = new JsonArray([transfer])
+        };
+        GameProfile.printChanges = true;
+        await backpack.PerformOperation("StorageTransfer", content);
     }
 
     public bool? isCollectedCache { get; private set; }

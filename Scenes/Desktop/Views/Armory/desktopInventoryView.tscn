@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://udk47ipcpsbq"]
+[gd_scene load_steps=24 format=3 uid="uid://udk47ipcpsbq"]
 
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="1_cq0hx"]
 [ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_ix0kh"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="12_3wbpm"]
 [ext_resource type="PackedScene" uid="uid://ch7kqyndhfgvs" path="res://Scenes/GameItemEntry/inventory_entry_large.tscn" id="13_qaoj0"]
 [ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="15_l485q"]
+[ext_resource type="Texture2D" uid="uid://kracdagqcagt" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Ingredients-128.png" id="15_opvrx"]
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="16_45lr4"]
 [ext_resource type="Texture2D" uid="uid://cebpugdhhg4s4" path="res://Images/SDF/T_UI_Icon_UIKit_ClearBadges_SDF.png" id="16_opvrx"]
 [ext_resource type="Texture2D" uid="uid://b068tdyuivkmu" path="res://Images/ContentCreators/ArcherDanceSheet4.png" id="17_uggwr"]
@@ -61,7 +62,7 @@ targetUser = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContaine
 devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All")
 tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters")
 targetProfile = "campaign"
-typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker", "", "Schematic", "Hero", "Defender", "Worker")
+typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "", "Schematic", "Hero", "Defender", "Worker", "AccountResource")
 creatorImageParent = NodePath("Creators")
 
 [node name="Creators" type="Control" parent="."]
@@ -404,7 +405,7 @@ layout_mode = 2
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4"]
 layout_mode = 2
 tooltip_text = "Survivors"
-theme_type_variation = &"RightCheckButton"
+theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4"]
@@ -430,6 +431,39 @@ stretch_mode = 5
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Survivors"
+
+[node name="Tab5" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5"]
+layout_mode = 2
+tooltip_text = "Survivors"
+theme_type_variation = &"RightCheckButton"
+button_group = SubResource("ButtonGroup_xh1u0")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("15_opvrx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Resources"
 
 [node name="NameSort" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
 layout_mode = 2

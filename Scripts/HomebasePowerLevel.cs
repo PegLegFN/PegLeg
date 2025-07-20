@@ -8,6 +8,8 @@ public partial class HomebasePowerLevel : Control
     Label homebaseNumberLabel;
     [Export]
     Range homebaseNumberProgressBar;
+    [Export]
+    bool ventures;
 
     public override void _Ready()
     {
@@ -47,20 +49,22 @@ public partial class HomebasePowerLevel : Control
 
         currentProfile.OnStatsChanged += OnProfileStatChanged;
 
-        UpdateStatsVisuals(currentProfile.account.GetFORTStats(true));
+        UpdateStatsVisuals(LatestStats);
     }
+
+    FORTStats LatestStats => ventures ? currentProfile.account.GetVentureFortStats(true) : currentProfile.account.GetFORTStats(true);
 
     GameProfile currentProfile;
 
     void OnProfileStatChanged()
     {
-        UpdateStatsVisuals(currentProfile.account.GetFORTStats(true));
+        UpdateStatsVisuals(LatestStats);
     }
 
     void OnProfileItemChanged(GameItem item)
     {
         if (item?.template?.Type == "Worker")
-            UpdateStatsVisuals(currentProfile.account.GetFORTStats(true));
+            UpdateStatsVisuals(LatestStats);
     }
 
     private void UpdateStatsVisuals(FORTStats stats)
@@ -71,10 +75,9 @@ public partial class HomebasePowerLevel : Control
         TooltipText = CustomTooltip.GenerateSimpleTooltip(
                 "Power Level",
                 homebaseNumberLabel.Text,
-                new string[]
-                {
+                [
                     $"Homebase Power: {Mathf.Floor(powerLevel)}\n({Mathf.Floor((powerLevel % 1) * 100)}% progress to {Mathf.Floor(powerLevel) + 1})"
-                },
+                ],
                 Colors.AliceBlue.ToHtml()
             );
     }

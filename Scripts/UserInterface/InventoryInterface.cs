@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Linq;
-using System.Security.Principal;
 using System.Text.Json.Nodes;
 
 public partial class InventoryInterface : Control, IRecyclableElementProvider<GameItem>
@@ -37,7 +36,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         }
         GameAccount.ActiveAccountChanged += UpdateAccount;
         itemList.SetProvider(this);
-        searchBox.TextChanged += ApplyFilters;
+        searchBox.TextChanged += _ => ApplyFilters();
         var dev = AppConfig.Get("advanced", "developer", false) && allowDevMode;
         if (targetUser is not null)
         {
@@ -55,7 +54,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         tabBar.CurrentTab = 0;
         tabBar.TabChanged += SetTypeFilter;
         AppConfig.OnConfigChanged += OnConfigChanged;
-        VisibilityChanged += TryUpdateAccount;
+        VisibilityChanged += TryFilter;
         UpdateAccount();
     }
 
@@ -83,6 +82,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     public override void _ExitTree()
     {
         GameAccount.ActiveAccountChanged -= UpdateAccount;
+        if (currentProfile is not null)
+            currentProfile.OnProfileChanged -= ApplyFilters;
     }
 
     bool filterNew;
@@ -116,76 +117,47 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         ApplySorting();
     }
 
-    GameItem[] allItems = [];
     GameItem[] filteredItems;
     GameItem[] currentItems;
     string currentTypeFilter = "";
     public int GetRecycleElementCount() => currentItems?.Length ?? 0;
     public GameItem GetRecycleElement(int index) => currentItems?[index];
-    GameAccount displayedAccount;
-    bool needsUpdate = false;
-
-    void TryUpdateAccount()
-    {
-        if (needsUpdate)
-            UpdateAccount();
-    }
+    GameProfile currentProfile;
 
     async void UpdateAccount()
     {
-        if (!IsVisibleInTree())
-        {
-            needsUpdate = true;
-            return;
-        }
-        needsUpdate = false;
-
-        GetProfileItems(null);
-        ApplyFilters();
-        displayedAccount = GameAccount.activeAccount;
+        filteredItems = [];
+        ApplySorting();
+        var account = GameAccount.activeAccount;
         if (!string.IsNullOrEmpty(targetUser?.Text) && allowDevMode)
         {
             if (targetUser.Text.Length==32)
-                displayedAccount = GameAccount.GetOrCreateAccount(targetUser.Text);
+                account = GameAccount.GetOrCreateAccount(targetUser.Text);
             else
-                displayedAccount = (await GameAccount.SearchForAccount(targetUser?.Text)) ?? displayedAccount;
+                account = (await GameAccount.SearchForAccount(targetUser?.Text)) ?? account;
         }
-        GD.Print("Inventory: "+displayedAccount?.accountId);
-        if (targetProfile != FnProfileTypes.AccountItems && !await displayedAccount.Authenticate())
+        if (allowDevMode)
+            GD.Print("Inventory target: " + account?.accountId);
+        if (targetProfile != FnProfileTypes.AccountItems && !await account.Authenticate())
             return;
 
         foreach (var image in creatorImages)
         {
-            image.Visible = displayedAccount.accountId == image.Name;
+            image.Visible = account.accountId == image.Name;
         }
 
-        GetProfileItems(await displayedAccount.GetProfile(targetProfile).Query());
+        if(currentProfile is not null)
+        {
+            currentProfile.OnProfileChanged -= ApplyFilters;
+        }
+        currentProfile = await account.GetProfile(targetProfile).Query();
+        currentProfile.OnProfileChanged += ApplyFilters;
         ApplyFilters();
-    }
-
-    void GetProfileItems(GameProfile itemProfile, bool ensureSearchTags = true)
-    {
-        if (itemProfile?.hasProfile != true)
-        {
-            allItems = [];
-            return;
-        }
-        allItems = itemProfile.GetItems();
-        if (!AppConfig.Get("advanced", "developer", false))
-            allItems = allItems
-            .Where(i => i.template is not null)
-            .ToArray();
-        if (!ensureSearchTags)
-            return;
-        for (int i = 0; i < allItems.Length; i++)
-        {
-            allItems[i].GetSearchTags();
-        }
     }
 
     public async void BulkRecycle()
     {
-        if (targetProfile != FnProfileTypes.AccountItems || displayedAccount is null || !await displayedAccount.Authenticate())
+        if (targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !await currentProfile.account.Authenticate())
             return;
 
         if (filteredItems.Length == 0)
@@ -196,8 +168,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         //    item.GetSearchTags();
         //    item.GenerateRawData();
         //}
-        var profile = await displayedAccount.GetProfile(targetProfile).Query();
-        var loadoutHeroes = profile
+        var loadoutHeroes = currentProfile
             .GetItems("CampaignHeroLoadout")
             .SelectMany(loadout =>
                 loadout.attributes["crew_members"]
@@ -216,27 +187,26 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             return true;
         };
         var toRecycle = await GameItemSelector.Instance.OpenSelector(filteredItems, null);
-        if ((toRecycle?.Length ?? 0) > 0 && await displayedAccount.Authenticate())
+        if ((toRecycle?.Length ?? 0) > 0 && await currentProfile.account.Authenticate())
         {
             JsonObject content = new()
             {
                 ["targetItemIds"] = new JsonArray(toRecycle.Select(item => (JsonNode)item.uuid).ToArray())
             };
             using var _ = LoadingOverlay.CreateToken();
-            await profile.PerformOperation("RecycleItemBatch", content);
-            GetProfileItems(profile);
+            await currentProfile.PerformOperation("RecycleItemBatch", content);
+            ApplyFilters();
         }
     }
 
     public void BulkMarkSeen()
     {
-        if (targetProfile != FnProfileTypes.AccountItems || displayedAccount is null)
+        if (targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true)
             return;
         if (filteredItems.Length == 0)
             return;
-        var profile = displayedAccount.GetProfile(targetProfile);
         var unseenItems = filteredItems.Where(i => !i.IsSeen).ToArray();
-        profile.MarkItemsSeen(unseenItems);
+        currentProfile.MarkItemsSeen(unseenItems);
     }
 
     //public async void BulkDismantle()
@@ -268,9 +238,29 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     //    }
     //}
 
-    void ApplyFilters(string _) => ApplyFilters();
+
+    bool itemsDirty = false;
+
+    async void TryFilter()
+    {
+        await Helpers.WaitForFrame();
+        if (itemsDirty)
+        {
+            GD.Print("trying to filter");
+            ApplyFilters();
+        }
+    }
+
     void ApplyFilters()
     {
+        itemsDirty = true;
+        if (currentProfile?.hasProfile != true || !IsVisibleInTree())
+        {
+            GD.Print("can't filter yet");
+            return;
+        }
+        itemsDirty = false;
+
         var possibleTypes = 
             currentTypeFilter
             .Split(',')
@@ -281,12 +271,13 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
         var instructions = PLSearch.GenerateSearchInstructions(searchBox.Text);
 
-        filteredItems = allItems
+        filteredItems = currentProfile.GetItems()
             .Where(item =>
+                (item.template is not null || AppConfig.Get("advanced", "developer", false)) &&
                 (!filterNew || !item.IsSeen) &&
                 (!filterFavorite || item.IsFavourited) &&
                 (possibleTypes?.Contains(item.template?.Type) ?? true) &&
-                PLSearch.EvaluateInstructions(instructions, item.RawData) 
+                PLSearch.EvaluateInstructions(instructions, item.RawData)
             )
             .ToArray();
         ApplySorting();

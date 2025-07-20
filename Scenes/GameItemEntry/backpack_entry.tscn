@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://jsu6mxwb40t6"]
+[gd_scene load_steps=6 format=3 uid="uid://jsu6mxwb40t6"]
 
 [ext_resource type="PackedScene" uid="uid://ch7kqyndhfgvs" path="res://Scenes/GameItemEntry/inventory_entry_large.tscn" id="1_dt25g"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_jj4sb"]
 [ext_resource type="Shader" uid="uid://cypncf62qx5bc" path="res://Shaders/CardTriangleEffect.tres" id="2_q35g6"]
+[ext_resource type="Resource" uid="uid://qd1vmbwf0n3j" path="res://Scripts/ContextMenu/ComponentLists/BackpackItemCtxList.tres" id="4_jsyui"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w10dp"]
 resource_local_to_scene = true
@@ -10,7 +11,7 @@ shader = ExtResource("2_q35g6")
 shader_parameter/TriangleTint = Color(0.9, 0.9, 0.9, 1)
 shader_parameter/TimeOffset = 0.0
 
-[node name="InventoryEntryLarge" instance=ExtResource("1_dt25g")]
+[node name="BackpackEntry" instance=ExtResource("1_dt25g")]
 custom_minimum_size = Vector2(120, 120)
 offset_right = 120.0
 offset_bottom = 120.0
@@ -26,3 +27,9 @@ material = SubResource("ShaderMaterial_w10dp")
 
 [node name="ItemIcon" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="2"]
 script = null
+
+[node name="InvEntryTooltipCtx" parent="Tooltip" index="0"]
+componentList = ExtResource("4_jsyui")
+
+[node name="InvEntryCtx" parent="Responsive Button Area" index="1"]
+componentList = ExtResource("4_jsyui")
