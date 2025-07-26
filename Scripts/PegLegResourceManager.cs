@@ -804,14 +804,14 @@ public class GameItemTemplate
     {
         if (Type != "Hero")
             return null;
-        return heroAbilities ??= new GameItemTemplate[]
-        {
+        return heroAbilities ??=
+        [
             Get(rawData["HeroPerkTemplate"]?.ToString()),
             Get(rawData["CommanderPerkTemplate"]?.ToString()),
             Get(rawData["HeroAbilities"]?[0].ToString()),
             Get(rawData["HeroAbilities"]?[1].ToString()),
             Get(rawData["HeroAbilities"]?[2].ToString()),
-        };
+        ];
     }
 
     GameItemTemplate teamPerk;

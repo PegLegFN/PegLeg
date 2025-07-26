@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://buf6p8qyydofm"]
+[gd_scene load_steps=57 format=3 uid="uid://buf6p8qyydofm"]
 
 [ext_resource type="Script" uid="uid://vil6mmu5pyy3" path="res://Scripts/Overlays/GameItemViewer/GameItemViewer.cs" id="1_5fxot"]
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_croo3"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cb15vvccjgrdk" path="res://Scenes/PerkAndAbilityEntries/hero_ability_entry.tscn" id="11_bxa5o"]
 [ext_resource type="PackedScene" uid="uid://bgyk3guex13ch" path="res://Scenes/PerkAndAbilityEntries/hero_perk_entry.tscn" id="12_pygth"]
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="14_6bwx2"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="14_lxpss"]
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="15_8sk0j"]
 [ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="15_pox86"]
 [ext_resource type="Texture2D" uid="uid://dnqbqca02sqwq" path="res://Images/InterfaceIcons/T-Pattern-OrArrow-128.png" id="16_3ck4t"]
@@ -224,7 +225,7 @@ shader_parameter/minVal = 25.0
 shader_parameter/currentVal = 45.0
 shader_parameter/limitVal = 48.0
 shader_parameter/totalVal = 50.0
-shader_parameter/time = 54.024
+shader_parameter/time = 20.293
 
 [sub_resource type="Gradient" id="Gradient_usvpd"]
 offsets = PackedFloat32Array(0.681199, 0.746594, 0.809264, 0.959044)
@@ -315,7 +316,6 @@ size_flags_vertical = 4
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 preventInteractability = true
-preventDevInteractability = true
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry" index="0"]
 material = SubResource("ShaderMaterial_1fkd4")
@@ -429,7 +429,7 @@ show_percentage = false
 custom_minimum_size = Vector2(500, 516)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_88uph")
-current_tab = 3
+current_tab = 1
 use_hidden_tabs_for_min_size = true
 
 [node name="Perks" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer" index="1" node_paths=PackedStringArray("realPerkArea", "optionalPerkArea", "interactionBlocker", "currentPerkEntries", "perkUpArea", "perkUpEntry", "reperkEntries", "perkApplyButton")]
@@ -598,7 +598,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Abilities" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer" index="2"]
-visible = false
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 metadata/_tab_index = 1
@@ -646,6 +645,7 @@ text = " Includes:"
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Abilities/VBoxContainer/TeamPerk/VBoxContainer/HBoxContainer" index="0"]
+material = ExtResource("14_lxpss")
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("3_fwu0d")
@@ -692,6 +692,7 @@ tick_count = 7
 ticks_on_borders = true
 
 [node name="Dev" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer" index="4"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Panel5Pad"

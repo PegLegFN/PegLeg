@@ -1,28 +1,28 @@
-[gd_scene load_steps=12 format=3 uid="uid://cnerbcrevhc7w"]
+[gd_scene load_steps=14 format=3 uid="uid://cnerbcrevhc7w"]
 
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_3peps"]
-[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="1_23qqt"]
+[ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_t6yh2"]
 [ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="2_syipb"]
+[ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="2_t6yh2"]
 [ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="2_vb4bp"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_38f6u"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="3_l5ld5"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_3grrh"]
-[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="5_oebh3"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="6_hrb6a"]
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="7_ousqk"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="8_h5blw"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="9_h5blw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jm7ic"]
-shader = ExtResource("1_23qqt")
-shader_parameter/ControlSize = Vector2(544, 32)
-shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
-shader_parameter/Fit = true
-shader_parameter/UseCorners = true
-shader_parameter/UseGlobalCorners = false
-shader_parameter/ApplyCornersToFit = false
-shader_parameter/CornerRadius = 5.0
-shader_parameter/ClipOOB = false
+shader = ExtResource("2_t6yh2")
+shader_parameter/ControlSize = Vector2(260, 32)
 
-[node name="SupportHero" type="MarginContainer"]
+[node name="SupportHero" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroPerkEntry")]
+offset_right = 256.0
+offset_bottom = 32.0
+script = ExtResource("1_t6yh2")
+heroAbilityEntries = []
+heroPerkEntry = NodePath("MarginContainer/HBoxContainer/HBoxContainer2")
 
 [node name="ColorRect" type="TextureRect" parent="."]
 modulate = Color(0.9, 0.615, 0, 1)
@@ -36,18 +36,42 @@ syncControlSize = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_left = 15
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("4_3grrh")
+expand_mode = 3
+
+[node name="Subtype" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/Icon"]
+material = ExtResource("9_h5blw")
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_hrb6a")
+expand_mode = 3
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+script = ExtResource("8_h5blw")
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+material = ExtResource("9_h5blw")
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 texture = ExtResource("1_3peps")
@@ -63,6 +87,7 @@ visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/margin_top = 2
@@ -103,44 +128,17 @@ layout_mode = 2
 texture = ExtResource("3_l5ld5")
 expand_mode = 3
 
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+material = ExtResource("9_h5blw")
 layout_mode = 2
 texture = ExtResource("7_ousqk")
 expand_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/margin_left = 15
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
-layout_mode = 2
-texture = ExtResource("4_3grrh")
-expand_mode = 3
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/TextureRect"]
-self_modulate = Color(0, 0.6, 1, 1)
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_oebh3")
-expand_mode = 3
-
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/TextureRect/TextureRect"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_hrb6a")
-expand_mode = 3
+[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="SubtypeIconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/Icon/Subtype" method="set_texture"]
+[connection signal="IconChanged" from="MarginContainer/HBoxContainer/HBoxContainer2" to="MarginContainer/HBoxContainer/HBoxContainer2/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="MarginContainer/HBoxContainer/HBoxContainer2" to="MarginContainer/HBoxContainer/HBoxContainer2/Label" method="set_text"]

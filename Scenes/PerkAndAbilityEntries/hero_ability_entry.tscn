@@ -1,64 +1,32 @@
-[gd_scene load_steps=6 format=3 uid="uid://cb15vvccjgrdk"]
+[gd_scene load_steps=5 format=3 uid="uid://cb15vvccjgrdk"]
 
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_2ka5t"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="2_elviy"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="3_dpc7h"]
 [ext_resource type="Texture2D" uid="uid://b7xndv3hrkxn6" path="res://Images/InterfaceIcons/T-Icon-Lock-64.png" id="3_nhj8c"]
 
-[sub_resource type="Gradient" id="Gradient_8ptd2"]
-offsets = PackedFloat32Array(0.25, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_2v6ej"]
-gradient = SubResource("Gradient_8ptd2")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
 [node name="AbilityEntry" type="TextureRect"]
+material = ExtResource("3_dpc7h")
 offset_right = 64.0
 offset_bottom = 64.0
 texture = ExtResource("1_2ka5t")
 expand_mode = 3
 script = ExtResource("2_elviy")
 
-[node name="LockIconPos" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -30.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = 30.0
-grow_horizontal = 0
-
-[node name="LockIconBG" type="TextureRect" parent="LockIconPos"]
+[node name="LockIcon2" type="TextureRect" parent="."]
+material = ExtResource("3_dpc7h")
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 5.0
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = SubResource("GradientTexture2D_2v6ej")
-expand_mode = 1
-
-[node name="LockIcon2" type="TextureRect" parent="LockIconPos"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchor_left = 0.65
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.35
+grow_horizontal = 0
 tooltip_text = "Evolve Hero to 2 Stars to unlock Commander Perk"
 texture = ExtResource("3_nhj8c")
 expand_mode = 1
 
 [connection signal="IconChanged" from="." to="." method="set_texture"]
-[connection signal="LockChanged" from="." to="LockIconPos/LockIcon2" method="set_tooltip_text"]
-[connection signal="LockVisible" from="." to="LockIconPos" method="set_visible"]
+[connection signal="LockChanged" from="." to="LockIcon2" method="set_tooltip_text"]
+[connection signal="LockVisible" from="." to="LockIcon2" method="set_visible"]
 [connection signal="NameAndDescriptionChanged" from="." to="." method="set_tooltip_text"]
