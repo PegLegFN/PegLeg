@@ -132,6 +132,11 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         resourceLoadTimer.Stop();
         if (resourceLoadStarted)
             return;
+        if (!IsVisibleInTree())
+        {
+            resourceLoadTimer.Start();
+            return;
+        }
         resourceLoadStarted = true;
         if(currentOfferData is not null)
         {
@@ -414,7 +419,8 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             //TODO: if jam track, use dedicated jam track tile format
         }
 
-        if (imageUrl is null && imageDisplayAssetPath  is not null && CatalogRequests.GetLocalCosmeticMeta(imageDisplayAssetPath) is JsonNode imageDA)
+        resourceTarget.Texture = null;
+        if (imageUrl is null && imageDisplayAssetPath is not null && CatalogRequests.GetLocalCosmeticMeta(imageDisplayAssetPath) is JsonNode imageDA)
         {
             var possibleRenderImage = imageDA?["ContextualPresentations"]?[0]?["RenderImage"]?["AssetPathName"]?.ToString();
             if (possibleRenderImage is null)
@@ -422,10 +428,8 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             imageUrl = "https://fortnitecentral.genxgames.gg/api/v1/export?path=" + possibleRenderImage.Split('.')[0];
         }
 
-        if (imageUrl is not null && CatalogRequests.GetLocalCosmeticResource(imageUrl) is Texture2D tex)
+        if (imageUrl is not null && CatalogRequests.GetLocalCosmeticResource(imageUrl) is ImageTexture tex && tex is not null)
             ApplyResource(tex);
-        else
-            resourceTarget.Texture = null;
     }
 
     public struct CosmeticMetadata

@@ -317,8 +317,8 @@ public partial class CosmeticShopInterface : Control
                         {
                             var entry = shopEntryScene.Instantiate<CosmeticShopOfferEntry>();
                             entry.CustomMinimumSize = new(tileSize, tileSize);
-                            entry.PopulateEntry(entryData.Value.AsObject(), Vector2.One);
                             simpleShopParent.AddChild(entry);
+                            entry.PopulateEntry(entryData.Value.AsObject(), Vector2.One);
                             RegisterOffer(entry);
                             entry.Visible = IsValidEntry(entry);
                             if (opCount > simpleOpsPerFrame)

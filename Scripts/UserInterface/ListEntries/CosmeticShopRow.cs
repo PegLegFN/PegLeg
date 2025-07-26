@@ -59,8 +59,8 @@ public partial class CosmeticShopRow : Control
             Vector2 cellSize = new(int.Parse(splitCellText[1]), int.Parse(splitCellText[3]));
             Vector2 finalSize = (cellSize * (cellUnitsV2 + cellSpacing)) - cellSpacing;
             entry.CustomMinimumSize = finalSize;
-            entry.PopulateEntry(offer.Value.AsObject(), cellSize);
             entryParent.AddChild(entry);
+            entry.PopulateEntry(offer.Value.AsObject(), cellSize);
             parent.RegisterOffer(entry);
             activeEntries.Add(entry);
 

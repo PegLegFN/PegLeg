@@ -573,7 +573,12 @@ static class CatalogRequests
     public static async Task<ImageTexture> GetCosmeticResource(string serverPath)
     {
         if (GetLocalCosmeticResource(serverPath) is ImageTexture localImageTex)
-            return localImageTex;
+        {
+            if (localImageTex is not null)
+                return localImageTex;
+            else
+                GD.Print("NULL LOCAL TEXTURE");
+        }
 
         bool isJamTrack = serverPath.StartsWith(fnapiJamTrackPrefix);
         bool isFNCentral = serverPath.StartsWith(fnCentralPrefix);
