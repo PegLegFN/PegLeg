@@ -154,6 +154,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.InteractableChanged, interactableWhenEmpty);
         AppConfig.OnConfigChanged += OnConfigChanged;
         GameAccount.BookmarksChanged += UpdateBookmark;
+        GameAccount.ActiveAccountChanged += UpdateItem;
     }
 
 
@@ -170,6 +171,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
     public override void _ExitTree()
     {
+        GameAccount.ActiveAccountChanged -= UpdateItem;
+        GameAccount.BookmarksChanged -= UpdateBookmark;
         AppConfig.OnConfigChanged -= OnConfigChanged;
         if (currentItem is not null)
         {
@@ -229,9 +232,16 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         int amount = item.quantity;
 
+        if (item.templateId== "AccountResource:currency_hybrid_mtx_xrayllama" && GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem("Token:receivemtxcurrency") is null)
+        {
+            item = GameItemTemplate.Get("AccountResource:currency_xrayllama").CreateInstance(amount);
+        }
+        //substitute generic event tickets for current event tickets
+
         inspectorOverride = item.inspectorOverride;
-        if(inspectorOverride is not null && inspectorOverride.template is not null)
+        if (inspectorOverride is not null && inspectorOverride.template is not null)
             item = inspectorOverride;
+
 
         if (item.template?.Type == "Accolades")
             amount = item.template?["AccoladeXP"]?.GetValue<int>() ?? 1;
@@ -359,7 +369,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.LevelMaxChanged, maxLevel);
         EmitSignal(SignalName.LevelProgressChanged, levelProgress);
 
-        SetInteractable(autoInteractableTypes.Contains(currentItem.template?.Type.ToLower()) || currentItem.CardPackChoices is not null);
+        SetInteractable(autoInteractableTypes.Contains(item.template?.Type.ToLower()) || item.CardPackChoices is not null);
 
         //if survivor, set personality icons
 

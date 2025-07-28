@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8bhtcfsoew84"]
+
+[ext_resource type="PackedScene" uid="uid://bk6fttr5h8nvm" path="res://Scenes/ContextComponents/toggle_ctx.tscn" id="1_fjggc"]
+[ext_resource type="Script" uid="uid://6d5dner3vsl2" path="res://Scripts/ContextMenu/Components/PinQuestCtx.cs" id="2_bfc6s"]
+[ext_resource type="Texture2D" uid="uid://lhe8ded54hsv" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Pin_128.png" id="3_fjggc"]
+
+[node name="PinQuestCtx" node_paths=PackedStringArray("toggleIcon", "disabledPanel") instance=ExtResource("1_fjggc")]
+script = ExtResource("2_bfc6s")
+toggleIcon = NodePath("MarginContainer/HBoxContainer/ToggleIconArea")
+disabledPanel = NodePath("Disabled")
+
+[node name="OffIcon" parent="MarginContainer/HBoxContainer/ToggleIconArea" index="0"]
+texture = null
+
+[node name="OnIcon" parent="MarginContainer/HBoxContainer/ToggleIconArea" index="1"]
+texture = ExtResource("3_fjggc")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="2"]
+text = "Pin Quest"
+
+[connection signal="pressed" from="TextureButton" to="." method="TogglePinned"]

@@ -519,14 +519,8 @@ static class CatalogRequests
     static readonly Dictionary<string, WeakRef> activeResourceCache = [];
     static readonly Dictionary<string, JsonObject> activeMetaCache = [];
 
-    public static ImageTexture GetLocalCosmeticResource(string serverPath)
+    public static string LocalCosmeticResourcePath(string serverPath)
     {
-        lock (activeResourceCache)
-        {
-            if (activeResourceCache.TryGetImage(serverPath, out var cachedTexture))
-                return cachedTexture;
-        }
-        
         bool isJamTrack = serverPath.StartsWith(fnapiJamTrackPrefix);
         bool isFNCentral = serverPath.StartsWith(fnCentralPrefix);
         string localPath = imageCacheFolderPath;
@@ -542,6 +536,18 @@ static class CatalogRequests
         {
             localPath += serverPath[fnapiLinkPrefix.Length..].Replace("/", "-");
         }
+        return localPath;
+    }
+
+    public static ImageTexture GetLocalCosmeticResource(string serverPath)
+    {
+        lock (activeResourceCache)
+        {
+            if (activeResourceCache.TryGetImage(serverPath, out var cachedTexture))
+                return cachedTexture;
+        }
+        
+        string localPath = LocalCosmeticResourcePath(serverPath);
 
         if (!FileAccess.FileExists(localPath))
             return null;

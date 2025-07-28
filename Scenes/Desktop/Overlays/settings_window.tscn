@@ -898,6 +898,7 @@ useHold = true
 outlinePadding = 20.0
 
 [node name="Misc" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="3" node_paths=PackedStringArray("accountImportButton")]
+visible = false
 layout_mode = 2
 script = ExtResource("2_dybhj")
 loginSceneFilePath = "res://Scenes/Desktop/desktopLogin.tscn"
@@ -1010,7 +1011,6 @@ access = 2
 use_native_dialog = true
 
 [node name="Advanced" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="4"]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced" index="0"]
@@ -1076,10 +1076,21 @@ text = "Offset refresh countdown"
 alignment = 2
 script = ExtResource("12_12lms")
 section = "advanced"
-key = "offset"
+key = "offset_refresh"
 defaultValue = true
 
-[node name="ExperimentalNotifs" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="5"]
+[node name="SuspendQuests" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="5"]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
+text = "Suspend Quests"
+alignment = 2
+script = ExtResource("12_12lms")
+section = "advanced"
+key = "suspend_quests"
+defaultValue = true
+
+[node name="ExperimentalNotifs" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="6"]
 layout_direction = 3
 layout_mode = 2
 text = "Enable Notifications"
@@ -1088,7 +1099,7 @@ script = ExtResource("12_12lms")
 section = "experimental"
 key = "notifications"
 
-[node name="BeastMode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="6"]
+[node name="BeastMode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="7"]
 layout_direction = 3
 layout_mode = 2
 text = "Beast Mode"

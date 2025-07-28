@@ -10,6 +10,8 @@ public partial class HomebasePowerLevel : Control
     Range homebaseNumberProgressBar;
     [Export]
     bool ventures;
+    [Export]
+    Color tooltipColor = Colors.Aquamarine;
 
     public override void _Ready()
     {
@@ -76,9 +78,9 @@ public partial class HomebasePowerLevel : Control
                 "Power Level",
                 homebaseNumberLabel.Text,
                 [
-                    $"Homebase Power: {Mathf.Floor(powerLevel)}\n({Mathf.Floor((powerLevel % 1) * 100)}% progress to {Mathf.Floor(powerLevel) + 1})"
+                    $"{(ventures?"Venture":"Homebase")} Power: {Mathf.Floor(powerLevel)}\n({Mathf.Floor((powerLevel % 1) * 100)}% progress to {Mathf.Floor(powerLevel) + 1})"
                 ],
-                Colors.AliceBlue.ToHtml()
+                tooltipColor.ToHtml()
             );
     }
 

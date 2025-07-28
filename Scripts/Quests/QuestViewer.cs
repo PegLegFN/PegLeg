@@ -40,15 +40,15 @@ public partial class QuestViewer : Control
         rerollButton.Pressed += RerollQuest;
     }
 
-    static readonly string[] cardPackFromRarity = new string[]
-    {
+    static readonly string[] cardPackFromRarity =
+    [
         "CardPack:cardpack_choice_all_r",
         "CardPack:cardpack_choice_all_r",
         "CardPack:cardpack_choice_all_r",
         "CardPack:cardpack_choice_all_r",
         "CardPack:cardpack_choice_all_vr",
         "CardPack:cardpack_choice_all_sr",
-    };
+    ];
 
     QuestSlot currentQuest;
     async void UpdatePinnedState()
@@ -67,11 +67,7 @@ public partial class QuestViewer : Control
         if (!await account.Authenticate())
             return;
 
-        if (pinButton.ButtonPressed)
-            await account.AddPinnedQuest(currentQuest.questItem);
-        else
-            await account.RemovePinnedQuest(currentQuest.questItem);
-
+        await currentQuest.questItem.SetPinnedAsync(pinButton.ButtonPressed);
         pinButton.ButtonPressed = currentQuest.isPinned;
     }
 

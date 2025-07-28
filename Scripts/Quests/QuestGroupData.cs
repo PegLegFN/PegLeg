@@ -1,10 +1,8 @@
 using Godot;
-using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public struct QuestGroupCollectionData
 {
@@ -13,6 +11,9 @@ public struct QuestGroupCollectionData
     public string displayName { get; private set; } = null;
     [JsonInclude]
     public int priority { get; private set; } = 0;
+    [JsonInclude]
+    [JsonConverter(typeof(JsonStringEnumConverter<QuestTimerMode>))]
+    public QuestTimerMode timer { get; private set; } = QuestTimerMode.None;
     [JsonInclude]
     public string[] eventFlags { get; private set; } = [];
     [JsonInclude]
@@ -83,8 +84,12 @@ public struct QuestGroupData
     [JsonIgnore]
     public readonly bool ShowComplete => showComplete ?? Sequence;
     [JsonInclude]
-    [JsonConverter(typeof(JsonStringEnumConverter<TimerMode>))]
-    public TimerMode timer { get; private set; } = TimerMode.None;
+    bool? showProgress { get; set; } = null;
+    [JsonIgnore]
+    public readonly bool ShowProgress => showProgress ?? ShowLocked && ShowComplete;
+    [JsonInclude]
+    [JsonConverter(typeof(JsonStringEnumConverter<QuestTimerMode>))]
+    public QuestTimerMode timer { get; private set; } = QuestTimerMode.None;
     [JsonInclude]
     public string eventFlag { get; private set; } = null;
     [JsonRequired]
@@ -140,17 +145,9 @@ public struct QuestGroupData
         //ctor for exported questlines
         this.displayName = displayName;
         this.eventFlag = eventFlag;
-        timer = TimerMode.Event;
+        timer = QuestTimerMode.Event;
         questlines = [quests];
         sequence = true;
-    }
-
-    public enum TimerMode
-    {
-        None,
-        Event,
-        Daily,
-        Weekly,
     }
 
     struct ComplexQuestPredicate
@@ -198,6 +195,7 @@ public struct QuestGroupData
         const System.StringComparison comparer = System.StringComparison.InvariantCultureIgnoreCase;
         readonly bool FilterQuest(GameItemTemplate item) =>
             item is not null &&
+            //!item.DisplayName.StartsWith("(Hidden)") &&
             (category == null || string.Equals(item.Category, category, comparer)) &&
             item.Name?.ToLower() is string name &&
             (startsWith == null || name.StartsWith(startsWith, comparer)) &&
@@ -213,4 +211,12 @@ public struct QuestGroupData
                 _ => []
             };
     }
+}
+
+public enum QuestTimerMode
+{
+    None,
+    Event,
+    Daily,
+    Weekly,
 }

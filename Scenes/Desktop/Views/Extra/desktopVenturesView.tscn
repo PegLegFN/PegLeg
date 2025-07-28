@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bm216dwkg2p58"]
+[gd_scene load_steps=14 format=3 uid="uid://bm216dwkg2p58"]
 
 [ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="1_c04xt"]
+[ext_resource type="Script" uid="uid://dw6254vnxbhxk" path="res://Scripts/UserInterface/Extra/VenturesInterface.cs" id="1_c34ni"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="2_c34ni"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="3_7f6lk"]
 [ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="4_wsqb2"]
@@ -23,7 +24,16 @@ corner_radius_top_right = 23
 corner_radius_bottom_right = 23
 corner_radius_bottom_left = 23
 
-[node name="Ventures" type="MarginContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c34ni"]
+bg_color = Color(1, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0, 1, 0, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+
+[node name="Ventures" type="MarginContainer" node_paths=PackedStringArray("currentLevelLabel", "levelProgress", "nextLevelLabel", "nextReward", "majorLevelSection", "nextMajorLevelLabel", "nextMajorReward", "modifierEntries", "mainItems", "mainCheckmarks", "extraItems")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -31,6 +41,18 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_c34ni")
+currentLevelLabel = NodePath("VBoxContainer/PanelContainer/HBoxContainer/CurLv")
+levelProgress = NodePath("VBoxContainer/PanelContainer/HBoxContainer/ProgressBar")
+nextLevelLabel = NodePath("VBoxContainer/PanelContainer/HBoxContainer/NextLv")
+nextReward = NodePath("VBoxContainer/PanelContainer/HBoxContainer/NextReward")
+majorLevelSection = NodePath("VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection")
+nextMajorLevelLabel = NodePath("VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection/MajorLv")
+nextMajorReward = NodePath("VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection/MajorReward")
+modifierEntries = [NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4")]
+mainItems = [NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry2"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry3"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry4"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry5"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry6"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry7"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry8"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry9"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry10"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry11"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry12"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry13"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry14"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry15"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry16"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry17"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry18"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry19"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry20"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry21"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry22"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry23"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry24"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry25"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry26"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry27"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry28"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry29"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry30"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry31"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry32"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry33"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry34"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry35"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry36"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry37"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry38"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry39"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry40"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry41"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry42"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry43"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry44"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry45"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry46"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry47"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry48"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry49"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry50")]
+mainCheckmarks = [NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer2"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer3"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer4"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer5"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer6"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer7"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer8"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer9"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer10"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer11"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer12"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer13"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer14"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer15"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer16"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer17"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer18"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer19"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer20"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer21"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer22"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer23"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer24"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer25"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer26"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer27"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer28"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer29"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer30"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer31"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer32"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer33"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer34"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer35"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer36"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer37"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer38"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer39"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer40"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer41"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer42"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer43"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer44"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer45"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer46"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer47"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer48"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer49"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer50")]
+extraItems = [NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry2"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry3"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry4"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry5"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry6"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry7"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry8"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry9"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/RewardEntry10")]
 metadata/_tab_index = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -52,6 +74,8 @@ layout_mode = 2
 script = ExtResource("1_c04xt")
 homebaseNumberLabel = NodePath("MarginContainer/HBoxContainer/PowerLevelNumber")
 homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelProgressBar")
+ventures = true
+tooltipColor = Color(0.596078, 0, 0.729412, 1)
 
 [node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel"]
 layout_mode = 2
@@ -110,7 +134,7 @@ theme_override_font_sizes/font_size = 30
 text = "144"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="CurLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -123,25 +147,29 @@ size_flags_vertical = 4
 max_value = 1.0
 value = 0.13
 
-[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="NextLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Lv ???"
 
-[node name="RewardEntry" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_wsqb2")]
+[node name="NextReward" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_wsqb2")]
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="MajorLvSection" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="MajorLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection"]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Lv ???"
 
-[node name="RewardEntry2" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_wsqb2")]
+[node name="MajorReward" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection" instance=ExtResource("4_wsqb2")]
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
@@ -182,10 +210,11 @@ theme_override_constants/margin_bottom = 5
 [node name="HBoxContainer" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("5_jxhgi")
+compressSpacing = true
 spacing = Vector2(10, 10)
 
 [node name="MissionAlertItemEntry" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(390, 0)
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 script = ExtResource("6_j35r5")
@@ -219,7 +248,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 
 [node name="MissionAlertItemEntry2" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(390, 0)
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 script = ExtResource("6_j35r5")
@@ -253,7 +282,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 
 [node name="MissionAlertItemEntry3" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(390, 0)
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 script = ExtResource("6_j35r5")
@@ -287,7 +316,7 @@ autowrap_mode = 3
 text_overrun_behavior = 3
 
 [node name="MissionAlertItemEntry4" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(390, 0)
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 script = ExtResource("6_j35r5")
@@ -314,40 +343,6 @@ text_overrun_behavior = 3
 layout_mode = 2
 
 [node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Description Test"
-autowrap_mode = 3
-text_overrun_behavior = 3
-
-[node name="MissionAlertItemEntry5" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(390, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-script = ExtResource("6_j35r5")
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5"]
-custom_minimum_size = Vector2(0, 96)
-layout_mode = 2
-texture = ExtResource("7_wnkow")
-expand_mode = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Metal Corosion"
-text_overrun_behavior = 3
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Description Test"
@@ -531,436 +526,658 @@ layout_mode = 2
 
 [node name="Container2" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 script = ExtResource("5_jxhgi")
 compressSpacing = true
 spacing = Vector2(6, 6)
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer2"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer3"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer4"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer5"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer6" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer6"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect7" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer7" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer7"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect8" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer8" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer8"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect9" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer9" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer9"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect10" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer10" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer10"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect11" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer11" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer11"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect12" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer12" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer12"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect13" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer13" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer13"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect14" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer14" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer14"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect15" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer15" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer15"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect16" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer16" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer16"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect17" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer17" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer17"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect18" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer18" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer18"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect19" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer19" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer19"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect20" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer20" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer20"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect21" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer21" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer21"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect22" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer22" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer22"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect23" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer23" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer23"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect24" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer24" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer24"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect25" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer25" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer25"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect26" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer26" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer26"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect27" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer27" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer27"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect28" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer28" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer28"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect29" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer29" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer29"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect30" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer30" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer30"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect31" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer31" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer31"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect32" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer32" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer32"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect33" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer33" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer33"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect34" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer34" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer34"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect35" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer35" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer35"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect36" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer36" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer36"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect37" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer37" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer37"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect38" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer38" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer38"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect39" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer39" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer39"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect40" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer40" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer40"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect41" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer41" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer41"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect42" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer42" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer42"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect43" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer43" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer43"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect44" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer44" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer44"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect45" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer45" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer45"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect46" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer46" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer46"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect47" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer47" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer47"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect48" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer48" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer48"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect49" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer49" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer49"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
-[node name="TextureRect50" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
-visible = false
-self_modulate = Color(0.0166667, 1, 0, 1)
+[node name="MarginContainer50" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container2/MarginContainer50"]
+modulate = Color(0.0166667, 1, 0, 1)
 material = ExtResource("9_r71bk")
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("10_n47hn")
 expand_mode = 1
 
@@ -979,7 +1196,7 @@ text = "Extra Rewards (Lv 51+)"
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
@@ -1022,6 +1239,39 @@ layout_mode = 2
 [node name="ActiveRewardParent" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent"]
+visible = false
+layout_mode = 0
+offset_left = 455.0
+offset_right = 551.0
+offset_bottom = 96.0
+theme_override_constants/margin_left = -3
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -3
+
+[node name="Control" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.25
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c34ni")
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer/Control/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "Next Reward"
+horizontal_alignment = 1
+
 [connection signal="DescriptionChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label2" method="set_text"]
 [connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/TextureRect6" method="set_texture"]
 [connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label" method="set_text"]
@@ -1038,7 +1288,3 @@ layout_mode = 2
 [connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/TextureRect6" method="set_texture"]
 [connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer/Label" method="set_text"]
 [connection signal="TooltipChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" method="set_tooltip_text"]
-[connection signal="DescriptionChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5/TextureRect6" method="set_texture"]
-[connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5/VBoxContainer/Label" method="set_text"]
-[connection signal="TooltipChanged" from="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5" to="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry5" method="set_tooltip_text"]

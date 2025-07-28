@@ -1,19 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://kgl0dydu0mtf"]
+[gd_scene load_steps=8 format=3 uid="uid://kgl0dydu0mtf"]
 
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="1_atr3d"]
 [ext_resource type="Script" uid="uid://ct11mvw5gpi7l" path="res://Scripts/ContextMenu/ContextMenu.cs" id="1_epbn8"]
-[ext_resource type="PackedScene" uid="uid://dvodww6qg44sb" path="res://Scenes/ContextComponents/inspect_offer_ctx.tscn" id="2_2pdw5"]
-[ext_resource type="PackedScene" uid="uid://c6ip4jr8v8ku8" path="res://Scenes/ContextComponents/favourite_item_ctx.tscn" id="2_850gp"]
-[ext_resource type="PackedScene" uid="uid://c8ptdx301yus7" path="res://Scenes/ContextComponents/inspect_item_ctx.tscn" id="2_y3yb8"]
-[ext_resource type="PackedScene" uid="uid://b5q5lt4tovbhd" path="res://Scenes/ContextComponents/bookmark_item_ctx.tscn" id="3_epbn8"]
-[ext_resource type="PackedScene" uid="uid://bwmeksn5ae2s4" path="res://Scenes/ContextComponents/copy_item_uuid_ctx.tscn" id="5_q8muj"]
-[ext_resource type="PackedScene" uid="uid://lgsv2ucxrcu6" path="res://Scenes/ContextComponents/copy_template_id_ctx.tscn" id="6_taiaa"]
-[ext_resource type="PackedScene" uid="uid://8f735g4fo3wh" path="res://Scenes/ContextComponents/copy_offer_id_ctx.tscn" id="8_n3g7q"]
-[ext_resource type="PackedScene" uid="uid://c5a2r24tp1bf1" path="res://Scenes/ContextComponents/recycle_item_ctx.tscn" id="9_cbvtg"]
-[ext_resource type="PackedScene" uid="uid://bu6qougeyqaig" path="res://Scenes/ContextComponents/copy_item_icon_ctx.tscn" id="10_6f8fp"]
-[ext_resource type="PackedScene" uid="uid://blpchxjwv3gym" path="res://Scenes/ContextComponents/item_title_ctx.tscn" id="11_ysndk"]
-[ext_resource type="PackedScene" uid="uid://dv78stjulbykc" path="res://Scenes/ContextComponents/open_cosmetic_icon_ctx.tscn" id="12_kr3ip"]
-[ext_resource type="PackedScene" uid="uid://u7q0ajqtxice" path="res://Scenes/ContextComponents/transfer_item_ctx.tscn" id="13_0a205"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xuii"]
 bg_color = Color(0.101961, 0.101961, 0.101961, 1)
@@ -45,7 +33,7 @@ fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0)
 metadata/_snap_enabled = true
 
-[node name="DesktopContextMenu" type="Window" node_paths=PackedStringArray("contextComponentsSource", "componentParent", "listTarget", "listAnimation", "scaleAnimation")]
+[node name="DesktopContextMenu" type="Window" node_paths=PackedStringArray("componentParent", "listTarget", "listAnimation", "scaleAnimation")]
 transparent_bg = true
 size = Vector2i(116, 105)
 wrap_controls = true
@@ -53,188 +41,11 @@ borderless = true
 always_on_top = true
 transparent = true
 script = ExtResource("1_epbn8")
-contextComponentsSource = NodePath("Components")
+contextComponentFolder = "res://Scenes/ContextComponents"
 componentParent = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget/VBoxContainer")
 listTarget = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget")
 listAnimation = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim")
 scaleAnimation = NodePath("ScaleAnim")
-
-[node name="Components" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 112.0
-offset_bottom = 65.0
-scale = Vector2(1e-05, 1e-05)
-size_flags_horizontal = 0
-size_flags_vertical = 0
-
-[node name="InspectOfferCtx" parent="Components" instance=ExtResource("2_2pdw5")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="InspectItemCtx" parent="Components" instance=ExtResource("2_y3yb8")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = -22.0
-offset_right = 122.0
-offset_bottom = 14.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="FavouriteItemCtx" parent="Components" instance=ExtResource("2_850gp")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="BookmarkItemCtx" parent="Components" instance=ExtResource("3_epbn8")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="CopyItemUuidCtx" parent="Components" instance=ExtResource("5_q8muj")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="CopyTemplateIdCtx" parent="Components" instance=ExtResource("6_taiaa")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="CopyOfferIdCtx" parent="Components" instance=ExtResource("8_n3g7q")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="RecycleItemCtx" parent="Components" instance=ExtResource("9_cbvtg")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="CopyItemIconCtx" parent="Components" instance=ExtResource("10_6f8fp")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="ItemTitleCtx" parent="Components" instance=ExtResource("11_ysndk")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 36.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="OpenCosmeticIconCtx" parent="Components" instance=ExtResource("12_kr3ip")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 24.0
-grow_horizontal = 1
-grow_vertical = 1
-
-[node name="TransferItemCtx" parent="Components" instance=ExtResource("13_0a205")]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 122.0
-offset_bottom = 24.0
-grow_horizontal = 1
-grow_vertical = 1
 
 [node name="ScaleAnim" type="MarginContainer" parent="."]
 offset_right = 71.0

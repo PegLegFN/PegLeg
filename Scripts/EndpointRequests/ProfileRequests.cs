@@ -12,6 +12,7 @@ using System.Threading;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Text.Json;
+using System.Security.Principal;
 
 
 public enum OrderRange
@@ -795,7 +796,8 @@ public partial class GameAccount
         var commonData = await GetProfile(FnProfileTypes.Common).Query();
         var lastSetTime = DateTime.TryParse(commonData.statAttributes["mtx_affiliate_set_time"]?.ToString(), null, DateTimeStyles.RoundtripKind, out var dt) ? dt : DateTime.UtcNow.AddDays(-15);
         bool isExpired = (DateTime.UtcNow - lastSetTime).Days > 13;
-        return commonData.statAttributes["mtx_affiliate"] + (isExpired && addExpiredText ? " (Expired)" : "");
+        var creator = commonData.statAttributes["mtx_affiliate"]?.ToString();
+        return (creator ?? "None") + (isExpired && creator is not null && addExpiredText ? " (Expired)" : "");
     }
 
     public async Task<bool> IsSACExpired() => Mathf.FloorToInt(await GetSACTime()) > 13;
@@ -803,7 +805,10 @@ public partial class GameAccount
     public async Task<double> GetSACTime()
     {
         var commonData = await GetProfile(FnProfileTypes.Common).Query();
-        var lastSetTime = DateTime.Parse(commonData.statAttributes["mtx_affiliate_set_time"].ToString(), null, DateTimeStyles.RoundtripKind);
+        var lastSetTimeString = commonData.statAttributes["mtx_affiliate_set_time"]?.ToString();
+        if (lastSetTimeString is null)
+            return 999;
+        var lastSetTime = DateTime.Parse(lastSetTimeString, null, DateTimeStyles.RoundtripKind);
         return (DateTime.UtcNow - lastSetTime).TotalDays;
     }
 
@@ -900,7 +905,7 @@ public partial class GameAccount
     public async Task AddPinnedQuest(GameItem item)
     {
         var accountItems = await CheckLocalPinnedQuests();
-        if (item.profile == accountItems && !localPinnedQuests.Contains(item.uuid))
+        if (item.templateId.StartsWith("Quest") && item.profile == accountItems && !localPinnedQuests.Contains(item.uuid))
         {
             localPinnedQuests.Add(item.uuid);
             accountItems.SendItemUpdate(item);
@@ -1614,7 +1619,7 @@ public class GameItem
     }
     public JsonArray Alterations => (attributes?["alterations"] ?? attributes?["alterationDefinitions"])?.AsArray();
 
-    public string Personality=> attributes?["personality"]?.ToString() is string rawPersonality ? ParseSurvivorAttribute(rawPersonality) : null;
+    public string Personality => attributes?["personality"]?.ToString() is string rawPersonality ? ParseSurvivorAttribute(rawPersonality) : null;
     public string SetBonus => attributes?["set_bonus"]?.ToString() is string rawSetBonus ? ParseSurvivorAttribute(rawSetBonus) : null;
 
     public GameItem[] CardPackChoices => attributes?["options"]?
@@ -1706,15 +1711,28 @@ public class GameItem
             NotifyChanged();
     }
 
-    public void SetFavourited(bool newVal)
+    public async void SetFavourited(bool newVal)
     {
-        if (template?.CanBeFavourited != true)
+        if (template?.CanBeFavourited != true || profile?.account.isOwned != true)
             return;
         SetFavouritedLocal(newVal);
         string content = @$"{{""targetItemId"": ""{uuid}"", ""bFavorite"":{newVal.ToString().ToLower()}}}";
         GD.Print("FAV: " + content);
-        profile.PerformOperation("SetItemFavoriteStatus", content).StartTask();
+        await profile.PerformOperation("SetItemFavoriteStatus", content);
     }
+
+    public bool QuestPinned => profile?.account.HasPinnedQuest(this) ?? false;
+    public async void SetPinned(bool newVal) => await SetPinnedAsync(newVal);
+    public async Task SetPinnedAsync(bool newVal)
+    {
+        if (profile?.account.isOwned != true)
+            return;
+        if (newVal)
+            await profile.account.AddPinnedQuest(this);
+        else
+            await profile.account.RemovePinnedQuest(this);
+    }
+
 
     bool? isSeenLocal = null;
     public bool IsSeen => isSeenLocal ?? attributes?["item_seen"]?.GetValue<bool>() ?? false || template?.CanBeUnseen != true;
@@ -1736,6 +1754,26 @@ public class GameItem
         SetSeenLocal();
         string content = @$"{{""itemIds"": [""{uuid}""]}}";
         profile.PerformOperation("MarkItemSeen", content).StartTask();
+    }
+
+    public async Task<GameItem[]> ClaimQuest(int index = 0)
+    {
+        GD.Print("Claiming "+uuid);
+        string altcontent = @$"{{""questId"": ""{uuid}"", ""selectedRewardIndex"": {index}}}";
+        var notifs = await profile.PerformOperation("ClaimQuestReward", altcontent);
+        var claimNotif = notifs.FirstOrDefault(n => n["type"].ToString()=="questClaim");
+        if(claimNotif is not null)
+        {
+            return claimNotif["loot"]["items"]
+                .AsArray()
+                .Select(n =>
+                    profile.account
+                        .GetProfile(n["itemProfile"].ToString())
+                        .GetItem(n["itemGuid"].ToString())
+                        .Clone(n["quantity"].GetValue<int>())
+                ).ToArray();
+        }
+        return [];
     }
 
     public async void SetRewardNotification(GameAccount account = null, bool force = false)
@@ -1868,7 +1906,6 @@ public class GameItem
         return (float)statLookup["Values"][statKey];
     }
 
-    public bool QuestPinned => profile?.account.HasPinnedQuest(this) ?? false;
     public string QuestState => attributes?["quest_state"]?.ToString();
     public bool QuestComplete => QuestState == "unknown" || QuestState == "Claimed"; //TODO: need to check which state value refers to unclaimed complete quests
 

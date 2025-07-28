@@ -125,7 +125,7 @@ public partial class QuestGroupViewer : Control
 
         if (questDataList.Count>0)
         {
-            var focusNode = questDataList.FirstOrDefault(q => !q.isComplete, null) ?? questDataList[^1];
+            var focusNode = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isComplete, null) ?? questDataList[^1];
             if (!useArrows)
                 focusNode = questDataList.FirstOrDefault(q => q.isPinned) ?? questDataList[0];
             currentQuestIndex = questDataList.IndexOf(focusNode);

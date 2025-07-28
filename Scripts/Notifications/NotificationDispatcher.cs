@@ -11,11 +11,19 @@ using System.Text.Json;
 public partial class NotificationDispatcher : Node
 {
     const string notifTimerPath = "user://notifTimes.json";
+
+    const string bdayOfferId = "AB717EDD429743F48CC0346F780109C8";
+    const string monthlyFreeLlamaOfferId = "8339003D26B24F70878EE280B70C340D";
+    const string firstFreeLlamaOfferId = "8339003D26B24F70878EE280B70C340D";
+
     class RefreshTimeContainer
     {
         public DateTime lastDailyCheck { get; set; }
+        public DateTime lastWeeklyCheck { get; set; }
         public DateTime lastHourlyCheck { get; set; }
     }
+
+    RefreshTimeContainer refreshTimes;
 
     [Export]
     Texture2D freeLlamaIcon;
@@ -29,8 +37,6 @@ public partial class NotificationDispatcher : Node
     Texture2D shopIcon;
     [Export]
     AudioStream shopSound;
-
-    RefreshTimeContainer refreshTimes;
 
     public override void _Ready()
     {
@@ -51,30 +57,6 @@ public partial class NotificationDispatcher : Node
         RefreshTimerController.OnHourChanged -= HourlyNotifs;
     }
 
-    NotificationData? _freeLlamaNotif;
-    NotificationData freeLlamaNotif => _freeLlamaNotif ??= new()
-    {
-        header = "Free Llamas",
-        body = "These Llamas arent available for long, so claim them quick!",
-        icon = freeLlamaIcon,
-        sound = freeLlamaSound,
-        urgent = true,
-        //firstAction = "View",
-        //superAction = "Claim All",
-        itemColor = Color.FromHtml("#bf00ff"),
-    };
-
-    NotificationData? _eventLlamaNotif;
-    NotificationData eventLlamaNotif => _eventLlamaNotif ??= new()
-    {
-        header = "Event Llamas",
-        body = "These Llamas dont come by often, and contain rare weapons",
-        icon = freeLlamaIcon,
-        urgent = true,
-        firstAction = "View",
-        itemColor = Color.FromHtml("#bf00ff"),
-    };
-
     CancellationTokenSource notifCTS;
     async void HourlyNotifs()
     {
@@ -92,7 +74,7 @@ public partial class NotificationDispatcher : Node
 
         Task<NotificationData[]>[] notifTasks =
         [
-            CheckLlamas(ct),
+            CheckDailyLlamas(ct),
             ..DailyNotifs(ct)
         ];
 
@@ -114,48 +96,93 @@ public partial class NotificationDispatcher : Node
         refreshTimes.lastDailyCheck = DateTime.UtcNow.Date;
         return [
             CheckMissions(ct),
-            CheckCosmetics(ct)
+            CheckCosmetics(ct),
             //check calender for quests
-            //if week is new, send 160 reward as notif
+            ..WeeklyNotifs(ct)
         ];
     }
 
-    static readonly FrozenSet<string> eventLlamaIds = (new string[] { "", "", "" }).ToFrozenSet();
-    async Task<NotificationData[]> CheckLlamas(CancellationToken ct)
+    Task<NotificationData[]>[] WeeklyNotifs(CancellationToken ct)
+    {
+        int utcDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
+        int daysSinceThursday = (3 + utcDayOfWeek) % 7;
+        var thisThursday = DateTime.UtcNow.Date.AddDays(daysSinceThursday);
+        if (refreshTimes.lastWeeklyCheck >= thisThursday)
+            return [];
+        refreshTimes.lastWeeklyCheck = DateTime.UtcNow.Date;
+        return [
+            //if week is new, send 160 reward as notif
+            CheckBdayLlamas(ct),
+        ];
+    }
+
+    NotificationData? freeLlamaNotif;
+    NotificationData FreeLlamaNotif => freeLlamaNotif ??= new()
+    {
+        header = "Free Llamas",
+        body = "These Llamas arent available for long, so claim them quick!",
+        icon = freeLlamaIcon,
+        sound = freeLlamaSound,
+        urgent = true,
+        //firstAction = "View",
+        //superAction = "Claim All",
+        itemColor = Color.FromHtml("#bf00ff"),
+    };
+
+    NotificationData? eventLlamaNotif;
+    NotificationData EventLlamaNotif => eventLlamaNotif ??= new()
+    {
+        header = "Event Llamas",
+        body = "These Llamas dont come by often, and contain rare weapons",
+        icon = freeLlamaIcon,
+        urgent = true,
+        firstAction = "View",
+        itemColor = Color.FromHtml("#bf00ff"),
+    };
+    static readonly FrozenSet<string> excludeFreeLlamaIds = (new string[] { 
+        bdayOfferId,
+        monthlyFreeLlamaOfferId,
+        firstFreeLlamaOfferId,
+    }).ToFrozenSet();
+    static readonly FrozenSet<string> eventLlamaIds = (new string[] { 
+        "", 
+        "", 
+        "" 
+    }).ToFrozenSet();
+    async Task<NotificationData[]> CheckDailyLlamas(CancellationToken ct)
     {
         if (ct.IsCancellationRequested)
             return [];
 
         var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
-        var randomStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.RandomLlamaCatalog, RefreshTimeType.Hourly);
         if (ct.IsCancellationRequested)
             return [];
 
         List<NotificationData> notifs = [];
-        if (xrayStorefront.Offers.Any(o => o.OfferId != "8339003D26B24F70878EE280B70C340D" && o.OfferId != "B9B0CE758A5049F898773C1A47A69ED4" && o.Price.quantity == 0 && (o.DailyLimit > 0 || o.EventLimit > 0)))
+        if (xrayStorefront.Offers.Any(o => !excludeFreeLlamaIds.Contains(o.OfferId) && o.Price.quantity == 0))
         {
             //deliver 1hr daily notif
-            notifs.Add(freeLlamaNotif with
+            notifs.Add(FreeLlamaNotif with
             {
                 body = "These Llamas appear randomly, and are only available for one hour at a time, so claim them quick!",
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Hourly)
             });
         }
-        if (xrayStorefront.Offers.Any(o => o.OfferId == "8339003D26B24F70878EE280B70C340D" && (o.DailyLimit > 0 || o.EventLimit > 0)))
+        if (xrayStorefront.Offers.Any(o => o.OfferId == monthlyFreeLlamaOfferId))
         {
             //deliver 24hr daily notif
-            notifs.Add(freeLlamaNotif with
+            notifs.Add(FreeLlamaNotif with
             {
                 body = "These Llamas are available for 24 hours, and return at the start of each month.",
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily)
             });
         }
-        if (randomStorefront.Offers.FirstOrDefault(o => (o.DailyLimit > 0 || o.EventLimit > 0) && eventLlamaIds.Contains(o.itemGrants[0].templateId)) is GameOffer evtOffer)
+        if (xrayStorefront.Offers.FirstOrDefault(o => eventLlamaIds.Contains(o.itemGrants[0].templateId)) is GameOffer evtOffer)
         {
             //deliver 24hr daily notif
             //todo: list amount of llamas, and the event item in the current one
             var contents = await evtOffer.GetXRayLlamaData(GameAccount.activeAccount);
-            notifs.Add(eventLlamaNotif with
+            notifs.Add(EventLlamaNotif with
             {
                 icon = evtOffer.itemGrants[0].GetTexture(),
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily)
@@ -167,8 +194,39 @@ public partial class NotificationDispatcher : Node
         return [.. notifs];
     }
 
-    NotificationData? _missionNotif;
-    NotificationData missionNotif => _missionNotif ??= new()
+    NotificationData? bDayLlamaNotif;
+    NotificationData BDayLlamaNotif => bDayLlamaNotif ??= new()
+    {
+        header = "Birthday Llama",
+        body = "A free Birthday Llama is available until the next weekly reset",
+        icon = freeLlamaIcon,
+        urgent = true,
+        firstAction = "View",
+        itemColor = Color.FromHtml("#bf00ff"),
+    };
+    async Task<NotificationData[]> CheckBdayLlamas(CancellationToken ct)
+    {
+        if (ct.IsCancellationRequested)
+            return [];
+
+        var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
+        if (ct.IsCancellationRequested)
+            return [];
+        if (xrayStorefront.Offers.FirstOrDefault(o => o.OfferId == bdayOfferId) is GameOffer bdayOffer)
+        {
+            //deliver bday llama notif
+            //todo: if birthday llama contains item with reminder, show notification
+            return [BDayLlamaNotif with
+            {
+                icon = bdayOffer.itemGrants[0].GetTexture(),
+                expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Weekly)
+            }];
+        }
+        return [];
+    }
+
+    NotificationData? missionNotif;
+    NotificationData MissionNotif => missionNotif ??= new()
     {
         header = "Missions Updated",
         body = "[PH] Mission Items",
@@ -227,7 +285,7 @@ public partial class NotificationDispatcher : Node
             bodyContent.AppendLine($"{(bodyContent.Length>0?"\n":"")}Mythic Lead{(mythicLeads.Count == 1 ? "" : "s")}: {string.Join(", ", mythicLeads.Select(m => m.DisplayName))}");
 
         //show notif of total quantities
-        return [missionNotif with
+        return [MissionNotif with
         {
             body = bodyContent.ToString(),
             expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily)

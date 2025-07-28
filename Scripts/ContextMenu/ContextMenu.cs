@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public partial class ContextMenu : Window
 {
     static ContextMenu inst;
-    [Export]
-    Control contextComponentsSource;
+    [Export(PropertyHint.Dir)]
+    string contextComponentFolder;
     [Export]
     Control componentParent;
     [Export]
@@ -24,19 +24,18 @@ public partial class ContextMenu : Window
         Visible = true;
         this.Win64RemoveFromTaskbar();
         MousePassthroughPolygon = fullPassthrough;
-        int chCount = contextComponentsSource.GetChildCount();
 
-        for (int i = 0; i < chCount; i++)
+        var compNames = DirAccess.GetFilesAt(contextComponentFolder);
+        for (int i = 0; i < compNames.Length; i++)
         {
-            var cNode = contextComponentsSource.GetChild(0);
+            var cScene = ResourceLoader.Load<PackedScene>($"{contextComponentFolder}/{compNames[i]}");
+            var cNode = cScene.Instantiate();
             if (cNode is not BaseContextComponent comp)
             {
-                contextComponentsSource.RemoveChild(cNode);
                 cNode.QueueFree();
                 continue;
             }
             contextComponentDict.TryAdd(comp.Id, comp);
-            contextComponentsSource.RemoveChild(comp);
             comp.menu = this;
         }
 

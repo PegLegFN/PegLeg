@@ -140,7 +140,7 @@ public partial class QuestGroupEntry : Control
 
     public void UpdateSequenceProgress()
     {
-        if (!questGroupData.ShowLocked || !questGroupData.ShowComplete)
+        if (!questGroupData.ShowProgress)
         {
             sequenceProgress.Visible = false;
             return;
@@ -158,13 +158,13 @@ public partial class QuestGroupEntry : Control
         eventTimer.Visible = true;
         switch (questGroupData.timer)
         {
-            case QuestGroupData.TimerMode.Weekly:
+            case QuestTimerMode.Weekly:
                 eventTimer.SetTimerType(2);
                 return;
-            case QuestGroupData.TimerMode.Daily:
+            case QuestTimerMode.Daily:
                 eventTimer.SetTimerType(1);
                 return;
-            case QuestGroupData.TimerMode.None:
+            case QuestTimerMode.None:
                 eventTimer.Visible = false;
                 return;
         }

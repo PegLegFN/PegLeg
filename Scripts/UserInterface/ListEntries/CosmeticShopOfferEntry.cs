@@ -184,21 +184,21 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             OS.ShellOpen(shopUrl);
     }
 
-    public void LoadOrOpenImage()
-    {
-        if (imageUrl is not null)
-        {
-            OS.ShellOpen(imageUrl);
-        }
-        //else if (!displayAssetLoadStarted)
-        //{
-        //    displayAssetLoadStarted = true;
-        //    resourceLoadStarted = false;
-        //    loadingCubes.Visible = true;
-        //    resourceTarget.Visible = false;
-        //    StartResourceLoadSequence();
-        //}
-    }
+    //public void LoadOrOpenImage()
+    //{
+    //    if (imageUrl is not null)
+    //    {
+    //        OS.ShellOpen(ProjectSettings.GlobalizePath(CatalogRequests.LocalCosmeticResourcePath(imageUrl)));
+    //    }
+    //    //else if (!displayAssetLoadStarted)
+    //    //{
+    //    //    displayAssetLoadStarted = true;
+    //    //    resourceLoadStarted = false;
+    //    //    loadingCubes.Visible = true;
+    //    //    resourceTarget.Visible = false;
+    //    //    StartResourceLoadSequence();
+    //    //}
+    //}
 
     void ApplyResource() => 
         ApplyResource(null);
@@ -277,10 +277,11 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         currentOfferData = null;
     }
 
-    public bool HasImage => imageUrl is not null;
     string shopUrl = null;
     string layoutId = null;
-    string imageUrl = null;
+    public string imageUrl { get; private set; } = null;
+    public string displayName { get; private set; } = null;
+    public string displayType { get; private set; } = null;
     string imageDisplayAssetPath = null;
     Vector2 resourceShift = new(0.5f, 0.5f);
     bool resourceFit = false;
@@ -524,12 +525,11 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
                 .Join(", ");
         }
 
-        string mainName = firstItem?["name"]?.ToString() ?? "<Unknown>";
-        string mainType = firstItem?["type"]?["displayValue"].ToString() ?? (entryData["dynamicBundleInfo"] is null ? "<Item>" : "<Bundle>");
-        Name = mainName;
+        Name = displayName = firstItem?["name"]?.ToString() ?? "<Unknown>";
+        displayType = firstItem?["type"]?["displayValue"].ToString() ?? (entryData["dynamicBundleInfo"] is null ? "<Item>" : "<Bundle>");
 
-        EmitSignal(SignalName.NameChanged, mainName);
-        EmitSignal(SignalName.TypeChanged, mainType + (extraItemsText ?? ""));
+        EmitSignal(SignalName.NameChanged, displayName);
+        EmitSignal(SignalName.TypeChanged, displayType + (extraItemsText ?? ""));
 
         int oldPrice = entryData["regularPrice"].GetValue<int>();
         int newPrice = entryData["finalPrice"].GetValue<int>();
@@ -544,7 +544,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         SetMetaVisuals();
 
 
-        string tooltip = mainName + " - " + mainType;
+        string tooltip = displayName + " - " + displayType;
         if (fullExtraItemsText is not null)
             tooltip += "\nContents include: " + fullExtraItemsText;
 
@@ -553,9 +553,10 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 
     void PopulateAsBundle(JsonObject entryData, JsonObject[] allItems)
     {
-        string mainName = entryData["bundle"]["name"].ToString();
+        displayName = entryData["bundle"]["name"].ToString();
+        displayType = "Bundle";
 
-        EmitSignal(SignalName.NameChanged, mainName);
+        EmitSignal(SignalName.NameChanged, displayName);
         EmitSignal(SignalName.TypeChanged, $"Bundle [{allItems.Length} items]");
 
         int oldPrice = entryData["regularPrice"].GetValue<int>();
@@ -570,7 +571,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         metadata = new(allItems.Select(item=>new CosmeticMetadata(item.AsObject(), entryData)).ToArray());
         SetMetaVisuals();
 
-        string tooltip = mainName + " - Bundle";
+        string tooltip = displayName + " - Bundle";
         tooltip += "\nContents include: " + allItems
                 .GroupBy(i => i["type"]?["displayValue"].ToString())
                 .Select(g => g.Key + (g.Count() > 1 ? " x" + g.Count() : ""))

@@ -86,7 +86,7 @@ public static class CalenderRequests
             activeSince == other.activeSince && 
             activeUntil == other.activeUntil;
     }
-
+    public static async Task CheckCalender() => await GameAccount.activeAccount.CheckCalender();
     public static async Task CheckCalender(this GameAccount account)
     {
         bool? notify = null;

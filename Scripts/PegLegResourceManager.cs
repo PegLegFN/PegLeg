@@ -221,11 +221,16 @@ public class PegLegResourceManager
     public static T LoadResourceObj<T>(string resource, bool allowOverrides = true) where T : class
     {
         using var standardFile = LoadResourceFile(resource, allowOverrides);
+        var text = standardFile.GetAsText();
         try
         {
-            return JsonSerializer.Deserialize<T>(standardFile.GetAsText());
+            return JsonSerializer.Deserialize<T>(text);
         }
-        catch { }
+        catch(Exception e)
+        {
+            JsonNode node = JsonNode.Parse(text);
+            GD.PushError(e);
+        }
         return null;
     }
     public static T[] LoadResourceArray<T>(string resource, bool allowOverrides = true)
@@ -317,6 +322,7 @@ public class PegLegResourceManager
             try
             {
                 var overrides = JsonNode.Parse(file.GetAsText()).AsObject();
+                GD.Print($"{overrides.Count} overrides exist for \"{resource}\"");
                 foreach (var kvp in overrides.ToArray())
                 {
                     jObj[kvp.Key] = overrides.DetachNode(kvp.Key);

@@ -44,13 +44,13 @@ public partial class RefreshTimerController : Node
 
         lastTime = DateTime.UtcNow;
         AppConfig.OnConfigChanged += OnConfigChanged;
-        offset = AppConfig.Get("advanced", "offset", true) ? 0 : 2;
+        offset = AppConfig.Get("advanced", "offset_refresh", true) ? 0 : 2;
     }
 
     float offset = 2;
     private void OnConfigChanged(string section, string key, JsonValue value)
     {
-        if (section == "advanced" && key == "offset")
+        if (section == "advanced" && key == "offset_refresh")
             offset = value.TryGetValue(out bool val) && val ? 0 : 2;
     }
 
@@ -94,6 +94,15 @@ public partial class RefreshTimerController : Node
                 .AddYears(instance.yearsToAddDebug)
                 .AddSeconds(-instance.offset);
 
+    public enum Season
+    {
+        FlannelFalls,
+        ScurvyShoals,
+        BlastedBadlands,
+        Hexsylvania,
+        FrozenFjords
+    }
+
     public static DateTime GetRefreshTime(RefreshTimeType refreshType)
     {
         var rightNow = RightNow;
@@ -106,7 +115,7 @@ public partial class RefreshTimerController : Node
                 return today.AddDays(1);
             case RefreshTimeType.Weekly:
                 int utcDayOfWeek = (int)rightNow.DayOfWeek;
-                int daysUntilThursday = ((10 - utcDayOfWeek)) % 7;
+                int daysUntilThursday = (10 - utcDayOfWeek) % 7;
                 return today.AddDays(daysUntilThursday + 1);
             case RefreshTimeType.BRWeekly:
                 int utcDayOfWeekBR = (int)rightNow.AddHours(14).DayOfWeek;

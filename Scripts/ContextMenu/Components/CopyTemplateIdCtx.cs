@@ -14,7 +14,7 @@ public partial class CopyTemplateIdCtx : BaseContextComponent
     {
         if (currentItem is null)
             return;
-        DisplayServer.ClipboardSet(Input.IsKeyPressed(Key.Shift) ? currentItem.template?.ToString() : currentItem.templateId);
+        DisplayServer.ClipboardSet(Input.IsKeyPressed(Key.Shift) ? currentItem.template?.rawData.ToString() : currentItem.templateId);
         menu.CloseMenu();
     }
 }

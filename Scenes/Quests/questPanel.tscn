@@ -29,8 +29,8 @@ size_flags_vertical = 3
 script = ExtResource("1_v67fr")
 objectiveParent = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives/ScrollContainer/VBoxContainer2")
 objectiveScene = ExtResource("2_2pmaq")
-pinButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/PinButton")
-rerollButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/RerollButton")
+pinButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/PinButton")
+rerollButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/RerollButton")
 rewardParent = NodePath("MarginContainer/HSplitContainer/Rewards/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
 rewardScene = ExtResource("3_q0o1l")
 
@@ -104,7 +104,12 @@ grow_vertical = 2
 texture = ExtResource("5_oqt08")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -116,18 +121,20 @@ autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
 
-[node name="RerollButton" type="Button" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="RerollButton" type="Button" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 8
 tooltip_text = "Reroll"
 theme_type_variation = &"SlantedButton"
+text = "Replace Quest"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/RerollButton"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/RerollButton"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -141,7 +148,7 @@ grow_vertical = 2
 texture = ExtResource("6_n7evw")
 expand_mode = 1
 
-[node name="PinButton" type="CheckButton" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="PinButton" type="CheckButton" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 8
@@ -149,7 +156,7 @@ tooltip_text = "Pinned"
 theme_type_variation = &"EmptyCheckButton"
 button_pressed = true
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/PinButton"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/PinButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -228,4 +235,4 @@ alignment = 1
 [connection signal="CompleteVisible" from="." to="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Icon/CompleteIcon" method="set_visible"]
 [connection signal="DescriptionChanged" from="." to="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Description" method="set_text"]
 [connection signal="IconChanged" from="." to="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
-[connection signal="NameChanged" from="." to="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="NameChanged" from="." to="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/Label" method="set_text"]

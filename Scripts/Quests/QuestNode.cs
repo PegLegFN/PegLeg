@@ -1,14 +1,9 @@
 using Godot;
 using System;
-using System.Collections.Frozen;
 using System.Linq;
 
 public partial class QuestNode : Control
 {
-    [Signal]
-    public delegate void NameChangedEventHandler(string name);
-    [Signal]
-    public delegate void IconChangedEventHandler(Texture2D icon);
     [Signal]
     public delegate void NotificationVisibleEventHandler(bool visible);
     [Signal]
@@ -28,6 +23,8 @@ public partial class QuestNode : Control
     Control[] flags = [];
     [Export]
     CheckButton selectedToggle;
+    [Export]
+    GameItemEntry questItemEntry;
     QuestSlot questData;
     bool displayAsLocked;
 
@@ -59,8 +56,7 @@ public partial class QuestNode : Control
 
     void RefreshQuestNode()
     {
-        EmitSignal(SignalName.NameChanged, questData.questTemplate.DisplayName);
-        EmitSignal(SignalName.IconChanged, questData.questTemplate.GetTexture());
+        questItemEntry.SetItem(questData.isUnlocked ? questData.questItem : questData.questTemplate.CreateInstance());
         EmitSignal(SignalName.NotificationVisible, questData.isNew);
 
         flagParent.Visible = false;

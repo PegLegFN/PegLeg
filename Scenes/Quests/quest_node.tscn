@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cm6qlfwgk148o"]
+[gd_scene load_steps=21 format=3 uid="uid://cm6qlfwgk148o"]
 
 [ext_resource type="Texture2D" uid="uid://bbqb2ns66gsfp" path="res://Images/InterfaceIcons/T_QuestNode_Generic.png" id="1_e6ctj"]
 [ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="2_3mdch"]
@@ -6,10 +6,13 @@
 [ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="3_c6yyq"]
 [ext_resource type="Texture2D" uid="uid://clv3y6rj87ibu" path="res://Images/TextureResources/GradientCircleOutline.tres" id="4_6n47o"]
 [ext_resource type="Texture2D" uid="uid://lhe8ded54hsv" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Pin_128.png" id="4_a24oo"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="4_fk868"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="6_ax8dp"]
 [ext_resource type="Texture2D" uid="uid://kn2yc41jby7o" path="res://Images/InterfaceIcons/SuperchargerIcon.png" id="8_7wyke"]
 [ext_resource type="Texture2D" uid="uid://xq53smuy7ecu" path="res://Images/InterfaceIcons/CoreReperkIconAlt.png" id="8_fk868"]
 [ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="8_guso7"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="9_1c6qk"]
+[ext_resource type="Resource" uid="uid://b6e1a0kvfsvyu" path="res://Scripts/ContextMenu/ComponentLists/QuestItemCtxList.tres" id="10_1c6qk"]
 [ext_resource type="Texture2D" uid="uid://cmieap1kecm64" path="res://Images/InterfaceIcons/TicketIcon.png" id="10_7wyke"]
 [ext_resource type="Texture2D" uid="uid://fo5dt3fnvrt0" path="res://Images/InterfaceIcons/SchematicIcon128.png" id="11_7wyke"]
 
@@ -45,7 +48,7 @@ corner_radius_top_right = 19
 corner_radius_bottom_right = 19
 corner_radius_bottom_left = 19
 
-[node name="QuestNode" type="TextureRect" node_paths=PackedStringArray("flagParent", "flags", "selectedToggle")]
+[node name="QuestNode" type="TextureRect" node_paths=PackedStringArray("flagParent", "flags", "selectedToggle", "questItemEntry")]
 self_modulate = Color(0.141176, 0.164706, 0.247059, 1)
 custom_minimum_size = Vector2(0, 128)
 texture = ExtResource("1_e6ctj")
@@ -55,6 +58,7 @@ colorStages = PackedColorArray(0.141176, 0.164706, 0.247059, 1, 0.901961, 0.9019
 flagParent = NodePath("PanelContainer")
 flags = [NodePath("PanelContainer/HBoxContainer/Pin"), NodePath("PanelContainer/HBoxContainer/Reperk"), NodePath("PanelContainer/HBoxContainer/Supercharger"), NodePath("PanelContainer/HBoxContainer/Ticket"), NodePath("PanelContainer/HBoxContainer/Schematic"), NodePath("PanelContainer/HBoxContainer/Hero")]
 selectedToggle = NodePath("Overlays/SelectedToggle")
+questItemEntry = NodePath("TextureRect")
 
 [node name="BG" type="TextureRect" parent="."]
 layout_mode = 1
@@ -79,6 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_c6yyq")
 expand_mode = 1
+script = ExtResource("4_fk868")
 
 [node name="Overlays" type="Control" parent="."]
 layout_mode = 1
@@ -182,6 +187,11 @@ offset_bottom = -8.0
 outlinePadding = 0.0
 hoverTime = 0.05
 
+[node name="Ctx" type="Node" parent="Responsive Button Circle" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("9_1c6qk")
+itemSource = NodePath("../../TextureRect")
+componentList = ExtResource("10_1c6qk")
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 z_index = 2
 layout_mode = 1
@@ -243,10 +253,10 @@ texture = ExtResource("8_guso7")
 expand_mode = 1
 
 [connection signal="ColorChanged" from="." to="." method="set_self_modulate"]
-[connection signal="IconChanged" from="." to="TextureRect" method="set_texture"]
 [connection signal="KeyItemVisible" from="." to="PanelContainer" method="set_visible"]
-[connection signal="NameChanged" from="." to="Responsive Button Circle" method="set_tooltip_text"]
 [connection signal="NotificationVisible" from="." to="Overlays/NotificationLabel" method="set_visible"]
 [connection signal="PinnedVisible" from="." to="Overlays/PinBG" method="set_visible"]
+[connection signal="IconChanged" from="TextureRect" to="TextureRect" method="set_texture"]
+[connection signal="TooltipChanged" from="TextureRect" to="Responsive Button Circle" method="set_tooltip_text"]
 [connection signal="toggled" from="Overlays/SelectedToggle" to="Overlays/SelectionOutline" method="set_visible"]
 [connection signal="pressed" from="Responsive Button Circle" to="." method="Press"]

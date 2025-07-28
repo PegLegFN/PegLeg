@@ -50,7 +50,8 @@ public partial class QuestInterface : Control
         }
         questGroupCollections.Clear();
 
-        await GameAccount.activeAccount.ClientQuestLogin();
+        if (!AppConfig.Get("advanced", "suspend_quests", false))
+            await GameAccount.activeAccount.ClientQuestLogin();
 
         questsDirty = true;
         if (IsVisibleInTree())
@@ -133,14 +134,30 @@ public partial class QuestInterface : Control
                 }
 
                 var timer = foldout.GetNode<RefreshTimerHook>("%RefreshTimerContainer");
-                var activeFlag = collection.eventFlags.FirstOrDefault(CalenderRequests.EventFlagActive);
-                if (timer is not null && activeFlag is not null)
+                if (timer is not null)
                 {
-                    timer.SetCustomRefreshTime(
-                        CalenderRequests.EventEnd(activeFlag),
-                        CalenderRequests.EventStart(activeFlag)
-                    );
                     timer.Visible = true;
+                    switch (collection.timer)
+                    {
+                        case QuestTimerMode.Weekly:
+                            timer.SetTimerType(2);
+                            break;
+                        case QuestTimerMode.Daily:
+                            timer.SetTimerType(1);
+                            break;
+                        case QuestTimerMode.None:
+                            timer.Visible = false;
+                            break;
+                        case QuestTimerMode.Event:
+                            var activeFlag = collection.eventFlags.FirstOrDefault(CalenderRequests.EventFlagActive);
+                            if (activeFlag is not null)
+                                timer.SetCustomRefreshTime(
+                                    CalenderRequests.EventEnd(activeFlag),
+                                    CalenderRequests.EventStart(activeFlag)
+                                );
+                            timer.Visible = activeFlag is not null;
+                            break;
+                    }
                 }
 
                 foldout.SetNotification(groupsInFoldout.Any(g => g.HasNotification));
