@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
 
-public partial class BalanceCheckerInterface : Control
+public partial class StatChangeInterface : Control
 {
     public override void _Ready()
     {
