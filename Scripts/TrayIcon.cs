@@ -35,8 +35,10 @@ public partial class TrayIcon : StatusIndicator
         inst = this;
         menu = GetNode<PopupMenu>(Menu);
         menu.IdPressed += HandleMenu;
+#if GODOT_WINDOWS
         GetWindow().CloseRequested += Minimise;
         GetTree().AutoAcceptQuit = false;
+#endif
         Pressed += (_, __) => Unminimise();
         menu.Clear();
         menu.AddItem("Close PegLeg", 404);
