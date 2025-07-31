@@ -160,7 +160,7 @@ public partial class VenturesInterface : Control
         for (int i = 1; i < currentSeason.Levels.Length; i++)
         {
             bool aboveLevel = ventureXP > currentSeason.Levels[i].TotalRequiredXP;
-            mainCheckmarkImages[i].Visible = aboveLevel;
+            mainCheckmarkImages[i-1].Visible = aboveLevel;
             if (aboveLevel)
             {
                 currentLevel = i;

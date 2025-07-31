@@ -113,12 +113,12 @@ public partial class CosmeticShopInterface : Control
             return;
 
         string currentSACCode = await account.GetSACCode(false);
-        if (await account.GetSACTime() > 1 && AppConfig.Get("automation", "creatorcode", false))
+        if (currentSACCode != "None" && await account.GetSACTime() > 1 && AppConfig.Get("automation", "creatorcode", false))
         {
             //GD.Print(currentSACCode);
             await account.SetSACCode(currentSACCode);
         }
-        sacButton.Text = await account.IsSACExpired() ? "None" : currentSACCode;
+        sacButton.Text = currentSACCode;
     }
 
     private void OnConfigChanged(string section, string key, JsonValue value)
