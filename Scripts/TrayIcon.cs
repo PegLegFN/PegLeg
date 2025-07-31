@@ -12,7 +12,11 @@ public partial class TrayIcon : StatusIndicator
         urgent = true,
         firstAction = "Don't Show Again",
         itemColor = Color.FromHtml("#ffcc00"),
-        OnAction = RespondToAction
+        HandleAction = _ =>
+        {
+            AppConfig.Set("notification", "on_minimised", false);
+            return true;
+        }
     };
 
     bool minimised = false;
@@ -51,11 +55,6 @@ public partial class TrayIcon : StatusIndicator
     {
         if (section == "notification" && key == "on_minimised" && value.TryGetValue(out bool showTutoriel))
             hasShownTutorial = !showTutoriel;
-    }
-
-    private void RespondToAction(string _)
-    {
-        AppConfig.Set("notification", "on_minimised", false);
     }
 
     public void HandleMenu(long id)

@@ -5,6 +5,19 @@ using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
+public partial class AppConfig
+{
+    public CosmeticShopConfig cosmeticShop = new();
+    public class CosmeticShopConfig
+    {
+        public bool simpleCosmetics;
+        public bool navigationVisible = true;
+        public bool autoFilterNew;
+        public bool autoCreatorCode = true;
+        public int simpleCosmeticTileSize = 150;
+    }
+}
+
 public partial class CosmeticShopInterface : Control
 {
     [Export]

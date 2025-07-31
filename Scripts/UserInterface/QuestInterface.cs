@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+public partial class AppConfig
+{
+    public partial class AdvancedConfig
+    {
+        public bool suspendQuests;
+    }
+}
+
 public partial class QuestInterface : Control
 {
     [Export]
@@ -49,6 +57,10 @@ public partial class QuestInterface : Control
             node.QueueFree();
         }
         questGroupCollections.Clear();
+
+        //check if in mission and quests are outdated
+        //if so, start repeated check if in mission every 15 seconds (force query campaign profile)
+        //when no longer in mission, claim any completed quests immediately, then resume reloading quests
 
         if (!AppConfig.Get("advanced", "suspend_quests", false))
             await GameAccount.activeAccount.ClientQuestLogin();

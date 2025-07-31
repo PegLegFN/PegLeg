@@ -95,7 +95,6 @@ public partial class Bootstrap : Node
         {
             NamedPipeContainer.OpenPipe();
 
-            AppConfig.Clear("window");
             var oldExternalFolder = Helpers.GlobalisePath("res://External");
             GD.Print("External: " + oldExternalFolder);
             if (!Engine.IsEditorHint() && DirAccess.DirExistsAbsolute(oldExternalFolder))

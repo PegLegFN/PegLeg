@@ -14,6 +14,10 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Security.Principal;
 
+public partial class AppData
+{
+    public string lastAccount;
+}
 
 public enum OrderRange
 {
@@ -306,8 +310,8 @@ public partial class GameAccount
     int refreshExpiresAt = -999;
     AuthenticationHeaderValue accountAuthHeader;
     //fails 60 seconds before it would actualy expire
-    public bool AuthTokenExpired => authExpiresAt <= (Time.GetTicksMsec() * 0.001) - 60;
-    bool RefreshTokenExpired => refreshExpiresAt <= (Time.GetTicksMsec() * 0.001) - 10;
+    public bool AuthTokenExpired => authExpiresAt <= (Time.GetTicksMsec() * 0.001) + 60;
+    bool RefreshTokenExpired => refreshExpiresAt <= (Time.GetTicksMsec() * 0.001) + 10;
     public AuthenticationHeaderValue AuthHeader => accountAuthHeader;
     public async Task<bool> Authenticate(bool loadingOverlay = false)
     {
@@ -1732,6 +1736,7 @@ public class GameItem
         else
             await profile.account.RemovePinnedQuest(this);
     }
+
 
 
     bool? isSeenLocal = null;

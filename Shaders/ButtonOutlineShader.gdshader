@@ -7,6 +7,7 @@ uniform float LineSize = 3.0;
 uniform float ProgressFade = 0.02;
 uniform float Progress = 0;
 uniform bool Circle = false;
+uniform bool VerticalHold = false;
 
 float remap(float fromMin, float fromMax, float toMin, float toMax, float value)
 {
@@ -40,7 +41,7 @@ void fragment() {
 
 	outline = clamp(outline*(finalLineSize),0, 1);
 
-	float fillGradient = UV.x;
+	float fillGradient = VerticalHold ? (1.0-UV.y) : UV.x;
 	if(Circle)
 		fillGradient = distance(UV,vec2(0.5))*2.1;
 

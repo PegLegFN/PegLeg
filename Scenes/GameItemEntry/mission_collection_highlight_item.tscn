@@ -1,18 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dbrrcnce14w8h"]
+[gd_scene load_steps=8 format=3 uid="uid://dbrrcnce14w8h"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_1qlyc"]
 [ext_resource type="Texture2D" uid="uid://docjdjoems0ia" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Black-L.png" id="1_5c4d1"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="2_4k5sn"]
+[ext_resource type="Material" uid="uid://3nw1g0lbs4qq" path="res://Sh_Materials/ItemRewardMatSmall.tres" id="2_dkobx"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_jrnxm"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="5_htaww"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="6_dkobx"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="7_ipwjr"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dk7yu"]
-shader = ExtResource("2_4k5sn")
-shader_parameter/ControlSize = Vector2(24, 24)
-shader_parameter/CornerRadius = 3.0
-shader_parameter/Fit = true
 
 [node name="MissionCollectionHighlightItem" type="MarginContainer"]
 custom_minimum_size = Vector2(0, 34)
@@ -22,7 +16,7 @@ mouse_filter = 2
 script = ExtResource("1_1qlyc")
 
 [node name="Icon" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_dk7yu")
+material = ExtResource("2_dkobx")
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("1_5c4d1")

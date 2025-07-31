@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://byv58kd1qnkw5"]
+[gd_scene load_steps=14 format=3 uid="uid://byv58kd1qnkw5"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_ww2ku"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="2_jy1bu"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="3_6e053"]
+[ext_resource type="Material" uid="uid://fu23qg1axsrm" path="res://Sh_Materials/ItemRewardMat.tres" id="3_tj077"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="4_3fp1p"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_oo5m0"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="6_knndl"]
@@ -13,13 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="11_tkmrp"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="12_tj077"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="13_4i2dj"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kfwxn"]
-resource_local_to_scene = true
-shader = ExtResource("3_6e053")
-shader_parameter/ControlSize = Vector2(64, 64)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
 
 [node name="RewardEntry" type="MarginContainer"]
 custom_minimum_size = Vector2(64, 64)
@@ -33,7 +26,7 @@ script = ExtResource("2_jy1bu")
 hideMythicLeadSquad = true
 
 [node name="TextureRect" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_kfwxn")
+material = ExtResource("3_tj077")
 layout_mode = 2
 texture = ExtResource("4_3fp1p")
 expand_mode = 1

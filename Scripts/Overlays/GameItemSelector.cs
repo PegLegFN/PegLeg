@@ -2,8 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<GameItem>
@@ -113,7 +111,8 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
 
     public static Predicate<GameItem> GenerateAutorecyclePredicate()
     {
-        var autoselectInstructions = PLSearch.GenerateSearchInstructions(AppConfig.Get("automation", "recycle_filter", "Common | Uncommon | Rare"));
+        var recycleFilter = GameAccount.activeAccount.GetLocalData("RecycleFilter")?.ToString() ?? "Common | Uncommon | Rare";
+        var autoselectInstructions = PLSearch.GenerateSearchInstructions(recycleFilter);
         return item => PLSearch.EvaluateInstructions(autoselectInstructions, item.RawData);
     }
 

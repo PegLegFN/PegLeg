@@ -824,110 +824,131 @@ public partial class CardPackOpener : Control
 
     async void ApplyChoice(int index)
     {
-        if (!isChosing)
-            return;
-        isChosing = false;
-
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
-        skipChoiceButton.Visible = false;
-
-        int nextChoiceIndex = nextPullIndex - queuedItems.Count;
-        //start the request now and await later, asynchronism baby!
-        JsonObject body = new()
+        try
         {
-            ["cardPackItemId"] = queuedChoices[nextChoiceIndex - 1].uuid,
-            ["selectionIdx"] = index
-        };
-        var operationTask = account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPack", body.ToString());
+            if (!isChosing)
+                return;
+            isChosing = false;
 
-        for (int i = 0; i < choiceCards.Length; i++)
-        {
-            choiceCards[i].SetInteractable(false);
+            var account = GameAccount.activeAccount;
+            if (!await account.Authenticate())
+                return;
+
+            skipChoiceButton.Visible = false;
+
+            int nextChoiceIndex = choicesOnly ? nextPullIndex - 1 : nextPullIndex - (queuedItems.Count + 1);
+            //start the request now and await later, asynchronism baby!
+            JsonObject body = new()
+            {
+                ["cardPackItemId"] = queuedChoices[nextChoiceIndex].uuid,
+                ["selectionIdx"] = index
+            };
+            var operationTask = account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPack", body.ToString());
+
+            for (int i = 0; i < choiceCards.Length; i++)
+            {
+                choiceCards[i].SetInteractable(false);
+            }
+
+            var currentChoices = queuedChoices[nextChoiceIndex].attributes["options"].AsArray();
+            var resultChoice = currentChoices[index];
+            var itemTemplate = GameItemTemplate.Get(resultChoice["itemType"].ToString());
+            var itemInstance = itemTemplate.CreateInstance((int?)resultChoice["quantity"] ?? 1, resultChoice["attributes"]?.AsObject().SafeDeepClone() ?? null);
+
+            var resultChild = choiceCards[index].GetChild<Control>(0);
+            resultChild.SelfModulate = Colors.Transparent;
+
+            choiceResultCard.Visible = true;
+            choiceResultCard.Reparent(choiceResultFGParent);
+            choiceResultCard.Scale = Vector2.One;
+            choiceResultCard.GlobalPosition = resultChild.GlobalPosition;
+            choiceResultCard.OffsetLeft += choiceResultCard.Size.X * 0.5f;
+            choiceResultCard.OffsetRight = choiceResultCard.OffsetLeft;
+            choiceResultCard.OffsetTop += choiceResultCard.Size.Y * 0.5f;
+            choiceResultCard.OffsetBottom = choiceResultCard.OffsetTop;
+            choiceResultCard.SetShaderTexture(itemInstance.GetTexture(), "IconTexture");
+            choiceResultCard.SetShaderColor(itemTemplate.RarityColor, "RarityColour");
+            choiceResultCard.SetShaderBool(false, "Started");
+
+
+            var choiceClose = GetTree().CreateTween().SetParallel();
+            choiceClose.TweenProperty(choiceCanvas, "self_modulate", Colors.Transparent, 0.25);
+            choiceClose.TweenProperty(choiceCanvas, "scale", Vector2.Zero, 0.25).SetEase(Tween.EaseType.In);
+
+            var cardSlideUp = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad);
+            cardSlideUp.TweenProperty(choiceResultCard, "offset_left", 60, 0.3);
+            cardSlideUp.TweenProperty(choiceResultCard, "offset_right", 60, 0.3);
+            cardSlideUp.TweenProperty(choiceResultCard, "offset_top", -250, 0.3);
+            cardSlideUp.TweenProperty(choiceResultCard, "offset_bottom", -250, 0.3);
+            cardSlideUp.TweenProperty(choiceResultCard, "scale", Vector2.One * 0.5f, 0.3);
+
+            choiceResultCard.SetShaderBool(true, "Started");
+            choiceResultCard.SetShaderFloat((float)(Time.GetTicksMsec() * 0.001) + 0.1f, "StartTime");
+
+            GD.Print(choiceResultCard.GetShaderFloat("time"));
+            GD.Print(choiceResultCard.GetShaderFloat("StartTime"));
+
+            await Helpers.WaitForTimer(0.4f);
+
+            JsonObject resultNotification = null;
+            try
+            {
+                resultNotification = (await operationTask)[0].AsObject();
+            }
+            catch
+            {
+                await GenericConfirmationWindow.ShowError("Failed to make choice");
+            }
+
+            choiceResultCard.Reparent(choiceResultBGParent);
+            choiceResultCard.OffsetLeft = 60;
+            choiceResultCard.OffsetRight = choiceResultCard.OffsetLeft;
+            choiceResultCard.OffsetTop = -250;
+            choiceResultCard.OffsetBottom = choiceResultCard.OffsetTop;
+
+
+            var cardSlideDown = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In);
+            cardSlideDown.TweenProperty(choiceResultCard, "offset_top", -115, 0.25);
+            cardSlideDown.TweenProperty(choiceResultCard, "offset_bottom", -115, 0.25);
+
+            await Helpers.WaitForTimer(0.2f);
+            if (cardChangeEffect is not null)
+                cardChangeEffect.Visible = true;
+            CardChangeEffectLevel = 0;
+            var changeEffectTween = GetTree().CreateTween();
+            changeEffectTween.TweenProperty(this, "CardChangeEffectLevel", 1, 1);
+            changeEffectTween.TweenProperty(this, "CardChangeEffectLevel", 2, 1);
+
+            await Helpers.WaitForTimer(1f);
+
+            choiceResultCard.Visible = false;
+
+            GameItem resultItem = null;
+            if (resultNotification is not null)
+            {
+                JsonNode resultItemData = resultNotification["lootGranted"]["items"][0];
+                resultItem = account.GetProfile(resultItemData["itemProfile"].ToString()).GetItem(resultItemData["itemGuid"].ToString());
+                topCard.SetItem(resultItem);
+                queuedChoices[nextChoiceIndex] = resultItem;
+            }
+
+            await Helpers.WaitForTimer(1f);
+            if (cardChangeEffect is not null)
+                cardChangeEffect.Visible = true;
+
+            //reopen choices if the result is another cardpack
+            if (resultItem?.template.Type == "CardPack")
+                OpenChoices();
+            else
+                pullButton.Visible = true;
         }
-
-        var currentChoices = queuedChoices[nextChoiceIndex - 1].attributes["options"].AsArray();
-        var resultChoice = currentChoices[index];
-        var itemTemplate = GameItemTemplate.Get(resultChoice["itemType"].ToString());
-        var itemInstance = itemTemplate.CreateInstance((int?)resultChoice["quantity"] ?? 1, resultChoice["attributes"]?.AsObject().SafeDeepClone() ?? null);
-
-        var resultChild = choiceCards[index].GetChild<Control>(0);
-        resultChild.SelfModulate = Colors.Transparent;
-
-        choiceResultCard.Visible = true;
-        choiceResultCard.Reparent(choiceResultFGParent);
-        choiceResultCard.Scale = Vector2.One;
-        choiceResultCard.GlobalPosition = resultChild.GlobalPosition;
-        choiceResultCard.OffsetLeft += choiceResultCard.Size.X * 0.5f;
-        choiceResultCard.OffsetRight = choiceResultCard.OffsetLeft;
-        choiceResultCard.OffsetTop += choiceResultCard.Size.Y * 0.5f;
-        choiceResultCard.OffsetBottom = choiceResultCard.OffsetTop;
-        choiceResultCard.SetShaderTexture(itemInstance.GetTexture(), "IconTexture");
-        choiceResultCard.SetShaderColor(itemTemplate.RarityColor, "RarityColour");
-        choiceResultCard.SetShaderBool(false, "Started");
-
-
-        var choiceClose = GetTree().CreateTween().SetParallel();
-        choiceClose.TweenProperty(choiceCanvas, "self_modulate", Colors.Transparent, 0.25);
-        choiceClose.TweenProperty(choiceCanvas, "scale", Vector2.Zero, 0.25).SetEase(Tween.EaseType.In);
-
-        var cardSlideUp = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad);
-        cardSlideUp.TweenProperty(choiceResultCard, "offset_left",      60,         0.3);
-        cardSlideUp.TweenProperty(choiceResultCard, "offset_right",     60,         0.3);
-        cardSlideUp.TweenProperty(choiceResultCard, "offset_top",       -250,       0.3);
-        cardSlideUp.TweenProperty(choiceResultCard, "offset_bottom",    -250,       0.3);
-        cardSlideUp.TweenProperty(choiceResultCard, "scale", Vector2.One * 0.5f,    0.3);
-
-        choiceResultCard.SetShaderBool(true, "Started");
-        choiceResultCard.SetShaderFloat((float)(Time.GetTicksMsec()*0.001)+0.1f, "StartTime");
-
-        GD.Print(choiceResultCard.GetShaderFloat("time"));
-        GD.Print(choiceResultCard.GetShaderFloat("StartTime"));
-
-        await Helpers.WaitForTimer(0.4f);
-
-        var resultNotification = (await operationTask)["notifications"][0];
-
-        choiceResultCard.Reparent(choiceResultBGParent);
-        choiceResultCard.OffsetLeft = 60;
-        choiceResultCard.OffsetRight = choiceResultCard.OffsetLeft;
-        choiceResultCard.OffsetTop = -250;
-        choiceResultCard.OffsetBottom = choiceResultCard.OffsetTop;
-
-
-        var cardSlideDown = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In);
-        cardSlideDown.TweenProperty(choiceResultCard, "offset_top", -115, 0.25);
-        cardSlideDown.TweenProperty(choiceResultCard, "offset_bottom", -115, 0.25);
-
-        await Helpers.WaitForTimer(0.2f);
-        if (cardChangeEffect is not null)
-            cardChangeEffect.Visible = true;
-        CardChangeEffectLevel = 0;
-        var changeEffectTween = GetTree().CreateTween();
-        changeEffectTween.TweenProperty(this, "CardChangeEffectLevel", 1, 1);
-        changeEffectTween.TweenProperty(this, "CardChangeEffectLevel", 2, 0.5);
-
-        await Helpers.WaitForTimer(1f);
-
-        choiceResultCard.Visible = false;
-
-        JsonNode resultItemData = resultNotification["lootGranted"]["items"][0];
-        GameItem resultItem = account.GetProfile(resultItemData["itemProfile"].ToString()).GetItem(resultItemData["itemGuid"].ToString());
-        topCard.SetItem(resultItem);
-        queuedChoices[nextChoiceIndex - 1] = resultItem;
-        GD.Print(resultNotification);
-
-        await Helpers.WaitForTimer(0.5f);
-        if (cardChangeEffect is not null)
-            cardChangeEffect.Visible = true;
-
-        //reopen choices if the result is another cardpack
-        if (resultItem.template.Type == "CardPack")
-            OpenChoices();
-        else
+        catch
+        {
+            //if anything weird goes wrong, try to recover
             pullButton.Visible = true;
+            choiceResultCard.Visible = false;
+            choiceCanvas.Scale = Vector2.Zero;
+        }
     }
 
     float CardChangeEffectLevel
@@ -966,7 +987,10 @@ public partial class CardPackOpener : Control
 
         var resultItems = queuedChoices
                     .Union(queuedItems)
-                    .Select(item => item.template.IsCollectable ? item.inspectorOverride : item);
+                    .Select(item => item.template.IsCollectable ? (item.inspectorOverride ?? item) : item);
+
+        if (queuedChoices.Count == 1 && queuedItems.Count == 0)
+            return;
 
         if (resultItems.Any())
         {

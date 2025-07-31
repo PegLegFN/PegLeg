@@ -63,9 +63,9 @@ public partial class RecycleListContainer : ScrollContainer
         {
             var elementSize = basis.BasisSize;
             if ((linkedGrid?.GetChildCount() ?? 0) > 0)
-                elementSize = linkedGrid.GetFirstChildMinSize();
+                elementSize = linkedGrid.GetFirstControlChild().GetCombinedMinimumSize();
             float elementHeight = elementSize.Y;
-            int columns = linkedGrid?.CalcGrid(elementSize, 1).X ?? 1;
+            int columns = linkedGrid?.GetColCount(elementSize.X) ?? 1;
 
             //calculate how many elements fit on screen (cols*(ceil(heightOfElement/heightOfThis)+1))
             int totalElements = linkedProvider.GetRecycleElementCount();

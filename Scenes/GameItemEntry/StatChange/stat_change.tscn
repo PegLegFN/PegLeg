@@ -1,0 +1,120 @@
+[gd_scene load_steps=8 format=3 uid="uid://dpcmqblgoh3dq"]
+
+[ext_resource type="Shader" uid="uid://v7c8s7chc42m" path="res://Shaders/StatBar.gdshader" id="1_5wtbv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5wtbv"]
+shader = ExtResource("1_5wtbv")
+shader_parameter/speed = 15.0
+shader_parameter/size = 0.5
+shader_parameter/amp = 0.75
+shader_parameter/flip = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ltgx"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pti84"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c23ie"]
+shader = ExtResource("1_5wtbv")
+shader_parameter/speed = 15.0
+shader_parameter/size = 0.5
+shader_parameter/amp = 0.75
+shader_parameter/flip = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0c8yf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_255t8"]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+
+[node name="StatNameLabel" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "StatName"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="BadProgressBar" type="ProgressBar" parent="MarginContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0, 0, 1)
+material = SubResource("ShaderMaterial_5wtbv")
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/background = SubResource("StyleBoxFlat_7ltgx")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pti84")
+max_value = 1.0
+show_percentage = false
+
+[node name="GoodProgressBar" type="ProgressBar" parent="MarginContainer"]
+unique_name_in_owner = true
+self_modulate = Color(0, 1, 0, 1)
+material = SubResource("ShaderMaterial_c23ie")
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/background = SubResource("StyleBoxEmpty_0c8yf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pti84")
+max_value = 1.0
+value = 0.75
+show_percentage = false
+
+[node name="BaseProgressBar" type="ProgressBar" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/background = SubResource("StyleBoxEmpty_255t8")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pti84")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="ChangeAmountLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 10
+text = "100.0 => 150.0 (+50.0)"
+vertical_alignment = 1
+
+[node name="ChangePercentLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 10
+text = "+10%"
+horizontal_alignment = 2
+vertical_alignment = 1

@@ -9,7 +9,7 @@ public partial class LoadingOverlay : ModalWindow
     public delegate void ProgressChangedEventHandler(float totalProgress);
 
     static LoadingOverlay instance;
-    static Dictionary<Guid, TaskToken> loadingTokens = [];
+    static List<TaskToken> loadingTokens = [];
     [Export]
     RichTextLabel progressLabel;
 
@@ -17,13 +17,19 @@ public partial class LoadingOverlay : ModalWindow
     {
         base._Ready();
         instance = this;
-        bool complete = !loadingTokens.Any(t => !t.Value.disposed);
+        bool complete = !loadingTokens.Any(t => !t.disposed);
         SetWindowOpen(!complete);
+    }
+
+    public override void _Process(double delta)
+    {
+        if(loadingTokens.Any(t=>t.dirty))
+            UpdateLoadingState();
     }
 
     static void UpdateLoadingState()
     {
-        bool complete = !loadingTokens.Any(t => !t.Value.disposed);
+        bool complete = !loadingTokens.Any(t => !t.disposed);
         //GD.PushWarning("tokens complete: " + complete);
         if (complete == instance?.IsOpen)
             instance?.SetWindowOpen(!complete);
@@ -32,30 +38,34 @@ public partial class LoadingOverlay : ModalWindow
             loadingTokens.Clear();
             return;
         }
+        foreach (var t in loadingTokens)
+        {
+            t.Clean();
+        }
         //GD.PushWarning("tokens: " + loadingTokens.Count);
         instance?.UpdateLoadingProgress();
     }
 
     void UpdateLoadingProgress()
     {
-        float totalProgress = loadingTokens.Select(t => t.Value.progress).Sum();
-        float totalMaxProgress = loadingTokens.Select(t => t.Value.maxProgress).Sum();
+        float totalProgress = loadingTokens.Select(t => t.progress).Sum();
+        float totalMaxProgress = loadingTokens.Select(t => t.maxProgress).Sum();
         float progressPercent = totalProgress / totalMaxProgress;
         EmitSignal(SignalName.ProgressChanged, progressPercent);
         if (progressLabel is not null)
-            progressLabel.Text = string.Join("\n", loadingTokens.Where(t => !t.Value.disposed).Select(t => t.Value.ProgressText));
+            progressLabel.Text = string.Join("\n", loadingTokens.Where(t => !t.disposed).Select(t => t.ProgressText));
     }
 
     public static TaskToken CreateToken(string taskName = null, float initialProgress = 0, float maxProgress = 1) =>
         TaskToken.Create(taskName, initialProgress, maxProgress);
 
-    public struct TaskToken() : IDisposable
+    public class TaskToken() : IDisposable
     {
-        Guid guid = Guid.NewGuid();
         public bool disposed { get; private set;}
         public string taskName { get; private set; }
         public float progress { get; private set; }
         public float maxProgress { get; private set; }
+        public bool dirty { get; private set; }
 
         public string ProgressText => taskName + (maxProgress > 0 ? $"({progress}/{maxProgress})" : "");
 
@@ -67,11 +77,12 @@ public partial class LoadingOverlay : ModalWindow
                 progress = initialProgress,
                 maxProgress = Mathf.Max(0, maxProgress)
             };
-            loadingTokens.Add(token.guid, token);
+            loadingTokens.Add(token);
             UpdateLoadingState();
             return token;
         }
 
+        public void IncrementLoadingProgress() => SetLoadingProgress(progress + 1);
         public void SetLoadingProgress(float newProgress)=>
             SetLoadingProgress(newProgress, maxProgress);
         public void SetLoadingProgress(float newProgress, float maxProgress)
@@ -80,7 +91,10 @@ public partial class LoadingOverlay : ModalWindow
                 return;
             this.maxProgress = Mathf.Max(maxProgress, 0);
             progress = Mathf.Clamp(newProgress, 0, maxProgress);
+            dirty = true;
         }
+
+        public void Clean() => dirty = false;
 
         public void Dispose()
         {
@@ -88,11 +102,11 @@ public partial class LoadingOverlay : ModalWindow
                 return;
             //GD.PushWarning($"disposing token \"{taskName}\" ({guid})");
             progress = maxProgress;
-            if (loadingTokens.ContainsKey(guid))
+            if (loadingTokens.Contains(this))
             {
                 disposed = true;
                 //GD.PushWarning($"removing token \"{taskName}\" ({guid})");
-                loadingTokens.Remove(guid);
+                loadingTokens.Remove(this);
                 UpdateLoadingState();
             }
         }

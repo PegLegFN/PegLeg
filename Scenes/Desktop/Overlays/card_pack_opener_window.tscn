@@ -87,7 +87,7 @@ shader = ExtResource("16_x2r4a")
 shader_parameter/SliceAmount = Vector2(4, 4)
 shader_parameter/UseManual = false
 shader_parameter/ManualControl = 0
-shader_parameter/time = 29121.5
+shader_parameter/time = 132209.0
 shader_parameter/StartTime = 0.0
 shader_parameter/Started = true
 shader_parameter/RarityColour = Color(0.915194, 0.464606, 0, 1)
@@ -741,7 +741,9 @@ use_top_left = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer"]
 layout_mode = 2
-mouse_filter = 2
+mouse_filter = 0
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer"]
 layout_mode = 2
@@ -777,6 +779,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="CardContextBlocker" type="Control" parent="Panel"]
+custom_minimum_size = Vector2(140, 125)
+layout_mode = 1
+anchor_left = 0.675
+anchor_top = 1.0
+anchor_right = 0.675
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"LargeButton"
 
 [node name="PullButton" type="Button" parent="Panel"]
 custom_minimum_size = Vector2(0, 100)
@@ -842,6 +855,7 @@ theme_override_font_sizes/font_size = 24
 text = " Skip Choice "
 
 [node name="Label" type="Label" parent="Panel/SkipChoiceButton"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5

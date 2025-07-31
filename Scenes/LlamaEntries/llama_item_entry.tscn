@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bgn5vgsvgrb1u"]
+[gd_scene load_steps=14 format=3 uid="uid://bgn5vgsvgrb1u"]
 
 [ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="1_5w7bn"]
 [ext_resource type="Texture2D" uid="uid://dufn5f0er7tu7" path="res://Images/Llamas/PinataStandardPack.png" id="2_78u63"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_gboss"]
 [ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="5_vtxue"]
 [ext_resource type="ButtonGroup" uid="uid://cm7rmga74vyve" path="res://Scenes/LlamaEntries/LlamaChoices.tres" id="5_wfxsh"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="9_sqws8"]
+[ext_resource type="Resource" uid="uid://dyqo6r13rubag" path="res://Scripts/ContextMenu/ComponentLists/InventoryItemCtxList.tres" id="10_i88j8"]
 
 [sub_resource type="Gradient" id="Gradient_flatg"]
 interpolation_mode = 2
@@ -97,6 +99,7 @@ layout_mode = 2
 
 [node name="NotificationLabel" type="Label" parent="Control"]
 visible = false
+layout_mode = 0
 offset_left = -4.0
 offset_top = -4.0
 offset_right = 12.0
@@ -141,6 +144,11 @@ expand_mode = 1
 
 [node name="Responsive Button Area" parent="." instance=ExtResource("2_gakw8")]
 layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("9_sqws8")
+itemSource = NodePath("../..")
+componentList = ExtResource("10_i88j8")
 
 [connection signal="AmountChanged" from="." to="PanelContainer/IconContainer/Pinata/AmountLabel" method="set_text"]
 [connection signal="IconChanged" from="." to="PanelContainer/IconContainer/Pinata" method="set_texture"]

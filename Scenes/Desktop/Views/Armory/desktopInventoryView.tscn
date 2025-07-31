@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://udk47ipcpsbq"]
+[gd_scene load_steps=25 format=3 uid="uid://udk47ipcpsbq"]
 
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="1_cq0hx"]
 [ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_ix0kh"]
@@ -6,6 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://cvljwgex83ynh" path="res://GodotThemes/Styleboxes/CheckButton/UnselectedCheck.tres" id="3_jwnrv"]
 [ext_resource type="Texture2D" uid="uid://cir0axuy4xjte" path="res://Images/InterfaceIcons/T_OpenGlow.png" id="3_l2jv4"]
 [ext_resource type="Texture2D" uid="uid://frsfbmj2qyxu" path="res://Images/InterfaceIcons/T_Icon_FavoriteTab_64.png" id="4_incdt"]
+[ext_resource type="Texture2D" uid="uid://bo36hhtrb2njg" path="res://Images/InterfaceIcons/T-Icon-Manage-New-32.png" id="4_m3xe0"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="4_q3ge8"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="5_g4jqb"]
 [ext_resource type="Texture2D" uid="uid://boywmwfvrbmwp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Cogs_128.png" id="6_6h6v6"]
@@ -49,7 +50,7 @@ shader_parameter/smoothness = 0.25
 shader_parameter/msdf = false
 shader_parameter/skipSDF = false
 
-[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent")]
+[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -64,6 +65,7 @@ tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters")
 targetProfile = "campaign"
 typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "", "Schematic", "Hero", "Defender", "Worker", "AccountResource")
 creatorImageParent = NodePath("Creators")
+inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
 
 [node name="Creators" type="Control" parent="."]
 layout_mode = 2
@@ -100,7 +102,7 @@ placeholder_text = "Search items"
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
@@ -116,6 +118,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Custom username"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+tooltip_text = "User Currently In Mission"
+texture = ExtResource("4_m3xe0")
+expand_mode = 3
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2/MarginContainer"]
 visible = false
@@ -552,9 +560,9 @@ layout_mode = 2
 [node name="Grid" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 script = ExtResource("6_a3sqn")
-minCols = 3
-compressSpacing = true
-spacing = Vector2(10, 10)
+MinCols = 3
+CompressSpacing = true
+Spacing = Vector2(10, 10)
 
 [node name="Padding" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

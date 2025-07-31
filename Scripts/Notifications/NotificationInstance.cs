@@ -198,8 +198,11 @@ public partial class NotificationInstance : Control
 
 	public void PerformAction(string actionType)
 	{
-		currentContainer.data.SubmitAction(actionType);
-		Dismiss();
+		if (Enum.TryParse<NotifAction>(actionType, out var action))
+        {
+            currentContainer.data.SubmitAction(action);
+            Dismiss();
+        }
 	}
 
 	public void AnimateStage(float toStage, double duration, double delay = 0, float? fromStage = null)

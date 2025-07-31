@@ -1,0 +1,167 @@
+[gd_scene load_steps=9 format=3 uid="uid://b8cv7fnnprix6"]
+
+[ext_resource type="Script" uid="uid://vbxrkx54h0ax" path="res://Scripts/UserInterface/Extra/StatChangeInterface.cs" id="1_o6gcj"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="2_1rxij"]
+[ext_resource type="PackedScene" uid="uid://bsogk7j88gee5" path="res://Scenes/GameItemEntry/StatChange/stat_change_weapon.tscn" id="3_qu6jd"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="4_jrdkr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5va6x"]
+resource_local_to_scene = true
+shader = ExtResource("4_jrdkr")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0jmlf"]
+resource_local_to_scene = true
+shader = ExtResource("4_jrdkr")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oqhk3"]
+resource_local_to_scene = true
+shader = ExtResource("4_jrdkr")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hkphv"]
+resource_local_to_scene = true
+shader = ExtResource("4_jrdkr")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+
+[node name="Balancing" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o6gcj")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="Label" type="Label" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Drag+drop MeleeWeapons.json or 
+RangedWeapons.json to compare thier
+contents with known stats"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="Container" parent="ScrollContainer/MarginContainer"]
+layout_mode = 2
+script = ExtResource("2_1rxij")
+CompressSpacing = true
+Spacing = Vector2(5, 5)
+
+[node name="WeaponStatChange" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_5va6x")
+
+[node name="WeaponStatChange2" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange2/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_0jmlf")
+
+[node name="WeaponStatChange3" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange3/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_oqhk3")
+
+[node name="WeaponStatChange4" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange4/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_hkphv")
+
+[node name="WeaponStatChange5" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange5/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_oqhk3")
+
+[node name="WeaponStatChange6" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange6/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_5va6x")
+
+[node name="WeaponStatChange7" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange7/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_hkphv")
+
+[node name="WeaponStatChange8" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange8/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_0jmlf")
+
+[node name="WeaponStatChange9" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange9/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_oqhk3")
+
+[node name="WeaponStatChange10" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange10/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_hkphv")
+
+[node name="WeaponStatChange11" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange11/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_oqhk3")
+
+[node name="WeaponStatChange12" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange12/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+material = SubResource("ShaderMaterial_5va6x")
+
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange2"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange3"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange4"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange5"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange6"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange7"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange8"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange9"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange10"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange11"]
+[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange12"]

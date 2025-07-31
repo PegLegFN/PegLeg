@@ -3,6 +3,11 @@ using System;
 using System.Linq;
 using System.Text.Json.Nodes;
 
+public partial class AppConfig
+{
+    public string inspectedAccount;
+}
+
 public partial class InventoryInterface : Control, IRecyclableElementProvider<GameItem>
 {
     [Export]
@@ -26,6 +31,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     [Export]
     Control creatorImageParent;
     Control[] creatorImages;
+    [Export]
+    Control inMissionIndicator;
 
     public override void _Ready()
     {
@@ -151,6 +158,11 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             currentProfile.OnProfileChanged -= ApplyFilters;
         }
         currentProfile = await account.GetProfile(targetProfile).Query();
+
+        if (!account.isOwned)
+            GD.Print(currentProfile.statAttributes["quest_manager"].ToString());
+        inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
+
         currentProfile.OnProfileChanged += ApplyFilters;
         ApplyFilters();
     }

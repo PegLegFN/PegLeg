@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using Godot;
 using System.Threading;
 using System.Text.Json;
-using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 
-static class Helpers
+static partial class Helpers
 {
     public static T[] FlexDeserialise<T>(this JsonElement ele, Func<JsonElement, T> innerCtor, int depth = 1) =>
         ele.ValueKind switch
@@ -106,6 +106,36 @@ static class Helpers
         targetParent.Remove(targetNode);
         return targetNode;
     }
+
+    [GeneratedRegex("^([a-z]+)(?:\\[(\\d)\\])?$", RegexOptions.IgnoreCase)]
+    private static partial Regex NodePathParserGeneratedRegex();
+    public static bool TryGetNodeFromPath(this JsonObject root, string path, out JsonNode node)
+    {
+        node = null;
+        var splitPath = path.Split('.');
+        if (splitPath.Length == 0)
+            return false;
+        JsonNode current = root;
+        for (int i = 0; i < splitPath.Length; i++)
+        {
+            var parsedPath = NodePathParserGeneratedRegex().Match(splitPath[i]);
+            if (!parsedPath.Success)
+                return false;
+            if (current is not JsonObject)
+                return false;
+            current = current[parsedPath.Groups[0].Value];
+
+            if (parsedPath.Groups.Count == 2)
+            {
+                //handle array index
+                if (current is not JsonArray)
+                    return false;
+                current = current[int.Parse(parsedPath.Groups[1].Value)];
+            }
+        }
+        return true;
+    }
+
     public static DateTime AsTime(this JsonNode value) => 
         value.Deserialize<DateTime>();
 

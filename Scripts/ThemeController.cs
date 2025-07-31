@@ -1,11 +1,18 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+
+public partial class AppConfig
+{
+    public ThemeConfig theme;
+    public class ThemeConfig
+    {
+        public string current = "";
+    }
+}
 
 public partial class ThemeController : Node
 {

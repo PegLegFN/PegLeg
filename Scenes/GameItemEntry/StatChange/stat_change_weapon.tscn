@@ -1,0 +1,315 @@
+[gd_scene load_steps=8 format=3 uid="uid://bsogk7j88gee5"]
+
+[ext_resource type="Material" uid="uid://fu23qg1axsrm" path="res://Sh_Materials/ItemRewardMat.tres" id="1_1hoho"]
+[ext_resource type="Script" uid="uid://dobpdd68qa1xn" path="res://Scripts/UserInterface/ListEntries/StatChangeEntry.cs" id="1_txq0a"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="2_7ltgx"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="2_emxwm"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="3_7ltgx"]
+[ext_resource type="PackedScene" uid="uid://dpcmqblgoh3dq" path="res://Scenes/GameItemEntry/StatChange/stat_change.tscn" id="5_n11jr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ahsn"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="WeaponStatChange" type="MarginContainer" node_paths=PackedStringArray("statChangeParent", "currentItem", "rarityToggles", "tierToggles")]
+custom_minimum_size = Vector2(300, 0)
+script = ExtResource("1_txq0a")
+statChangeScene = ExtResource("5_n11jr")
+statChangeParent = NodePath("MarginContainer/VBoxContainer/VBoxContainer")
+currentItem = NodePath("MarginContainer/VBoxContainer/HBoxContainer")
+rarityToggles = [NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Common"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Uncommon"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Rare"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Epic"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Legendary")]
+tierToggles = [NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Common"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Uncommon"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Rare"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Epic"), NodePath("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Legendary")]
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+script = ExtResource("2_emxwm")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+modulate = Color(1, 0.690196, 0.2, 1)
+material = ExtResource("1_1hoho")
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("2_7ltgx")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item Name"
+
+[node name="RarityFilters" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Common" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Common"
+theme_type_variation = &"LeftCheckButton"
+text = " "
+metadata/rarity = "Common"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Common"]
+self_modulate = Color(0.61, 0.61, 0.61, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ahsn")
+
+[node name="Uncommon" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Uncommon"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/rarity = "Uncommon"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Uncommon"]
+self_modulate = Color(0, 0.717647, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ahsn")
+
+[node name="Rare" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Rare"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/rarity = "Rare"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Rare"]
+self_modulate = Color(0, 0.490196, 1, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ahsn")
+
+[node name="Epic" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Epic"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/rarity = "Epic"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Epic"]
+self_modulate = Color(0.701961, 0, 1, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ahsn")
+
+[node name="Legendary" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Legendary"
+theme_type_variation = &"RightCheckButton"
+button_pressed = true
+text = " "
+metadata/rarity = "Legendary"
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters/HBoxContainer/Legendary"]
+self_modulate = Color(1, 0.690196, 0.2, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ahsn")
+
+[node name="RarityFilters2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2"]
+layout_mode = 2
+theme_override_constants/separation = -1
+
+[node name="Common" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Common"
+theme_type_variation = &"LeftCheckButton"
+button_pressed = true
+text = " "
+metadata/rarity = "Common"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Common"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7ltgx")
+expand_mode = 1
+
+[node name="Uncommon" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Uncommon"
+theme_type_variation = &"MiddleCheckButton"
+button_pressed = true
+text = " "
+metadata/rarity = "Uncommon"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Uncommon"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7ltgx")
+expand_mode = 1
+
+[node name="Rare" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Rare"
+theme_type_variation = &"MiddleCheckButton"
+button_pressed = true
+text = " "
+metadata/rarity = "Rare"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Rare"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7ltgx")
+expand_mode = 1
+
+[node name="Epic" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Epic"
+theme_type_variation = &"MiddleCheckButton"
+button_pressed = true
+text = " "
+metadata/rarity = "Epic"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Epic"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7ltgx")
+expand_mode = 1
+
+[node name="Legendary" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Legendary"
+theme_type_variation = &"RightCheckButton"
+button_pressed = true
+text = " "
+metadata/rarity = "Legendary"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/RarityFilters2/HBoxContainer/Legendary"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7ltgx")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[connection signal="IconChanged" from="MarginContainer/VBoxContainer/HBoxContainer" to="MarginContainer/VBoxContainer/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="MarginContainer/VBoxContainer/HBoxContainer" to="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Label" method="set_text"]

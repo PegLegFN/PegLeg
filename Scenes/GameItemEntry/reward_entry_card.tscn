@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c47svw0ruq2i3"]
+[gd_scene load_steps=23 format=3 uid="uid://c47svw0ruq2i3"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_hrn5h"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="1_w7bnd"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="7_dc4uf"]
 [ext_resource type="Shader" uid="uid://bcjttgof1a18i" path="res://Shaders/ChoiceCardChangeEffect.gdshader" id="11_xnoem"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="12_abtl2"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="13_t03b0"]
 
 [sub_resource type="Gradient" id="Gradient_tpqxe"]
 colors = PackedColorArray(0.9, 0.9, 0.9, 1, 0.6, 0.6, 0.6, 1)
@@ -129,6 +130,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="InspectArea" type="Control" parent="ContentParent/Content/DetailsArea/Space"]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -275,7 +277,7 @@ text = "Hero
 "
 text_overrun_behavior = 3
 
-[node name="ChangeEffect" type="TextureRect" parent="ContentParent"]
+[node name="ChangeEffect" type="TextureRect" parent="ContentParent/Content"]
 unique_name_in_owner = true
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 material = SubResource("ShaderMaterial_kpy8b")
@@ -283,15 +285,27 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -236.5
-offset_top = -192.5
-offset_right = 163.5
-offset_bottom = 207.5
+offset_left = -220.0
+offset_top = -200.0
+offset_right = 180.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib66")
 script = ExtResource("4_w04mt")
+
+[node name="ContextInput" type="Button" parent="ContentParent/Content"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Ctx" type="Node" parent="ContentParent/Content/ContextInput"]
+script = ExtResource("13_t03b0")
 
 [node name="CardOverlay" type="TextureRect" parent="."]
 layout_mode = 2
@@ -309,9 +323,11 @@ expand_mode = 5
 [connection signal="PersonalityIconChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/SecondaryIocn" method="set_texture"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/RarityGradient" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/DetailsArea/TypeBox" method="set_self_modulate"]
-[connection signal="RarityChanged" from="." to="ContentParent/ChangeEffect" method="set_self_modulate"]
+[connection signal="RarityChanged" from="." to="ContentParent/Content/ChangeEffect" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/Triangles" method="SetShaderColor" binds= ["TriangleTint"]]
 [connection signal="SubtypeIconChanged" from="." to="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer/MarginContainer/SubtypeIcon" method="set_texture"]
 [connection signal="SurvivorBoostIconChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/TersiatyIcon" method="set_texture"]
+[connection signal="TooltipChanged" from="." to="ContentParent/Content/ContextInput" method="set_tooltip_text"]
 [connection signal="TypeChanged" from="." to="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer/TypeLabel" method="set_text"]
 [connection signal="pressed" from="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/Responsive Button Circle" to="." method="Inspect"]
+[connection signal="ContextMenuTriggered" from="ContentParent/Content/ContextInput/Ctx" to="." method="Inspect" unbinds=1]

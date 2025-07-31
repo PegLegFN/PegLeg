@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://tso3qs0wxppc"]
+[gd_scene load_steps=16 format=3 uid="uid://tso3qs0wxppc"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_j3td7"]
 [ext_resource type="Shader" uid="uid://dabk0fuxvn2ch" path="res://Shaders/ChoiceCard.tres" id="2_op652"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://datfcfaym8so5" path="res://Images/Flipbook/ChoiceCardV2/Base-sheet.png" id="6_m1h2m"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_65gaw"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="8_hciuj"]
+[ext_resource type="Shader" uid="uid://c1cu5jabwr16n" path="res://Shaders/ButtonOutlineShader.gdshader" id="9_mthcg"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="9_r1kfb"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="9_tm7mh"]
 [ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="10_pu46j"]
@@ -26,6 +27,17 @@ shader_parameter/RarityColour = Color(1, 0.266667, 0, 1)
 shader_parameter/UVTexture = ExtResource("5_do3oc")
 shader_parameter/PatternTexture = ExtResource("4_e2vqj")
 shader_parameter/IconTexture = ExtResource("3_5abd1")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mthcg"]
+resource_local_to_scene = true
+shader = ExtResource("9_mthcg")
+shader_parameter/ControlSize = Vector2(154, 219)
+shader_parameter/TargetSize = Vector2(1200, 675)
+shader_parameter/LineSize = 3.0
+shader_parameter/ProgressFade = 0.02
+shader_parameter/Progress = 0.0
+shader_parameter/Circle = false
+shader_parameter/VerticalHold = true
 
 [node name="ChoiceEntryCard" type="MarginContainer"]
 custom_minimum_size = Vector2(0, 256)
@@ -73,6 +85,12 @@ anchor_left = 0.155
 anchor_top = 0.092
 anchor_right = 0.845
 anchor_bottom = 0.911
+useHold = true
+holdTime = 1.0
+holdRecoverTime = 0.5
+
+[node name="TextureRect" parent="Control/Responsive Button Area/MarginContainer" index="0"]
+material = SubResource("ShaderMaterial_mthcg")
 
 [node name="CtxMenu" type="Node" parent="Control/Responsive Button Area"]
 script = ExtResource("9_r1kfb")
@@ -159,6 +177,9 @@ outlinePadding = 0.0
 [connection signal="InteractableChanged" from="." to="Control/InspectArea/TextureRect/Responsive Button Circle" method="set_visible"]
 [connection signal="NameChanged" from="." to="Control/Label" method="set_text"]
 [connection signal="RarityChanged" from="." to="ChoiceCardTexture" method="SetShaderColor" binds= ["RarityColour"]]
-[connection signal="pressed" from="Control/Responsive Button Area" to="." method="EmitPressedSignal"]
+[connection signal="TooltipChanged" from="." to="Control/Responsive Button Area" method="set_tooltip_text"]
+[connection signal="HoldPressed" from="Control/Responsive Button Area" to="." method="EmitPressedSignal"]
 [connection signal="ContextMenuTriggered" from="Control/Responsive Button Area/CtxMenu" to="." method="Inspect" unbinds=1]
 [connection signal="pressed" from="Control/InspectArea/TextureRect/Responsive Button Circle" to="." method="Inspect"]
+
+[editable path="Control/Responsive Button Area"]

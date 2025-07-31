@@ -4,6 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 
+public partial class AppConfig
+{
+    public class NotificationConfig
+    {
+        public float scale = 1;
+        public bool showTrayTutorial = true;
+    }
+
+    public partial class ExperimentalConfig
+    {
+        public bool notifications = true;
+    }
+}
+
 public partial class NotificationManager : Control
 {
     [Export]
@@ -100,6 +114,7 @@ public partial class NotificationManager : Control
         //show window if not already visible
         if (activeNotifications.Count == 0)
         {
+            //TODO: move window to first display in which there are no boarderless fullscreen windows
             window.MousePassthroughPolygon = [];
             GD.Print("open notifs");
         }
@@ -405,10 +420,17 @@ public record struct NotificationData()
     public string firstAction;
     public string secondAction;
     public string superAction;
-    public Action<string> OnAction;//first, second, super
+    public Func<NotifAction, bool> HandleAction;//first, second, super
 
-    public void SubmitAction(string action)=>
-        OnAction?.Invoke(action);
+    public bool SubmitAction(NotifAction action)=>
+        HandleAction?.Invoke(action) ?? true;
+
+}
+public enum NotifAction
+{
+    FirstAction,
+    SecondAction,
+    SuperAction,
 }
 
 public record struct NotificationItemData()

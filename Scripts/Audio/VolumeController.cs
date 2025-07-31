@@ -1,5 +1,19 @@
 using Godot;
+using System.Collections.Generic;
 
+public partial class AppConfig
+{
+    public AudioConfig audio = new();
+    public class AudioConfig
+    {
+        public Dictionary<string, AudioChannel> channels;
+        public struct AudioChannel()
+        {
+            public float volume = 1;
+            public bool muted;
+        }
+    }
+}
 public partial class VolumeController : Node
 {
     static Window mainWindow;

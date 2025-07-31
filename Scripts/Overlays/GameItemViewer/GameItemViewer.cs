@@ -108,7 +108,7 @@ public partial class GameItemViewer : ModalWindow
     int itemTier = 1;
     int itemLevel = 1;
 
-    public void ShowItem(GameItem newItem, int prioritiseChoice = 0)
+    public void ShowItem(GameItem newItem, int prioritiseChoice = 0, bool preserveUnseen = false, bool rawInspect=false)
     {
         itemChoiceParent.Visible = false;
         currentItem = newItem;
@@ -117,14 +117,14 @@ public partial class GameItemViewer : ModalWindow
         currentOfferEntry.ClearOffer();
         currentOffer = null;
 
-        if (newItem.profile?.account.isOwned == true)
+        if (!preserveUnseen && newItem.profile?.account.isOwned == true)
             newItem.MarkItemSeen();
 
         upgrader.Visible = currentItem.attributes?["level"] is not null;
         upgrader.SetItem(currentItem);
 
         //if choice cardpack, display choices instead
-        if (currentItem.template?.Type == "CardPack" && currentItem.CardPackChoices is GameItem[] itemChoices)
+        if (!rawInspect && currentItem.template?.Type == "CardPack" && currentItem.CardPackChoices is GameItem[] itemChoices)
         {
             itemChoiceParent.Visible = true;
             choices = itemChoices;

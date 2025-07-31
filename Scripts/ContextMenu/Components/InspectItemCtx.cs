@@ -15,7 +15,7 @@ public partial class InspectItemCtx : BaseContextComponent
     {
         if (currentItem is null)
             return;
-        GameItemViewer.Instance.ShowItem(currentItem);
+        GameItemViewer.Instance.ShowItem(currentItem, preserveUnseen: Input.IsKeyPressed(Key.Shift), rawInspect: Input.IsKeyPressed(Key.Ctrl));
         menu.CloseMenu();
     }
 }

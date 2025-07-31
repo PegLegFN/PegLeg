@@ -2,6 +2,11 @@ using Godot;
 using System;
 using System.Text.Json.Nodes;
 
+public partial class AppConfig
+{
+    public float uiScale;
+}
+
 public partial class TargetResolutionSetter : Node
 {
 	[Export]

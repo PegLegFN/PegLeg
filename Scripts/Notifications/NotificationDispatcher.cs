@@ -12,9 +12,8 @@ public partial class NotificationDispatcher : Node
 {
     const string notifTimerPath = "user://notifTimes.json";
 
-    const string bdayOfferId = "AB717EDD429743F48CC0346F780109C8";
     const string monthlyFreeLlamaOfferId = "8339003D26B24F70878EE280B70C340D";
-    const string firstFreeLlamaOfferId = "8339003D26B24F70878EE280B70C340D";
+    const string firstFreeLlamaOfferId = "B9B0CE758A5049F898773C1A47A69ED4";
 
     class RefreshTimeContainer
     {
@@ -57,13 +56,27 @@ public partial class NotificationDispatcher : Node
         RefreshTimerController.OnHourChanged -= HourlyNotifs;
     }
 
+    public override void _Input(InputEvent @event)
+    {
+        if(@event is InputEventKey keyEvt && keyEvt.AltPressed && keyEvt.Keycode == Key.N && keyEvt.Pressed)
+        {
+            GetViewport().SetInputAsHandled();
+            HourlyNotifs(true);
+        }
+        base._Input(@event);
+    }
+
+
+    void HourlyNotifs() => HourlyNotifs(false);
+    bool isForced = false;
     CancellationTokenSource notifCTS;
-    async void HourlyNotifs()
+    async void HourlyNotifs(bool force)
     {
         if (!AppConfig.Get("experimental", "notifications", false))
             return;
         var hour = DateTime.UtcNow.Date.AddHours(DateTime.UtcNow.Hour);
-        if (refreshTimes.lastHourlyCheck == hour)
+        isForced = force;
+        if (refreshTimes.lastHourlyCheck == hour && !isForced)
             return;
         refreshTimes.lastHourlyCheck = hour;
         notifCTS = notifCTS.CancelAndRegenerate(out var ct);
@@ -91,7 +104,7 @@ public partial class NotificationDispatcher : Node
 
     Task<NotificationData[]>[] DailyNotifs(CancellationToken ct)
     {
-        if (refreshTimes.lastDailyCheck == DateTime.UtcNow.Date)
+        if (refreshTimes.lastDailyCheck == DateTime.UtcNow.Date && !isForced)
             return [];
         refreshTimes.lastDailyCheck = DateTime.UtcNow.Date;
         return [
@@ -107,7 +120,7 @@ public partial class NotificationDispatcher : Node
         int utcDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
         int daysSinceThursday = (3 + utcDayOfWeek) % 7;
         var thisThursday = DateTime.UtcNow.Date.AddDays(daysSinceThursday);
-        if (refreshTimes.lastWeeklyCheck >= thisThursday)
+        if (refreshTimes.lastWeeklyCheck >= thisThursday && !isForced)
             return [];
         refreshTimes.lastWeeklyCheck = DateTime.UtcNow.Date;
         return [
@@ -124,9 +137,15 @@ public partial class NotificationDispatcher : Node
         icon = freeLlamaIcon,
         sound = freeLlamaSound,
         urgent = true,
-        //firstAction = "View",
+        firstAction = "View",
         //superAction = "Claim All",
         itemColor = Color.FromHtml("#bf00ff"),
+        HandleAction = a =>
+        {
+            if (a == NotifAction.FirstAction)
+                GD.Print("View Llama");
+            return true;
+        }
     };
 
     NotificationData? eventLlamaNotif;
@@ -140,7 +159,6 @@ public partial class NotificationDispatcher : Node
         itemColor = Color.FromHtml("#bf00ff"),
     };
     static readonly FrozenSet<string> excludeFreeLlamaIds = (new string[] { 
-        bdayOfferId,
         monthlyFreeLlamaOfferId,
         firstFreeLlamaOfferId,
     }).ToFrozenSet();
@@ -159,8 +177,15 @@ public partial class NotificationDispatcher : Node
             return [];
 
         List<NotificationData> notifs = [];
-        if (xrayStorefront.Offers.Any(o => !excludeFreeLlamaIds.Contains(o.OfferId) && o.Price.quantity == 0))
+        if (xrayStorefront.Offers.Any(o => !excludeFreeLlamaIds.Contains(o.OfferId) && o.WeeklyLimit==-1 && o.Price.quantity == 0))
         {
+            GD.Print($"Free Llamas: {string.Join(", ", xrayStorefront
+                .Offers
+                .Where(o => 
+                    !excludeFreeLlamaIds.Contains(o.OfferId) && 
+                    o.Price.quantity == 0
+                ).Select(o => o.OfferId)
+            )}");
             //deliver 1hr daily notif
             notifs.Add(FreeLlamaNotif with
             {
@@ -212,7 +237,7 @@ public partial class NotificationDispatcher : Node
         var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
         if (ct.IsCancellationRequested)
             return [];
-        if (xrayStorefront.Offers.FirstOrDefault(o => o.OfferId == bdayOfferId) is GameOffer bdayOffer)
+        if (xrayStorefront.Offers.FirstOrDefault(o => o.WeeklyLimit > 0) is GameOffer bdayOffer)
         {
             //deliver bday llama notif
             //todo: if birthday llama contains item with reminder, show notification
