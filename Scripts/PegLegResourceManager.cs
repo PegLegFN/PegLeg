@@ -379,7 +379,11 @@ public class PegLegResourceManager
         {
             return ResourceLoader.Load<T>(fallbackResourcePath + resource);
         }
-        GD.PushWarning($"Asset not found: \"{resource}\"");
+        //missing game asset textures are expected when using fallback resources
+        if (!typeof(T).IsSubclassOf(typeof(Texture)) || !resource.StartsWith("GameAssets/"))
+        {
+            GD.PushWarning($"Asset not found: \"{resource}\"");
+        }
         return null;
     }
 

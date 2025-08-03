@@ -459,7 +459,7 @@ public class GameMission
             return;
 
         Dictionary<string, GameItem> rewardItemList = [];
-        foreach (var itemData in missionData["missionRewards"]["items"].AsArray().DetachAll())
+        foreach (var itemData in missionData["missionRewards"]["items"].AsArray())
         {
             GameItem item = new(null, null, itemData.AsObject());
             item.GetSearchTags();
