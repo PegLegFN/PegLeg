@@ -48,6 +48,7 @@ public partial class Bootstrap : Node
         window.MoveToCenter();
         progressLabel.Text = "Preparing...";
 
+        #if GODOT_WINDOWS
         if (FileAccess.FileExists(processLockPath))
         {
             using var processFile = FileAccess.Open(processLockPath, FileAccess.ModeFlags.Read);
@@ -96,6 +97,7 @@ public partial class Bootstrap : Node
             var currentPid = OS.GetProcessId();
             processFile.Store64((ulong)currentPid);
         }
+        #endif
 
 
         try

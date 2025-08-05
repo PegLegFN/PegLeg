@@ -21,9 +21,13 @@ public partial class ContextMenu : Window
     public override void _Ready()
     {
         inst = this;
+#if GODOT_WINDOWS
         Visible = true;
         this.Win64RemoveFromTaskbar();
-        MousePassthroughPolygon = fullPassthrough;
+#else
+        MousePassthroughPolygon = [];
+#endif
+        SetCtxVisible(false);
 
         var compNames = DirAccess.GetFilesAt(contextComponentFolder);
         for (int i = 0; i < compNames.Length; i++)
@@ -45,6 +49,15 @@ public partial class ContextMenu : Window
         FocusExited += CloseMenu;
     }
 
+    void SetCtxVisible(bool visible)
+    {
+#if GODOT_WINDOWS
+        MousePassthroughPolygon = visible ? [] : fullPassthrough;
+#else
+        Visible = visible;
+#endif
+    }
+
     List<HSeparator> activeSeparators = [];
     List<BaseContextComponent> activeComponents = [];
     Tween animTween;
@@ -56,7 +69,7 @@ public partial class ContextMenu : Window
     {
         scaleAnimation.Scale = Vector2.Zero;
         await Helpers.WaitForFrame();
-        MousePassthroughPolygon = fullPassthrough;
+        SetCtxVisible(false);
         var compList = hook.componentList.components;
         bool hasComps = false;
         for (int i = 0; i < compList.Length; i++)
@@ -171,7 +184,7 @@ public partial class ContextMenu : Window
         Size = (Vector2I)scaleAnimation.Size;
 
         Position = targetPos;
-        MousePassthroughPolygon = [];
+        SetCtxVisible(true);
         GrabFocus();
         isOpening = false;
         await Helpers.WaitForFrame();
@@ -203,7 +216,7 @@ public partial class ContextMenu : Window
             return;
         scaleAnimation.Scale = Vector2.Zero;
         await Helpers.WaitForFrame();
-        MousePassthroughPolygon = fullPassthrough;
+        SetCtxVisible(false);
         open = false;
         Clear();
     }
