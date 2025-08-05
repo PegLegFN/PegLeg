@@ -46,6 +46,7 @@ public partial class NotificationManager : Control
     Window window;
     Vector2I baseSize;
     Timer queueTimer;
+    const string notificationWindowTag = "NotifWindow";
 	public override void _Ready()
 	{
         window = GetWindow();
@@ -116,6 +117,7 @@ public partial class NotificationManager : Control
         {
             //TODO: move window to first display in which there are no boarderless fullscreen windows
             window.MousePassthroughPolygon = [];
+            TrayIcon.RegisterResponsiveWindow(notificationWindowTag);
             GD.Print("open notifs");
         }
         isListChanging = true;
@@ -226,6 +228,7 @@ public partial class NotificationManager : Control
             notificationInstances[1].AnimateStage(-1, 0.15, 0, 0);
             await Helpers.WaitForTimer(0.15);
             window.MousePassthroughPolygon = fullPassthrough;
+            TrayIcon.UnregisterResponsiveWindow(notificationWindowTag);
             activeNotifications.Clear();
             currentListIdx = 0;
             listTarget = 0;

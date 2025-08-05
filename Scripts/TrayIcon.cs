@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
 public partial class TrayIcon : StatusIndicator
@@ -30,6 +31,7 @@ public partial class TrayIcon : StatusIndicator
     Texture2D testBuildIcon;
 
     static TrayIcon inst;
+    const string mainWindowTag = "MainWindow";
     public override void _Ready()
     {
         inst = this;
@@ -70,12 +72,33 @@ public partial class TrayIcon : StatusIndicator
         }
     }
 
+    static List<string> responsiveWindowList = [];
+    public static void RegisterResponsiveWindow(string windowTag)
+    {
+        if (responsiveWindowList.Count == 0)
+        {
+            Engine.MaxFps = 0;
+        }
+        if(!responsiveWindowList.Contains(windowTag))
+            responsiveWindowList.Add(windowTag);
+    }
+
+    public static void UnregisterResponsiveWindow(string windowTag)
+    {
+        responsiveWindowList.Remove(windowTag);
+        if (responsiveWindowList.Count == 0)
+        {
+            Engine.MaxFps = 10;
+        }
+    }
+
     void Minimise()
     {
         if (!minimised)
         {
             minimised = true;
             GetWindow().Win64SetVisible(false);
+            UnregisterResponsiveWindow(mainWindowTag);
             if (mainAppRoot is not null)
             {
                 mainAppRoot.Visible = false;
@@ -109,6 +132,7 @@ public partial class TrayIcon : StatusIndicator
         {
             minimised = false;
             window.Win64SetVisible(true);
+            RegisterResponsiveWindow(mainWindowTag);
             if (mainAppRoot is not null)
             {
                 mainAppRoot.ProcessMode = ProcessModeEnum.Inherit;
