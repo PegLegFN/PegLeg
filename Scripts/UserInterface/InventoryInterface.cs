@@ -159,8 +159,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         }
         currentProfile = await account.GetProfile(targetProfile).Query();
 
-        if (!account.isOwned)
-            GD.Print(currentProfile.statAttributes["quest_manager"].ToString());
         inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
 
         currentProfile.OnProfileChanged += ApplyFilters;
