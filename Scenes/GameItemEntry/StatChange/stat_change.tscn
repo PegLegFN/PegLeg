@@ -1,6 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpcmqblgoh3dq"]
+[gd_scene load_steps=12 format=3 uid="uid://dpcmqblgoh3dq"]
 
 [ext_resource type="Shader" uid="uid://v7c8s7chc42m" path="res://Shaders/StatBar.gdshader" id="1_5wtbv"]
+[ext_resource type="Script" uid="uid://dh5k6mxqxh58l" path="res://Scripts/UserInterface/ListEntries/StatChangeEntry.cs" id="1_c23ie"]
+[ext_resource type="Resource" uid="uid://d0t7yum7lg7r4" path="res://DataResources/Stats/emptyNormalisedStats.tres" id="2_o8tyn"]
+[ext_resource type="Resource" uid="uid://bb8kign7qeju4" path="res://DataResources/Stats/statNameLookup.tres" id="3_o8tyn"]
+[ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="4_o8tyn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5wtbv"]
 shader = ExtResource("1_5wtbv")
@@ -42,13 +46,29 @@ shader_parameter/flip = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_255t8"]
 
-[node name="HBoxContainer" type="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" node_paths=PackedStringArray("statName", "baseProgress", "goodProgress", "badProgress", "changeAmount", "changePercent", "rawStatIndicator")]
+script = ExtResource("1_c23ie")
+statName = NodePath("StatNameLabel")
+baseProgress = NodePath("MarginContainer/BaseProgressBar")
+goodProgress = NodePath("MarginContainer/GoodProgressBar")
+badProgress = NodePath("MarginContainer/BadProgressBar")
+changeAmount = NodePath("MarginContainer/HBoxContainer/ChangeAmountLabel")
+changePercent = NodePath("MarginContainer/HBoxContainer/ChangePercentLabel")
+normalisedStats = ExtResource("2_o8tyn")
+statNameLookup = ExtResource("3_o8tyn")
+rawStatIndicator = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+tooltip_text = "This stat hasn't had a name mapped to it. If you know what this stat does, let me know"
+texture = ExtResource("4_o8tyn")
+expand_mode = 3
 
 [node name="StatNameLabel" type="Label" parent="."]
-unique_name_in_owner = true
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 theme_override_font_sizes/font_size = 12
 text = "StatName"
 
@@ -56,10 +76,9 @@ text = "StatName"
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
+size_flags_stretch_ratio = 3.0
 
 [node name="BadProgressBar" type="ProgressBar" parent="MarginContainer"]
-unique_name_in_owner = true
 self_modulate = Color(1, 0, 0, 1)
 material = SubResource("ShaderMaterial_5wtbv")
 layout_mode = 2
@@ -70,7 +89,6 @@ max_value = 1.0
 show_percentage = false
 
 [node name="GoodProgressBar" type="ProgressBar" parent="MarginContainer"]
-unique_name_in_owner = true
 self_modulate = Color(0, 1, 0, 1)
 material = SubResource("ShaderMaterial_c23ie")
 layout_mode = 2
@@ -82,7 +100,6 @@ value = 0.75
 show_percentage = false
 
 [node name="BaseProgressBar" type="ProgressBar" parent="MarginContainer"]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/background = SubResource("StyleBoxEmpty_255t8")
@@ -96,7 +113,6 @@ layout_mode = 2
 size_flags_vertical = 0
 
 [node name="ChangeAmountLabel" type="Label" parent="MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -108,7 +124,6 @@ text = "100.0 => 150.0 (+50.0)"
 vertical_alignment = 1
 
 [node name="ChangePercentLabel" type="Label" parent="MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 1

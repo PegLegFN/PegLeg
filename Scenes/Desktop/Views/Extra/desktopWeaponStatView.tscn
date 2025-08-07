@@ -1,167 +1,114 @@
-[gd_scene load_steps=9 format=3 uid="uid://b8cv7fnnprix6"]
+[gd_scene load_steps=4 format=3 uid="uid://b8cv7fnnprix6"]
 
 [ext_resource type="Script" uid="uid://vbxrkx54h0ax" path="res://Scripts/UserInterface/Extra/StatChangeInterface.cs" id="1_o6gcj"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="2_1rxij"]
 [ext_resource type="PackedScene" uid="uid://bsogk7j88gee5" path="res://Scenes/GameItemEntry/StatChange/stat_change_weapon.tscn" id="3_qu6jd"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="4_jrdkr"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5va6x"]
-resource_local_to_scene = true
-shader = ExtResource("4_jrdkr")
-shader_parameter/ControlSize = Vector2(64, 64)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0jmlf"]
-resource_local_to_scene = true
-shader = ExtResource("4_jrdkr")
-shader_parameter/ControlSize = Vector2(64, 64)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oqhk3"]
-resource_local_to_scene = true
-shader = ExtResource("4_jrdkr")
-shader_parameter/ControlSize = Vector2(64, 64)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hkphv"]
-resource_local_to_scene = true
-shader = ExtResource("4_jrdkr")
-shader_parameter/ControlSize = Vector2(64, 64)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-
-[node name="Balancing" type="MarginContainer"]
+[node name="Balancing" type="MarginContainer" node_paths=PackedStringArray("importMeleeBtn", "clearMeleeBtn", "importRangedBtn", "clearRangedBtn", "statWeaponParent", "emptyChanges")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_o6gcj")
+importMeleeBtn = NodePath("VBoxContainer/HBoxContainer/ImportMelee")
+clearMeleeBtn = NodePath("VBoxContainer/HBoxContainer/ClearMelee")
+importRangedBtn = NodePath("VBoxContainer/HBoxContainer/ImportRanged")
+clearRangedBtn = NodePath("VBoxContainer/HBoxContainer/ClearRanged")
+statWeaponScene = ExtResource("3_qu6jd")
+statWeaponParent = NodePath("VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/WeaponParent")
+emptyChanges = NodePath("VBoxContainer/MarginContainer/Empty")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_type_variation = &"Panel5Pad"
 
-[node name="Label" type="Label" parent="PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-text = "Drag+drop MeleeWeapons.json or 
-RangedWeapons.json to compare thier
-contents with known stats"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ImportMelee" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Import Melee Stats"
+
+[node name="ClearMelee" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Clear Melee Stats"
+
+[node name="ImportRanged" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Import Ranged Stats"
+
+[node name="ClearRanged" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Clear Ranged Stats"
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Drag + Drop MeleeWeapons.json or RangedWeapons.json to import automatically"
+horizontal_alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GridContainer" type="Container" parent="ScrollContainer/MarginContainer"]
+[node name="WeaponParent" type="Container" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("2_1rxij")
 CompressSpacing = true
 Spacing = Vector2(5, 5)
 
-[node name="WeaponStatChange" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+[node name="Empty" type="PanelContainer" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
 
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_5va6x")
-
-[node name="WeaponStatChange2" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/Empty"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 4
+text = "No Changes"
 
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange2/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_0jmlf")
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(600, 228)
 
-[node name="WeaponStatChange3" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
+[node name="WeaponStatChange" parent="SubViewport" instance=ExtResource("3_qu6jd")]
+scale = Vector2(2, 2)
 
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange3/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_oqhk3")
+[node name="MeleeFileDialog" type="FileDialog" parent="."]
+title = "Import Melee Stats"
+ok_button_text = "Import"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json")
+use_native_dialog = true
 
-[node name="WeaponStatChange4" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
+[node name="RangedFileDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+title = "Import Ranged Stats"
+ok_button_text = "Import"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.json")
+use_native_dialog = true
 
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange4/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_hkphv")
-
-[node name="WeaponStatChange5" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange5/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_oqhk3")
-
-[node name="WeaponStatChange6" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange6/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_5va6x")
-
-[node name="WeaponStatChange7" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange7/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_hkphv")
-
-[node name="WeaponStatChange8" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange8/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_0jmlf")
-
-[node name="WeaponStatChange9" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange9/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_oqhk3")
-
-[node name="WeaponStatChange10" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange10/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_hkphv")
-
-[node name="WeaponStatChange11" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange11/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_oqhk3")
-
-[node name="WeaponStatChange12" parent="ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_qu6jd")]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange12/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
-material = SubResource("ShaderMaterial_5va6x")
-
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange2"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange3"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange4"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange5"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange6"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange7"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange8"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange9"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange10"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange11"]
-[editable path="ScrollContainer/MarginContainer/GridContainer/WeaponStatChange12"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ImportMelee" to="MeleeFileDialog" method="show"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ClearMelee" to="." method="ClearMelee"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ImportRanged" to="RangedFileDialog" method="show"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ClearRanged" to="." method="ClearRanged"]
+[connection signal="file_selected" from="MeleeFileDialog" to="." method="ImportMelee"]
+[connection signal="file_selected" from="RangedFileDialog" to="." method="ImportRanged"]
