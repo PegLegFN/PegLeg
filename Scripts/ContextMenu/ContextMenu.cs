@@ -28,7 +28,10 @@ public partial class ContextMenu : Window
         var compNames = DirAccess.GetFilesAt(contextComponentFolder);
         for (int i = 0; i < compNames.Length; i++)
         {
-            var cScene = ResourceLoader.Load<PackedScene>($"{contextComponentFolder}/{compNames[i]}");
+            string name = compNames[i];
+            if (name.EndsWith(".remap"))
+                name = name[..^6];
+            var cScene = ResourceLoader.Load<PackedScene>($"{contextComponentFolder}/{name}");
             var cNode = cScene.Instantiate();
             if (cNode is not BaseContextComponent comp)
             {
