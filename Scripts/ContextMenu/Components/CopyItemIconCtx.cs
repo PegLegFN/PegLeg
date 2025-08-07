@@ -6,15 +6,15 @@ public partial class CopyItemIconCtx : BaseContextComponent
     public override void Update(ContextMenuHook hook)
     {
         currentItem = hook?.itemSource?.currentItem;
-        SetDisabled(true);
+        SetDisabled(currentItem?.GetTexture(null)?.GetImage() is null);
     }
 
     public void Copy()
     {
-        if (currentItem is null)
+        var img = currentItem?.GetTexture(null)?.GetImage();
+        if (img is null)
             return;
-        //todo: implement image clipboard stuff
-        Win64Helpers.ClipboardSetImage(currentItem.GetTexture().GetImage());
+        Win64Helpers.ClipboardSetImage(img);
         menu.CloseMenu();
     }
 }

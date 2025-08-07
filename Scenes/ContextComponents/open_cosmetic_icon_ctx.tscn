@@ -1,17 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dv78stjulbykc"]
+[gd_scene load_steps=4 format=3 uid="uid://dv78stjulbykc"]
 
 [ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_eimrl"]
 [ext_resource type="Script" uid="uid://dcalftm2jmuek" path="res://Scripts/ContextMenu/Components/OpenCosmeticIconCtx.cs" id="2_eimrl"]
-[ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="3_1r4qm"]
-[ext_resource type="Texture2D" uid="uid://bu8o0vuqpgyt2" path="res://Images/SDF/MSDF/T_UI_Icon_UIKit_LobbyImage_MSDF.png" id="4_jsviv"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wyyog"]
-shader = ExtResource("3_1r4qm")
-shader_parameter/blendAmount = 1.0
-shader_parameter/threshold = 0.35
-shader_parameter/smoothness = 0.35
-shader_parameter/msdf = true
-shader_parameter/skipSDF = false
+[ext_resource type="Texture2D" uid="uid://vn5bffvsoufm" path="res://Images/InterfaceIcons/T_UI_IconLibrary_Place_128.png" id="3_vcq16"]
 
 [node name="OpenCosmeticIconCtx" node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_eimrl")]
 offset_left = -61.0
@@ -22,13 +13,9 @@ script = ExtResource("2_eimrl")
 disabledPanel = NodePath("Disabled")
 
 [node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" index="0"]
-material = SubResource("ShaderMaterial_wyyog")
-texture = ExtResource("4_jsviv")
+texture = ExtResource("3_vcq16")
 
 [node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
 text = "Export Icon"
-
-[node name="Disabled" parent="." index="3"]
-visible = false
 
 [connection signal="pressed" from="TextureButton" to="." method="Copy"]

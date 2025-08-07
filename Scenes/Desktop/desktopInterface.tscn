@@ -318,7 +318,7 @@ grow_vertical = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 7
+current_tab = 1
 script = ExtResource("16_hsemp")
 
 [node name="Dashboard" parent="Content/MainTabs" instance=ExtResource("10_xfiw1")]
@@ -327,7 +327,6 @@ layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="Llamas" parent="Content/MainTabs" instance=ExtResource("23_b4gaj")]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -404,18 +403,21 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 6
 
-[node name="Extra" type="MarginContainer" parent="Content/MainTabs"]
-layout_mode = 2
-metadata/_tab_index = 7
-
-[node name="TabContainer" type="TabContainer" parent="Content/MainTabs/Extra"]
+[node name="Extra" type="TabContainer" parent="Content/MainTabs"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
 current_tab = 0
+metadata/_tab_index = 7
 
-[node name="Ventures" parent="Content/MainTabs/Extra/TabContainer" instance=ExtResource("35_s7yuu")]
+[node name="Ventures" parent="Content/MainTabs/Extra" instance=ExtResource("35_s7yuu")]
 layout_mode = 2
+
+[node name="Balancing" parent="Content/MainTabs/Extra" instance=ExtResource("37_c6nfh")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="StatusBar" type="MarginContainer" parent="Content"]
 z_index = 5
