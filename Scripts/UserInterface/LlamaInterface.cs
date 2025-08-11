@@ -23,6 +23,9 @@ public partial class LlamaInterface : Control
     [Export]
     PackedScene itemEntryScene;
 
+    [Export]
+    PackedScene screenshotItemEntryScene;
+
     [ExportGroup("List")]
     [Export]
     Control offerListLoadingIcon;
@@ -85,10 +88,27 @@ public partial class LlamaInterface : Control
     [Export]
     GameItemEntry secondChoice;
 
+    [ExportGroup("Screenshot")]
+    [Export]
+    Control screenshotShareButton;
+    [Export]
+    GameOfferEntry screenshotOfferEntry;
+    [Export]
+    CardPackEntry screenshotCardpackEntry;
+    [Export]
+    Control screenshotResultEntriesParent;
+    [Export]
+    Control screenshotChoicePanel;
+    [Export]
+    GameItemEntry screenshotFirstChoice;
+    [Export]
+    GameItemEntry ScreenshotSecondChoice;
+
 
     List<GameOfferEntry> llamaOfferEntries = [];
     Queue<CardPackEntry> llamaItemEntries = new();
     List<GameItemEntry> llamaResultEntries = [];
+    List<GameItemEntry> llamaResultScreenshotEntries = [];
 
     GameProfile llamaItemProfile;
     List<LlamaItemStack> llamaItemStacks = [];
@@ -418,17 +438,24 @@ public partial class LlamaInterface : Control
         offerCts?.Cancel();
 
         currentOfferEntry.ClearOffer();
+        screenshotOfferEntry.ClearOffer();
         currentCardpackEntry.ClearItem();
+        screenshotCardpackEntry.ClearItem();
 
         openButton.Visible = false;
         purchaseButton.Visible = false;
         altPurchaseButton.Visible = false;
         quantitySpinner.Visible = false;
+        screenshotShareButton.Visible = false;
 
         resultEntriesParent.Visible = false;
         surpriseResultPanel.Visible = false;
         soldOutResultPanel.Visible = false;
         choicePanel.Visible = false;
+
+        screenshotShareButton.Visible = false;
+        screenshotResultEntriesParent.Visible = false;
+        screenshotChoicePanel.Visible = false;
 
         currentOfferSelection = null;
         currentCardpackSelection = null;
@@ -438,12 +465,10 @@ public partial class LlamaInterface : Control
 
     public void SetLlamaOffer(string offerId)
     {
-        if (!activeOffers.ContainsKey(offerId))
-        {
+        if (activeOffers.TryGetValue(offerId, out GameOffer value))
+            SetLlamaOffer(value);
+        else
             ClearSelection();
-            return;
-        }
-        SetLlamaOffer(activeOffers[offerId]);
     }
 
     public async void SetLlamaOffer(GameOffer offer)
@@ -487,6 +512,7 @@ public partial class LlamaInterface : Control
             return;
 
         await currentOfferEntry.SetOffer(offer);
+        await screenshotOfferEntry.SetOffer(offer);
         if (ct.IsCancellationRequested)
             return;
 
@@ -517,24 +543,31 @@ public partial class LlamaInterface : Control
             .ThenBy(item => item.template?.DisplayName)
             .ToArray();
         //fill out item list
-        resultEntriesParent.Visible = true;
+        ApplyLlamaItems(sortedItems, llamaResultEntries, itemEntryScene, resultEntriesParent);
+        ApplyLlamaItems(sortedItems, llamaResultScreenshotEntries, screenshotItemEntryScene, screenshotResultEntriesParent, true);
+        screenshotShareButton.Visible = true;
+    }
 
-        while (llamaResultEntries.Count <= items.Length)
+    void ApplyLlamaItems(GameItem[] items, List<GameItemEntry> pool, PackedScene scene, Control parent, bool disableInteraction = false)
+    {
+        parent.Visible = true;
+        while (pool.Count <= items.Length)
         {
-            var newEntry = itemEntryScene.Instantiate<GameItemEntry>();
-            resultEntriesParent.AddChild(newEntry);
-            llamaResultEntries.Add(newEntry);
+            var newEntry = scene.Instantiate<GameItemEntry>();
+            if (disableInteraction)
+                newEntry.preventInteractability = true;
+            parent.AddChild(newEntry);
+            pool.Add(newEntry);
         }
         for (int i = 0; i < items.Length; i++)
         {
-            string templateId = sortedItems[i].templateId;
-            llamaResultEntries[i].Visible = true;
-            llamaResultEntries[i].SetItem(sortedItems[i]);
-            sortedItems[i].SetRewardNotification();
+            pool[i].Visible = true;
+            pool[i].SetItem(items[i]);
+            items[i].SetRewardNotification();
         }
-        for (int i = items.Length; i < llamaResultEntries.Count; i++)
+        for (int i = items.Length; i < pool.Count; i++)
         {
-            llamaResultEntries[i].Visible = false;
+            pool[i].Visible = false;
         }
     }
 
@@ -562,6 +595,7 @@ public partial class LlamaInterface : Control
         quantitySpinner.Visible = maxAmount > 1;
         cardPackItem.MarkItemSeen();
         currentCardpackEntry.SetItem(cardPackItem);
+        screenshotCardpackEntry.SetItem(cardPackItem);
 
         if (cardPackItem.CardPackChoices is not GameItem[] choices)
         {
@@ -570,8 +604,12 @@ public partial class LlamaInterface : Control
         }
 
         choicePanel.Visible = true;
+        screenshotChoicePanel.Visible = true;
         firstChoice.SetItem(choices[0]);
+        screenshotFirstChoice.SetItem(choices[0]);
         secondChoice.SetItem(choices[1]);
+        ScreenshotSecondChoice.SetItem(choices[1]);
+        screenshotShareButton.Visible = true;
     }
 
     public void InspectChoiceLlama(int choiceIndex)

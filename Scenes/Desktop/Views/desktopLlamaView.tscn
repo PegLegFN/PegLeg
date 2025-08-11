@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://4hei03rcfvmu"]
+[gd_scene load_steps=37 format=3 uid="uid://4hei03rcfvmu"]
 
 [ext_resource type="Script" uid="uid://4x8mjwjel8g5" path="res://Scripts/UserInterface/LlamaInterface.cs" id="1_n8h1q"]
 [ext_resource type="PackedScene" uid="uid://b0uxwtxndd6x3" path="res://Scenes/LlamaEntries/llama_offer_entry.tscn" id="2_eeobp"]
@@ -31,10 +31,11 @@
 [ext_resource type="Texture2D" uid="uid://oo036o6whl2w" path="res://Images/InterfaceIcons/OrArrowHD.png" id="25_jae7j"]
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="30_lpoky"]
 [ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="31_jae7j"]
+[ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="32_84r54"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_osi5s"]
 shader = ExtResource("8_ffqoy")
-shader_parameter/ControlSize = Vector2(788, 720)
+shader_parameter/ControlSize = Vector2(778, 680)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -63,7 +64,7 @@ corner_radius_bottom_left = 12
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lpoky"]
 shader = ExtResource("8_ffqoy")
-shader_parameter/ControlSize = Vector2(400, 338)
+shader_parameter/ControlSize = Vector2(450, 306)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -72,7 +73,7 @@ shader_parameter/ApplyCornersToFit = false
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = false
 
-[node name="Llamas" type="MarginContainer" node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorIcon", "llamaScrollArea", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent", "selectedLlamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "altOfferEntry", "altPurchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
+[node name="Llamas" type="MarginContainer" node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorIcon", "llamaScrollArea", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent", "selectedLlamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "altOfferEntry", "altPurchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice", "screenshotShareButton", "screenshotOfferEntry", "screenshotCardpackEntry", "screenshotResultEntriesParent", "screenshotChoicePanel", "screenshotFirstChoice", "ScreenshotSecondChoice")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -82,6 +83,7 @@ script = ExtResource("1_n8h1q")
 catalogLlamaEntryScene = ExtResource("2_eeobp")
 cardpackLlamaEntryScene = ExtResource("3_h03df")
 itemEntryScene = ExtResource("4_1u5ij")
+screenshotItemEntryScene = ExtResource("31_jae7j")
 offerListLoadingIcon = NodePath("HSplitContainer/MarginContainer/SmallLoadingIcon")
 offerListErrorIcon = NodePath("HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error")
 llamaScrollArea = NodePath("HSplitContainer/MarginContainer/ScrollContainer")
@@ -102,6 +104,13 @@ soldOutResultPanel = NodePath("HSplitContainer/Llama Contents/MarginContainer/Ca
 choicePanel = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer")
 firstChoice = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry")
 secondChoice = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry")
+screenshotShareButton = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton")
+screenshotOfferEntry = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/OfferEntry")
+screenshotCardpackEntry = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry")
+screenshotResultEntriesParent = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer")
+screenshotChoicePanel = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer")
+screenshotFirstChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry")
+ScreenshotSecondChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 2
@@ -378,13 +387,13 @@ theme_override_font_sizes/font_size = 32
 text = "Select a Llama"
 text_overrun_behavior = 3
 
-[node name="Button" type="Button" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer"]
+[node name="ShareButton" type="Button" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/Button"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -817,21 +826,25 @@ value = 1.0
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" node_paths=PackedStringArray("matchSize")]
+transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 0
 script = ExtResource("30_lpoky")
+matchSize = NodePath("PegLegWatermark")
 
-[node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport"]
-custom_minimum_size = Vector2(400, 0)
-offset_right = 350.0
-offset_bottom = 306.0
+[node name="PegLegWatermark" parent="SubViewportContainer/SubViewport" instance=ExtResource("32_84r54")]
+offset_right = 64.0
+offset_bottom = 64.0
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/MarginContainer2"]
+[node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark"]
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2"]
 material = SubResource("ShaderMaterial_lpoky")
 layout_mode = 2
 texture = ExtResource("9_hhjpb")
@@ -839,19 +852,25 @@ expand_mode = 1
 script = ExtResource("10_qedio")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="CardPackEntry" type="Control" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer"]
+[node name="OfferEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+layout_mode = 2
+script = ExtResource("9_cn6d8")
+grantedItemEntry = NodePath("../CardPackEntry")
+priceEntry = NodePath("../VBoxContainer/Price")
+
+[node name="CardPackEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
 layout_mode = 2
 script = ExtResource("8_4nkxo")
 includeAmountInName = true
 
-[node name="Pinata" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer"]
+[node name="Pinata" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 material = SubResource("ShaderMaterial_kno20")
 custom_minimum_size = Vector2(0, 128)
@@ -862,17 +881,17 @@ expand_mode = 1
 stretch_mode = 5
 script = ExtResource("10_qedio")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
 layout_mode = 2
 
-[node name="LlamaName" type="Label" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="LlamaName" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Llama Name"
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 15
@@ -880,18 +899,19 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 30
 
-[node name="Items" type="ScrollContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="Items" type="ScrollContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 
-[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items"]
+[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RewardsContainer" type="Container" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
+[node name="RewardsContainer" type="Container" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -899,123 +919,26 @@ script = ExtResource("12_h8kct")
 CompressSpacing = true
 Spacing = Vector2(5, 0)
 
-[node name="RewardEntry" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
+[node name="ChoiceContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
+custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 
-[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer"]
 layout_mode = 2
+ratio = 2.5
 
-[node name="RewardEntry3" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
+[node name="Control" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer"]
 layout_mode = 2
+theme_override_constants/margin_bottom = 20
 
-[node name="RewardEntry4" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry5" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry6" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry7" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry8" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry9" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry10" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry11" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry12" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry13" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry14" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry15" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry16" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry17" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry18" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry19" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry20" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="RewardEntry21" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer" instance=ExtResource("31_jae7j")]
-layout_mode = 2
-
-[node name="SurpriseContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/SurpriseContainer"]
-layout_mode = 2
-texture = ExtResource("11_avnw0")
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/SurpriseContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "It's a surprise..."
-horizontal_alignment = 1
-
-[node name="SoldOutContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/SoldOutContainer"]
-layout_mode = 2
-texture = ExtResource("18_8e8fw")
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/SoldOutContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Sold Out"
-horizontal_alignment = 1
-
-[node name="ChoiceContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 150)
-layout_mode = 2
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer"]
-layout_mode = 2
-ratio = 2.75
-
-[node name="Control" type="MarginContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("4_1u5ij")]
+[node name="RewardEntry" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("4_1u5ij")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1026,14 +949,25 @@ grow_horizontal = 2
 grow_vertical = 2
 autoLinkToViewer = false
 
-[node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+text = "Name"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("4_1u5ij")]
+[node name="RewardEntry" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("4_1u5ij")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1044,14 +978,25 @@ grow_horizontal = 2
 grow_vertical = 2
 autoLinkToViewer = false
 
-[node name="TextureRect3" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+text = "Name"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="TextureRect3" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 texture = ExtResource("25_jae7j")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3"]
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1068,18 +1013,18 @@ theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 48
 text = "OR"
 
-[node name="Price" type="HBoxContainer" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="Price" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1
 script = ExtResource("19_h7xtb")
 
-[node name="Icon" type="TextureRect" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/Price"]
+[node name="Icon" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price"]
 layout_mode = 2
 texture = ExtResource("14_ynnau")
 expand_mode = 3
 
-[node name="PriceText" type="Label" parent="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/Price"]
+[node name="PriceText" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "2500"
@@ -1094,6 +1039,7 @@ vertical_alignment = 1
 [connection signal="IconChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/Pinata" method="set_texture"]
 [connection signal="NameChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/LlamaName" method="set_text"]
 [connection signal="SubtypeIconChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton" to="SubViewportContainer/SubViewport" method="CopyScreenshot"]
 [connection signal="Pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="." method="InspectChoiceLlama"]
 [connection signal="Pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="." method="InspectChoiceLlama"]
 [connection signal="AmountChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
@@ -1110,9 +1056,13 @@ vertical_alignment = 1
 [connection signal="AmountChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
 [connection signal="TooltipChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" method="set_tooltip_text"]
 [connection signal="HoldPressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer/Responsive Button Area" to="." method="PurchaseTokenUpgradeLlama"]
-[connection signal="IconChanged" from="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/Pinata" method="set_texture"]
-[connection signal="SubtypeIconChanged" from="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
-[connection signal="Pressed" from="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="." method="InspectChoiceLlama"]
-[connection signal="Pressed" from="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="." method="InspectChoiceLlama"]
-[connection signal="AmountChanged" from="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/Price/PriceText" method="set_text"]
-[connection signal="IconChanged" from="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/Price/Icon" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/OfferEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/LlamaName" method="set_text"]
+[connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/Pinata" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/LlamaName" method="set_text"]
+[connection signal="SubtypeIconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/Label" method="set_text"]
+[connection signal="Pressed" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="." method="InspectChoiceLlama"]
+[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/Label" method="set_text"]
+[connection signal="Pressed" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="." method="InspectChoiceLlama"]
+[connection signal="AmountChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/PriceText" method="set_text"]
+[connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/Icon" method="set_texture"]

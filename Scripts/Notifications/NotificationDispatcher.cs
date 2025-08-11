@@ -43,8 +43,12 @@ public partial class NotificationDispatcher : Node
         if (FileAccess.FileExists(notifTimerPath))
         {
             //load times from file
-            using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Read);
-            refreshTimes = JsonSerializer.Deserialize<RefreshTimeContainer>(timerFile.GetAsText());
+            try
+            {
+                using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Read);
+                refreshTimes = JsonSerializer.Deserialize<RefreshTimeContainer>(timerFile.GetAsText());
+            }
+            catch { }
         }
         RefreshTimerController.OnHourChanged += HourlyNotifs;
         HourlyNotifs();

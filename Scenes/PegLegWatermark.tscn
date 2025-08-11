@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://ckgomc13aefaq"]
+
+[ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/InterfaceIcons/PegLegIcon256.png" id="1_3vg8i"]
+[ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="1_sjo8y"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="2_sp15k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8q6yo"]
+shader = ExtResource("1_sjo8y")
+shader_parameter/ControlSize = Vector2(150, 27)
+shader_parameter/ControlSizeScale = Vector2(1, 1)
+shader_parameter/Expo = true
+shader_parameter/AlphaStart = 0.0
+shader_parameter/CornerRadius = 10.0
+
+[node name="PegLegWatermark" type="MarginContainer"]
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+z_index = 1
+layout_mode = 2
+theme_override_constants/margin_top = -25
+theme_override_constants/margin_right = -25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = -24
+alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
+material = SubResource("ShaderMaterial_8q6yo")
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("2_sp15k")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 7
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Shared from PegLeg"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("1_3vg8i")
+expand_mode = 1

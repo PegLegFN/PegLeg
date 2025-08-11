@@ -4,6 +4,18 @@ using System.Threading.Tasks;
 
 public partial class SubViewportScreenshotter : SubViewport
 {
+    public override async void _Ready()
+    {
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
+        if (matchSize is not null)
+        {
+            var targetSize = matchSize.Size * matchSize.Scale;
+            Size = (Vector2I)targetSize;
+        }
+        RenderTargetUpdateMode = UpdateMode.Once;
+    }
+
 	[Export]
 	Control matchSize;
 	public async void CopyScreenshot()

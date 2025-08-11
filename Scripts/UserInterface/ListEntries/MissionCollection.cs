@@ -110,12 +110,12 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 
     public void FilterMissions()
     {
-        loadingIcon.Visible = false;
-        missionList.Visible = true;
-
         if (!missionsDirty || !IsVisibleInTree())
             return;
         missionsDirty = false;
+
+        loadingIcon.Visible = false;
+        missionList.Visible = true;
 
         var sortedMissions =
             GameMission.currentMissions?

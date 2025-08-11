@@ -40,7 +40,8 @@ public partial class NotificationManager : Control
         if (instance is null)
             return;
 
-        instance.queueTimer.Start();
+        if (notificationQueue.Count > 0)
+            instance.queueTimer.Start();
     }
 
     Window window;
@@ -60,7 +61,7 @@ public partial class NotificationManager : Control
             notification.OnDismiss += DismissCurrent;
         }
         instance = this;
-        queueTimer = new() { WaitTime = 0.5, OneShot = true };
+        queueTimer = new() { WaitTime = 0.5, OneShot = true, Autostart = false };
         AddChild(queueTimer);
         if (notificationQueue.Count > 0)
             queueTimer.Start();

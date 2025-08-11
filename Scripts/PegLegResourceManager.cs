@@ -397,6 +397,9 @@ public class PegLegResourceManager
     public static JsonObject EventQuestLines => dataSources?["EventQuestLines"];
     public static JsonObject ExpeditionCriteria => dataSources?["ExpeditionCriteria"];
 
+    static JsonObject magicNumbers;
+    public static JsonObject MagicNumbers => magicNumbers ??= LoadResourceObj("magicNumbers.json") ?? [];
+
     //public static bool TryGetDataSource(string dataType, out JsonObject source)
     //{
     //    bool exists = dataSources.ContainsKey(dataType);

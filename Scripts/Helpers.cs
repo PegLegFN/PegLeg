@@ -594,15 +594,25 @@ static partial class Helpers
         OrderRange.Daily => "daily_purchases",
         OrderRange.Weekly => "weekly_purchases",
         OrderRange.Monthly => "monthly_purchases",
-        _ => throw new NotImplementedException(),
+        _ => null,
     };
 
     public static DateTime ToInterval(this OrderRange range) => range switch
     {
-        OrderRange.Daily => RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily).AddDays(-1),
-        OrderRange.Weekly => RefreshTimerController.GetRefreshTime(RefreshTimeType.Weekly).AddDays(-7),
-        _ => throw new NotImplementedException(),
+        OrderRange.Daily => RefreshTimerController.GetLastRefreshTime(RefreshTimeType.Daily),
+        OrderRange.Weekly => RefreshTimerController.GetLastRefreshTime(RefreshTimeType.Weekly),
+        _ => default,
     };
+
+    public static DateTime WeeklyRefresh(this DateTime from, DayOfWeek day = DayOfWeek.Tuesday, int hour = 0, int minute = 0)
+    {
+        //tuesday 13:00
+        var today = from.AddHours(-hour).AddMinutes(-minute).Date; // 14:00
+        int targetDay = (int)day; //tuesday 2
+        int utcDayOfWeek = (int)today.DayOfWeek; //monday 1
+        int daysUntilTarget = ((6+targetDay) - utcDayOfWeek) % 7;
+        return today.AddDays(daysUntilTarget + 1).AddHours(hour).AddMinutes(minute);
+    }
 
     public static Func<T, bool> ToFunc<T>(this Predicate<T> predicate, bool defaultResult = true) => t => predicate.Try(t, defaultResult);
     public static bool Try<T>(this Predicate<T> predicate, T t, bool defaultResult = true) => predicate is not null ? predicate(t) : defaultResult;
