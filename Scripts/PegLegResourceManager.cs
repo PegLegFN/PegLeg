@@ -11,7 +11,7 @@ using FileAccess = Godot.FileAccess;
 
 public class PegLegResourceManager
 {
-    public const string packageFolderPath = "res://Resources/";
+    public const string packageFolderPath = "res://PegLegResourcePacks/";
     public const string resourcePath = "res://PegLegResources/";
     public const string fallbackResourcePath = "res://FallbackResources/";
     public const string overrideResourcePath = "user://CustomResources/";
