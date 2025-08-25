@@ -12,6 +12,8 @@ public partial class XpLimitController : Control
     [Export]
     XpLimitDisplay creativeXpDisplay;
     [Export]
+    XpLimitDisplay superchargedXpDisplay;
+    [Export]
     Godot.Range xpProgress;
     [Export]
     Label levelLabel;
@@ -23,6 +25,8 @@ public partial class XpLimitController : Control
     Control loading;
     [Export]
     Control content;
+    [Export]
+    Control superchargedContent;
 
     GameProfile stwProfile;
     GameProfile brProfile;
@@ -31,12 +35,14 @@ public partial class XpLimitController : Control
     {
         content.Visible = false;
         loading.Visible = true;
+        RefreshTimerController.OnHourChanged += ForceUpdateProfiles;
         GameAccount.ActiveAccountChanged += UpdateAccount;
         UpdateAccount();
     }
 
     public override void _ExitTree()
     {
+        RefreshTimerController.OnHourChanged -= ForceUpdateProfiles;
         GameAccount.ActiveAccountChanged -= UpdateAccount;
     }
 
@@ -49,17 +55,11 @@ public partial class XpLimitController : Control
             var account = GameAccount.activeAccount;
             if (!await account.Authenticate())
                 return;
-            if (stwProfile is not null)
-                stwProfile.OnProfileChanged -= UpdateProfiles;
+
             stwProfile = account.GetProfile(FnProfileTypes.AccountItems);
-            stwProfile.OnProfileChanged += UpdateProfiles;
-
-            if (brProfile is not null)
-                brProfile.OnProfileChanged -= UpdateProfiles;
             brProfile = account.GetProfile(FnProfileTypes.CosmeticInventory);
-            brProfile.OnProfileChanged += UpdateProfiles;
 
-            UpdateProfiles();
+            await UpdateProfiles(false);
         }
         finally
         {
@@ -67,17 +67,19 @@ public partial class XpLimitController : Control
         }
     }
 
-    private void UpdateProfiles() => UpdateProfiles(false);
-    private void ForceUpdateProfiles() => UpdateProfiles(true);
-    private async void UpdateProfiles(bool force)
+    private async void UpdateProfiles() => await UpdateProfiles(false);
+    private async void ForceUpdateProfiles() => await UpdateProfiles(true);
+    private async Task UpdateProfiles(bool force)
     {
         loading.Visible = true;
         content.Visible = false;
         try
         {
+            //for some reason, XP stat changes don't increment the profile revision, so we need to completely re-fetch the BR profile
             await Task.WhenAll(
                 stwProfile.Query(force),
-                brProfile.Query(force)
+                brProfile.Query(force, force),
+                CalenderRequests.CheckCalender()
             );
             UpdateXP();
             content.Visible = true;
@@ -88,28 +90,63 @@ public partial class XpLimitController : Control
         }
     }
 
+    void CheckForNewWeek()
+    {
+        if (stwReset < DateTime.Now || playtimeReset < DateTime.Now)
+            ForceUpdateProfiles();
+    }
+
+    DateTime stwReset;
+    DateTime playtimeReset;
+
     void UpdateXP()
     {
-        var stwReset = DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Tuesday, 14);
-        var playtimeReset = DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Thursday, 14);
+        stwReset = DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Tuesday, 14);
+        playtimeReset = DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Thursday, 14);
         var playtimeLimit = PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>();
 
         var stwXpItem = stwProfile.GetFirstTemplateItem("Token:stw_accolade_tracker");
+
+        bool ignoreStwXp = (stwXpItem?.attributes["last_reset"]?.Deserialize<DateTime>() ?? default) < stwReset.AddDays(-7);
+        int? brWeek = CalenderRequests.BRSeasonWeek;
+        bool ignorePlaytimeXp = brWeek != brProfile.statAttributes["playtime_xp"]?["currentWeek"]?.GetValue<int?>();
+        bool ignoreCreativeXp = brWeek != brProfile.statAttributes["creative_dynamic_xp"]?["currentWeek"]?.GetValue<int?>();
+
         stwXpDisplay.SetXpProgress(
-            stwXpItem?.attributes["weekly_xp"]?.GetValue<int?>() ?? 0, 
+            ignoreStwXp ? 0 : (stwXpItem?.attributes["weekly_xp"]?.GetValue<int?>() ?? 0), 
             stwXpItem?.template["SoftWeeklyXPCap"].GetValue<int>() ?? 1,
             stwReset
         );
         playtimeXpDisplay.SetXpProgress(
-            brProfile.statAttributes["playtime_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0, 
+            ignorePlaytimeXp ? 0: (brProfile.statAttributes["playtime_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0), 
             PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>(),
             playtimeReset
         );
         creativeXpDisplay.SetXpProgress(
-            brProfile.statAttributes["creative_dynamic_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0, 
+            ignoreCreativeXp ? 0: (brProfile.statAttributes["creative_dynamic_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0), 
             PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>(),
             playtimeReset
         );
+
+        int rested = brProfile.statAttributes["rested_xp"]?.GetValue<int?>() ?? 0;
+        if (rested > 0 && superchargedXpDisplay is not null)
+        {
+            int restedMax = brProfile.statAttributes["rested_xp_cumulative"]?.GetValue<int?>() ?? 0;
+            double restedMult = brProfile.statAttributes["rested_xp_mult"]?.GetValue<double?>() ?? 0;
+            superchargedXpDisplay.SetXpProgress(
+                rested,
+                restedMax,
+                null
+            );
+            GD.Print($"Mult: {restedMult}");
+            superchargedXpDisplay.TooltipText = $"The next {rested.Notate()} XP will be earned {restedMult:0.#}x faster than usual";
+            superchargedContent.Visible = true;
+        }
+        else
+        {
+            if (superchargedContent is not null)
+                superchargedContent.Visible = false;
+        }
 
         var currentXP = brProfile.statAttributes["xp"]?.GetValue<int>() ?? 0;
         var currentLV = brProfile.statAttributes["level"]?.GetValue<int>() ?? 0;
@@ -118,7 +155,7 @@ public partial class XpLimitController : Control
         xpAmount.Text = currentXP.Notate();
         xpProgress.Value = (float)currentXP / 80000;
 
-        var requiredXP = ((200 - currentLV) * 80000) - currentXP;
+        var requiredXP = Mathf.Max(((200 - currentLV) * 80000) - currentXP, 0);
 
         xpUntilMax.Text = requiredXP.Compactify();
     }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://53fn442ut5dy"]
+[gd_scene load_steps=45 format=3 uid="uid://53fn442ut5dy"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_8m0vl"]
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="2_shdc5"]
@@ -11,14 +11,29 @@
 [ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="4_nfikh"]
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="6_cam1p"]
 [ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="7_q2g84"]
+[ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="11_8mrrf"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="12_nfbfc"]
 [ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="12_u3sfv"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="13_ffxkp"]
+[ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="16_qw5ag"]
+[ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="17_8mrrf"]
+[ext_resource type="Script" uid="uid://6kq5n7f3yc4n" path="res://Scripts/UserInterface/Dashboard/XpLimitController.cs" id="18_53d0n"]
+[ext_resource type="Script" uid="uid://dwvt6ybtex6dg" path="res://Scripts/UsernameLabel.cs" id="19_d1dn6"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="20_rx8l1"]
+[ext_resource type="Script" uid="uid://bwua60il6w4x2" path="res://Scripts/UserInterface/Dashboard/XpLimitDisplay.cs" id="21_x8104"]
+[ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="22_s10ll"]
+[ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="23_rrk0c"]
+[ext_resource type="Shader" uid="uid://d1dxev01cxp3l" path="res://Shaders/StwXpBar.gdshader" id="24_gdkuu"]
+[ext_resource type="Texture2D" uid="uid://bd6ewmxuan2o5" path="res://Images/InterfaceIcons/Fortnite-Mission-Pattern-512.png" id="25_er7rf"]
+[ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="26_8fu1x"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="26_klq7w"]
+[ext_resource type="Texture2D" uid="uid://d4kjqspxmn12f" path="res://Images/InterfaceIcons/CreativeStaggared.png" id="27_nirxt"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="28_0ioo5"]
+[ext_resource type="Texture2D" uid="uid://dlbasrvn2ilmd" path="res://Images/TextureResources/progress-wheel.tres" id="29_1ubti"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8qkd3"]
 shader = ExtResource("3_2njcm")
-shader_parameter/ControlSize = Vector2(0, 128)
+shader_parameter/ControlSize = Vector2(574, 128)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -37,16 +52,123 @@ metadata/_snap_enabled = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c25kl"]
 shader = ExtResource("7_q2g84")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(596, 144)
 shader_parameter/ControlSizeScale = Vector2(0.66, 1)
 shader_parameter/Expo = false
 shader_parameter/AlphaStart = 0.8
 shader_parameter/CornerRadius = 48.0
 
-[node name="MissionViewer" node_paths=PackedStringArray("missionEntry") instance=ExtResource("1_8m0vl")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pv2ri"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.6, 0.6, 0.6, 0.752941)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eekvt"]
+bg_color = Color(1, 0.470588, 0, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_04eig"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ft8p"]
+bg_color = Color(0, 0.75, 0.75, 1)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_onntx"]
+shader = ExtResource("24_gdkuu")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.5
+shader_parameter/tileScale = 0.15
+shader_parameter/tileSpeed = 0.15
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("25_er7rf")
+shader_parameter/tint = Color(0.88, 0.4, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pefo1"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hr6ve"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ub83p"]
+shader = ExtResource("24_gdkuu")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.51
+shader_parameter/tileScale = 0.4
+shader_parameter/tileSpeed = 0.2
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = false
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("26_8fu1x")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e84qy"]
+shader = ExtResource("24_gdkuu")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.03
+shader_parameter/tileScale = 0.5
+shader_parameter/tileSpeed = 0.35
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("27_nirxt")
+shader_parameter/tint = Color(0, 0.9, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7kl1j"]
+shader = ExtResource("24_gdkuu")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.79
+shader_parameter/tileScale = 0.25
+shader_parameter/tileSpeed = 0.275
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = true
+shader_parameter/pattern = ExtResource("28_0ioo5")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
+
+[node name="MissionViewer" node_paths=PackedStringArray("missionEntry", "secondMissionEntry") instance=ExtResource("1_8m0vl")]
 theme = ExtResource("2_shdc5")
 script = ExtResource("3_nhmtr")
 missionEntry = NodePath("Control/WindowContents/CenterContainer/MissionEntry")
+secondMissionEntry = NodePath("SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry")
 isUserClosable = true
 
 [node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="0"]
@@ -142,12 +264,37 @@ size_flags_horizontal = 3
 theme_override_constants/separation = -4
 alignment = 1
 
-[node name="Mission Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
 layout_mode = 2
+
+[node name="Mission Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 32
 text = "Mission name"
 vertical_alignment = 1
+
+[node name="ShareBtn" type="Button" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShareBtn" index="0"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_8mrrf")
+expand_mode = 1
 
 [node name="Zone Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
 layout_mode = 2
@@ -188,7 +335,6 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
-text_overrun_behavior = 1
 
 [node name="MissionAlertItemEntry2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="1"]
 layout_mode = 2
@@ -205,7 +351,6 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
-text_overrun_behavior = 1
 
 [node name="MissionAlertItemEntry3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="2"]
 layout_mode = 2
@@ -222,7 +367,6 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
-text_overrun_behavior = 1
 
 [node name="MissionAlertItemEntry4" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="3"]
 layout_mode = 2
@@ -239,7 +383,6 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
-text_overrun_behavior = 1
 
 [node name="MissionAlertItemEntry5" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="4"]
 layout_mode = 2
@@ -256,7 +399,6 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
-text_overrun_behavior = 1
 
 [node name="Rewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="1"]
 layout_mode = 2
@@ -270,8 +412,9 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Mission Rewards"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1"]
+[node name="HBoxContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1"]
 layout_mode = 2
+columns = 4
 
 [node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="0" instance=ExtResource("6_cam1p")]
 layout_mode = 2
@@ -283,6 +426,12 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="3" instance=ExtResource("6_cam1p")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="4" instance=ExtResource("6_cam1p")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal6" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="5" instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
 [node name="AlertRewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="1"]
@@ -304,13 +453,13 @@ layout_mode = 2
 [node name="RewardEntryHorizontal2" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="1" instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal3" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal6" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
 [node name="PowerLevel" type="Control" parent="Control/WindowContents/CenterContainer/MissionEntry" index="3"]
@@ -322,12 +471,1611 @@ layout_mode = 0
 offset_top = 17.0
 offset_bottom = 41.0
 
+[node name="SubViewportContainer4" type="SubViewportContainer" parent="Control/WindowContents/CenterContainer/MissionEntry" index="4"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="XpSummaryViewport" type="SubViewport" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4" index="0" node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("16_qw5ag")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport" index="0" instance=ExtResource("17_8mrrf")]
+
+[node name="XPProgress" type="PanelContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark" index="1" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+custom_minimum_size = Vector2(485, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("18_53d0n")
+stwXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer")
+playtimeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2")
+creativeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3")
+superchargedXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+xpProgress = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar")
+levelLabel = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer/Label2")
+xpAmount = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/Label")
+xpUntilMax = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2/Label")
+loading = NodePath("VBoxContainer/Body/SmallLoadingIcon")
+content = NodePath("VBoxContainer/Body/XPContent")
+superchargedContent = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress" index="0"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "Seasonal Pass XP"
+horizontal_alignment = 1
+script = ExtResource("19_d1dn6")
+
+[node name="Body" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SmallLoadingIcon" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body" index="0" instance=ExtResource("20_rx8l1")]
+layout_mode = 2
+
+[node name="XPContent" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body" index="1"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="0" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "STW Mission XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" index="1"]
+material = SubResource("ShaderMaterial_onntx")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" index="2"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="1" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" index="0"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Playtime XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" index="1"]
+material = SubResource("ShaderMaterial_ub83p")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.51
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" index="2"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="2" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" index="0"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Creative XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" index="1"]
+material = SubResource("ShaderMaterial_e84qy")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.03
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" index="2"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="3" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4" index="0"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4" index="1"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Supercharged XP Remaining"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4" index="2"]
+material = SubResource("ShaderMaterial_7kl1j")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.79
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent" index="1"]
+layout_mode = 2
+
+[node name="MarginContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent" index="2"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer" index="0"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 0.63
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("29_1ubti")
+texture_progress = ExtResource("29_1ubti")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0, 0.766667, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "??'???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "/80K"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer" index="2"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = " to Lv 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubViewportContainer4" type="SubViewportContainer" parent="." index="3"]
+visible = false
+layout_mode = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="XpSummaryViewport" type="SubViewport" parent="SubViewportContainer4" index="0" node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("16_qw5ag")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="SubViewportContainer4/XpSummaryViewport" index="0" instance=ExtResource("17_8mrrf")]
+
+[node name="SharedMissionEntry" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark" index="1" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
+layout_mode = 2
+script = ExtResource("3_tqai8")
+fullItems = true
+alertModifierLayout = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Modifiers")
+alertModifierParent = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Modifiers")
+missionRewardLayout = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards")
+missionRewardParent = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer")
+alertRewardLayout = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards")
+alertRewardParent = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer")
+defaultBackground = ExtResource("4_n2q53")
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="0"]
+layout_mode = 2
+theme_type_variation = &"SecondaryPanel"
+
+[node name="MissionBackground" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="1"]
+material = SubResource("ShaderMaterial_8qkd3")
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("4_nfikh")
+expand_mode = 1
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MissionBackground" index="0"]
+self_modulate = Color(0.145098, 0.145098, 0.145098, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_kn5b0")
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="2"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer" index="0"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="0"]
+layout_mode = 2
+theme_override_constants/margin_left = -24
+theme_override_constants/margin_top = -8
+theme_override_constants/margin_right = -8
+theme_override_constants/margin_bottom = -8
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/MarginContainer" index="0"]
+material = SubResource("ShaderMaterial_c25kl")
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.501961)
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="1"]
+layout_mode = 2
+
+[node name="MissionIcon" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0"]
+layout_mode = 2
+texture = ExtResource("3_vntdm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(225, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -4
+alignment = 1
+
+[node name="Mission Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
+layout_mode = 2
+theme_override_constants/line_spacing = -4
+theme_override_font_sizes/font_size = 32
+text = "Mission name"
+vertical_alignment = 1
+
+[node name="Zone Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_constants/line_spacing = -4
+theme_override_font_sizes/font_size = 16
+text = "Zone name"
+
+[node name="Control" type="Control" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="2"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="3"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "This description is a placeholder description. This description is a placeholder description. This description is a placeholder description. "
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Modifiers" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="0"]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="MissionAlertItemEntry" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="0"]
+layout_mode = 2
+script = ExtResource("12_nfbfc")
+
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="0"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+texture = ExtResource("4_8tulo")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Metal Corosion"
+
+[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="1"]
+layout_mode = 2
+script = ExtResource("12_nfbfc")
+
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="0"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+texture = ExtResource("4_8tulo")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Metal Corosion"
+
+[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="2"]
+layout_mode = 2
+script = ExtResource("12_nfbfc")
+
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="0"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+texture = ExtResource("4_8tulo")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Metal Corosion"
+
+[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="3"]
+layout_mode = 2
+script = ExtResource("12_nfbfc")
+
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="0"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+texture = ExtResource("4_8tulo")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Metal Corosion"
+
+[node name="MissionAlertItemEntry5" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="4"]
+layout_mode = 2
+script = ExtResource("12_nfbfc")
+
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="0"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+texture = ExtResource("4_8tulo")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Metal Corosion"
+
+[node name="Rewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="1"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MissionRewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Mission Rewards"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1"]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="0" instance=ExtResource("6_cam1p")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal2" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="1" instance=ExtResource("6_cam1p")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal3" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="2" instance=ExtResource("6_cam1p")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal4" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="3" instance=ExtResource("6_cam1p")]
+layout_mode = 2
+
+[node name="AlertRewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Alert Rewards"
+
+[node name="HBoxContainer" type="GridContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="1"]
+layout_mode = 2
+size_flags_horizontal = 0
+columns = 3
+
+[node name="RewardEntryHorizontal" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="0" instance=ExtResource("12_u3sfv")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal2" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="1" instance=ExtResource("12_u3sfv")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal4" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" instance=ExtResource("12_u3sfv")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal5" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" instance=ExtResource("12_u3sfv")]
+layout_mode = 2
+
+[node name="RewardEntryHorizontal6" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" instance=ExtResource("12_u3sfv")]
+layout_mode = 2
+
+[node name="PowerLevel" type="Control" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="3"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PowerLevelIndicator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel" index="0" instance=ExtResource("13_ffxkp")]
+layout_mode = 0
+offset_top = 17.0
+offset_bottom = 41.0
+
+[node name="SubViewportContainer4" type="SubViewportContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="4"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="XpSummaryViewport" type="SubViewport" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4" index="0" node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("16_qw5ag")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport" index="0" instance=ExtResource("17_8mrrf")]
+
+[node name="XPProgress" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark" index="1" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+custom_minimum_size = Vector2(485, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("18_53d0n")
+stwXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer")
+playtimeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2")
+creativeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3")
+superchargedXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+xpProgress = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar")
+levelLabel = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer/Label2")
+xpAmount = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/Label")
+xpUntilMax = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2/Label")
+loading = NodePath("VBoxContainer/Body/SmallLoadingIcon")
+content = NodePath("VBoxContainer/Body/XPContent")
+superchargedContent = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress" index="0"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "Seasonal Pass XP"
+horizontal_alignment = 1
+script = ExtResource("19_d1dn6")
+
+[node name="Body" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SmallLoadingIcon" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body" index="0" instance=ExtResource("20_rx8l1")]
+layout_mode = 2
+
+[node name="XPContent" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body" index="1"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="0" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "STW Mission XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" index="1"]
+material = SubResource("ShaderMaterial_onntx")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" index="2"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="1" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" index="0"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Playtime XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" index="1"]
+material = SubResource("ShaderMaterial_ub83p")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.51
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" index="2"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="2" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" index="0"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Creative XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" index="1"]
+material = SubResource("ShaderMaterial_e84qy")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.03
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" index="2"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" index="3" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("21_x8104")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4" index="0"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4" index="1"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Supercharged XP Remaining"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" index="1" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("22_s10ll")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer" index="0"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pv2ri")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" index="0"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eekvt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel" index="1"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_rrk0c")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_04eig")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6ft8p")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4" index="2"]
+material = SubResource("ShaderMaterial_7kl1j")
+layout_mode = 2
+script = ExtResource("26_klq7w")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" index="0"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_pefo1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hr6ve")
+max_value = 1.0
+value = 0.79
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent" index="1"]
+layout_mode = 2
+
+[node name="MarginContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent" index="2"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer" index="0"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 0.63
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("29_1ubti")
+texture_progress = ExtResource("29_1ubti")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0, 0.766667, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "??'???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "/80K"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer" index="2"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = " to Lv 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="BackgroundChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MissionBackground" method="set_texture"]
 [connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/RichTextLabel" method="set_text"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/MissionIcon" method="set_texture"]
 [connection signal="LocationChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Zone Name" method="set_text"]
-[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Mission Name" method="set_text"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Mission Name" method="set_text"]
 [connection signal="PowerLevelChanged" from="Control/WindowContents/CenterContainer/MissionEntry" to="Control/WindowContents/CenterContainer/MissionEntry/PowerLevel/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShareBtn" to="SubViewportContainer4/XpSummaryViewport" method="CopyScreenshot"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry/TextureRect6" method="set_texture"]
 [connection signal="NameChanged" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry/Label" method="set_text"]
 [connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" method="set_tooltip_text"]
@@ -343,5 +2091,35 @@ offset_bottom = 41.0
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5/TextureRect6" method="set_texture"]
 [connection signal="NameChanged" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5/Label" method="set_text"]
 [connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" to="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" method="set_tooltip_text"]
+[connection signal="value_changed" from="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="Control/WindowContents/CenterContainer/MissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="BackgroundChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MissionBackground" method="set_texture"]
+[connection signal="DescriptionChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/RichTextLabel" method="set_text"]
+[connection signal="IconChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/MissionIcon" method="set_texture"]
+[connection signal="LocationChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Zone Name" method="set_text"]
+[connection signal="NameChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Mission Name" method="set_text"]
+[connection signal="PowerLevelChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="IconChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry/Label" method="set_text"]
+[connection signal="TooltipChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" method="set_tooltip_text"]
+[connection signal="IconChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2/Label" method="set_text"]
+[connection signal="TooltipChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" method="set_tooltip_text"]
+[connection signal="IconChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3/Label" method="set_text"]
+[connection signal="TooltipChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" method="set_tooltip_text"]
+[connection signal="IconChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4/Label" method="set_text"]
+[connection signal="TooltipChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" method="set_tooltip_text"]
+[connection signal="IconChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5/Label" method="set_text"]
+[connection signal="TooltipChanged" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" method="set_tooltip_text"]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 
 [editable path="Control/WindowContents/CenterContainer/MissionEntry/PowerLevel/PowerLevelIndicator"]
+[editable path="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel/PowerLevelIndicator"]

@@ -1,41 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://fcp6vypncmbj"]
+[gd_scene load_steps=3 format=3 uid="uid://fcp6vypncmbj"]
 
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="1_sj0kl"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="2_0faev"]
-[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="3_6jdye"]
-[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_2hchk"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_julx1"]
-resource_local_to_scene = true
-shader = ExtResource("2_0faev")
-shader_parameter/ControlSize = Vector2(48, 48)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
+[ext_resource type="Material" uid="uid://3nw1g0lbs4qq" path="res://Sh_Materials/ItemRewardMatSmall.tres" id="2_ntug5"]
 
 [node name="RewardEntry" instance=ExtResource("1_sj0kl")]
 custom_minimum_size = Vector2(48, 48)
 offset_right = 48.0
 offset_bottom = 48.0
 
-[node name="Overlays_LeftIcon#TextureRect" type="TextureRect" parent="." index="0"]
-material = SubResource("ShaderMaterial_julx1")
-layout_mode = 2
-texture = ExtResource("3_6jdye")
-expand_mode = 1
-script = ExtResource("4_2hchk")
-syncControlSize = true
-
-[node name="RightIconContainer" parent="Overlays/AmountContainer" index="0"]
-custom_minimum_size = Vector2(16, 0)
-
-[node name="LeftIconContainer" parent="Overlays/AmountContainer" index="2"]
-custom_minimum_size = Vector2(16, 0)
+[node name="TextureRect" parent="." index="0"]
+material = ExtResource("2_ntug5")
 
 [node name="AmountLabel" parent="Overlays/AmountContainer" index="4"]
 theme_override_font_sizes/font_size = 16
-
-[node name="InteractableContainer" parent="Overlays" index="3"]
-custom_minimum_size = Vector2(12, 0)
-
-[connection signal="IconChanged" from="." to="Overlays_LeftIcon#TextureRect" method="set_texture"]
-[connection signal="RarityChanged" from="." to="Overlays_LeftIcon#TextureRect" method="set_self_modulate"]

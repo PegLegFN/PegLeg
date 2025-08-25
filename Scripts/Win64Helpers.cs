@@ -1,11 +1,8 @@
 ﻿
 using Godot;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
-
-
 
 #if GODOT_WINDOWS
 using System.Windows;
@@ -14,6 +11,12 @@ using static Godot.Gradient;
 
 static partial class Win64Helpers
 {
+#if GODOT_WINDOWS
+    public const bool isWindows = true;
+#else
+    public const bool isWindows = false;
+#endif
+
     static nint NativeWindowHandle(Window window) => 
         new(DisplayServer.WindowGetNativeHandle(DisplayServer.HandleType.WindowHandle, window.GetWindowId()));
 

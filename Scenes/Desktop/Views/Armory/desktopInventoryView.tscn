@@ -50,7 +50,7 @@ shader_parameter/smoothness = 0.25
 shader_parameter/msdf = false
 shader_parameter/skipSDF = false
 
-[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator")]
+[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -58,7 +58,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ix0kh")
 itemList = NodePath("VBoxContainer/ScrollContainer")
-searchBox = NodePath("VBoxContainer/Search")
+searchBox = NodePath("VBoxContainer/HBoxContainer/Search")
 targetUser = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/User")
 devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All")
 tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters")
@@ -66,6 +66,7 @@ targetProfile = "campaign"
 typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "", "Schematic", "Hero", "Defender", "Worker", "AccountResource")
 creatorImageParent = NodePath("Creators")
 inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
+heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
 
 [node name="Creators" type="Control" parent="."]
 layout_mode = 2
@@ -92,7 +93,18 @@ expand_mode = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Search" type="LineEdit" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"Panel3Pad"
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+text = "Press Enter to filter longer lists"
+
+[node name="Search" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3

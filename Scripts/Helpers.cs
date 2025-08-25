@@ -298,6 +298,17 @@ static partial class Helpers
             if (result.Content == OfflineContent)
                 resultNode["offline"] = true;
         }
+        catch (ArgumentNullException)
+        {
+            GD.Print("result text was null");
+            resultNode = new JsonObject()
+            {
+                ["success"] = result.IsSuccessStatusCode,
+                ["code"] = (int)result.StatusCode
+            };
+            if (result.Content == OfflineContent)
+                resultNode["offline"] = true;
+        }
 
         if (result.IsSuccessStatusCode)
             resultNode ??= new JsonObject() { ["success"] = true };

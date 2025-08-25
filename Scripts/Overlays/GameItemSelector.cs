@@ -105,7 +105,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     }
 
     public static bool RecyclablePredicate(GameItem item) => 
-        !item.template.Unrecyclable && 
+        item.template?.Unrecyclable == false && 
         item.attributes?["favorite"]?.GetValue<bool>() != true &&
         item.attributes?["squad_id"] is null;
 

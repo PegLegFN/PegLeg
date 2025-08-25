@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cnerbcrevhc7w"]
+[gd_scene load_steps=15 format=3 uid="uid://cnerbcrevhc7w"]
 
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_3peps"]
 [ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_t6yh2"]
@@ -12,10 +12,14 @@
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="7_ousqk"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="8_h5blw"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="9_h5blw"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="13_1c244"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jm7ic"]
+resource_local_to_scene = true
 shader = ExtResource("2_t6yh2")
-shader_parameter/ControlSize = Vector2(260, 32)
+shader_parameter/ControlSize = Vector2(256, 32)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.0115877
 
 [node name="SupportHero" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroPerkEntry")]
 offset_right = 256.0
@@ -25,7 +29,7 @@ heroAbilityEntries = []
 heroPerkEntry = NodePath("MarginContainer/HBoxContainer/HBoxContainer2")
 
 [node name="ColorRect" type="TextureRect" parent="."]
-modulate = Color(0.9, 0.615, 0, 1)
+self_modulate = Color(0.9, 0.615, 0, 1)
 texture_repeat = 2
 material = SubResource("ShaderMaterial_jm7ic")
 layout_mode = 2
@@ -133,12 +137,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+visible = false
 material = ExtResource("9_h5blw")
 layout_mode = 2
 texture = ExtResource("7_ousqk")
 expand_mode = 3
 
+[node name="Responsive Button Area" parent="." instance=ExtResource("13_1c244")]
+layout_mode = 2
+
 [connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="RarityChanged" from="." to="ColorRect" method="set_self_modulate"]
 [connection signal="SubtypeIconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/Icon/Subtype" method="set_texture"]
 [connection signal="IconChanged" from="MarginContainer/HBoxContainer/HBoxContainer2" to="MarginContainer/HBoxContainer/HBoxContainer2/TextureRect" method="set_texture"]
 [connection signal="NameChanged" from="MarginContainer/HBoxContainer/HBoxContainer2" to="MarginContainer/HBoxContainer/HBoxContainer2/Label" method="set_text"]

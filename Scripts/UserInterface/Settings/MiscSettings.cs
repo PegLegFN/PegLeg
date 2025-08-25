@@ -38,6 +38,11 @@ public partial class MiscSettings : Control
         OS.ShellOpen(ProjectSettings.GlobalizePath("user://"));
     }
 
+    void OpenInstallationFolder()
+    {
+        OS.ShellOpen(Helpers.GlobalisePath("res://"));
+    }
+
     void CloseApp()
     {
         GetTree().Quit();

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Nodes;
 
@@ -70,6 +71,19 @@ public partial class NotificationManager : Control
         AppConfig.OnConfigChanged += OnConfigChanged;
         MouseEntered += CheckPassthrough;
     }
+
+    public void CheckIfFullscreen()
+    {
+        //use win32 api to get focused window handle
+        //If focused window is on the same display as
+        // notifications and is the same size as the
+        // screen, move notifications to another screen
+        // or hide them
+        //An exception is provided for if the current process
+        // is Fortnite, in which we can move the notification
+        // window to the bottom center, out of the way of the HUD
+    }
+
 
     private void CheckPassthrough()
     {

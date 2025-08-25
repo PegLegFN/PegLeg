@@ -6,6 +6,8 @@ public partial class SubViewportScreenshotter : SubViewport
 {
     public override async void _Ready()
     {
+		if(GetParent() is SubViewportContainer containerParent)
+            containerParent.Visible = false;
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
         if (matchSize is not null)
@@ -19,9 +21,16 @@ public partial class SubViewportScreenshotter : SubViewport
 	[Export]
 	Control matchSize;
 	public async void CopyScreenshot()
-	{
-		var img = await CaptureScreenshot();
-		Win64Helpers.ClipboardSetImage(img);
+    {
+#if !GODOT_WINDOWS
+        GD.PushWarning("Can't share images on non-windows platforms");
+        return;
+#endif
+        var img = await CaptureScreenshot();
+        if(Input.IsKeyPressed(Key.Shift))
+            Win64Helpers.ClipboardSetImage(img);
+        else
+            ShareImagePopup.ShowImage(img);
 	}
 
 	public async Task<Image> CaptureScreenshot()

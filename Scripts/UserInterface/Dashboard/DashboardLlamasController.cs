@@ -18,19 +18,20 @@ public partial class DashboardLlamasController : Control
 
     public override void _Ready()
     {
-        llamaEntries = llamaEntryContainer
+        llamaEntries = [.. llamaEntryContainer
             .GetChildren()
             .Select(c => c is GameOfferEntry offerEntry ? offerEntry : null)
-            .Where(oe => oe is not null)
-            .ToArray();
+            .Where(oe => oe is not null)];
         VisibilityChanged += LoadShopLlamas;
-        RefreshTimerController.OnHourChanged += ForceLoadShopLlamas;
-        ForceLoadShopLlamas();
+        RefreshTimerController.OnHourChanged += UpdateShopLlamas;
+        GameAccount.ActiveAccountChanged += UpdateShopLlamas;
+        UpdateShopLlamas();
     }
 
     public override void _ExitTree()
     {
-        RefreshTimerController.OnHourChanged -= ForceLoadShopLlamas;
+        RefreshTimerController.OnHourChanged -= UpdateShopLlamas;
+        GameAccount.ActiveAccountChanged -= UpdateShopLlamas;
     }
 
     public void GoToLlamaTab() => LlamaInterface.SelectLlamaTab();
@@ -38,13 +39,14 @@ public partial class DashboardLlamasController : Control
 
     CancellationTokenSource llamaShopCTS;
     SemaphoreSlim llamaShopSemaphore = new(1);
-    async void LoadShopLlamas() => await LoadShopLlamasAsync();
-    async void ForceLoadShopLlamas() => await LoadShopLlamasAsync(true);
-    bool llamasDirty = false;
-    async Task LoadShopLlamasAsync(bool force = false)
+    void UpdateShopLlamas()
     {
-        if (force)
-            llamasDirty = true;
+        llamasDirty = true;
+        LoadShopLlamas();
+    }
+    bool llamasDirty = false;
+    async void LoadShopLlamas()
+    {
         if (!IsVisibleInTree() || !llamasDirty)
             return;
         llamasDirty = false;
@@ -63,12 +65,13 @@ public partial class DashboardLlamasController : Control
 
             await Helpers.WaitForFrame();
 
-            var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, force ? null : RefreshTimeType.Hourly);
-            //var randomStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.RandomLlamaCatalog, force ? null : RefreshTimeType.Hourly);
+            var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
             if (ct.IsCancellationRequested)
                 return;
 
             var offers = xrayStorefront.Offers.Where(o => (o.DailyLimit > 0 || o.EventLimit > 0) && o.OfferId != "B9B0CE758A5049F898773C1A47A69ED4").ToArray();
+
+            await GameAccount.activeAccount.GenerateXRayLlamaResults(offers.Any(o => o.Price.quantity == 0));
 
             for (int i = 0; i < llamaEntries.Length; i++)
             {

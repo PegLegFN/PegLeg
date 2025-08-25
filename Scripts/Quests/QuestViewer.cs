@@ -136,7 +136,13 @@ public partial class QuestViewer : Control
                 objectiveEntries.Add(newEntry);
             }
             var objective = objectives[i].AsObject();
-            if (objective["Hidden"]?.GetValue<bool>() ?? false)
+            if (
+                objective["Hidden"]?.GetValue<bool>() ?? false || 
+                (
+                    string.IsNullOrWhiteSpace(objective["Description"]?.ToString()) &&
+                    string.IsNullOrWhiteSpace(objective["HudShortDescription"]?.ToString())
+                )
+            )
             {
                 objectiveEntries[i].Visible = false;
                 continue;

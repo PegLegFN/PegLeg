@@ -1,13 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://c70qnky0xyx4w"]
+[gd_scene load_steps=8 format=3 uid="uid://c70qnky0xyx4w"]
 
 [ext_resource type="Script" uid="uid://bj4gqyg63bw8" path="res://Scripts/UserInterface/ListEntries/MissionCollection.cs" id="1_4v5fq"]
 [ext_resource type="Texture2D" uid="uid://dj7i2q6htu5st" path="res://Images/InterfaceIcons/T_UI_IconLibrary_Pencil_128.png" id="1_p305g"]
 [ext_resource type="Texture2D" uid="uid://dl05qp6bcrs5c" path="res://Images/InterfaceIcons/T_UI_Icon_Search.png" id="2_ma4gr"]
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="3_2dnay"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="4_27twl"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_xict5"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="6_b35vf"]
 
-[node name="MissionCollection" type="PanelContainer" node_paths=PackedStringArray("missionList", "loadingIcon")]
+[node name="MissionCollection" type="PanelContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "playableFilter")]
 custom_minimum_size = Vector2(255, 150)
 offset_right = 240.0
 offset_bottom = 150.0
@@ -17,6 +18,7 @@ testName = "Name"
 testSearch = "///worker leg !lead"
 missionList = NodePath("VBoxContainer/Body/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/Body/SmallLoadingIcon")
+playableFilter = NodePath("VBoxContainer/Header/HBoxContainer/CheckButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -33,11 +35,13 @@ layout_mode = 2
 [node name="Name" type="Label" parent="VBoxContainer/Header/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
 text = "Collection Name Very Long"
 text_overrun_behavior = 3
 
 [node name="SearchBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer"]
-custom_minimum_size = Vector2(20, 0)
+visible = false
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 theme_type_variation = &"TinyButton"
 
@@ -56,7 +60,8 @@ texture = ExtResource("2_ma4gr")
 expand_mode = 1
 
 [node name="EditBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer"]
-custom_minimum_size = Vector2(20, 0)
+visible = false
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 theme_type_variation = &"TinyButton"
 
@@ -73,6 +78,27 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_p305g")
 expand_mode = 1
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer"]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/CheckButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_27twl")
+expand_mode = 3
 
 [node name="Body" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2

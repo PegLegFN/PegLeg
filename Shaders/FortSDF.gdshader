@@ -1,4 +1,5 @@
 shader_type canvas_item;
+#include "Includes/SDFHelpers.gdshaderinc"
 
 uniform sampler2D blendFrom;
 uniform float blendAmount:hint_range(0,1)=1;
@@ -12,20 +13,6 @@ void vertex() {
 	modulate = COLOR;
 }
 
-float evalDF(float val)
-{
-	return smoothstep(threshold, threshold+smoothness, val);
-}
-vec3 evalDF(vec3 val)
-{
-	return vec3(evalDF(val.r),evalDF(val.g),evalDF(val.b));
-}
-
-float median(vec3 rgb)
-{
-	return max(min(rgb.r,rgb.g), min(max(rgb.r,rgb.g),rgb.b));
-}
-
 void fragment() {
 	vec4 source = texture(TEXTURE, UV);
 	vec4 blend = texture(blendFrom, UV);
@@ -36,14 +23,11 @@ void fragment() {
 	}
 	else if (msdf)
 	{
-		vec3 evaled=evalDF(source.rgb);
-		//COLOR.a = evalDF(source.r);
-		//COLOR.a = evalDF(source.g);
-		COLOR.a = evalDF(mix(median(blend.rgb), median(source.rgb), blendAmount));
+		COLOR.a = blendMSDF(blend.rgb, source.rgb, blendAmount, threshold, smoothness);
 	}
 	else
 	{
-		COLOR.a = evalDF(source.r);
+		COLOR.a = evalDF(source.r, threshold, smoothness);
 	}
 	COLOR.a*=modulate.a;
 }

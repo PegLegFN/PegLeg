@@ -53,12 +53,23 @@ public partial class TrayIcon : StatusIndicator
             Icon = editorIcon;
         }
         AppConfig.OnConfigChanged += OnConfigChanged;
+        runtimeFPS = (int)AppConfig.Get("ui", "fps", 60.0);
+        RegisterResponsiveWindow(mainWindowTag);
     }
+    static int runtimeFPS = 60;
 
     private void OnConfigChanged(string section, string key, JsonValue value)
     {
         if (section == "notification" && key == "on_minimised" && value.TryGetValue(out bool showTutoriel))
             hasShownTutorial = !showTutoriel;
+        if (section == "ui" && key == "fps" && value.TryGetValue(out float fps))
+        {
+            runtimeFPS = (int)fps;
+            if (responsiveWindowList.Count > 0)
+            {
+                Engine.MaxFps = Mathf.Max(0, runtimeFPS);
+            }
+        }
     }
 
     public void HandleMenu(long id)
@@ -77,7 +88,7 @@ public partial class TrayIcon : StatusIndicator
     {
         if (responsiveWindowList.Count == 0)
         {
-            Engine.MaxFps = 0;
+            Engine.MaxFps = Mathf.Max(0, runtimeFPS);
         }
         if(!responsiveWindowList.Contains(windowTag))
             responsiveWindowList.Add(windowTag);

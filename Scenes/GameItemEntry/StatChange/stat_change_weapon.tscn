@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bsogk7j88gee5"]
+[gd_scene load_steps=20 format=3 uid="uid://bsogk7j88gee5"]
 
 [ext_resource type="Material" uid="uid://fu23qg1axsrm" path="res://Sh_Materials/ItemRewardMat.tres" id="1_1hoho"]
 [ext_resource type="Script" uid="uid://dobpdd68qa1xn" path="res://Scripts/UserInterface/ListEntries/StatChangeWeapon.cs" id="1_txq0a"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="8_8avjx"]
 [ext_resource type="Texture2D" uid="uid://b7y8nqn6v3jrq" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Metal-Obsidian-L.png" id="8_eourx"]
 [ext_resource type="Texture2D" uid="uid://cubygayq8llga" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Red-L.png" id="9_ha8c7"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="9_hi25n"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="9_l2ljy"]
 [ext_resource type="Texture2D" uid="uid://docjdjoems0ia" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Black-L.png" id="10_8avjx"]
 
@@ -65,12 +66,14 @@ layout_mode = 2
 script = ExtResource("2_emxwm")
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ItemEntry"]
-self_modulate = Color(1, 0.690196, 0.2, 1)
+self_modulate = Color(0.901961, 0.509804, 0, 1)
 material = ExtResource("1_1hoho")
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("2_7ltgx")
 expand_mode = 1
+script = ExtResource("9_hi25n")
+syncControlSize = true
 
 [node name="Ctx" type="Node" parent="MarginContainer/VBoxContainer/ItemEntry/TextureRect" node_paths=PackedStringArray("itemSource")]
 script = ExtResource("8_8avjx")
@@ -443,7 +446,7 @@ ticks_on_borders = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[connection signal="IconChanged" from="MarginContainer/VBoxContainer/ItemEntry" to="MarginContainer/VBoxContainer/ItemEntry/TextureRect" method="set_texture"]
+[connection signal="IconChanged" from="MarginContainer/VBoxContainer/ItemEntry" to="MarginContainer/VBoxContainer/ItemEntry/TextureRect" method="SetShaderTexture" binds= ["MainIcon"]]
 [connection signal="NameChanged" from="MarginContainer/VBoxContainer/ItemEntry" to="MarginContainer/VBoxContainer/ItemEntry/VBoxContainer/Label" method="set_text"]
 [connection signal="RarityChanged" from="MarginContainer/VBoxContainer/ItemEntry" to="MarginContainer/VBoxContainer/ItemEntry/TextureRect" method="set_self_modulate"]
 [connection signal="TooltipChanged" from="MarginContainer/VBoxContainer/ItemEntry" to="MarginContainer/VBoxContainer/ItemEntry/TextureRect" method="set_tooltip_text"]

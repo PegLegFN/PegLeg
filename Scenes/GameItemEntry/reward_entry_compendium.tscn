@@ -1,8 +1,29 @@
-[gd_scene load_steps=4 format=3 uid="uid://cei68i5c1u3d1"]
+[gd_scene load_steps=8 format=3 uid="uid://cei68i5c1u3d1"]
 
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="1_0v6tw"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_ofgik"]
 [ext_resource type="Texture2D" uid="uid://b3m1n41ikas8t" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_128.png" id="3_2ypv6"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="3_pu42y"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="3_vlvj1"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_3o28s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v5or8"]
+resource_local_to_scene = true
+shader = ExtResource("2_ofgik")
+shader_parameter/ControlSize = Vector2(96, 96)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = true
+shader_parameter/MainIcon = ExtResource("4_3o28s")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltIcon = ExtResource("3_vlvj1")
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = true
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
 [node name="RewardEntryCompendium" instance=ExtResource("1_0v6tw")]
 custom_minimum_size = Vector2(96, 96)
@@ -10,17 +31,14 @@ custom_minimum_size = Vector2(96, 96)
 [node name="Panel" type="Panel" parent="." index="0"]
 layout_mode = 2
 
+[node name="TextureRect" parent="." index="1"]
+material = SubResource("ShaderMaterial_v5or8")
+
 [node name="AmountContainer" parent="Overlays" index="0"]
 visible = false
 
-[node name="RightIconContainer" parent="Overlays/AmountContainer" index="0"]
-visible = false
-
-[node name="LeftIconContainer" parent="Overlays/AmountContainer" index="2"]
-visible = false
-
-[node name="InteractableIcon" parent="Overlays/InteractableContainer" index="0"]
-visible = false
+[node name="InteractableIcon" parent="Overlays" index="2"]
+z_index = -1
 
 [node name="Bookmark" type="TextureRect" parent="Overlays" index="4"]
 material = ExtResource("3_pu42y")

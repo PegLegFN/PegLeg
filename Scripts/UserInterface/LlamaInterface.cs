@@ -350,12 +350,12 @@ public partial class LlamaInterface : Control
             var account = GameAccount.activeAccount;
             if (!await account.Authenticate() || ct.IsCancellationRequested)
                 return;
-            await account.GenerateXRayLlamaResults();
 
             var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, force ? null : RefreshTimeType.Hourly);
             var randomStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.RandomLlamaCatalog, force ? null : RefreshTimeType.Hourly);
             if (ct.IsCancellationRequested)
                 return;
+            await account.GenerateXRayLlamaResults();
 
             int catalogEntryIndex = 0;
             var allOffers = xrayStorefront.Offers.Union(randomStorefront.Offers);
@@ -508,6 +508,14 @@ public partial class LlamaInterface : Control
         }
 
         var prerollData = await offer.GetXRayLlamaData(account);
+        if (offer.IsXRayLlama && prerollData is null)
+        {
+            await account.GenerateXRayLlamaResults();
+            prerollData = await offer.GetXRayLlamaData(account);
+
+            if (ct.IsCancellationRequested)
+                return;
+        }
         if (ct.IsCancellationRequested)
             return;
 

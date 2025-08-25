@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://dbi5mie2icc78"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_euef7"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="2_aqcmj"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_aqcmj"]
 [ext_resource type="Texture2D" uid="uid://de4vkpc5d58on" path="res://Images/InterfaceIcons/T-Items-WeaponPerkup-Legendary-L.png" id="2_qtkvr"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="2_wrin4"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_eyte7"]
@@ -9,9 +9,19 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_euef7"]
 shader = ExtResource("2_aqcmj")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(32, 32)
 shader_parameter/CornerRadius = 3.0
 shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("2_qtkvr")
+shader_parameter/AltRarity = Color(0, 0, 0, 1)
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = false
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
 [node name="NotificationHighlightItem" type="HBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
@@ -20,7 +30,6 @@ offset_bottom = 32.0
 mouse_filter = 2
 script = ExtResource("1_euef7")
 preventInteractability = true
-preventDevInteractability = true
 autoLinkToViewer = false
 
 [node name="Label" type="Label" parent="."]
@@ -106,7 +115,7 @@ text = "1"
 
 [connection signal="AmountChanged" from="." to="MarginContainer/Icon/Label" method="set_text"]
 [connection signal="AmountVisibility" from="." to="MarginContainer/Icon/Label" method="set_visible"]
-[connection signal="IconChanged" from="." to="MarginContainer/Icon" method="set_texture"]
+[connection signal="IconChanged" from="." to="MarginContainer/Icon" method="SetShaderTexture" binds= ["MainIcon"]]
 [connection signal="InteractableChanged" from="." to="MarginContainer/Icon/Responsive Button Area" method="set_visible"]
 [connection signal="NotificationChanged" from="." to="MarginContainer/Icon/NotificationLabel" method="set_visible"]
 [connection signal="RarityChanged" from="." to="MarginContainer/Icon" method="set_self_modulate"]

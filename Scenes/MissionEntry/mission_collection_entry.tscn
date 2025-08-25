@@ -1,15 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://bekssnfes28vf"]
+[gd_scene load_steps=5 format=3 uid="uid://bekssnfes28vf"]
 
 [ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="1_fam8x"]
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_qnyc5"]
 [ext_resource type="PackedScene" uid="uid://dbrrcnce14w8h" path="res://Scenes/GameItemEntry/mission_collection_highlight_item.tscn" id="2_8t80l"]
+[ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="3_f2nuh"]
 
 [node name="MissionCollectionEntry" type="MarginContainer" node_paths=PackedStringArray("highlightedRewardParent")]
-custom_minimum_size = Vector2(235, 40)
-offset_right = 230.0
+custom_minimum_size = Vector2(220, 40)
+offset_right = 224.0
 offset_bottom = 40.0
 script = ExtResource("1_qnyc5")
-highlightedRewardParent = NodePath("MarginContainer/HBoxContainer/Highlights")
+highlightedRewardParent = NodePath("HBoxContainer/MarginContainer2/Highlights")
 
 [node name="Button" type="Button" parent="."]
 show_behind_parent = true
@@ -17,55 +18,85 @@ custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 2
 
-[node name="TheaterCat" type="Label" parent="MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(12, 0)
+[node name="TheaterCat" type="Label" parent="HBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 text = "T"
-horizontal_alignment = 2
+horizontal_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("1_fam8x")
 expand_mode = 3
 
-[node name="PowerLevel" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/MarginContainer/HBoxContainer/Icon"]
+self_modulate = Color(1, 0.37, 0.37, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+tooltip_text = "This mission can't be accessed with this account alone "
+texture = ExtResource("3_f2nuh")
+expand_mode = 3
+
+[node name="PowerLevel" type="Label" parent="HBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "144"
 
-[node name="Highlights" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+mouse_filter = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Highlights" type="HBoxContainer" parent="HBoxContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 10
 mouse_filter = 0
-theme_override_constants/separation = 2
+theme_override_constants/separation = 0
 alignment = 2
 
-[node name="MissionCollectionHighlightItem" parent="MarginContainer/HBoxContainer/Highlights" instance=ExtResource("2_8t80l")]
+[node name="MissionCollectionHighlightItem" parent="HBoxContainer/MarginContainer2/Highlights" instance=ExtResource("2_8t80l")]
 layout_mode = 2
 
-[node name="MissionCollectionHighlightItem2" parent="MarginContainer/HBoxContainer/Highlights" instance=ExtResource("2_8t80l")]
+[node name="MissionCollectionHighlightItem2" parent="HBoxContainer/MarginContainer2/Highlights" instance=ExtResource("2_8t80l")]
 layout_mode = 2
 
-[node name="MissionCollectionHighlightItem3" parent="MarginContainer/HBoxContainer/Highlights" instance=ExtResource("2_8t80l")]
+[node name="MissionCollectionHighlightItem3" parent="HBoxContainer/MarginContainer2/Highlights" instance=ExtResource("2_8t80l")]
 layout_mode = 2
 
-[node name="MissionCollectionHighlightItem4" parent="MarginContainer/HBoxContainer/Highlights" instance=ExtResource("2_8t80l")]
+[node name="MissionCollectionHighlightItem4" parent="HBoxContainer/MarginContainer2/Highlights" instance=ExtResource("2_8t80l")]
 layout_mode = 2
 
-[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/Icon" method="set_texture"]
-[connection signal="PowerLevelChanged" from="." to="MarginContainer/HBoxContainer/PowerLevel" method="set_text"]
-[connection signal="TheaterCategoryChanged" from="." to="MarginContainer/HBoxContainer/TheaterCat" method="set_text"]
+[connection signal="IconChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
+[connection signal="MissionLocked" from="." to="HBoxContainer/MarginContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
+[connection signal="PowerLevelChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/PowerLevel" method="set_text"]
+[connection signal="TheaterCategoryChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/TheaterCat" method="set_text"]
 [connection signal="TooltipChanged" from="." to="Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Button" to="." method="InspectMission"]

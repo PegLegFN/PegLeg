@@ -78,6 +78,8 @@ public partial class AppConfig
         IncludeFields = true,
     };
 
+    public static void PreloadConfig() => _configData ??= LoadConfig();
+
     static JsonObject LoadConfig()
     {
         using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Read);
@@ -85,7 +87,8 @@ public partial class AppConfig
         {
             //var configStructure = JsonSerializer.Deserialize<AppConfig>(configFile.GetAsText(), jsonOptions);
             //return JsonNode.Parse(JsonSerializer.Serialize(configStructure))?.AsObject();
-            return JsonNode.Parse(configFile.GetAsText())?.AsObject();
+            string fileContent = configFile.GetAsText();
+            return JsonNode.Parse(fileContent)?.AsObject();
         }
 
         return [];

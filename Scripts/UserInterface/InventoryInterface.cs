@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 public partial class AppConfig
 {
@@ -33,6 +34,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     Control[] creatorImages;
     [Export]
     Control inMissionIndicator;
+    [Export]
+    Control heavySearchWarning;
 
     public override void _Ready()
     {
@@ -41,9 +44,12 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         {
             item.Visible = false;
         }
+        if (heavySearchWarning is not null)
+            heavySearchWarning.Visible = false;
         GameAccount.ActiveAccountChanged += UpdateAccount;
         itemList.SetProvider(this);
-        searchBox.TextChanged += _ => ApplyFilters();
+        searchBox.TextChanged += _ => LightweithtApplyFilters();
+        searchBox.TextSubmitted += _ => ApplyFilters();
         var dev = AppConfig.Get("advanced", "developer", false) && allowDevMode;
         if (targetUser is not null)
         {
@@ -63,6 +69,24 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         AppConfig.OnConfigChanged += OnConfigChanged;
         VisibilityChanged += TryFilter;
         UpdateAccount();
+    }
+
+    public override void _ShortcutInput(InputEvent @event)
+    {
+        if
+        (
+            IsVisibleInTree() &&
+            @event is InputEventKey keyEvent && 
+            keyEvent.Keycode == Key.I && 
+            keyEvent.Pressed &&
+            keyEvent.ShiftPressed &&
+            !keyEvent.CtrlPressed &&
+            keyEvent.AltPressed && 
+            currentProfile is not null
+        )
+        {
+            DevTextOverlay.ShowText(currentProfile.statAttributes.ToString());
+        }
     }
 
     private void OnConfigChanged(string section, string key, JsonValue val)
@@ -133,6 +157,11 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
     async void UpdateAccount()
     {
+        accountDirty = true;
+        if (!IsVisibleInTree())
+            return;
+        accountDirty = false;
+
         filteredItems = [];
         ApplySorting();
         var account = GameAccount.activeAccount;
@@ -249,27 +278,48 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     //}
 
 
+    bool accountDirty = false;
     bool itemsDirty = false;
 
     async void TryFilter()
     {
         await Helpers.WaitForFrame();
-        if (itemsDirty)
+        if (accountDirty)
         {
-            GD.Print("trying to filter");
+            itemsDirty = false;
+            totalItemCount = null;
+            UpdateAccount();
+        }
+        else if (itemsDirty)
+        {
             ApplyFilters();
         }
     }
 
-    void ApplyFilters()
+
+    int? totalItemCount;
+    void LightweithtApplyFilters()
+    {
+        totalItemCount ??= currentProfile?.GetItems().Length;
+        if ((totalItemCount ?? 0) < 3500)
+            ApplyFilters();
+        else if (heavySearchWarning is not null)
+            heavySearchWarning.Visible = true;
+
+
+    }
+
+    bool isFiltering = false;
+    async void ApplyFilters()
     {
         itemsDirty = true;
-        if (currentProfile?.hasProfile != true || !IsVisibleInTree())
-        {
-            GD.Print("can't filter yet");
+        if (isFiltering || currentProfile?.hasProfile != true || !IsVisibleInTree())
             return;
-        }
+        totalItemCount = null;
         itemsDirty = false;
+
+        if (heavySearchWarning is not null)
+            heavySearchWarning.Visible = false;
 
         var possibleTypes = 
             currentTypeFilter
@@ -280,16 +330,28 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             possibleTypes = null;
 
         var instructions = PLSearch.GenerateSearchInstructions(searchBox.Text);
-
-        filteredItems = currentProfile.GetItems()
-            .Where(item =>
-                (item.template is not null || AppConfig.Get("advanced", "developer", false)) &&
-                (!filterNew || !item.IsSeen) &&
-                (!filterFavorite || item.IsFavourited) &&
-                (possibleTypes?.Contains(item.template?.Type) ?? true) &&
-                PLSearch.EvaluateInstructions(instructions, item.RawData)
-            )
-            .ToArray();
+        var allItems = currentProfile.GetItems();
+        totalItemCount = allItems.Length;
+        currentItems = [];
+        itemList.UpdateList(true);
+        GameItem[] resultItems = [];
+        GameItem[] FilterFunc() => 
+            [.. allItems
+                .Where(item =>
+                    (item.template is not null || AppConfig.Get("advanced", "developer", false)) &&
+                    (!filterNew || !item.IsSeen) &&
+                    (!filterFavorite || item.IsFavourited) &&
+                    (possibleTypes?.Contains(item.template?.Type) ?? true) &&
+                    PLSearch.EvaluateInstructions(instructions, item.RawData)
+                )
+            ];
+        isFiltering = true;
+        if ((totalItemCount ?? 0) < 3500)
+            resultItems = FilterFunc();
+        else
+            await Task.Run(() => resultItems = FilterFunc());
+        isFiltering = false;
+        filteredItems = resultItems;
         ApplySorting();
     }
 
@@ -297,6 +359,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     {
         var resultItems = filteredItems
             .OrderBy(i => i.template is null)
+            .ThenBy(i => !(i.attributes?["favorite"]?.GetValue<bool>() ?? false))
             .ThenBy(i => !i.template?.CanBeLeveled)
             .ThenBy(i => i.template?.Type);
 

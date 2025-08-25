@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbpdgupjy1ovb"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_1r0px"]
+[ext_resource type="Script" uid="uid://dupwia0rjs5o2" path="res://Scripts/Overlays/DevTextOverlay.cs" id="2_dbisq"]
+
+[node name="DevText" node_paths=PackedStringArray("textEdit") instance=ExtResource("1_1r0px")]
+script = ExtResource("2_dbisq")
+textEdit = NodePath("Control/WindowContents/PanelContainer/CodeEdit")
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents" index="0"]
+custom_minimum_size = Vector2(900, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Panel3Pad"
+
+[node name="CodeEdit" type="CodeEdit" parent="Control/WindowContents/PanelContainer" index="0"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_spacing = 2
+placeholder_text = "{
+	\"Here\": [
+		\"Be\",
+		3,
+		\"Dragons\"
+	]
+}"
+editable = false
+drag_and_drop_selection_enabled = false
+middle_mouse_paste_enabled = false
+minimap_draw = true
+minimap_width = 50
+highlight_all_occurrences = true
+draw_tabs = true
+line_folding = true
+gutters_draw_fold_gutter = true
+delimiter_strings = Array[String](["\" \"", "' '"])
+indent_automatic_prefixes = Array[String](["{", "[", "("])
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true

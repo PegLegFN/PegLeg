@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://c78gt6b2m1utg"]
+[gd_scene load_steps=27 format=3 uid="uid://c78gt6b2m1utg"]
 
 [ext_resource type="Script" uid="uid://c6amov6qaydfm" path="res://Scripts/UserInterface/MissionInterface.cs" id="1_474w2"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="2_88mxw"]
@@ -7,7 +7,9 @@
 [ext_resource type="AudioStream" uid="uid://dweoot2qw456d" path="res://Audio/SFX/UI/Notification/fort_UI_Important_Update.ogg" id="3_m7b6w"]
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="4_ebt37"]
 [ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="5_6m3c7"]
+[ext_resource type="Texture2D" uid="uid://cdbip8w04ra2u" path="res://Images/InterfaceIcons/T-Icon-Quest-Journal-64.png" id="6_jmsy3"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="6_p6lk0"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="7_0gdkn"]
 [ext_resource type="Texture2D" uid="uid://gak2hv6itgoo" path="res://Images/InterfaceIcons/T-Icon-Survivor-Leader-CARD.png" id="7_lvf0s"]
 [ext_resource type="Texture2D" uid="uid://fo5dt3fnvrt0" path="res://Images/InterfaceIcons/SchematicIcon128.png" id="7_nyegd"]
 [ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="8_0gdkn"]
@@ -27,7 +29,7 @@
 [sub_resource type="ButtonGroup" id="ButtonGroup_fb3nj"]
 resource_name = "MissionZoneFilter"
 
-[node name="Missions" type="MarginContainer" node_paths=PackedStringArray("zoneFilterTabBar", "searchBar", "missionList", "loadingIcon")]
+[node name="Missions" type="MarginContainer" node_paths=PackedStringArray("zoneFilterTabBar", "searchBar", "playableFilter", "storyFilter", "missionList", "loadingIcon")]
 self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,8 +39,10 @@ grow_vertical = 2
 script = ExtResource("1_474w2")
 unexpectedResetNotifIcon = ExtResource("2_nynxn")
 unexpectedResetSound = ExtResource("3_m7b6w")
-zoneFilterTabBar = NodePath("VBoxContainer/HBoxContainer/ZoneFilters")
+zoneFilterTabBar = NodePath("VBoxContainer/HBoxContainer/Filters/ZoneFilters")
 searchBar = NodePath("VBoxContainer/HBoxContainer/SearchBox")
+playableFilter = NodePath("VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton")
+storyFilter = NodePath("VBoxContainer/HBoxContainer/Filters/StoryFilter/CheckButton")
 missionList = NodePath("VBoxContainer/Control/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/Control/SmallLoadingIcon")
 
@@ -117,22 +121,70 @@ popup/item_0/id = 0
 popup/item_1/text = "List View"
 popup/item_1/id = 1
 
-[node name="ItemFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="Filters" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="StoryFilter" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/StoryFilter"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that accessible with your current Power Level"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/StoryFilter/CheckButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("6_jmsy3")
+expand_mode = 3
+
+[node name="PowerLevel" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+theme_type_variation = &"EmptyCheckButton"
+button_pressed = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("7_0gdkn")
+expand_mode = 3
+
+[node name="ItemFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
 visible = false
 layout_mode = 2
 theme_type_variation = &"CheckGroupContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ItemFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters"]
 layout_mode = 2
 
-[node name="Survivors" type="CheckButton" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer"]
+[node name="Survivors" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Legendary Survivors
 Mythic Lead Survivors"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Survivors"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Survivors"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -146,13 +198,13 @@ texture = ExtResource("7_lvf0s")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Schematics" type="CheckButton" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer"]
+[node name="Schematics" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Schematics"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Schematics"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Schematics"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -166,14 +218,14 @@ texture = ExtResource("7_nyegd")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Heroes" type="CheckButton" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer"]
+[node name="Heroes" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Heros
 Defenders"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Heroes"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Heroes"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -187,13 +239,13 @@ texture = ExtResource("8_0gdkn")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="UpgradeMats" type="CheckButton" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer"]
+[node name="UpgradeMats" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Upgrade Materials"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/UpgradeMats"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/UpgradeMats"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -207,7 +259,7 @@ texture = ExtResource("10_5ywbn")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/UpgradeMats"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/UpgradeMats"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -221,13 +273,13 @@ texture = ExtResource("11_3yuk1")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PerkUps" type="CheckButton" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer"]
+[node name="PerkUps" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Perk-Up"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/PerkUps"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/PerkUps"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -241,7 +293,7 @@ texture = ExtResource("12_jljfs")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/PerkUps"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/PerkUps"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -255,13 +307,13 @@ texture = ExtResource("13_0u7ma")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Tickets" type="CheckButton" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer"]
+[node name="Tickets" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Crafting Resources"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -276,7 +328,7 @@ texture = ExtResource("15_618bo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -293,7 +345,7 @@ expand_mode = 1
 stretch_mode = 5
 flip_h = true
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -310,7 +362,7 @@ texture = ExtResource("17_n40x5")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -325,24 +377,24 @@ texture = ExtResource("14_fvpat")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer" node_paths=PackedStringArray("checkButtonParent")]
+[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters" node_paths=PackedStringArray("checkButtonParent")]
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 script = ExtResource("4_ebt37")
 checkButtonParent = NodePath("HBoxContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ZoneFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Main" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="Main" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Main Regions"
 theme_type_variation = &"LeftCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " M"
 
-[node name="All" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="All" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "All Regions"
 theme_type_variation = &"MiddleCheckButton"
@@ -350,35 +402,35 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_fb3nj")
 text = "  All"
 
-[node name="Stonewood" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="Stonewood" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Stonewood"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = "  S"
 
-[node name="Plankerton" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="Plankerton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Plankerton"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " P"
 
-[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Canney Valley"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " CV"
 
-[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Twine Peaks"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " TP"
 
-[node name="Ventures" type="CheckButton" parent="VBoxContainer/HBoxContainer/ZoneFilters/HBoxContainer"]
+[node name="Ventures" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Ventures"
 theme_type_variation = &"RightCheckButton"
@@ -453,9 +505,9 @@ layout_mode = 2
 layout_mode = 2
 mouse_filter = 0
 script = ExtResource("18_phyx5")
-minCols = 3
-compressSpacing = true
-spacing = Vector2(10, 10)
+MinCols = 3
+CompressSpacing = true
+Spacing = Vector2(10, 10)
 
 [node name="Padding" type="Control" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

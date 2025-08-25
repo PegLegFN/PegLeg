@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 public partial class DashboardSuperchargerController : Control
 {
@@ -13,6 +12,8 @@ public partial class DashboardSuperchargerController : Control
     Control checkmark;
     [Export]
     Control loading;
+    [Export]
+    bool onlyShowOnResetDay = false;
 
     public override void _Ready()
 	{
@@ -31,16 +32,30 @@ public partial class DashboardSuperchargerController : Control
 
     private async void AccountChanged()
     {
+        bool isRefreshDay = (DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Thursday) - DateTime.UtcNow).TotalDays > 6.1;
+        if (onlyShowOnResetDay)
+        {
+            Visible = false;
+            if (!isRefreshDay)
+                return;
+        }
         entry.ClearItem();
         entry.Visible = false;
         checkmark.Visible = false;
         loading.Visible = true;
         noSuperchargerMessage.Visible = false;
 
-        await Helpers.WaitForTimer(0.1);
-        var profile = await GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).Query(true);
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
+        var profile = await GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         var possibleQuest = profile.GetFirstItem("Quest", q => q.templateId.StartsWith("Quest:weekly_elder"));
         GD.Print(possibleQuest?.template?.DisplayName ?? "NoSupercharger");
+
+
+        if (onlyShowOnResetDay)
+        {
+            Visible = isRefreshDay && possibleQuest is not null;
+        }
 
         loading.Visible = false;
         checkmark.Visible = possibleQuest?.QuestComplete ?? false;

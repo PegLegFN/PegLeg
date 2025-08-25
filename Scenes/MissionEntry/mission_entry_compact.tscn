@@ -1,0 +1,247 @@
+[gd_scene load_steps=10 format=3 uid="uid://dfetgl4vetabf"]
+
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="2_kjmaf"]
+[ext_resource type="Resource" uid="uid://da112m72yfpe2" path="res://Scripts/ContextMenu/ComponentLists/MissionRewardCtxList.tres" id="3_aylkg"]
+[ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="4_rqil5"]
+[ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="5_plbok"]
+[ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="6_bnmc3"]
+[ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="7_pd80m"]
+[ext_resource type="PackedScene" uid="uid://dbrrcnce14w8h" path="res://Scenes/GameItemEntry/mission_collection_highlight_item.tscn" id="8_cgab4"]
+[ext_resource type="Texture2D" uid="uid://dffqg6jtdu38u" path="res://Images/InterfaceIcons/Icon_Seach_Close.png" id="8_yl8cx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
+shader = ExtResource("5_plbok")
+
+[node name="MissionEntry" type="MarginContainer" node_paths=PackedStringArray("missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
+custom_minimum_size = Vector2(340, 30)
+offset_right = 260.0
+offset_bottom = 30.0
+mouse_filter = 2
+script = ExtResource("4_rqil5")
+missionRewardLayout = NodePath("MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer")
+missionRewardParent = NodePath("MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer")
+alertRewardLayout = NodePath("MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3")
+alertRewardParent = NodePath("MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4/MarginContainer/HBoxContainer2")
+
+[node name="Button" type="Button" parent="."]
+show_behind_parent = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="Ctx" type="Node" parent="Button" node_paths=PackedStringArray("missionSource", "itemSource")]
+script = ExtResource("2_kjmaf")
+missionSource = NodePath("../..")
+itemSource = NodePath("../../MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer/MissionCollectionHighlightItem")
+componentList = ExtResource("3_aylkg")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TheaterCat" type="Label" parent="MarginContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "T"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="MarginContainer/HBoxContainer/HBoxContainer/TheaterCat"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.688, 0.28, 1, 1)
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("6_bnmc3")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/Icon"]
+self_modulate = Color(1, 0.37, 0.37, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "This mission can't be accessed with this account alone "
+texture = ExtResource("7_pd80m")
+expand_mode = 1
+
+[node name="PowerLevel" type="Label" parent="MarginContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "144"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="MissionCollectionHighlightItem" parent="MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MissionCollectionHighlightItem2" parent="MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MissionCollectionHighlightItem3" parent="MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MissionCollectionHighlightItem4" parent="MarginContainer/HBoxContainer/HBoxContainer2/MarginContainer3/MarginContainer/HBoxContainer" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+alignment = 2
+
+[node name="MissionCollectionHighlightItem" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4/MarginContainer/HBoxContainer2" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MissionCollectionHighlightItem2" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4/MarginContainer/HBoxContainer2" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MissionCollectionHighlightItem3" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4/MarginContainer/HBoxContainer2" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MissionCollectionHighlightItem4" parent="MarginContainer/HBoxContainer/HBoxContainer2/HBoxContainer3/MarginContainer4/MarginContainer/HBoxContainer2" instance=ExtResource("8_cgab4")]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 0
+compactifyAmount = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -3
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -3
+
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/MarginContainer2/MarginContainer3"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer2/MarginContainer3/Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_yl8cx")
+expand_mode = 1
+
+[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/HBoxContainer/Icon" method="set_texture"]
+[connection signal="MissionLocked" from="." to="MarginContainer/HBoxContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
+[connection signal="PowerLevelChanged" from="." to="MarginContainer/HBoxContainer/HBoxContainer/PowerLevel" method="set_text"]
+[connection signal="TheaterCategoryChanged" from="." to="MarginContainer/HBoxContainer/HBoxContainer/TheaterCat" method="set_text"]
+[connection signal="TheaterColorChanged" from="." to="MarginContainer/HBoxContainer/HBoxContainer/TheaterCat/TextureRect" method="set_color"]
+[connection signal="TooltipChanged" from="." to="Button" method="set_tooltip_text"]
+[connection signal="pressed" from="Button" to="." method="InspectMission"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/MarginContainer2/MarginContainer3/Button" to="." method="RemoveFromList"]

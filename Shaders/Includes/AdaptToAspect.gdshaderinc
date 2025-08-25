@@ -13,6 +13,10 @@ vec2 adaptToAspect(vec2 controlSize, vec2 shiftDirection, vec2 textureResolution
 	return result;
 	//return (scaledUV-scaledShift)/scaledResolution;
 }
+vec2 adaptToAspect(vec2 controlSize, vec2 shiftDirection, sampler2D tex, vec2 uv, bool fit)
+{
+	return adaptToAspect(controlSize, shiftDirection, vec2(textureSize(tex, 0)), uv, fit);
+}
 
 vec2 GetFitSize(vec2 controlSize, vec2 textureResolution)
 {

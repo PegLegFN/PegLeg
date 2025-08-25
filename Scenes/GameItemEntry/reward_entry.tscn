@@ -1,14 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://byv58kd1qnkw5"]
+[gd_scene load_steps=12 format=3 uid="uid://byv58kd1qnkw5"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_ww2ku"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="2_jy1bu"]
 [ext_resource type="Material" uid="uid://fu23qg1axsrm" path="res://Sh_Materials/ItemRewardMat.tres" id="3_tj077"]
-[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="4_3fp1p"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_tj077"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_oo5m0"]
-[ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="6_knndl"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="7_qcb58"]
-[ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="8_oce35"]
-[ext_resource type="Script" uid="uid://hfqwad6httyj" path="res://Scripts/UIElements/Signal Logic/VariantIsNotNull.cs" id="9_xa0w7"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="9_4i2dj"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="10_1eq7g"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="11_tkmrp"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="12_tj077"]
@@ -26,9 +24,10 @@ script = ExtResource("2_jy1bu")
 hideMythicLeadSquad = true
 
 [node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
 material = ExtResource("3_tj077")
 layout_mode = 2
-texture = ExtResource("4_3fp1p")
+texture = ExtResource("4_tj077")
 expand_mode = 1
 script = ExtResource("5_oo5m0")
 syncControlSize = true
@@ -47,39 +46,16 @@ grow_horizontal = 0
 grow_vertical = 0
 size_flags_vertical = 8
 mouse_filter = 2
+theme_override_constants/separation = 0
 alignment = 2
 
-[node name="RightIconContainer" type="AspectRatioContainer" parent="Overlays/AmountContainer"]
-custom_minimum_size = Vector2(21, 0)
+[node name="RightIcon" type="TextureRect" parent="Overlays/AmountContainer"]
+material = ExtResource("9_4i2dj")
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 2
-stretch_mode = 0
-alignment_vertical = 2
-
-[node name="RightNullCheck" type="Node" parent="Overlays/AmountContainer/RightIconContainer"]
-script = ExtResource("9_xa0w7")
-
-[node name="RightIcon" type="TextureRect" parent="Overlays/AmountContainer/RightIconContainer"]
-layout_mode = 2
-mouse_filter = 2
 texture = ExtResource("10_1eq7g")
-expand_mode = 1
-
-[node name="TextureRect" type="TextureRect" parent="Overlays/AmountContainer/RightIconContainer/RightIcon"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -3.0
-offset_top = -3.0
-offset_right = 3.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8_oce35")
 expand_mode = 1
 
 [node name="Control" type="Control" parent="Overlays/AmountContainer"]
@@ -87,37 +63,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="LeftIconContainer" type="AspectRatioContainer" parent="Overlays/AmountContainer"]
-custom_minimum_size = Vector2(21, 0)
+[node name="LeftIcon" type="TextureRect" parent="Overlays/AmountContainer"]
+material = ExtResource("9_4i2dj")
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 2
-stretch_mode = 0
-alignment_vertical = 2
-
-[node name="LeftNullCheck" type="Node" parent="Overlays/AmountContainer/LeftIconContainer"]
-script = ExtResource("9_xa0w7")
-
-[node name="LeftIcon" type="TextureRect" parent="Overlays/AmountContainer/LeftIconContainer"]
-layout_mode = 2
-mouse_filter = 2
 texture = ExtResource("10_1eq7g")
-expand_mode = 1
-
-[node name="TextureRect" type="TextureRect" parent="Overlays/AmountContainer/LeftIconContainer/LeftIcon"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -3.0
-offset_top = -3.0
-offset_right = 3.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8_oce35")
 expand_mode = 1
 
 [node name="Control2" type="Control" parent="Overlays/AmountContainer"]
@@ -152,36 +104,18 @@ text = " ! "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InteractableToggle" type="Node" parent="Overlays"]
-script = ExtResource("6_knndl")
-
-[node name="InteractableContainer" type="AspectRatioContainer" parent="Overlays"]
-custom_minimum_size = Vector2(16, 0)
+[node name="InteractableIcon" type="TextureRect" parent="Overlays"]
+material = ExtResource("9_4i2dj")
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
+offset_left = -16.0
+offset_bottom = 16.0
 grow_horizontal = 0
 mouse_filter = 2
-stretch_mode = 0
-alignment_vertical = 0
-
-[node name="InteractableIcon" type="TextureRect" parent="Overlays/InteractableContainer"]
-layout_mode = 2
-mouse_filter = 2
 texture = ExtResource("7_qcb58")
-expand_mode = 1
-
-[node name="TextureRect" type="TextureRect" parent="Overlays/InteractableContainer/InteractableIcon"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8_oce35")
 expand_mode = 1
 
 [node name="CtxNoInteract" type="Node" parent="Overlays" node_paths=PackedStringArray("itemSource")]
@@ -198,24 +132,19 @@ script = ExtResource("12_tj077")
 itemSource = NodePath("../..")
 componentList = ExtResource("13_4i2dj")
 
-[connection signal="AmmoIconChanged" from="." to="Overlays/AmountContainer/LeftIconContainer/LeftNullCheck" method="Check"]
-[connection signal="AmmoIconChanged" from="." to="Overlays/AmountContainer/LeftIconContainer/LeftIcon" method="set_texture"]
+[connection signal="AmmoIconChanged" from="." to="Overlays/AmountContainer/LeftIcon" method="set_texture"]
 [connection signal="AmountChanged" from="." to="Overlays/AmountContainer/AmountLabel" method="set_text"]
 [connection signal="AmountVisibility" from="." to="Overlays/AmountContainer/AmountLabel" method="set_visible"]
-[connection signal="IconChanged" from="." to="TextureRect" method="set_texture"]
-[connection signal="InteractableChanged" from="." to="Overlays/InteractableContainer" method="set_visible"]
+[connection signal="IconChanged" from="." to="TextureRect" method="SetShaderTexture" binds= ["MainIcon"]]
+[connection signal="InteractableChanged" from="." to="Overlays/InteractableIcon" method="set_visible"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
+[connection signal="IsHero" from="." to="TextureRect" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsSchematic" from="." to="TextureRect" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="NotificationChanged" from="." to="Overlays/NotificationLabel" method="set_visible"]
-[connection signal="PersonalityIconChanged" from="." to="Overlays/AmountContainer/LeftIconContainer/LeftNullCheck" method="Check"]
-[connection signal="PersonalityIconChanged" from="." to="Overlays/AmountContainer/LeftIconContainer/LeftIcon" method="set_texture"]
+[connection signal="PersonalityIconChanged" from="." to="Overlays/AmountContainer/LeftIcon" method="set_texture"]
 [connection signal="RarityChanged" from="." to="TextureRect" method="set_self_modulate"]
-[connection signal="SubtypeIconChanged" from="." to="Overlays/AmountContainer/RightIconContainer/RightNullCheck" method="Check"]
-[connection signal="SubtypeIconChanged" from="." to="Overlays/AmountContainer/RightIconContainer/RightIcon" method="set_texture"]
-[connection signal="SurvivorBoostIconChanged" from="." to="Overlays/AmountContainer/RightIconContainer/RightNullCheck" method="Check"]
-[connection signal="SurvivorBoostIconChanged" from="." to="Overlays/AmountContainer/RightIconContainer/RightIcon" method="set_texture"]
+[connection signal="SubtypeIconChanged" from="." to="Overlays/AmountContainer/RightIcon" method="set_texture"]
+[connection signal="SurvivorBoostIconChanged" from="." to="Overlays/AmountContainer/RightIcon" method="set_texture"]
 [connection signal="TooltipChanged" from="." to="Overlays" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
-[connection signal="Value" from="Overlays/AmountContainer/RightIconContainer/RightNullCheck" to="Overlays/AmountContainer/RightIconContainer" method="set_visible"]
-[connection signal="Value" from="Overlays/AmountContainer/LeftIconContainer/LeftNullCheck" to="Overlays/AmountContainer/LeftIconContainer" method="set_visible"]
-[connection signal="Value" from="Overlays/InteractableToggle" to="Overlays/InteractableContainer/InteractableIcon" method="set_visible"]
 [connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]

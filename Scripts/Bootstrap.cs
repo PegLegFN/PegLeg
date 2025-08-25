@@ -6,16 +6,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using FileAccess = Godot.FileAccess;
 
+
 public partial class Bootstrap : Node
 {
     const string processLockPath = "user://pid";
     const string pipeName = "PegLegPipe";
-    [Export]
-    bool pauseAtBoot;
+    const int majorPackageVersion = 1;
+    const int minorPackageVersion = 0;
+
     [Export]
     Vector2I windowSize = new(1350, 720);
     [Export]
     Control curtain;
+    [Export]
+    Label progressLabel;
 	[ExportGroup("Scenes")]
 	[Export]
 	PackedScene desktopOnboarding;
@@ -40,8 +44,9 @@ public partial class Bootstrap : Node
     public override async void _Ready()
     {
         var window = GetWindow();
-        window.Position = new(-100, -100);
-        window.Win64SetVisible(false);
+        window.ContentScaleSize = window.Size;
+        window.MoveToCenter();
+        progressLabel.Text = "Preparing...";
 
         if (FileAccess.FileExists(processLockPath))
         {
@@ -85,74 +90,18 @@ public partial class Bootstrap : Node
                 return;
             }
         }
+
+        using (var processFile = FileAccess.Open(processLockPath, FileAccess.ModeFlags.Write))
         {
-            using var processFile = FileAccess.Open(processLockPath, FileAccess.ModeFlags.Write);
             var currentPid = OS.GetProcessId();
             processFile.Store64((ulong)currentPid);
         }
 
+
         try
         {
             NamedPipeContainer.OpenPipe();
-
-            var oldExternalFolder = Helpers.GlobalisePath("res://External");
-            GD.Print("External: " + oldExternalFolder);
-            if (!Engine.IsEditorHint() && DirAccess.DirExistsAbsolute(oldExternalFolder))
-                DeleteContents(oldExternalFolder);
-
-            //todo: download and import external assets during runtime using resource pack(s)
-
-            //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
-            await PegLegResourceManager.TempImportResources();
-
-
-            var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
-            bool hasAccount = false;
-            if (lastUsedId is not null)
-            {
-                GD.Print("last: " + lastUsedId);
-                var lastUsedAccount = GameAccount.GetOrCreateAccount(lastUsedId);
-                hasAccount = await lastUsedAccount.SetAsActiveAccount();
-            }
-
-            //TODO: if more than one account has device details, show account selector
-            if (!hasAccount)
-            {
-                foreach (var a in GameAccount.OwnedAccounts)
-                {
-                    if (!await a.SetAsActiveAccount())
-                        continue;
-                    hasAccount = true;
-                    break;
-                }
-            }
-
-            if (pauseAtBoot)
-            {
-                GD.Print("boot complete");
-                return;
-            }
-            curtain.Visible = true;
-            await Helpers.WaitForFrame();
-            window.Win64SetVisible(true);
-            window.Size = windowSize;
-            window.MoveToCenter();
-            window.Transparent = false;
-            window.TransparentBg = true;
-            window.Borderless = false;
-            window.Unfocusable = false;
-
-            var iconPath = ProjectSettings.GetSettingWithOverride("application/config/icon").ToString();
-            DisplayServer.SetIcon(ResourceLoader.Load<Texture2D>(iconPath).GetImage());
-
-            await Helpers.WaitForFrame();
-            await Helpers.WaitForFrame();
-
-            //todo: autoselect desktop/mobile scenes here
-            if (hasAccount)
-                GetTree().ChangeSceneToPacked(desktopInterface);
-            else
-                GetTree().ChangeSceneToPacked(desktopOnboarding);
+            await Initialise(window);
         }
         catch(Exception e)
         {
@@ -160,6 +109,86 @@ public partial class Bootstrap : Node
             Thread.Sleep(5000);
             GetTree().Quit();
         }
+    }
+
+    async Task Initialise(Window window)
+    {
+        AppConfig.PreloadConfig();
+
+        if (FileAccess.FileExists(Helpers.GlobalisePath("res://update.exe")))
+            DirAccess.RemoveAbsolute(Helpers.GlobalisePath("res://update.exe"));
+
+        var oldExternalFolder = Helpers.GlobalisePath("res://External");
+        GD.Print("External: " + oldExternalFolder);
+        if (!Engine.IsEditorHint() && DirAccess.DirExistsAbsolute(oldExternalFolder))
+            DeleteContents(oldExternalFolder);
+
+        //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
+        await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, p => progressLabel.Text = $"{p}...");
+        //await PegLegResourceManager.TempImportResources();
+        await Helpers.WaitForFrame();
+
+        var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
+        bool hasAccount = false;
+        if (lastUsedId is not null)
+        {
+            GD.Print("last: " + lastUsedId);
+            var lastUsedAccount = GameAccount.GetOrCreateAccount(lastUsedId);
+            hasAccount = await lastUsedAccount.SetAsActiveAccount(p => progressLabel.Text = $"{p}...");
+        }
+
+        //TODO: if more than one account has device details, show account selector
+        if (!hasAccount)
+        {
+            foreach (var a in GameAccount.OwnedAccounts)
+            {
+                progressLabel.Text = "Login Failed. Attempting another account...";
+                await Helpers.WaitForTimer(1.5);
+                if (!await a.SetAsActiveAccount(p => progressLabel.Text = $"{p}..."))
+                    continue;
+                hasAccount = true;
+                break;
+            }
+            if (!hasAccount && GameAccount.OwnedAccounts.Length > 0)
+            {
+
+                progressLabel.Text = "Login Failed. No accounts remaining";
+                await Helpers.WaitForTimer(1.5);
+            }
+        }
+        if (GameAccount.activeAccount is not null)
+        {
+            progressLabel.Text = "Fetching missions...";
+            await GameMission.UpdateMissions();
+            progressLabel.Text = "Fetching catalog...";
+            await GameStorefront.UpdateCatalog();
+            progressLabel.Text = "Generating XRay Llama contents...";
+            await GameAccount.activeAccount.GenerateXRayLlamaResults();
+            progressLabel.Text = "Updating quests...";
+            await GameAccount.activeAccount.ClientQuestLogin();
+        }
+
+        progressLabel.Text = "";
+        curtain.Visible = true;
+        await Helpers.WaitForFrame();
+        window.Size = windowSize;
+        window.MoveToCenter();
+        window.Transparent = false;
+        window.TransparentBg = true;
+        window.Borderless = false;
+        window.Unfocusable = false;
+
+        var iconPath = ProjectSettings.GetSettingWithOverride("application/config/icon").ToString();
+        DisplayServer.SetIcon(ResourceLoader.Load<Texture2D>(iconPath).GetImage());
+
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
+
+        //todo: autoselect desktop/mobile scenes here
+        if (hasAccount)
+            GetTree().ChangeSceneToPacked(desktopInterface);
+        else
+            GetTree().ChangeSceneToPacked(desktopOnboarding);
     }
 
     static class NamedPipeContainer

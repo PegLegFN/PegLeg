@@ -15,7 +15,7 @@ public partial class HeroEntry : GameItemEntry
     protected override void UpdateItem(GameItem item)
     {
         base.UpdateItem(item);
-        if (item.template.GetHeroAbilities() is GameItemTemplate[] abilityTemplates)
+        if (item?.template?.GetHeroAbilities() is GameItemTemplate[] abilityTemplates)
         {
             heroPerkEntry?.SetAbility(abilityTemplates[0], false);
             heroCommanderPerkEntry?.SetAbility(item.template.Tier < 2 ? abilityTemplates[0] : abilityTemplates[1]);

@@ -30,11 +30,19 @@ public partial class MissionEntry : Control, IRecyclableEntry
     public delegate void TheaterColorChangedEventHandler(Color theatreCol);
     [Signal]
     public delegate void TheaterNameChangedEventHandler(string theatreName);
+    [Signal]
+    public delegate void MissionLockedEventHandler(bool locked);
+    [Signal]
+    public delegate void MissionCompleteEventHandler(bool locked);
+    [Signal]
+    public delegate void IsToDoEventHandler(bool locked);
 
     [Export]
     bool controlModifierParentLayoutProps = true;
     [Export]
     bool fullItems = false;
+    [Export]
+    bool ignoreAccountStatus = false;
 
     [Export]
     Control alertModifierLayout;
@@ -64,9 +72,10 @@ public partial class MissionEntry : Control, IRecyclableEntry
 
     public override void _Ready()
     {
-        GameAccount.ActiveAccountChanged += RefreshRewardNotifications;
+        GameAccount.ActiveAccountChanged += AccountChanged;
+        MissionToDoListController.OnToDoListUpdated += ToDoListChanged;
         AppConfig.OnConfigChanged += OnConfigChanged;
-        EmitSignal(SignalName.BackgroundVisible, AppConfig.Get("missions", "show_background", true));
+        EmitSignalBackgroundVisible(AppConfig.Get("missions", "show_background", true));
     }
 
     private void OnConfigChanged(string section, string key, JsonValue val)
@@ -74,16 +83,25 @@ public partial class MissionEntry : Control, IRecyclableEntry
         if (section != "missions")
             return;
         if (key == "show_background")
-            EmitSignal(SignalName.BackgroundVisible, !val.TryGetValue(out bool show) || show);
+            EmitSignalBackgroundVisible(!val.TryGetValue(out bool show) || show);
     }
 
     public override void _ExitTree()
     {
-        GameAccount.ActiveAccountChanged -= RefreshRewardNotifications;
+        GameAccount.ActiveAccountChanged -= AccountChanged;
+        MissionToDoListController.OnToDoListUpdated -= ToDoListChanged;
+        AppConfig.OnConfigChanged -= OnConfigChanged;
     }
 
-    private void RefreshRewardNotifications()
+    private void ToDoListChanged()
     {
+        EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
+    }
+
+    private void AccountChanged()
+    {
+        //emit false if complete
+        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.activeAccount) != true && !ignoreAccountStatus);
         currentMission?.UpdateRewardNotifications(true);
     }
 
@@ -106,17 +124,21 @@ public partial class MissionEntry : Control, IRecyclableEntry
 	{
         currentMission = mission;
 
-        EmitSignal(SignalName.NameChanged, currentMission.DisplayName);
-        EmitSignal(SignalName.DescriptionChanged, currentMission.Description);
-        EmitSignal(SignalName.LocationChanged, currentMission.Location);
-        EmitSignal(SignalName.IconChanged, currentMission.missionGenerator.GetTexture(FnItemTextureType.Icon));
-        EmitSignal(SignalName.PowerLevelChanged, currentMission.PowerLevel.ToString());
-        EmitSignal(SignalName.BackgroundChanged, currentMission.backgroundTexture ?? defaultBackground);
+        EmitSignalNameChanged(currentMission.DisplayName);
+        EmitSignalDescriptionChanged(currentMission.Description);
+        EmitSignalLocationChanged(currentMission.Location);
+        EmitSignalIconChanged(currentMission.missionGenerator.GetTexture(FnItemTextureType.Icon));
+        EmitSignalPowerLevelChanged(currentMission.PowerLevel.ToString());
+        EmitSignalBackgroundChanged(currentMission.backgroundTexture ?? defaultBackground);
+        EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
 
-        EmitSignal(SignalName.TheaterNameChanged, currentMission.TheaterName);
-        EmitSignal(SignalName.VenturesIndicatorVisible, currentMission.TheaterCat == "v");
-        EmitSignal(SignalName.TheaterCategoryChanged, currentMission.TheaterCat.ToUpper());
-        EmitSignal(SignalName.TheaterColorChanged, currentMission.TheaterCat switch
+        //emit false if complete
+        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.activeAccount) != true && !ignoreAccountStatus);
+
+        EmitSignalTheaterNameChanged(currentMission.TheaterName);
+        EmitSignalVenturesIndicatorVisible(currentMission.TheaterCat == "v");
+        EmitSignalTheaterCategoryChanged(currentMission.TheaterCat.ToUpper());
+        EmitSignalTheaterColorChanged(currentMission.TheaterCat switch
         {
             "s"=>Colors.Aquamarine,
             "p" => Colors.ForestGreen,
@@ -126,8 +148,8 @@ public partial class MissionEntry : Control, IRecyclableEntry
             _ =>Colors.Transparent
         });
 
-        string eventFlag = currentMission.tileData["requirements"]["eventFlag"].ToString();
-        bool hasEventFlag = !string.IsNullOrWhiteSpace(eventFlag);
+        string tileEventFlag = currentMission.tile.requirements.eventFlag;
+        bool hasEventFlag = !string.IsNullOrWhiteSpace(tileEventFlag);
 
         //TODO: if a mission has a quest requirement, mission entries should have the option of listing it
         List<string> tooltipDescriptions =
@@ -135,13 +157,13 @@ public partial class MissionEntry : Control, IRecyclableEntry
             currentMission.Description ?? "",
             //"Item Id: " + item.templateId,
         ];
-        if (mission.SearchTags is JsonArray tagArray && tagArray.Count > 0)
-            tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Except(new string[] { currentMission.DisplayName }).ToArray().Join(", "));
+        if (mission.searchTags.Count > 0)
+            tooltipDescriptions.Add("Search Tags: " + mission.searchTags.Select(n=>n.ToString()).Except([currentMission.DisplayName]).ToArray().Join(", "));
 
-        EmitSignal(SignalName.TooltipChanged, CustomTooltip.GenerateSimpleTooltip(
+        EmitSignalTooltipChanged(CustomTooltip.GenerateSimpleTooltip(
             currentMission.DisplayName,
             null,
-            tooltipDescriptions.ToArray()
+            [.. tooltipDescriptions]
             ));
 
         if(alertModifierLayout is not null && alertModifierParent is not null)
@@ -198,9 +220,10 @@ public partial class MissionEntry : Control, IRecyclableEntry
         {
             var rewards = fullItems ?
                 currentMission.rewardItems :
-                currentMission.rewardItems
-                    .Where(r => r.template.DisplayName != "Gold" && r.template.DisplayName != "Venture XP")
-                    .ToArray();
+                [.. currentMission.rewardItems.Where(r => 
+                    r.template.DisplayName != "Gold" && 
+                    r.template.DisplayName != "Venture XP"
+                )];
             if (rewards.Length > 0)
             {
                 ApplyItems(rewards, missionRewardParent);
@@ -219,9 +242,9 @@ public partial class MissionEntry : Control, IRecyclableEntry
         {
             var rewards = fullItems ?
                 currentMission.alertRewardItems :
-                currentMission.alertRewardItems
-                    .Where(r => r.template.DisplayName != "Venture XP")
-                    .ToArray();
+                [.. currentMission.alertRewardItems.Where(r => 
+                    r.template.DisplayName != "Venture XP"
+                )];
             if (rewards.Length > 0)
             {
                 ApplyItems(rewards, alertRewardParent);
@@ -261,15 +284,18 @@ public partial class MissionEntry : Control, IRecyclableEntry
         {
             var rewards = fullItems ?
                 currentMission.allItems :
-                currentMission.allItems
-                    .Where(r => r.template.DisplayName != "Gold" && r.template.DisplayName != "Venture XP")
+                [.. currentMission.allItems
+                    .Where(r => 
+                        r.template.DisplayName != "Gold" && 
+                        r.template.DisplayName != "Venture XP"
+                    )
                     .OrderBy(r => -r.sortingTemplate.RarityLevel)
                     .ThenBy(r => -r.quantity)
-                    .ToArray();
-            ApplyItems(rewards.Where(item => predicate(item)).ToArray(), highlightedRewardParent);
+                ];
+            ApplyItems([.. rewards.Where(item => predicate(item))], highlightedRewardParent);
             return;
         }
-        ApplyItems(Array.Empty<GameItem>(), highlightedRewardParent);
+        ApplyItems([], highlightedRewardParent);
     }
 
     static void ApplyItems(GameItem[] itemArray, Control parent)
@@ -286,7 +312,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
             controlChild.Visible = true;
             controlChild.ProcessMode = ProcessModeEnum.Inherit;
 
-            bool isRewardBundle = itemArray[i].template.Name.ToLower().StartsWith("zcp_");
+            bool isRewardBundle = itemArray[i].template.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase);
             controlChild.addXToAmount = isRewardBundle;
             controlChild.compactifyAmount = !isRewardBundle;
             controlChild.preventInteractability = isRewardBundle;
@@ -295,6 +321,9 @@ public partial class MissionEntry : Control, IRecyclableEntry
     }
 
     public void InspectMission() => MissionViewer.ShowMission(currentMission);
+
+    public void AddToList() => MissionToDoListController.AddToList(currentMission);
+    public void RemoveFromList() => MissionToDoListController.RemoveFromList(currentMission);
 }
 
 public interface IMissionHighlightProvider

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c47svw0ruq2i3"]
+[gd_scene load_steps=28 format=3 uid="uid://c47svw0ruq2i3"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_hrn5h"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="1_w7bnd"]
@@ -7,12 +7,16 @@
 [ext_resource type="Shader" uid="uid://cypncf62qx5bc" path="res://Shaders/CardTriangleEffect.tres" id="2_sp6f0"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_bervu"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_w04mt"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="5_osex5"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="5_w6pnj"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="6_jhjyb"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="6_p6e2l"]
 [ext_resource type="Texture2D" uid="uid://csbd78stcd271" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Magnifier_128.png" id="7_af580"]
 [ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="7_dc4uf"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="7_kfuyv"]
 [ext_resource type="Shader" uid="uid://bcjttgof1a18i" path="res://Shaders/ChoiceCardChangeEffect.gdshader" id="11_xnoem"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="12_abtl2"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="12_jhjyb"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="13_t03b0"]
 
 [sub_resource type="Gradient" id="Gradient_tpqxe"]
@@ -30,6 +34,17 @@ resource_local_to_scene = true
 shader = ExtResource("2_sp6f0")
 shader_parameter/TriangleTint = Color(0.9, 0.51, 0, 1)
 shader_parameter/TimeOffset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oq1lj"]
+resource_local_to_scene = true
+shader = ExtResource("5_osex5")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/Fit = false
+shader_parameter/VerticalShift = 0.0
+shader_parameter/IsHero = true
+shader_parameter/IsSchematic = false
+shader_parameter/Noise = ExtResource("7_kfuyv")
+shader_parameter/HeroTriangles = ExtResource("6_jhjyb")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_irr70"]
 content_margin_left = 3.0
@@ -82,6 +97,7 @@ grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="RarityGradient" type="TextureRect" parent="ContentParent/Content"]
+visible = false
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -92,6 +108,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_rdiui")
 
 [node name="Triangles" type="TextureRect" parent="ContentParent/Content"]
+visible = false
 texture_repeat = 2
 material = SubResource("ShaderMaterial_8i204")
 layout_mode = 1
@@ -106,6 +123,8 @@ expand_mode = 1
 script = ExtResource("4_w04mt")
 
 [node name="ItemIcon" type="TextureRect" parent="ContentParent/Content"]
+self_modulate = Color(0.9, 0.51, 0, 1)
+material = SubResource("ShaderMaterial_oq1lj")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -116,6 +135,7 @@ grow_vertical = 2
 texture = ExtResource("4_bervu")
 expand_mode = 1
 stretch_mode = 6
+script = ExtResource("4_w04mt")
 
 [node name="DetailsArea" type="VBoxContainer" parent="ContentParent/Content"]
 layout_mode = 1
@@ -236,11 +256,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="TersiatyIcon" type="TextureRect" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer"]
+material = ExtResource("12_jhjyb")
 layout_mode = 2
 texture = ExtResource("5_w6pnj")
 expand_mode = 3
 
 [node name="SecondaryIocn" type="TextureRect" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer"]
+material = ExtResource("12_jhjyb")
 layout_mode = 2
 texture = ExtResource("5_w6pnj")
 expand_mode = 3
@@ -262,19 +284,22 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="SubtypeIcon" type="TextureRect" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer/MarginContainer"]
+material = ExtResource("12_jhjyb")
 layout_mode = 2
 texture = ExtResource("1_w7bnd")
 expand_mode = 3
 
 [node name="TypeLabel" type="Label" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = 0
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 18
-text = "Hero
-"
+theme_override_font_sizes/font_size = 15
+text = "Account Resource"
+autowrap_mode = 1
+clip_text = true
 text_overrun_behavior = 3
 
 [node name="ChangeEffect" type="TextureRect" parent="ContentParent/Content"]
@@ -317,14 +342,16 @@ expand_mode = 5
 [connection signal="AmountChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/AmountLabel" method="set_text"]
 [connection signal="AmountVisibility" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/AmountLabel" method="set_visible"]
 [connection signal="IconChanged" from="." to="ContentParent/Content/ItemIcon" method="set_texture"]
+[connection signal="IconFit" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["Fit"]]
 [connection signal="InteractableChanged" from="." to="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/Responsive Button Circle" method="set_visible"]
+[connection signal="IsHero" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsSchematic" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="NameChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/NameLabel" method="set_text"]
 [connection signal="NameRelevant" from="." to="ContentParent/Content/DetailsArea/NameBox/NameLabel" method="set_visible"]
 [connection signal="PersonalityIconChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/SecondaryIocn" method="set_texture"]
-[connection signal="RarityChanged" from="." to="ContentParent/Content/RarityGradient" method="set_self_modulate"]
+[connection signal="RarityChanged" from="." to="ContentParent/Content/ItemIcon" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/DetailsArea/TypeBox" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/ChangeEffect" method="set_self_modulate"]
-[connection signal="RarityChanged" from="." to="ContentParent/Content/Triangles" method="SetShaderColor" binds= ["TriangleTint"]]
 [connection signal="SubtypeIconChanged" from="." to="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer/MarginContainer/SubtypeIcon" method="set_texture"]
 [connection signal="SurvivorBoostIconChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/TersiatyIcon" method="set_texture"]
 [connection signal="TooltipChanged" from="." to="ContentParent/Content/ContextInput" method="set_tooltip_text"]

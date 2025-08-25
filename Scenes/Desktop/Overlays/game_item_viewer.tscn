@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://buf6p8qyydofm"]
+[gd_scene load_steps=59 format=3 uid="uid://buf6p8qyydofm"]
 
 [ext_resource type="Script" uid="uid://vil6mmu5pyy3" path="res://Scripts/Overlays/GameItemViewer/GameItemViewer.cs" id="1_5fxot"]
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_croo3"]
@@ -13,15 +13,17 @@
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="10_c8yg2"]
 [ext_resource type="PackedScene" uid="uid://cb15vvccjgrdk" path="res://Scenes/PerkAndAbilityEntries/hero_ability_entry.tscn" id="11_bxa5o"]
 [ext_resource type="PackedScene" uid="uid://bgyk3guex13ch" path="res://Scenes/PerkAndAbilityEntries/hero_perk_entry.tscn" id="12_pygth"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardGameItem.gdshader" id="14_6bwx2"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="14_6bwx2"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="14_lxpss"]
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="15_8sk0j"]
 [ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="15_pox86"]
 [ext_resource type="Texture2D" uid="uid://dnqbqca02sqwq" path="res://Images/InterfaceIcons/T-Pattern-OrArrow-128.png" id="16_3ck4t"]
 [ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="17_5dqmp"]
 [ext_resource type="Theme" uid="uid://bc1c4l6rjxof5" path="res://GodotThemes/LineEditLargeTheme.tres" id="18_4mdgc"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="18_dqphe"]
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="18_vptf0"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="19_gnbdk"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="19_ictwk"]
 [ext_resource type="Script" uid="uid://ddyudnu605xw2" path="res://Scripts/Overlays/GameItemViewer/GameItemUpgrader.cs" id="19_kk5po"]
 [ext_resource type="Texture2D" uid="uid://docjdjoems0ia" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Black-L.png" id="20_iom1u"]
 [ext_resource type="Texture2D" uid="uid://xcnetq4h582o" path="res://Images/TextureResources/BlankTexture.tres" id="20_nu85e"]
@@ -32,12 +34,23 @@
 [ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="22_jjr7p"]
 [ext_resource type="Texture2D" uid="uid://d8v0v7pbda3c" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Metal-Brightcore-L.png" id="23_avs1q"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1fkd4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_agup8"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
 shader_parameter/ControlSize = Vector2(200, 200)
 shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = true
+shader_parameter/MainIcon = ExtResource("19_ictwk")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltIcon = ExtResource("18_dqphe")
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = true
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m63ph"]
 bg_color = Color(0, 0, 0, 1)
@@ -67,36 +80,80 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_detail = 5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lfxp2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ictwk"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(64, 64)
 shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("19_ictwk")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltIcon = ExtResource("18_dqphe")
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = true
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_wrarj"]
 resource_name = "ItemViewerChoices"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8atfg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dqphe"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(64, 64)
 shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("19_ictwk")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltIcon = ExtResource("18_dqphe")
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = true
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbiy1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6i3b5"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
 shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("19_ictwk")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltIcon = ExtResource("18_dqphe")
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = true
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gnhoe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_36phr"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
 shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("19_ictwk")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltIcon = ExtResource("18_dqphe")
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = true
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ph3ha"]
 content_margin_left = 5.0
@@ -225,7 +282,7 @@ shader_parameter/minVal = 25.0
 shader_parameter/currentVal = 45.0
 shader_parameter/limitVal = 48.0
 shader_parameter/totalVal = 50.0
-shader_parameter/time = 20.293
+shader_parameter/time = 57.916
 
 [sub_resource type="Gradient" id="Gradient_usvpd"]
 offsets = PackedFloat32Array(0.681199, 0.746594, 0.809264, 0.959044)
@@ -318,10 +375,16 @@ layout_mode = 2
 preventInteractability = true
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry" index="0"]
-material = SubResource("ShaderMaterial_1fkd4")
+material = SubResource("ShaderMaterial_agup8")
+
+[node name="RightIcon" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry/Overlays/AmountContainer" index="0"]
+custom_minimum_size = Vector2(32, 32)
 
 [node name="Control" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry/Overlays/AmountContainer" index="1"]
 visible = false
+
+[node name="LeftIcon" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry/Overlays/AmountContainer" index="2"]
+custom_minimum_size = Vector2(32, 32)
 
 [node name="Control2" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry/Overlays/AmountContainer" index="3"]
 visible = true
@@ -731,7 +794,6 @@ highlight_all_occurrences = true
 draw_tabs = true
 line_folding = true
 gutters_draw_fold_gutter = true
-indent_size = 8
 indent_automatic_prefixes = Array[String](["{", "[", "("])
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
@@ -761,7 +823,6 @@ visible = false
 layout_mode = 2
 
 [node name="ItemChoiceSelector" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="1"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -806,10 +867,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/RewardEntryHorizontal" index="0"]
-material = SubResource("ShaderMaterial_lfxp2")
-
-[node name="InteractableIcon" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/RewardEntryHorizontal/Overlays/InteractableContainer" index="0"]
-visible = false
+material = SubResource("ShaderMaterial_ictwk")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control" index="1"]
 self_modulate = Color(1, 1, 1, 0)
@@ -882,10 +940,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/RewardEntryHorizontal" index="0"]
-material = SubResource("ShaderMaterial_8atfg")
-
-[node name="InteractableIcon" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/RewardEntryHorizontal/Overlays/InteractableContainer" index="0"]
-visible = false
+material = SubResource("ShaderMaterial_dqphe")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2" index="1"]
 self_modulate = Color(1, 1, 1, 0)
@@ -963,10 +1018,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" index="0"]
-material = SubResource("ShaderMaterial_jbiy1")
-
-[node name="InteractableIcon" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal/Overlays/InteractableContainer" index="0"]
-visible = false
+material = SubResource("ShaderMaterial_6i3b5")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3" index="1"]
 self_modulate = Color(1, 1, 1, 0)
@@ -1044,10 +1096,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" index="0"]
-material = SubResource("ShaderMaterial_gnhoe")
-
-[node name="InteractableIcon" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal/Overlays/InteractableContainer" index="0"]
-visible = false
+material = SubResource("ShaderMaterial_36phr")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4" index="1"]
 self_modulate = Color(1, 1, 1, 0)

@@ -399,14 +399,18 @@ public static class PLSearch
                             skipUntilIndex = item.endIndex;
                         bool comparisonTrue = false;
                         string checkString = item.meta.ToString();
-                        if (checkString == "NEW" && target["attributes"] is JsonObject itemAttributes)
+                        if (target["uuid"]?.GetValue<string>() is string uuid && uuid== checkString)
+                        {
+                            comparisonTrue = true;
+                        }
+                        else if (checkString == "NEW" && target["attributes"] is JsonObject itemAttributes)
                         {
                             //special query that checks an items isSeen property
                             comparisonTrue = !(itemAttributes["item_seen"]?.GetValue<bool>() ?? false);
                         }
                         else if (target["searchTags"] is JsonArray tagArray)
                         {
-                            comparisonTrue = tagArray.Any(t => t?.ToString().ToLower().Contains(checkString.ToLower()) ?? false);
+                            comparisonTrue = tagArray.Any(t => t?.ToString().Contains(checkString, StringComparison.CurrentCultureIgnoreCase) ?? false);
                         }
                         if (item.inverted)
                             comparisonTrue = !comparisonTrue;
@@ -486,8 +490,8 @@ public static class PLSearch
     {
         if (check.Length <= 2)
             return false;
-        bool ends = check.StartsWith("\'");
-        bool starts = check.EndsWith("\'");
+        bool ends = check.StartsWith('\'');
+        bool starts = check.EndsWith('\'');
         string content = check[1..^1];
 
         if (ends && starts)

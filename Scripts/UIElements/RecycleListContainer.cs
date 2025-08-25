@@ -56,7 +56,7 @@ public partial class RecycleListContainer : ScrollContainer
             GD.PushWarning("no linked provider in recyclable list");
             return;
         }
-        if (!IsVisibleInTree() || lockList)
+        if ((!IsVisibleInTree() && !force) || lockList)
             return;
         lockList = true;
         try

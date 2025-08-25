@@ -1,21 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://ch7kqyndhfgvs"]
+[gd_scene load_steps=6 format=3 uid="uid://ch7kqyndhfgvs"]
 
 [ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="1_eccir"]
-[ext_resource type="Shader" uid="uid://cypncf62qx5bc" path="res://Shaders/CardTriangleEffect.tres" id="2_2nbar"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="2_3muhe"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="3_s3jqb"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="4_p0y5e"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lodde"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fbjsm"]
 resource_local_to_scene = true
-shader = ExtResource("2_2nbar")
-shader_parameter/TriangleTint = Color(0.9, 0.9, 0.9, 1)
-shader_parameter/TimeOffset = 0.0
+shader = ExtResource("2_3muhe")
+shader_parameter/ControlSize = Vector2(116, 149)
+shader_parameter/Fit = false
+shader_parameter/VerticalShift = 0.5
+shader_parameter/IsHero = true
+shader_parameter/IsSchematic = false
+shader_parameter/Noise = ExtResource("4_p0y5e")
+shader_parameter/HeroTriangles = ExtResource("3_s3jqb")
 
 [node name="InventoryEntryLarge" instance=ExtResource("1_eccir")]
 custom_minimum_size = Vector2(120, 180)
 offset_right = 78.0
 offset_bottom = 117.0
 
-[node name="RarityTriangles" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="1"]
-material = SubResource("ShaderMaterial_lodde")
+[node name="ItemIcon" parent="ItemContent/EdgePadding/GameItem/MarginContainer" index="0"]
+material = SubResource("ShaderMaterial_fbjsm")
 
 [node name="Button" parent="OverflowWarningPopup" index="0"]
 custom_minimum_size = Vector2(0, 24)

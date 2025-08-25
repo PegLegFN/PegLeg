@@ -8,7 +8,7 @@ public partial class CopyCosmeticIconCtx : BaseContextComponent
     public override void Update(ContextMenuHook hook)
     {
         currentCosmetic = hook?.cosmeticSource;
-        SetDisabled(currentCosmetic?.imageUrl is null);
+        SetDisabled(currentCosmetic?.imageUrl is null || !Win64Helpers.isWindows);
     }
 
     public void Copy()

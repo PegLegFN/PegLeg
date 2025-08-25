@@ -91,7 +91,7 @@ public partial class RefreshTimerHook : Control
         timerType = 5;
         refreshTime = customRefreshTime;
         lastRefreshTime = customLastRefreshTime;
-        CustomTooltipText = refreshTime.ToString("g");
+        CustomTooltipText = refreshTime.ToLocalTime().ToString("g");
         warningCountdownTime = customWarningTime;
         criticalCountdownTime = customCritTime;
         UpdateTimeText();
@@ -119,7 +119,7 @@ public partial class RefreshTimerHook : Control
         };
         refreshTime = RefreshTimerController.GetRefreshTime(type);
         lastRefreshTime = RefreshTimerController.GetLastRefreshTime(type);
-        CustomTooltipText = refreshTime.ToString("g");
+        CustomTooltipText = refreshTime.ToLocalTime().ToString("g");
     }
 
     void UpdateTimeText()

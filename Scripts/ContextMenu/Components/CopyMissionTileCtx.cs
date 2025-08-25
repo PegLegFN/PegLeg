@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Text.Json;
 
 public partial class CopyMissionTileCtx : BaseContextComponent
 {
@@ -15,7 +16,7 @@ public partial class CopyMissionTileCtx : BaseContextComponent
     {
         if (currentMission is null)
             return;
-        DisplayServer.ClipboardSet(Input.IsKeyPressed(Key.Shift) ? currentMission.tileData.ToString() : currentMission.TileIdx.ToString());
+        DisplayServer.ClipboardSet(Input.IsKeyPressed(Key.Shift) ? currentMission.tile.ToString() : currentMission.TileIdx.ToString());
         menu.CloseMenu();
     }
 }

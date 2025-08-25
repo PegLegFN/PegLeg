@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://4hei03rcfvmu"]
+[gd_scene load_steps=38 format=3 uid="uid://4hei03rcfvmu"]
 
 [ext_resource type="Script" uid="uid://4x8mjwjel8g5" path="res://Scripts/UserInterface/LlamaInterface.cs" id="1_n8h1q"]
 [ext_resource type="PackedScene" uid="uid://b0uxwtxndd6x3" path="res://Scenes/LlamaEntries/llama_offer_entry.tscn" id="2_eeobp"]
@@ -32,10 +32,11 @@
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="30_lpoky"]
 [ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="31_jae7j"]
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="32_84r54"]
+[ext_resource type="PackedScene" uid="uid://bgr0eeg3fek2e" path="res://Scenes/GameItemEntry/reward_entry_xl.tscn" id="33_jixmc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_osi5s"]
 shader = ExtResource("8_ffqoy")
-shader_parameter/ControlSize = Vector2(778, 680)
+shader_parameter/ControlSize = Vector2(788, 720)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -102,15 +103,15 @@ resultEntriesParent = NodePath("HSplitContainer/Llama Contents/MarginContainer/C
 surpriseResultPanel = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer")
 soldOutResultPanel = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer")
 choicePanel = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer")
-firstChoice = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry")
-secondChoice = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry")
+firstChoice = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry2")
+secondChoice = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2")
 screenshotShareButton = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton")
 screenshotOfferEntry = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/OfferEntry")
 screenshotCardpackEntry = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry")
 screenshotResultEntriesParent = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer")
 screenshotChoicePanel = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer")
-screenshotFirstChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry")
-ScreenshotSecondChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry")
+screenshotFirstChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry2")
+ScreenshotSecondChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 2
@@ -410,6 +411,8 @@ expand_mode = 1
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_bottom = 30
 
 [node name="Items" type="ScrollContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer"]
 layout_mode = 2
@@ -470,9 +473,9 @@ horizontal_alignment = 1
 
 [node name="ChoiceContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 100
+theme_override_constants/margin_left = 70
 theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 100
+theme_override_constants/margin_right = 70
 theme_override_constants/margin_bottom = 50
 
 [node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer"]
@@ -489,7 +492,7 @@ size_flags_horizontal = 0
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("4_1u5ij")]
+[node name="RewardEntry2" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -507,7 +510,7 @@ size_flags_horizontal = 8
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("4_1u5ij")]
+[node name="RewardEntry2" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -869,6 +872,7 @@ priceEntry = NodePath("../VBoxContainer/Price")
 layout_mode = 2
 script = ExtResource("8_4nkxo")
 includeAmountInName = true
+debug = true
 
 [node name="Pinata" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
 self_modulate = Color(0.5, 0.5, 0.5, 1)
@@ -938,7 +942,7 @@ size_flags_horizontal = 0
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("4_1u5ij")]
+[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -947,6 +951,7 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+preventInteractability = true
 autoLinkToViewer = false
 
 [node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect"]
@@ -967,7 +972,7 @@ size_flags_horizontal = 8
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("4_1u5ij")]
+[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -976,6 +981,7 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+preventInteractability = true
 autoLinkToViewer = false
 
 [node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2"]
@@ -1040,8 +1046,6 @@ vertical_alignment = 1
 [connection signal="NameChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/LlamaName" method="set_text"]
 [connection signal="SubtypeIconChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" to="HSplitContainer/Llama Contents/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
 [connection signal="pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton" to="SubViewportContainer/SubViewport" method="CopyScreenshot"]
-[connection signal="Pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="." method="InspectChoiceLlama"]
-[connection signal="Pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="." method="InspectChoiceLlama"]
 [connection signal="AmountChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
 [connection signal="IconChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
 [connection signal="TooltipChanged" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" method="set_tooltip_text"]
@@ -1060,9 +1064,5 @@ vertical_alignment = 1
 [connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/Pinata" method="set_texture"]
 [connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/LlamaName" method="set_text"]
 [connection signal="SubtypeIconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
-[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/Label" method="set_text"]
-[connection signal="Pressed" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry" to="." method="InspectChoiceLlama"]
-[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/Label" method="set_text"]
-[connection signal="Pressed" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry" to="." method="InspectChoiceLlama"]
 [connection signal="AmountChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/PriceText" method="set_text"]
 [connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/Icon" method="set_texture"]

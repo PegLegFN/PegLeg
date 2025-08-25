@@ -17,12 +17,7 @@ public partial class OpenCosmeticIconCtx : BaseContextComponent
     {
         if (currentCosmetic is null)
             return;
-        if (Input.IsKeyPressed(Key.Alt))
-        {
-            Image cosmeticImage = Image.LoadFromFile(CatalogRequests.LocalCosmeticResourcePath(currentCosmetic.imageUrl));
-            Win64Helpers.ClipboardSetImage(cosmeticImage);
-        }
-        else if (Input.IsKeyPressed(Key.Shift) && Input.IsKeyPressed(Key.Ctrl))
+        if (Input.IsKeyPressed(Key.Shift) && Input.IsKeyPressed(Key.Ctrl))
         {
             OS.ShellOpen(ProjectSettings.GlobalizePath(CatalogRequests.LocalCosmeticResourcePath(currentCosmetic.imageUrl)));
         }

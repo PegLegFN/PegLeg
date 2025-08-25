@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 public static class CalenderRequests
 {
@@ -56,6 +57,7 @@ public static class CalenderRequests
     {
         public DateTime validFrom { get; set; }
         public Dictionary<string, EventTimeRange> activeEvents { get; set; }
+        public EventStateData state { get; set; }
 
         [JsonIgnore]
         public Dictionary<string, EventTimeRange> ActiveEvents => activeEvents ??= [];
@@ -75,6 +77,13 @@ public static class CalenderRequests
         }
     }
 
+    struct EventStateData
+    {
+        public int seasonNumber { get; set; }
+        public DateTime seasonBegin { get; set; }
+        public DateTime seasonEnd { get; set; }
+    }
+
     struct EventTimeRange
     {
         public DateTime activeSince { get; set; }
@@ -86,6 +95,8 @@ public static class CalenderRequests
             activeSince == other.activeSince && 
             activeUntil == other.activeUntil;
     }
+
+    static SemaphoreSlim calenderCheck = new(1);
     public static async Task CheckCalender() => await GameAccount.activeAccount.CheckCalender();
     public static async Task CheckCalender(this GameAccount account)
     {
@@ -105,10 +116,19 @@ public static class CalenderRequests
         }
 
         GD.Print($"cal: {currentCalender.cacheExpire}   now: {DateTime.UtcNow}   request:{currentCalender.cacheExpire < DateTime.UtcNow}");
-        if (currentCalender.cacheExpire < DateTime.UtcNow)
+        await calenderCheck.WaitAsync();
+        try
         {
-            var shouldNotify = await RequestCalender(account);
-            notify ??= shouldNotify;
+            if (currentCalender.cacheExpire < DateTime.UtcNow)
+            {
+                GD.Print("downloading latest calender");
+                var shouldNotify = await RequestCalender(account);
+                notify ??= shouldNotify;
+            }
+        }
+        finally
+        {
+            calenderCheck.Release();
         }
 
         notify ??= currentCalender.latestCalenderIndex != currentCalender.GetCurrentIndex(true);
@@ -153,7 +173,8 @@ public static class CalenderRequests
                         activeSince = e["activeSince"].AsTime(),
                         activeUntil = e["activeUntil"].AsTime()
                     }
-                )
+                ),
+                state = s["state"].Deserialize<EventStateData>()
             })]
         };
 
@@ -179,6 +200,10 @@ public static class CalenderRequests
     public static DateTime EventEnd(string flag) =>
         flag is not null && currentCalender.KnownEvents.TryGetValue(flag, out var time) ? time.activeUntil : default; //todo: estimate times of missing events
 
-    public static int BRSeasonNumber => 1;
-    public static string BRSeasonEventFlag => $"EventFlag.Event_S{BRSeasonNumber}_UISeasonEnd";
+    public static int BRSeasonNumber => currentCalender.GetCurrentState().state.seasonNumber;
+
+    static EventTimeRange? BRSeasonRange => currentCalender.GetCurrentState().ActiveEvents.TryGetValue($"EventFlag.Event_S{BRSeasonNumber}_StoryQuests", out var range) ? range : null;
+    public static DateTime? BRSeasonStart => BRSeasonRange?.activeSince;
+    public static int? BRSeasonWeek => BRSeasonRange is EventTimeRange range ? Mathf.FloorToInt((DateTime.UtcNow - range.activeSince).TotalDays) / 7 : null;
+    public static DateTime? BRSeasonEnd => BRSeasonRange?.activeUntil;
 }

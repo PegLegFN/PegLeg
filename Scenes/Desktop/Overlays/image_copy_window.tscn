@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://ciamgottppk7s"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_8bp2u"]
+[ext_resource type="Script" uid="uid://b3pf8d1mhwtyg" path="res://Scripts/Overlays/ShareImagePopup.cs" id="2_wd5is"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="3_jernw"]
+
+[node name="CopyImage" node_paths=PackedStringArray("targetRect") instance=ExtResource("1_8bp2u")]
+script = ExtResource("2_wd5is")
+targetRect = NodePath("Control/WindowContents/PanelContainer/VBoxContainer/PanelContainer/TextureRect")
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents" index="0"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/PanelContainer" index="0"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/PanelContainer/VBoxContainer" index="0"]
+layout_mode = 2
+theme_type_variation = &"Panel3Pad"
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/PanelContainer/VBoxContainer/PanelContainer" index="0"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/PanelContainer/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/PanelContainer/VBoxContainer/Panel" index="0"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Copy to Clipboard"
+
+[node name="Responsive Button Area" parent="Control/WindowContents/PanelContainer/VBoxContainer/Panel" index="1" instance=ExtResource("3_jernw")]
+custom_minimum_size = Vector2(0, 17.645)
+layout_mode = 1
+
+[connection signal="pressed" from="Control/WindowContents/PanelContainer/VBoxContainer/Panel/Responsive Button Area" to="." method="CopyImage"]

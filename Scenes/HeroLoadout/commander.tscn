@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://3ic5fe2i0n0w"]
+[gd_scene load_steps=16 format=3 uid="uid://3ic5fe2i0n0w"]
 
 [ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="1_2i6xj"]
 [ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_2pugj"]
@@ -13,10 +13,14 @@
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="10_73y55"]
 [ext_resource type="PackedScene" uid="uid://cb15vvccjgrdk" path="res://Scenes/PerkAndAbilityEntries/hero_ability_entry.tscn" id="12_73y55"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="13_y0vih"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="14_1eg8j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pft80"]
+resource_local_to_scene = true
 shader = ExtResource("2_73y55")
 shader_parameter/ControlSize = Vector2(358, 54)
+shader_parameter/scale = 1.0
+shader_parameter/Rand = 0.952764
 
 [node name="Commander" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry")]
 offset_right = 358.0
@@ -26,7 +30,7 @@ heroAbilityEntries = [NodePath("MarginContainer/HBoxContainer/VBoxContainer2/HBo
 heroCommanderPerkEntry = NodePath("MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk")
 
 [node name="Panel" type="TextureRect" parent="."]
-modulate = Color(0.9, 0.615, 0, 1)
+self_modulate = Color(0.9, 0.615, 0, 1)
 texture_repeat = 2
 material = SubResource("ShaderMaterial_pft80")
 layout_mode = 2
@@ -37,7 +41,7 @@ syncControlSize = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_right = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -83,7 +87,7 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 script = ExtResource("1_2i6xj")
-tierImages = [null, null, null, null, null]
+tierImages = [NodePath("TextureRect"), NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4"), NodePath("TextureRect5")]
 superchargeColor = Color(0, 0.708333, 0.85, 1)
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController"]
@@ -125,14 +129,17 @@ expand_mode = 5
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
 [node name="Name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 24
 text = "Deadly Blade Crash"
 
 [node name="CommanderPerk" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 script = ExtResource("10_73y55")
 
 [node name="PerkIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk"]
@@ -151,17 +158,23 @@ text = "Corrosive Strikes +"
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="VBoxContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
-alignment = 1
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
 
 [node name="AbilityEntry" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="LockIcon2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry" index="0"]
 anchor_left = 0.5
@@ -169,6 +182,7 @@ anchor_bottom = 0.5
 
 [node name="AbilityEntry2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="LockIcon2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry2" index="0"]
 anchor_left = 0.5
@@ -176,6 +190,7 @@ anchor_bottom = 0.5
 
 [node name="AbilityEntry3" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="LockIcon2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry3" index="0"]
 anchor_left = 0.5
@@ -201,8 +216,13 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 2
 theme_override_font_sizes/font_size = 10
 
+[node name="Responsive Button Area" parent="." instance=ExtResource("14_1eg8j")]
+layout_mode = 2
+
+[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon" method="set_texture"]
 [connection signal="MaxTierChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController" method="SetMaxTier"]
 [connection signal="NameChanged" from="." to="MarginContainer/HBoxContainer/VBoxContainer/Name" method="set_text"]
+[connection signal="RarityChanged" from="." to="Panel" method="set_self_modulate"]
 [connection signal="SubtypeIconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/Subtype" method="set_texture"]
 [connection signal="SuperchargeChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController" method="SetSuperchargedTier"]
 [connection signal="TierChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController" method="SetTier"]

@@ -97,7 +97,6 @@ public partial class ContextMenu : Window
         Position = Vector2I.One*-100;
         listTarget.Size = Vector2.Zero;
         await Helpers.WaitForFrame();
-        await Helpers.WaitForFrame();
 
         //var targetListSize = listTarget.GetCombinedMinimumSize();
         var targetListSize = listTarget.Size;
@@ -105,7 +104,6 @@ public partial class ContextMenu : Window
         listAnimation.CustomMinimumSize = targetListSize;
         scaleAnimation.Size = Vector2.Zero;
         Size = (Vector2I)scaleAnimation.Size;
-        await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
 
         var ds = DisplayServer.Singleton;
@@ -160,8 +158,7 @@ public partial class ContextMenu : Window
 
         listAnimation.CustomMinimumSize = targetListSize * Vector2.Right;
         scaleAnimation.Size = Vector2.Zero;
-        await Helpers.WaitForFrame();
-        await Helpers.WaitForFrame();
+        //await Helpers.WaitForFrame();
         scaleAnimation.Position = Vector2.Zero;
         if (flipH)
         {
@@ -177,18 +174,20 @@ public partial class ContextMenu : Window
         MousePassthroughPolygon = [];
         GrabFocus();
         isOpening = false;
+        await Helpers.WaitForFrame();
+        await Helpers.WaitForFrame();
 
         animTween = CreateTween().SetParallel().SetTrans(Tween.TransitionType.Sine);
-        animTween.TweenProperty(scaleAnimation, "scale", Vector2.One, 0.1f).SetEase(Tween.EaseType.Out);
+        animTween.TweenProperty(scaleAnimation, "scale", Vector2.One, 0.15f).SetEase(Tween.EaseType.Out);
         if (flipH)
         {
-            animTween.TweenProperty(scaleAnimation, "position:x", 0, 0.1f).SetEase(Tween.EaseType.Out);
+            animTween.TweenProperty(scaleAnimation, "position:x", 0, 0.15f).SetEase(Tween.EaseType.Out);
         }
         if (flipV)
         {
-            animTween.TweenProperty(scaleAnimation, "position:y", 0, 0.1f).SetDelay(0.05f);
+            animTween.TweenProperty(scaleAnimation, "position:y", 0, 0.15f).SetDelay(0.1f);
         }
-        animTween.TweenProperty(listAnimation, "custom_minimum_size", targetListSize, 0.1f).SetDelay(0.05f);
+        animTween.TweenProperty(listAnimation, "custom_minimum_size", targetListSize, 0.15f).SetDelay(0.1f);
         animTween.Finished += () =>
         {
             Size = (Vector2I)scaleAnimation.Size;

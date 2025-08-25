@@ -181,7 +181,7 @@ public partial class NotificationDispatcher : Node
             return [];
 
         List<NotificationData> notifs = [];
-        if (xrayStorefront.Offers.Any(o => !excludeFreeLlamaIds.Contains(o.OfferId) && o.WeeklyLimit==-1 && o.Price.quantity == 0))
+        if (xrayStorefront.Offers.Any(o => !excludeFreeLlamaIds.Contains(o.OfferId) && o.WeeklyLimit == -1 && o.Price?.quantity == 0))
         {
             GD.Print($"Free Llamas: {string.Join(", ", xrayStorefront
                 .Offers

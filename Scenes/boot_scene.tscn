@@ -1,27 +1,56 @@
-[gd_scene load_steps=4 format=3 uid="uid://bcllm2n3omok8"]
+[gd_scene load_steps=7 format=3 uid="uid://bcllm2n3omok8"]
 
 [ext_resource type="Script" uid="uid://b0j1smbi1nuqg" path="res://Scripts/Bootstrap.cs" id="1_6qsod"]
 [ext_resource type="PackedScene" uid="uid://ysh5ajklts1q" path="res://Scenes/Desktop/desktopOnboarding.tscn" id="2_frb0b"]
 [ext_resource type="PackedScene" uid="uid://u5ag0k8n6eqm" path="res://Scenes/Desktop/desktopInterface.tscn" id="3_js2t5"]
+[ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="4_p8jt0"]
+[ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="5_efo63"]
 
-[node name="BootScene" type="Control" node_paths=PackedStringArray("curtain")]
-layout_mode = 3
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g0s4o"]
+shader = ExtResource("4_p8jt0")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/ControlSizeScale = Vector2(1, 1)
+shader_parameter/Expo = true
+shader_parameter/AlphaStart = 0.0
+shader_parameter/CornerRadius = 39.05
+
+[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("curtain", "progressLabel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6qsod")
-curtain = NodePath("ColorRect")
+curtain = NodePath("Curtain")
+progressLabel = NodePath("MarginContainer/Label")
 desktopOnboarding = ExtResource("2_frb0b")
 desktopInterface = ExtResource("3_js2t5")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+material = SubResource("ShaderMaterial_g0s4o")
+layout_mode = 2
+color = Color(0, 0, 0, 0.784314)
+
+[node name="LoadingIcon" parent="MarginContainer" instance=ExtResource("5_efo63")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="MarginContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Curtain" type="ColorRect" parent="."]
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 color = Color(0, 0, 0, 1)

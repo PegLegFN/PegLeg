@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dn2ji38mchobh"]
+[gd_scene load_steps=3 format=3 uid="uid://dn2ji38mchobh"]
 
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_20clq"]
 [ext_resource type="Texture2D" uid="uid://de4vkpc5d58on" path="res://Images/InterfaceIcons/T-Items-WeaponPerkup-Legendary-L.png" id="1_dd2lp"]
 
 [node name="DashboardAlertSummary" type="MarginContainer"]
@@ -7,7 +8,6 @@ offset_right = 404.0
 offset_bottom = 24.0
 
 [node name="Color" type="ColorRect" parent="."]
-unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0.176471)
 layout_mode = 2
 color = Color(1, 1, 1, 0)
@@ -15,25 +15,26 @@ color = Color(1, 1, 1, 0)
 [node name="VBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="ItemEntry" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.5
+mouse_filter = 0
+script = ExtResource("1_20clq")
 
-[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
+[node name="Icon" type="TextureRect" parent="VBoxContainer/ItemEntry"]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 0
+mouse_filter = 2
 texture = ExtResource("1_dd2lp")
 expand_mode = 1
 
-[node name="Name" type="Label" parent="VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
+[node name="Name" type="Label" parent="VBoxContainer/ItemEntry"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 0
 text = "Legendary PERK-UP!"
 text_overrun_behavior = 3
 
@@ -96,3 +97,8 @@ mouse_filter = 0
 text = "5.12M"
 horizontal_alignment = 1
 clip_text = true
+
+[connection signal="IconChanged" from="VBoxContainer/ItemEntry" to="VBoxContainer/ItemEntry/Icon" method="set_texture"]
+[connection signal="NameChanged" from="VBoxContainer/ItemEntry" to="VBoxContainer/ItemEntry/Name" method="set_text"]
+[connection signal="RarityChanged" from="VBoxContainer/ItemEntry" to="Color" method="set_color"]
+[connection signal="TooltipChanged" from="VBoxContainer/ItemEntry" to="VBoxContainer/ItemEntry" method="set_tooltip_text"]

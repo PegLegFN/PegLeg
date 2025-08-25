@@ -1,0 +1,124 @@
+[gd_scene load_steps=9 format=3 uid="uid://ci30x54kles27"]
+
+[ext_resource type="PackedScene" uid="uid://cbwhly7mce0o5" path="res://Scenes/HeroLoadout/heroLoadoutPanel.tscn" id="1_46vl6"]
+[ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="2_eh87y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_og08t"]
+resource_local_to_scene = true
+shader = ExtResource("2_eh87y")
+shader_parameter/ControlSize = Vector2(358, 80)
+shader_parameter/scale = 1.0
+shader_parameter/Rand = 0.117187
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eh87y"]
+resource_local_to_scene = true
+shader = ExtResource("2_eh87y")
+shader_parameter/ControlSize = Vector2(358, 48)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.926056
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ironh"]
+resource_local_to_scene = true
+shader = ExtResource("2_eh87y")
+shader_parameter/ControlSize = Vector2(358, 48)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.297307
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bcw5u"]
+resource_local_to_scene = true
+shader = ExtResource("2_eh87y")
+shader_parameter/ControlSize = Vector2(358, 48)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.837528
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y4a24"]
+resource_local_to_scene = true
+shader = ExtResource("2_eh87y")
+shader_parameter/ControlSize = Vector2(358, 48)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.224472
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fywhl"]
+resource_local_to_scene = true
+shader = ExtResource("2_eh87y")
+shader_parameter/ControlSize = Vector2(358, 48)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.904208
+
+[node name="HeroLoadoutPanel" instance=ExtResource("1_46vl6")]
+
+[node name="Commander" parent="VBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 80)
+
+[node name="Panel" parent="VBoxContainer/Commander" index="0"]
+material = SubResource("ShaderMaterial_og08t")
+
+[node name="PowerLevelLabel" parent="VBoxContainer/Commander/MarginContainer/Control/PowerLevelIndicator/HBoxContainer" index="0"]
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="TeamPerk" parent="VBoxContainer" index="3"]
+custom_minimum_size = Vector2(0, 32)
+
+[node name="SupportHero" parent="VBoxContainer" index="5"]
+custom_minimum_size = Vector2(0, 48)
+
+[node name="ColorRect" parent="VBoxContainer/SupportHero" index="0"]
+material = SubResource("ShaderMaterial_eh87y")
+
+[node name="Label" parent="VBoxContainer/SupportHero/MarginContainer/HBoxContainer/HBoxContainer2" index="1"]
+theme_override_font_sizes/font_size = 24
+
+[node name="SupportHero2" parent="VBoxContainer" index="6"]
+custom_minimum_size = Vector2(0, 48)
+
+[node name="ColorRect" parent="VBoxContainer/SupportHero2" index="0"]
+material = SubResource("ShaderMaterial_ironh")
+
+[node name="Label" parent="VBoxContainer/SupportHero2/MarginContainer/HBoxContainer/HBoxContainer2" index="1"]
+theme_override_font_sizes/font_size = 24
+
+[node name="SupportHero3" parent="VBoxContainer" index="7"]
+custom_minimum_size = Vector2(0, 48)
+
+[node name="ColorRect" parent="VBoxContainer/SupportHero3" index="0"]
+material = SubResource("ShaderMaterial_bcw5u")
+
+[node name="Label" parent="VBoxContainer/SupportHero3/MarginContainer/HBoxContainer/HBoxContainer2" index="1"]
+theme_override_font_sizes/font_size = 24
+
+[node name="SupportHero4" parent="VBoxContainer" index="8"]
+custom_minimum_size = Vector2(0, 48)
+
+[node name="ColorRect" parent="VBoxContainer/SupportHero4" index="0"]
+material = SubResource("ShaderMaterial_y4a24")
+
+[node name="Label" parent="VBoxContainer/SupportHero4/MarginContainer/HBoxContainer/HBoxContainer2" index="1"]
+theme_override_font_sizes/font_size = 24
+
+[node name="SupportHero5" parent="VBoxContainer" index="9"]
+custom_minimum_size = Vector2(0, 48)
+
+[node name="ColorRect" parent="VBoxContainer/SupportHero5" index="0"]
+material = SubResource("ShaderMaterial_fywhl")
+
+[node name="Label" parent="VBoxContainer/SupportHero5/MarginContainer/HBoxContainer/HBoxContainer2" index="1"]
+theme_override_font_sizes/font_size = 24
+
+[node name="Gadget" parent="VBoxContainer/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 32)
+
+[node name="Gadget2" parent="VBoxContainer/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 32)
+
+[editable path="VBoxContainer/Commander"]
+[editable path="VBoxContainer/Commander/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry"]
+[editable path="VBoxContainer/Commander/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry2"]
+[editable path="VBoxContainer/Commander/MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry3"]
+[editable path="VBoxContainer/Commander/MarginContainer/Control/PowerLevelIndicator"]
+[editable path="VBoxContainer/SupportHero"]
+[editable path="VBoxContainer/SupportHero2"]
+[editable path="VBoxContainer/SupportHero3"]
+[editable path="VBoxContainer/SupportHero4"]
+[editable path="VBoxContainer/SupportHero5"]

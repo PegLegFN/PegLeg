@@ -17,6 +17,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     [Export]
     Control loadingIcon;
     [Export]
+    CheckButton playableFilter;
+    [Export]
     bool sortByPower;
     [Export]
     bool sortByZoneCat;
@@ -29,18 +31,18 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     PLSearch.Instruction[] missionSearchInstructions = [];
     PLSearch.Instruction[] itemSearchInstructions = [];
 
-    public override async void _Ready()
+    public override void _Ready()
     {
         missionList.SetProvider(this);
+        GameAccount.ActiveAccountChanged += SetMissionsDirty;
         GameMission.OnMissionsUpdated += SetMissionsDirty;
         GameMission.OnMissionsInvalidated += ClearMissions;
         VisibilityChanged += FilterMissions;
+        if (playableFilter is not null)
+            playableFilter.Pressed += SetMissionsDirty;
         EmitSignal(SignalName.NameChanged, testName);
         UpdateFilters();
-        if (!await GameAccount.activeAccount.Authenticate())
-            return;
-        ClearMissions();
-        await GameMission.UpdateMissions();
+        SetMissionsDirty();
     }
 
     public override void _ExitTree()
@@ -86,7 +88,9 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 
     bool MissionFilter(GameMission mission)
     {
-        if (!PLSearch.EvaluateInstructions(missionSearchInstructions, mission.missionData))
+        if (playableFilter?.ButtonPressed == true && !mission.PlayableBy(GameAccount.activeAccount))
+            return false;
+        if (!PLSearch.EvaluateInstructions(missionSearchInstructions, mission.SearchObject))
             return false;
 
         return mission.allItems.Any(item => MissionInterface.MatchItemOrEquivelent(item, itemSearchInstructions));

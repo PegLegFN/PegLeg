@@ -7,13 +7,16 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using FileAccess = Godot.FileAccess;
 
 public class PegLegResourceManager
 {
-    public const string packageFolderPath = "user://Resources/";
+    public const string packageFolderPath = "res://Resources/";
     public const string resourcePath = "res://PegLegResources/";
     public const string fallbackResourcePath = "res://FallbackResources/";
     public const string overrideResourcePath = "user://CustomResources/";
+
+    public static readonly string globalPackageFolderPath = Helpers.GlobalisePath(packageFolderPath);
 
     public static readonly Texture2D defaultIcon = ResourceLoader.Load<Texture2D>("res://Images/InterfaceIcons/T-Icon-Unknown-128.png");
     public static readonly BanjoSuppliments supplimentaryData = ResourceLoader.Load<BanjoSuppliments>("res://banjo_suppliments.tres");
@@ -30,54 +33,89 @@ public class PegLegResourceManager
             if(versionRegex is not null)
                 return versionRegex;
             versionRegex = new();
-            versionRegex.Compile("^(?:PegLegResources\\-)?v(\\d+)\\.(\\d+)\\.(\\d+)([a-z]?[a-z0-9]*)(?:\\-Win64(?:.pck)?)?$");
+            versionRegex.Compile($"^(?:PegLegResources\\-)?v(\\d+)\\.(\\d+)\\.(\\d+)(?:.pck)?$");
             return versionRegex;
         }
     }
-
-    static (int, int, int) GetVersion(string versionText)
+    record struct PackageVersion(GithubHelper.ReleaseVersion version) : IComparable<PackageVersion>
     {
-        if (VersionRegex.Search(versionText) is not RegExMatch standardMatch)
-            return (0, 0, 0);
-        var groups = standardMatch.Strings;
-        int major = int.Parse(groups[1]);
-        int minor = int.Parse(groups[2]);
-        int patch = int.Parse(groups[3]);
-        if (major.ToString() != groups[1])
+
+        public readonly int CompareTo(PackageVersion other) =>
+            version.CompareTo(other.version);
+
+        PackageVersion MajorBasis => this with { version = version with { minor = 0, patch = 0 } };
+        PackageVersion MinorBasis => this with { version = version with { patch = 0 } };
+        PackageVersion[] AllRequirements => [ MajorBasis, MinorBasis, this ];
+        public PackageVersion[] Requirements => [.. AllRequirements.Distinct().Order()];
+
+        public readonly string LocalPackagePath => globalPackageFolderPath + $"PegLegResources-{version}.pck";
+
+        public readonly bool HasLocalPackage() =>
+            FileAccess.FileExists(LocalPackagePath);
+
+        public void LoadAllPackages()
         {
-            GD.Print($"Incorect number format in Major version number ({major} != {groups[1]})");
-            return (0, 0, 0);
+            ProjectSettings.LoadResourcePack(LocalPackagePath, false);
+            if (version.patch > 0)
+                ProjectSettings.LoadResourcePack(MinorBasis.LocalPackagePath, false);
+            if (version.minor > 0)
+                ProjectSettings.LoadResourcePack(MajorBasis.LocalPackagePath, false);
         }
-        if (minor.ToString() != groups[2])
-        {
-            GD.Print($"Incorect number format in Minor version number ({minor} != {groups[2]})");
-            return (0, 0, 0);
-        }
-        if (patch.ToString() != groups[3])
-        {
-            GD.Print($"Incorect number format in Patch version number ({patch} != {groups[3]})");
-            return (0, 0, 0);
-        }
-        return (major, minor, patch);
     }
 
-    static void TryImportPackage(int major, int minor, int patch)
+    public static async Task FetchAndLoadPackages(int targetMajor, int targetMinor, Action<string> onProgress = null)
     {
-        var packageFilename = $"PegLegResources-v{major}.{minor}.{patch}-Win64.pck";
-        if (!FileAccess.FileExists(packageFolderPath + packageFilename))
+        onProgress?.Invoke("Checking for resource updates");
+        Dictionary<PackageVersion, GithubHelper.ReleaseAsset> releases = [];
+        try
+        {
+            var releasesArray = await GithubHelper.FetchReleases("TomatechGames", "PegLegResourcePackager");
+            releases = releasesArray?
+                .Where(r => !r.prerelease || AppConfig.Get("advanced", "prerelease_resources", false))
+                .ToDictionary(
+                    r => new PackageVersion(r.TryGetVersion(out var v, VersionRegex) ? v : default), //todo: fix risk of duplicate key when failing version parse
+                    r => r.assets.Length > 0 ? r.assets[0] : default
+                );
+        }
+        catch
+        {
+            GD.PushWarning("Failed to fetch resource versions, resources may fail to load or be out of date");
             return;
-        ProjectSettings.LoadResourcePack(packageFolderPath + packageFilename, false);
-    }
+        }
 
-    public static async Task ImportResources(string versionNumber)
-    {
-        var (majorTarget, minorTarget, patchTarget) = GetVersion(versionNumber);
-
-        TryImportPackage(majorTarget, minorTarget, patchTarget);
-        if (patchTarget != 0)
-            TryImportPackage(majorTarget, minorTarget, 0);
-        if (patchTarget != 0 && minorTarget != 0)
-            TryImportPackage(majorTarget, 0, 0);
+        var latestVersion = releases
+            .Keys
+            .Where(pv =>
+                pv.version.major == targetMajor &&
+                pv.version.minor == targetMinor
+            )
+            .OrderBy(pv => pv.version.patch)
+            .LastOrDefault();
+        if (latestVersion == default)
+        {
+            GD.PushWarning("No compatible versions found, did I time travel?");
+            return;
+        }
+        GD.Print("Latest Pack Ver: " + latestVersion);
+        if (!DirAccess.DirExistsAbsolute(globalPackageFolderPath))
+            DirAccess.MakeDirAbsolute(globalPackageFolderPath);
+        foreach (var requirement in latestVersion.Requirements)
+        {
+            if (requirement.HasLocalPackage())
+                continue;
+            if (!releases.TryGetValue(requirement, out var asset))
+            {
+                GD.PushWarning($"Version list is missing requirement \"{requirement}\"");
+                continue;
+            }
+            WebHelpers.DownloadProgressHandle downloadProgress = new();
+            downloadProgress.OnProgress += () => onProgress?.Invoke($"Downloading Resource Pack: {requirement.version} ({downloadProgress.ProgressPercent:0.0}%)");
+            using FileAccessStream fileStream = new(requirement.LocalPackagePath, FileAccess.ModeFlags.Write);
+            await asset.DownloadTo(fileStream, downloadProgress);
+        }
+        await Helpers.WaitForFrame();
+        latestVersion.LoadAllPackages();
+        onProgress?.Invoke("Loading Resources");
         await Task.WhenAll(
             LoadDataSources(),
             LoadNamedItems()
@@ -150,7 +188,9 @@ public class PegLegResourceManager
         "WorkerPortrait",
         "WorldItem",
         "ZoneTheme",
+        "PersonalVehicle",
     ];
+
     static async Task LoadNamedItems()
     {
         GD.Print("loading items");
@@ -160,7 +200,7 @@ public class PegLegResourceManager
             return Task.Run(() =>
             {
                 var itemData = LoadResourceObj($"GameAssets/NamedItems/{curName}.json", false).DetachAll();
-                GD.Print($"loaded \"GameAssets/NamedItems/{curName}.json\", with {itemData.Count()} items");
+                GD.Print($"loaded \"GameAssets/NamedItems/{curName}.json\", with {itemData.Length} items");
                 Parallel.ForEach(itemData, kvp =>
                 {
                     namedItemsCC.TryAdd(kvp.Key, new(kvp.Value.AsObject()));
@@ -168,6 +208,19 @@ public class PegLegResourceManager
             });
         });
         await Task.WhenAll(tasks);
+        int templatesPerFrame = 0;
+        GD.Print($"loading template textures...");
+        foreach (var template in namedItemsCC.Values)
+        {
+            template.GetTexture();
+            templatesPerFrame--;
+            if (templatesPerFrame < 0)
+            {
+                await Helpers.WaitForFrame();
+                templatesPerFrame = 60;
+            }
+        }
+        GD.Print($"loaded {namedItemsCC.Count} template textures");
         GameItemTemplate.SetImportedTemplates(namedItemsCC.ToFrozenDictionary(StringComparer.InvariantCultureIgnoreCase));
     }
 
@@ -198,7 +251,7 @@ public class PegLegResourceManager
             var dirs = overrideDir.GetDirectories();
             themeList.AddRange(dirs);
         }
-        return themeList.Distinct().ToArray();
+        return [.. themeList.Distinct()];
     }
 
     public static FileAccess LoadResourceFile(string resource, bool allowOverrides = true, bool onlyOverride = false)
@@ -639,7 +692,17 @@ public class GameItemTemplate
             lowername == "currency_xrayllama"
         );
 
-    public string Type => rawData?["Type"].ToString();
+    public string Type
+    {
+        get
+        {
+            var type = rawData.TryGetPropertyValue("Type", out var typeNode) ? typeNode.ToString() : null;
+            if (type is null)
+                GD.Print("WOAH NELLY");
+            return type;
+        }
+    }
+
     public bool IsCollectable => Type switch
     {
         "Hero" or "Worker" or "Defender" or "Schematic" => true,
@@ -649,7 +712,7 @@ public class GameItemTemplate
     {
         "Hero" or "Worker" or "Weapon" or "Trap" => true,
         "Schematic" => !Unrecyclable || Category != "Trap",
-        "Defender" => !Unrecyclable,
+        "Defender" => !Unrecyclable || RarityLevel > 1,
         _ => false
     };
     public bool CanBeUnseen=> Type switch
@@ -697,8 +760,12 @@ public class GameItemTemplate
     public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview) => GetTexture(textureType, PegLegResourceManager.defaultIcon);
     public Texture2D GetTexture(Texture2D fallbackIcon) => GetTexture(FnItemTextureType.Preview, fallbackIcon);
 
+    Dictionary<FnItemTextureType, Texture2D> textures = [];
     public Texture2D GetTexture(FnItemTextureType textureType, Texture2D fallbackIcon)
     {
+        if (textures.TryGetValue(textureType, out var cachedTex))
+            return cachedTex;
+
         if 
         (
             (
@@ -733,7 +800,10 @@ public class GameItemTemplate
 
         if (!TryGetTexturePath(out var texturePath, textureType))
             return fallbackIcon;
-        return PegLegResourceManager.LoadResourceAsset<Texture2D>("GameAssets/"+texturePath) ?? fallbackIcon;
+        var loadedTex = PegLegResourceManager.LoadResourceAsset<Texture2D>("GameAssets/" + texturePath);
+        if(loadedTex is not null)
+            textures[textureType] = loadedTex;
+        return loadedTex ?? fallbackIcon;
     }
 
     public bool TryGetTexturePath(out string foundPath, FnItemTextureType textureType = FnItemTextureType.Preview)
@@ -798,9 +868,9 @@ public class GameItemTemplate
 
         if (
             rawData["RangedWeaponStats"]?["AmmoType"]?.ToString() is string ammoType && 
-            PegLegResourceManager.supplimentaryData.AmmoIcons.ContainsKey(ammoType)
+            PegLegResourceManager.supplimentaryData.AmmoIcons.TryGetValue(ammoType.Split(" ")[0], out Texture2D value)
             )
-            return PegLegResourceManager.supplimentaryData.AmmoIcons[ammoType];
+            return value;
 
         return fallbackIcon;
     }

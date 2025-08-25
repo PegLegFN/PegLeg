@@ -45,6 +45,7 @@ public partial class ShaderHook : Control
     public override void _Ready()
     {
         ItemRectChanged += OnRectUpdated;
+        SetShaderFloat(GD.Randf(), "Rand");
     }
 
     private void OnRectUpdated()

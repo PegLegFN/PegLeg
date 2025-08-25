@@ -1,17 +1,23 @@
-[gd_scene load_steps=8 format=3 uid="uid://ewoytphqxrj1"]
+[gd_scene load_steps=10 format=3 uid="uid://ewoytphqxrj1"]
 
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_2mltm"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_jq2el"]
 [ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="1_kpu7q"]
 [ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="2_kvbdw"]
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="2_w5yui"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_4jiys"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="4_kvbdw"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_40614"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4nfbh"]
+resource_local_to_scene = true
 shader = ExtResource("1_kpu7q")
-shader_parameter/ControlSize = Vector2(250, 26)
+shader_parameter/ControlSize = Vector2(192, 26)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.949645
 
 [node name="TeamPerk" type="MarginContainer"]
+script = ExtResource("1_jq2el")
 
 [node name="Panel" type="TextureRect" parent="."]
 modulate = Color(0.51, 0.804, 1, 1)
@@ -46,13 +52,23 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Blast from the Past"
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="WarningIcon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
 material = ExtResource("4_kvbdw")
 layout_mode = 2
 texture = ExtResource("2_w5yui")
 expand_mode = 3
 
-[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Requirements" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "2/2"
+
+[node name="Responsive Button Area" parent="." instance=ExtResource("7_40614")]
+layout_mode = 2
+
+[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="." to="MarginContainer/HBoxContainer/Label" method="set_text"]

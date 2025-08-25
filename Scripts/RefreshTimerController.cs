@@ -114,7 +114,7 @@ public partial class RefreshTimerController : Node
             case RefreshTimeType.Daily:
                 return today.AddDays(1);
             case RefreshTimeType.Weekly:
-                return rightNow.WeeklyRefresh();
+                return rightNow.WeeklyRefresh(DayOfWeek.Thursday);
             case RefreshTimeType.BRWeekly:
                 return rightNow.WeeklyRefresh(hour:12);
         }

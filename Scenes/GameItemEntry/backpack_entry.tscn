@@ -1,15 +1,44 @@
-[gd_scene load_steps=6 format=3 uid="uid://jsu6mxwb40t6"]
+[gd_scene load_steps=14 format=3 uid="uid://jsu6mxwb40t6"]
 
 [ext_resource type="PackedScene" uid="uid://ch7kqyndhfgvs" path="res://Scenes/GameItemEntry/inventory_entry_large.tscn" id="1_dt25g"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_jj4sb"]
-[ext_resource type="Shader" uid="uid://cypncf62qx5bc" path="res://Shaders/CardTriangleEffect.tres" id="2_q35g6"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="4_abngg"]
 [ext_resource type="Resource" uid="uid://qd1vmbwf0n3j" path="res://Scripts/ContextMenu/ComponentLists/BackpackItemCtxList.tres" id="4_jsyui"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="5_6ficb"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="5_abngg"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="6_wc1r0"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="7_6ficb"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w10dp"]
+[sub_resource type="Gradient" id="Gradient_o50gb"]
+colors = PackedColorArray(0.9, 0.9, 0.9, 1, 0.6, 0.6, 0.6, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4arc4"]
+gradient = SubResource("Gradient_o50gb")
+fill = 1
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_18ceg"]
 resource_local_to_scene = true
-shader = ExtResource("2_q35g6")
-shader_parameter/TriangleTint = Color(0.9, 0.9, 0.9, 1)
-shader_parameter/TimeOffset = 0.0
+shader = ExtResource("4_abngg")
+shader_parameter/ControlSize = Vector2(116, 89)
+shader_parameter/Fit = true
+shader_parameter/VerticalShift = 0.5
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/Noise = ExtResource("6_wc1r0")
+shader_parameter/HeroTriangles = ExtResource("5_6ficb")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2wmh"]
+bg_color = Color(0, 0, 0, 1)
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 3.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ptkuf"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="BackpackEntry" instance=ExtResource("1_dt25g")]
 custom_minimum_size = Vector2(120, 120)
@@ -19,17 +48,86 @@ offset_bottom = 120.0
 [node name="AspectTexture" parent="ItemContent" index="0"]
 texture = ExtResource("2_jj4sb")
 
-[node name="AspectTexture" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer" index="0"]
+[node name="IconWindow" type="Control" parent="ItemContent/EdgePadding/GameItem/MarginContainer" index="0"]
+clip_contents = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow" index="0"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="AspectTexture" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer" index="0"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
 texture = ExtResource("2_jj4sb")
+expand_mode = 5
 
-[node name="RarityTriangles" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="1"]
-material = SubResource("ShaderMaterial_w10dp")
+[node name="RarityGradient" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="0"]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_4arc4")
+expand_mode = 1
 
-[node name="ItemIcon" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="2"]
-script = null
+[node name="ItemIcon" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_abngg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ItemIcon" parent="ItemContent/EdgePadding/GameItem/MarginContainer" index="1"]
+material = SubResource("ShaderMaterial_18ceg")
+texture = ExtResource("7_6ficb")
+
+[node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/MarginContainer" index="0"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_b2wmh")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ptkuf")
+max_value = 1.0
+value = 1.0
+fill_mode = 3
+show_percentage = false
+
+[node name="AspectRatioContainer" parent="ItemContent/RarityOutline" index="1"]
+anchors_preset = -1
+offset_right = -6.0
+
+[node name="NotificationLabel" parent="ItemContent/RarityOutline" index="2"]
+anchors_preset = -1
+offset_right = -10.0
 
 [node name="InvEntryTooltipCtx" parent="Tooltip" index="0"]
 componentList = ExtResource("4_jsyui")
 
 [node name="InvEntryCtx" parent="Responsive Button Area" index="1"]
 componentList = ExtResource("4_jsyui")
+
+[connection signal="DurabilityValue" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/MarginContainer/ProgressBar" method="set_value"]
+[connection signal="DurabilityVisible" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/MarginContainer" method="set_visible"]
+[connection signal="IconChanged" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture/ItemIcon" method="set_texture"]
+[connection signal="IconFit" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture/ItemIcon" method="SetFit"]
+[connection signal="RarityChanged" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture/RarityGradient" method="set_self_modulate"]

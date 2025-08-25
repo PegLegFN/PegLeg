@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dt403r6613tos"]
+[gd_scene load_steps=25 format=3 uid="uid://dt403r6613tos"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_p7b2a"]
 [ext_resource type="Script" uid="uid://g5i4usaw1fcl" path="res://Scripts/UIElements/VerticalTab.cs" id="2_c1ulb"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bpj23p4ewlb5r" path="res://Scripts/UserInterface/Settings/ThemeSettings.cs" id="4_kkpd6"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_1lymk"]
 [ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="5_7ebkc"]
+[ext_resource type="Script" uid="uid://yme0qwqj3yob" path="res://Scripts/Config/ConfigFloatSwitchHook.cs" id="6_w03hs"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_wim73"]
 [ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="8_nh2gq"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="9_yv42k"]
@@ -15,6 +16,8 @@
 [ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="12_ld0ka"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="12_pwy1u"]
 [ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="12_v5jo8"]
+[ext_resource type="Script" uid="uid://dull1xj5ergmg" path="res://Scripts/UserInterface/Settings/UpdateChecker.cs" id="17_e6sed"]
+[ext_resource type="PackedScene" uid="uid://dwba88ym1rkl5" path="res://Scenes/updateVersion.tscn" id="17_xu4j7"]
 
 [sub_resource type="Gradient" id="Gradient_c1ulb"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -172,6 +175,19 @@ text = "Advanced"
 alignment = 0
 script = ExtResource("2_c1ulb")
 
+[node name="UpdatesTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="5"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" index="0"]
+layout_mode = 2
+theme_type_variation = &"VTab"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_w03hs")
+text = "Updates"
+alignment = 0
+script = ExtResource("2_c1ulb")
+
 [node name="MarginContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(350, 410)
 layout_mode = 2
@@ -310,7 +326,7 @@ size_flags_horizontal = 3
 min_value = 0.5
 max_value = 1.0
 step = 0.05
-value = 1.0
+value = 0.85
 scrollable = false
 tick_count = 11
 ticks_on_borders = true
@@ -403,6 +419,70 @@ script = ExtResource("12_12lms")
 section = "notification"
 key = "on_minimised"
 defaultValue = true
+
+[node name="FPS" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="7"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS" index="0"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Target FPS"
+
+[node name="FPSSwitch" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS" index="1" node_paths=PackedStringArray("switchButtons")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CheckContainer"
+script = ExtResource("6_w03hs")
+section = "ui"
+key = "fps"
+values = PackedFloat32Array(30, 60, 144, -1)
+requirePressed = true
+switchButtons = [NodePath("HBoxContainer/30FPS"), NodePath("HBoxContainer/60FPS"), NodePath("HBoxContainer/144FPS"), NodePath("HBoxContainer/InfFPS")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="30FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stonewood"
+theme_type_variation = &"LeftCheckButton"
+text = " 30"
+alignment = 1
+metadata/zone = "s"
+
+[node name="60FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Plankerton"
+theme_type_variation = &"MiddleCheckButton"
+button_pressed = true
+text = " 60"
+alignment = 1
+metadata/zone = "p"
+
+[node name="144FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Canny Valley"
+theme_type_variation = &"MiddleCheckButton"
+text = " 144"
+alignment = 1
+metadata/zone = "c"
+
+[node name="InfFPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="3"]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Canny Valley"
+theme_type_variation = &"RightCheckButton"
+text = " Inf"
+alignment = 1
+metadata/zone = "c"
 
 [node name="Audio" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="1"]
 visible = false
@@ -991,12 +1071,16 @@ holdTime = 2.5
 layout_mode = 2
 text = "Open AppData folder"
 
-[node name="CloseAppButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="11"]
+[node name="InstallFolderButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="11"]
+layout_mode = 2
+text = "Open Installation folder"
+
+[node name="CloseAppButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="12"]
 layout_mode = 2
 size_flags_vertical = 8
 text = "Close PegLeg"
 
-[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="12"]
+[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="13"]
 visible = false
 layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
@@ -1107,12 +1191,68 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "beastmode"
 
+[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="5" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
+visible = false
+layout_mode = 2
+script = ExtResource("17_e6sed")
+failMsg = NodePath("VBoxContainer/ScrollContainer/MarginContainer/Label")
+updateBtn = NodePath("VBoxContainer/HBoxContainer/UpdateLaunchBtn")
+releaseParent = NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
+releaseScene = ExtResource("17_xu4j7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Updates"
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/ScrollContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/ScrollContainer/MarginContainer" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/ScrollContainer/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+text = "Up to date :)"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="3"]
+layout_mode = 2
+
+[node name="UpdateCheckBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LargeButton"
+text = "Check For Updates"
+
+[node name="UpdateLaunchBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ActionButton"
+text = "Update"
+
 [connection signal="WindowOpened" from="." to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="UpdateActiveTheme"]
 [connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface" method="set_visible"]
 [connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/AudioTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio" method="set_visible"]
 [connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/ThemeTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="set_visible"]
 [connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MiscTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="set_visible"]
 [connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced" method="set_visible"]
+[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" method="set_visible"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmetics" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles" method="set_visible"]
 [connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" method="SetValue"]
@@ -1150,6 +1290,9 @@ key = "beastmode"
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="ApplyTheme"]
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButton/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenAppData"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/InstallFolderButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenInstallationFolder"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/CloseAppButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="CloseApp"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/ExperimentalNotifs" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection" method="set_visible"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer/UpdateCheckBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" method="CheckForUpdates"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer/UpdateLaunchBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" method="DownloadAndRunInstaller"]

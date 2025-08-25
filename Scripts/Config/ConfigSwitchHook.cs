@@ -13,10 +13,10 @@ public partial class ConfigSwitchHook : SwitchController
 
     bool valueIsChanging;
 
-    protected override void Initialise(int defaultIndex = -1)
+    protected override void Initialise(int defaultIndex)
     {
         AppConfig.OnConfigChanged += OnConfigChanged;
-        int storedIndex = AppConfig.Get(section, key, -1);
+        int storedIndex = AppConfig.Get(section, key, defaultIndex);
         valueIsChanging = true;
         base.Initialise(storedIndex);
         valueIsChanging = false;

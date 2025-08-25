@@ -15,6 +15,8 @@ public partial class ColumnStackContainer : Container
     int maxColumns = 0;
     [Export]
     Vector2I spacing = new(5, 5);
+    [Export(PropertyHint.Range, "1, 20, 1")]
+    int iterationsPerFrame = 3;
 
     public override Vector2 _GetMinimumSize()
     {
@@ -57,10 +59,25 @@ public partial class ColumnStackContainer : Container
         return currentSmallest;
     }
 
+    int frameIterations;
+    public override void _Process(double delta)
+    {
+        bool resort = frameIterations <= 0;
+        frameIterations = iterationsPerFrame;
+        if (resort)
+            _Notification((int)NotificationSortChildren);
+    }
+
     public override void _Notification(int what)
     {
+        var name = Name;
         if (what == NotificationSortChildren)
         {
+            frameIterations--;
+            if (frameIterations <= 0)
+            {
+                return;
+            }
             int actualColumns = Mathf.Max(minColumns, GetFittingColumns());
             float cellWidth = (Size.X - (spacing.X * (actualColumns - 1))) / actualColumns;
             float[] heights = new float[actualColumns];

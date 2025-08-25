@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bqp7ax1fjc306"]
+[gd_scene load_steps=71 format=3 uid="uid://bqp7ax1fjc306"]
 
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="1_ac3k7"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://dw4hobglon36k" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Clock_128.png" id="7_ots04"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="10_smvwj"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="10_ta6o0"]
+[ext_resource type="Texture2D" uid="uid://cdbip8w04ra2u" path="res://Images/InterfaceIcons/T-Icon-Quest-Journal-64.png" id="11_dlqc6"]
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="11_k0h4l"]
 [ext_resource type="Texture2D" uid="uid://bs2rkwdm3joj1" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Caution_128.png" id="11_nlqir"]
 [ext_resource type="Texture2D" uid="uid://clu8pwf3ou6au" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Ranged-CARD.png" id="11_rguep"]
 [ext_resource type="Texture2D" uid="uid://c5pk5nlltrbxc" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Melee-CARD.png" id="12_jv2yv"]
@@ -21,6 +23,8 @@
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="14_p2qwn"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="14_tws5x"]
 [ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="16_sctyi"]
+[ext_resource type="Script" uid="uid://b5p17hdo00lc6" path="res://Scripts/UserInterface/Dashboard/MissionToDoListController.cs" id="24_0eto4"]
+[ext_resource type="PackedScene" uid="uid://dfetgl4vetabf" path="res://Scenes/MissionEntry/mission_entry_compact.tscn" id="24_a0y7g"]
 [ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="25_7rx8s"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="25_m2jhp"]
 [ext_resource type="Texture2D" uid="uid://dgwvyp3xkplbh" path="res://Images/InterfaceIcons/PinataStandardPack-UpgradeWhite.png" id="26_7rx8s"]
@@ -46,6 +50,10 @@
 [ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="38_sfcv1"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="39_13buu"]
 [ext_resource type="Texture2D" uid="uid://dlbasrvn2ilmd" path="res://Images/TextureResources/progress-wheel.tres" id="40_at20a"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="43_4yf1i"]
+[ext_resource type="Script" uid="uid://dwvt6ybtex6dg" path="res://Scripts/UsernameLabel.cs" id="47_4kbf4"]
+[ext_resource type="PackedScene" uid="uid://dx5ueh2xxydys" path="res://Scenes/MissionEntry/mission_reward_entry_accountless.tscn" id="50_xqktx"]
+[ext_resource type="PackedScene" uid="uid://bsmb8rbqn537o" path="res://Scenes/MissionEntry/mission_collection_entry_accountless.tscn" id="53_0op8k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("3_h2g04")
@@ -91,14 +99,15 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_as0uf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4yf1i"]
 shader = ExtResource("35_7rx8s")
-shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/ControlSize = Vector2(119, 16)
 shader_parameter/progress = 0.5
 shader_parameter/tileScale = 0.15
 shader_parameter/tileSpeed = 0.15
 shader_parameter/tileSpeedRatio = 0.5
 shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
 shader_parameter/pattern = ExtResource("36_as0uf")
 shader_parameter/tint = Color(0.88, 0.4, 1, 1)
 
@@ -124,6 +133,54 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0h4l"]
+shader = ExtResource("35_7rx8s")
+shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/progress = 0.51
+shader_parameter/tileScale = 0.4
+shader_parameter/tileSpeed = 0.2
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = false
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("38_sfcv1")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dlqc6"]
+shader = ExtResource("35_7rx8s")
+shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/progress = 0.03
+shader_parameter/tileScale = 0.5
+shader_parameter/tileSpeed = 0.35
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("38_ho1op")
+shader_parameter/tint = Color(0, 0.9, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4kbf4"]
+shader = ExtResource("35_7rx8s")
+shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/progress = 0.31
+shader_parameter/tileScale = 0.25
+shader_parameter/tileSpeed = 0.275
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = true
+shader_parameter/pattern = ExtResource("43_4yf1i")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_as0uf"]
+shader = ExtResource("35_7rx8s")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.5
+shader_parameter/tileScale = 0.15
+shader_parameter/tileSpeed = 0.15
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("36_as0uf")
+shader_parameter/tint = Color(0.88, 0.4, 1, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ho1op"]
 shader = ExtResource("35_7rx8s")
 shader_parameter/ControlSize = Vector2(373, 16)
@@ -132,6 +189,7 @@ shader_parameter/tileScale = 0.4
 shader_parameter/tileSpeed = 0.2
 shader_parameter/tileSpeedRatio = 0.5
 shader_parameter/useAlpha = false
+shader_parameter/rainbow = false
 shader_parameter/pattern = ExtResource("38_sfcv1")
 shader_parameter/tint = Color(0.95, 1, 0.4, 1)
 
@@ -143,8 +201,21 @@ shader_parameter/tileScale = 0.5
 shader_parameter/tileSpeed = 0.35
 shader_parameter/tileSpeedRatio = 0.5
 shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
 shader_parameter/pattern = ExtResource("38_ho1op")
 shader_parameter/tint = Color(0, 0.9, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xqktx"]
+shader = ExtResource("35_7rx8s")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.79
+shader_parameter/tileScale = 0.25
+shader_parameter/tileSpeed = 0.275
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = true
+shader_parameter/pattern = ExtResource("43_4yf1i")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
 
 [node name="Dashboard" type="MarginContainer"]
 custom_minimum_size = Vector2(720, 0)
@@ -159,54 +230,34 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VSplitContainer" parent="BeastDashboard"]
+[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard"]
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="BeastDashboard/PanelContainer"]
 layout_mode = 2
 
-[node name="NotableRewards" type="PanelContainer" parent="BeastDashboard/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 2.0
-theme_type_variation = &"Panel5PadB"
-script = ExtResource("1_rx870")
-missionList = NodePath("VBoxContainer/MarginContainer/ScrollContainer")
-loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
-notableMode = true
-rarityFilters = []
-zoneFilters = []
-typeFilters = []
-repeatabilityFilters = []
-
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/NotableRewards"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer"]
-layout_mode = 2
-
-[node name="CheckButton" type="CheckButton" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-button_pressed = true
-
-[node name="Node" type="Node" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton"]
-script = ExtResource("2_dckmf")
-
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
-text = "Notable Rewards"
+text = "Mission Rewards"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer"]
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("10_smvwj")
 timerType = 1
 
-[node name="Button" type="Button" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer"]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/Button"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -220,12 +271,54 @@ grow_vertical = 2
 texture = ExtResource("2_aag1n")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Notable" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("1_rx870")
+missionList = NodePath("VBoxContainer/MarginContainer/ScrollContainer")
+loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
+notableMode = true
+rarityFilters = []
+zoneFilters = []
+typeFilters = []
+repeatabilityFilters = []
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="Node" type="Node" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton"]
+script = ExtResource("2_dckmf")
+
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Notable Rewards"
+
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer"]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("14_p2qwn")
@@ -235,7 +328,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("16_sctyi")
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -245,24 +338,26 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 0
 
-[node name="Padding" type="Control" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
+[node name="SmallLoadingIcon" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
 layout_mode = 2
 
-[node name="AllRewards" type="PanelContainer" parent="BeastDashboard/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "sortByPower", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="All" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "sortByPower", "filterPower", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(370, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -271,58 +366,64 @@ theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_rx870")
 missionList = NodePath("VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/VBoxContainer/MarginContainer/SmallLoadingIcon")
-sortByPower = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton")
+searchBar = NodePath("VBoxContainer/VBoxContainer/SearchBox")
+sortByPower = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton")
+filterPower = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton")
+filterStory = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton")
 rarityFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common")]
 zoneFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures")]
 typeFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps")]
-repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x")]
+repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x")]
+metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer"]
+visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 button_pressed = true
 
-[node name="Node" type="Node" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer/CheckButton"]
+[node name="Node" type="Node" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton"]
 script = ExtResource("2_dckmf")
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "Mission Rewards"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer"]
 custom_minimum_size = Vector2(0, 210)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer2" type="HFlowContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer"]
+[node name="SearchBox" type="LineEdit" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search in missions"
+context_menu_enabled = false
+clear_button_enabled = true
+
+[node name="HBoxContainer2" type="HFlowContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="RarityFilters" type="PanelContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="RarityFilters" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Mythic" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
-custom_minimum_size = Vector2(55, 0)
+[node name="Mythic" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(53, 0)
 layout_mode = 2
 tooltip_text = "Mythic"
 theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/rarity = "Mythic"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -333,7 +434,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 0.28, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -345,15 +446,15 @@ text = "Mythic"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Legendary" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
-custom_minimum_size = Vector2(70, 0)
+[node name="Legendary" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(76, 0)
 layout_mode = 2
 tooltip_text = "Legendary"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Legendary"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -364,7 +465,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.683333, 0, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -376,15 +477,15 @@ text = "Legendary"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Epic" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
-custom_minimum_size = Vector2(40, 0)
+[node name="Epic" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 tooltip_text = "Epic"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Epic"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -395,7 +496,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.816667, 0, 1, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -407,15 +508,15 @@ text = "Epic"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Rare" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
-custom_minimum_size = Vector2(40, 0)
+[node name="Rare" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(37, 0)
 layout_mode = 2
 tooltip_text = "Rare"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Rare"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -426,7 +527,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.366667, 1, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -438,15 +539,15 @@ text = "Rare"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Uncommon" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
-custom_minimum_size = Vector2(80, 0)
+[node name="Uncommon" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
 tooltip_text = "Uncommon"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Uncommon"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -457,7 +558,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0166667, 1, 0, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -469,15 +570,15 @@ text = "Uncommon"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Common" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
-custom_minimum_size = Vector2(65, 0)
+[node name="Common" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+custom_minimum_size = Vector2(68, 0)
 layout_mode = 2
 tooltip_text = "Common"
 theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/rarity = "Common"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -487,7 +588,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -499,16 +600,16 @@ text = "Common"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ZoneFilters" type="PanelContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="ZoneFilters" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Stonewood" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Stonewood" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 tooltip_text = "Stonewood"
@@ -516,7 +617,7 @@ theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/zone = "s"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -527,7 +628,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2296, 0.4264, 0.82, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -539,7 +640,7 @@ text = "Stone"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Plankerton" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Plankerton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 tooltip_text = "Plankerton"
@@ -547,7 +648,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/zone = "p"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -558,7 +659,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.15, 1, 0, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -570,7 +671,7 @@ text = "Plank"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Canny Valley" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Canny Valley" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 tooltip_text = "Canny Valley"
@@ -578,7 +679,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/zone = "c"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -589,7 +690,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.8, 0, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -601,7 +702,7 @@ text = "Canny"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Twine Peaks" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Twine Peaks" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 tooltip_text = "Twine Peaks"
@@ -609,7 +710,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/zone = "t"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -620,7 +721,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.683333, 0, 1, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -632,7 +733,7 @@ text = "Twine"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Ventures" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Ventures" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 tooltip_text = "Ventures"
@@ -640,7 +741,7 @@ theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/zone = "v"
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures"]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -651,7 +752,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.883333, 1, 1)
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -663,25 +764,25 @@ text = "Ventures"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RewardTypeFilter" type="PanelContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="RewardTypeFilter" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Repeatable" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
+[node name="Alert" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
-tooltip_text = "Repeatable Rewards"
+tooltip_text = "Alert Rewards"
 theme_type_variation = &"LeftCheckButton"
 button_group = SubResource("ButtonGroup_asvga")
 text = " "
 metadata/type = "Schematic>Trap"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -692,16 +793,16 @@ texture = ExtResource("7_ots04")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Alert" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
+[node name="Repeatable" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
-tooltip_text = "Alert Rewards"
+tooltip_text = "Repeatable Rewards"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_asvga")
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -712,7 +813,7 @@ texture = ExtResource("6_xaony")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="4x" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
+[node name="4x" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "x4 Alert Rewards"
@@ -720,7 +821,7 @@ theme_type_variation = &"RightCheckButton"
 button_group = SubResource("ButtonGroup_asvga")
 metadata/type = "Schematic>Trap"
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x"]
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -731,19 +832,86 @@ text = "x4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 
-[node name="TypeFilters" type="PanelContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="StoryFilter" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters"]
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Include Story Missions"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("11_dlqc6")
+expand_mode = 3
+
+[node name="PLSort" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Sort items by Mission Power"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("11_k0h4l")
+expand_mode = 3
+
+[node name="PowerLevel" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+theme_type_variation = &"EmptyCheckButton"
+button_pressed = true
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("4_hmk5g")
+expand_mode = 3
+
+[node name="TypeFilters" type="PanelContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Survivors" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Survivors" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Survivors"
@@ -751,7 +919,7 @@ theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -762,7 +930,7 @@ texture = ExtResource("5_dwmk6")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Lead Survivors" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Lead Survivors" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Lead Survivors"
@@ -770,7 +938,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Worker:manager"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -781,7 +949,7 @@ texture = ExtResource("6_vrldu")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Heroes" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Heroes" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Heroes"
@@ -789,7 +957,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Hero"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -800,7 +968,7 @@ texture = ExtResource("25_7rx8s")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Upgrade Llamas" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Upgrade Llamas" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Upgrade Llamas"
@@ -808,7 +976,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "AccountResource:voucher_cardpack_bronze"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -819,7 +987,7 @@ texture = ExtResource("26_7rx8s")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Mini Llamas" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Mini Llamas" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Mini Llamas"
@@ -827,7 +995,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "AccountResource:voucher_basicpack"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -841,7 +1009,7 @@ texture = ExtResource("27_as0uf")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Schematics" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Schematics" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Schematics"
@@ -849,7 +1017,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -860,7 +1028,7 @@ texture = ExtResource("28_7rx8s")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Ranged Weapons" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Ranged Weapons" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Ranged Weapons"
@@ -868,7 +1036,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic>Ranged"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -879,7 +1047,7 @@ texture = ExtResource("11_rguep")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Melee Weapons" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Melee Weapons" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Melee Weapons"
@@ -887,7 +1055,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic>Melee"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -898,7 +1066,7 @@ texture = ExtResource("12_jv2yv")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Traps" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Traps" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Traps"
@@ -906,7 +1074,7 @@ theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/type = "Schematic>Trap"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -917,14 +1085,14 @@ texture = ExtResource("13_y3ww7")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Reset" type="Button" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Reset" type="Button" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Reset Filters
 (Shift to invert)"
 theme_type_variation = &"SlantedButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -935,37 +1103,17 @@ mouse_filter = 2
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset/MarginContainer"]
 layout_mode = 2
 texture = ExtResource("14_tws5x")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PowerLevel" type="PanelContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"CheckContainer"
-
-[node name="CheckButton" type="CheckButton" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel"]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton"]
-layout_mode = 1
-anchors_preset = -1
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 2.0
-offset_bottom = -1.0
-grow_vertical = 2
-texture = ExtResource("4_hmk5g")
-expand_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("14_p2qwn")
@@ -975,7 +1123,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("16_sctyi")
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -985,21 +1133,66 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 0
 
-[node name="Padding" type="Control" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
+[node name="SmallLoadingIcon" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
+layout_mode = 2
+
+[node name="To-Do List (0)" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer" node_paths=PackedStringArray("missionList")]
+visible = false
+layout_mode = 2
+script = ExtResource("24_0eto4")
+missionList = NodePath("ScrollContainer")
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/To-Do List (0)" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("14_p2qwn")
+elementSpace = 4.0
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
+elementScene = ExtResource("24_a0y7g")
+
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/To-Do List (0)/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/To-Do List (0)/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Offset" type="Control" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/To-Do List (0)/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DynGridContainer" type="VBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/To-Do List (0)/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="Padding" type="Control" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/To-Do List (0)/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VSplitContainer" parent="BeastDashboard"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard"]
@@ -1021,25 +1214,49 @@ script = ExtResource("1_ac3k7")
 columnMinWidth = 400
 minColumns = 1
 maxColumns = 4
-spacing = Vector2i(6, 6)
+spacing = Vector2i(4, 4)
 
 [node name="Alert Summary" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
-custom_minimum_size = Vector2(485, 450)
+custom_minimum_size = Vector2(478, 420)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("32_tpsvr")
-targetTemplateIds = PackedStringArray("AccountResource:currency_mtxswap", "AccountResource:reagent_alteration_upgrade_sr", "AccountResource:reagent_alteration_upgrade_vr", "AccountResource:reagent_alteration_upgrade_r", "AccountResource:reagent_alteration_upgrade_uc", "AccountResource:reagent_alteration_generic", "AccountResource:reagent_c_t01", "AccountResource:reagent_c_t02", "AccountResource:reagent_c_t03", "AccountResource:reagent_c_t04", "AccountResource:campaign_event_currency", "AccountResource:reagent_alteration_ele_fire", "AccountResource:reagent_alteration_ele_water", "AccountResource:reagent_alteration_ele_nature")
+targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayllama", "AccountResource:reagent_alteration_upgrade_sr", "AccountResource:reagent_alteration_upgrade_vr", "AccountResource:reagent_alteration_upgrade_r", "AccountResource:reagent_alteration_upgrade_uc", "AccountResource:reagent_alteration_generic", "AccountResource:reagent_c_t01", "AccountResource:reagent_c_t02", "AccountResource:reagent_c_t03", "AccountResource:reagent_c_t04", "AccountResource:campaign_event_currency", "AccountResource:reagent_alteration_ele_fire", "AccountResource:reagent_alteration_ele_water", "AccountResource:reagent_alteration_ele_nature")
 rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Alert Summary"
 horizontal_alignment = 1
+
+[node name="ShareBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2/ShareBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("34_6qpji")
+expand_mode = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
 layout_mode = 2
@@ -1242,7 +1459,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer"]
-custom_minimum_size = Vector2(485, 0)
+custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 
 [node name="Container" type="Container" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer"]
@@ -1251,10 +1468,23 @@ script = ExtResource("1_ac3k7")
 columnMinWidth = 237
 minColumns = 1
 maxColumns = 2
-spacing = Vector2i(6, 6)
+spacing = Vector2i(4, 4)
+
+[node name="MissionCollection" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container" instance=ExtResource("1_a6luq")]
+custom_minimum_size = Vector2(237, 310)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+testName = "x4-5 Missions"
+testSearch = "LargeReward///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
+text = "x4-5 Missions"
+horizontal_alignment = 1
 
 [node name="Supercharger" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container" node_paths=PackedStringArray("entry", "noSuperchargerMessage", "checkmark", "loading")]
-custom_minimum_size = Vector2(239.5, 0)
+custom_minimum_size = Vector2(237, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_type_variation = &"Panel5PadB"
@@ -1341,7 +1571,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="LlamaShop" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container" node_paths=PackedStringArray("loadingIcon", "errorIcon", "llamaEntryContainer")]
-custom_minimum_size = Vector2(239.5, 0)
+custom_minimum_size = Vector2(237, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_type_variation = &"Panel5PadB"
@@ -1355,6 +1585,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
 [node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -1367,6 +1598,25 @@ layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("10_smvwj")
 timerType = 1
+
+[node name="ShareBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer/ShareBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("34_6qpji")
+expand_mode = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer"]
 custom_minimum_size = Vector2(230, 150)
@@ -1468,39 +1718,22 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Retry"
 
-[node name="MissionCollection" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer" instance=ExtResource("1_a6luq")]
-custom_minimum_size = Vector2(485, 280)
-layout_mode = 2
-theme_type_variation = &"Panel3PadB"
-testName = "x4-5 Missions"
-testSearch = "LargeReward///bundle"
-sortByPower = true
-sortByZoneCat = true
-
-[node name="Name" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
-text = "x4-5 Missions"
-horizontal_alignment = 1
-
-[node name="SearchBtn" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="1"]
-visible = false
-
-[node name="EditBtn" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="2"]
-visible = false
-
-[node name="XPProgress" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content")]
-custom_minimum_size = Vector2(485, 0)
+[node name="XPProgress" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("34_nh5vk")
 stwXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer")
 playtimeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2")
 creativeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3")
+superchargedXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
 xpProgress = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar")
 levelLabel = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer/Label2")
 xpAmount = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/Label")
 xpUntilMax = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2/Label")
 loading = NodePath("VBoxContainer/Body/SmallLoadingIcon")
 content = NodePath("VBoxContainer/Body/XPContent")
+superchargedContent = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress"]
 layout_mode = 2
@@ -1512,17 +1745,41 @@ layout_mode = 2
 [node name="Name" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "Seasonal Pass XP"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="ShareBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/Button"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("34_6qpji")
+expand_mode = 1
+
+[node name="RefreshBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -1536,15 +1793,8 @@ grow_vertical = 2
 texture = ExtResource("2_aag1n")
 expand_mode = 1
 
-[node name="HSlider" type="HSlider" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer"]
-visible = false
-layout_mode = 2
-max_value = 168.0
-tick_count = 8
-ticks_on_borders = true
-
 [node name="Body" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer"]
-custom_minimum_size = Vector2(0, 140)
+custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -1559,11 +1809,11 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
 progressText = NodePath("MarginContainer/MarginContainer/Label")
 progressBar = NodePath("MarginContainer/ProgressBar")
@@ -1651,7 +1901,7 @@ value = 0.615
 show_percentage = false
 
 [node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
-material = SubResource("ShaderMaterial_as0uf")
+material = SubResource("ShaderMaterial_4yf1i")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
@@ -1692,7 +1942,7 @@ layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
 progressText = NodePath("MarginContainer/MarginContainer/Label")
 progressBar = NodePath("MarginContainer/ProgressBar")
@@ -1779,7 +2029,7 @@ value = 0.615
 show_percentage = false
 
 [node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
-material = SubResource("ShaderMaterial_ho1op")
+material = SubResource("ShaderMaterial_k0h4l")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
@@ -1820,7 +2070,7 @@ layout_mode = 2
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
 progressText = NodePath("MarginContainer/MarginContainer/Label")
 progressBar = NodePath("MarginContainer/ProgressBar")
@@ -1907,7 +2157,7 @@ value = 0.615
 show_percentage = false
 
 [node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
-material = SubResource("ShaderMaterial_v863i")
+material = SubResource("ShaderMaterial_dlqc6")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
@@ -1946,6 +2196,135 @@ horizontal_alignment = 2
 [node name="HSeparator" type="HSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
 visible = false
 layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 1
+script = ExtResource("34_v863i")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HSeparator" type="HSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Supercharged XP Remaining"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("10_smvwj")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("34_2nkp8")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+material = SubResource("ShaderMaterial_4kbf4")
+layout_mode = 2
+script = ExtResource("36_7rx8s")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.31
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
 
 [node name="VSeparator" type="VSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
 layout_mode = 2
@@ -2033,7 +2412,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
@@ -2084,22 +2462,22 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" node_paths=PackedStringArray("matchSize")]
+[node name="MissionSummaryViewport" type="SubViewport" parent="SubViewportContainer" node_paths=PackedStringArray("matchSize")]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(375, 224)
+size = Vector2i(375, 334)
 render_target_update_mode = 0
 script = ExtResource("34_m2jhp")
 matchSize = NodePath("PegLegWatermark")
 
-[node name="PegLegWatermark" parent="SubViewportContainer/SubViewport" instance=ExtResource("37_7he0n")]
+[node name="PegLegWatermark" parent="SubViewportContainer/MissionSummaryViewport" instance=ExtResource("37_7he0n")]
 offset_right = 64.0
 offset_bottom = 64.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark"]
 layout_mode = 2
 
-[node name="NotableRewards" type="PanelContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="NotableRewards" type="PanelContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -2114,40 +2492,40 @@ zoneFilters = []
 typeFilters = []
 repeatabilityFilters = []
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
 button_pressed = true
 
-[node name="Node" type="Node" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton"]
+[node name="Node" type="Node" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton"]
 script = ExtResource("2_dckmf")
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Notable Rewards"
 
-[node name="Label2" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("10_smvwj")
 timerType = 1
 
-[node name="Button" type="Button" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/Button"]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/Button"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -2161,12 +2539,12 @@ grow_vertical = 2
 texture = ExtResource("2_aag1n")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -2176,9 +2554,9 @@ elementSpace = 4.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
-elementScene = ExtResource("16_sctyi")
+elementScene = ExtResource("50_xqktx")
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -2188,26 +2566,26 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 0
 
-[node name="Padding" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Control" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
+[node name="Control" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
 layout_mode = 2
 
-[node name="MissionCollection" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("loadingIcon") instance=ExtResource("1_a6luq")]
+[node name="MissionCollection" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("loadingIcon") instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 size_flags_vertical = 0
@@ -2218,57 +2596,1188 @@ loadingIcon = NodePath("VBoxContainer/Body/Control")
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
-theme_override_font_sizes/font_size = 24
+[node name="Name" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
 text = "PL160 Repeatable Rewards"
 
-[node name="SearchBtn" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="1"]
+[node name="CheckButton" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="3"]
 visible = false
+button_pressed = false
 
-[node name="EditBtn" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="2"]
-visible = false
-
-[node name="Control" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="0"]
+[node name="Control" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="0"]
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="1"]
+[node name="SmallLoadingIcon" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="1"]
 visible = false
 
-[node name="ScrollContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="2"]
+[node name="ScrollContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="2"]
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
+elementScene = ExtResource("53_0op8k")
 
-[node name="Offset" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" index="0"]
+[node name="Offset" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" index="0"]
 visible = false
 
-[node name="Padding" parent="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" index="2"]
+[node name="Padding" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" index="2"]
 visible = false
 
-[connection signal="toggled" from="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
-[connection signal="toggled" from="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" method="set_visible"]
-[connection signal="OnFalse" from="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [0.0]]
-[connection signal="OnTrue" from="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [2.0]]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/Button" to="BeastDashboard/VBoxContainer/NotableRewards" method="ReloadMissions"]
-[connection signal="toggled" from="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
-[connection signal="toggled" from="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer" method="set_visible"]
-[connection signal="OnFalse" from="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/VBoxContainer/AllRewards" method="set_stretch_ratio" binds= [0.0]]
-[connection signal="OnTrue" from="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/VBoxContainer/AllRewards" method="set_stretch_ratio" binds= [5.0]]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer/AllRewards/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" to="BeastDashboard/VBoxContainer/AllRewards" method="TurnOffFilters"]
+[node name="Supercharger" type="PanelContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("entry", "noSuperchargerMessage", "checkmark", "loading")]
+custom_minimum_size = Vector2(239.5, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("36_tp2em")
+entry = NodePath("VBoxContainer/PanelContainer/HBoxContainer")
+noSuperchargerMessage = NodePath("VBoxContainer/PanelContainer/VBoxContainer")
+checkmark = NodePath("VBoxContainer/PanelContainer/Control2")
+loading = NodePath("VBoxContainer/PanelContainer/Control")
+onlyShowOnResetDay = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Weekly 160 Alert Reward"
+
+[node name="Label2" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "xx:xx:xx"
+script = ExtResource("10_smvwj")
+timerType = 2
+
+[node name="PanelContainer" type="MarginContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer"]
+custom_minimum_size = Vector2(230, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("36_8isvq")
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("34_sp71l")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hero Superharger"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "No Supercharger Quest"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 12
+text = "Complete the Twine Peaks SSD 10
+to unlock Weekly Supercharger Quests"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="AlertSummaryViewport" type="SubViewport" parent="SubViewportContainer2" node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("34_m2jhp")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="SubViewportContainer2/AlertSummaryViewport" instance=ExtResource("37_7he0n")]
+
+[node name="Alert Summary" type="PanelContainer" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
+custom_minimum_size = Vector2(485, 420)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("32_tpsvr")
+targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayllama", "AccountResource:reagent_alteration_upgrade_sr", "AccountResource:reagent_alteration_upgrade_vr", "AccountResource:reagent_alteration_upgrade_r", "AccountResource:reagent_alteration_upgrade_uc", "AccountResource:reagent_alteration_generic", "AccountResource:reagent_c_t01", "AccountResource:reagent_c_t02", "AccountResource:reagent_c_t03", "AccountResource:reagent_c_t04", "AccountResource:campaign_event_currency", "AccountResource:reagent_alteration_ele_fire", "AccountResource:reagent_alteration_ele_water", "AccountResource:reagent_alteration_ele_nature")
+rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
+loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Alert Summary"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Reward" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.5
+theme_type_variation = &"Outline6"
+text = "Reward"
+horizontal_alignment = 1
+
+[node name="Stone" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Stone"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Stone"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2296, 0.4264, 0.82, 1)
+
+[node name="Plank" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Plank"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Plank"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.15, 1, 0, 1)
+
+[node name="Canny" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Canny"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Canny"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.8, 0, 1)
+
+[node name="Twine" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Twine"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Twine"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.683333, 0, 1, 1)
+
+[node name="Total" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Total"
+horizontal_alignment = 1
+
+[node name="Ventures" type="Label" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Vent's"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0.883333, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="DashboardAlertSummary" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="ItemEntry" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer" index="0"]
+forceShowVBucks = true
+
+[node name="DashboardAlertSummary2" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary3" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary4" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary5" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary6" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary7" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary8" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary9" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary10" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary11" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary12" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary13" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary14" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary15" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary16" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary17" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+visible = false
+layout_mode = 2
+
+[node name="SmallLoadingIcon" parent="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
+layout_mode = 2
+
+[node name="SubViewportContainer3" type="SubViewportContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="LlamaSummaryViewport" type="SubViewport" parent="SubViewportContainer3" node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("34_m2jhp")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="SubViewportContainer3/LlamaSummaryViewport" instance=ExtResource("37_7he0n")]
+
+[node name="LlamaShop" type="PanelContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("loadingIcon", "errorIcon", "llamaEntryContainer")]
+custom_minimum_size = Vector2(239.5, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("7_3tsbl")
+loadingIcon = NodePath("VBoxContainer/PanelContainer/SmallLoadingIcon")
+errorIcon = NodePath("VBoxContainer/PanelContainer/Error")
+llamaEntryContainer = NodePath("VBoxContainer/PanelContainer/VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Llama Shop"
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer"]
+custom_minimum_size = Vector2(230, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"Panel3Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+visible = false
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle2" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+visible = false
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle3" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+visible = false
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle4" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+visible = false
+layout_mode = 2
+
+[node name="SmallLoadingIcon" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer" instance=ExtResource("25_m2jhp")]
+layout_mode = 2
+
+[node name="Error" type="MarginContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error"]
+layout_mode = 2
+texture = ExtResource("10_ta6o0")
+
+[node name="VBoxContainer" type="HBoxContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("11_nlqir")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 24
+text = "Llamas
+Unavailable"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="RetryButton" type="Button" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_aag1n")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Retry"
+
+[node name="SubViewportContainer4" type="SubViewportContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="XpSummaryViewport" type="SubViewport" parent="SubViewportContainer4" node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("34_m2jhp")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="SubViewportContainer4/XpSummaryViewport" instance=ExtResource("37_7he0n")]
+
+[node name="XPProgress" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+custom_minimum_size = Vector2(485, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("34_nh5vk")
+stwXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer")
+playtimeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2")
+creativeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3")
+superchargedXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+xpProgress = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar")
+levelLabel = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer/Label2")
+xpAmount = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/Label")
+xpUntilMax = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2/Label")
+loading = NodePath("VBoxContainer/Body/SmallLoadingIcon")
+content = NodePath("VBoxContainer/Body/XPContent")
+superchargedContent = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "Seasonal Pass XP"
+horizontal_alignment = 1
+script = ExtResource("47_4kbf4")
+
+[node name="Body" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SmallLoadingIcon" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body" instance=ExtResource("25_m2jhp")]
+layout_mode = 2
+
+[node name="XPContent" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("34_v863i")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "STW Mission XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("10_smvwj")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("34_2nkp8")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_as0uf")
+layout_mode = 2
+script = ExtResource("36_7rx8s")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("34_v863i")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Playtime XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("10_smvwj")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("34_2nkp8")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+material = SubResource("ShaderMaterial_ho1op")
+layout_mode = 2
+script = ExtResource("36_7rx8s")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.51
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("34_v863i")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Creative XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("10_smvwj")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("34_2nkp8")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+material = SubResource("ShaderMaterial_v863i")
+layout_mode = 2
+script = ExtResource("36_7rx8s")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.03
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("34_v863i")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HSeparator" type="HSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Supercharged XP Remaining"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("10_smvwj")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("34_2nkp8")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+material = SubResource("ShaderMaterial_xqktx")
+layout_mode = 2
+script = ExtResource("36_7rx8s")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.79
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent"]
+layout_mode = 2
+
+[node name="MarginContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 0.63
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("40_at20a")
+texture_progress = ExtResource("40_at20a")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0, 0.766667, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -2
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "??'???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "/80K"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = " to Lv 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="ReloadMissions"]
+[connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
+[connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" method="set_visible"]
+[connection signal="OnFalse" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="set_stretch_ratio"]
+[connection signal="OnTrue" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="set_stretch_ratio"]
+[connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
+[connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer" method="set_visible"]
+[connection signal="OnFalse" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All" method="set_stretch_ratio"]
+[connection signal="OnTrue" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All" method="set_stretch_ratio"]
+[connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All" method="TurnOffFilters"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2/ShareBtn" to="SubViewportContainer2/AlertSummaryViewport" method="CopyScreenshot"]
 [connection signal="IconChanged" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/TextureRect" method="set_texture"]
 [connection signal="NameChanged" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="SubViewportContainer3/LlamaSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/RetryButton" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop" method="ForceLoadShopLlamas"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/Button" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress" method="ForceUpdateProfiles"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="SubViewportContainer4/XpSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress" method="ForceUpdateProfiles"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress" method="ForceUpdateProfiles"]
 [connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 [connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 [connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button" to="SubViewportContainer/SubViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2" to="SubViewportContainer/SubViewport" method="CopyScreenshot"]
+[connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button" to="SubViewportContainer/MissionSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2" to="SubViewportContainer/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
-[connection signal="toggled" from="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
-[connection signal="toggled" from="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" method="set_visible"]
-[connection signal="OnFalse" from="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [0.0]]
-[connection signal="OnTrue" from="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [2.0]]
-[connection signal="pressed" from="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/Button" to="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="ReloadMissions"]
+[connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
+[connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" method="set_visible"]
+[connection signal="OnFalse" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [0.0]]
+[connection signal="OnTrue" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [2.0]]
+[connection signal="pressed" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/Button" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="ReloadMissions"]
+[connection signal="IconChanged" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="pressed" from="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/RetryButton" to="SubViewportContainer3/LlamaSummaryViewport/PegLegWatermark/LlamaShop" method="ForceLoadShopLlamas"]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 
-[editable path="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MissionCollection"]
-[editable path="SubViewportContainer/SubViewport/PegLegWatermark/VBoxContainer/MissionCollection"]
+[editable path="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/MissionCollection"]
+[editable path="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection"]
+[editable path="SubViewportContainer2/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]

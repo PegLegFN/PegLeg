@@ -103,6 +103,14 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void SelectionTintChangedEventHandler(Color rarityColour);
     [Signal]
     public delegate void OverflowWarningEventHandler(bool value);
+    [Signal]
+    public delegate void DurabilityVisibleEventHandler(bool value);
+    [Signal]
+    public delegate void DurabilityValueEventHandler(float value);
+    [Signal]
+    public delegate void IsHeroEventHandler(bool value);
+    [Signal]
+    public delegate void IsSchematicEventHandler(bool value);
 
     [Signal]
     public delegate void PressedEventHandler();
@@ -137,6 +145,12 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public bool useSquadForRating;
     [Export]
     public bool hideMythicLeadSquad = false;
+    [Export]
+    public bool updateRewardNotification = true;
+    [Export]
+    public bool forceShowVBucks = false;
+    [Export]
+    public bool packImageAsSubtype = true;
     [Export]
     protected CheckButton selectionGraphics;
 
@@ -182,6 +196,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     }
 
     public GameItem currentItem { get; protected set; }
+    public GameItem displayItem { get; protected set; }
     protected GameItem inspectorOverride;
 
     public void SetItem(GameItem newItem, bool forceUpdate = false)
@@ -213,38 +228,39 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
     public void UpdateItem() => UpdateItem(currentItem);
 
-    protected virtual void UpdateItem(GameItem item)
+    protected virtual void UpdateItem(GameItem updatedItem)
     {
         if (!IsInstanceValid(this) || !IsInsideTree())
             return;
+        displayItem = updatedItem;
 
-        if(item is null || item.customData?["empty"] is not null)
+        if (displayItem is null || displayItem.customData?["empty"] is not null)
         {
             ClearItem();
             return;
         }
 
-        if (item.template is null)
-        {
-            //GD.Print("uh oh");
-            //GD.Print(item);
-        }
+        int amount = displayItem.quantity;
 
-        int amount = item.quantity;
-
-        if (item.templateId== "AccountResource:currency_hybrid_mtx_xrayllama" && GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem("Token:receivemtxcurrency") is null)
+        if (
+            !forceShowVBucks &&
+            displayItem.templateId == "AccountResource:currency_hybrid_mtx_xrayllama" &&
+            GameAccount.activeAccount
+                .GetProfile(FnProfileTypes.AccountItems)
+                .GetFirstTemplateItem("Token:receivemtxcurrency") is null
+        )
         {
-            item = GameItemTemplate.Get("AccountResource:currency_xrayllama").CreateInstance(amount);
+            displayItem = GameItemTemplate.Get("AccountResource:currency_xrayllama").CreateInstance(amount);
         }
         //substitute generic event tickets for current event tickets
 
-        inspectorOverride = item.inspectorOverride;
+        inspectorOverride = displayItem.inspectorOverride;
         if (inspectorOverride is not null && inspectorOverride.template is not null)
-            item = inspectorOverride;
+            displayItem = inspectorOverride;
 
 
-        if (item.template?.Type == "Accolades")
-            amount = item.template?["AccoladeXP"]?.GetValue<int>() ?? 1;
+        if (displayItem.template?.Type == "Accolades")
+            amount = displayItem.template?["AccoladeXP"]?.GetValue<int>() ?? 1;
         string amountText = compactifyAmount ? amount.Compactify() : amount.Notate();
 
         if (addXToAmount)
@@ -253,19 +269,19 @@ public partial class GameItemEntry : Control, IRecyclableEntry
             amountText = "";
         bool amountNeeded = amountText != "";
 
-        string name = item.template?.DisplayName ?? item.templateId?.Split(":")[1];
-        string description = item.template?.Description;
-        string type = item.template?.Type;
-        Texture2D mainIcon = item.GetTexture();
+        string name = displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1];
+        string description = displayItem.template?.Description;
+        string type = displayItem.template?.Type;
+        Texture2D mainIcon = displayItem.GetTexture();
 
         description ??= "";
-        var personalityText = item.Personality;
-        var setBonusText = item.SetBonus;
+        var personalityText = displayItem.Personality;
+        var setBonusText = displayItem.SetBonus;
         if (type == "Worker" && name == "Survivor")
         {
             if(personalityText is not null && setBonusText is not null)
             {
-                var pronoun = item.attributes?["gender"]?.ToString() is string gender ? (gender == "1" ? "him" : "her") : "them";
+                var pronoun = displayItem.attributes?["gender"]?.ToString() is string gender ? (gender == "1" ? "him" : "her") : "them";
                 description = description
                     .Replace("{Gender}|gender(him, her)", pronoun)
                     .Replace("[Worker.Personality]", personalityText)
@@ -282,13 +298,16 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         if (type == "Worker")
             type = "Survivor";
 
-        float rating = item.CalculateSurvivorRating(useSquadForRating || selector?.overrideSurvivorSquad is not null, selector?.overrideSurvivorSquad);
+        float rating = displayItem.CalculateSurvivorRating(
+            useSquadForRating || selector?.overrideSurvivorSquad is not null, 
+            selector?.overrideSurvivorSquad
+        );
         string ratingText = rating == 0 ? "" : rating.ToString();
 
-        int tier = item.template?.Tier ?? 0;
+        int tier = displayItem.template?.Tier ?? 0;
         float levelProgress = 0;
-        int level = item.attributes?["level"]?.GetValue<int>() ?? 1;
-        int bonusMaxLevel = item.attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;
+        int level = displayItem.attributes?["level"]?.GetValue<int>() ?? 1;
+        int bonusMaxLevel = displayItem.attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;
         int maxLevel = Mathf.Max(tier * 10, 1) + bonusMaxLevel;
         int minLevel = Mathf.Max(maxLevel - 10, 1);
         levelProgress = minLevel == maxLevel ? 1 : (level - minLevel) / (maxLevel - minLevel);
@@ -301,31 +320,31 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         if (type != "Survivor")
         {
-            EmitSignal(SignalName.PersonalityIconChanged, (Texture2D)null);
-            EmitSignal(SignalName.SurvivorBoostIconChanged, (Texture2D)null);
+            EmitSignalPersonalityIconChanged(null);
+            EmitSignalSurvivorBoostIconChanged(null);
         }
 
-        EmitSignal(SignalName.ItemDoesExist, true);
-        EmitSignal(SignalName.ItemDoesNotExist, false);
+        EmitSignalItemDoesExist(true);
+        EmitSignalItemDoesNotExist(false);
 
-        EmitSignal(SignalName.NameChanged, name);
-        EmitSignal(SignalName.DescriptionChanged, description);
-        EmitSignal(SignalName.TypeChanged, type ?? item.templateId?.Split(":")[0]);
-        EmitSignal(SignalName.RarityChanged, item.template?.RarityColor ?? missingRarityColor);
+        EmitSignalNameChanged(name);
+        EmitSignalDescriptionChanged(description);
+        EmitSignalTypeChanged(type ?? displayItem.templateId?.Split(":")[0]);
+        EmitSignalRarityChanged(displayItem.template?.RarityColor ?? missingRarityColor);
 
         var tooltipAmount = amountNeeded ? ((addXToAmount ? "x" : "") + amount.Notate()) : null;
         if (type == "Ingredient" && inspectorOverride is null)
-            tooltipAmount = item.TotalQuantity.ToString();
+            tooltipAmount = displayItem.TotalQuantity.ToString();
 
         List<string> tooltipDescriptions =
         [
             description ?? "",
             //"Item Id: " + item.templateId,
         ];
-        if (item.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
+        if (displayItem.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
             tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Except([name]).ToArray().Join(", "));
 
-        if (item.template is null)
+        if (displayItem.template is null)
             tooltipDescriptions[0] = "Err: Missing Template";
 
         EmitSignal(
@@ -334,63 +353,76 @@ public partial class GameItemEntry : Control, IRecyclableEntry
                 name,
                 tooltipAmount,
                 [.. tooltipDescriptions],
-                (item.template?.RarityColor ?? missingRarityColor).ToHtml()
+                (displayItem.template?.RarityColor ?? missingRarityColor).ToHtml()
             )
         );
 
-        var subtypeIcon = item.template?.GetSubtypeTexture();
+        var subtypeIcon = displayItem.template?.GetSubtypeTexture();
 
-        if (type == "CardPack" && item.GetTexture(FnItemTextureType.PackImage, null) is Texture2D packIcon)
+        if (packImageAsSubtype && type == "CardPack" && displayItem.GetTexture(FnItemTextureType.PackImage, null) is Texture2D packIcon)
             subtypeIcon = packIcon;
 
-        EmitSignal(SignalName.IconChanged, mainIcon ?? missingIcon);
-        EmitSignal(SignalName.IconFit, !(type == "Hero" || type == "Survivor" || type == "Defender"));
-        EmitSignal(SignalName.SubtypeIconChanged, subtypeIcon);
-        EmitSignal(SignalName.AmmoIconChanged, item.template?.GetAmmoTexture());
+        EmitSignalIconChanged(mainIcon ?? missingIcon);
+        EmitSignalIconFit(!(type == "Hero" || type == "Survivor" || type == "Defender"));
+        EmitSignalSubtypeIconChanged(subtypeIcon);
+        EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
 
-        EmitSignal(SignalName.AmountVisibility, amountNeeded);
-        EmitSignal(SignalName.AmountChanged, amountText);
-        if (type == "Weapon" && item.template?.Category == "Ranged" && item.attributes?["loadedAmmo"]?.GetValue<int>() is int loadedAmmo)
+        EmitSignalIsSchematic(type == "Schematic");
+        EmitSignalIsHero(type == "Hero");
+
+        EmitSignalAmountVisibility(amountNeeded);
+        EmitSignalAmountChanged(amountText);
+        if (type == "Weapon" && displayItem.template?.Category == "Ranged" && displayItem.attributes?["loadedAmmo"]?.GetValue<int>() is int loadedAmmo)
         {
-            int maxAmmo = item.template?["RangedWeaponStats"]?["Reload"]?["ClipSize"]?.GetValue<int>() ?? 0;
+            int maxAmmo = displayItem.template?["RangedWeaponStats"]?["Reload"]?["ClipSize"]?.GetValue<int>() ?? 0;
             if (maxAmmo != 0)
             {
-                EmitSignal(SignalName.AmountVisibility, true);
-                EmitSignal(SignalName.AmountChanged, $"{loadedAmmo}/{maxAmmo}");
+                EmitSignalAmountVisibility(true);
+                EmitSignalAmountChanged($"{loadedAmmo}/{maxAmmo}");
             }
         }
 
-        EmitSignal(SignalName.RatingChanged, ratingText);
-        EmitSignal(SignalName.RatingVisibility, rating != 0);
+        EmitSignalRatingChanged(ratingText);
+        EmitSignalRatingVisibility(rating != 0);
 
-        EmitSignal(SignalName.IsCollectable, !(item.isCollectedCache ?? true));
-        EmitSignal(SignalName.CanBeLeveledChanged, item.template?.CanBeLeveled == true && item.template?.Type != "Weapon" && item.template?.Type != "Trap");
-        EmitSignal(SignalName.LevelChanged, level);
-        EmitSignal(SignalName.LevelMaxChanged, maxLevel);
-        EmitSignal(SignalName.LevelProgressChanged, levelProgress);
+        bool hasDurability = displayItem.template?.Type == "Weapon" && displayItem.attributes?["durability"] is not null;
+        EmitSignalDurabilityVisible(hasDurability);
+        if (hasDurability)
+        {
+            var stats = displayItem.template["MeleeWeaponStats"] ?? displayItem.template["RangedWeaponStats"] ?? displayItem.template["TrapStats"];
+            var maxDura = stats?["Durability"].GetValue<float>() ?? 1;
+            var currentDura = displayItem.attributes?["durability"]?.GetValue<float>() ?? maxDura;
+            EmitSignalDurabilityValue(currentDura / maxDura);
+        }
 
-        SetInteractable(autoInteractableTypes.Contains(item.template?.Type.ToLower()) || item.CardPackChoices is not null);
+        EmitSignalIsCollectable(!(displayItem.isCollectedCache ?? true));
+        EmitSignalCanBeLeveledChanged(displayItem.template?.CanBeLeveled == true);
+        EmitSignalLevelChanged(level);
+        EmitSignalLevelMaxChanged(maxLevel);
+        EmitSignalLevelProgressChanged(levelProgress);
+
+        SetInteractable(autoInteractableTypes.Contains(displayItem.template?.Type.ToLower()) || displayItem.CardPackChoices is not null);
 
         //if survivor, set personality icons
 
         if (type == "Survivor")
         {
-            EmitSignal(SignalName.PersonalityIconChanged, item.GetTexture(FnItemTextureType.Personality, null));
-            if (!hideMythicLeadSquad || item.template?.RarityLevel != 6 || item?.attributes?["portrait"] is not null)
-                EmitSignal(SignalName.SurvivorBoostIconChanged, item.GetTexture(FnItemTextureType.SetBonus, null));
+            EmitSignalPersonalityIconChanged(displayItem.GetTexture(FnItemTextureType.Personality, null));
+            if (!hideMythicLeadSquad || displayItem.template?.RarityLevel != 6 || displayItem?.attributes?["portrait"] is not null)
+                EmitSignalSurvivorBoostIconChanged(displayItem.GetTexture(FnItemTextureType.SetBonus, null));
         }
 
         //var rarity = itemInstance.GetTemplate().GetItemRarity();
         //if (!(data.rarity < 7 && data.rarity >= 0))
         //    rarity = 0;
 
-        EmitSignal(SignalName.OverflowWarning, item.attributes?["inventory_overflow_date"]?.GetValueKind()==System.Text.Json.JsonValueKind.String);
-        EmitSignal(SignalName.NotificationChanged, !item.IsSeen);
-        EmitSignal(SignalName.BookmarkChanged, GameAccount.activeAccount.IsBookmarked(item.template));
-        EmitSignal(SignalName.FavoriteChanged, item.IsFavourited);
-        EmitSignal(SignalName.MaxTierChanged, Mathf.Min((item.template?.RarityLevel ?? 0) + 1, 5));
-        EmitSignal(SignalName.TierChanged, tier);
-        EmitSignal(SignalName.SuperchargeChanged, bonusMaxLevel / 2);
+        EmitSignalOverflowWarning(displayItem.attributes?["inventory_overflow_date"]?.GetValueKind()==System.Text.Json.JsonValueKind.String);
+        EmitSignalNotificationChanged(!displayItem.IsSeen);
+        EmitSignalBookmarkChanged(GameAccount.activeAccount.IsBookmarked(displayItem.template));
+        EmitSignalFavoriteChanged(displayItem.IsFavourited);
+        EmitSignalMaxTierChanged(Mathf.Min((displayItem.template?.RarityLevel ?? 0) + 1, 5));
+        EmitSignalTierChanged(tier);
+        EmitSignalSuperchargeChanged(bonusMaxLevel / 2);
     }
 
     void RemoveItem()
@@ -449,6 +481,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
             currentItem.OnRemoved -= RemoveItem;
             currentItem = null;
         }
+        displayItem = null;
         inspectorOverride = null;
         EmitSignal(SignalName.ItemDoesExist, false);
         EmitSignal(SignalName.ItemDoesNotExist, true);

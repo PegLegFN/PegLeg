@@ -1,18 +1,24 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkjv8n3gxf51c"]
+[gd_scene load_steps=9 format=3 uid="uid://dkjv8n3gxf51c"]
 
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_51cn4"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_asui6"]
 [ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="1_pvxuu"]
 [ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="2_6ha8o"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_s00ns"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="4_6ha8o"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_expaw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pcm7t"]
+resource_local_to_scene = true
 shader = ExtResource("1_pvxuu")
 shader_parameter/ControlSize = Vector2(105, 26)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.941413
 
 [node name="Gadget" type="MarginContainer"]
 offset_right = 76.0
 offset_bottom = 22.0
+script = ExtResource("1_51cn4")
 
 [node name="Panel" type="TextureRect" parent="."]
 modulate = Color(0.2666, 0.57288, 0.62, 1)
@@ -48,3 +54,9 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Adrenaline Rush"
 text_overrun_behavior = 3
+
+[node name="Responsive Button Area" parent="." instance=ExtResource("6_expaw")]
+layout_mode = 2
+
+[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="." to="MarginContainer/HBoxContainer/Label" method="set_text"]

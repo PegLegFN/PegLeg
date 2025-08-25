@@ -52,6 +52,7 @@ public partial class CardPackEntry : GameItemEntry
             ]);
             return;
         }
+        displayItem = item;
 
         string name = item.template.DisplayName;
         int amount = item.customData["stackQuantity"]?.GetValue<int>() ?? item.quantity;
@@ -104,8 +105,7 @@ public partial class CardPackEntry : GameItemEntry
         ]);
 
 
-        EmitSignal(
-            SignalName.TooltipChanged,
+        EmitSignalTooltipChanged(
             CustomTooltip.GenerateSimpleTooltip(
                 name,
                 amountText,
@@ -121,8 +121,8 @@ public partial class CardPackEntry : GameItemEntry
         //    packIcon = null;
         //}
 
-        EmitSignal(SignalName.IconChanged, item.GetTexture());
-        EmitSignal(SignalName.SubtypeIconChanged, item.GetTexture(FnItemTextureType.PackImage));
+        EmitSignalIconChanged(item.GetTexture());
+        EmitSignalSubtypeIconChanged(item.GetTexture(FnItemTextureType.PackImage));
     }
 
     void SetColours(Color[] colors)
@@ -135,7 +135,7 @@ public partial class CardPackEntry : GameItemEntry
         };
         currentLlamaGradient.Colors = currentLlamaColors;
 
-        EmitSignal(SignalName.RarityChanged, currentLlamaColors[0]);
+        EmitSignalRarityChanged(currentLlamaColors[0]);
         EmitSignal(SignalName.Color1Changed, currentLlamaColors[1]);
         EmitSignal(SignalName.Color2Changed, currentLlamaColors[2]);
         EmitSignal(SignalName.Color3Changed, currentLlamaColors[3]);

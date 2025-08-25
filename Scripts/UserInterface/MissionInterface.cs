@@ -85,7 +85,12 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 	LineEdit searchBar;
 
     [Export]
-    CheckButton[] itemFilterButtons = Array.Empty<CheckButton>();
+    CheckButton[] itemFilterButtons = [];
+
+    [Export]
+    CheckButton playableFilter;
+    [Export]
+    CheckButton storyFilter;
 
     [Export]
     RecycleListContainer missionList;
@@ -110,9 +115,11 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
                 FilterMissions();
         };
 
-        zoneFilterTabBar.TabChanged += e => FilterMissions();
-        searchBar.TextSubmitted += e => UpdateFilters();
-		searchBar.TextChanged += e => UpdateFilters();
+        zoneFilterTabBar.TabChanged += _ => FilterMissions();
+        searchBar.TextSubmitted += _ => UpdateFilters();
+		searchBar.TextChanged += _ => UpdateFilters();
+        playableFilter.Pressed += FilterMissions;
+        storyFilter.Pressed += FilterMissions;
         foreach (var button in itemFilterButtons)
         {
             button.Pressed += UpdateFilters;
@@ -124,12 +131,16 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         RefreshTimerController.OnDayChanged += ForceReloadMissions;
         RefreshTimerController.OnDayChanged += StartUpdateCheckTimer;
 
+        GameAccount.ActiveAccountChanged += FilterMissions;
         GameMission.OnMissionsUpdated += OnMissionsUpdated;
         GameMission.OnMissionsInvalidated += OnMissionsInvalidated;
 
-        GameAccount.ActiveAccountChanged += ForceReloadMissions;
+        //GameAccount.ActiveAccountChanged += ForceReloadMissions;
 
-        GameMission.CheckMissions().StartTask();
+        if (GameMission.currentMissions is not null)
+            OnMissionsUpdated();
+        else
+            GameMission.UpdateMissions().StartTask();
         StartUpdateCheckTimer();
     }
 
@@ -197,33 +208,22 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     public void ForceReloadMissions() => GameMission.UpdateMissions().StartTask();
     public void ReloadMissions() => GameMission.CheckMissions().StartTask();
 
-    public async void LoadMissions(bool force = false)
-    {
-
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
-        if (force || await GameMission.MissionsNeedUpdate(true))
-            await GameMission.UpdateMissions();
-    }
-
-    PLSearch.Instruction[] missionSearchInstructions = Array.Empty<PLSearch.Instruction>();
-    PLSearch.Instruction[] itemSearchInstructions = Array.Empty<PLSearch.Instruction>();
-    string[] extraItemFilters = Array.Empty<string>();
+    PLSearch.Instruction[] missionSearchInstructions = [];
+    PLSearch.Instruction[] itemSearchInstructions = [];
+    string[] extraItemFilters = [];
     void UpdateFilters()
     {
         var searchText = searchBar.Text;
         if (searchText.Contains("///"))
         {
             string[] splitSearchText = searchText.Split("///");
-            missionSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[0]) ?? Array.Empty<PLSearch.Instruction>();
-            itemSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[1..].Join()) ?? Array.Empty<PLSearch.Instruction>();
+            missionSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[0]) ?? [];
+            itemSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[1..].Join()) ?? [];
         }
         else
         {
-            missionSearchInstructions = PLSearch.GenerateSearchInstructions(searchText) ?? Array.Empty<PLSearch.Instruction>();
-            itemSearchInstructions = Array.Empty<PLSearch.Instruction>();
+            missionSearchInstructions = PLSearch.GenerateSearchInstructions(searchText) ?? [];
+            itemSearchInstructions = [];
         }
 
         List<string> extraItemFilterList = [];
@@ -234,7 +234,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
                 extraItemFilterList.AddRange(itemFilters[i]);
             }
         }
-        extraItemFilters = extraItemFilterList.ToArray();
+        extraItemFilters = [.. extraItemFilterList];
         FilterMissions();
     }
 
@@ -247,12 +247,12 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 
     public static bool MatchItem(GameItem item, PLSearch.Instruction[] itemInstructions, string[] extraItemFilters = null)
     {
-        extraItemFilters ??= Array.Empty<string>();
+        extraItemFilters ??= [];
         bool matchesItemFilters = extraItemFilters.Length == 0;
         foreach (var itemFilter in extraItemFilters)
         {
             matchesItemFilters = item.templateId.Contains(itemFilter);
-            if (itemFilter.EndsWith("*"))
+            if (itemFilter.EndsWith('*'))
                 matchesItemFilters = item.templateId.StartsWith(itemFilter[..^1]);
 
             if (itemFilter == "MYTHICLEAD")
@@ -272,9 +272,13 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     {
         if (!theaterFilter.Contains(mission.TheaterCat[0]))
             return false;
+        if (playableFilter?.ButtonPressed == true && !mission.PlayableBy(GameAccount.activeAccount))
+            return false;
+        if (storyFilter?.ButtonPressed != true && mission.IsStoryMission)
+            return false;
 
         var currentItemInstructions = itemSearchInstructions;
-        if (!PLSearch.EvaluateInstructions(missionSearchInstructions, mission.missionData))
+        if (!PLSearch.EvaluateInstructions(missionSearchInstructions, mission.SearchObject))
         {
             if (currentItemInstructions.Length == 0)
                 currentItemInstructions = missionSearchInstructions;

@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://dbrrcnce14w8h"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_1qlyc"]
-[ext_resource type="Texture2D" uid="uid://docjdjoems0ia" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Black-L.png" id="1_5c4d1"]
 [ext_resource type="Material" uid="uid://3nw1g0lbs4qq" path="res://Sh_Materials/ItemRewardMatSmall.tres" id="2_dkobx"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="3_dkobx"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_jrnxm"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="5_htaww"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="6_dkobx"]
@@ -19,7 +19,7 @@ script = ExtResource("1_1qlyc")
 material = ExtResource("2_dkobx")
 layout_mode = 2
 size_flags_horizontal = 0
-texture = ExtResource("1_5c4d1")
+texture = ExtResource("3_dkobx")
 expand_mode = 3
 script = ExtResource("4_jrnxm")
 syncControlSize = true
@@ -39,21 +39,19 @@ grow_vertical = 0
 size_flags_horizontal = 8
 size_flags_vertical = 8
 theme_type_variation = &"Outline10"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 10
 text = "2.56k"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="NotificationLabel" type="Label" parent="Icon"]
 layout_mode = 0
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 12.0
-offset_bottom = 25.0
+offset_right = 16.0
+offset_bottom = 29.0
 rotation = -0.1309
 theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
 theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 8
 text = " ! "
 
 [node name="CtxNoInteract" type="Node" parent="Icon" node_paths=PackedStringArray("itemSource")]
@@ -72,8 +70,10 @@ componentList = ExtResource("7_ipwjr")
 
 [connection signal="AmountChanged" from="." to="Icon/Label" method="set_text"]
 [connection signal="AmountVisibility" from="." to="Icon/Label" method="set_visible"]
-[connection signal="IconChanged" from="." to="Icon" method="set_texture"]
+[connection signal="IconChanged" from="." to="Icon" method="SetShaderTexture" binds= ["MainIcon"]]
 [connection signal="InteractableChanged" from="." to="Icon/Responsive Button Area" method="set_visible"]
+[connection signal="IsHero" from="." to="Icon" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsSchematic" from="." to="Icon" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="NotificationChanged" from="." to="Icon/NotificationLabel" method="set_visible"]
 [connection signal="RarityChanged" from="." to="Icon" method="set_self_modulate"]
 [connection signal="TooltipChanged" from="." to="Icon" method="set_tooltip_text"]

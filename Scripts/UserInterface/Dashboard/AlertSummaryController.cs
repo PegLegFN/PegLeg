@@ -16,14 +16,13 @@ public partial class AlertSummaryController : Control
 
     AlertRewardRow[] rewardRows;
 
-	public override async void _Ready()
+	public override void _Ready()
 	{
 		rewardRows = rewardRowParent.GetChildren().Select(c => new AlertRewardRow(c as Control)).ToArray();
         GameMission.OnMissionsUpdated += CountRewards;
         GameMission.OnMissionsInvalidated += ClearRewards;
         VisibilityChanged += CountRewards;
-        ClearRewards();
-        await GameMission.UpdateMissions();
+        CountRewards();
     }
 
     public override void _ExitTree()
@@ -142,9 +141,7 @@ public partial class AlertSummaryController : Control
 	struct AlertRewardRow
 	{
 		Control row;
-		TextureRect icon;
-		Label name;
-        ColorRect color;
+		GameItemEntry itemEntry;
 
 		Label stonewood;
 		Label plankerton;
@@ -156,9 +153,7 @@ public partial class AlertSummaryController : Control
         public AlertRewardRow(Control parent)
         {
 			row = parent;
-			icon = parent.GetNode<TextureRect>("%Icon");
-            name = parent.GetNode<Label>("%Name");
-            color = parent.GetNode<ColorRect>("%Color");
+            itemEntry = parent.GetNode<GameItemEntry>("%ItemEntry");
 
             stonewood = parent.GetNode<Label>("%Stonewood");
             plankerton = parent.GetNode<Label>("%Plankerton");
@@ -177,11 +172,7 @@ public partial class AlertSummaryController : Control
 		public void SetValues(GameItemTemplate t, ZoneTotals v)
 		{
             Visible = true;
-			icon.Texture = t.GetTexture();
-			name.Text = t.DisplayName;
-            name.TooltipText = t.DisplayName;
-            color.Color = t.RarityColor;
-
+            itemEntry.SetItem(t.CreateInstance());
 
             stonewood.Text = v.S.Compactify();
             stonewood.TooltipText = v.S.ToString();

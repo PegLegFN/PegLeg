@@ -1,62 +1,271 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbwhly7mce0o5"]
+[gd_scene load_steps=7 format=3 uid="uid://b4k4ku3cjmqku"]
 
-[ext_resource type="PackedScene" uid="uid://3ic5fe2i0n0w" path="res://Scenes/LoadoutEntries/commander.tscn" id="1_tbi66"]
-[ext_resource type="PackedScene" uid="uid://ewoytphqxrj1" path="res://Scenes/LoadoutEntries/team_perk.tscn" id="2_msaml"]
-[ext_resource type="PackedScene" uid="uid://cnerbcrevhc7w" path="res://Scenes/LoadoutEntries/support_hero.tscn" id="3_ia3fa"]
-[ext_resource type="PackedScene" uid="uid://dkjv8n3gxf51c" path="res://Scenes/LoadoutEntries/gadget.tscn" id="4_yjhs0"]
+[ext_resource type="PackedScene" uid="uid://cctqgr5s4bkgl" path="res://Scenes/HeroLoadout/loadout_slot_grid.tscn" id="1_i1bxd"]
+[ext_resource type="PackedScene" uid="uid://ci30x54kles27" path="res://Scenes/HeroLoadout/heroLoadoutPanelLarge.tscn" id="1_pwith"]
+[ext_resource type="PackedScene" uid="uid://fdp52f4byq7k" path="res://Scenes/HeroLoadout/loadout_slot_list.tscn" id="2_kwlnb"]
+[ext_resource type="PackedScene" uid="uid://cbwhly7mce0o5" path="res://Scenes/HeroLoadout/heroLoadoutPanel.tscn" id="2_qqdfd"]
+[ext_resource type="Texture2D" uid="uid://tpjage78y2k4" path="res://Images/InterfaceIcons/OrArrowHDRight.png" id="2_wrnfi"]
+[ext_resource type="Texture2D" uid="uid://ctxcwnxsjwlga" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-StormKingHammer-L.png" id="3_ht23k"]
 
-[node name="HeroLoadoutView" type="MarginContainer"]
-offset_right = 358.0
-offset_bottom = 374.0
+[node name="Hero Loadout" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots"]
+layout_mode = 2
+size_flags_horizontal = 4
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry3" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry4" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry5" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry6" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry7" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry8" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry9" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry10" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry11" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry12" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry13" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry14" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry15" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry16" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry17" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry18" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry19" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="LoadoutSlotEntry20" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry3" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry4" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry5" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry6" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry7" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry8" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry9" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry10" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry11" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry12" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry13" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry14" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry15" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry16" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry17" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry18" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry19" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutSlotEntry20" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="LoadoutPreview" type="MarginContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(725, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutPreview"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="CommanderHeader" type="Label" parent="VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/HBoxContainer"]
 layout_mode = 2
-text = "Commander"
+texture = ExtResource("3_ht23k")
+expand_mode = 3
 
-[node name="Commander" parent="VBoxContainer" instance=ExtResource("1_tbi66")]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_bottom = 12
 
-[node name="TeamPerkHeader" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/HBoxContainer/MarginContainer"]
 layout_mode = 2
-text = "Team Perk"
+theme_override_font_sizes/font_size = 32
+text = "Loadout Name Here"
 
-[node name="TeamPerk" parent="VBoxContainer" instance=ExtResource("2_msaml")]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview"]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
 
-[node name="SupportHeader" type="Label" parent="VBoxContainer"]
+[node name="IncomingLoadout" parent="HBoxContainer/LoadoutPreview/VBoxContainer2" instance=ExtResource("1_pwith")]
 layout_mode = 2
-text = "Support"
+size_flags_horizontal = 0
+size_flags_vertical = 4
 
-[node name="SupportHero" parent="VBoxContainer" instance=ExtResource("3_ia3fa")]
-layout_mode = 2
-
-[node name="SupportHero2" parent="VBoxContainer" instance=ExtResource("3_ia3fa")]
-layout_mode = 2
-
-[node name="SupportHero3" parent="VBoxContainer" instance=ExtResource("3_ia3fa")]
-layout_mode = 2
-
-[node name="SupportHero4" parent="VBoxContainer" instance=ExtResource("3_ia3fa")]
-layout_mode = 2
-
-[node name="SupportHero5" parent="VBoxContainer" instance=ExtResource("3_ia3fa")]
+[node name="Control" type="Control" parent="HBoxContainer/LoadoutPreview/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="GadgetsHeader" type="Label" parent="VBoxContainer"]
+[node name="Button" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer2"]
 layout_mode = 2
-text = "Gadgets"
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 24
+text = "Apply Changes"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer2"]
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+theme_override_font_sizes/font_size = 24
+text = "Load Preset"
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_wrnfi")
+expand_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Loadout Slot 20"
+horizontal_alignment = 1
+
+[node name="CurrentLoadout" parent="HBoxContainer/LoadoutPreview/VBoxContainer" instance=ExtResource("2_qqdfd")]
+layout_mode = 2
+size_flags_horizontal = 8
+interactable = false
+
+[node name="Control" type="Control" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="Gadget" parent="VBoxContainer/HBoxContainer" instance=ExtResource("4_yjhs0")]
+[node name="Button" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Gadget2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("4_yjhs0")]
-layout_mode = 2
-size_flags_horizontal = 3
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 24
+text = "Set Active Slot"
