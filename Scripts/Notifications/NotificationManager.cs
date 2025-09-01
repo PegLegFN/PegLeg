@@ -440,8 +440,15 @@ public record struct NotificationData()
     public string superAction;
     public Func<NotifAction, bool> HandleAction;//first, second, super
 
-    public bool SubmitAction(NotifAction action)=>
-        HandleAction?.Invoke(action) ?? true;
+    public bool SubmitAction(NotifAction action)
+    {
+        if(HandleAction is null)
+        {
+            GD.Print("No Handler");
+            return false;
+        }
+        return HandleAction.Invoke(action);
+    }
 
 }
 public enum NotifAction

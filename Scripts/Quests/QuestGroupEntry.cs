@@ -38,8 +38,9 @@ public class QuestSlot
 
     public bool isUnlocked => questItem?.profile is not null;
     public bool isNew => !(questItem?.IsSeen ?? true);
-    public bool isPinned => questItem?.profile?.account.HasPinnedQuest(questItem) ?? false;
-    public bool isComplete => questItem?.attributes["quest_state"]?.ToString() == "Claimed";
+    public bool isPinned => questItem?.QuestPinned ?? false;
+    public bool isCompleted => questItem?.QuestState == "Completed";
+    public bool isClaimed => questItem?.QuestState == "Claimed";
     public bool isRerollable => isUnlocked && questTemplate.Category == "DailyQuests" && questItem.profile.account.CanRerollQuest();
 }
 
@@ -67,7 +68,7 @@ public partial class QuestGroupEntry : Control
 
     bool hasNotification = false;
     public bool HasNotification => hasNotification;
-    public bool HasQuests => questSlotList.Any(q => q.isUnlocked && (questGroupData.ShowComplete || !q.isComplete));
+    public bool HasQuests => questSlotList.Any(q => q.isUnlocked && (questGroupData.ShowComplete || !q.isClaimed));
 
     public List<QuestSlot> questSlotList { get; private set; } = [];
     public QuestGroupData questGroupData { get; private set; }
@@ -147,7 +148,7 @@ public partial class QuestGroupEntry : Control
         }
         sequenceProgress.Visible = true;
         sequenceProgress.MaxValue = questSlotList.Count;
-        sequenceProgress.Value = questSlotList.Count(q => q.isComplete);
+        sequenceProgress.Value = questSlotList.Count(q => q.isClaimed);
         sequenceProgress.SelfModulate = 
             sequenceProgress.MaxValue == sequenceProgress.Value ?
             Colors.Green : Colors.Yellow;
@@ -186,11 +187,11 @@ public partial class QuestGroupEntry : Control
     
     public void UpdateNotificationAndIcon()
     {
-        var notif = questSlotList.Any(questData => questData.isNew && (questGroupData.ShowComplete || !questData.isComplete));
+        var notif = questSlotList.Any(questData => questData.isNew && (questGroupData.ShowComplete || !questData.isClaimed));
         notification.Visible = notif;
         EmitSignalNotificationVisible(notif);
         pinnedIcon.Visible = questSlotList.Any(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isPinned);
-        completeIcon.Visible = questSlotList.All(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isComplete);
+        completeIcon.Visible = questSlotList.All(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isClaimed);
     }
 
     public void LinkButtonGroup(ButtonGroup buttonGroup)

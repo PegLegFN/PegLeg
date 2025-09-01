@@ -213,7 +213,7 @@ public partial class StatChangeWeapon : Control
         var changeArray = changes
             .Where(c =>
             {
-                if (excludedStats.FSet.Contains(c.Key))
+                if (excludedStats.Contains(c.Key))
                     return false;
                 if (!rangeSliderContainer.Visible)
                     return true;
@@ -231,8 +231,8 @@ public partial class StatChangeWeapon : Control
                 }
                 return !ranges.Any(r => c.Key.EndsWith(r)) || c.Key.EndsWith(allowedRange);
             })
-            .OrderBy(c => statPriorityLookup.FDict.TryGetValue(c.Key, out var priority) ? -priority : 0)
-            .ThenBy(c => statNameLookup.FDict.TryGetValue(c.Key, out var mappedName) ? mappedName : $"ZZZ{c.Key}")
+            .OrderBy(c => statPriorityLookup.TryGetValue(c.Key, out var priority) ? -priority : 0)
+            .ThenBy(c => statNameLookup.TryGetValue(c.Key, out var mappedName) ? mappedName : $"ZZZ{c.Key}")
             .ToArray();
         for (int i = 0; i < changeArray.Length; i++)
         {

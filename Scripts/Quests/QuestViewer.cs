@@ -57,7 +57,7 @@ public partial class QuestViewer : Control
         if (
             currentQuest is null || 
             !currentQuest.isUnlocked || 
-            currentQuest.isComplete || 
+            currentQuest.isClaimed || 
             currentQuest.questItem?.profile?.account != account
             )
             return;
@@ -98,10 +98,10 @@ public partial class QuestViewer : Control
         EmitSignal(SignalName.NameChanged, quest.questTemplate.DisplayName);
         EmitSignal(SignalName.DescriptionChanged, quest.questTemplate.Description);
         EmitSignal(SignalName.IconChanged, quest.questTemplate.GetTexture());
-        EmitSignal(SignalName.CompleteVisible, quest.isComplete);
+        EmitSignal(SignalName.CompleteVisible, quest.isClaimed);
 
         rerollButton.Visible = quest.isRerollable;
-        pinButton.Visible = quest.isUnlocked && !quest.isComplete;
+        pinButton.Visible = quest.isUnlocked && !quest.isClaimed;
         pinButton.ButtonPressed = quest.isPinned;
 
         var rewards = quest.questTemplate.GetVisibleQuestRewards();

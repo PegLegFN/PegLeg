@@ -912,7 +912,7 @@ public class GameItemTemplate
     {
         if (Type != "Quest")
             return null;
-        return questRewards ??= GetVisibleQuestRewards().Union(GetHiddenQuestRewards()).ToArray();
+        return questRewards ??= [.. GetVisibleQuestRewards().Union(GetHiddenQuestRewards())];
     }
 
     public GameItem[] GetVisibleQuestRewards()
@@ -950,18 +950,18 @@ public class GameItemTemplate
             var cardpackID = cardPackFromRarity[dynamicRewards.Select(q => Get(q["Item"]?.ToString())?.RarityLevel ?? 0).Max()];
             JsonObject attributes = new()
             {
-                ["options"] = new JsonArray(dynamicRewards.Select(r => new JsonObject()
+                ["options"] = new JsonArray([.. dynamicRewards.Select(r => new JsonObject()
                 {
                     ["itemType"] = r["Item"].ToString(),
                     ["attributes"] = new JsonObject(),
                     ["quantity"] = r["Quantity"].GetValue<int>()
-                }).ToArray())
+                })]),
+                ["quest_selectable"] = true
             };
             var choiceReward = Get(cardpackID).CreateInstance(1, attributes);
-            choiceReward.attributes["quest_selectable"] = true;
             rewards.Insert(0, choiceReward);
         }
-        return rewards.ToArray();
+        return [.. rewards];
     }
 
     public JsonArray GenerateSearchTags(bool assumeUncommon = true)

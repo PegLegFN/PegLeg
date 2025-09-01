@@ -24,7 +24,7 @@ public partial class StatChangeEntry : Control
 
     public void SetChange(KeyValuePair<string, StatChange> changeKVP)
     {
-        bool hasMappedName = statNameLookup.FDict.TryGetValue(changeKVP.Key, out var mappedName);
+        bool hasMappedName = statNameLookup.TryGetValue(changeKVP.Key, out var mappedName);
         statName.Text = hasMappedName ? mappedName : changeKVP.Key;
         rawStatIndicator.Visible = !hasMappedName;
         var change = changeKVP.Value;
@@ -32,7 +32,7 @@ public partial class StatChangeEntry : Control
 
         float progressMax = 1;
         //if stat is always within range 0 and 1, keep max at 1
-        if (normalisedStats?.FSet.Contains(changeKVP.Key) != true)
+        if (normalisedStats?.Contains(changeKVP.Key) != true)
         {
             float progressScale = 2;
             if (isBuff && change.from > 0)

@@ -718,7 +718,7 @@ public partial class GameAccount
         if (lastInterval is null)
             return null;
 
-        var lastIntervalTime = DateTime.Parse(orderRange["lastInterval"].ToString(), null, DateTimeStyles.RoundtripKind);
+        var lastIntervalTime = DateTime.Parse(lastInterval, null, DateTimeStyles.RoundtripKind);
         if (lastIntervalTime != range.ToInterval())
             return null;
 
@@ -1804,14 +1804,17 @@ public class GameItem
         var claimNotif = notifs.FirstOrDefault(n => n["type"].ToString()=="questClaim");
         if(claimNotif is not null)
         {
-            return claimNotif["loot"]["items"]
+            GD.Print(claimNotif);
+            return [.. claimNotif["loot"]["items"]
                 .AsArray()
                 .Select(n =>
                     profile.account
-                        .GetProfile(n["itemProfile"].ToString())
-                        .GetItem(n["itemGuid"].ToString())
-                        .Clone(n["quantity"].GetValue<int>())
-                ).ToArray();
+                        .GetProfile(n["itemProfile"].ToString())?
+                        .GetItem(n["itemGuid"].ToString())?
+                        .Clone(n["quantity"].GetValue<int>()) ??
+                    GameItemTemplate.Get(n["itemType"].ToString())?.
+                        CreateInstance(n["quantity"].GetValue<int>())
+                )];
         }
         return [];
     }
@@ -2067,7 +2070,7 @@ public class GameItem
 
         if (textureType == FnItemTextureType.Preview && GameItemTemplate.Get(attributes?["portrait"]?.ToString()) is GameItemTemplate portraitTemplate)
             return portraitTemplate.GetTexture(fallbackIcon);
-        if (template?.Type == "CardPack" && template?.Name.StartsWith("ZCP_") == false)
+        if (template?.Type == "CardPack")
         {
             if (attributes?.ContainsKey("options") ?? false)
             {

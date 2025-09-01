@@ -59,18 +59,24 @@ public partial class GameOfferEntry : Control
     public override void _Ready()
     {
         VisibilityChanged += CheckForRefresh;
-        GameAccount.ActiveAccountChangedEarly += MarkDirty;
+        GameAccount.ActiveAccountChanged += MarkOfferDirty;
     }
 
     public override void _ExitTree()
     {
         VisibilityChanged -= CheckForRefresh;
-        GameAccount.ActiveAccountChangedEarly -= MarkDirty;
+        GameAccount.ActiveAccountChanged -= MarkOfferDirty;
     }
 
-    private void MarkDirty()
+    private void MarkOfferDirty()
     {
         offerDirty = true;
+        CheckForRefresh();
+    }
+
+    private void MarkAccountDirty()
+    {
+        accountDirty = true;
         CheckForRefresh();
     }
 
@@ -98,10 +104,10 @@ public partial class GameOfferEntry : Control
         {
             if(currentOffer is not null)
             {
-                currentOffer.OnChanged -= MarkDirty;
+                currentOffer.OnChanged -= MarkOfferDirty;
                 currentOffer.OnRemoved -= ClearOffer;
             }
-            shopOffer.OnChanged += MarkDirty;
+            shopOffer.OnChanged += MarkOfferDirty;
             shopOffer.OnRemoved += ClearOffer;
         }
 
@@ -126,16 +132,15 @@ public partial class GameOfferEntry : Control
     {
         if (currentOffer is null)
             return;
-        cts?.Cancel();
-        cts = new();
-        await UpdateAccountProperties(cts.Token);
+        cts = cts.CancelAndRegenerate(out var ct);
+        await UpdateAccountProperties(ct);
     }
 
-    async Task UpdateAccountProperties(CancellationToken ct)
+    async Task UpdateAccountProperties(CancellationToken ct = default)
     {
         if (currentOffer is null)
             return;
-
+        accountDirty = false;
         var account = GameAccount.activeAccount;
         var isAuthenticated = await account.Authenticate();
         if (ct.IsCancellationRequested)

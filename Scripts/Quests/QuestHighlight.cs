@@ -29,7 +29,7 @@ public partial class QuestHighlight : Control
         if (!Visible)
             return;
         EmitSignal(SignalName.TooltipChanged, questData.questTemplate["DisplayName"].ToString());
-        if (questData.isComplete)
+        if (questData.isClaimed)
         {
             EmitSignal(SignalName.ColorChanged, completeColor);
             EmitSignal(SignalName.ProgressChanged, 1);

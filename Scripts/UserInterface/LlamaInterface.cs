@@ -12,6 +12,14 @@ public partial class LlamaInterface : Control
 
     static LlamaInterface instance;
     public static void SelectLlamaTab() => instance.Visible = true;
+    public static async void SelectLlamaTab(GameOffer withOffer)
+    {
+        instance.Visible = true;
+        await instance.LoadShopLlamasAsync();
+        await instance.llamaShopSemaphore.WaitAsync();
+        instance.llamaShopSemaphore.Release();
+        instance.SetLlamaOffer(withOffer);
+    }
 
     [ExportGroup("Scenes")]
     [Export]
@@ -474,6 +482,9 @@ public partial class LlamaInterface : Control
     public async void SetLlamaOffer(GameOffer offer)
     {
         ClearSelection();
+
+        if (!activeOffers.ContainsKey(offer.OfferId))
+            return;
 
         offerCts = offerCts.CancelAndRegenerate(out var ct);
 

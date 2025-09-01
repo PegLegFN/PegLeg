@@ -101,10 +101,10 @@ public partial class QuestGroupViewer : Control
         var groupData = questGroup.questGroupData;
         useArrows = groupData.Sequence;
 
-        questDataList = questGroup.questSlotList.Where(q => (q.isUnlocked || groupData.ShowLocked) && (!q.isComplete || groupData.ShowComplete)).ToList();
+        questDataList = questGroup.questSlotList.Where(q => (q.isUnlocked || groupData.ShowLocked) && (!q.isClaimed || groupData.ShowComplete)).ToList();
         if (questDataList.FirstOrDefault()?.questTemplate.DisplayName.Contains("Endurance") ?? false)
             questDataList = [.. questDataList.OrderBy(q => int.Parse(q.questTemplate.DisplayName.Split(" ")[^1]))];
-        firstUnlocked = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isComplete);
+        firstUnlocked = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isClaimed);
 
         nodesPerPage = maxNodesPerPage;
         if (questDataList.Count > nodesPerPage)
@@ -125,7 +125,7 @@ public partial class QuestGroupViewer : Control
 
         if (questDataList.Count>0)
         {
-            var focusNode = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isComplete, null) ?? questDataList[^1];
+            var focusNode = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isClaimed, null) ?? questDataList[^1];
             if (!useArrows)
                 focusNode = questDataList.FirstOrDefault(q => q.isPinned) ?? questDataList[0];
             currentQuestIndex = questDataList.IndexOf(focusNode);
@@ -183,8 +183,8 @@ public partial class QuestGroupViewer : Control
                 {
                     var prevQuest = questDataList[pageStartIndex + i - 1];
                     //set arrow effects
-                    questArrowList[i - 1].SetShaderBool(prevQuest.isUnlocked && !prevQuest.isComplete, "Animation");
-                    questArrowList[i - 1].SetShaderBool(prevQuest.isComplete, "UseCompleteColor");
+                    questArrowList[i - 1].SetShaderBool(prevQuest.isUnlocked && !prevQuest.isClaimed, "Animation");
+                    questArrowList[i - 1].SetShaderBool(prevQuest.isClaimed, "UseCompleteColor");
                     questArrowList[i - 1].Visible = true;
                 }
                 else

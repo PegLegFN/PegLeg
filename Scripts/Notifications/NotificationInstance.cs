@@ -200,9 +200,14 @@ public partial class NotificationInstance : Control
 	{
 		if (Enum.TryParse<NotifAction>(actionType, out var action))
         {
-            currentContainer.data.SubmitAction(action);
-            Dismiss();
+            var dismis = currentContainer.data.SubmitAction(action);
+			if (dismis)
+				Dismiss();
         }
+		else
+		{
+			GD.Print($"Could not convert \"{actionType}\" to Action Type");
+		}
 	}
 
 	public void AnimateStage(float toStage, double duration, double delay = 0, float? fromStage = null)

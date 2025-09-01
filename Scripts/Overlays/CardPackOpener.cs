@@ -172,219 +172,232 @@ public partial class CardPackOpener : Control
         if (!await account.Authenticate(true))
             return;
 
-        ProcessMode = ProcessModeEnum.Inherit;
-        isOpen = true;
-        //await this.WaitForFrame();
+        LoadingOverlay.TaskToken? stacheLoadingToken = null;
 
-        stacheButton.Visible = llamaOffer?.IsXRayLlama == false;
-        shouldStacheLlamas = false;
-        llamaHits = 0;
-        if (llamaItem is not null)
-            llamaItem = llamaItem.Clone();
-        llamaItem ??= llamaOffer?.itemGrants[0];
-        llamaItem ??= defaultLlamaItem;
-        if(llamaOffer is not null)
+        try
         {
-            llamaTier = llamaOffer.GetXRayLlamaDataUnsafe(account)?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
-            if (llamaItem.template.DisplayName.Contains("Legendary"))
-                llamaTier = 2;
-            llamaItem.customData["llamaTier"] = llamaTier;
-            GD.Print($"Offer Tier: {llamaTier}");
-        }
-        else
-        {
-            llamaTier = llamaItem.customData?["llamaTier"]?.GetValue<int>() ?? 0;
-            GD.Print($"Item Tier: {llamaTier}");
-        }
-        llamaEntry.SetItem(llamaItem);
-        isSmall = llamaItem.templateId == "CardPack:cardpack_basic";
-        waitForFirstHit = true;
-        //bgFade.TweenProperty(backgroundImage, "self_modulate", Colors.White, 0.25f);
-        displayPanel.Visible = true;
-        pullButton.Visible = false;
-        skipAllButton.Visible = false;
-        cardPacksPrepared = false;
-        llamaBurstComplate = false;
-        this.fromPanel = fromPanel;
-        glowFlare.Scale = Vector2.Zero;
-        fullLlama.Visible = true;
-        fullLlama.Scale = Vector2.One;
-        LlamaScale(false);
-        smallLlamaPartParent.Visible = false;
-        standardLlamaPartParent.Visible = false;
-        standardLlamaButton.Visible = false;
+            ProcessMode = ProcessModeEnum.Inherit;
+            isOpen = true;
+            //await this.WaitForFrame();
 
-        topCard.Scale = Vector2.Zero;
-        confettiParticles.Restart();
-        confettiParticles.Emitting = false;
-        for (int i = 0; i < impactParticles.Length; i++)
-        {
-            var particles = impactParticles[i];
-            if (particles is null)
-                continue;
-            particles.Restart();
-            particles.Emitting = false;
-        }
-
-        //start llama animation
-        ResizePanelOpen();
-        await Helpers.WaitForTimer(0.31);
-        while (waitForFirstHit)
-        {
-            await Helpers.WaitForFrame();
-        }
-        stacheButton.Visible = false;
-        LoadingOverlay.TaskToken stacheLoadingToken = default;
-        if (shouldStacheLlamas)
-        {
-            stacheLoadingToken = LoadingOverlay.CreateToken();
-        }
-
-        cardPacks ??= [];
-
-        GameItem[] extraItems = null;
-        GameItem[] extraCardPacks = null;
-
-        if (llamaOffer is not null)
-        {
-            var shopNotif = await account.PurchaseOffer(llamaOffer, llamaOfferQuantity);
-            if (shopNotif is null)
+            stacheButton.Visible = llamaOffer?.IsXRayLlama == false;
+            shouldStacheLlamas = false;
+            llamaHits = 0;
+            if (llamaItem is not null)
+                llamaItem = llamaItem.Clone();
+            llamaItem ??= llamaOffer?.itemGrants[0];
+            llamaItem ??= defaultLlamaItem;
+            if (llamaOffer is not null)
             {
-                await GenericConfirmationWindow.ShowConfirmation("Oops", "", "Close", "Failed to purchase Llama", allowCancel:false);
+                llamaTier = llamaOffer.GetXRayLlamaDataUnsafe(account)?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
+                if (llamaItem.template.DisplayName.Contains("Legendary"))
+                    llamaTier = 2;
+                llamaItem.customData["llamaTier"] = llamaTier;
+                GD.Print($"Offer Tier: {llamaTier}");
+            }
+            else
+            {
+                llamaTier = llamaItem.customData?["llamaTier"]?.GetValue<int>() ?? 0;
+                GD.Print($"Item Tier: {llamaTier}");
+            }
+            llamaEntry.SetItem(llamaItem);
+            isSmall = llamaItem.templateId == "CardPack:cardpack_basic";
+            waitForFirstHit = true;
+            //bgFade.TweenProperty(backgroundImage, "self_modulate", Colors.White, 0.25f);
+            displayPanel.Visible = true;
+            pullButton.Visible = false;
+            skipAllButton.Visible = false;
+            cardPacksPrepared = false;
+            llamaBurstComplate = false;
+            this.fromPanel = fromPanel;
+            glowFlare.Scale = Vector2.Zero;
+            fullLlama.Visible = true;
+            fullLlama.Scale = Vector2.One;
+            LlamaScale(false);
+            smallLlamaPartParent.Visible = false;
+            standardLlamaPartParent.Visible = false;
+            standardLlamaButton.Visible = false;
+
+            topCard.Scale = Vector2.Zero;
+            confettiParticles.Restart();
+            confettiParticles.Emitting = false;
+            for (int i = 0; i < impactParticles.Length; i++)
+            {
+                var particles = impactParticles[i];
+                if (particles is null)
+                    continue;
+                particles.Restart();
+                particles.Emitting = false;
+            }
+
+            //start llama animation
+            ResizePanelOpen();
+            await Helpers.WaitForTimer(0.31);
+            while (waitForFirstHit)
+            {
+                await Helpers.WaitForFrame();
+            }
+            stacheButton.Visible = false;
+            if (shouldStacheLlamas)
+            {
+                stacheLoadingToken = LoadingOverlay.CreateToken();
+            }
+
+            cardPacks ??= [];
+
+            GameItem[] extraItems = null;
+            GameItem[] extraCardPacks = null;
+
+            if (llamaOffer is not null)
+            {
+                var shopNotif = await account.PurchaseOffer(llamaOffer, llamaOfferQuantity);
+                if (shopNotif is null)
+                {
+                    await GenericConfirmationWindow.ShowConfirmation("Oops", "", "Close", "Failed to purchase Llama", allowCancel: false);
+                    stacheLoadingToken?.Dispose();
+                    CloseMenu();
+                    return;
+                }
+                var shopResultItems = shopNotif
+                    .First(val => val["type"].ToString() == "CatalogPurchase")["lootResult"]["items"]
+                        .AsArray()
+                        .Select(var => var.AsObject()
+                        )
+                    .ToArray();
+
+
+                extraItems = [.. shopResultItems
+                    .Where(val => val?["itemGuid"] is not null && !(val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
+                    .Select(val => GameItemTemplate.Get(val["itemType"].ToString())?.CreateInstance(
+                        (int)val["quantity"],
+                        val["attributes"]?.SafeDeepClone().AsObject(),
+                        account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString())
+                    ))
+                ];
+
+                extraCardPacks = [.. shopResultItems
+                    .Where(val => val.AsObject().ContainsKey("itemGuid") && (val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
+                    .Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
+                ];
+            }
+
+            if (shouldStacheLlamas)
+            {
+                stacheLoadingToken.Dispose();
                 CloseMenu();
                 return;
             }
-            var shopResultItems = shopNotif
-                .First(val => val["type"].ToString() == "CatalogPurchase")["lootResult"]["items"]
-                    .AsArray()
-                    .Select(var => var.AsObject()
-                    )
-                .ToArray();
+            extraItems ??= [];
+            extraCardPacks ??= [];
+            extraCardPacks = extraCardPacks.Union(cardPacks).ToArray();
 
-
-            extraItems = shopResultItems
-                .Where(val => val?["itemGuid"] is not null && !(val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
-                .Select(val => GameItemTemplate.Get(val["itemType"].ToString())?.CreateInstance(
-                    (int)val["quantity"],
-                    val["attributes"]?.SafeDeepClone().AsObject(),
-                    account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString())
-                    ))
-                .ToArray();
-
-            extraCardPacks = shopResultItems
-                .Where(val => val.AsObject().ContainsKey("itemGuid") && (val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
-                .Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
-                .ToArray();
-        }
-
-        if (shouldStacheLlamas)
-        {
-            stacheLoadingToken.Dispose();
-            CloseMenu();
-            return;
-        }
-        extraItems ??= [];
-        extraCardPacks ??= [];
-        extraCardPacks = extraCardPacks.Union(cardPacks).ToArray();
-
-        //step 1: separate the choice cardpacks from the regular ones
-        List<GameItem> openableCardPacks = [];
-        foreach (var item in extraCardPacks)
-        {
-            if (!item.attributes.ContainsKey("options"))
-                openableCardPacks.Add(item);
-        }
-        extraCardPacks = extraCardPacks.Except(openableCardPacks).ToArray();
-
-        //step 2: send request to open all regular ones
-        if (openableCardPacks.Count > 0)
-        {
-            JsonArray cardpacksToOpen = new(default, openableCardPacks.Select(item => (JsonNode)item.uuid).ToArray());
-            GD.Print("opening all these cardpacks:\n- " + openableCardPacks.Select(item => item.uuid).ToArray().Join("\n- "));
-            JsonObject body = new()
+            //step 1: separate the choice cardpacks from the regular ones
+            List<GameItem> openableCardPacks = [];
+            foreach (var item in extraCardPacks)
             {
-                ["cardPackItemIds"] = cardpacksToOpen
-            };
-            //LoadingOverlay.Instance.AddLoadingKey("LlamaOpenBulk");
+                if (!item.attributes.ContainsKey("options"))
+                    openableCardPacks.Add(item);
+            }
+            extraCardPacks = extraCardPacks.Except(openableCardPacks).ToArray();
 
-            //TODO: handle errors
-            //TODO: merge amounts of identical item stacks
-            var resultNotification = (await account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPackBatch", body.ToString())).FirstOrDefault();
-            var resultItemData = resultNotification["lootGranted"]["items"].AsArray();
+            //step 2: send request to open all regular ones
+            if (openableCardPacks.Count > 0)
+            {
+                JsonArray cardpacksToOpen = new(default, openableCardPacks.Select(item => (JsonNode)item.uuid).ToArray());
+                GD.Print("opening all these cardpacks:\n- " + openableCardPacks.Select(item => item.uuid).ToArray().Join("\n- "));
+                JsonObject body = new()
+                {
+                    ["cardPackItemIds"] = cardpacksToOpen
+                };
+                //LoadingOverlay.Instance.AddLoadingKey("LlamaOpenBulk");
 
-            var resultItems = resultItemData
-                .Where(val => val?["itemGuid"] is not null && !(val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
-                .Select(val => GameItemTemplate.Get(val["itemType"].ToString())?.CreateInstance(
-                    (int)val["quantity"],
-                    val["attributes"]?.SafeDeepClone().AsObject(),
-                    account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString())
-                    ))
-                .ToArray();
+                //TODO: handle errors
+                //TODO: merge amounts of identical item stacks
+                var resultNotification = (await account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPackBatch", body.ToString())).FirstOrDefault();
+                var resultItemData = resultNotification["lootGranted"]["items"].AsArray();
 
-            var resultCardPacks = resultItemData
-                .Where(val => val.AsObject().ContainsKey("itemGuid") && (val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
-                .Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
-                .ToArray();
+                var resultItems = resultItemData
+                    .Where(val => val?["itemGuid"] is not null && !(val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
+                    .Select(val => GameItemTemplate.Get(val["itemType"].ToString())?.CreateInstance(
+                        (int)val["quantity"],
+                        val["attributes"]?.SafeDeepClone().AsObject(),
+                        account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString())
+                        ))
+                    .ToArray();
 
-            GD.Print("LlamaResult: "+ resultItemData.ToString());
+                var resultCardPacks = resultItemData
+                    .Where(val => val.AsObject().ContainsKey("itemGuid") && (val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
+                    .Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
+                    .ToArray();
 
-            var exceptions = resultItemData
-                .Where(val => !val.AsObject().ContainsKey("itemGuid"))
-                .ToArray();
-            if (exceptions.Length > 0)
-                GD.Print("Exception: " + exceptions[0]);
+                GD.Print("LlamaResult: " + resultItemData.ToString());
 
-            queuedChoices.AddRange(resultCardPacks);
-            queuedItems.AddRange(resultItems);
+                var exceptions = resultItemData
+                    .Where(val => !val.AsObject().ContainsKey("itemGuid"))
+                    .ToArray();
+                if (exceptions.Length > 0)
+                    GD.Print("Exception: " + exceptions[0]);
+
+                queuedChoices.AddRange(resultCardPacks);
+                queuedItems.AddRange(resultItems);
+            }
+
+            queuedChoices.AddRange(extraCardPacks);
+            queuedItems.AddRange(extraItems);
+            cardPacksPrepared = true;
+
+            //step 2.5: wait for user to proceed
+            await WaitForCardPackBurst();
+            GD.Print("wait complete");
+
+            if (!IsInsideTree() || !isOpen)
+                return;
+            GD.Print("phew");
+
+
+            //step 3: apply sorting
+            if (sortByRarity)
+            {
+                var orderedChoices = queuedChoices.OrderBy(item => item.template.RarityLevel);
+                queuedChoices = [.. orderedChoices];
+
+                var orderedItems = queuedItems.OrderBy(item => item.template.RarityLevel);
+                queuedItems = [.. orderedItems];
+            }
+
+            //step 4: display results based on user settings
+
+            choicesOnly = skipReveal;
+            if (skipReveal && queuedChoices.Count == 0)
+            {
+                await ShowRecyclePopup();
+                CloseMenu();
+                return;
+            }
+
+            nextPullIndex = 0;
+            SetCardItems(-1);
+            smallCardParent.Visible = true;
+            var cardsUnfold = GetTree().CreateTween().SetParallel().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quart);
+            cardsUnfold.TweenProperty(this, "CurrentCardSeparation", gapBetweenCards, 0.25f);
+
+            for (int i = 0; i < choiceCards.Length; i++)
+            {
+                var index = i;
+                choiceCards[i].Pressed += () => ApplyChoice(index);
+            }
+
+            pullButton.Visible = true;
+            skipAllButton.Visible = true;
         }
-
-        queuedChoices.AddRange(extraCardPacks);
-        queuedItems.AddRange(extraItems);
-        cardPacksPrepared = true;
-
-        //step 2.5: wait for user to proceed
-        await WaitForCardPackBurst();
-        GD.Print("wait complete");
-
-        if (!IsInsideTree() || !isOpen)
-            return;
-        GD.Print("phew");
-
-
-        //step 3: apply sorting
-        if (sortByRarity)
+        catch (Exception ex)
         {
-            var orderedChoices = queuedChoices.OrderBy(item => item.template.RarityLevel);
-            queuedChoices = [.. orderedChoices];
-
-            var orderedItems = queuedItems.OrderBy(item => item.template.RarityLevel);
-            queuedItems = [.. orderedItems];
-        }
-
-        //step 4: display results based on user settings
-
-        choicesOnly = skipReveal;
-        if(skipReveal && queuedChoices.Count == 0)
-        {
-            await ShowRecyclePopup();
+            GD.PushWarning(ex);
+            await GenericConfirmationWindow.ShowConfirmation("Oops", "", "Close", "Unknown Error while opening Llamas, check the Log for details", ex.Message, allowCancel: false);
+            stacheLoadingToken?.Dispose();
             CloseMenu();
-            return;
         }
-
-        nextPullIndex = 0;
-        SetCardItems(-1);
-        smallCardParent.Visible = true;
-        var cardsUnfold = GetTree().CreateTween().SetParallel().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quart);
-        cardsUnfold.TweenProperty(this, "CurrentCardSeparation", gapBetweenCards, 0.25f);
-
-        for (int i = 0; i < choiceCards.Length; i++)
-        {
-            var index = i;
-            choiceCards[i].Pressed += () => ApplyChoice(index);
-        }
-
-        pullButton.Visible = true;
-        skipAllButton.Visible = true;
+        
     }
 
     int CurrentCardSeparation

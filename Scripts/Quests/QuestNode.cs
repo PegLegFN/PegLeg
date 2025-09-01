@@ -113,7 +113,9 @@ public partial class QuestNode : Control
         //);
 
         int colorIndex = 0;
-        if (questData.isComplete)
+        if (questData.isClaimed)
+            colorIndex = 3;
+        else if (questData.isCompleted)
             colorIndex = 2;
         else if(displayAsLocked)
             colorIndex = 0;
