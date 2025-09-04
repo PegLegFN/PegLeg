@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bcllm2n3omok8"]
+[gd_scene load_steps=8 format=3 uid="uid://bcllm2n3omok8"]
 
 [ext_resource type="Script" uid="uid://b0j1smbi1nuqg" path="res://Scripts/Bootstrap.cs" id="1_6qsod"]
 [ext_resource type="PackedScene" uid="uid://ysh5ajklts1q" path="res://Scenes/Desktop/desktopOnboarding.tscn" id="2_frb0b"]
 [ext_resource type="PackedScene" uid="uid://u5ag0k8n6eqm" path="res://Scenes/Desktop/desktopInterface.tscn" id="3_js2t5"]
+[ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="4_efo63"]
 [ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="4_p8jt0"]
 [ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="5_efo63"]
 
@@ -14,7 +15,7 @@ shader_parameter/Expo = true
 shader_parameter/AlphaStart = 0.0
 shader_parameter/CornerRadius = 39.05
 
-[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("curtain", "progressLabel")]
+[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("curtain", "linuxBG", "progressLabel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,9 +23,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6qsod")
 curtain = NodePath("Curtain")
+linuxBG = NodePath("TextureRect")
 progressLabel = NodePath("MarginContainer/Label")
 desktopOnboarding = ExtResource("2_frb0b")
 desktopInterface = ExtResource("3_js2t5")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("4_efo63")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2

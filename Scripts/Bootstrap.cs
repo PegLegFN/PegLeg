@@ -19,6 +19,8 @@ public partial class Bootstrap : Node
     [Export]
     Control curtain;
     [Export]
+    Control linuxBG;
+    [Export]
     Label progressLabel;
 	[ExportGroup("Scenes")]
 	[Export]
@@ -97,6 +99,8 @@ public partial class Bootstrap : Node
             var currentPid = OS.GetProcessId();
             processFile.Store64((ulong)currentPid);
         }
+        #elif GODOT_LINUXBSD
+        linuxBG.Visible = true;
         #endif
 
 
