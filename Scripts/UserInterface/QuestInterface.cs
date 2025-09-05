@@ -63,7 +63,7 @@ public partial class QuestInterface : Control
         //when no longer in mission, claim any completed quests immediately, then resume reloading quests
 
         if (!AppConfig.Get("advanced", "suspend_quests", false))
-            await GameAccount.activeAccount.ClientQuestLogin();
+            await GameAccount.activeAccount.ClientQuestLoginCampaign();
 
         questsDirty = true;
         if (IsVisibleInTree())

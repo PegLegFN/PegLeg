@@ -165,7 +165,8 @@ public partial class Bootstrap : Node
             progressLabel.Text = "Generating XRay Llama contents...";
             await GameAccount.activeAccount.GenerateXRayLlamaResults();
             progressLabel.Text = "Updating quests...";
-            await GameAccount.activeAccount.ClientQuestLogin();
+            await GameAccount.activeAccount.ClientQuestLoginCampaign();
+            await GameAccount.activeAccount.ClientQuestLoginAthena();
         }
 
         progressLabel.Text = "";

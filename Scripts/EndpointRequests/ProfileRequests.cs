@@ -451,12 +451,17 @@ public partial class GameAccount
                 return;
 
             var avatarData = await Helpers.MakeRequest(
-                    HttpMethod.Get,
-                    FnWebAddresses.avatar,
-                    $"/v1/avatar/fortnite/ids?accountIds={accountId}",
-                    "{}",
-                    AuthHeader
-                );
+                HttpMethod.Get,
+                FnWebAddresses.avatar,
+                $"/v1/avatar/fortnite/ids?accountIds={accountId}",
+                "{}",
+                AuthHeader
+            );
+            if(avatarData is JsonObject obj)
+            {
+                GD.Print($"avatar fetch error: \n{obj}");
+                return;
+            }
 
             string skinId = avatarData[0]?["avatarId"]?.ToString() is string avId ? avId.Split(":")[^1] : null;
             GD.Print($"skinID: {skinId}");
@@ -931,9 +936,14 @@ public partial class GameAccount
         return accountItems;
     }
 
-    public async Task ClientQuestLogin()
+    public async Task ClientQuestLoginCampaign()
     {
         await GetProfile(FnProfileTypes.AccountItems)
+            .PerformOperation("ClientQuestLogin", @"{""streamingAppKey"": """"}");
+    }
+    public async Task ClientQuestLoginAthena()
+    {
+        await GetProfile(FnProfileTypes.CosmeticInventory)
             .PerformOperation("ClientQuestLogin", @"{""streamingAppKey"": """"}");
     }
 
@@ -1444,23 +1454,32 @@ public class GameProfile
                 case "statModified":
                     var statName = change["name"].ToString();
                     var statVal = change["value"].SafeDeepClone();
-                    var hadStat = statAttributes.TryGetPropertyValue(statName, out var oldStatVal);
+                    var hadStatBefore = statAttributes.TryGetPropertyValue(statName, out var oldStatVal);
+                    var hasStatNow = statVal is not null;
 
-                    statAttributes[statName] = statVal;
+                    string statValText = "[Removed]";
+                    if (hasStatNow)
+                    {
+                        statAttributes[statName] = statVal;
+                        statValText = statVal.ToString();
+                        if (statValText.Length > 500)
+                            statValText = "[500+ chars]";
+                    }
+                    else
+                        statAttributes.Remove(statName);
 
-                    var statValText = statVal.ToString();
-                    if (statValText.Length > 500)
-                        statValText = "[500+]";
 
-                    string oldStatValText = null;
-                    if (hadStat)
+                    string oldStatValText = "";
+                    if (hadStatBefore)
                     {
                         oldStatValText = oldStatVal.ToString();
                         if (oldStatValText.Length > 500)
                             oldStatValText = "[500+]";
+                        oldStatValText += "\n=>\n";
                     }
+
                     if (printChanges)
-                        GD.Print($"STAT CHANGED: {statName}: {(hadStat ? $"\n{oldStatValText}\n=>\n" : "")}{statValText}");
+                        GD.Print($"STAT CHANGED: {statName}: {oldStatValText}{statValText}");
                     OnStatChanged?.Invoke(statName);
                     OnStatsChanged?.Invoke();
 

@@ -58,6 +58,7 @@ public partial class XpLimitController : Control
 
             stwProfile = account.GetProfile(FnProfileTypes.AccountItems);
             brProfile = account.GetProfile(FnProfileTypes.CosmeticInventory);
+            await GameAccount.activeAccount.ClientQuestLoginAthena();
 
             await UpdateProfiles(false);
         }
@@ -132,7 +133,7 @@ public partial class XpLimitController : Control
         if (rested > 0 && superchargedXpDisplay is not null)
         {
             int restedMax = brProfile.statAttributes["rested_xp_cumulative"]?.GetValue<int?>() ?? 0;
-            double restedMult = brProfile.statAttributes["rested_xp_mult"]?.GetValue<double?>() ?? 0;
+            double restedMult = brProfile.statAttributes["rested_xp_mult"]?.GetValue<double?>() ?? 2; //i assume this defaults to 2 when not listed
             superchargedXpDisplay.SetXpProgress(
                 rested,
                 restedMax,

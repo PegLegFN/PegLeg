@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>
 {
+    [Signal]
+    public delegate void HasVBucksEventHandler(bool value);
     [Export]
     RecycleListContainer missionList;
     [Export]
@@ -289,6 +291,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
         if (ct.IsCancellationRequested)
             return;
+
+        if (notableMode)
+            EmitSignalHasVBucks(filteredRewards.Any(r => r.item.template.VBucksOrXRayTickets));
 
         IOrderedEnumerable<MissionRewardPair> sortedRewards;
 

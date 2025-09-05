@@ -2603,6 +2603,12 @@ mouse_filter = 0
 visible = false
 layout_mode = 2
 
+[node name="Label" type="Label" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "V-Bucks only available to Founders"
+horizontal_alignment = 1
+
 [node name="Control" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
 layout_mode = 2
 
@@ -3791,6 +3797,7 @@ vertical_alignment = 1
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2" to="SubViewportContainer/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button3" to="SubViewportContainer/SummaryDispatcher" method="ExecuteWebhook"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
+[connection signal="HasVBucks" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/Label" method="set_visible"]
 [connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" method="set_visible"]
 [connection signal="OnFalse" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" method="set_stretch_ratio" binds= [0.0]]

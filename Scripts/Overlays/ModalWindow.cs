@@ -16,22 +16,21 @@ public partial class ModalWindow : Control
     [Export]
     Control backgroundPanel;
     [Export]
-    CanvasGroup windowCanvas;
+    protected CanvasGroup windowCanvas;
     [Export]
-    Control windowControl;
+    protected Control windowControl;
 
     [Export]
     float tweenTime = 0.1f;
-    protected float TweenTime => tweenTime;
     [Export]
     float shrunkScale = 0.5f;
     [Export]
     bool startOpen;
     [Export]
-    bool useSounds = true;
+    protected bool useSounds = true;
     [Export]
     protected bool isUserClosable = false;
-    protected bool UseSounds => useSounds;
+    protected virtual bool UseWindowAnim => true;
 
     public override void _Ready()
     {
@@ -39,15 +38,17 @@ public partial class ModalWindow : Control
         MouseFilter = MouseFilterEnum.Ignore;
         backgroundPanel.Modulate = Colors.Transparent;
 
-        if (windowCanvas is not null)
         {
-            windowCanvas.SelfModulate = Colors.Transparent;
-            windowCanvas.Scale = Vector2.One * shrunkScale;
-        }
-        if (windowControl is not null)
-        {
-            windowControl.Modulate = Colors.Transparent;
-            windowControl.Scale = Vector2.One * shrunkScale;
+            if (windowCanvas is not null)
+            {
+                windowCanvas.SelfModulate = Colors.Transparent;
+                windowCanvas.Scale = Vector2.One * shrunkScale;
+            }
+            if (windowControl is not null)
+            {
+                windowControl.Modulate = Colors.Transparent;
+                windowControl.Scale = Vector2.One * shrunkScale;
+            }
         }
 
         if (startOpen)
@@ -104,8 +105,7 @@ public partial class ModalWindow : Control
             openedThisFrame = true;
             WhileOpen().StartTask();
         }
-        currentTween = GetTree().CreateTween().SetParallel();
-        BuildTween(ref currentTween, openState);
+        currentTween = BuildTween(openState, tweenTime);
         currentTween.Finished += () =>
         {
             if (IsInstanceValid(this))
@@ -132,8 +132,10 @@ public partial class ModalWindow : Control
         ProcessMode = ProcessModeEnum.Disabled;
     }
 
-    protected virtual void BuildTween(ref Tween tween, bool openState)
+    protected virtual Tween BuildTween(bool openState, double duration)
     {
+        var tween = CreateTween().SetParallel();
+        tween.Stop();
         if (openState)
         {
             if (useSounds)
@@ -155,19 +157,23 @@ public partial class ModalWindow : Control
 
         var newSize = openState ? 1 : shrunkScale;
         var newColour = openState ? Colors.White : Colors.Transparent;
-        tween.TweenProperty(backgroundPanel, "modulate", newColour, tweenTime);
+        tween.TweenProperty(backgroundPanel, "modulate", newColour, duration);
 
-        if (windowCanvas is not null)
+        if (UseWindowAnim)
         {
-            tween.TweenProperty(windowCanvas, "self_modulate", newColour, tweenTime);
-            tween.TweenProperty(windowCanvas, "scale", Vector2.One * newSize, tweenTime);
-        }
+            if (windowCanvas is not null)
+            {
+                tween.TweenProperty(windowCanvas, "self_modulate", newColour, duration);
+                tween.TweenProperty(windowCanvas, "scale", Vector2.One * newSize, duration);
+            }
 
-        if (windowControl is not null)
-        {
-            tween.TweenProperty(windowControl, "modulate", newColour, tweenTime);
-            tween.TweenProperty(windowControl, "scale", Vector2.One * newSize, tweenTime);
+            if (windowControl is not null)
+            {
+                tween.TweenProperty(windowControl, "modulate", newColour, duration);
+                tween.TweenProperty(windowControl, "scale", Vector2.One * newSize, duration);
+            }
         }
+        return tween;
     }
 
     protected virtual void OnTweenFinished(bool openState)

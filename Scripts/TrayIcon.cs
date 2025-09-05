@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
@@ -56,6 +57,7 @@ public partial class TrayIcon : StatusIndicator
         AppConfig.OnConfigChanged += OnConfigChanged;
         runtimeFPS = (int)AppConfig.Get("ui", "fps", 60.0);
         RegisterResponsiveWindow(mainWindowTag);
+        RefreshTimerController.OnHourChanged += TryAutoRestart;
     }
     static int runtimeFPS = 60;
 
@@ -71,6 +73,17 @@ public partial class TrayIcon : StatusIndicator
                 Engine.MaxFps = Mathf.Max(0, runtimeFPS);
             }
         }
+    }
+
+    public void TryAutoRestart()
+    {
+        if (!AppConfig.Get("advanced", "auto_restart", false))
+            return;
+        int restartHour = AppConfig.Get("advanced", "auto_restart_hour", 7);
+        if (DateTime.Now.Hour != restartHour)
+            return;
+        OS.CreateInstance([]);
+        GetTree().Quit();
     }
 
     public void HandleMenu(long id)
@@ -182,6 +195,7 @@ public partial class TrayIcon : StatusIndicator
             Unminimise();
         GetWindow().CloseRequested -= Minimise;
         GetTree().AutoAcceptQuit = true;
+        RefreshTimerController.OnHourChanged -= TryAutoRestart;
         menu.IdPressed -= HandleMenu;
         Visible = false;
     }

@@ -61,8 +61,11 @@ public partial class AccountSelector : ModalWindow
         }
     }
 
-    protected override void BuildTween(ref Tween tween, bool openState)
+    protected override Tween BuildTween(bool openState, double duration)
     {
+        var tween = CreateTween();
+        tween.Stop();
+        duration *= 2;
         if (openState)
         {
             PopulateAccounts();
@@ -76,21 +79,22 @@ public partial class AccountSelector : ModalWindow
         }
         foldoutBtn.Disabled = true;
 
-        tween.SetParallel(false);
         tween.TweenInterval(openState ? 0 : 0.1f);
         tween.SetParallel();
-        tween.TweenProperty(this, "Dummy", 1, 0.01); // silences "started with no Tweeners" error
-        base.BuildTween(ref tween, openState);
+        tween.TweenSubtween(base.BuildTween(openState, openState ? duration : duration * 0.5))
+            .SetDelay(openState ? 0 : duration * 0.5);
 
-        tween.TweenProperty(selectorButtonIcons, "modulate", openState ? Colors.Transparent : Colors.White, TweenTime);
-        tween.TweenProperty(selectorButtonLabel, "modulate", openState ? Colors.White : Colors.Transparent, TweenTime);
+        tween.TweenProperty(selectorButtonIcons, "modulate", openState ? Colors.Transparent : Colors.White, duration*0.5)
+            .SetDelay(openState ? duration * 0.25 : duration * 0.5);
+        tween.TweenProperty(selectorButtonLabel, "modulate", openState ? Colors.White : Colors.Transparent, duration*0.5)
+            .SetDelay(openState ? duration * 0.25 : duration * 0.5);
 
-        tween.TweenProperty(selectorButtonLabel, "custom_minimum_size:x", openState ? selectorButtonLabelTarget.GetCombinedMinimumSize().X : 0, TweenTime);
+        tween.TweenProperty(selectorButtonLabel, "custom_minimum_size:x", openState ? selectorButtonLabelTarget.GetCombinedMinimumSize().X : 0, duration * 0.5)
+            .SetDelay(duration * 0.5);
 
         tween.TweenInterval(0.1f);
 
-        tween.Play();
-        //tween.SetParallel(false);
+        return tween;
     }
 
     void GenerateAccountEntry()

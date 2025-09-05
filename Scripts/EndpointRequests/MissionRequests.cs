@@ -646,7 +646,7 @@ public class GameMission
         alertModifiers ??= [];
         alertRewardItems ??= [];
 
-        searchTags ??= [];
+        searchTags = missionGenerator.GenerateSearchTags().DeepClone().AsArray();
         if (IsFourPlayer)
             searchTags.Add("Group");
         if(alertModifiers.Length>0)

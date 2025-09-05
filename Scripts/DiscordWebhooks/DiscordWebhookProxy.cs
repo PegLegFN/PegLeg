@@ -31,6 +31,8 @@ public partial class DiscordWebhookProxy
 
     public async Task CreateSyncMessage()
     {
+        if (!AppConfig.Get("advaced", "webhooks", false))
+            return;
         if (!AppConfig.Get("webhooks", InternalName + "_enabled", false))
             return;
         var urlEnding = AppConfig.Get("webhooks", InternalName + "_url", "");
@@ -62,6 +64,8 @@ public partial class DiscordWebhookProxy
 
     public async Task Execute()
     {
+        if (!AppConfig.Get("advaced", "webhooks", false))
+            return;
         if (!AppConfig.Get("webhooks", InternalName + "_enabled", false))
             return;
         var urlEnding = AppConfig.Get("webhooks", InternalName + "_url", "");
