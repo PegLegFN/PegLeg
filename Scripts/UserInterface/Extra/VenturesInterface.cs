@@ -111,14 +111,16 @@ public partial class VenturesInterface : Control
             modifierEntries[i].Visible = false;
         }
 
+        GD.Print(currentSeason.Levels.Length);
         currentSeason.Levels ??= [];
-        for (int i = 1; i < currentSeason.Levels.Length; i++)
+        var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
+        for (int i = 1; i < levels.Length; i++)
         {
             mainItems[i-1].Visible = true;
-            mainItems[i-1].SetItem(currentSeason.Levels[i].Rewards[0].AsItem());
+            mainItems[i-1].SetItem(levels[i].Rewards[0].AsItem());
             mainCheckmarks[i-1].Visible = true;
         }
-        for (int i = currentSeason.Levels.Length-1; i < mainItems.Length; i++)
+        for (int i = levels.Length-1; i < mainItems.Length; i++)
         {
             if (i < 0)
                 continue;
@@ -126,13 +128,13 @@ public partial class VenturesInterface : Control
             mainCheckmarks[i].Visible = false;
         }
 
-        currentSeason.PastLevels ??= [];
-        for (int i = 0; i < currentSeason.PastLevels.Length; i++)
+        var pastLevels = currentSeason.PastLevels ?? [];
+        for (int i = 0; i < pastLevels.Length; i++)
         {
             extraItems[i].Visible = true;
-            extraItems[i].SetItem(currentSeason.PastLevels[i].AsItem());
+            extraItems[i].SetItem(pastLevels[i].AsItem());
         }
-        for (int i = currentSeason.PastLevels.Length; i < extraItems.Length; i++)
+        for (int i = pastLevels.Length; i < extraItems.Length; i++)
         {
             extraItems[i].Visible = false;
         }
@@ -157,9 +159,10 @@ public partial class VenturesInterface : Control
         GameItem nextMilestone = null;
         int milestoneLevel = 0;
 
-        for (int i = 1; i < currentSeason.Levels.Length; i++)
+        var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
+        for (int i = 1; i < levels.Length; i++)
         {
-            bool aboveLevel = ventureXP > currentSeason.Levels[i].TotalRequiredXP;
+            bool aboveLevel = ventureXP > levels[i].TotalRequiredXP;
             mainCheckmarkImages[i-1].Visible = aboveLevel;
             if (aboveLevel)
             {
@@ -167,42 +170,42 @@ public partial class VenturesInterface : Control
             }
             else if(currentLevel+1 == i)
             {
-                nextItem = currentSeason.Levels[i].Rewards[0].AsItem();
-                int startProgress = currentSeason.Levels[i - 1].TotalRequiredXP;
+                nextItem = levels[i].Rewards[0].AsItem();
+                int startProgress = levels[i - 1].TotalRequiredXP;
                 currentProgress = ventureXP - startProgress;
-                targetProgress = currentSeason.Levels[i].TotalRequiredXP - startProgress;
-                totalTarget = currentSeason.Levels[i].TotalRequiredXP;
+                targetProgress = levels[i].TotalRequiredXP - startProgress;
+                totalTarget = levels[i].TotalRequiredXP;
             }
-            else if(nextMilestone is null && currentSeason.Levels[i].IsMajorReward)
+            else if(nextMilestone is null && levels[i].IsMajorReward)
             {
-                nextMilestone = currentSeason.Levels[i].Rewards[0].AsItem();
+                nextMilestone = levels[i].Rewards[0].AsItem();
                 milestoneLevel = i;
             }
         }
 
         if (currentLevel == currentSeason.Levels.Length-1)
         {
-            var pastMaxXP = ventureXP - currentSeason.Levels[^1].TotalRequiredXP;
+            var pastMaxXP = ventureXP - levels[^1].TotalRequiredXP;
             int pastMaxLevel = pastMaxXP / currentSeason.PastLevelXPRequirement;
             currentProgress = pastMaxXP - (pastMaxLevel * currentSeason.PastLevelXPRequirement);
             targetProgress = currentSeason.PastLevelXPRequirement;
             currentLevel += pastMaxLevel;
-            totalTarget = currentSeason.Levels[^1].TotalRequiredXP + ((pastMaxLevel + 1) * currentSeason.PastLevelXPRequirement);
+            totalTarget = levels[^1].TotalRequiredXP + ((pastMaxLevel + 1) * currentSeason.PastLevelXPRequirement);
 
             var rewardIndex = pastMaxLevel % currentSeason.PastLevels.Length;
             nextItem = currentSeason.PastLevels[rewardIndex].AsItem();
         }
 
-        currentLevelLabel.Text = $"Lv {currentLevel}";
+        currentLevelLabel.Text = $"Lv {currentLevel+1}";
         levelProgress.Value = (float)currentProgress / targetProgress;
-        levelProgress.TooltipText = $"{(targetProgress - currentProgress).Notate()} XP to Lv {currentLevel + 1} ({ventureXP.Notate()}/{totalTarget.Notate()})";
-        nextLevelLabel.Text = $"Lv {currentLevel+1}";
+        levelProgress.TooltipText = $"{(targetProgress - currentProgress).Notate()} XP to Lv {currentLevel + 2} ({ventureXP.Notate()}/{totalTarget.Notate()})";
+        nextLevelLabel.Text = $"Lv {currentLevel+2}";
         nextReward.SetItem(nextItem);
 
         majorLevelSection.Visible = nextMilestone is not null;
         if (nextMilestone is not null)
         {
-            nextMajorLevelLabel.Text = $"Lv {milestoneLevel}";
+            nextMajorLevelLabel.Text = $"Lv {milestoneLevel+1}";
             nextMajorReward.SetItem(nextMilestone);
         }
     }

@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://q7ic84srvgy5"]
 
-[ext_resource type="Script" uid="uid://dnl1lptfobd1w" path="res://Scripts/UserInterface/TempCompendiumInterface.cs" id="1_bi7hy"]
-[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="2_eixj7"]
-[ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="2_pegwh"]
-[ext_resource type="PackedScene" uid="uid://cei68i5c1u3d1" path="res://Scenes/GameItemEntry/reward_entry_compendium.tscn" id="4_k5lnx"]
-[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_v321d"]
+[ext_resource type="Script" uid="uid://dnl1lptfobd1w" path="res://Scripts/UserInterface/TempCompendiumInterface.cs" id="1_8mwmu"]
+[ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="2_a4ybs"]
+[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_wbayu"]
+[ext_resource type="PackedScene" uid="uid://cei68i5c1u3d1" path="res://Scenes/GameItemEntry/reward_entry_compendium.tscn" id="4_b5i84"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="5_xahuf"]
 
 [node name="Compendium" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "loadingIcon")]
 anchors_preset = 15
@@ -13,12 +13,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_bottom = -4
-script = ExtResource("1_bi7hy")
+script = ExtResource("1_8mwmu")
 itemList = NodePath("VBoxContainer/PanelContainer/ScrollContainer")
 searchBox = NodePath("VBoxContainer/LineEdit")
 loadingIcon = NodePath("LoadingIcon")
 
-[node name="LoadingIcon" parent="." instance=ExtResource("2_pegwh")]
+[node name="LoadingIcon" parent="." instance=ExtResource("2_a4ybs")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -55,13 +55,13 @@ theme_type_variation = &"Panel5Pad"
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
-script = ExtResource("2_eixj7")
+script = ExtResource("3_wbayu")
 elementSpace = 5.0
 linkedGrid = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
-elementScene = ExtResource("4_k5lnx")
+elementScene = ExtResource("4_b5i84")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer"]
 layout_mode = 2
@@ -83,14 +83,15 @@ layout_mode = 2
 [node name="DynGridContainer" type="Container" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 0
-script = ExtResource("4_v321d")
-compressSpacing = true
-spacing = Vector2(5, 5)
+script = ExtResource("5_xahuf")
+CompressSpacing = true
+Spacing = Vector2(5, 5)
 
 [node name="Padding" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Yes, this screen is bad. I intend to replace this screen with a proper Collection Book screen in the future"
 horizontal_alignment = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://bqp7ax1fjc306"]
+[gd_scene load_steps=73 format=3 uid="uid://bqp7ax1fjc306"]
 
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="1_ac3k7"]
@@ -52,8 +52,10 @@
 [ext_resource type="Texture2D" uid="uid://dlbasrvn2ilmd" path="res://Images/TextureResources/progress-wheel.tres" id="40_at20a"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="43_4yf1i"]
 [ext_resource type="Script" uid="uid://dwvt6ybtex6dg" path="res://Scripts/UsernameLabel.cs" id="47_4kbf4"]
+[ext_resource type="Texture2D" uid="uid://dbuf04r766lk6" path="res://Images/BanjoSuppliments/TypeIcons/T-Trap-Floor-TITLE.png" id="49_pll84"]
 [ext_resource type="PackedScene" uid="uid://dx5ueh2xxydys" path="res://Scenes/MissionEntry/mission_reward_entry_accountless.tscn" id="50_xqktx"]
 [ext_resource type="PackedScene" uid="uid://bsmb8rbqn537o" path="res://Scenes/MissionEntry/mission_collection_entry_accountless.tscn" id="53_0op8k"]
+[ext_resource type="Script" uid="uid://d2gdvkomm7sxb" path="res://Scripts/DiscordWebhooks/DailySummaryWebhookDispatcher.cs" id="54_q8xc3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("3_h2g04")
@@ -2446,6 +2448,25 @@ grow_vertical = 2
 texture = ExtResource("34_6qpji")
 expand_mode = 1
 
+[node name="Button3" type="Button" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button3"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("49_pll84")
+expand_mode = 1
+
 [node name="CheckButton" type="CheckButton" parent="BeastDashboard/VBoxContainer2/MarginContainer"]
 visible = false
 layout_mode = 2
@@ -2699,6 +2720,10 @@ layout_mode = 2
 
 [node name="Control2" type="Control" parent="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
 layout_mode = 2
+
+[node name="SummaryDispatcher" type="Node" parent="SubViewportContainer" node_paths=PackedStringArray("screenshotter")]
+script = ExtResource("54_q8xc3")
+screenshotter = NodePath("../MissionSummaryViewport")
 
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="."]
 visible = false
@@ -3764,6 +3789,7 @@ vertical_alignment = 1
 [connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button" to="SubViewportContainer/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2" to="SubViewportContainer/MissionSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button3" to="SubViewportContainer/SummaryDispatcher" method="ExecuteWebhook"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
 [connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" method="set_visible"]

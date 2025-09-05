@@ -1,11 +1,14 @@
 ﻿
+using Godot;
 using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using HttpClient = System.Net.Http.HttpClient;
 
 public static class WebHelpers
 {
@@ -41,10 +44,43 @@ public static class WebHelpers
         return msg;
     }
 
-    public static T SetJsonContent<T>(this T msg, string jsonContent = "{}") where T : HttpRequestMessage
+    public static T SetContent<T>(this T msg, HttpContent content) where T : HttpRequestMessage
     {
         msg.Content?.Dispose();
-        msg.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        msg.Content = content;
+        return msg;
+    }
+
+    public static MultipartFormDataContent AddStringContent(this MultipartFormDataContent multipartFormContent, string name, string content)
+    {
+        multipartFormContent.Add(new StringContent(content, Encoding.UTF8, "application/text"), name);
+        return multipartFormContent;
+    }
+    public static MultipartFormDataContent AddImageContent(this MultipartFormDataContent multipartFormContent, string name, Image content, string filename="image")
+    {
+        multipartFormContent.Add(new ByteArrayContent(content.SavePngToBuffer()), name, filename+".png");
+        return multipartFormContent;
+    }
+
+    public static T SetStringContent<T>(this T msg, string stringContent) where T : HttpRequestMessage
+    {
+        msg.Content?.Dispose();
+        msg.Content = new StringContent(stringContent, Encoding.UTF8, "application/text");
+        return msg;
+    }
+
+    public static T SetJsonContent<T>(this T msg, string jsonTextContent = "{}") where T : HttpRequestMessage
+    {
+        msg.Content?.Dispose();
+        msg.Content = new StringContent(jsonTextContent, Encoding.UTF8, "application/json");
+        return msg;
+    }
+
+    public static T SetJsonContent<T>(this T msg, JsonObject jsonContent) where T : HttpRequestMessage
+    {
+        jsonContent ??= [];
+        msg.Content?.Dispose();
+        msg.Content = new StringContent(jsonContent.ToString(), Encoding.UTF8, "application/json");
         return msg;
     }
 

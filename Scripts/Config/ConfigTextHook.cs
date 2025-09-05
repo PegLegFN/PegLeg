@@ -24,6 +24,16 @@ public partial class ConfigTextHook : Control
 
     bool valueIsChanging;
 
+    public void UpdateTargetSetting(string section, string key)
+    {
+        this.section = section ?? this.section;
+        this.key = key ?? this.key;
+
+        valueIsChanging = true;
+        EmitSignal(SignalName.ConfigValueChanged, AppConfig.Get(this.section, this.key, defaultValue));
+        valueIsChanging = false;
+    }
+
     public override void _Ready()
     {
         if (tryBind)

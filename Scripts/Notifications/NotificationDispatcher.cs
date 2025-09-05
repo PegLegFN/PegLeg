@@ -15,14 +15,14 @@ public partial class NotificationDispatcher : Node
     const string monthlyFreeLlamaOfferId = "8339003D26B24F70878EE280B70C340D";
     const string firstFreeLlamaOfferId = "B9B0CE758A5049F898773C1A47A69ED4";
 
-    class RefreshTimeContainer
+    class NotifTimeContainer
     {
         public DateTime lastDailyCheck { get; set; }
         public DateTime lastWeeklyCheck { get; set; }
         public DateTime lastHourlyCheck { get; set; }
     }
 
-    RefreshTimeContainer refreshTimes;
+    NotifTimeContainer notifTimes;
 
     [Export]
     Texture2D llamaIcon;
@@ -43,14 +43,14 @@ public partial class NotificationDispatcher : Node
 
     public override void _Ready()
     {
-        refreshTimes = new();
+        notifTimes = new();
         if (FileAccess.FileExists(notifTimerPath))
         {
             //load times from file
             try
             {
                 using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Read);
-                refreshTimes = JsonSerializer.Deserialize<RefreshTimeContainer>(timerFile.GetAsText());
+                notifTimes = JsonSerializer.Deserialize<NotifTimeContainer>(timerFile.GetAsText());
             }
             catch { }
         }
@@ -84,9 +84,9 @@ public partial class NotificationDispatcher : Node
             return;
         var hour = DateTime.UtcNow.Date.AddHours(DateTime.UtcNow.Hour);
         isForced = force;
-        if (refreshTimes.lastHourlyCheck == hour && !isForced)
+        if (notifTimes.lastHourlyCheck == hour && !isForced)
             return;
-        refreshTimes.lastHourlyCheck = hour;
+        notifTimes.lastHourlyCheck = hour;
         notifCTS = notifCTS.CancelAndRegenerate(out var ct);
 
         bool hasAuth = await GameAccount.activeAccount.Authenticate();
@@ -101,7 +101,7 @@ public partial class NotificationDispatcher : Node
 
         //save refresh times
         using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Write);
-        timerFile.StoreString(JsonSerializer.Serialize(refreshTimes));
+        timerFile.StoreString(JsonSerializer.Serialize(notifTimes));
 
         var notifs = (await Task.WhenAll(notifTasks)).SelectMany(n => n);
         if (ct.IsCancellationRequested)
@@ -112,9 +112,9 @@ public partial class NotificationDispatcher : Node
 
     Task<NotificationData[]>[] DailyNotifs(CancellationToken ct)
     {
-        if (refreshTimes.lastDailyCheck == DateTime.UtcNow.Date && !isForced)
+        if (notifTimes.lastDailyCheck == DateTime.UtcNow.Date && !isForced)
             return [];
-        refreshTimes.lastDailyCheck = DateTime.UtcNow.Date;
+        notifTimes.lastDailyCheck = DateTime.UtcNow.Date;
         return [
             CheckMissions(ct),
             CheckCosmetics(ct),
@@ -129,9 +129,9 @@ public partial class NotificationDispatcher : Node
         int utcDayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
         int daysSinceThursday = (3 + utcDayOfWeek) % 7;
         var thisThursday = DateTime.UtcNow.Date.AddDays(daysSinceThursday);
-        if (refreshTimes.lastWeeklyCheck >= thisThursday && !isForced)
+        if (notifTimes.lastWeeklyCheck >= thisThursday && !isForced)
             return [];
-        refreshTimes.lastWeeklyCheck = DateTime.UtcNow.Date;
+        notifTimes.lastWeeklyCheck = DateTime.UtcNow.Date;
         return [
             //if week is new, send 160 reward as notif
             CheckBdayLlamas(ct),

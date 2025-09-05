@@ -71,11 +71,7 @@ public partial class RefreshTimerHook : Control
         RefreshTimerController.OnSecondChanged += UpdateTimeText;
         UpdateTimeText();
 
-        VisibilityChanged += () =>
-        {
-            if (IsVisibleInTree())
-                UpdateTimeText();
-        };
+        VisibilityChanged += () => UpdateTimeText(true);
         if (target is null)
             MouseFilter = MouseFilterEnum.Stop;
     }
@@ -122,9 +118,10 @@ public partial class RefreshTimerHook : Control
         CustomTooltipText = refreshTime.ToLocalTime().ToString("g");
     }
 
-    void UpdateTimeText()
+    void UpdateTimeText() => UpdateTimeText(false);
+    void UpdateTimeText(bool force)
     {
-        if (!IsVisibleInTree())
+        if (!force && !IsVisibleInTree())
             return;
         var remainingTime = (refreshTime - RefreshTimerController.RightNow);
         if (remainingTime.TotalMinutes < criticalCountdownTime)

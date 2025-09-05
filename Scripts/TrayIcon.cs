@@ -43,6 +43,7 @@ public partial class TrayIcon : StatusIndicator
 #endif
         Pressed += (_, __) => Unminimise();
         menu.Clear();
+        menu.AddItem("Restart PegLeg", 200);
         menu.AddItem("Close PegLeg", 404);
         if (OS.HasFeature("test"))
             Icon = testBuildIcon;
@@ -74,9 +75,12 @@ public partial class TrayIcon : StatusIndicator
 
     public void HandleMenu(long id)
     {
-        var index = menu.GetItemIndex((int)id);
         switch (id)
         {
+            case 200:
+                OS.CreateInstance([]);
+                GetTree().Quit();
+                break;
             case 404:
                 GetTree().Quit();
                 break;

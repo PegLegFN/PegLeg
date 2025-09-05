@@ -197,12 +197,12 @@ public class GameMission
             return (checkMissionsState = false, null);
 
         JsonNode missionData = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.game,
-                "fortnite/api/game/v2/world/info",
-                "",
-                account.AuthHeader
-            );
+            HttpMethod.Get,
+            FnWebAddresses.game,
+            "fortnite/api/game/v2/world/info",
+            "",
+            account.AuthHeader
+        );
 
         if (missionData["errorMessage"] is not null)
         {
@@ -508,10 +508,10 @@ public class GameMission
 
             var missionRegionList = theater["regions"].Deserialize<Region[]>(serialiserOptions);
 
-            Parallel.ForEach(theaterMissions, missionData =>
+            foreach (var missionData in theaterMissions)
             {
                 if (missionData.missionGenerator.Contains("_TheOutpost_"))
-                    return;
+                    continue;
                 missionList.Add(new(
                     theaterInfo,
                     [.. missionRegionList.Where(r => r.IncludesTile(missionData.tileIndex) == true)],
@@ -519,7 +519,19 @@ public class GameMission
                     missionData,
                     missionAlertDict.TryGetValue(missionData.tileIndex, out var alertData) ? alertData : null
                 ));
-            });
+            }
+            //Parallel.ForEach(theaterMissions, missionData =>
+            //{
+            //    if (missionData.missionGenerator.Contains("_TheOutpost_"))
+            //        return;
+            //    missionList.Add(new(
+            //        theaterInfo,
+            //        [.. missionRegionList.Where(r => r.IncludesTile(missionData.tileIndex) == true)],
+            //        missionTiles[missionData.tileIndex],
+            //        missionData,
+            //        missionAlertDict.TryGetValue(missionData.tileIndex, out var alertData) ? alertData : null
+            //    ));
+            //});
         }
         return missionList;
     }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://u5ag0k8n6eqm"]
+[gd_scene load_steps=80 format=3 uid="uid://u5ag0k8n6eqm"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_3bqtb"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="2_34fsc"]
@@ -27,10 +27,9 @@
 [ext_resource type="Texture2D" uid="uid://d21c3cdy7sqyf" path="res://Images/Flipbook/VendingSheet.png" id="18_s7yuu"]
 [ext_resource type="AudioStream" uid="uid://bjjgpivjq30po" path="res://Audio/SFX/Notifs/VendingMachine_Vend_Sparkle.wav" id="19_s7yuu"]
 [ext_resource type="PackedScene" uid="uid://kgl0dydu0mtf" path="res://Scenes/Desktop/desktopContextMenu.tscn" id="20_ayavh"]
-[ext_resource type="Texture2D" uid="uid://d1718pgqaawqn" path="res://Images/InterfaceIcons/T_Ui_Elastic_NoColor.png" id="20_k0gyk"]
 [ext_resource type="PackedScene" uid="uid://c78gt6b2m1utg" path="res://Scenes/Desktop/Views/desktopMissionView.tscn" id="22_qlkcq"]
 [ext_resource type="PackedScene" uid="uid://4hei03rcfvmu" path="res://Scenes/Desktop/Views/desktopLlamaView.tscn" id="23_b4gaj"]
-[ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCollectionBookView.tscn" id="24_sj3vv"]
+[ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="24_sj3vv"]
 [ext_resource type="PackedScene" uid="uid://bwunyntryyu6o" path="res://Scenes/Desktop/Views/Armory/desktopSurvivorLoadoutView.tscn" id="25_ag48h"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="25_jxakv"]
 [ext_resource type="PackedScene" uid="uid://buf6p8qyydofm" path="res://Scenes/Desktop/Overlays/game_item_viewer.tscn" id="25_r7yrq"]
@@ -178,63 +177,10 @@ testBuildIcon = ExtResource("11_m0p55")
 
 [node name="PopupMenu" type="PopupMenu" parent="NonUI/StatusIndicator"]
 prefer_native_menu = true
-item_count = 1
+item_count = 2
 item_0/text = "Close"
 item_0/id = 0
-
-[node name="TutorialWindow" type="Window" parent="NonUI/StatusIndicator"]
-process_mode = 3
-transparent_bg = true
-size = Vector2i(270, 28)
-visible = false
-wrap_controls = true
-borderless = true
-always_on_top = true
-transparent = true
-unfocusable = true
-
-[node name="MarginContainer" type="MarginContainer" parent="NonUI/StatusIndicator/TutorialWindow"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 1
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_right = 1
-theme_override_constants/margin_bottom = 1
-
-[node name="PanelContainer" type="PanelContainer" parent="NonUI/StatusIndicator/TutorialWindow/MarginContainer"]
-layout_mode = 2
-theme_type_variation = &"Panel3PadB"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="NonUI/StatusIndicator/TutorialWindow/MarginContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="NonUI/StatusIndicator/TutorialWindow/MarginContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
-text = "PegLeg is running in the background"
-
-[node name="Button" type="Button" parent="NonUI/StatusIndicator/TutorialWindow/MarginContainer/PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-tooltip_text = "Dismiss"
-theme_type_variation = &"TinyButton"
-
-[node name="TextureRect" type="TextureRect" parent="NonUI/StatusIndicator/TutorialWindow/MarginContainer/PanelContainer/HBoxContainer/Button"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("20_k0gyk")
-expand_mode = 1
-
-[node name="Timer" type="Timer" parent="NonUI/StatusIndicator/TutorialWindow"]
-process_mode = 3
-wait_time = 5.0
-one_shot = true
+item_1/id = 1
 
 [node name="NotifWindow" type="Window" parent="NonUI"]
 auto_translate_mode = 1
@@ -873,7 +819,6 @@ texture = ExtResource("57_lrsor")
 lifetime = 1.5
 process_material = SubResource("ParticleProcessMaterial_s7yuu")
 
-[connection signal="pressed" from="NonUI/StatusIndicator/TutorialWindow/MarginContainer/PanelContainer/HBoxContainer/Button" to="NonUI/StatusIndicator/TutorialWindow" method="set_visible" binds= [false]]
 [connection signal="IconChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="Content/OverlayWindows/AccountSwitcher" method="OpenWindow"]
