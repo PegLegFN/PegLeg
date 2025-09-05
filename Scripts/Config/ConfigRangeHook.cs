@@ -29,6 +29,8 @@ public partial class ConfigRangeHook : Node
     [Export]
     bool requireApply = true;
 
+    [Export]
+    bool printWithoutApply = false;
 
 
     public override void _Ready()
@@ -95,7 +97,7 @@ public partial class ConfigRangeHook : Node
         {
             if (!requireApply)
             {
-                ApplyValueTyped(newValue, false);
+                ApplyValueTyped(newValue, printWithoutApply);
                 EmitSignal(SignalName.UnappliedLabelChanged, newValue.ToString()[..Mathf.Min(newValue.ToString().Length, 4)]);
                 EmitSignal(SignalName.AppliedChanged, true);
             }

@@ -106,13 +106,23 @@ public partial class NotificationManager : Control
         instance = null;
     }
 
-    void SetScale(float scaleAmt)
+    async void SetScale(float scaleAmt)
     {
         var newSize = (Vector2I)((Vector2)baseSize * scaleAmt);
-        window.Size = newSize;
         window.ContentScaleFactor = scaleAmt;
-        var safeRect = DisplayServer.GetDisplaySafeArea();
-        window.Position = safeRect.Position + safeRect.Size - (window.Size + new Vector2I(5, 5 - (int)(9 * scaleAmt)));
+        //the window size is acting weird... perhaps one of the aspect ratio containers is messing things up?
+        for (int i = 0; i < 15; i++)
+        {
+            window.Size = newSize;
+            var safeRect = DisplayServer.GetDisplaySafeArea();
+            window.Position = safeRect.Position + safeRect.Size - (newSize + new Vector2I(5, 5 - (int)(9 * scaleAmt)));
+            //await Helpers.WaitForFrame();
+        }
+        //GD.Print(baseSize);
+        //GD.Print(newSize);
+        //GD.Print(safeRect);
+        //GD.Print(window.Size);
+        //GD.Print(scaleAmt);
     }
 
     bool appendQueued = false;

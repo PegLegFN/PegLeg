@@ -175,6 +175,13 @@ static partial class Helpers
     static SceneTree MainLoopSceneTree => (SceneTree)Engine.GetMainLoop();
 
     public static async Task WaitForFrame() => await MainLoopSceneTree.WaitForFrame();
+    public static async Task WaitForFrames(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            await MainLoopSceneTree.WaitForFrame();
+        }
+    }
     static async Task WaitForFrame(this SceneTree sceneTree) => 
         await sceneTree.ToSignal(sceneTree, SceneTree.SignalName.ProcessFrame);
 
