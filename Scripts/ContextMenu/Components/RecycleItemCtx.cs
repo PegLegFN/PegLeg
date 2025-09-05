@@ -8,6 +8,8 @@ public partial class RecycleItemCtx : BaseContextComponent
     public override void Update(ContextMenuHook hook)
     {
         currentItem = hook?.itemSource?.currentItem;
+        if (currentItem?.inspectorOverride is not null) //ensures we're targeting the actual profile item
+            currentItem = currentItem.inspectorOverride;
         SetDisabled(true);
 
         if (currentItem?.profile is null)
@@ -33,13 +35,15 @@ public partial class RecycleItemCtx : BaseContextComponent
 
     public async void Recycle()
     {
-        if (currentItem?.profile is null)
+        var item = currentItem;
+        if (item?.profile is null)
             return;
         menu.CloseMenu();
         GameItemSelector.Instance.SetRecycleDefaults();
-        var toRecycle = await GameItemSelector.Instance.OpenSelector([currentItem], [currentItem]);
+        var toRecycle = await GameItemSelector.Instance.OpenSelector([item], [item]);
         if (toRecycle.Length == 0)
             return;
-        await currentItem?.profile.PerformOperation("RecycleItemBatch", $@"""targetItemIds"":[{currentItem.uuid}]");
+        var json = $@"{{""targetItemIds"":[{item.uuid}]}}";
+        await item?.profile.PerformOperation("RecycleItemBatch", json);
     }
 }
