@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 
 public partial class AppConfig
 {
-    public class NotificationConfig
+    public partial class NotificationConfig
     {
         public float scale = 1;
         public bool showTrayTutorial = true;

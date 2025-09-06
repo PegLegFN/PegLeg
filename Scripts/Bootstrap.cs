@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Frozen;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
@@ -41,12 +42,17 @@ public partial class Bootstrap : Node
         DirAccess.RemoveAbsolute(path);
     }
 
+    public static readonly FrozenSet<string> cmdLineArgs = OS.GetCmdlineArgs().ToFrozenSet();
+
     public override async void _Ready()
     {
         var window = GetWindow();
         window.ContentScaleSize = window.Size;
         window.MoveToCenter();
         progressLabel.Text = "Preparing...";
+
+        if (cmdLineArgs.Contains("--start-minimised"))
+            window.Mode = Window.ModeEnum.Minimized;
 
         if (FileAccess.FileExists(processLockPath))
         {

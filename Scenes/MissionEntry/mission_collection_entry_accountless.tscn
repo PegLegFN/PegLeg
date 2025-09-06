@@ -1,8 +1,73 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsmb8rbqn537o"]
+[gd_scene load_steps=3 format=3 uid="uid://bsmb8rbqn537o"]
 
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="1_sosuh"]
+[ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="2_k4iy5"]
 
-[node name="MissionCollectionEntry" instance=ExtResource("1_sosuh")]
+[node name="MissionCollectionEntry" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent") instance=ExtResource("1_sosuh")]
+alertModifierLayout = NodePath("HBoxContainer/MarginContainer3")
+alertModifierParent = NodePath("HBoxContainer/MarginContainer3/HBoxContainer")
+
+[node name="MarginContainer" parent="HBoxContainer" index="0"]
+size_flags_horizontal = 1
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
 
 [node name="TextureRect2" parent="HBoxContainer/MarginContainer/HBoxContainer/Icon" index="0"]
 modulate = Color(1, 1, 1, 0)
+
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="HBoxContainer" type="HFlowContainer" parent="HBoxContainer/MarginContainer3" index="0"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = -6
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_k4iy5")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_k4iy5")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_k4iy5")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="3"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_k4iy5")
+expand_mode = 3
+
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="4"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_k4iy5")
+expand_mode = 3
+
+[node name="MarginContainer2" parent="HBoxContainer" index="2"]
+size_flags_horizontal = 10

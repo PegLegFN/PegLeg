@@ -3,6 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
 
+public partial class AppConfig
+{
+    public partial class AdvancedConfig
+    {
+        public bool autoRestart;
+        public int restartHour;
+    }
+    public partial class InterfaceConfig
+    {
+        public int targetFps;
+    }
+}
+
 public partial class TrayIcon : StatusIndicator
 {
     NotificationData? _tutorialNotif;
@@ -58,6 +71,8 @@ public partial class TrayIcon : StatusIndicator
         runtimeFPS = (int)AppConfig.Get("ui", "fps", 60.0);
         RegisterResponsiveWindow(mainWindowTag);
         RefreshTimerController.OnHourChanged += TryAutoRestart;
+        if (Bootstrap.cmdLineArgs.Contains("--start-minimised"))
+            Minimise();
     }
     static int runtimeFPS = 60;
 
@@ -82,7 +97,10 @@ public partial class TrayIcon : StatusIndicator
         int restartHour = AppConfig.Get("advanced", "auto_restart_hour", 7);
         if (DateTime.Now.Hour != restartHour)
             return;
-        OS.CreateInstance([]);
+        List<string> args = [];
+        if (minimised)
+            args.Add("--start-minimised");
+        OS.CreateInstance([..args]);
         GetTree().Quit();
     }
 
@@ -91,7 +109,10 @@ public partial class TrayIcon : StatusIndicator
         switch (id)
         {
             case 200:
-                OS.CreateInstance([]);
+                List<string> args = [];
+                if (minimised)
+                    args.Add("--start-minimised");
+                OS.CreateInstance([..args]);
                 GetTree().Quit();
                 break;
             case 404:
@@ -139,7 +160,6 @@ public partial class TrayIcon : StatusIndicator
             }
             Visible = true;
         }
-        
     }
 
     public static void UnminimiseDeferred()

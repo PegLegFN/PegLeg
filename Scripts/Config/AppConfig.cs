@@ -24,6 +24,18 @@ public partial class AppConfig
     static JsonObject _configData;
     static JsonObject ConfigData => _configData ??= LoadConfig();
 
+    public static bool TryRead<T>(string path, out T value)
+    {
+        //reflection or source generation?...
+        value = default;
+        return false;
+    }
+    public static bool TryWrite<T>(string path, T value)
+    {
+        //reflection or source generation?...
+        return false;
+    }
+
     public static bool TryGet<T>(string path, out T value)
     {
         value = default;
