@@ -356,7 +356,13 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             for (int i = 1; i <= 3; i++)
             {
                 if (colors["color"+i] is JsonValue colorVal)
-                    bgColorList.Add(Color.FromHtml(colorVal.ToString()));
+                {
+                    try
+                    {
+                        bgColorList.Add(Color.FromHtml(colorVal.ToString()));
+                    }
+                    catch { }
+                }
             }
             bgGradient.Colors = bgColorList.ToArray();
             List<float> bgOffsetList = [];
@@ -373,7 +379,12 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         }
         Color outlineColor = fallbackOutlineColor;
         if (entryData["colors"]?["textBackgroundColor"] is JsonValue outlineColorVal)
-            outlineColor = Color.FromHtml(outlineColorVal.ToString());
+            try
+            {
+                //...why are malformed hex codes even possible?
+                outlineColor = Color.FromHtml(outlineColorVal.ToString());
+            }
+            catch { }
         if (useOutlineColor)
             EmitSignal(SignalName.OutlineChanged, outlineColor);
 

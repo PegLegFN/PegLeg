@@ -1976,6 +1976,13 @@ public class GameItem
     public int Rating => _rating ??= CalculateRating();
     public int UpdateRating() => (_rating = CalculateRating()) ?? 0;
 
+    public GameItem[] GetPrerollItems() => attributes?["items"]?.AsArray()
+            .Select(node => new GameItem(null, null, node.AsObject()))
+            .OrderBy(item => -item.template?.RarityLevel)
+            .ThenBy(item => item.template?.Type)
+            .ThenBy(item => item.template?.DisplayName)
+            .ToArray() ?? null;
+
     public int CalculateRating()
     {
         if (PegLegResourceManager.ItemRatings is not JsonObject ratings)

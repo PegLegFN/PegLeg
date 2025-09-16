@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://y27ypgna5cwl"]
+[gd_scene load_steps=21 format=3 uid="uid://y27ypgna5cwl"]
 
 [ext_resource type="Script" uid="uid://b4xwylpnpul65" path="res://Scripts/Notifications/NotificationInstance.cs" id="1_hhscf"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="1_trrjj"]
 [ext_resource type="Shader" uid="uid://bmpdy7gneitqr" path="res://Shaders/StaticNotifIcon.gdshader" id="3_0wru6"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="3_mrql6"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_4fw6k"]
+[ext_resource type="PackedScene" uid="uid://t8l7m6ep3lsg" path="res://Scenes/GameItemEntry/notification_highlight_item_large.tscn" id="4_uvlqm"]
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="5_td8no"]
 [ext_resource type="Texture2D" uid="uid://d4bvtl0uat3g3" path="res://Images/Flipbook/VendingItemSheet.png" id="7_uvlqm"]
 [ext_resource type="PackedScene" uid="uid://dbi5mie2icc78" path="res://Scenes/GameItemEntry/notification_highlight_item.tscn" id="8_0wru6"]
@@ -76,7 +77,7 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[node name="DesktopNotificationV2Panel" type="Control" node_paths=PackedStringArray("canvasGroup", "interactionBlocker", "buttons", "headerLabel", "bodyLabel", "itemIcon", "flipbookIcon", "firstBtn", "secondBtn", "superBtn", "sfxPlayer")]
+[node name="DesktopNotificationV2Panel" type="Control" node_paths=PackedStringArray("canvasGroup", "interactionBlocker", "buttons", "headerLabel", "bodyLabel", "itemIcon", "flipbookIcon", "firstBtn", "secondBtn", "superBtn", "sfxPlayer", "itemRow1", "itemPrefix1", "items1", "itemExtra1", "itemRow2", "itemPrefix2", "items2", "itemExtra2")]
 layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
@@ -95,6 +96,14 @@ firstBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxCon
 secondBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/SecondAction")
 superBtn = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer/PrimaryAction")
 sfxPlayer = NodePath("AudioStreamPlayer")
+itemRow1 = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1")
+itemPrefix1 = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/Label")
+items1 = [NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem2"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem3"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem4"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem5"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem6"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem7"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/NotificationHighlightItem8")]
+itemExtra1 = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/MarginContainer/Label2")
+itemRow2 = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2")
+itemPrefix2 = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/Label")
+items2 = [NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem9"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem10"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem11"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem12"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem13"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem14"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem15"), NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/NotificationHighlightItem16")]
+itemExtra2 = NodePath("CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/MarginContainer/Label2")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="."]
 position = Vector2(0, 50)
@@ -232,6 +241,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 2
 
 [node name="BodyText" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/line_spacing = 0
@@ -242,89 +252,153 @@ Line 3"
 autowrap_mode = 3
 text_overrun_behavior = 3
 
-[node name="ItemRow1" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
+[node name="ItemRows" type="VBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_constants/separation = 2
+
+[node name="ItemRow1" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/separation = 2
 
-[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1"]
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Main:"
+
+[node name="NotificationHighlightItem" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem2" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem3" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem4" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem5" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem6" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem7" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
 visible = false
-custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="NotificationHighlightItem8" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1" instance=ExtResource("8_0wru6")]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1"]
+layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_right = -2
+
+[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow1/MarginContainer"]
+custom_minimum_size = Vector2(19, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "+99"
+horizontal_alignment = 1
+
+[node name="ItemRow2" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Ventures:"
+
+[node name="NotificationHighlightItem9" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem10" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem11" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem12" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem13" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem14" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+layout_mode = 2
+
+[node name="NotificationHighlightItem15" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+visible = false
+layout_mode = 2
+
+[node name="NotificationHighlightItem16" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2" instance=ExtResource("8_0wru6")]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2"]
+layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_right = -2
+
+[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRow2/MarginContainer"]
+custom_minimum_size = Vector2(19, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "+99"
+horizontal_alignment = 1
+
+[node name="ItemRowLarge" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 2
+
+[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge"]
+visible = false
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Weekly Shop:"
 
-[node name="NotificationHighlightItem" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge" instance=ExtResource("4_uvlqm")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem2" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem2" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge" instance=ExtResource("4_uvlqm")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem3" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem3" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge" instance=ExtResource("4_uvlqm")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem4" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem4" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge" instance=ExtResource("4_uvlqm")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem5" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem5" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge" instance=ExtResource("4_uvlqm")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem6" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="NotificationHighlightItem6" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge" instance=ExtResource("4_uvlqm")]
 layout_mode = 2
 
-[node name="NotificationHighlightItem7" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge"]
 layout_mode = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_right = -2
 
-[node name="NotificationHighlightItem8" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow1"]
-visible = false
+[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRows/ItemRowLarge/MarginContainer"]
+custom_minimum_size = Vector2(19, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "+99"
-
-[node name="ItemRow2" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body"]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Label" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2"]
-visible = false
-custom_minimum_size = Vector2(75, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Event Shop:"
-
-[node name="NotificationHighlightItem9" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem10" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem11" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem12" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem13" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem14" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem15" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="NotificationHighlightItem16" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2" instance=ExtResource("8_0wru6")]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Body/ItemRow2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "+99"
+horizontal_alignment = 1
 
 [node name="ButtonRow" type="HBoxContainer" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -400,16 +474,19 @@ layout_mode = 2
 size_flags_horizontal = 10
 
 [node name="FirstAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "First"
 
 [node name="SecondAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Second"
 
 [node name="PrimaryAction" type="Button" parent="CanvasGroup/MarginContainer/Content/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonRow/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"SlantedActionButton"
 theme_override_font_sizes/font_size = 12

@@ -46,7 +46,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
     public async void ReloadMissions()
     {
-        await GameMission.UpdateMissions();
+        if (Input.IsKeyPressed(Key.Shift))
+            await GameMission.ReparseMissions();
+        else
+            await GameMission.UpdateMissions();
     }
 
     public override void _Ready()
@@ -173,6 +176,20 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         FilterMissions();
     }
 
+    public static bool ItemIsNotable(GameItem item)
+    {
+        var template = item.sortingTemplate;
+        if (template.RarityLevel == 6 && template.Type == "Worker")
+            return true; // mythic leads
+        if (template.VBucksOrXRayTickets)
+            return true; // v-bucks
+        if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
+            return true; // upgrade llamas
+        if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
+            return true; // legendary survivor (excl. leads)
+        return false;
+    }
+
     bool needsRefresh = false;
     CancellationTokenSource filterCTS = new();
     async void FilterMissions()
@@ -196,19 +213,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         Predicate<GameItem> itemPredicate = null;
         if (notableMode)
         {
-            itemPredicate = i => 
-            {
-                var template = i.sortingTemplate;
-                if (template.RarityLevel == 6 && template.Type == "Worker")
-                    return true; // mythic leads
-                if (template.VBucksOrXRayTickets)
-                    return true; // v-bucks
-                if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
-                    return true; // upgrade llamas
-                if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
-                    return true; // legendary survivor (excl. leads)
-                return false;
-            };
+            itemPredicate = ItemIsNotable;
         }
         else
         {

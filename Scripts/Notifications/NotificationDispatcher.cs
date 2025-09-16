@@ -56,7 +56,6 @@ public partial class NotificationDispatcher : Node
         }
         RefreshTimerController.OnHourChanged += HourlyNotifs;
         HourlyNotifs();
-        GameMission.CheckMissions().StartTask();
     }
 
     public override void _ExitTree()
@@ -64,14 +63,13 @@ public partial class NotificationDispatcher : Node
         RefreshTimerController.OnHourChanged -= HourlyNotifs;
     }
 
-    public override void _Input(InputEvent @event)
+    public override void _ShortcutInput(InputEvent @event)
     {
-        if(@event is InputEventKey keyEvt && keyEvt.AltPressed && keyEvt.Keycode == Key.N && keyEvt.Pressed)
+        if(@event is InputEventKey keyEvt && !keyEvt.ShiftPressed && !keyEvt.CtrlPressed && keyEvt.AltPressed && keyEvt.Keycode == Key.N && keyEvt.Pressed)
         {
             GetViewport().SetInputAsHandled();
             HourlyNotifs(true);
         }
-        base._Input(@event);
     }
 
 
@@ -135,6 +133,7 @@ public partial class NotificationDispatcher : Node
         return [
             //if week is new, send 160 reward as notif
             CheckBdayLlamas(ct),
+            //check weekly/event shop
         ];
     }
 
@@ -206,10 +205,16 @@ public partial class NotificationDispatcher : Node
                 ).Select(o => o.OfferId)
             )}");
             //deliver 1hr daily notif
+            var contents = (await offer.GetXRayLlamaData(GameAccount.activeAccount)).GetPrerollItems();
+            foreach (var item in contents)
+            {
+                item.SetRewardNotification();
+            }
             return [FreeLlamaNotif with
             {
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Hourly),
-                HandleAction = CreateLlamaHandler(offer)
+                HandleAction = CreateLlamaHandler(offer),
+                items = [.. contents.Select(i => new NotificationItemData() { item = i })]
             }];
         }
         return [];
@@ -228,16 +233,18 @@ public partial class NotificationDispatcher : Node
         if (xrayStorefront.Offers.FirstOrDefault(o => o.OfferId == monthlyFreeLlamaOfferId) is GameOffer freeOffer)
         {
             //deliver 24hr daily notif
+            var contents = await freeOffer.GetXRayLlamaData(GameAccount.activeAccount);
             notifs.Add(FreeLlamaNotif with
             {
                 body = "These Llamas are available for 24 hours, and return at the start of each month.",
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily),
-                HandleAction = CreateLlamaHandler(freeOffer)
+                HandleAction = CreateLlamaHandler(freeOffer),
+                items = [.. contents.GetPrerollItems().Select(i => new NotificationItemData() { item = i })]
             });
         }
         if (xrayStorefront.Offers.FirstOrDefault(o => eventLlamaIds.Contains(o.itemGrants[0].templateId)) is GameOffer evtOffer)
         {
-            //deliver 24hr daily notif
+            //deliver event llama notif
             //todo: list amount of llamas, and the event item in the current one
             var contents = await evtOffer.GetXRayLlamaData(GameAccount.activeAccount);
             if (ct.IsCancellationRequested)
@@ -246,7 +253,8 @@ public partial class NotificationDispatcher : Node
             {
                 icon = evtOffer.itemGrants[0].GetTexture(),
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily),
-                HandleAction = CreateLlamaHandler(evtOffer)
+                HandleAction = CreateLlamaHandler(evtOffer),
+                items = [.. contents.GetPrerollItems().Select(i => new NotificationItemData() { item = i })]
             });
         }
         return [.. notifs];
@@ -273,10 +281,12 @@ public partial class NotificationDispatcher : Node
         {
             //deliver bday llama notif
             //todo: if birthday llama contains item with reminder, show notification
+            var contents = await bdayOffer.GetXRayLlamaData(GameAccount.activeAccount);
             return [BDayLlamaNotif with
             {
                 icon = bdayOffer.itemGrants[0].GetTexture(),
-                expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Weekly)
+                expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Weekly),
+                items = [.. contents.GetPrerollItems().Select(i => new NotificationItemData() { item = i })]
             }];
         }
         return [];
@@ -290,7 +300,9 @@ public partial class NotificationDispatcher : Node
         sound = missionSound,
         flipbookSlice = new(6, 5),
         flipbookLength = 29,
-        animDuration = 1
+        animDuration = 1,
+        itemPrefix = "Main:",
+        secondaryItemPrefix = "Ventures:",
     };
 
     static readonly FrozenSet<string> targetMissionRewardIds = FrozenSet.ToFrozenSet(
@@ -305,6 +317,7 @@ public partial class NotificationDispatcher : Node
         if (GameMission.currentMissions is not GameMission[] missions || ct.IsCancellationRequested)
             return [];
 
+        /* old text-based system
         Dictionary<string, int> totals = [];
         List<GameItemTemplate> mythicLeads = [];
 
@@ -317,6 +330,8 @@ public partial class NotificationDispatcher : Node
                     var tid = item.templateId;
                     if (tid.Contains("Worker:manager") && tid.Contains("_sr_"))
                         mythicLeads.Add(item.template);
+                    if (item.template.VBucksOrXRayTickets)
+                        tid = "AccountResource:currency_mtxswap";
                     if (!targetMissionRewardIds.Contains(tid))
                         continue;
                     if (!totals.ContainsKey(tid))
@@ -332,7 +347,7 @@ public partial class NotificationDispatcher : Node
         List<string> totalStrings = [];
         totals.TryGetValue("AccountResource:currency_mtxswap", out var vbucks);
         if (vbucks > 0)
-            totalStrings.Add($"V-Bucks: {vbucks}");
+            totalStrings.Add($"XRay Tickets (& V-Bucks for Founders): {vbucks}");
         totals.TryGetValue("Worker:workerbasic_sr_t01", out var legSurvivors);
         if (legSurvivors > 0)
             totalStrings.Add($"Legendary Survivors: {legSurvivors}");
@@ -346,6 +361,36 @@ public partial class NotificationDispatcher : Node
         {
             body = bodyContent.ToString(),
             expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily)
+        }];
+        */
+
+        List<NotificationItemData> mainItems = [];
+        List<NotificationItemData> ventItems = [];
+
+        await Task.Run(() =>
+        {
+            foreach (var mission in missions)
+            {
+                var list = mission.TheaterCat == "v" ? ventItems : mainItems;
+                foreach (var item in mission.alertRewardItems ?? [])
+                {
+                    if (MissionRewardsController.ItemIsNotable(item))
+                    {
+                        list.Add(new()
+                        {
+                            item = item,
+                            powerLabel = $"{mission.PowerLevel}",
+                            powerTooltip = $"{mission.TheaterName}, Power Level {mission.PowerLevel}"
+                        });
+                    }
+                }
+            }
+        }, ct);
+
+        return [MissionNotif with {
+            items = [..mainItems],
+            secondaryItems = [..ventItems],
+            expires = GameMission.missionReset
         }];
     }
 

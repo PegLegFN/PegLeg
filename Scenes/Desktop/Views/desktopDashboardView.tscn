@@ -2477,6 +2477,16 @@ script = ExtResource("35_7he0n")
 section = "advanced"
 key = "developer"
 
+[node name="CheckButton2" type="CheckButton" parent="BeastDashboard/VBoxContainer2/MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+button_mask = 0
+script = ExtResource("35_7he0n")
+section = "advanced"
+key = "webhooks"
+
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 visible = false
 layout_mode = 2
@@ -3797,6 +3807,7 @@ vertical_alignment = 1
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2" to="SubViewportContainer/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button3" to="SubViewportContainer/SummaryDispatcher" method="ExecuteWebhook"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton2" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
 [connection signal="HasVBucks" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/Label" method="set_visible"]
 [connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/HBoxContainer/CheckButton" to="SubViewportContainer/MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" method="set_visible"]

@@ -10,8 +10,8 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     #region Statics
     static MissionInterface instance;
 
-    static NotificationData? _unexpectedResetNotif;
-    static NotificationData unexpectedResetNotif => _unexpectedResetNotif ??= new()
+    static NotificationData? unexpectedResetNotif;
+    static NotificationData UnexpectedResetNotif => unexpectedResetNotif ??= new()
     {
         header = "Unexpected Reset Detected",
         icon = instance?.unexpectedResetNotifIcon,
@@ -179,7 +179,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
             if (await GameMission.MissionsNeedUpdate() && GameMission.currentMissions is not null)
             {
                 GD.Print("Unexpected reset detected");
-                NotificationManager.Push([unexpectedResetNotif]);
+                NotificationManager.Push([UnexpectedResetNotif]);
                 await GameMission.UpdateMissions();
             }
         }
@@ -187,7 +187,9 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 
     public void FakeUnexpectedReset()
     {
-        NotificationManager.Push([unexpectedResetNotif]);
+        NotificationManager.Push([UnexpectedResetNotif with {
+            expires = DateTime.UtcNow.AddSeconds(5)
+        }]);
         //NotificationManager.PushNotification(unexpectedResetNotif);
         //NotificationManager.PushNotification(unexpectedResetNotif);
     }
@@ -206,7 +208,6 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     }
 
     public void ForceReloadMissions() => GameMission.UpdateMissions().StartTask();
-    public void ReloadMissions() => GameMission.CheckMissions().StartTask();
 
     PLSearch.Instruction[] missionSearchInstructions = [];
     PLSearch.Instruction[] itemSearchInstructions = [];

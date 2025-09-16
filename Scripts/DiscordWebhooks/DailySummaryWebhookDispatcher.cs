@@ -23,7 +23,7 @@ public partial class DailySummaryWebhookDispatcher : Node
 
     async void ExecuteWebhookDelayed()
     {
-        await Helpers.WaitForTimer(9);
+        await Helpers.WaitForTimer(6);
 		ExecuteWebhook();
     }
 

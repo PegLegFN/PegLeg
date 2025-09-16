@@ -114,6 +114,8 @@ public class PegLegResourceManager
             await asset.DownloadTo(fileStream, downloadProgress);
         }
         await Helpers.WaitForFrame();
+        if(FileAccess.FileExists(globalPackageFolderPath+"ExtraPatch.pck"))
+            ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
         latestVersion.LoadAllPackages();
         onProgress?.Invoke("Loading Resources");
         await Task.WhenAll(

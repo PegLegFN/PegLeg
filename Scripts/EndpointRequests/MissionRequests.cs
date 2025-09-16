@@ -226,12 +226,15 @@ public class GameMission
 
     static SemaphoreSlim missionUpdateSemaphore = new(1);
     public static async Task UpdateMissions() => await UpdateMissions(null);
+    public static async Task ReparseMissions() => await UpdateMissions(recentMissionData);
 
+    static JsonNode recentMissionData;
     static async Task UpdateMissions(JsonNode missionData)
     {
         using var st = await missionUpdateSemaphore.AwaitToken();
         if (!st.wasImmediate)
             return;
+        bool delayFirst = DateTime.Now.Minute == 0 && DateTime.Now.Second == 0;
 
         var account = GameAccount.activeAccount;
         if (!await account.Authenticate())
@@ -245,14 +248,23 @@ public class GameMission
 
         while (true)
         {
-            GD.Print($"[{DateTime.Now}] Requesting Missions...");
+            if (DateTime.Now.Minute == 0 && DateTime.Now.Second ==0)
+            {
+                //if request is made exactly on the hour, its likely for daily reset.
+                //requesting missions exactly at reset can cause consistancy issues, so
+                //we add a 1 second delay before the request
+                await Helpers.WaitForTimer(1);
+                missionData = null;
+            }
+            GD.Print($"Requesting Missions...");
             missionData ??= await Helpers.MakeRequest(
-                    HttpMethod.Get,
-                    FnWebAddresses.game,
-                    "fortnite/api/game/v2/world/info",
-                    "",
-                    account.AuthHeader
-                );
+                HttpMethod.Get,
+                FnWebAddresses.game,
+                "fortnite/api/game/v2/world/info",
+                "",
+                account.AuthHeader
+            );
+            recentMissionData = missionData.DeepClone();
             var newHash = missionData["missionAlerts"].ToString().Hash();
 
             GD.Print($"[{DateTime.Now}] {missionHash} >> {newHash}");
@@ -283,20 +295,25 @@ public class GameMission
                 }
             }
 
-            //edge case where missions expire after being requested but before being converted to MissionEntries
-            if (await MissionsNeedUpdate(true))
+            //edge case where missions expire after being requested but before the response is returned
+            if (missionReset < DateTime.UtcNow)
             {
                 missionData = null;
                 continue;
             }
 
-            currentMissions = 
+            using (var latestMissionsFile = FileAccess.Open("user://latestMissions.json", FileAccess.ModeFlags.Write))
+            {
+                latestMissionsFile.StoreString(recentMissionData.ToString());
+            }
+
+            currentMissions =
             [.. generatedMissions
-                .Where(m => m is not null)
-                .OrderBy(m => m.TheaterIdx)
-                .ThenBy(m => m.PowerLevel)
-                .ThenBy(m => m.IsFourPlayer)
-                .ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
+            .Where(m => m is not null)
+            .OrderBy(m => m.TheaterIdx)
+            .ThenBy(m => m.PowerLevel)
+            .ThenBy(m => m.IsFourPlayer)
+            .ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
             ];
             OnMissionsUpdated?.Invoke();
             return;

@@ -70,6 +70,7 @@ public partial class NotificationManager : Control
         ListProgress = _listProgress;
         AppConfig.OnConfigChanged += OnConfigChanged;
         MouseEntered += CheckPassthrough;
+        RefreshTimerController.OnSecondChanged += ClearExpired;
     }
 
     public void CheckIfFullscreen()
@@ -103,10 +104,11 @@ public partial class NotificationManager : Control
     public override void _ExitTree()
     {
         AppConfig.OnConfigChanged -= OnConfigChanged;
+        RefreshTimerController.OnSecondChanged -= ClearExpired;
         instance = null;
     }
 
-    async void SetScale(float scaleAmt)
+    void SetScale(float scaleAmt)
     {
         var newSize = (Vector2I)((Vector2)baseSize * scaleAmt);
         window.ContentScaleFactor = scaleAmt;
@@ -125,18 +127,18 @@ public partial class NotificationManager : Control
         //GD.Print(scaleAmt);
     }
 
-    bool appendQueued = false;
+    bool isAppendQueued = false;
     bool isListChanging = false;
     bool allowOutOfRange = false;
     async void AppendFromQueue()
     {
         if (listTarget != _listProgress || isListChanging)
         {
-            appendQueued = true;
+            isAppendQueued = true;
             instance.queueTimer.Start(0.1);
             return;
         }
-        appendQueued = false;
+        isAppendQueued = false;
         //show window if not already visible
         if (activeNotifications.Count == 0)
         {
@@ -219,15 +221,98 @@ public partial class NotificationManager : Control
         }
     }
 
+    bool isClearQueued;
+    async void ClearExpired()
+    {
+        if (isClearQueued)
+            return;
+        isClearQueued = true;
+        while (listTarget != _listProgress || isAppendQueued || isListChanging)
+        {
+            await Helpers.WaitForFrame();
+        }
+        isClearQueued = false;
+        if (!activeNotifications.Any(n => n.data.HasExpired))
+            return;
+        isListChanging = true;
+
+        ResetList();
+
+        //loop through instances, store offsets of non-expired notifs for later
+        List<float> offsets = [];
+        for (int i = 0; i < activeNotifications.Count; i++)
+        {
+            if (!activeNotifications[i].data.HasExpired)
+                offsets.Add((activeNotifications.Count - 1) - i);
+        }
+        offsets.Reverse();
+
+        //animate scale of expired notifs
+        for (int i = 0; i < notificationInstances.Length; i++)
+        {
+            if (notificationInstances[i].CurrentData?.HasExpired != true)
+                continue;
+            notificationInstances[i].freezeAnim=true;
+            var scaleTween = notificationInstances[i].CreateTween();
+            scaleTween.TweenProperty(notificationInstances[i], "scale", Vector2.Zero, 0.1);
+        }
+
+        await Helpers.WaitForTimer(0.1);
+        await Helpers.WaitForFrames(2);
+
+        activeNotifications = [.. activeNotifications.Where(n => !n.data.HasExpired)];
+
+        //if notifs are empty, hide list and return
+
+        ReassignInstances();
+
+        //restore the offsets of non-expired notifs
+        //animate offsets back down
+        int animCount = Mathf.Min(notificationInstances.Length - 1, offsets.Count);
+        for (int i = 0; i < animCount; i++)
+        {
+            GD.Print($"{offsets[i]}=>{i}");
+            notificationInstances[i+1].AnimateStage(i, 0.15, 0.05*i, offsets[i]);
+        }
+        if (animCount > 0)
+            await Helpers.WaitForTimer(0.1 + (animCount * 0.05));
+
+        for (int i = 0; i < notificationInstances.Length; i++)
+        {
+            notificationInstances[i].freezeAnim = false;
+        }
+
+        isListChanging = false;
+    }
+
     void ResetList()
     {
-        if (currentListIdx == activeNotifications.Count || currentListIdx==-1)
+        if (currentListIdx == activeNotifications.Count || currentListIdx == -1)
             return;
         //make foreground notification be at last index
         var beforeCurrent = activeNotifications[..(currentListIdx + 1)];
         activeNotifications.RemoveRange(0, currentListIdx + 1);
         activeNotifications.AddRange(beforeCurrent);
         _listProgress = listTarget = currentListIdx = activeNotifications.Count - 1;
+    }
+
+    void ReassignInstances()
+    {
+        for (int i = 0; i < notificationInstances.Length; i++)
+        {
+            notificationInstances[i].Visible = false;
+            notificationInstances[i].SetNotifData(null);
+            notificationInstances[i].SetNotifInteractable(false);
+        }
+        for (int i = 1; i < notificationInstances.Length; i++)
+        {
+            if (i > activeNotifications.Count)
+                break;
+            GD.Print($"Set {i} to {activeNotifications[^i].data.header}");
+            notificationInstances[i].Visible = true;
+            notificationInstances[i].SetNotifData(activeNotifications[^i]);
+            notificationInstances[i].SetNotifInteractable(i == 1);
+        }
     }
 
     public async void DismissCurrent()
@@ -354,7 +439,7 @@ public partial class NotificationManager : Control
 
     public void ShiftTarget(int changeAmount)
     {
-        if (isListChanging || appendQueued || activeNotifications.Count <= 1 || Mathf.Abs(listTarget - ListProgress) > 5)
+        if (isListChanging || isAppendQueued || activeNotifications.Count <= 1 || Mathf.Abs(listTarget - ListProgress) > 5)
             return;
         listTarget += changeAmount;
     }
@@ -432,9 +517,13 @@ public record struct NotificationData()
     public string header;
     public string body;
     public DateTime expires = DateTime.MaxValue;
+    public bool HasExpired => DateTime.UtcNow > expires;
     public bool urgent = false;
 
     public NotificationItemData[] items = [];
+    public string itemPrefix;
+    public NotificationItemData[] secondaryItems = [];
+    public string secondaryItemPrefix;
 
     public Texture2D icon;
     public Color itemColor;
@@ -468,16 +557,9 @@ public enum NotifAction
     SuperAction,
 }
 
-public record struct NotificationItemData()
+public record class NotificationItemData()
 {
-    public string label;
-    public string displayTemplate;
-    public int displayAmount;
-    public int displayPower;
-
-    public string linkedItemId;
-
-    public string linkedMissionId;
-
-    public string linkedOfferId;
+    public string powerTooltip;
+    public string powerLabel;
+    public GameItem item;
 }

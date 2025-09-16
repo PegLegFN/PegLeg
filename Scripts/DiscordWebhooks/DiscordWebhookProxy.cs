@@ -85,7 +85,7 @@ public partial class DiscordWebhookProxy
             GD.Print($"WH edit response failed: {editResponse.ReasonPhrase}");
             return;
         }
-        await Task.Delay(1000*3);
+        await Task.Delay(1000);
         var winnerResponse = await discordClient
             .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?thread_id={syncThreadId}", HttpMethod.Get)
             .Send();

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://t8l7m6ep3lsg"]
+
+[ext_resource type="PackedScene" uid="uid://dbi5mie2icc78" path="res://Scenes/GameItemEntry/notification_highlight_item.tscn" id="1_ualti"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_a2r8q"]
+[ext_resource type="Texture2D" uid="uid://de4vkpc5d58on" path="res://Images/InterfaceIcons/T-Items-WeaponPerkup-Legendary-L.png" id="3_tjday"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lpsn0"]
+resource_local_to_scene = true
+shader = ExtResource("2_a2r8q")
+shader_parameter/ControlSize = Vector2(40, 40)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("3_tjday")
+shader_parameter/AltRarity = Color(0, 0, 0, 1)
+shader_parameter/AltSchematic = false
+shader_parameter/AltHero = false
+shader_parameter/AltFancy = false
+shader_parameter/ChoiceShift = 0.0
+
+[node name="NotificationHighlightItem" instance=ExtResource("1_ualti")]
+custom_minimum_size = Vector2(0, 40)
+
+[node name="Icon" parent="MarginContainer" index="0"]
+material = SubResource("ShaderMaterial_lpsn0")
+
+[node name="Label" parent="MarginContainer/Icon" index="0"]
+theme_override_font_sizes/font_size = 15
+
+[node name="PowerLevelLabel" parent="MarginContainer/PowerLevelBox/HBoxContainer" index="0"]
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 1
+theme_override_font_sizes/font_size = 12
+text = "100"
+
+[editable path="MarginContainer/PowerLevelBox"]

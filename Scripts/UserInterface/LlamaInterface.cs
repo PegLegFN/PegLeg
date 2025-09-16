@@ -546,7 +546,7 @@ public partial class LlamaInterface : Control
 
         purchaseButton.Visible = true;
 
-        var items = prerollData?.attributes?["items"].AsArray().Select(node => new GameItem(null, null, node.AsObject())).ToArray() ?? null;
+        var items = prerollData?.GetPrerollItems();
         if (items is null)
         {
             //it's a surprise
@@ -555,15 +555,9 @@ public partial class LlamaInterface : Control
             surpriseResultPanel.Visible = true;
             return;
         }
-
-        var sortedItems = items
-            .OrderBy(item => -item.template?.RarityLevel)
-            .ThenBy(item => item.template?.Type)
-            .ThenBy(item => item.template?.DisplayName)
-            .ToArray();
         //fill out item list
-        ApplyLlamaItems(sortedItems, llamaResultEntries, itemEntryScene, resultEntriesParent);
-        ApplyLlamaItems(sortedItems, llamaResultScreenshotEntries, screenshotItemEntryScene, screenshotResultEntriesParent, true);
+        ApplyLlamaItems(items, llamaResultEntries, itemEntryScene, resultEntriesParent);
+        ApplyLlamaItems(items, llamaResultScreenshotEntries, screenshotItemEntryScene, screenshotResultEntriesParent, true);
         screenshotShareButton.Visible = true;
     }
 

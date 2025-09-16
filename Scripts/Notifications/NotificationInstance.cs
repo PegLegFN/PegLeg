@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using NotifDataContainer = NotificationManager.NotificationDataContainer;
 
 public partial class NotificationInstance : Control
@@ -37,13 +38,33 @@ public partial class NotificationInstance : Control
     Button secondBtn;
     [Export]
     Button superBtn;
-	[Export]
+    [Export]
 	AudioStreamPlayer sfxPlayer;
+
+    [ExportGroup("Items")]
+    [Export]
+    Control itemRow1;
+	[Export]
+	Label itemPrefix1;
+	[Export]
+	GameItemEntry[] items1;
+    [Export]
+    Label itemExtra1;
+    [Export]
+    Control itemRow2;
+    [Export]
+    Label itemPrefix2;
+    [Export]
+    GameItemEntry[] items2;
+    [Export]
+    Label itemExtra2;
+
 
     NotifDataContainer currentContainer;
 	public NotifInstanceState? currentState;
 	public bool freezeAnim;
 
+    public NotificationData? CurrentData => currentContainer?.data;
     public event Action OnDismiss;
 	public void Dismiss() => OnDismiss?.Invoke();
 	public float Stage {
@@ -166,7 +187,7 @@ public partial class NotificationInstance : Control
         var data = currentContainer.data;
 		headerLabel.Text = data.header;
 		bodyLabel.Text = data.body;
-		bodyLabel.Visible = !string.IsNullOrWhiteSpace(data.body) && data.items.Length < 8;
+		bodyLabel.Visible = !string.IsNullOrWhiteSpace(data.body);
 
 		flipbookMode = data.flipbookLength>0;
         itemIcon.Visible = !flipbookMode;
@@ -186,14 +207,63 @@ public partial class NotificationInstance : Control
         }
 		UpdateProgress(currentState.Value.animProgress);
 
-		firstBtn.Visible = !string.IsNullOrWhiteSpace(data.firstAction);
-		firstBtn.Text = data.firstAction;
+
+        firstBtn.Visible = !string.IsNullOrWhiteSpace(data.firstAction);
+        firstBtn.Text = data.firstAction;
 
         secondBtn.Visible = !string.IsNullOrWhiteSpace(data.secondAction);
         secondBtn.Text = data.secondAction;
 
         superBtn.Visible = !string.IsNullOrWhiteSpace(data.superAction);
         superBtn.Text = data.superAction;
+
+        bool hasButtons = firstBtn.Visible || secondBtn.Visible || superBtn.Visible;
+
+        int itemsSoFar = 0;
+        itemRow1.Visible = data.items.Length > 0;
+        if (itemRow1.Visible)
+        {
+            itemsSoFar = Mathf.Min(data.itemPrefix is not null ? 6 : 8, data.items.Length);
+            SetItems(data.items, data.itemPrefix, hasButtons || data.secondaryItems.Length > 0, itemPrefix1, items1, itemExtra1);
+        }
+
+        itemRow2.Visible = !hasButtons && (data.secondaryItems.Length > 0 || itemsSoFar < data.items.Length);
+        if (!hasButtons)
+        {
+            if (data.secondaryItems.Length > 0)
+            {
+                SetItems(data.secondaryItems, data.secondaryItemPrefix, true, itemPrefix2, items2, itemExtra2);
+            }
+            else if (itemsSoFar < data.items.Length)
+            {
+                SetItems(data.items[itemsSoFar..], null, true, itemPrefix2, items2, itemExtra2);
+            }
+        }
+    }
+
+    void SetItems(NotificationItemData[] itemData, string prefix, bool withExtra, Label prefixLabel, GameItemEntry[] itemEntries, Label itemExtra)
+    {
+        prefixLabel.Visible = prefix is not null;
+        prefixLabel.Text = prefix;
+
+        int rowLimit = Mathf.Min(prefix is not null ? 6 : 8, itemData.Length);
+        for (int i = 0; i < rowLimit; i++)
+        {
+            itemEntries[i].SetItem(itemData[i].item);
+            itemEntries[i].Visible = true;
+            var plBox = itemEntries[i].GetNode<Control>("%PowerLevelBox");
+            var plText = itemData[i].powerLabel;
+            plBox.Visible = plText is not null;
+            plBox.TooltipText = itemData[i].powerTooltip;
+            plBox.GetNode<Label>("%PowerLevelLabel").Text = plText;
+        }
+        for (int i = rowLimit; i < 8; i++)
+        {
+            itemEntries[i].Visible = false;
+        }
+        itemExtra.Visible = withExtra && rowLimit < itemData.Length;
+        if (itemExtra.Visible)
+            itemExtra.Text = $"+{itemData.Length - rowLimit}";
     }
 
 	public void PerformAction(string actionType)
@@ -212,7 +282,7 @@ public partial class NotificationInstance : Control
 
 	public void AnimateStage(float toStage, double duration, double delay = 0, float? fromStage = null)
     {
-		GD.Print("animating stage");
+		//GD.Print("animating stage");
 		Stage = fromStage ?? Stage;
 		var tween = CreateTween();
 		tween.TweenInterval(delay);
