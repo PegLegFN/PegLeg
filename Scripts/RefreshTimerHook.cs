@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class RefreshTimerHook : Control
 {
@@ -71,7 +72,7 @@ public partial class RefreshTimerHook : Control
         RefreshTimerController.OnSecondChanged += UpdateTimeText;
         UpdateTimeText();
 
-        VisibilityChanged += () => UpdateTimeText(true);
+        VisibilityChanged += UpdateTimeTextDelayed;
         if (target is null)
             MouseFilter = MouseFilterEnum.Stop;
     }
@@ -116,6 +117,12 @@ public partial class RefreshTimerHook : Control
         refreshTime = RefreshTimerController.GetRefreshTime(type);
         lastRefreshTime = RefreshTimerController.GetLastRefreshTime(type);
         CustomTooltipText = refreshTime.ToLocalTime().ToString("g");
+    }
+
+    async void UpdateTimeTextDelayed()
+    {
+        await Helpers.WaitForFrame();
+        UpdateTimeText(true);
     }
 
     void UpdateTimeText() => UpdateTimeText(false);

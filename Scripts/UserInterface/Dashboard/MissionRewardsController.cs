@@ -2,9 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>
 {
@@ -46,9 +43,11 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
     public async void ReloadMissions()
     {
-        if (Input.IsKeyPressed(Key.Shift))
-            await GameMission.ReparseMissions();
-        else
+        //if (Input.IsKeyPressed(Key.Shift))
+        //{
+        //    await GameMission.ReparseMissions();
+        //}
+        //else
             await GameMission.UpdateMissions();
     }
 
@@ -191,8 +190,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     }
 
     bool needsRefresh = false;
-    CancellationTokenSource filterCTS = new();
-    async void FilterMissions()
+    void FilterMissions()
     {
         var missions = GameMission.currentMissions;
         if (lockFilter || missions is null)
@@ -205,7 +203,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
             return;
         }
         needsRefresh = false;
-        filterCTS = filterCTS.CancelAndRegenerate(out var ct);
         int curPL = (int)GameAccount.activeAccount.FortStats.PowerLevel;
         int ventPL = (int)GameAccount.activeAccount.VentureFortStats.PowerLevel;
 
@@ -272,30 +269,22 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
         List<MissionRewardPair> filteredRewards = [];
 
-        await Task.Run(() =>
+        foreach (var mission in missions)
         {
-            foreach (var mission in missions)
+            if (missionPredicate is not null && !missionPredicate(mission))
+                continue;
+            foreach (var item in mission.allItems ?? [])
             {
-                if (missionPredicate is not null && !missionPredicate(mission))
+                if (
+                    item.template.DisplayName == "Gold" || 
+                    item.template.DisplayName == "Venture XP"
+                    )
                     continue;
-                foreach (var item in mission.allItems ?? [])
-                {
-                    if (
-                        item.template.DisplayName == "Gold" || 
-                        item.template.DisplayName == "Venture XP"
-                        )
-                        continue;
-                    if(itemPredicate is not null && !itemPredicate(item))
-                        continue;
-                    filteredRewards.Add(new() { mission = mission, item = item });
-                    if (ct.IsCancellationRequested)
-                        return;
-                }
+                if(itemPredicate is not null && !itemPredicate(item))
+                    continue;
+                filteredRewards.Add(new() { mission = mission, item = item });
             }
-        }, ct);
-
-        if (ct.IsCancellationRequested)
-            return;
+        }
 
         if (notableMode)
             EmitSignalHasVBucks(filteredRewards.Any(r => r.item.template.VBucksOrXRayTickets));

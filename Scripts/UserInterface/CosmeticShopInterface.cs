@@ -1,7 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
@@ -57,14 +59,69 @@ public partial class CosmeticShopInterface : Control
     [Export]
     CheckButton includeDiscountBundles;
     [Export(PropertyHint.ArrayType)]
-    CheckButton[] newOrOldFilters = Array.Empty<CheckButton>();
+    CheckButton[] newOrOldFilters = [];
     [Export(PropertyHint.ArrayType)]
-    CheckButton[] typeFilters = Array.Empty<CheckButton>();
+    CheckButton[] typeFilters = [];
     [Export]
     Button resetTypeFilters;
+    [Export]
+    OptionButton regionSelector;
+    [Export(PropertyHint.File, "*.json")]
+    string regionFile;
+    [Export(PropertyHint.GlobalFile, "*.json")]
+    string regionExFile;
+    static FrozenDictionary<string, string> regionNames;
+    static FrozenDictionary<string, decimal> regionWeights;
+
+    public static decimal GetRegionWeight(string code) => regionWeights.TryGetValue(code, out var weight) ? weight : 0;
 
     public override void _Ready()
     {
+        //using (var inFile = FileAccess.Open(regionExFile, FileAccess.ModeFlags.Read))
+        //{
+        //    var inData = JsonNode.Parse(inFile.GetAsText());
+        //    JsonObject outNames = [];
+        //    JsonObject outWeights = [];
+        //    ulong sum = 0;
+        //    foreach (var data in inData.AsArray())
+        //    {
+        //        var key = data["Alpha_2"].ToString();
+        //        outNames[key] = data["Country"].ToString();
+        //        ulong pop= data["Population"].GetValue<ulong>();
+        //        sum += pop;
+        //        outWeights[key] = pop;
+        //    }
+        //    var text = new JsonObject()
+        //    {
+        //        ["names"] = outNames,
+        //        ["weights"] = outWeights,
+        //        ["totalWeights"] = sum,
+        //    }.ToJsonString(Helpers.JsonOptions.Fields);
+        //    var outFile = FileAccess.Open(regionFile, FileAccess.ModeFlags.Write);
+        //    outFile.StoreString(text);
+        //}
+        using (var inFile = FileAccess.Open(regionFile, FileAccess.ModeFlags.Read))
+        {
+            var inData = JsonNode.Parse(inFile.GetAsText());
+            regionNames = inData["names"].Deserialize<Dictionary<string, string>>().ToFrozenDictionary();
+            var regionWeightTotal = (decimal)inData["totalWeights"].GetValue<ulong>();
+            var regionLongWeights = inData["weights"].Deserialize<Dictionary<string, ulong>>();
+            regionWeights = regionLongWeights.ToFrozenDictionary(kvp => kvp.Key, kvp => kvp.Value / regionWeightTotal);
+        }
+        regionSelector.Clear();
+        regionSelector.AddItem("All");
+        regionSelector.SetItemMetadata(0, "*");
+        regionSelector.AddItem("G  -  Global");
+        regionSelector.SetItemMetadata(1, "G");
+        regionSelector.AddSeparator("Regions");
+        int regIdx = 1;
+        foreach (var kvp in regionNames.OrderBy(kvp=>kvp.Key))
+        {
+            regIdx++;
+            regionSelector.AddItem($"{kvp.Key}  -  {kvp.Value}");
+            regionSelector.SetItemMetadata(regIdx, kvp.Key);
+        }
+
         VisibilityChanged += async () =>
         {
             if (IsVisibleInTree())
@@ -247,6 +304,13 @@ public partial class CosmeticShopInterface : Control
 
     public void RegisterOffer(CosmeticShopOfferEntry newOffer) => activeOffers.Add(newOffer);
 
+    static readonly string[] regionSuffixes = [
+        "",
+        "_IE",
+        "_US",
+        "_GB"
+    ];
+
     bool isLoadingShop = false;
     List<CosmeticShopOfferEntry> activeOffers = [];
     List<CosmeticShopOfferEntry> onScreenOffers = [];
@@ -320,6 +384,36 @@ public partial class CosmeticShopInterface : Control
         {
             simpleShopParent.ProcessMode = ProcessModeEnum.Disabled;
 
+            var entries = cosmeticShop.SelectMany(c =>
+                c.Value.AsObject().SelectMany(s =>
+                    s.Value.AsArray().SelectMany(p =>
+                        p.AsObject().AsEnumerable()
+                    )
+                )
+            );
+
+            //if filtering by popular, order by rank here
+            if (baseFilterValue == 4)
+                entries = entries.OrderBy(e => e.Value["bestsellerRank"]?.GetValue<int>() ?? 0);//todo: use region specific ranks
+
+            foreach (var entryData in entries)
+            {
+                var entry = shopEntryScene.Instantiate<CosmeticShopOfferEntry>();
+                entry.CustomMinimumSize = new(tileSize, tileSize);
+                simpleShopParent.AddChild(entry);
+                entry.PopulateEntry(entryData.Value.AsObject(), Vector2.One);
+                RegisterOffer(entry);
+                entry.Visible = IsValidEntry(entry);
+                if (opCount > simpleOpsPerFrame)
+                {
+                    UpdateShopOfferResourceLoading();
+                    await Helpers.WaitForFrame();
+                    opCount = 0;
+                }
+                opCount++;
+            }
+
+            /* old bad nested loops
             foreach (var category in cosmeticShop)
             {
                 foreach (var section in category.Value.AsObject())
@@ -345,6 +439,7 @@ public partial class CosmeticShopInterface : Control
                     }
                 }
             }
+            */
         }
         finally
         {

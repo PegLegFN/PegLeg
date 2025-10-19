@@ -1,10 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,9 +62,10 @@ static class CatalogRequests
         var storefrontTask = EnsureStorefront(forceRefresh);
         var cosmeticDisplayData = await RequestCosmeticDisplayData();
         var bestsellingCosmetics = await RequestCosmeticBestsellingData();
+        var jamTrackData = await RequestJamtrackData();
         await storefrontTask;
         await layoutTask;
-        return cosmeticCache = ProcessCosmetics(cosmeticDisplayData, bestsellingCosmetics);
+        return cosmeticCache = ProcessCosmetics(cosmeticDisplayData, bestsellingCosmetics, jamTrackData);
     }
 
     public static JsonObject GetCachedCosmeticOfferData(string offerId)
@@ -90,8 +95,8 @@ static class CatalogRequests
 
     static readonly Dictionary<string, string[]> defaultShops = new()
     {
-        [FnStorefrontTypes.WeeklyShopCatalog] = new string[]
-        {
+        [FnStorefrontTypes.WeeklyShopCatalog] =
+        [
             "v2:/8833e6245fe4bf6f0a87e2d248398ec079aac302a1d0b17d036cdd6a1f485d85",
             "v2:/a3eeb54f8f9d2f32ba2f1769a095a9fa406a5c6f239235a8d810d7263cd727e5",
             "v2:/485f70bb37ced8eb25c4b4e42302ee5274532823c17091afb486e1879c4ecc16",
@@ -103,15 +108,15 @@ static class CatalogRequests
             "v2:/4f1c82dc8fb66fef5a0046fb2163344069b65b6ba64e496939d2fc8e8f779157",
             "v2:/9af32d7a9a16f864eae99d17542ec08763d118f3ce9c72ad05d5fc5f44586dc1",
             "v2:/fd2b5edc1839496be18a0cb1ef1bc74c07f391b4448de53d07bb63f695f1763b"
-        },
-        [FnStorefrontTypes.EventShopCatalog] = new string[]
-        {
+        ],
+        [FnStorefrontTypes.EventShopCatalog] =
+        [
             "v2:/222374fc7ea9f6ef8eb0b3c20f3a5d7f64f612e9f3435c74e3d51d785739bf9f",
             "v2:/570ff3bed6fc8a1f7006610dbb6ce9e4bcd244a32caa435a60392460da356c88",
             "v2:/6633ab8087f2a2e80bdf7a90d06351e7a03b82790cc2e286f4b6851020532ed4",
             "v2:/5c841be6c7cf1635cca83f2d4c345242c85192bf5beda2af0317e1cc745a3a38",
             "v2:/bfe19601a5107b1a6ba83ab25ac9fef02ae14b78ee451ab33c6b5218938183c4"
-        }
+        ]
     };
 
     static JsonObject cachedCosmeticLayouts;
@@ -191,12 +196,15 @@ static class CatalogRequests
     //    };
     //}
 
-    static JsonObject ProcessCosmetics(JsonObject cosmeticDisplayData, string[] bestsellingCosmetics = null)
+    static JsonObject ProcessCosmetics(
+        JsonObject cosmeticDisplayData, 
+        FrozenDictionary<string, string[]> bestsellingCosmetics, 
+        FrozenDictionary<string, JamTrackData> jamTracks)
     {
         var shopOfferList = storefrontCache[FnStorefrontTypes.WeeklyCosmeticShopCatalog]?.AsArray().ToList();
         if(shopOfferList is null)
             return null;
-        bestsellingCosmetics ??= Array.Empty<string>();
+        bestsellingCosmetics ??= FrozenDictionary<string, string[]>.Empty;
         //shopOfferList.AddRange(storefrontCache[FnStorefrontTypes.DailyCosmeticShopCatalog].AsArray());
         var shopOfferDict = shopOfferList.ToDictionary(n => n["offerId"].ToString());
 
@@ -207,9 +215,36 @@ static class CatalogRequests
             {
                 needsFallback = !cosmeticDisplayData.ContainsKey(offer.Key);
             }
-            bool isBestseller = bestsellingCosmetics.Contains(offer.Key);
+            var globalBestSellers = bestsellingCosmetics["bestsellers_list"];
+            bool isBestseller = globalBestSellers.Contains(offer.Key);
             if (isBestseller)
                 GD.Print("BESTSELLER: " + offer.Value["devName"]?.ToString());
+            var bestsellerRegions = bestsellingCosmetics
+                .Where(kvp => kvp.Value.Contains(offer.Key) && kvp.Key != "bestsellers_list")
+                .ToDictionary(kvp => kvp.Key.Split("_")[^1], kvp => (JsonNode)(10-Array.IndexOf(kvp.Value, offer.Key)));
+            var regionalRank = (float)bestsellerRegions.Select(kvp => (int)kvp.Value * CosmeticShopInterface.GetRegionWeight(kvp.Key)).Sum();
+
+            var webUrl = offer.Value["meta"]?["webURL"]?.ToString();
+
+            //fix jam track URL (janky)
+            if (offer.Value["meta"]?["templateId"]?.ToString() is string templateId)
+            {
+                if (templateId.StartsWith("SparksSong") && jamTracks.TryGetValue(templateId, out var trackData))
+                {
+                    webUrl = trackData.WebURL;
+                }
+            }
+
+            //fix car part URL
+            if (webUrl.Contains("/bundles/"))
+            {
+                if (webUrl.Contains("-wheel-"))
+                    webUrl = webUrl.Replace("/bundles/", "/wheels/");
+                else if (webUrl.Contains("-trail-"))
+                    webUrl = webUrl.Replace("/bundles/", "/trails/");
+                else if (webUrl.Contains("-boost-"))
+                    webUrl = webUrl.Replace("/bundles/", "/boosts/");
+            }
 
             if (needsFallback)
             {
@@ -223,7 +258,7 @@ static class CatalogRequests
                     ["outDate"] = offer.Value["meta"]?["outDate"]?.ToString(),
                     ["regularPrice"] = offer.Value["prices"]?.AsArray().FirstOrDefault()?["regularPrice"]?.GetValue<int>(),
                     ["finalPrice"] = offer.Value["prices"]?.AsArray().FirstOrDefault()?["finalPrice"]?.GetValue<int>(),
-                    ["webURL"] = offer.Value["meta"]?["webURL"]?.ToString(),
+                    ["webURL"] = webUrl,
                     ["layoutId"] = offer.Value["meta"]?["LayoutId"]?.ToString(),
                     ["isBestseller"] = isBestseller,
                     ["layout"] = new JsonObject()
@@ -240,6 +275,14 @@ static class CatalogRequests
                     ["tileSize"] = offer.Value["meta"]?["TileSize"]?.ToString(),
                     ["sortPriority"] = offer.Value["sortPriority"]?.GetValue<int>(),
                 };
+
+                if (isBestseller)
+                    fallbackDisplayData["bestsellerRank"] = Array.IndexOf(globalBestSellers, offer.Key);
+                if (bestsellerRegions.Count != 0)
+                {
+                    fallbackDisplayData["bestsellerRegions"] = new JsonObject(bestsellerRegions);
+                    fallbackDisplayData["regionalRank"] = regionalRank;
+                }
 
                 if (cachedCosmeticLayouts[fallbackDisplayData["layout"]["id"]?.ToString()] is JsonObject fallbackLayoutData)
                 {
@@ -267,12 +310,11 @@ static class CatalogRequests
                     fallbackDisplayData["fallbackDisplayAsset"] = imgDaPath.Replace("/Game/Catalog/", "/OfferCatalog/");
                 }
 
-                fallbackDisplayData["fallbackGrants"] = new JsonArray(
+                fallbackDisplayData["fallbackGrants"] = new JsonArray([.. 
                     offer.Value["itemGrants"]
                     .AsArray()
                     .Select(g => (JsonNode)g["templateId"].ToString())
-                    .ToArray()
-                );
+                ]);
 
                 lock (cosmeticDisplayData)
                 {
@@ -288,10 +330,18 @@ static class CatalogRequests
             }
 
             //additions
-            displayData["webURL"] = offer.Value["meta"]?["webURL"]?.ToString() ?? null;
             displayData["inDate"] = offer.Value["meta"]?["inDate"]?.ToString() ?? null;
             displayData["outDate"] = offer.Value["meta"]?["outDate"]?.ToString() ?? null;
             displayData["isBestseller"] = isBestseller;
+            displayData["webURL"] = webUrl;
+
+            if (isBestseller)
+                displayData["bestsellerRank"] = Array.IndexOf(globalBestSellers, offer.Key);
+            if (bestsellerRegions.Count != 0)
+            {
+                displayData["bestsellerRegions"] = new JsonObject(bestsellerRegions);
+                displayData["regionalRank"] = regionalRank;
+            }
 
             if (offer.Value["dynamicBundleInfo"] is JsonObject dynBundleInfo)
                 displayData["dynamicBundleInfo"] = dynBundleInfo.SafeDeepClone();
@@ -457,19 +507,68 @@ static class CatalogRequests
         return storefrontCache;
     }
 
-    public static async Task<string[]> RequestCosmeticBestsellingData()
+    public static async Task<FrozenDictionary<string, string[]>> RequestCosmeticBestsellingData()
     {
         GD.Print("retrieving cosmetic bestsellers from epic...");
-        var response = await Helpers.MakeRequestRaw(
-                FnWebAddresses.epicCDN,
-                new HttpRequestMessage(HttpMethod.Get, "/fn_bsdata/ebb74910-dd35-44b8-b826-d58dc16c6456.json")
-            );
-        if(!response.IsSuccessStatusCode)
+        var res = await FnWebAddresses.epicCDN
+            .MakeRequest("/fn_bsdata/ebb74910-dd35-44b8-b826-d58dc16c6456.json")
+            .Send();
+        if (!res.IsSuccessStatusCode)
             return null;
-        var responseText = await response.Content.ReadAsStringAsync();
-        var responseJson = JsonNode.Parse(responseText);
-        return responseJson["bestsellers_list"]["offer_list"].AsArray().Select(x => x.ToString()).ToArray();
+        var responseDict = await res.Content.ReadFromJsonAsync<Dictionary<string, BestsellerData>>(Helpers.JsonOptions.CamelCase);
+        return responseDict.ToFrozenDictionary(kvp => kvp.Key, kvp => kvp.Value.offerList ?? []);
     }
+    record struct BestsellerData
+    {
+        [JsonPropertyName("expiry_date")]
+        public DateTime expiryDate;
+        [JsonPropertyName("offer_list")]
+        public string[] offerList;
+    }
+
+    public static async Task<FrozenDictionary<string, JamTrackData>> RequestJamtrackData()
+    {
+        GD.Print("retrieving jam tracks from epic...");
+        var res = await FnWebAddresses.content
+            .MakeRequest("/content/api/pages/fortnite-game/spark-tracks")
+            .Send();
+        if (!res.IsSuccessStatusCode)
+            return null;
+        var responseObj = await res.Content.ReadFromJsonAsync<JsonObject>(Helpers.JsonOptions.CamelCase);
+        responseObj.Remove("_title");
+        responseObj.Remove("_noIndex");
+        responseObj.Remove("_activeDate");
+        responseObj.Remove("lastModified");
+        responseObj.Remove("_locale");
+        responseObj.Remove("_templateName");
+        responseObj.Remove("_suggestedPrefetch");
+        var responseTracks = responseObj.Deserialize<Dictionary<string, JamTrackData.JamTrackContainer>>(Helpers.JsonOptions.Fields).Select(kvp=>kvp.Value.track);
+        return responseTracks.ToFrozenDictionary(track=>track.songTemplateId);
+    }
+
+    public record struct JamTrackData
+    {
+        [JsonPropertyName("tt")]
+        public string title;
+        [JsonPropertyName("au")]
+        public string albumArtUrl;
+        [JsonPropertyName("su")]
+        public string songUuid;
+        [JsonPropertyName("an")]
+        public string author;
+        [JsonPropertyName("sn")]
+        public string songId;
+        [JsonPropertyName("ti")]
+        public string songTemplateId;
+
+        public string WebURL => $"/item-shop/jam-tracks/{title.ToLower().Replace(' ', '-')}-{songUuid.Split(' ')[^1]}";
+
+        public record struct JamTrackContainer
+        {
+            public JamTrackData track;
+        }
+    }
+
     public static async Task<JsonObject> RequestCosmeticDisplayData()
     {
         GD.Print("retrieving cosmetic visuals from fortnite-api...");
@@ -513,7 +612,7 @@ static class CatalogRequests
 
     const string fnapiLinkPrefix = "https://fortnite-api.com/images/cosmetics/";
     const string fnapiJamTrackPrefix = "https://cdn.fortnite-api.com/tracks/";
-    const string fnCentralPrefix = "https://fortnitecentral.genxgames.gg/api/v1/export?path=";
+    const string dillyPrefix = "https://export-service.dillyapis.com/v1/export?path=";
     const string imageCacheFolderPath = "user://cosmetic_images/";
     const string metaCacheFolderPath = "user://cosmetic_meta/";
     static readonly Dictionary<string, WeakRef> activeResourceCache = [];
@@ -522,11 +621,11 @@ static class CatalogRequests
     public static string LocalCosmeticResourcePath(string serverPath)
     {
         bool isJamTrack = serverPath.StartsWith(fnapiJamTrackPrefix);
-        bool isFNCentral = serverPath.StartsWith(fnCentralPrefix);
+        bool isFNCentral = serverPath.StartsWith(dillyPrefix);
         string localPath = imageCacheFolderPath;
         if (isFNCentral)
         {
-            localPath += "/" + serverPath.Split('/')[^1] + ".webp";
+            localPath += "/" + serverPath.Split('/')[^1] + ".png";
         }
         else if (isJamTrack)
         {
@@ -576,7 +675,7 @@ static class CatalogRequests
         return imageTex;
     }
 
-    public static async Task<ImageTexture> GetCosmeticResource(string serverPath)
+    public static async Task<ImageTexture> GetCosmeticResource(string serverPath, bool printSuccess = false)
     {
         if (GetLocalCosmeticResource(serverPath) is ImageTexture localImageTex)
         {
@@ -587,7 +686,7 @@ static class CatalogRequests
         }
 
         bool isJamTrack = serverPath.StartsWith(fnapiJamTrackPrefix);
-        bool isFNCentral = serverPath.StartsWith(fnCentralPrefix);
+        bool isFNCentral = serverPath.StartsWith(dillyPrefix);
         //if (isJamTrack)
         //{
         //    GD.Print("Interpreting as Jam Track");
@@ -599,9 +698,9 @@ static class CatalogRequests
         var client = WebClients.fnApi;
         if (isFNCentral)
         {
-            client = WebClients.fnCentral;
-            localPath += "/" + serverPath.Split('/')[^1] + ".webp";
-            halfPath = "/api/v1/export?path=" + serverPath[fnCentralPrefix.Length..];
+            client = WebClients.dillyApi;
+            localPath += "/" + serverPath.Split('/')[^1] + ".png";
+            halfPath = "/v1/export?path=" + serverPath[dillyPrefix.Length..];
         }
         else if (isJamTrack)
         {
@@ -615,21 +714,23 @@ static class CatalogRequests
             halfPath = "/images/cosmetics/" + serverPath[fnapiLinkPrefix.Length..];
         }
 
-        GD.Print($"Requesting cosmetic ({client}, {halfPath}, {localPath})");
+        GD.Print($"Requesting cosmetic ({client.BaseAddress}, {halfPath}, {localPath}, {serverPath})");
         using var result = await Helpers.MakeRequestRaw(client, new(HttpMethod.Get, halfPath));
         if (!result.IsSuccessStatusCode)
         {
-            GD.Print(result);
+            GD.Print("Err: "+result);
             return null;
         }
-        //GD.Print("remote file exists");
+        if (printSuccess)
+            GD.Print("remote file exists");
 
         Image resourceImage = new();
         byte[] imageBuffer = await result.Content.ReadAsByteArrayAsync();
         var error = LoadImageWithCtx(resourceImage, imageBuffer, localPath);
         if (error != Error.Ok)
             return null;
-        //GD.Print("remote file loaded");
+        if (printSuccess)
+            GD.Print("remote file loaded");
 
         if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
             DirAccess.MakeDirAbsolute(imageCacheFolderPath);
@@ -696,19 +797,16 @@ static class CatalogRequests
         {
             //treat as path (probably display asset)
             GD.Print("Meta: "+pathOrTemplateID.Split('.')[0]);
-            JsonNode resultObject = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                WebClients.fnCentral,
-                $"api/v1/export?path={pathOrTemplateID.Split('.')[0]}",
-                "",
-                null
-            );
-            GD.Print(resultObject);
+            var res = await WebHelpers
+                .MakeRequest(WebClients.dillyApi, $"v1/export?path={pathOrTemplateID.Split('.')[0]}")
+                .Send();
+            var resultObject = await res.Content.ReadFromJsonAsync<JsonNode>();
+            GD.Print("MetaRes: "+resultObject);
             if (resultObject is not null && resultObject?["result"]?.ToString()?.StartsWith("Too many requests") != true && resultObject["errored"]?.GetValue<bool>() != true)
             {
                 metaObject = resultObject["jsonOutput"]?[0]?["Properties"]?.AsObject()?.SafeDeepClone();
             }
-            GD.Print(metaObject);
+            GD.Print("MetaObj: "+metaObject);
         }
         else if (pathOrTemplateID.Contains(':'))
         {
@@ -717,8 +815,8 @@ static class CatalogRequests
             {
                 JsonNode resultObject = await Helpers.MakeRequest(
                     HttpMethod.Get,
-                    WebClients.fnCentral,
-                    $"api/v1/export?path={remotePath}",
+                    WebClients.dillyApi,
+                    $"v1/export?path={remotePath}",
                     "",
                     null
                 );
@@ -750,12 +848,12 @@ static class CatalogRequests
                 if (dataList.FirstOrDefault(n => n["LargeIcon"] is not null)?["LargeIcon"]?["AssetPathName"]?.ToString() is string largeImagePath)
                 {
                     metaObject["images"] ??= new JsonObject();
-                    metaObject["images"]["icon"] = fnCentralPrefix + largeImagePath.Split('.')[0];
+                    metaObject["images"]["icon"] = dillyPrefix + largeImagePath.Split('.')[0];
                 }
                 if (dataList.FirstOrDefault(n => n["Icon"] is not null)?["Icon"]?["AssetPathName"]?.ToString() is string smallImagePath)
                 {
                     metaObject["images"] ??= new JsonObject();
-                    metaObject["images"]["smallIcon"] = fnCentralPrefix + smallImagePath.Split('.')[0];
+                    metaObject["images"]["smallIcon"] = dillyPrefix + smallImagePath.Split('.')[0];
                 }
             }
         }
@@ -1042,7 +1140,7 @@ public class GameOffer
 
     public string OfferId => rawData["offerId"].ToString();
     JsonObject metadata;
-    public int? GetMetaInt(string key) => int.TryParse(GetMeta(key), out var simLimit) ? simLimit : null;
+    public int? GetMetaInt(string key) => int.TryParse(GetMeta(key), out var iVal) ? iVal : null;
     public string GetMeta(string key)
     {
         if (metadata[key] is JsonNode metaVal)

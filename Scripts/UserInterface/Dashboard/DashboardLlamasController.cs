@@ -69,7 +69,7 @@ public partial class DashboardLlamasController : Control
             if (ct.IsCancellationRequested)
                 return;
 
-            var offers = xrayStorefront.Offers.Where(o => (o.DailyLimit > 0 || o.EventLimit > 0) && o.OfferId != "B9B0CE758A5049F898773C1A47A69ED4").ToArray();
+            var offers = xrayStorefront?.Offers?.Where(o => o is not null && (o.DailyLimit > 0 || o.EventLimit > 0) && o.OfferId != "B9B0CE758A5049F898773C1A47A69ED4")?.ToArray() ?? [];
 
             await GameAccount.activeAccount.GenerateXRayLlamaResults(offers.Any(o => o.Price.quantity == 0));
 

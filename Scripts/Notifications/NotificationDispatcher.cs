@@ -205,7 +205,7 @@ public partial class NotificationDispatcher : Node
                 ).Select(o => o.OfferId)
             )}");
             //deliver 1hr daily notif
-            var contents = (await offer.GetXRayLlamaData(GameAccount.activeAccount)).GetPrerollItems();
+            var contents = (await offer.GetXRayLlamaData(GameAccount.activeAccount))?.GetPrerollItems() ?? [];
             foreach (var item in contents)
             {
                 item.SetRewardNotification();

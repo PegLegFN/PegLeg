@@ -23,6 +23,11 @@ static class FnWebAddresses
         BaseAddress = new Uri("https://account-public-service-prod.ol.epicgames.com")
     };
 
+    public static readonly HttpClient friends = new()
+    {
+        BaseAddress = new Uri("https://friends-public-service-prod.ol.epicgames.com")
+    };
+
     public static readonly HttpClient avatar = new()
     {
         BaseAddress = new Uri("https://avatar-service-prod.identity.live.on.epicgames.com")
@@ -36,6 +41,11 @@ static class FnWebAddresses
     public static readonly HttpClient epicCDN = new()
     {
         BaseAddress = new Uri("https://cdn2.unrealengine.com")
+    };
+
+    public static readonly HttpClient party = new()
+    {
+        BaseAddress = new Uri("https://party-service-prod.ol.epicgames.com")
     };
 }
 

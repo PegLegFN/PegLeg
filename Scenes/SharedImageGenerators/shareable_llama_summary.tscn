@@ -1,0 +1,149 @@
+[gd_scene load_steps=9 format=3 uid="uid://cschg8vgh0q5i"]
+
+[ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_tlki3"]
+[ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_br0at"]
+[ext_resource type="Script" uid="uid://bpaceopmh5sqo" path="res://Scripts/UserInterface/Dashboard/DashboardLlamasController.cs" id="3_i0f23"]
+[ext_resource type="PackedScene" uid="uid://pcyuj0ewudy3" path="res://Scenes/LlamaEntries/llama_highlight_db_style.tscn" id="4_flk0i"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_axdv7"]
+[ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="6_obgha"]
+[ext_resource type="Texture2D" uid="uid://bs2rkwdm3joj1" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Caution_128.png" id="7_lemwf"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="8_cneas"]
+
+[node name="ShareableLlamaSummary" type="SubViewportContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="LlamaSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("1_tlki3")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="LlamaSummaryViewport" instance=ExtResource("2_br0at")]
+
+[node name="LlamaShop" type="PanelContainer" parent="LlamaSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("loadingIcon", "errorIcon", "llamaEntryContainer")]
+custom_minimum_size = Vector2(239.5, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("3_i0f23")
+loadingIcon = NodePath("VBoxContainer/PanelContainer/SmallLoadingIcon")
+errorIcon = NodePath("VBoxContainer/PanelContainer/Error")
+llamaEntryContainer = NodePath("VBoxContainer/PanelContainer/VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Llama Shop"
+
+[node name="PanelContainer" type="PanelContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer"]
+custom_minimum_size = Vector2(230, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"Panel3Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_flk0i")]
+visible = false
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle2" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_flk0i")]
+visible = false
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle3" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_flk0i")]
+visible = false
+layout_mode = 2
+
+[node name="LlamaHighlightDBStyle4" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("4_flk0i")]
+visible = false
+layout_mode = 2
+
+[node name="SmallLoadingIcon" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer" instance=ExtResource("5_axdv7")]
+layout_mode = 2
+
+[node name="Error" type="MarginContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error"]
+layout_mode = 2
+texture = ExtResource("6_obgha")
+
+[node name="VBoxContainer" type="HBoxContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("7_lemwf")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 24
+text = "Llamas
+Unavailable"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="RetryButton" type="Button" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TextureRect" type="TextureRect" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_cneas")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Retry"
+
+[connection signal="pressed" from="LlamaSummaryViewport/PegLegWatermark/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/RetryButton" to="LlamaSummaryViewport/PegLegWatermark/LlamaShop" method="ForceLoadShopLlamas"]

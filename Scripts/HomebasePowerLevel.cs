@@ -51,37 +51,36 @@ public partial class HomebasePowerLevel : Control
 
         currentProfile.OnStatsChanged += OnProfileStatChanged;
 
-        UpdateStatsVisuals(LatestStats);
+        UpdateStatsVisuals();
     }
-
-    FORTStats LatestStats => ventures ? currentProfile.account.GetVentureFortStats(true) : currentProfile.account.GetFORTStats(true);
 
     GameProfile currentProfile;
 
     void OnProfileStatChanged()
     {
-        UpdateStatsVisuals(LatestStats);
+        UpdateStatsVisuals();
     }
 
     void OnProfileItemChanged(GameItem item)
     {
-        if (item?.template?.Type == "Worker")
-            UpdateStatsVisuals(LatestStats);
+        if (ventures && item?.template?.Type == "Worker")
+            UpdateStatsVisuals();
     }
 
-    private void UpdateStatsVisuals(FORTStats stats)
+    private void UpdateStatsVisuals()
     {
+        FORTStats stats = ventures ? currentProfile.account.GetVentureFORTStats() : currentProfile.account.GetFORTStats();
         var powerLevel = stats.PowerLevel;
         homebaseNumberLabel.Text = Mathf.Floor(powerLevel).ToString();
         homebaseNumberProgressBar.Value = powerLevel % 1;
         TooltipText = CustomTooltip.GenerateSimpleTooltip(
-                "Power Level",
-                homebaseNumberLabel.Text,
-                [
-                    $"{(ventures?"Venture":"Homebase")} Power: {Mathf.Floor(powerLevel)}\n({Mathf.Floor((powerLevel % 1) * 100)}% progress to {Mathf.Floor(powerLevel) + 1})"
-                ],
-                tooltipColor.ToHtml()
-            );
+            "Power Level",
+            homebaseNumberLabel.Text,
+            [
+                $"{(ventures? "Venture" : "Homebase")} Power: {Mathf.Floor(powerLevel)}\n({Mathf.Floor((powerLevel % 1) * 100)}% progress to {Mathf.Floor(powerLevel) + 1})"
+            ],
+            tooltipColor.ToHtml()
+        );
     }
 
     public override void _ExitTree()

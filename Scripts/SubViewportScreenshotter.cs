@@ -7,9 +7,19 @@ public partial class SubViewportScreenshotter : SubViewport
     public override async void _Ready()
     {
 		if(GetParent() is SubViewportContainer containerParent)
-            containerParent.Visible = false;
+        {
+            if (Bootstrap.UseShareMenu)
+                containerParent.VisibilityChanged += QueueRender;
+            else
+                containerParent.Visible = false;
+        }
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
+        QueueRender();
+    }
+
+    void QueueRender()
+    {
         if (matchSize is not null)
         {
             var targetSize = matchSize.Size * matchSize.Scale;
@@ -18,7 +28,7 @@ public partial class SubViewportScreenshotter : SubViewport
         RenderTargetUpdateMode = UpdateMode.Once;
     }
 
-	[Export]
+    [Export]
 	Control matchSize;
 	public async void CopyScreenshot()
     {
@@ -35,12 +45,7 @@ public partial class SubViewportScreenshotter : SubViewport
 
 	public async Task<Image> CaptureScreenshot()
 	{
-		if(matchSize is not null)
-		{
-			var targetSize = matchSize.Size * matchSize.Scale;
-			Size = (Vector2I)targetSize;
-		}
-		RenderTargetUpdateMode = UpdateMode.Once;
+        QueueRender();
 		await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
         return GetTexture().GetImage();

@@ -15,6 +15,8 @@ public partial class RecycleListContainer : ScrollContainer
     Control elementParent;
     [Export]
     PackedScene elementScene;
+    [Export]
+    bool dumbMode;
 
     IRecyclableEntry basis;
     Vector2 basisSize;
@@ -70,6 +72,9 @@ public partial class RecycleListContainer : ScrollContainer
             //calculate how many elements fit on screen (cols*(ceil(heightOfElement/heightOfThis)+1))
             int totalElements = linkedProvider.GetRecycleElementCount();
             int newOnScreenElements = columns * (Mathf.CeilToInt(Size.Y / (elementHeight + elementSpace)) + 2);
+
+            if (dumbMode)
+                newOnScreenElements = totalElements;
 
             //use scrollVertical and elementParent y pos to get the offset height
             float offsetHeight = (GlobalPosition.Y - elementParent.GlobalPosition.Y) + offsetControl.Size.Y;

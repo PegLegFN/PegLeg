@@ -43,6 +43,8 @@ public partial class TrayIcon : StatusIndicator
     Texture2D editorIcon;
     [Export]
     Texture2D testBuildIcon;
+    [Export]
+    string[] restartFlags;
 
     static TrayIcon inst;
     const string mainWindowTag = "MainWindow";
@@ -97,11 +99,12 @@ public partial class TrayIcon : StatusIndicator
         int restartHour = AppConfig.Get("advanced", "auto_restart_hour", 7);
         if (DateTime.Now.Hour != restartHour)
             return;
-        List<string> args = [];
+        DirAccess.RemoveAbsolute(Bootstrap.processLockPath);
+        List<string> args = [..restartFlags];
         if (minimised)
             args.Add("--start-minimised");
-        OS.CreateInstance([..args]);
         GetTree().Quit();
+        OS.CreateInstance([..args]);
     }
 
     public void HandleMenu(long id)
@@ -109,11 +112,13 @@ public partial class TrayIcon : StatusIndicator
         switch (id)
         {
             case 200:
-                List<string> args = [];
+                //prevents next instance from closing immediately if this isnatnce takes too long to close
+                DirAccess.RemoveAbsolute(Bootstrap.processLockPath);
+                List<string> args = [.. restartFlags];
                 if (minimised)
                     args.Add("--start-minimised");
-                OS.CreateInstance([..args]);
                 GetTree().Quit();
+                OS.CreateInstance([..args]);
                 break;
             case 404:
                 GetTree().Quit();

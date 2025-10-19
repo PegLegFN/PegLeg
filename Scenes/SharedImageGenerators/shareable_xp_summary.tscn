@@ -1,0 +1,791 @@
+[gd_scene load_steps=26 format=3 uid="uid://co461hhd3r2sk"]
+
+[ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_8f0vt"]
+[ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_ob1n3"]
+[ext_resource type="Script" uid="uid://6kq5n7f3yc4n" path="res://Scripts/UserInterface/Dashboard/XpLimitController.cs" id="3_afwqd"]
+[ext_resource type="Script" uid="uid://dwvt6ybtex6dg" path="res://Scripts/UsernameLabel.cs" id="4_8so6h"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_nd6q4"]
+[ext_resource type="Script" uid="uid://bwua60il6w4x2" path="res://Scripts/UserInterface/Dashboard/XpLimitDisplay.cs" id="6_5i3pu"]
+[ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="7_45pg5"]
+[ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="8_lj2n3"]
+[ext_resource type="Shader" uid="uid://d1dxev01cxp3l" path="res://Shaders/StwXpBar.gdshader" id="9_uh551"]
+[ext_resource type="Texture2D" uid="uid://bd6ewmxuan2o5" path="res://Images/InterfaceIcons/Fortnite-Mission-Pattern-512.png" id="10_oav5i"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="11_7mrnj"]
+[ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="12_2ais8"]
+[ext_resource type="Texture2D" uid="uid://d4kjqspxmn12f" path="res://Images/InterfaceIcons/CreativeStaggared.png" id="13_43f2v"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="14_f5c8q"]
+[ext_resource type="Texture2D" uid="uid://dlbasrvn2ilmd" path="res://Images/TextureResources/progress-wheel.tres" id="15_72i4m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_as0uf"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.6, 0.6, 0.6, 0.752941)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ho1op"]
+bg_color = Color(1, 0.470588, 0, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sfcv1"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_at20a"]
+bg_color = Color(0, 0.75, 0.75, 1)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_as0uf"]
+shader = ExtResource("9_uh551")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.5
+shader_parameter/tileScale = 0.15
+shader_parameter/tileSpeed = 0.15
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("10_oav5i")
+shader_parameter/tint = Color(0.88, 0.4, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nh5vk"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4kbf4"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ho1op"]
+shader = ExtResource("9_uh551")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.51
+shader_parameter/tileScale = 0.4
+shader_parameter/tileSpeed = 0.2
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = false
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("12_2ais8")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v863i"]
+shader = ExtResource("9_uh551")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.03
+shader_parameter/tileScale = 0.5
+shader_parameter/tileSpeed = 0.35
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("13_43f2v")
+shader_parameter/tint = Color(0, 0.9, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xqktx"]
+shader = ExtResource("9_uh551")
+shader_parameter/ControlSize = Vector2(373, 16)
+shader_parameter/progress = 0.79
+shader_parameter/tileScale = 0.25
+shader_parameter/tileSpeed = 0.275
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = true
+shader_parameter/rainbow = true
+shader_parameter/pattern = ExtResource("14_f5c8q")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
+
+[node name="ShareableXpSummary" type="SubViewportContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="XpSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("1_8f0vt")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="XpSummaryViewport" instance=ExtResource("2_ob1n3")]
+
+[node name="XPProgress" type="PanelContainer" parent="XpSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+custom_minimum_size = Vector2(485, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("3_afwqd")
+stwXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer")
+playtimeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2")
+creativeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3")
+superchargedXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+xpProgress = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar")
+levelLabel = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer/Label2")
+xpAmount = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/Label")
+xpUntilMax = NodePath("VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2/Label")
+loading = NodePath("VBoxContainer/Body/SmallLoadingIcon")
+content = NodePath("VBoxContainer/Body/XPContent")
+superchargedContent = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "Seasonal Pass XP"
+horizontal_alignment = 1
+script = ExtResource("4_8so6h")
+
+[node name="Body" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SmallLoadingIcon" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body" instance=ExtResource("5_nd6q4")]
+visible = false
+layout_mode = 2
+
+[node name="XPContent" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("6_5i3pu")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "STW Mission XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("7_45pg5")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_lj2n3")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_as0uf")
+layout_mode = 2
+script = ExtResource("11_7mrnj")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("6_5i3pu")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Playtime XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("7_45pg5")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_lj2n3")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+material = SubResource("ShaderMaterial_ho1op")
+layout_mode = 2
+script = ExtResource("11_7mrnj")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.51
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("6_5i3pu")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Creative XP"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("7_45pg5")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_lj2n3")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+material = SubResource("ShaderMaterial_v863i")
+layout_mode = 2
+script = ExtResource("11_7mrnj")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.03
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+layout_mode = 2
+theme_override_constants/separation = 2
+script = ExtResource("6_5i3pu")
+progressText = NodePath("MarginContainer/MarginContainer/Label")
+progressBar = NodePath("MarginContainer/ProgressBar")
+progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
+refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
+
+[node name="HSeparator" type="HSeparator" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Supercharged XP Remaining"
+
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("7_45pg5")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 5
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_lj2n3")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
+theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+material = SubResource("ShaderMaterial_xqktx")
+layout_mode = 2
+script = ExtResource("11_7mrnj")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 0.79
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999/4,000,000"
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "99%"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent"]
+layout_mode = 2
+
+[node name="MarginContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 0.63
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("15_72i4m")
+texture_progress = ExtResource("15_72i4m")
+tint_under = Color(0, 0, 0, 1)
+tint_progress = Color(0, 0.766667, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -2
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "??'???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "/80K"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = " to Lv 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="value_changed" from="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="XpSummaryViewport/PegLegWatermark/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]

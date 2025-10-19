@@ -10,6 +10,9 @@ public partial class GameAccountEntry : Control
     public delegate void TooltipChangedEventHandler(string tooltip);
 
     [Signal]
+    public delegate void StatusChangedEventHandler(string tooltip);
+
+    [Signal]
     public delegate void IconChangedEventHandler(Texture2D icon);
 
     [Signal]
@@ -29,7 +32,20 @@ public partial class GameAccountEntry : Control
     public override void _Ready()
     {
         GameAccount.ActiveAccountChanged += SetActiveAccount;
+        XmppManager.OnUserStatusChanged += OnUserStatus;
         SetActiveAccount();
+    }
+
+    private void OnUserStatus(string account, string status)
+    {
+        if (currentAccount?.accountId != account)
+            return;
+        CallDeferred(nameof(SetStatus), status);
+    }
+
+    public void SetStatus(string status)
+    {
+        EmitSignalStatusChanged(status);
     }
 
     public void SetAccount(GameAccount account)

@@ -115,13 +115,12 @@ public static class CalenderRequests
             catch (JsonException) { }
         }
 
-        GD.Print($"cal: {currentCalender.cacheExpire}   now: {DateTime.UtcNow}   request:{currentCalender.cacheExpire < DateTime.UtcNow}");
+        GD.Print($"Calender: {{expiresUTC: {currentCalender.cacheExpire}, currentlyUTC: {DateTime.UtcNow}, fetch: {currentCalender.cacheExpire < DateTime.UtcNow}}}");
         await calenderCheck.WaitAsync();
         try
         {
             if (currentCalender.cacheExpire < DateTime.UtcNow)
             {
-                GD.Print("downloading latest calender");
                 var shouldNotify = await RequestCalender(account);
                 notify ??= shouldNotify;
             }
@@ -135,8 +134,6 @@ public static class CalenderRequests
 
         if (notify == true)
         {
-            if (hadCalender)
-                GD.Print("Calender Update!");
             OnCalenderUpdate?.Invoke();
         }
     }

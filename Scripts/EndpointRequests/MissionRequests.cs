@@ -226,10 +226,10 @@ public class GameMission
 
     static SemaphoreSlim missionUpdateSemaphore = new(1);
     public static async Task UpdateMissions() => await UpdateMissions(null);
-    public static async Task ReparseMissions() => await UpdateMissions(recentMissionData);
+    public static async Task ReparseMissions(JsonNode customData = null) => await UpdateMissions(customData ?? recentMissionData, customData is not null);
 
     static JsonNode recentMissionData;
-    static async Task UpdateMissions(JsonNode missionData)
+    static async Task UpdateMissions(JsonNode missionData, bool ignoreExpiry = false)
     {
         using var st = await missionUpdateSemaphore.AwaitToken();
         if (!st.wasImmediate)
@@ -296,7 +296,7 @@ public class GameMission
             }
 
             //edge case where missions expire after being requested but before the response is returned
-            if (missionReset < DateTime.UtcNow)
+            if (!ignoreExpiry && missionReset < DateTime.UtcNow)
             {
                 missionData = null;
                 continue;
@@ -339,9 +339,13 @@ public class GameMission
                 return false;
             if ((questDefinition ?? "None") != "None")
             {
-                var quest = account.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem($"Quest:{ParseItemPath(questDefinition)}");
-                if (quest?.QuestComplete != true)
-                    return false;
+                var questName = ParseItemPath(questDefinition);
+                if(questName != "ReactiveQuest_DistressCalls")//i assume this is hardcoded similarly ingame too?
+                {
+                    var quest = account.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem($"Quest:{questName}");
+                    if (quest?.QuestComplete != true)
+                        return false;
+                }
             }
             foreach (var questDef in activeQuestDefinitions)
             {
@@ -537,18 +541,6 @@ public class GameMission
                     missionAlertDict.TryGetValue(missionData.tileIndex, out var alertData) ? alertData : null
                 ));
             }
-            //Parallel.ForEach(theaterMissions, missionData =>
-            //{
-            //    if (missionData.missionGenerator.Contains("_TheOutpost_"))
-            //        return;
-            //    missionList.Add(new(
-            //        theaterInfo,
-            //        [.. missionRegionList.Where(r => r.IncludesTile(missionData.tileIndex) == true)],
-            //        missionTiles[missionData.tileIndex],
-            //        missionData,
-            //        missionAlertDict.TryGetValue(missionData.tileIndex, out var alertData) ? alertData : null
-            //    ));
-            //});
         }
         return missionList;
     }

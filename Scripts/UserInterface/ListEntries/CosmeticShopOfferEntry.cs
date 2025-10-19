@@ -2,8 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Resources;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
@@ -38,8 +37,11 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 
     [Signal]
     public delegate void ReminingTimeVisibilityEventHandler(bool visible);
+
     [Signal]
     public delegate void BestsellerVisibilityEventHandler(bool visible);
+    [Signal]
+    public delegate void BestsellerTooltipEventHandler(string tooltip);
 
     [Signal]
     public delegate void LastSeenTextEventHandler(string amount);
@@ -72,7 +74,6 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
     CosmeticShopOfferData currentOfferData;
     Gradient bgGradient;
     Color[] bgGradientDefaultColors;
-    static readonly float[] bgGradientDefaultOffsets = new float[] { 0, 1 };
 
     public override void _Ready()
     {
@@ -127,7 +128,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 
     bool tryLoadImageDisplayAsset;
     bool resourceLoadStarted;
-    private async void StartResourceLoadSequence()
+    private void StartResourceLoadSequence()
     {
         resourceLoadTimer.Stop();
         if (resourceLoadStarted)
@@ -145,9 +146,29 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             return;
         }
 
-        if (displayAssetLoadStarted)
-            await LoadImageDisplayAsset();
+        TryFetchResource();
+    }
 
+
+    bool displayAssetLoadStarted;
+    private async Task LoadImageDisplayAsset()
+    {
+        if (displayAssetLoadStarted)
+            return;
+        displayAssetLoadStarted = true;
+        var imageDA = await CatalogRequests.GetCosmeticMeta(imageDisplayAssetPath);
+        var possibleRenderImage = imageDA?["ContextualPresentations"]?[0]?["RenderImage"]?["AssetPathName"]?.ToString();
+        if (possibleRenderImage is null)
+            return;
+        imageUrl = "https://export-service.dillyapis.com/v1/export?path=" + possibleRenderImage.Split('.')[0];
+    }
+
+    public async void TryFetchResource(bool withDisplayAsset = false)
+    {
+        loadingCubes.Visible = true;
+        resourceTarget.Visible = false;
+        if (withDisplayAsset && imageDisplayAssetPath is not null)
+            await LoadImageDisplayAsset();
         if (imageUrl is null)
         {
             resourceTarget.Texture = fallbackTexture;
@@ -156,7 +177,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             resourceTarget.Visible = true;
             return;
         }
-        var tex = await CatalogRequests.GetCosmeticResource(imageUrl);
+        var tex = await CatalogRequests.GetCosmeticResource(imageUrl, withDisplayAsset);
         if (tex is not null)
             ApplyResource(tex);
         else
@@ -168,16 +189,6 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         }
     }
 
-    private async Task LoadImageDisplayAsset()
-    {
-        var imageDA = await CatalogRequests.GetCosmeticMeta(imageDisplayAssetPath);
-        var possibleRenderImage = imageDA?["ContextualPresentations"]?[0]?["RenderImage"]?["AssetPathName"]?.ToString();
-        if (possibleRenderImage is null)
-            return;
-        imageUrl = "https://fortnitecentral.genxgames.gg/api/v1/export?path=" + possibleRenderImage.Split('.')[0];
-    }
-
-    bool displayAssetLoadStarted;
     public void Interact()
     {
         if (shopUrl is not null)
@@ -293,8 +304,6 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
     {
         offerId = entryData["offerId"].ToString();
         cellWidth = (int)cellSize.X;
-        if (entryData["webURL"]?.ToString() is string extraWebURL)
-            shopUrl = "https://www.fortnite.com" + extraWebURL;
         layoutId = entryData["layout"]?["id"]?.ToString();
 
         int oldPrice = entryData["regularPrice"].GetValue<int>();
@@ -305,7 +314,21 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         else
             discountAmount = 0;
 
-        EmitSignal(SignalName.BestsellerVisibility, entryData["isBestseller"]?.GetValue<bool>() == true);
+        bool isBestseller = entryData["isBestseller"]?.GetValue<bool>() == true;
+        List<string> bestsellerTooltipLines = isBestseller ? ["Bestseller Globally"] : [];
+
+        if (entryData["bestsellerRegions"]?.Deserialize<Dictionary<string, int>>() is Dictionary<string, int> regions)
+        {
+            isBestseller = true;
+            bestsellerTooltipLines.Add($"Bestseller in {regions.Count} regions");
+            //bestsellerTooltipLines.Add($"Ranked {regions.Values.Sum() / 121f:0.#}/10 across all regions");
+            var score = entryData["regionalRank"].GetValue<float>();
+            if (score > 0.5)
+                bestsellerTooltipLines.Add($"Regional score of {entryData["regionalRank"].GetValue<float>():0.##}/10");
+        }
+
+        EmitSignalBestsellerVisibility(isBestseller);
+        EmitSignalBestsellerTooltip(string.Join("\n", bestsellerTooltipLines));
 
         imageDisplayAssetPath = entryData["fallbackDisplayAsset"]?.ToString();
 
@@ -325,6 +348,17 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
                 if (!itemTypes.Contains(type))
                     itemTypes.Add(type);
             }
+        }
+
+        if (entryData["webURL"]?.ToString() is string extraWebURL)
+        {
+            if (extraWebURL.StartsWith("/item-shop/jam-tracks/") && allItems.Length>0)
+            {
+                var firstItemName = allItems[0]["name"].ToString().ToLower().Replace(" ", "-");
+                var urlId = extraWebURL.Split("-")[^1];
+                extraWebURL = $"/item-shop/jam-tracks/{firstItemName}-{urlId}";
+            }
+            shopUrl = "https://www.fortnite.com" + extraWebURL;
         }
 
         if (entryData["bundle"] is not null)
@@ -375,7 +409,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         else
         {
             bgGradient.Colors = bgGradientDefaultColors;
-            bgGradient.Offsets = bgGradientDefaultOffsets;
+            bgGradient.Offsets = [0, 1];
         }
         Color outlineColor = fallbackOutlineColor;
         if (entryData["colors"]?["textBackgroundColor"] is JsonValue outlineColorVal)
@@ -437,7 +471,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             var possibleRenderImage = imageDA?["ContextualPresentations"]?[0]?["RenderImage"]?["AssetPathName"]?.ToString();
             if (possibleRenderImage is null)
                 return;
-            imageUrl = "https://fortnitecentral.genxgames.gg/api/v1/export?path=" + possibleRenderImage.Split('.')[0];
+            imageUrl = "https://export-service.dillyapis.com/v1/export?path=" + possibleRenderImage.Split('.')[0];
         }
 
         if (imageUrl is not null && CatalogRequests.GetLocalCosmeticResource(imageUrl) is ImageTexture tex && tex is not null)
@@ -453,6 +487,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         public bool isOld { get; private set; }
         public bool isVeryOld { get; private set; }
         public bool isBestseller { get; private set; }
+        public int bestsellerRank { get; private set; }
         public DateTime firstAddedDate { get; private set; }
         public DateTime? lastAddedDate { get; private set; }
         //public DateTime isVeryOld { get; private set; }
@@ -507,7 +542,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             isRecentlyNew = itemMetadatas.Any(m => m.isRecentlyNew);
             isAddedToday = itemMetadatas.Any(m => m.isAddedToday);
             isLeavingSoon = itemMetadatas.Any(m => m.isLeavingSoon);
-            isBestseller = itemMetadatas.Any(m => m.isBestseller);
+            isBestseller = itemMetadatas[0].isBestseller;
             isOld = itemMetadatas.Any(m => m.isOld);
             isVeryOld = itemMetadatas.Any(m => m.isVeryOld);
 

@@ -12,6 +12,7 @@ using System.Threading;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Text.Json;
+using System.Net.Http.Json;
 
 public partial class AppData
 {
@@ -25,23 +26,16 @@ public enum OrderRange
     Monthly
 }
 
-public readonly struct FORTStats
+public readonly struct FORTStats(float fortitude, float offense, float resistance, float technology)
 {
     //todo: export this via BanjoBotAssets
     static DataTableCurve homebaseRatingCurve;
     static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= new("HomebaseRatingMapping.json", "UIMonsterRating");
 
-    public readonly float fortitude;
-    public readonly float offense;
-    public readonly float resistance;
-    public readonly float technology;
-    public FORTStats(float fortitude, float offense, float resistance, float technology)
-    {
-        this.fortitude = fortitude;
-        this.offense = offense;
-        this.resistance = resistance;
-        this.technology = technology;
-    }
+    public readonly float fortitude = fortitude;
+    public readonly float offense = offense;
+    public readonly float resistance = resistance;
+    public readonly float technology = technology;
 
     public float PowerLevel => HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology));
 }
@@ -150,13 +144,12 @@ public partial class GameAccount
         }
     }
 
-    public static GameAccount[] OwnedAccounts => gameAccountCache.Values.Where(a => a.isOwned).ToArray();
+    public static GameAccount[] OwnedAccounts => [.. gameAccountCache.Values.Where(a => a.isOwned)];
     public static GameAccount GetOrCreateAccount(string accountId) => gameAccountCache.ContainsKey(accountId) ? gameAccountCache[accountId] : gameAccountCache[accountId] = new(accountId);
     public static async Task<bool> RemoveAccount(string accountId, bool force = false)
     {
-        if (!gameAccountCache.ContainsKey(accountId))
+        if (!gameAccountCache.TryGetValue(accountId, out GameAccount account))
             return true;
-        var account = gameAccountCache[accountId];
         if (!await account.RemoveDeviceDetails(force))
             return false;
         account.DeleteLocalData();
@@ -243,9 +236,11 @@ public partial class GameAccount
         account.SetAuthentication(accountAuthResponse);
     }
 
+    public XmppManager XmppManager { get; private set; }
     public GameAccount(string accountId)
     {
         this.accountId = accountId;
+        XmppManager = new(this);
     }
 
     public Action OnAccountUpdated;
@@ -262,11 +257,59 @@ public partial class GameAccount
     public string DisplayName => GetLocalData("DisplayName")?.ToString() ?? $"<{accountId}>";
     public Texture2D ProfileIcon => GetLocalData("IconPath")?.ToString() is string iconPath ? CatalogRequests.GetLocalCosmeticResource(iconPath) : null;
 
+    public async Task FetchDisplayNames(params GameAccount[] accounts)
+    {
+        if (accounts.Length>100)
+        {
+            await FetchDisplayNames(accounts[..100]);
+            await FetchDisplayNames(accounts[100..]);
+            return;
+        }
+        var res = await FnWebAddresses.account
+            .MakeRequest($"/account/api/public/account?{string.Join("&", accounts.Select(a => $"accountId={a.accountId}"))}")
+            .SetAuthorisation(AuthHeader)
+            .Send();
+        if (!res.IsSuccessStatusCode)
+            return;
+        //GD.Print(await res.Content.ReadAsStringAsync());
+        var displayNames = await res.Content.ReadFromJsonAsync<AccountDisplayNames[]>(Helpers.JsonOptions.Fields);
+        var displayNameDict = displayNames.ToDictionary(d => d.id);
+        foreach (var acc in accounts)
+        {
+            if (displayNameDict.TryGetValue(acc.accountId, out var dnData))
+                acc.SetLocalData("DisplayName", dnData.DisplayName);
+        }
+    }
+
     Dictionary<string, GameProfile> profiles = [];
 
     public GameProfile this[string profileId] => GetProfile(profileId);
     public GameProfile GetProfile(string profileId) => profiles.ContainsKey(profileId ?? "") ? profiles[profileId ?? ""] : profiles[profileId ?? ""] = new(this, profileId ?? "");
     public bool HasProfile(string profileId) => profiles.ContainsKey(profileId);
+
+    Dictionary<string, FriendData> friends = [];
+    public IEnumerable<FriendData> Friends => friends.Values;
+    public FriendData? GetFriend(string accountId) => friends.TryGetValue(accountId, out var friendData) ? friendData : null;
+
+    public async Task FetchFriends()
+    {
+        var res = await FnWebAddresses.friends
+            .MakeRequest($"friends/api/v1/{accountId}/summary")
+            .SetAuthorisation(AuthHeader)
+            .Send();
+        if (!res.IsSuccessStatusCode)
+            return;
+        var friendData = await res.Content.ReadFromJsonAsync<FriendSummary>(Helpers.JsonOptions.Fields);
+        //GD.Print(await res.Content.ReadAsStringAsync());
+        friends = friendData.friends.ToDictionary(f => f.accountId ?? "");
+        var userIds =
+            friends.Keys
+            .Union(friendData.incoming.Select(f => f.accountId))
+            .Union(friendData.outgoing.Select(f => f.accountId))
+            .Union(friendData.blocklist.Select(f => f.accountId))
+            .Distinct();
+        await FetchDisplayNames([.. userIds.Select(GetOrCreateAccount)]);
+    }
 
     public async Task<GameAccount> EnsureProfile(string profileId, bool force = false)
     {
@@ -324,10 +367,11 @@ public partial class GameAccount
     //fails 60 seconds before it would actualy expire
     public bool AuthTokenExpired => authExpiresAt <= (Time.GetTicksMsec() * 0.001) + 60;
     bool RefreshTokenExpired => refreshExpiresAt <= (Time.GetTicksMsec() * 0.001) + 10;
+    public string AuthToken => authToken;
     public AuthenticationHeaderValue AuthHeader => accountAuthHeader;
-    public async Task<bool> Authenticate(bool loadingOverlay = false)
+    public async Task<bool> Authenticate(bool loadingOverlay = false, bool assumeValid = true)
     {
-        if (isAuthed)
+        if (isAuthed && assumeValid)
             return true;
         if (!isOwned)
             return false;
@@ -336,17 +380,30 @@ public partial class GameAccount
         if (!loadingOverlay)
             loadToken.Dispose();
 
+        if (!assumeValid)
+        {
+            using var req = await FnWebAddresses.account
+                .MakeRequest("account/api/oauth/verify")
+                .SetAuthorisation(AuthHeader)
+                .Send();
+            if(req.IsSuccessStatusCode)
+                return true;
+        }
+
         if (!RefreshTokenExpired)
         {
             var refreshAuth = await GameClient.LoginWithRefreshToken(refreshToken);
 
-            if (refreshAuth is not null && refreshAuth["errorMessage"] is null)
+            if (refreshAuth is not null && refreshAuth["access_token"] is not null)
             {
                 SetAuthentication(refreshAuth);
                 return true;
             }
 
-            GD.Print(refreshAuth?["errorMessage"].ToString());
+            if (refreshAuth?["errorMessage"] is JsonNode errorNode)
+                GD.Print("Refresh token error: " + errorNode.ToString());
+            else
+                GD.Print("Refresh token error: "+refreshAuth.ToString());
         }
 
         var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
@@ -357,7 +414,7 @@ public partial class GameAccount
             SetAuthentication(deviceAuth);
             return true;
         }
-        bool offline = deviceAuth?["offline"] is JsonValue val && val.GetValueKind() == System.Text.Json.JsonValueKind.True;
+        bool offline = deviceAuth?["offline"] is JsonValue val && val.GetValueKind() == JsonValueKind.True;
         string failMsg = offline ? "Offline" : deviceAuth?["errorMessage"].ToString();
         GD.Print(failMsg);
         if (!loginFailure)
@@ -440,14 +497,19 @@ public partial class GameAccount
     }
 
     SemaphoreSlim iconSemaphore = new(1);
+
     public async void UpdateIcon()
+    {
+        await UpdateIcon(this);
+    }
+    public async Task UpdateIcon(GameAccount asAccount)
     {
         if (iconSemaphore.CurrentCount <= 0)
             return;
         await iconSemaphore.WaitAsync();
         try
         {
-            if (!await Authenticate())
+            if (!await asAccount.Authenticate())
                 return;
 
             var avatarData = await Helpers.MakeRequest(
@@ -455,7 +517,7 @@ public partial class GameAccount
                 FnWebAddresses.avatar,
                 $"/v1/avatar/fortnite/ids?accountIds={accountId}",
                 "{}",
-                AuthHeader
+                asAccount.AuthHeader
             );
             if(avatarData is JsonObject obj)
             {
@@ -631,13 +693,14 @@ public partial class GameAccount
     public event Action<GameAccount> OnFortStatsChanged;
     FORTStats? fortStats;
     public FORTStats FortStats => GetFORTStats();
+    public void MarkFortStatsDirty() => fortStats = null;
     public FORTStats GetFORTStats(bool force = false)
     {
         if (!force && fortStats is not null)
             return fortStats.Value;
 
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
-        var researchStats = accountItems.statAttributes["research_levels"];
+        //var researchStats = accountItems.statAttributes["research_levels"];
         var statItems = accountItems.GetItems("Stat");
         var equippedWorkerItems = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
 
@@ -665,8 +728,9 @@ public partial class GameAccount
 
     public event Action<GameAccount> OnVentureFortStatsChanged;
     FORTStats? ventureFortStats;
-    public FORTStats VentureFortStats => GetVentureFortStats();
-    public FORTStats GetVentureFortStats(bool force = false)
+    public FORTStats VentureFortStats => GetVentureFORTStats();
+    public void MarkVentureFortStatsDirty() => ventureFortStats = null;
+    public FORTStats GetVentureFORTStats(bool force = false)
     {
         if (!force && ventureFortStats is not null)
             return ventureFortStats.Value;
@@ -1334,7 +1398,11 @@ public class GameProfile
         GD.Print($"operation complete ({operation} in {profileId} as {account.DisplayName})");
 
         if (result.ContainsKey("notifications"))
-            return result["notifications"].AsArray();
+        {
+            var notifs = result["notifications"].AsArray();
+            GD.Print("Notifications: "+notifs.ToString());
+            return notifs;
+        }
         return [];
     }
 
@@ -1401,6 +1469,8 @@ public class GameProfile
 
     public void ApplyProfileChanges(JsonArray profileChanges)
     {
+        account.MarkFortStatsDirty();
+        account.MarkVentureFortStatsDirty();
         List<GameItem> itemsToNotify = [];
         List<GameItem> itemsToIgnore = [];
         Dictionary<string, GameItem> reassociations = [];
@@ -1812,6 +1882,35 @@ public class GameItem
             return;
         SetSeenLocal();
         string content = @$"{{""itemIds"": [""{uuid}""]}}";
+        profile.PerformOperation("MarkItemSeen", content).StartTask();
+    }
+
+    public static void MarkItemsSeen(IEnumerable<GameItem> items)
+    {
+        var itemArr = items.ToArray();
+        if (itemArr.Length == 0)
+            return;
+        if (!itemArr.Any(i => i.attributes?["item_seen"] is not null))
+            return;
+        var profile = itemArr[0].profile;
+        foreach (var item in itemArr)
+        {
+            if (item.template?.CanBeUnseen != true)
+            {
+                GD.PushWarning("an item cant be unseen");
+                return;
+            }
+            if (item.profile != profile)
+            {
+                GD.PushWarning("why did you mix profiles?");
+                return;
+            }
+        }
+        foreach (var item in itemArr)
+        {
+            item.SetSeenLocal();
+        }
+        string content = @$"{{""itemIds"": [{string.Join(", ", itemArr.Select(i=> @$"""{i.uuid}"""))}]}}";
         profile.PerformOperation("MarkItemSeen", content).StartTask();
     }
 

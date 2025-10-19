@@ -143,7 +143,7 @@ public partial class GameOfferEntry : Control
         accountDirty = false;
         var account = GameAccount.activeAccount;
         var isAuthenticated = await account.Authenticate();
-        if (ct.IsCancellationRequested)
+        if (ct.IsCancellationRequested || currentOffer is null)
             return;
         if (!isAuthenticated)
         {
@@ -154,10 +154,10 @@ public partial class GameOfferEntry : Control
         EmitSignal(SignalName.IsErrored, false);
 
         int stockLimit = await account.GetPurchaseLimit(currentOffer);
+        if (ct.IsCancellationRequested || currentOffer is null)
+            return;
         if (!account.MatchesItemRequirements(currentOffer)) //todo: proper item requirement check
             stockLimit = 0;
-        if (ct.IsCancellationRequested)
-            return;
         currentStockLimit = stockLimit;
         if (currentStockLimit == 999)
             currentStockLimit = -1;
@@ -166,17 +166,17 @@ public partial class GameOfferEntry : Control
         if (grantedItem?.template?.Type == "CardPack")
         {
             int tier = (await currentOffer.GetXRayLlamaData(account))?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
+            if (ct.IsCancellationRequested || currentOffer is null)
+                return;
             if (grantedItem.template.DisplayName.Contains("Legendary"))
                 tier = 2;
-            if (ct.IsCancellationRequested)
-                return;
             grantedItem.customData["llamaTier"] = tier;
         }
 
         if (cosmeticMode)
         {
             var finalPrice = await currentOffer.GetPersonalPrice();
-            if (ct.IsCancellationRequested)
+            if (ct.IsCancellationRequested || currentOffer is null)
                 return;
             pricePerPurchase = finalPrice;
         }
@@ -184,7 +184,7 @@ public partial class GameOfferEntry : Control
         if ((pricePerPurchase?.quantity ?? 0) > 0)
         {
             var inventoryItem = await currentOffer.GetPriceInventoryItem();
-            if (ct.IsCancellationRequested)
+            if (ct.IsCancellationRequested || currentOffer is null)
                 return;
             currentPriceInInventory = inventoryItem?.quantity ?? 0;
         }

@@ -10,7 +10,7 @@ using FileAccess = Godot.FileAccess;
 
 public partial class Bootstrap : Node
 {
-    const string processLockPath = "user://pid";
+    public const string processLockPath = "user://pid";
     const string pipeName = "PegLegPipe";
     const int majorPackageVersion = 1;
     const int minorPackageVersion = 1;
@@ -21,11 +21,15 @@ public partial class Bootstrap : Node
     Control curtain;
     [Export]
     Label progressLabel;
-	[ExportGroup("Scenes")]
+    [Export]
+    bool shareInEditor;
+    [ExportGroup("Scenes")]
 	[Export]
 	PackedScene desktopOnboarding;
     [Export]
     PackedScene desktopInterface;
+    [Export]
+    PackedScene shareMenu;
 
     static void DeleteContents(string path)
     {
@@ -43,6 +47,8 @@ public partial class Bootstrap : Node
     }
 
     public static readonly FrozenSet<string> cmdLineArgs = OS.GetCmdlineArgs().ToFrozenSet();
+    public static bool StartMinimised { get; private set; } = cmdLineArgs.Contains("--start-minimised");
+    public static bool UseShareMenu { get; private set; } = cmdLineArgs.Contains("--share-menu");
 
     public override async void _Ready()
     {
@@ -51,8 +57,9 @@ public partial class Bootstrap : Node
         window.MoveToCenter();
         progressLabel.Text = "Preparing...";
 
-        if (cmdLineArgs.Contains("--start-minimised"))
+        if (StartMinimised)
             window.Mode = Window.ModeEnum.Minimized;
+        UseShareMenu |= OS.HasFeature("editor") && shareInEditor;
 
         if (FileAccess.FileExists(processLockPath))
         {
@@ -191,9 +198,16 @@ public partial class Bootstrap : Node
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
 
+
         //todo: autoselect desktop/mobile scenes here
+
         if (hasAccount)
-            GetTree().ChangeSceneToPacked(desktopInterface);
+        {
+            if (UseShareMenu)
+                GetTree().ChangeSceneToPacked(shareMenu);
+            else
+                GetTree().ChangeSceneToPacked(desktopInterface);
+        }
         else
             GetTree().ChangeSceneToPacked(desktopOnboarding);
     }

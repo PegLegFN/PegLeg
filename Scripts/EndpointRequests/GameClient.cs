@@ -70,7 +70,9 @@ static class GameClient
             HttpMethod.Post,
             FnWebAddresses.account,
             "account/api/oauth/token",
-            $"grant_type=authorization_code&code={oneTimeCode}",
+            $"grant_type=authorization_code&" +
+            $"code={oneTimeCode}&" +
+            $"token_type=eg1",
             clientHeader
         )).AsObject();
     }
@@ -110,10 +112,10 @@ static class GameClient
         if (deviceDetails is null)
             return null;
         return await LoginWithDeviceAuth(
-                deviceDetails["accountId"]?.ToString(), 
-                deviceDetails["deviceId"]?.ToString(), 
-                deviceDetails["secret"]?.ToString()
-            );
+            deviceDetails["accountId"]?.ToString(), 
+            deviceDetails["deviceId"]?.ToString(), 
+            deviceDetails["secret"]?.ToString()
+        );
     }
 
     public static async Task<JsonObject> LoginWithDeviceAuth(string accountId, string deviceId, string deviceSecret)
@@ -127,7 +129,8 @@ static class GameClient
             $"grant_type=device_auth&" +
             $"account_id={accountId}&" +
             $"device_id={deviceId}&" +
-            $"secret={deviceSecret}",
+            $"secret={deviceSecret}&" +
+            $"token_type=eg1",
             clientHeader
         ))?.AsObject();
     }
@@ -177,7 +180,8 @@ static class GameClient
                 FnWebAddresses.account,
                 "/account/api/oauth/token",
                 $"grant_type=device_code&" +
-                $"device_code={deviceCode}",
+                $"device_code={deviceCode}&" +
+                $"token_type=eg1",
                 clientHeader
             ))?.AsObject();
         if (lastCheckResult is not null && lastCheckResult["errorMessage"] is null)

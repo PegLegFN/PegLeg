@@ -47,6 +47,11 @@ shader_parameter/Repeat = true
 shader_parameter/HorizontalMask = 0.0
 shader_parameter/VerticalMask = 0.0
 shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_0v5s8"]
 resource_name = "CosmeticTimeFilter"
@@ -63,8 +68,13 @@ shader_parameter/Repeat = true
 shader_parameter/HorizontalMask = 0.05
 shader_parameter/VerticalMask = 0.0
 shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
-[node name="Cosmetic Shop" type="VBoxContainer" node_paths=PackedStringArray("sacButton", "verticalScrollBox", "navContainer", "navigationPane", "pageParent", "simpleShopParent", "loadingAnim", "shopContent", "navToggle", "filterBlocker", "requireLeavingSoon", "requireAddedToday", "includeDiscountBundles", "newOrOldFilters", "typeFilters", "resetTypeFilters")]
+[node name="Cosmetic Shop" type="VBoxContainer" node_paths=PackedStringArray("sacButton", "verticalScrollBox", "navContainer", "navigationPane", "pageParent", "simpleShopParent", "loadingAnim", "shopContent", "navToggle", "filterBlocker", "requireLeavingSoon", "requireAddedToday", "includeDiscountBundles", "newOrOldFilters", "typeFilters", "resetTypeFilters", "regionSelector")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -91,6 +101,9 @@ includeDiscountBundles = NodePath("HSplitContainer/VBoxContainer/MarginContainer
 newOrOldFilters = [NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer/VeryNew"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer/New"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer/Any"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer/Old"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer/Popular")]
 typeFilters = [NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Outfit"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Pickaxe"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Glider"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Emote"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Wrap"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Music"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Instrument"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Car"), NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TypeFilters/HBoxContainer/Misc")]
 resetTypeFilters = NodePath("HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/Reset")
+regionSelector = NodePath("HSplitContainer/VBoxContainer/MarginContainer/RegionSelector/HBoxContainer/OptionButton")
+regionFile = "res://regionNamesAndWeights.json"
+regionExFile = "C:/Users/Tomatech/Documents/populationFromCountryCodes.json"
 
 [node name="TimerAndSAC" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -697,6 +710,39 @@ texture = ExtResource("25_7g2j3")
 expand_mode = 1
 script = ExtResource("26_0o8hv")
 syncControlSize = true
+
+[node name="RegionSelector" type="MarginContainer" parent="HSplitContainer/VBoxContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_right = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/VBoxContainer/MarginContainer/RegionSelector"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="HSplitContainer/VBoxContainer/MarginContainer/RegionSelector/HBoxContainer"]
+layout_mode = 2
+text = "Region:"
+
+[node name="OptionButton" type="OptionButton" parent="HSplitContainer/VBoxContainer/MarginContainer/RegionSelector/HBoxContainer"]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+alignment = 1
+text_overrun_behavior = 1
+selected = 1
+fit_to_longest_item = false
+item_count = 5
+popup/item_0/text = "All"
+popup/item_0/id = 3
+popup/item_1/text = "G  -  Global"
+popup/item_1/id = 2
+popup/item_2/id = 4
+popup/item_2/separator = true
+popup/item_3/text = "US  -  America"
+popup/item_3/id = 0
+popup/item_4/text = "IE  -  Ireland"
+popup/item_4/id = 1
 
 [connection signal="ConfigValueChanged" from="HSplitContainer/VBoxContainer/MarginContainer/Button" to="HSplitContainer/VBoxContainer/MarginContainer/Button/ValChanged" method="EmitValues"]
 [connection signal="InvertedValue" from="HSplitContainer/VBoxContainer/MarginContainer/Button/ValChanged" to="HSplitContainer/VBoxContainer/MarginContainer/Button/Off" method="set_visible"]

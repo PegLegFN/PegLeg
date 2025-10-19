@@ -69,7 +69,7 @@ public class PegLegResourceManager
         Dictionary<PackageVersion, GithubHelper.ReleaseAsset> releases = [];
         try
         {
-            var releasesArray = await GithubHelper.FetchReleases("TomatechGames", "PegLegResourcePackager");
+            var releasesArray = await GithubHelper.FetchReleases("PegLegFN", "PegLegResourcePackager");
             releases = releasesArray?
                 .Where(r => !r.prerelease || AppConfig.Get("advanced", "prerelease_resources", false))
                 .ToDictionary(
@@ -803,7 +803,7 @@ public class GameItemTemplate
         if (!TryGetTexturePath(out var texturePath, textureType))
             return fallbackIcon;
         var loadedTex = PegLegResourceManager.LoadResourceAsset<Texture2D>("GameAssets/" + texturePath);
-        if(loadedTex is not null)
+        if (loadedTex is not null)
             textures[textureType] = loadedTex;
         return loadedTex ?? fallbackIcon;
     }

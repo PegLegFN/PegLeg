@@ -133,7 +133,7 @@ public partial class SurvivorLoadoutInterface : Node
             return;
 
         var allWorkers = (await account.GetProfile(FnProfileTypes.AccountItems).Query())
-            .GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
+            .GetItems("Worker", item => !string.IsNullOrWhiteSpace(item.attributes["squad_id"]?.ToString()));
 
         var groupedWorkers = allWorkers.GroupBy(item => item.attributes["squad_id"].ToString());
 
@@ -171,7 +171,7 @@ public partial class SurvivorLoadoutInterface : Node
 
         var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
         var allWorkers = accountItems.GetItems("Worker");
-        var slottedWorkers = allWorkers.Where( item => item.attributes.ContainsKey("squad_id"));
+        //var slottedWorkers = allWorkers.Where( item => item.attributes.ContainsKey("squad_id"));
         var workerUUIDs = allWorkers.Select(item => item.uuid).ToList();
         int missingWorkers = 0;
 
@@ -184,12 +184,14 @@ public partial class SurvivorLoadoutInterface : Node
         };
         foreach (var squad in fullLoadout)
         {
+            if (string.IsNullOrWhiteSpace(squad.Key))
+                continue;
             var squadArray = squad.Value.AsArray();
             for (int i = 0; i < squadArray.Count; i++)
             {
                 string workerKey = squadArray[i].ToString();
 
-                if (workerKey == "")
+                if (string.IsNullOrWhiteSpace(workerKey))
                     continue;
 
                 if (!workerUUIDs.Contains(workerKey))
@@ -227,7 +229,7 @@ public partial class SurvivorLoadoutInterface : Node
         if (!await account.Authenticate())
             return;
 
-        await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray(survivorSquadIds.Select(s => (JsonNode)s).ToArray()) });
+        await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray([.. survivorSquadIds.Select(s => (JsonNode)s)]) });
         await accountItems.PerformOperation("AssignWorkerToSquadBatch", flattenedLoadout);
         await Helpers.WaitForTimer(0.1);
     }
@@ -283,8 +285,8 @@ public partial class SurvivorLoadoutInterface : Node
         OnLoadoutChanged(loadoutSelector.Selected);
     }
 
-    static readonly string[] survivorSquadIds = new string[]
-    {
+    static readonly string[] survivorSquadIds =
+    [
         "squad_attribute_medicine_emtsquad",
         "squad_attribute_medicine_trainingteam",
         "squad_attribute_arms_fireteamalpha",
@@ -293,7 +295,7 @@ public partial class SurvivorLoadoutInterface : Node
         "squad_attribute_scavenging_gadgeteers",
         "squad_attribute_synthesis_corpsofengineering",
         "squad_attribute_synthesis_thethinktank",
-    };
+    ];
 
     private async void OnSquadClear()
     {
@@ -312,7 +314,7 @@ public partial class SurvivorLoadoutInterface : Node
         var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
         var existingWorkers = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
 
-        await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray(survivorSquadIds.Select(s => (JsonNode)s).ToArray()) });
+        await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray([.. survivorSquadIds.Select(s => (JsonNode)s)]) });
     }
 
     void GenerateOptions()

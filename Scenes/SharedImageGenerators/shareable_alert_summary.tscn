@@ -1,0 +1,248 @@
+[gd_scene load_steps=8 format=3 uid="uid://bcnf5m1xdyb7r"]
+
+[ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_u1eso"]
+[ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_xnsoy"]
+[ext_resource type="Script" uid="uid://bob0mcr4r7qyn" path="res://Scripts/UserInterface/Dashboard/AlertSummaryController.cs" id="3_6k71c"]
+[ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="4_gmqrm"]
+[ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/dashboard_alert_summary.tscn" id="5_mrch3"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="6_xb20p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
+shader = ExtResource("4_gmqrm")
+
+[node name="ShareableAlertSummary" type="SubViewportContainer"]
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="AlertSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("1_u1eso")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="AlertSummaryViewport" instance=ExtResource("2_xnsoy")]
+
+[node name="Alert Summary" type="PanelContainer" parent="AlertSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
+custom_minimum_size = Vector2(485, 420)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("3_6k71c")
+targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayllama", "AccountResource:reagent_alteration_upgrade_sr", "AccountResource:reagent_alteration_upgrade_vr", "AccountResource:reagent_alteration_upgrade_r", "AccountResource:reagent_alteration_upgrade_uc", "AccountResource:reagent_alteration_generic", "AccountResource:reagent_c_t01", "AccountResource:reagent_c_t02", "AccountResource:reagent_c_t03", "AccountResource:reagent_c_t04", "AccountResource:campaign_event_currency", "AccountResource:reagent_alteration_ele_fire", "AccountResource:reagent_alteration_ele_water", "AccountResource:reagent_alteration_ele_nature")
+rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
+loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Alert Summary"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Reward" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.5
+theme_type_variation = &"Outline6"
+text = "Reward"
+horizontal_alignment = 1
+
+[node name="Stone" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Stone"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Stone"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2296, 0.4264, 0.82, 1)
+
+[node name="Plank" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Plank"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Plank"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.15, 1, 0, 1)
+
+[node name="Canny" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Canny"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Canny"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.8, 0, 1)
+
+[node name="Twine" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Twine"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Twine"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.683333, 0, 1, 1)
+
+[node name="Total" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Total"
+horizontal_alignment = 1
+
+[node name="Ventures" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Vent's"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0.883333, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="DashboardAlertSummary" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="ItemEntry" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer" index="0"]
+forceShowVBucks = true
+
+[node name="DashboardAlertSummary2" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary3" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary4" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary5" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary6" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary7" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary8" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary9" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary10" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary11" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary12" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary13" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary14" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary15" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary16" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary17" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+visible = false
+layout_mode = 2
+
+[node name="SmallLoadingIcon" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer" instance=ExtResource("6_xb20p")]
+layout_mode = 2
+
+[editable path="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]

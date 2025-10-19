@@ -1,0 +1,101 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwhjf30eslhqt"]
+
+[ext_resource type="Script" uid="uid://cfdi2i0m02t0x" path="res://Scripts/XmppBridge.cs" id="1_t7kyd"]
+[ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="2_sx0sn"]
+[ext_resource type="PackedScene" uid="uid://u3qgqc6gx0hg" path="res://Scenes/Accounts/xmpp_account_entry.tscn" id="3_sx0sn"]
+
+[node name="XmppTest" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." node_paths=PackedStringArray("status", "partyData", "memberData", "accountParent")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+script = ExtResource("1_t7kyd")
+status = NodePath("VBoxContainer/HBoxContainer/LineEdit")
+partyData = NodePath("VBoxContainer/HBoxContainer2/TextEdit")
+memberData = NodePath("VBoxContainer/HBoxContainer2/TextEdit2")
+accountScene = ExtResource("3_sx0sn")
+accountParent = NodePath("VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/UserList")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ConnectBtn" type="Button" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Launch Fortnite"
+theme_type_variation = &"LargeButton"
+text = "Connect"
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/ConnectBtn"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_sx0sn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "In the Launcher"
+placeholder_text = "status"
+drag_and_drop_selection_enabled = false
+
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Set Status"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+editable = false
+
+[node name="TextEdit2" type="TextEdit" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+editable = false
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UserList" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/ConnectBtn" to="PanelContainer" method="Connect"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Button" to="PanelContainer" method="SetStatus"]

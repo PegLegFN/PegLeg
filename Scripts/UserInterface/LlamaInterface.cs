@@ -606,7 +606,7 @@ public partial class LlamaInterface : Control
         var maxAmount = currentCardpackSelection.DisplayAmount;
         quantitySpinner.MaxValue = Mathf.Max(maxAmount, 1);
         quantitySpinner.Visible = maxAmount > 1;
-        cardPackItem.MarkItemSeen();
+        GameItem.MarkItemsSeen(cardPackStack.items);
         currentCardpackEntry.SetItem(cardPackItem);
         screenshotCardpackEntry.SetItem(cardPackItem);
 

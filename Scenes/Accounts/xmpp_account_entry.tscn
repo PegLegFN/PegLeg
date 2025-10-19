@@ -1,0 +1,146 @@
+[gd_scene load_steps=10 format=3 uid="uid://u3qgqc6gx0hg"]
+
+[ext_resource type="Script" uid="uid://dvgcv52c2ve0w" path="res://Scripts/UserInterface/ListEntries/GameAccountEntry.cs" id="1_lqmh6"]
+[ext_resource type="Texture2D" uid="uid://cj7awxlqm1to2" path="res://Images/InterfaceIcons/T_UI_Icon_Sidebar_OnlinePlayers.png" id="2_isegq"]
+[ext_resource type="Shader" uid="uid://17ec5ugjn0qv" path="res://Shaders/CircleBaseMask.gdshader" id="3_wdpxl"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_q7v4y"]
+[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="5_06rw3"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="6_0ehfm"]
+[ext_resource type="Texture2D" uid="uid://djcvidllqfmt5" path="res://Images/InterfaceIcons/T_UI_LevelManagement_Trashcan_Icon.png" id="7_6yl8x"]
+[ext_resource type="Texture2D" uid="uid://cj7hjf5jc1l2t" path="res://Images/InterfaceIcons/FortPlayBtn.png" id="8_utjhu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pkso0"]
+shader = ExtResource("3_wdpxl")
+
+[node name="AccountEntry" type="HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+script = ExtResource("1_lqmh6")
+defaultIcon = ExtResource("2_isegq")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+theme_type_variation = &"AccountButton"
+text = "
+"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("4_q7v4y")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "TomatechGames"
+text_overrun_behavior = 3
+
+[node name="AuthAlert" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(21, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Could not authenticate, please sign in again"
+texture = ExtResource("5_06rw3")
+expand_mode = 1
+
+[node name="InvertHasAuth" type="Node" parent="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/AuthAlert"]
+script = ExtResource("6_0ehfm")
+
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_spacing = -1
+theme_override_font_sizes/font_size = 16
+text = "Status goes here and will take up a lot of space, so there better be enough room for all of it"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="DeleteButton" type="Button" parent="."]
+visible = false
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="DeleteButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_6yl8x")
+expand_mode = 1
+
+[node name="ExchangeBtn" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="ExchangeBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_utjhu")
+expand_mode = 1
+
+[connection signal="IconChanged" from="." to="MarginContainer/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="NameChanged" from="." to="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="StatusChanged" from="." to="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="." to="MarginContainer/Button" method="set_tooltip_text"]
+[connection signal="pressed" from="MarginContainer/Button" to="." method="Press"]
+[connection signal="InvertedValue" from="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/AuthAlert/InvertHasAuth" to="MarginContainer/Button" method="set_disabled"]
+[connection signal="InvertedValue" from="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/AuthAlert/InvertHasAuth" to="MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/AuthAlert" method="set_visible"]
+[connection signal="pressed" from="DeleteButton" to="." method="Delete"]
+[connection signal="pressed" from="ExchangeBtn" to="." method="Exchange"]

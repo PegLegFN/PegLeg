@@ -13,8 +13,23 @@ using System.Text.Json.Serialization;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 
-static partial class Helpers
+public static partial class Helpers
 {
+    public static class JsonOptions
+    {
+        public static JsonSerializerOptions Fields { get; private set; } = new()
+        {
+            IncludeFields = true,
+            WriteIndented = true
+        };
+        public static JsonSerializerOptions CamelCase { get; private set; } = new()
+        {
+            IncludeFields = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
+    }
+
     public static T[] FlexDeserialise<T>(this JsonElement ele, Func<JsonElement, T> innerCtor, int depth = 1) =>
         ele.ValueKind switch
         {
@@ -302,7 +317,7 @@ static partial class Helpers
                 ["code"] = (int)result.StatusCode,
                 ["response"] = resultText,
             };
-            if (result.Content == OfflineContent)
+            if (result.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
                 resultNode["offline"] = true;
         }
         catch (ArgumentNullException)
@@ -313,7 +328,7 @@ static partial class Helpers
                 ["success"] = result.IsSuccessStatusCode,
                 ["code"] = (int)result.StatusCode
             };
-            if (result.Content == OfflineContent)
+            if (result.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
                 resultNode["offline"] = true;
         }
 
@@ -330,7 +345,6 @@ static partial class Helpers
         return resultNode;
     }
 
-    public static readonly StringContent OfflineContent = new("Offline");
     public static async Task<HttpResponseMessage> MakeRequestRaw(System.Net.Http.HttpClient endpoint, HttpRequestMessage request)
     {
         //GD.Print("Debug: "+request.ToString());
@@ -345,7 +359,7 @@ static partial class Helpers
             if (await IsOffline())
             {
                 GD.Print($"Offline ({response})");
-                return new() { Content = OfflineContent, StatusCode = System.Net.HttpStatusCode.NotFound };
+                return new() { Content = new StringContent("Offline"), StatusCode = System.Net.HttpStatusCode.GatewayTimeout };
             }
             try
             {
