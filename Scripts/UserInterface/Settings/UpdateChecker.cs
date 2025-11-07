@@ -56,6 +56,25 @@ public partial class UpdateChecker : Control
                 }
 			}
 
+            if (false)
+            {
+                string[] verData = ProjectSettings.GetSetting("application/config/version").AsString().Split(".");
+                if (verData.Length >= 3)
+                {
+                    //release version
+                    currentVer = new(
+                        int.Parse(verData[0]),
+                        int.Parse(verData[1]),
+                        int.Parse(verData[2]),
+                        0
+                    );
+                    if (verData.Length >= 4)
+                    {
+                        currentVer = currentVer with { prerelease = int.Parse(verData[3]) };
+                    }
+                }
+            }
+
 			bool useBeta = currentVer.prerelease > 0;
             try
             {

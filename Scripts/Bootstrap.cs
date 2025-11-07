@@ -143,7 +143,7 @@ public partial class Bootstrap : Node
         if (FileAccess.FileExists(Helpers.GlobalisePath("res://update.exe")))
             DirAccess.RemoveAbsolute(Helpers.GlobalisePath("res://update.exe"));
 
-        var oldPackFolder = Helpers.GlobalisePath("res://External");
+        var oldPackFolder = Helpers.GlobalisePath("res://PegLegResources");
         if (DirAccess.DirExistsAbsolute(oldPackFolder))
             DeleteContents(oldPackFolder);
 

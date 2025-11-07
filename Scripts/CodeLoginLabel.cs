@@ -97,7 +97,7 @@ public partial class CodeLoginLabel : Node
     async void CheckForCode()
     {
         var linkCheckRequest = await GameClient.CheckLoginLinkCode();
-        if (linkCheckRequest?["access_token"] is not null)
+        if (linkCheckRequest?["access_token"] is null)
             return;
 
         started = false;
