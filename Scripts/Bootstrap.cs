@@ -156,6 +156,7 @@ public partial class Bootstrap : Node
         await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, p => progressLabel.Text = $"{p}...");
         //await PegLegResourceManager.TempImportResources();
         await Helpers.WaitForFrame();
+        var preloadTexturesTask = PegLegResourceManager.PreloadTemplateTextures();
 
         var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
         bool hasAccount = false;
@@ -196,6 +197,12 @@ public partial class Bootstrap : Node
             progressLabel.Text = "Updating quests...";
             await GameAccount.activeAccount.ClientQuestLoginCampaign();
             await GameAccount.activeAccount.ClientQuestLoginAthena();
+        }
+
+        if(preloadTexturesTask is not null)
+        {
+            progressLabel.Text = "Caching Textures...";
+            await preloadTexturesTask;
         }
 
         progressLabel.Text = "";

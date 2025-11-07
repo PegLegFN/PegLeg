@@ -66,15 +66,12 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
         {
             foreach (var source in includedSources)
             {
-                if (GameItemTemplate.GetTemplatesOfType(source) is GameItemTemplate[] templates)
-                {
-                    //is regular or paralell better here?
-                    Parallel.ForEach(templates, t => ProcessTemplate(t, ref uniqueTemplates));
+                //is regular or paralell better here?
+                //Parallel.ForEach(GameItemTemplate.GetTemplatesOfType(source), t => ProcessTemplate(t, ref uniqueTemplates));
 
-                    //foreach (var t in templates)
-                    //{
-                    //	ProcessTemplate(t, ref uniqueTemplates);
-                    //}
+                foreach (var t in GameItemTemplate.GetTemplatesOfType(source))
+                {
+                    ProcessTemplate(t, ref uniqueTemplates);
                 }
             }
 

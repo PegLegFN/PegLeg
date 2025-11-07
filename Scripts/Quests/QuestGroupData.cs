@@ -176,7 +176,7 @@ public struct QuestGroupData
             if (prefilter is not null)
                 filteredQuests = Evaluate(prefilter.Value, filteredQuests);
 
-            filteredQuests ??= (allQuests ??= GameItemTemplate.GetTemplatesOfType("Quest"));
+            filteredQuests ??= (allQuests ??= GameItemTemplate.GetTemplatesOfType("Quest").ToArray());
 
             if (union is not null)
                 filteredQuests = Evaluate(union.Value, filteredQuests).Distinct().ToArray();

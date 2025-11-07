@@ -211,20 +211,26 @@ public class PegLegResourceManager
             });
         });
         await Task.WhenAll(tasks);
+        GameItemTemplate.SetImportedTemplates(namedItemsCC.ToFrozenDictionary(StringComparer.InvariantCultureIgnoreCase));
+    }
+
+    public static async Task PreloadTemplateTextures()
+    {
+        int templatesTotal = 0;
         int templatesPerFrame = 0;
         GD.Print($"loading template textures...");
-        foreach (var template in namedItemsCC.Values)
+        foreach (var template in GameItemTemplate.GetTemplates())
         {
             template.GetTexture();
             templatesPerFrame--;
+            templatesTotal++;
             if (templatesPerFrame < 0)
             {
                 await Helpers.WaitForFrame();
-                templatesPerFrame = OS.HasFeature("mobile") ? 10 : 60;
+                templatesPerFrame = OS.HasFeature("mobile") ? 20 : 60;
             }
         }
-        GD.Print($"loaded {namedItemsCC.Count} template textures");
-        GameItemTemplate.SetImportedTemplates(namedItemsCC.ToFrozenDictionary(StringComparer.InvariantCultureIgnoreCase));
+        GD.Print($"loaded {templatesTotal} template textures");
     }
 
     public static bool ResourceExists(string resource, bool allowOverrides = true)
@@ -635,9 +641,13 @@ public class GameItemTemplate
         return null;
     }
 
+    public static IEnumerable<GameItemTemplate> GetTemplates()
+    {
+        return importedTemplates?.Union(customTemplates)?.Select(kvp => kvp.Value);
+    }
+
     //probably pretty performance heavy, use sparingly
-    public static GameItemTemplate[] GetTemplatesOfType(string templateType, Func<GameItemTemplate, bool> filter = null) => 
-    [.. 
+    public static IEnumerable<GameItemTemplate> GetTemplatesOfType(string templateType, Func<GameItemTemplate, bool> filter = null) =>
         importedTemplates?
         .Where(kvp =>
             kvp.Key.StartsWith(templateType + ":") &&
@@ -649,8 +659,7 @@ public class GameItemTemplate
                 (filter is null || filter(kvp.Value)
             ))
         )?
-        .Select(kvp => kvp.Value) ?? []
-    ];
+        .Select(kvp => kvp.Value) ?? Array.Empty<GameItemTemplate>();
 
     public static Texture2D GetSubtypeTexture(string key, Texture2D fallbackIcon = null)
     {

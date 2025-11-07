@@ -149,6 +149,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0"]
@@ -411,6 +412,7 @@ alignment = 1
 metadata/zone = "c"
 
 [node name="Audio" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="1"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio" index="0"]
@@ -1043,7 +1045,6 @@ access = 2
 use_native_dialog = true
 
 [node name="Advanced" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4"]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" index="0"]
@@ -1122,7 +1123,17 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "suspend_quests"
 
-[node name="AutoRestartToggle" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="6"]
+[node name="SuspendQuests2" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="6"]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Refreshes quests in all accounts whenever they're fetched in the current account"
+text = "Bulk Refresh Quests"
+alignment = 2
+script = ExtResource("12_12lms")
+section = "advanced"
+key = "bulk_quest_refresh"
+
+[node name="AutoRestartToggle" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="7"]
 layout_direction = 3
 layout_mode = 2
 tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
@@ -1132,7 +1143,7 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "auto_restart"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="7"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="8"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/HBoxContainer" index="0"]
@@ -1153,7 +1164,7 @@ asInt = true
 defaultValue = 7.0
 requireApply = false
 
-[node name="ExperimentalNotifs" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="8"]
+[node name="ExperimentalNotifs" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="9"]
 layout_direction = 3
 layout_mode = 2
 text = "Enable Notifications"
@@ -1162,7 +1173,7 @@ script = ExtResource("12_12lms")
 section = "experimental"
 key = "notifications"
 
-[node name="BeastMode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="9"]
+[node name="BeastMode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="10"]
 layout_direction = 3
 layout_mode = 2
 text = "Beast Mode"
