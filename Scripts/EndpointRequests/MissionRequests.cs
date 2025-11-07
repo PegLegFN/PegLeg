@@ -291,7 +291,8 @@ public class GameMission
                 }
                 else
                 {
-                    throw;
+                    generatedMissions = [];
+                    //throw;
                 }
             }
 
@@ -665,12 +666,12 @@ public class GameMission
         //this is super lazy, i dont want to figure out how to query the total of specific items procedurally
         if (
             rewardItems.Where(i =>
-                i.sortingTemplate.Name.StartsWith("Reagent_Alteration_Upgrade", StringComparison.InvariantCultureIgnoreCase) ||
-                i.sortingTemplate.Name.Equals("Reagent_Alteration_Generic", StringComparison.InvariantCultureIgnoreCase) ||
-                i.sortingTemplate.Name.StartsWith("Reagent_C", StringComparison.InvariantCultureIgnoreCase) ||
-                i.sortingTemplate.Name.Equals("PersonnelXP", StringComparison.InvariantCultureIgnoreCase) ||
-                i.sortingTemplate.Name.Equals("SchematicXP", StringComparison.InvariantCultureIgnoreCase) ||
-                i.sortingTemplate.Name.Equals("HeroXP", StringComparison.InvariantCultureIgnoreCase)
+                i.sortingTemplate?.Name.StartsWith("Reagent_Alteration_Upgrade", StringComparison.InvariantCultureIgnoreCase)==true ||
+                i.sortingTemplate?.Name.Equals("Reagent_Alteration_Generic", StringComparison.InvariantCultureIgnoreCase) == true ||
+                i.sortingTemplate?.Name.StartsWith("Reagent_C", StringComparison.InvariantCultureIgnoreCase) == true ||
+                i.sortingTemplate?.Name.Equals("PersonnelXP", StringComparison.InvariantCultureIgnoreCase) == true ||
+                i.sortingTemplate?.Name.Equals("SchematicXP", StringComparison.InvariantCultureIgnoreCase) == true ||
+                i.sortingTemplate?.Name.Equals("HeroXP", StringComparison.InvariantCultureIgnoreCase) == true
             ).Select(i => i.quantity).Sum() >= 4
         )
         {

@@ -11,10 +11,11 @@ uniform bool IsFancy;
 uniform bool IsChoice;
 uniform sampler2D MainIcon;
 uniform vec4 AltRarity : source_color;
-uniform sampler2D AltIcon;
-uniform bool AltSchematic;
 uniform bool AltHero;
+uniform bool AltSchematic;
 uniform bool AltFancy;
+uniform sampler2D AltIcon;
+uniform bool HeroBeamsOnly;
 uniform float ChoiceShift : hint_range(0.0, 1.0);
 
 varying vec4 modulate;
@@ -39,9 +40,18 @@ vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, 
 	float gradient = 1.0-distance(vec2(0.5, 1.25), uv*vec2(1,1.5));
 	if(hero)
 	{
-		float radialVal = radial(uv, vec2(0.5,1.2));
-		float beams = clamp(1.1-floor(abs(radialVal)*7.0)/5.0, 0.25, 1);
-		backgroundCol = rarity * clamp(beams*(gradient+0.2)*1.5,0.0,1.0);
+		if(HeroBeamsOnly)
+		{
+			float radialVal = radial(uv, vec2(0.5,1.2));
+			float beams = clamp(1.1-floor(abs(radialVal*radialVal)*30.0)/5.0, 0.0, 1);
+			backgroundCol = rarity * clamp(beams*(gradient+0.2)*1.5,0.0,1.0);
+		}
+		else
+		{
+			float radialVal = radial(uv, vec2(0.5,1.2));
+			float beams = clamp(1.1-floor(abs(radialVal)*7.0)/5.0, 0.25, 1);
+			backgroundCol = rarity * clamp(beams*(gradient+0.2)*1.5,0.0,1.0);
+		}
 	}
 	else if(schematic)
 	{
@@ -77,7 +87,7 @@ void fragment() {
 		vec2 shiftedUV = fitUV+vec2(ChoiceShift*choiceDist,0.0);
 		
 		vec4 first = renderItem(shiftedUV, MainIcon, modulate, IsSchematic, IsHero, IsFancy);
-		vec4 second = renderItem(shiftedUV+vec2(-choiceDist,0.0), AltIcon, AltRarity, AltSchematic, AltHero, AltFancy);
+		vec4 second = renderItem(shiftedUV+vec2(-choiceDist,0.0), MainIcon, AltRarity, false, false, false);
 		
 		float gradient = clamp((fitUV.x+(ChoiceShift*choiceDist)-1.0)/choiceGap, 0, 1);
 		COLOR = mix(first, second, gradient);

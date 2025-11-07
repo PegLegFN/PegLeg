@@ -8,7 +8,7 @@ float createMask(float gradient, float offset)
 
 void fragment() {
 	float gradient=(max(max(UV.x, 1.0-UV.x),max(UV.y, 1.0-UV.y))*2.0)-1.0;
-	float offset=mod(time, 1);
+	float offset=mod(TIME, 1);
 	float mask = 0.0;
 	mask+=createMask(gradient, offset-0.6666);
 	mask+=createMask(gradient, offset-0.3333);

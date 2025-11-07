@@ -1,9 +1,7 @@
 using Godot;
 using System;
-using System.Linq;
-using System.Reflection;
 
-public partial class ThemeSettings : Node
+public partial class ThemeSettings : Control
 {
 	[Export]
 	OptionButton themeOptions;

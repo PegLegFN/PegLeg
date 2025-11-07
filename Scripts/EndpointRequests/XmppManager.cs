@@ -65,9 +65,9 @@ public class XmppManager
         activeStateChanging = true;
         byte[] ridBytes = new byte[16];
         Random.Shared.NextBytes(ridBytes);
-        client.Resource = $"V2:Fortnite:SWT::{Convert.ToHexString(ridBytes).ToUpper()}";
-        client.Password = account.AuthToken;
-        await client.ConnectAsync();
+
+        var resourceId = $"V2:Fortnite:SWT::{Convert.ToHexString(ridBytes).ToUpper()}";
+
         try
         {
             var partyReq = await FnWebAddresses.party
@@ -75,13 +75,33 @@ public class XmppManager
                 .SetAuthorisation(account.AuthHeader)
                 .Send();
             var partyContainer = await partyReq.Content.ReadFromJsonAsync<PartyContainer>(Helpers.JsonOptions.CamelCase);
-            party = partyContainer.current.Length>0 ? partyContainer.current[0] : null;
-            if(party is not null)
+            party = partyContainer.current.Length > 0 ? partyContainer.current[0] : null;
+            if (party is not null)
             {
+                GD.Print($"Party Found: {party.id} (Created: {party.created_at})");
+                //resourceId = party.members[account.accountId].connections[0].id.Split("/")[^1];
                 OnPartyUpdated?.Invoke();
             }
         }
         catch { }
+
+        client.Resource = resourceId;
+        client.Password = account.AuthToken;
+        await client.ConnectAsync();
+
+        //try
+        //{
+        //    if (party is not null)
+        //    {
+        //        var partyReq = await FnWebAddresses.party
+        //            .MakeRequest($"/party/api/v1/Fortnite/parties/{party.id}/members/{account.accountId}/join")
+        //            .SetAuthorisation(account.AuthHeader)
+        //            .SetJsonContent()
+        //            .Send();
+        //    }
+        //}
+        //catch { }
+
         Active = true;
         activeStateChanging = false;
     }
@@ -128,6 +148,7 @@ public class XmppManager
                         "com.epicgames.social.party.notification.v0.INITIAL_INTENTION" => jElement.Deserialize<XmppEpicMsg.PartyJoinRequest>(Helpers.JsonOptions.CamelCase),
                         "com.epicgames.social.party.notification.v0.INTENTION_EXPIRED" => jElement.Deserialize<XmppEpicMsg.ExpiredJoinRequest>(Helpers.JsonOptions.CamelCase),
 
+                        "com.epicgames.social.party.notification.v0.MEMBER_CONNECTED" => jElement.Deserialize<XmppEpicMsg.PartyMemberConnected>(Helpers.JsonOptions.CamelCase),
                         "com.epicgames.social.party.notification.v0.MEMBER_JOINED" => jElement.Deserialize<XmppEpicMsg.PartyMemberJoined>(Helpers.JsonOptions.CamelCase),
                         "com.epicgames.social.party.notification.v0.MEMBER_STATE_UPDATED" => jElement.Deserialize<XmppEpicMsg.PartyMemberUpdate>(Helpers.JsonOptions.CamelCase),
                         "com.epicgames.social.party.notification.v0.MEMBER_NEW_CAPTAIN" => jElement.Deserialize<XmppEpicMsg.PartyMemberPromoted>(Helpers.JsonOptions.CamelCase),
@@ -139,7 +160,7 @@ public class XmppManager
 
                         "com.epicgames.social.party.notification.v0.PARTY_UPDATED" => jElement.Deserialize<XmppEpicMsg.PartyUpdate>(Helpers.JsonOptions.CamelCase),
                         "com.epicgames.social.interactions.notification.v2" => jElement.Deserialize<XmppEpicMsg.InteractionNotif>(Helpers.JsonOptions.CamelCase),
-                        _ => jElement.Deserialize<XmppEpicMsg>()
+                        _ => jElement.Deserialize<XmppEpicMsg.GenericXmppEpicMessage>()
                     };
                     OnEpicMsgRecieved(parsedMsg);
                 }
@@ -202,8 +223,8 @@ public class XmppManager
     {
         if (msg is XmppEpicMsg.PartyUpdate pUpdate)
         {
-            if (pUpdate.captain_id != account.accountId)
-                return;
+            //if (pUpdate.captain_id != account.accountId)
+            //    return;
             if (pUpdate.party_id != party?.id)
                 return;
             var partyState = party.meta;
@@ -215,9 +236,37 @@ public class XmppManager
             {
                 partyState.Remove(key);
             }
-            GD.Print("Party Update: " + pUpdate.party_id);
+            GD.Print($"Party Update: {pUpdate.party_id} (Rev: {pUpdate.revision})");
             party.meta = partyState;
+            party.revision = pUpdate.revision;
+            party.updated_at = pUpdate.updated_at;
             OnPartyUpdated?.Invoke();
+        }
+        else if (msg is XmppEpicMsg.PartyMemberJoined mConnect)
+        {
+            if (party.members.TryGetValue(mConnect.account_id, out var memberData))
+            {
+                memberData.connections = [.. memberData.connections, mConnect.connection];
+            }
+            else
+            {
+                memberData = new()
+                {
+                    account_id = mConnect.account_id,
+                    joined_at = mConnect.joined_at.Value,
+                    updated_at = mConnect.updated_at.Value,
+                    connections = [mConnect.connection]
+                };
+                party.members.Add(mConnect.account_id, memberData);
+            }
+            var memberState = memberData.meta;
+            foreach (var kvp in mConnect.member_state_updated)
+            {
+                memberState[kvp.Key] = kvp.Value;
+            }
+            memberData.meta = memberState;
+            GD.Print("Connected: " + mConnect.account_dn ?? mConnect.account_id);
+            OnPartyMemberUpdated?.Invoke(memberData);
         }
         else if (msg is XmppEpicMsg.PartyMemberJoined mJoin)
         {
@@ -285,13 +334,95 @@ public class XmppManager
             if (mLeave.party_id != party?.id)
                 return;
             //covers leaves, kicks, disconnects
-            party.members.Remove(mLeave.account_id);
-            GD.Print("Left: " + mLeave.account_dn ?? mLeave.account_id);
+            //party.members.Remove(mLeave.account_id);
+            if(!party.members.TryGetValue(mLeave.account_id, out var m))
+            {
+                GD.Print("member missing");
+                GD.Print(JsonSerializer.Serialize(mLeave.UnknownData));
+                return;
+            }
+            m.connections = [..m.connections.Where(c => c.id != mLeave.connection.id)];
+            if (m.connections.Length>0)
+            {
+                GD.Print($"Connection Terminated: {mLeave.account_dn ?? mLeave.account_id} ({mLeave.connection.id})");
+            }
+            else
+            {
+                party.members.Remove(mLeave.account_id);
+                GD.Print($"Final Connection Terminated: {mLeave.account_dn ?? mLeave.account_id} ({mLeave.connection.id})");
+            }
+        }
+        else if (msg is XmppEpicMsg.InteractionNotif interaction)
+        {
+            GD.Print($"Interactions: [\n{string.Join("", interaction.interactions.Select(i=>$"{{{i.interactionType}, {i.fromAccountId} => {i.toAccountId} ({i._type})}}\n"))}]");
+        }
+        else if(msg is XmppEpicMsg.GenericXmppEpicMessage gen)
+        {
+            GD.Print($"message: {msg.type}, data:[\n{string.Join("", gen.UnknownData.Select(kvp => $"{kvp.Key} = {kvp.Value}\n"))}]");
         }
         else
         {
             GD.Print($"message: {msg.type}");
         }
+    }
+
+    record struct PartyPatch
+    {
+        public PartyPatch(int revision, Dictionary<string, string> metaUpdate)
+        {
+            this.revision = revision;
+            meta = new() { update = metaUpdate };
+        }
+
+        public int revision;
+        public MetaPatch meta;
+        public struct MetaPatch
+        {
+            public required Dictionary<string, string> update;
+        }
+    }
+
+    public async Task SendPartyPatch(Dictionary<string, string> toPatch)
+    {
+        if (party is null)
+            return;
+        PartyPatch patch = new(party.revision, toPatch);
+        GD.Print("Patching: " + JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields));
+
+        var patchReq = await FnWebAddresses.party
+            .MakeRequest($"/party/api/v1/Fortnite/parties/{party.id}", System.Net.Http.HttpMethod.Patch)
+            .SetAuthorisation(account.AuthHeader)
+            .SetJsonContent(JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields))
+            .Send();
+
+        if (!patchReq.IsSuccessStatusCode)
+        {
+            //fetch party?
+            return;
+        }
+        GD.Print("Patch success");
+    }
+
+    record struct PartyMemberPatch(int revision, Dictionary<string, string> update);
+    public async Task SendPartyMemberPatch(Dictionary<string, string> toPatch)
+    {
+        if (party is null)
+            return;
+        PartyMemberPatch patch = new(party.revision, toPatch);
+        GD.Print("Patching: " + JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields));
+
+        var patchReq = await FnWebAddresses.party
+            .MakeRequest($"/party/api/v1/Fortnite/parties/{party.id}/members/{account.accountId}", System.Net.Http.HttpMethod.Patch)
+            .SetAuthorisation(account.AuthHeader)
+            .SetJsonContent(JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields))
+            .Send();
+
+        if (!patchReq.IsSuccessStatusCode)
+        {
+            //fetch party?
+            return;
+        }
+        GD.Print("Patch success");
     }
 
     public async Task SendStatus(string? status, string? toAccount = null) =>

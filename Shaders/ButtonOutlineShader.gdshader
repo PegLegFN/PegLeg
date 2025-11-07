@@ -4,8 +4,8 @@ shader_type canvas_item;
 uniform vec2 ControlSize = vec2(100.0, 100.0);
 uniform vec2 TargetSize = vec2(90.0, 90.0);
 uniform float LineSize = 3.0;
-uniform float ProgressFade = 0.02;
 uniform float Progress = 0;
+uniform float ProgressFade = 0.02;
 uniform bool Circle = false;
 uniform bool VerticalHold = false;
 

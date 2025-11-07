@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://u5ag0k8n6eqm"]
+[gd_scene load_steps=83 format=3 uid="uid://u5ag0k8n6eqm"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_3bqtb"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="2_34fsc"]
@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://kgl0dydu0mtf" path="res://Scenes/Desktop/desktopContextMenu.tscn" id="20_ayavh"]
 [ext_resource type="PackedScene" uid="uid://c78gt6b2m1utg" path="res://Scenes/Desktop/Views/desktopMissionView.tscn" id="22_qlkcq"]
 [ext_resource type="PackedScene" uid="uid://4hei03rcfvmu" path="res://Scenes/Desktop/Views/desktopLlamaView.tscn" id="23_b4gaj"]
+[ext_resource type="Script" uid="uid://840dnd45qqla" path="res://Scripts/UIElements/MobilePadding.cs" id="24_r4l5r"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="24_sj3vv"]
 [ext_resource type="PackedScene" uid="uid://bwunyntryyu6o" path="res://Scenes/Desktop/Views/Armory/desktopSurvivorLoadoutView.tscn" id="25_ag48h"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="25_jxakv"]
@@ -44,6 +45,7 @@
 [ext_resource type="Texture2D" uid="uid://cjtv2aa84wwwr" path="res://Images/InterfaceIcons/T_Icon_Spray_Adjustments_Tab_128.png" id="28_p4icb"]
 [ext_resource type="PackedScene" uid="uid://cochrwi38s2xb" path="res://Scenes/Desktop/Views/desktopQuestGroupListView.tscn" id="28_rt2uq"]
 [ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="29_ql5qm"]
+[ext_resource type="PackedScene" uid="uid://b4k4ku3cjmqku" path="res://Scenes/Desktop/Views/desktopHeroLoadoutView.tscn" id="31_i2466"]
 [ext_resource type="Texture2D" uid="uid://cj7hjf5jc1l2t" path="res://Images/InterfaceIcons/FortPlayBtn.png" id="31_retv3"]
 [ext_resource type="PackedScene" uid="uid://c4lt6qwfc4cou" path="res://Scenes/Desktop/Overlays/loading_overlay.tscn" id="31_v6low"]
 [ext_resource type="PackedScene" uid="uid://beau8d5wjqojh" path="res://Scenes/Desktop/Views/Armory/desktopStorageView.tscn" id="32_ayavh"]
@@ -55,6 +57,7 @@
 [ext_resource type="PackedScene" uid="uid://b8cv7fnnprix6" path="res://Scenes/Desktop/Views/Extra/desktopWeaponStatView.tscn" id="37_c6nfh"]
 [ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/card_pack_opener_window.tscn" id="41_alhak"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="41_kf5nt"]
+[ext_resource type="PackedScene" uid="uid://cr3cku76polyu" path="res://Scenes/Desktop/Views/Extra/desktopPartyLoadoutsView.tscn" id="42_i2466"]
 [ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="44_3p6h5"]
 [ext_resource type="PackedScene" uid="uid://cvc7hj4ng7c04" path="res://Scenes/Desktop/Overlays/game_item_selector.tscn" id="44_m211x"]
 [ext_resource type="PackedScene" uid="uid://outqvmv6p0pm" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_line_edit_window.tscn" id="45_vujc8"]
@@ -166,12 +169,11 @@ tooltipControl = NodePath("Tooltip")
 [node name="Tooltip" parent="NonUI/TooltipFixer" instance=ExtResource("8_2iux3")]
 visible = false
 
-[node name="StatusIndicator" type="StatusIndicator" parent="NonUI" node_paths=PackedStringArray("mainAppRoot")]
+[node name="StatusIndicator" type="StatusIndicator" parent="NonUI"]
 tooltip = "PegLeg"
 icon = ExtResource("37_5b0rm")
 menu = NodePath("PopupMenu")
 script = ExtResource("10_t6a4k")
-mainAppRoot = NodePath("../../Content")
 editorIcon = ExtResource("10_m85w4")
 testBuildIcon = ExtResource("11_m0p55")
 
@@ -254,30 +256,28 @@ texture = ExtResource("16_rir5i")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Content" type="Control" parent="."]
+[node name="Content" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_top = 4
+script = ExtResource("24_r4l5r")
+extraPaddingOnMobile = Vector4i(16, 128, 16, 16)
 
 [node name="MainTabs" type="TabContainer" parent="Content"]
 custom_minimum_size = Vector2(720, 0)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 4.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 0
+current_tab = 4
 script = ExtResource("16_hsemp")
 
 [node name="Dashboard" parent="Content/MainTabs" instance=ExtResource("10_xfiw1")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -297,32 +297,36 @@ layout_mode = 2
 metadata/_tab_index = 3
 
 [node name="Armoury" type="TabContainer" parent="Content/MainTabs"]
-visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 0
+current_tab = 1
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 4
 
 [node name="Survivor Squads" parent="Content/MainTabs/Armoury" instance=ExtResource("25_ag48h")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
+
+[node name="Hero Loadout" parent="Content/MainTabs/Armoury" instance=ExtResource("31_i2466")]
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="Inventory" parent="Content/MainTabs/Armoury" instance=ExtResource("13_yfdoy")]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="Backpack" parent="Content/MainTabs/Armoury" instance=ExtResource("15_dlrdq")]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 
 [node name="Storage" parent="Content/MainTabs/Armoury" instance=ExtResource("32_ayavh")]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 
 [node name="More (Dev)" type="TabContainer" parent="Content/MainTabs/Armoury" node_paths=PackedStringArray("altParent")]
 visible = false
@@ -332,7 +336,7 @@ tab_alignment = 1
 current_tab = 0
 script = ExtResource("16_hsemp")
 altParent = NodePath("../Node/DevParent")
-metadata/_tab_index = 4
+metadata/_tab_index = 5
 
 [node name="Athena" parent="Content/MainTabs/Armoury/More (Dev)" instance=ExtResource("33_7d0l0")]
 layout_mode = 2
@@ -471,16 +475,19 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
+[node name="Team Loadouts" parent="Content/MainTabs/Extra" instance=ExtResource("42_i2466")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
 [node name="StatusBar" type="MarginContainer" parent="Content"]
 z_index = 5
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 32.0
-grow_horizontal = 2
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_vertical = 0
 mouse_filter = 2
 theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
+theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 5
 
 [node name="Left" type="HBoxContainer" parent="Content/StatusBar"]
@@ -690,12 +697,7 @@ color = Color(1, 1, 1, 0.188235)
 
 [node name="OverlayWindows" type="Control" parent="Content"]
 z_index = 6
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 mouse_filter = 2
 
 [node name="AccountSwitcher" parent="Content/OverlayWindows" instance=ExtResource("26_xb41w")]

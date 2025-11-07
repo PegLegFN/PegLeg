@@ -2,7 +2,6 @@ shader_type canvas_item;
 #include "Includes/AdaptToAspect.gdshaderinc"
 #include "Includes/CornerMask.gdshaderinc"
 
-
 uniform vec2 ControlSize = vec2(100.0, 100.0);
 uniform float CornerRadius = 10.0;
 uniform vec4 BGCol : source_color = vec4(1.0);

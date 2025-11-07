@@ -64,6 +64,7 @@ public partial class ContextMenuHook : Node
                 Trigger();
             }
         }
+        //todo: on android, detect hold press, then show tooltip with button to expand context menu options
     }
 
     public static void TriggerHovered()
@@ -73,6 +74,12 @@ public partial class ContextMenuHook : Node
 
     void Trigger()
     {
+        if (missionSource is not null && missionSource.currentMission is null)
+            return;
+        if (itemSource is not null && itemSource.currentItem is null)
+            return;
+        if (offerSource is not null && offerSource.currentOffer is null)
+            return;
         //GD.Print($"Triggering {Name} ({componentList?.ResourceName.Split("/")[^1]})");
         if ((componentList?.components?.Length ?? 0) == 0)
             EmitSignalContextMenuTriggered(this);

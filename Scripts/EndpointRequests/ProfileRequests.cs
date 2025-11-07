@@ -5,14 +5,14 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
-using System.Text.Json;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 public partial class AppData
 {
@@ -394,7 +394,7 @@ public partial class GameAccount
         {
             var refreshAuth = await GameClient.LoginWithRefreshToken(refreshToken);
 
-            if (refreshAuth is not null && refreshAuth["access_token"] is not null)
+            if (refreshAuth?["access_token"] is not null)
             {
                 SetAuthentication(refreshAuth);
                 return true;
@@ -409,7 +409,7 @@ public partial class GameAccount
         var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
         JsonNode deviceAuth = await GameClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
 
-        if (deviceAuth is not null && deviceAuth["errorMessage"] is null)
+        if (deviceAuth?["access_token"] is not null)
         {
             SetAuthentication(deviceAuth);
             return true;
@@ -1123,7 +1123,7 @@ public class GameProfile
         return [];
     }
 
-    public GameItem GetItem(string uuid) => items.TryGetValue(uuid, out GameItem value) ? value : null;
+    public GameItem GetItem(string uuid) => uuid is not null && items.TryGetValue(uuid, out GameItem value) ? value : null;
     public GameItem[] GetItems(Predicate<GameItem> predicate) => GetItems(null, predicate);
     public GameItem[] GetItems(string type = null, Predicate<GameItem> predicate = null)
     {
@@ -1168,7 +1168,7 @@ public class GameProfile
         }
     }
 
-    public async Task<GameProfile> Query(bool forceFetch = false, bool forceCompleteFetch = false)
+    public async Task<GameProfile> Query(bool forceFetch = false, bool forceCompleteFetch = false, bool silent = false)
     {
         if (account is null)
             return this;
@@ -1180,7 +1180,7 @@ public class GameProfile
             {
                 if (forceCompleteFetch)
                     rvn = -1;
-                await PerformOperationUnsafe("QueryProfile");
+                await PerformOperationUnsafe("QueryProfile", silent: silent);
             }
             return this;
         }
@@ -1238,8 +1238,98 @@ public class GameProfile
         PerformOperation("MarkItemSeen", content).StartTask();
     }
 
+    #region TempHeroLoadoutCopy
+
+    public async Task CopyLoadoutToItem(GameItem sourceLoadout, string destinationLoadoutId)
+    {
+
+        if (account is null)
+            return;
+        //this may not work with low level accounts
+        //await account.profileOperationSemaphore.WaitAsync();
+        try
+        {
+            var targetLoadout = GetItem(destinationLoadoutId);
+            await Task.WhenAll(
+                CopyHero(sourceLoadout, targetLoadout, "commanderslot"),
+                CopyTeamPerk(sourceLoadout, targetLoadout),
+                CopyHero(sourceLoadout, targetLoadout, "followerslot1"),
+                CopyHero(sourceLoadout, targetLoadout, "followerslot2"),
+                CopyHero(sourceLoadout, targetLoadout, "followerslot3"),
+                CopyHero(sourceLoadout, targetLoadout, "followerslot4"),
+                CopyHero(sourceLoadout, targetLoadout, "followerslot5"),
+                CopyGadget(sourceLoadout, targetLoadout, 0),
+                CopyGadget(sourceLoadout, targetLoadout, 1)
+            );
+            //foreach (var att in sourceLoadout.attributes)
+            //{
+            //    targetLoadout.attributes[att.Key] = att.Value.DeepClone();
+            //}
+            //var keys = targetLoadout.attributes.Select(kvp => kvp.Key).ToArray();
+            //foreach (var att in keys)
+            //{
+            //    if (!sourceLoadout.attributes.ContainsKey(att))
+            //        targetLoadout.attributes.Remove(att);
+            //}
+            //targetLoadout.NotifyChanged();
+            //OnItemUpdated?.Invoke(targetLoadout);
+        }
+        finally
+        {
+            //account.profileOperationSemaphore.Release();
+        }
+        //await Query(true, true);
+    }
+
+    private async Task CopyHero(GameItem sourceLoadout, GameItem destLoadout, string slotName)
+    {
+        string hid = sourceLoadout.attributes["crew_members"][slotName]?.ToString();
+        if (hid == destLoadout.attributes["crew_members"][slotName]?.ToString())
+            return;
+        await PerformOperation("AssignHeroToLoadout", $$"""
+        {
+            "heroId": "{{hid}}",
+            "loadoutId": "{{destLoadout.uuid}}",
+            "slotName": "{{slotName}}"
+        }
+        """);
+    }
+
+    private async Task CopyTeamPerk(GameItem sourceLoadout, GameItem destLoadout)
+    {
+        string tpid = sourceLoadout.attributes["team_perk"]?.ToString();
+        if (tpid == destLoadout.attributes["team_perk"]?.ToString())
+            return;
+        await PerformOperation("AssignTeamPerkToLoadout", $$"""
+        {
+            "teamPerkId": "{{tpid}}",
+            "loadoutId": "{{destLoadout.uuid}}"
+        }
+        """);
+    }
+
+    private async Task CopyGadget(GameItem sourceLoadout, GameItem destLoadout, int slotIdx)
+    {
+        string gadgetId = "";
+        if (sourceLoadout.attributes["gadgets"] is JsonArray gadgetsArray && gadgetsArray.Count > slotIdx)
+            gadgetId = gadgetsArray[slotIdx]?["gadget"]?.ToString();
+        if(destLoadout.attributes["gadgets"] is JsonArray destArray && destArray.Count > slotIdx)
+        {
+            if (destArray[slotIdx]?["gadget"]?.ToString() == gadgetId)
+                return;
+        }
+        await PerformOperation("AssignGadgetToLoadout", $$"""
+        {
+            "gadgetId": "{{gadgetId}}",
+            "loadoutId": "{{destLoadout.uuid}}",
+            "slotIndex": {{slotIdx}}
+        }
+        """);
+    }
+    #endregion
+
     public JsonObject lastOp { get; private set; }
-    async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry=false)
+    async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry = false, bool silent = false, bool witholdChanges = false)
     {
         if (!account.isOwned)
         {
@@ -1305,14 +1395,21 @@ public class GameProfile
             {
                 actingAccount.ForceExpireToken();
                 await actingAccount.Authenticate();
-                return await PerformOperationUnsafe(operation, content, true);
+                return await PerformOperationUnsafe(operation, content, true, silent, witholdChanges);
             }
             else
             {
-                var _ = GenericConfirmationWindow.ShowErrorForWebResult(result);
+                GD.Print($"operation failed ({operation}({(account.isOwned ? "client" : "public")}) in {profileId} as {account.DisplayName})");
+                if (!silent)
+                {
+                    _ = GenericConfirmationWindow.ShowErrorForWebResult(result);
+                }
             }
             return null;
         }
+
+        if (witholdChanges)
+            return [];
 
         var changes = result["profileChanges"]?.AsArray();
 
@@ -1395,7 +1492,7 @@ public class GameProfile
         }
         printChanges = false;
 
-        GD.Print($"operation complete ({operation} in {profileId} as {account.DisplayName})");
+        GD.Print($"operation complete ({operation}({(account.isOwned ? "client" : "public")}) in {profileId} as {account.DisplayName})");
 
         if (result.ContainsKey("notifications"))
         {
@@ -1785,7 +1882,7 @@ public class GameItem
         }
         _searchTags = template?.GenerateSearchTags(assumeUncommon)?.SafeDeepClone();
         if (_searchTags is null)
-            return [.. templateId.Split(":")];
+            return [.. templateId?.Split(":")];
         if (attributes?["inventory_overflow_date"] is not null)
             _searchTags.Add("Overflow");
         if (attributes?["personality"]?.ToString() is string rawPersonality)

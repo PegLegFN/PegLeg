@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<GameItem>
+public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<GameItem>, ISelectableElementProvider<GameItem>
 {
     public static GameItemSelector Instance { get; private set; }
 
@@ -286,9 +286,31 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
             container.UpdateList(true);
     }
 
-    public bool ItemIsSelected(GameItem item) => multiselectMode && selectedItems.Contains(item);
+    public bool IsSelectable(GameItem item) => selectablePredicate.Try(item);
+    public bool IsSelected(GameItem item) => multiselectMode && selectedItems.Contains(item);
+    public Color GetSelectableColor(GameItem item)
+    {
+        if (!selectablePredicate.Try(item))
+            return unselectableTintColor;
+        if (!IsSelected(item))
+            return Colors.Transparent;
+        if (item?.isCollectedCache ?? false)
+            return collectionTintColor;
+        return selectedTintColor;
+    }
+    public Texture2D GetSelectableIcon(GameItem item)
+    {
+        if (!selectablePredicate.Try(item))
+            return unselectableMarkerTex;
+        if (!IsSelected(item))
+            return null;
+        if (item?.isCollectedCache ?? false)
+            return collectionMarkerTex;
+        return selectedMarkerTex;
+    }
 
-    public void OnElementSelected(int index)
+
+    public void OnElementSelected(int index, string context)
     {
         if (isSelecting && selectablePredicate.Try(items[index]))
         {

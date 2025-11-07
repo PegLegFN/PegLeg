@@ -1,0 +1,99 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr3cku76polyu"]
+
+[ext_resource type="Script" uid="uid://cyjlkxl6ndqqf" path="res://Scripts/UserInterface/Extra/PartyLoadoutsInterface.cs" id="1_mh2xe"]
+[ext_resource type="PackedScene" uid="uid://cbwhly7mce0o5" path="res://Scenes/HeroLoadout/heroLoadoutPanel.tscn" id="1_sriuo"]
+
+[node name="Team Loadouts" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." node_paths=PackedStringArray("partyLoadoutPanels", "partyUsernames")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_mh2xe")
+partyLoadoutPanels = [NodePath("PanelContainer/HBoxContainer/PanelContainer3/VBoxContainer/HeroLoadoutPanel"), NodePath("PanelContainer/HBoxContainer/PanelContainer4/VBoxContainer/HeroLoadoutPanel"), NodePath("PanelContainer/HBoxContainer/PanelContainer5/VBoxContainer/HeroLoadoutPanel")]
+partyUsernames = [NodePath("PanelContainer/HBoxContainer/PanelContainer3/VBoxContainer/Label"), NodePath("PanelContainer/HBoxContainer/PanelContainer4/VBoxContainer/Label"), NodePath("PanelContainer/HBoxContainer/PanelContainer5/VBoxContainer/Label")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"LargeButton"
+theme_override_font_sizes/font_size = 24
+text = " Fetch Teammate Loadouts "
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5PadB"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "TomatechGames"
+
+[node name="HeroLoadoutPanel" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer3/VBoxContainer" instance=ExtResource("1_sriuo")]
+layout_mode = 2
+useActiveAccount = false
+interactable = false
+
+[node name="PanelContainer4" type="PanelContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer4"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer4/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "TomatechGames"
+
+[node name="HeroLoadoutPanel" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer4/VBoxContainer" instance=ExtResource("1_sriuo")]
+layout_mode = 2
+useActiveAccount = false
+interactable = false
+
+[node name="PanelContainer5" type="PanelContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer5"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer5/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "TomatechGames"
+
+[node name="HeroLoadoutPanel" parent="VBoxContainer/PanelContainer/HBoxContainer/PanelContainer5/VBoxContainer" instance=ExtResource("1_sriuo")]
+layout_mode = 2
+useActiveAccount = false
+interactable = false
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="VBoxContainer" method="Connect"]

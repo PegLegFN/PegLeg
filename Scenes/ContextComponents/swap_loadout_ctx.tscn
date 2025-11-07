@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://yp3kboip6kk1"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_uml85"]
+[ext_resource type="Script" uid="uid://hnmyjk3xngt2" path="res://Scripts/ContextMenu/Components/SwapLoadoutCtx.cs" id="2_kf8y7"]
+[ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="3_kf8y7"]
+
+[node name="SwapLoadoutCtx" node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_uml85")]
+script = ExtResource("2_kf8y7")
+disabledPanel = NodePath("Disabled")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" index="0"]
+texture = ExtResource("3_kf8y7")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
+text = "Swap Loadout"
+
+[connection signal="pressed" from="TextureButton" to="." method="Inspect"]

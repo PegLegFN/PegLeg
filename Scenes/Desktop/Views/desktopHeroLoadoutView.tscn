@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4k4ku3cjmqku"]
+[gd_scene load_steps=9 format=3 uid="uid://b4k4ku3cjmqku"]
 
-[ext_resource type="PackedScene" uid="uid://cctqgr5s4bkgl" path="res://Scenes/HeroLoadout/loadout_slot_grid.tscn" id="1_i1bxd"]
-[ext_resource type="PackedScene" uid="uid://ci30x54kles27" path="res://Scenes/HeroLoadout/heroLoadoutPanelLarge.tscn" id="1_pwith"]
+[ext_resource type="Script" uid="uid://c3p5k7vank2bh" path="res://Scripts/HeroLoadout/HeroLoadoutSlotSelector.cs" id="1_kwlnb"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_ht23k"]
 [ext_resource type="PackedScene" uid="uid://fdp52f4byq7k" path="res://Scenes/HeroLoadout/loadout_slot_list.tscn" id="2_kwlnb"]
 [ext_resource type="PackedScene" uid="uid://cbwhly7mce0o5" path="res://Scenes/HeroLoadout/heroLoadoutPanel.tscn" id="2_qqdfd"]
 [ext_resource type="Texture2D" uid="uid://tpjage78y2k4" path="res://Images/InterfaceIcons/OrArrowHDRight.png" id="2_wrnfi"]
-[ext_resource type="Texture2D" uid="uid://ctxcwnxsjwlga" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-StormKingHammer-L.png" id="3_ht23k"]
+[ext_resource type="Texture2D" uid="uid://b14huoyr6f3me" path="res://Images/InterfaceIcons/OrArrowHDDown.png" id="3_1fwhb"]
+[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_kwlnb"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="8_4wsl6"]
 
 [node name="Hero Loadout" type="MarginContainer"]
 anchors_preset = 15
@@ -17,226 +19,122 @@ grow_vertical = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer"]
+[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" node_paths=PackedStringArray("linkedPanel", "loadoutList")]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("1_kwlnb")
+linkedPanel = NodePath("../LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel")
+loadoutList = NodePath("PanelContainer/VBoxContainer/ScrollContainer2")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutSlots"]
 layout_mode = 2
 size_flags_horizontal = 4
-horizontal_scroll_mode = 0
+theme_type_variation = &"Panel5Pad"
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer"]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search Loadouts (unfinished)"
+editable = false
+
+[node name="CheckButton" type="CheckButton" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Heroes"
+script = ExtResource("2_ht23k")
+section = "inventory"
+key = "loadout_list_heroes"
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("3_kwlnb")
+elementSpace = 4.0
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/VBoxContainer")
+elementScene = ExtResource("2_kwlnb")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+mouse_filter = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer"]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-columns = 2
+size_flags_horizontal = 3
 
-[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+[node name="Offset" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 0
 
-[node name="LoadoutSlotEntry3" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry4" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry5" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry6" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry7" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry8" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry9" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry10" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry11" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry12" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry13" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry14" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry15" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry16" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry17" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry18" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry19" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="LoadoutSlotEntry20" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("1_i1bxd")]
-visible = false
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry3" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry4" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry5" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry6" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry7" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry8" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry9" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry10" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry11" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry12" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry13" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry14" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry15" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry16" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry17" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry18" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry19" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
-layout_mode = 2
-
-[node name="LoadoutSlotEntry20" parent="HBoxContainer/LoadoutSlots/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_kwlnb")]
+[node name="Padding" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="LoadoutPreview" type="MarginContainer" parent="HBoxContainer"]
-custom_minimum_size = Vector2(725, 0)
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_right = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutPreview"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="Loadouts" type="HBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/HBoxContainer"]
+[node name="IncomingLodout" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts"]
+visible = false
 layout_mode = 2
-texture = ExtResource("3_ht23k")
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" instance=ExtResource("2_kwlnb")]
+layout_mode = 2
+
+[node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout"]
+layout_mode = 2
+theme_override_constants/margin_top = -30
+theme_override_constants/margin_bottom = -15
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout/OverwriteIcon"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_1fwhb")
 expand_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/HBoxContainer/MarginContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "Loadout Name Here"
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-
-[node name="IncomingLoadout" parent="HBoxContainer/LoadoutPreview/VBoxContainer2" instance=ExtResource("1_pwith")]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-
-[node name="Control" type="Control" parent="HBoxContainer/LoadoutPreview/VBoxContainer2"]
-custom_minimum_size = Vector2(0, 16)
+[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" instance=ExtResource("2_kwlnb")]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer2"]
+[node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts"]
+visible = false
 layout_mode = 2
-theme_type_variation = &"ActionButton"
-theme_override_font_sizes/font_size = 24
-text = "Apply Changes"
+theme_override_constants/margin_left = -30
+theme_override_constants/margin_right = -15
 
-[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer2"]
-layout_mode = 2
-theme_type_variation = &"LargeButton"
-theme_override_font_sizes/font_size = 24
-text = "Load Preset"
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/OverwriteIcon"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -244,28 +142,57 @@ size_flags_vertical = 4
 texture = ExtResource("2_wrnfi")
 expand_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts"]
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="CurrentLoadout" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
-size_flags_vertical = 4
+size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 text = "Loadout Slot 20"
 horizontal_alignment = 1
 
-[node name="CurrentLoadout" parent="HBoxContainer/LoadoutPreview/VBoxContainer" instance=ExtResource("2_qqdfd")]
+[node name="HeroLoadoutPanel" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout" instance=ExtResource("2_qqdfd")]
 layout_mode = 2
 size_flags_horizontal = 8
+useActiveAccount = false
 interactable = false
 
-[node name="Control" type="Control" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
-custom_minimum_size = Vector2(0, 16)
+[node name="Actions" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+custom_minimum_size = Vector2(300, 110)
 layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
 
-[node name="Button" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+[node name="Button" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 24
-text = "Set Active Slot"
+text = "Apply Changes"
+
+[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions"]
+layout_mode = 2
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 24
+text = "Set As Active Slot"
+
+[node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2"]
+script = ExtResource("8_4wsl6")
+
+[node name="Button3" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+theme_override_font_sizes/font_size = 24
+text = "Load Preset"
+
+[connection signal="IsCurrent" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2/InvertVisible" method="EmitInverted"]
+[connection signal="LoadoutName" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/Label" method="set_text"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
+[connection signal="InvertedValue" from="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2/InvertVisible" to="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2" method="set_visible"]

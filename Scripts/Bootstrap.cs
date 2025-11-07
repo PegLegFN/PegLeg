@@ -18,6 +18,8 @@ public partial class Bootstrap : Node
     [Export]
     Vector2I windowSize = new(1350, 720);
     [Export]
+    Control background;
+    [Export]
     Control curtain;
     [Export]
     Label progressLabel;
@@ -57,10 +59,16 @@ public partial class Bootstrap : Node
         window.MoveToCenter();
         progressLabel.Text = "Preparing...";
 
+#if GODOT_ANDROID
+        background.Visible = true;
+        //DisplayServer.ScreenSetOrientation(DisplayServer.ScreenOrientation.Portrait);
+#endif
+
         if (StartMinimised)
             window.Mode = Window.ModeEnum.Minimized;
         UseShareMenu |= OS.HasFeature("editor") && shareInEditor;
 
+#if GODOT_WINDOWS
         if (FileAccess.FileExists(processLockPath))
         {
             using var processFile = FileAccess.Open(processLockPath, FileAccess.ModeFlags.Read);
@@ -109,11 +117,14 @@ public partial class Bootstrap : Node
             var currentPid = OS.GetProcessId();
             processFile.Store64((ulong)currentPid);
         }
+#endif
 
 
         try
         {
+#if GODOT_WINDOWS
             NamedPipeContainer.OpenPipe();
+#endif
             await Initialise(window);
         }
         catch(Exception e)
@@ -128,13 +139,18 @@ public partial class Bootstrap : Node
     {
         AppConfig.PreloadConfig();
 
+#if GODOT_WINDOWS
         if (FileAccess.FileExists(Helpers.GlobalisePath("res://update.exe")))
             DirAccess.RemoveAbsolute(Helpers.GlobalisePath("res://update.exe"));
 
+        var oldPackFolder = Helpers.GlobalisePath("res://External");
+        if (DirAccess.DirExistsAbsolute(oldPackFolder))
+            DeleteContents(oldPackFolder);
+
         var oldExternalFolder = Helpers.GlobalisePath("res://External");
-        GD.Print("External: " + oldExternalFolder);
         if (!Engine.IsEditorHint() && DirAccess.DirExistsAbsolute(oldExternalFolder))
             DeleteContents(oldExternalFolder);
+#endif
 
         //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
         await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, p => progressLabel.Text = $"{p}...");

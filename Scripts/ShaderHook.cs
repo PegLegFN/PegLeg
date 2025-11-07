@@ -93,7 +93,7 @@ public partial class ShaderHook : Control
 
     ShaderMaterial ShaderMat => Material as ShaderMaterial;
 
-    public void SetShaderBool(bool val, string property)=>
+    public void SetShaderBool(bool val, string property) =>
         ShaderMat.SetShaderParameter(property, val);
 
     public int GetShaderInt(string property) =>
@@ -103,15 +103,15 @@ public partial class ShaderHook : Control
 
     public float GetShaderFloat(string property) =>
         (float)ShaderMat.GetShaderParameter(property);
-    public void SetShaderFloat(float val, string property)=>
+    public void SetShaderFloat(float val, string property) =>
         ShaderMat.SetShaderParameter(property, val);
 
-    public void SetShaderColor(Color val, string property)=>
+    public void SetShaderColor(Color val, string property) =>
         ShaderMat.SetShaderParameter(property, val);
 
-    public void SetShaderVector(Vector2 val, string property)=>
+    public void SetShaderVector(Vector2 val, string property) =>
         ShaderMat.SetShaderParameter(property, val);
 
-    public void SetShaderTexture(Texture val, string property)=>
+    public void SetShaderTexture(Texture val, string property) =>
         ShaderMat.SetShaderParameter(property, val);
 }

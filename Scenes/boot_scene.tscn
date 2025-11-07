@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcllm2n3omok8"]
+[gd_scene load_steps=9 format=3 uid="uid://bcllm2n3omok8"]
 
 [ext_resource type="Script" uid="uid://b0j1smbi1nuqg" path="res://Scripts/Bootstrap.cs" id="1_6qsod"]
 [ext_resource type="PackedScene" uid="uid://ysh5ajklts1q" path="res://Scenes/Desktop/desktopOnboarding.tscn" id="2_frb0b"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ceg4ywbjaq5o" path="res://Scenes/SharedImageGenerators/shareableMenu.tscn" id="4_efo63"]
 [ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="4_p8jt0"]
 [ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="5_efo63"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="5_g0s4o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g0s4o"]
 shader = ExtResource("4_p8jt0")
@@ -15,18 +16,26 @@ shader_parameter/Expo = true
 shader_parameter/AlphaStart = 0.0
 shader_parameter/CornerRadius = 39.05
 
-[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("curtain", "progressLabel")]
+[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("background", "curtain", "progressLabel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6qsod")
+background = NodePath("TextureRect")
 curtain = NodePath("Curtain")
 progressLabel = NodePath("MarginContainer/Label")
 desktopOnboarding = ExtResource("2_frb0b")
 desktopInterface = ExtResource("3_js2t5")
 shareMenu = ExtResource("4_efo63")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 2
+texture = ExtResource("5_g0s4o")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2

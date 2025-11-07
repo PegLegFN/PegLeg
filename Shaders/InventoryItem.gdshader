@@ -38,25 +38,25 @@ void fragment() {
 	vec2 backgroundUV = adaptToAspect(ControlSize, vec2(0.5), vec2(1.0), UV, false);
 	vec4 texCol = texture(TEXTURE, adaptedUV);
 	vec4 backgroundCol = modulate;
-	
+
 	if(IsHero)
 	{
 		float radialVal = radial(backgroundUV, vec2(0.5,1.05));
 		float beams = clamp(1.1-floor(abs(radialVal)*5.0)/10.0, 0.5, 1);
 		float glow = clamp(1.0-(distance(backgroundUV, vec2(0.5, 0.7))), 0, 1);
 		float result = glow*beams*1.75;
-		
+
 		float tri1 = min(triTex(backgroundUV, 0.02).r * 3.0, 1);
 		float tri2 = min(triTex(backgroundUV, 0.025).g * 4.0, 1);
 		float tri3 = min(triTex(backgroundUV, 0.015).b * 4.0, 1);
 		//backgroundCol = mix(backgroundCol,modulate*0.75 ,  tri1);
 		//backgroundCol = mix(backgroundCol,modulate*1.0,  tri2);
 		//backgroundCol = mix(backgroundCol,mix(modulate, vec4(1), 0.25) ,  tri3);
-		
+
 		result = mix(result, 1.0, tri3);
 		result = mix(result, 1.5, tri2);
 		result = mix(result, 0.75, tri1);
-		
+
 		backgroundCol = min(result, 1)*mix(modulate, vec4(1),max(0, result-1.0));
 		float darkSlice = min(1.0-min((backgroundUV.y+(backgroundUV.x*0.15)-0.25)*100.0, 1), 1);
 		backgroundCol = mix(backgroundCol, backgroundCol*0.7, darkSlice);
@@ -65,11 +65,11 @@ void fragment() {
 	{
 		float noiseVal = texture(Noise, backgroundUV).r;
 		float wave = clamp(((backgroundUV.y-0.1)-noiseVal*0.3)*100.0, 0, 1)*0.1;
-		
+
 		float xGrid = gridFunc(backgroundUV.x-0.5, 20, 0.1);
 		float yGrid = gridFunc(backgroundUV.y, 20, 0.1);
 		float fullGrid = min(xGrid+yGrid, 1)*0.3;
-		
+
 		float result = min(1, fullGrid+(wave*(1.0-backgroundUV.y)))+0.1;
 		backgroundCol = mix(vec4(1), modulate, result);
 	}

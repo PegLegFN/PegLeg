@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://co3siul5t6nvt"]
+
+[ext_resource type="PackedScene" uid="uid://csgloybnhxnil" path="res://Scenes/HeroLoadout/loadout_slot_hero.tscn" id="1_d4e5h"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="2_782kb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kt32r"]
+resource_local_to_scene = true
+shader = ExtResource("2_782kb")
+shader_parameter/ControlSize = Vector2(32, 32)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 5.0
+shader_parameter/ClipOOB = false
+
+[node name="LoadoutSlotCommander" node_paths=PackedStringArray("heroCommanderPerkEntry") instance=ExtResource("1_d4e5h")]
+heroCommanderPerkEntry = NodePath("PerkEntry")
+useHeroPerkDescription = false
+useCommanderPerkDescription = true
+
+[node name="HeroIcon" parent="." index="4"]
+material = SubResource("ShaderMaterial_kt32r")

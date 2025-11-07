@@ -1,0 +1,394 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmkj8rbbrlb6w"]
+
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="1_8md8x"]
+[ext_resource type="PackedScene" uid="uid://u3qgqc6gx0hg" path="res://Scenes/Accounts/xmpp_account_entry.tscn" id="1_w0w1w"]
+[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="2_xeyww"]
+[ext_resource type="Shader" uid="uid://17ec5ugjn0qv" path="res://Shaders/CircleBaseMask.gdshader" id="4_b1ibn"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="5_djj1p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pkso0"]
+shader = ExtResource("4_b1ibn")
+
+[node name="Virtual Party" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Party Data"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = 0
+text = "Current Party ID:
+b28a78cb34bd4294a8f32d55e2b94ed7"
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/Button"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_8md8x")
+expand_mode = 1
+
+[node name="Button2" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/Button2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_xeyww")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Link/Create Party"
+
+[node name="Button2" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Force Create Party"
+
+[node name="Label3" type="Label" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Members:"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AccountEntry" parent="HBoxContainer/PanelContainer/VBoxContainer/VBoxContainer2" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry2" parent="HBoxContainer/PanelContainer/VBoxContainer/VBoxContainer2" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry3" parent="HBoxContainer/PanelContainer/VBoxContainer/VBoxContainer2" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry4" parent="HBoxContainer/PanelContainer/VBoxContainer/VBoxContainer2" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Promote"
+
+[node name="Button2" type="Button" parent="HBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Kick"
+
+[node name="PanelContainer2" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Friends"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Search Friends"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AccountEntry" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry2" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry3" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry4" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry5" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry6" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry7" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry8" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry9" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry10" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry11" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry12" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry13" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry14" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="AccountEntry15" parent="HBoxContainer/PanelContainer2/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Invite to party"
+
+[node name="Button2" type="Button" parent="HBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Request to join"
+
+[node name="PanelContainer3" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/PanelContainer3/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Notifications"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/PanelContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/PanelContainer3/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AccountEntry" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/MarginContainer" index="1"]
+visible = false
+layout_mode = 2
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = -2
+columns = 2
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/GridContainer"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Icon2" type="TextureRect" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/GridContainer"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Icon3" type="TextureRect" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/GridContainer"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Icon4" type="TextureRect" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/GridContainer"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Label" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+text = "Party Invitation"
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="2"]
+layout_mode = 2
+theme_override_constants/h_separation = -2
+theme_override_constants/v_separation = -2
+columns = 3
+
+[node name="Icon" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/GridContainer" index="0"]
+visible = false
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Icon2" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/GridContainer" index="1"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Icon3" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/GridContainer" index="2"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Icon4" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/GridContainer" index="3"]
+material = SubResource("ShaderMaterial_pkso0")
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_djj1p")
+expand_mode = 1
+
+[node name="Label" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
+text = "TomatechGames (Archer, yeet_crab_mum, jxvkk)"
+
+[node name="AccountEntry2" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_w0w1w")]
+layout_mode = 2
+
+[node name="Label" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+text = "Join Request"
+
+[node name="Label" parent="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
+text = "TomatechGames"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer3/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Confirm"
+
+[node name="Button2" type="Button" parent="HBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Dismiss"
+
+[editable path="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry"]
+[editable path="HBoxContainer/PanelContainer3/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/AccountEntry2"]

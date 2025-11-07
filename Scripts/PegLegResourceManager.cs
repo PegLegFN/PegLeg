@@ -11,7 +11,7 @@ using FileAccess = Godot.FileAccess;
 
 public class PegLegResourceManager
 {
-    public const string packageFolderPath = "res://PegLegResourcePacks/";
+    public const string packageFolderPath = "user://PegLegResourcePacks/";
     public const string resourcePath = "res://PegLegResources/";
     public const string fallbackResourcePath = "res://FallbackResources/";
     public const string overrideResourcePath = "user://CustomResources/";
@@ -39,7 +39,6 @@ public class PegLegResourceManager
     }
     record struct PackageVersion(GithubHelper.ReleaseVersion version) : IComparable<PackageVersion>
     {
-
         public readonly int CompareTo(PackageVersion other) =>
             version.CompareTo(other.version);
 
@@ -61,6 +60,8 @@ public class PegLegResourceManager
             if (version.minor > 0)
                 ProjectSettings.LoadResourcePack(MajorBasis.LocalPackagePath, false);
         }
+
+        public override string ToString() => version.ToString();
     }
 
     public static async Task FetchAndLoadPackages(int targetMajor, int targetMinor, Action<string> onProgress = null)
@@ -203,10 +204,10 @@ public class PegLegResourceManager
             {
                 var itemData = LoadResourceObj($"GameAssets/NamedItems/{curName}.json", false).DetachAll();
                 GD.Print($"loaded \"GameAssets/NamedItems/{curName}.json\", with {itemData.Length} items");
-                Parallel.ForEach(itemData, kvp =>
+                foreach (var kvp in itemData)
                 {
                     namedItemsCC.TryAdd(kvp.Key, new(kvp.Value.AsObject()));
-                });
+                }
             });
         });
         await Task.WhenAll(tasks);
@@ -219,7 +220,7 @@ public class PegLegResourceManager
             if (templatesPerFrame < 0)
             {
                 await Helpers.WaitForFrame();
-                templatesPerFrame = 60;
+                templatesPerFrame = OS.HasFeature("mobile") ? 10 : 60;
             }
         }
         GD.Print($"loaded {namedItemsCC.Count} template textures");
@@ -700,7 +701,10 @@ public class GameItemTemplate
         {
             var type = rawData.TryGetPropertyValue("Type", out var typeNode) ? typeNode.ToString() : null;
             if (type is null)
+            {
                 GD.Print("WOAH NELLY");
+                return "";
+            }
             return type;
         }
     }

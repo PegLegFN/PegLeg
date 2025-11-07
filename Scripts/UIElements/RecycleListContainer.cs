@@ -109,11 +109,13 @@ public partial class RecycleListContainer : ScrollContainer
                     //complete clear and relink
                     foreach (var item in activeEntries)
                     {
+                        //GD.Print("force clearing " + item.Key);
                         item.Value.ClearRecycleIndex();
                         pooledEntries.Enqueue(item.Value);
                         item.Value.node.Visible = false;
                     }
                     activeEntries.Clear();
+                    //GD.Print($"forcing from {newStartingIndex} to {newEndIndex}");
                     for (int i = newStartingIndex; i < newEndIndex; i++)
                     {
                         //GD.Print("force adding " + i);
@@ -132,7 +134,8 @@ public partial class RecycleListContainer : ScrollContainer
                         for (int i = lastStartingIndex; i < newStartingIndex; i++)
                         {
                             //GD.Print("removing " + i);
-                            var item = activeEntries[i];
+                            if (!activeEntries.TryGetValue(i, out var item))
+                                continue;
                             activeEntries[i].ClearRecycleIndex();
                             pooledEntries.Enqueue(item);
                             activeEntries.Remove(i);
@@ -145,7 +148,8 @@ public partial class RecycleListContainer : ScrollContainer
                         for (int i = newEndIndex; i < lastEndIndex; i++)
                         {
                             //GD.Print("removing " + i);
-                            var item = activeEntries[i];
+                            if (!activeEntries.TryGetValue(i, out var item))
+                                continue;
                             activeEntries[i].ClearRecycleIndex();
                             pooledEntries.Enqueue(item);
                             activeEntries.Remove(i);
@@ -251,10 +255,19 @@ public interface IRecyclableElementProvider
 {
     public int GetRecycleElementCount();
     public void OnElementSpawned(IRecyclableEntry entry) { }
-    public void OnElementSelected(int index) { }
+    public void OnElementSelected(int index, string context = "") { }
 }
 
 public interface IRecyclableElementProvider<T> : IRecyclableElementProvider
 {
     public T GetRecycleElement(int index);
+}
+
+public interface ISelectableElementProvider<T>
+{
+    public bool IsSelected(T value);
+    public bool IsSelectable(T value) => true;
+
+    public Color GetSelectableColor(T value) => IsSelectable(value) ? Colors.Red : (IsSelected(value) ? Colors.Green : Colors.Transparent);
+    public Texture2D GetSelectableIcon(T value) => null;
 }

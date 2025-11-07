@@ -97,7 +97,7 @@ public partial class CodeLoginLabel : Node
     async void CheckForCode()
     {
         var linkCheckRequest = await GameClient.CheckLoginLinkCode();
-        if (linkCheckRequest is null || linkCheckRequest["errorMessage"] is not null)
+        if (linkCheckRequest?["access_token"] is not null)
             return;
 
         started = false;
@@ -113,7 +113,8 @@ public partial class CodeLoginLabel : Node
         EmitSignal(SignalName.LoginActiveChanged, false);
 
         EmitSignal(SignalName.UserCodeChanged, "");
-        GameAccount.LoginToAccount(linkCheckRequest.AsObject());
+
+        GameAccount.LoginToAccount(linkCheckRequest?.AsObject());
         return;
     }
 }

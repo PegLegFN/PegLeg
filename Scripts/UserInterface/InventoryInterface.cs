@@ -381,7 +381,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         itemList.UpdateList(true);
     }
 
-    public void OnElementSelected(int index)
+    public void OnElementSelected(int index, string context)
     {
         GameItemViewer.Instance.ShowItem(currentItems[index]);
     }

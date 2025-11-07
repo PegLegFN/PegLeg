@@ -1,0 +1,78 @@
+[gd_scene load_steps=26 format=3 uid="uid://dt403r6613tos"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_p7b2a"]
+[ext_resource type="Script" uid="uid://objskpkxjfqt" path="res://Scripts/UserInterface/Settings/MiscSettings.cs" id="2_dybhj"]
+[ext_resource type="Script" uid="uid://ciko6xgyer33u" path="res://Scripts/UIElements/VerticalTabContainer.cs" id="2_lhoqf"]
+[ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="2_y75ef"]
+[ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="3_dewmg"]
+[ext_resource type="PackedScene" uid="uid://dedxnr814fng7" path="res://Scenes/verticalTab.tscn" id="3_h1p2y"]
+[ext_resource type="Script" uid="uid://bpj23p4ewlb5r" path="res://Scripts/UserInterface/Settings/ThemeSettings.cs" id="4_kkpd6"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_1lymk"]
+[ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="5_7ebkc"]
+[ext_resource type="Script" uid="uid://yme0qwqj3yob" path="res://Scripts/Config/ConfigFloatSwitchHook.cs" id="6_w03hs"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_wim73"]
+[ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="8_nh2gq"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="9_yv42k"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="12_12lms"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="12_ld0ka"]
+[ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="12_pwy1u"]
+[ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="12_v5jo8"]
+[ext_resource type="Script" uid="uid://dull1xj5ergmg" path="res://Scripts/UserInterface/Settings/UpdateChecker.cs" id="17_e6sed"]
+[ext_resource type="Script" uid="uid://cddr668av6e55" path="res://Scripts/DiscordWebhooks/DiscordWebhookSettings.cs" id="17_qg6jm"]
+[ext_resource type="PackedScene" uid="uid://dwba88ym1rkl5" path="res://Scenes/updateVersion.tscn" id="17_xu4j7"]
+
+[sub_resource type="Gradient" id="Gradient_c1ulb"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_w03hs"]
+gradient = SubResource("Gradient_c1ulb")
+fill = 1
+fill_from = Vector2(1, 0.5)
+fill_to = Vector2(0.5, 0.5)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mjqpy"]
+shader = ExtResource("5_1lymk")
+shader_parameter/ControlSize = Vector2(0, 200)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="Gradient" id="Gradient_ew55o"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_eiysq"]
+gradient = SubResource("Gradient_ew55o")
+fill = 1
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(1, 1)
+metadata/_snap_enabled = true
+
+[node name="SettingsWindow" instance=ExtResource("1_p7b2a")]
+tweenTime = null
+shrunkScale = null
+startOpen = null
+useSounds = null
+isUserClosable = true
+
+[node name="Background" parent="." index="0"]
+Text = ""
+Texture = null
+syncTimeUntil = 0
+timeOffset = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="0"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+use_top_left = true
+
+[node name="TabContainer" type="TabContainer" parent="Contr

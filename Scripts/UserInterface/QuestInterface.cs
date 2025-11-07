@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 public partial class AppConfig
 {
@@ -63,11 +64,27 @@ public partial class QuestInterface : Control
         //when no longer in mission, claim any completed quests immediately, then resume reloading quests
 
         if (!AppConfig.Get("advanced", "suspend_quests", false))
+        {
             await GameAccount.activeAccount.ClientQuestLoginCampaign();
+            if (AppConfig.Get("advanced", "bulk_quest_refresh", false))
+                BulkClientQuestLogin(GameAccount.activeAccount);
+        }
 
         questsDirty = true;
         if (IsVisibleInTree())
             LoadQuests();
+    }
+
+    private static async void BulkClientQuestLogin(GameAccount except)
+    {
+        await Task.WhenAll(GameAccount.OwnedAccounts.Select(a => a != except ? BulkClientQuestLoginSubtask(a) : Task.CompletedTask));
+    }
+
+    private static async Task BulkClientQuestLoginSubtask(GameAccount target)
+    {
+        if (!await target.Authenticate())
+            return;
+        await target.ClientQuestLoginCampaign();
     }
 
     public override void _ExitTree()

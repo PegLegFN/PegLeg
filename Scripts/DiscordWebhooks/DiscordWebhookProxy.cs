@@ -62,7 +62,10 @@ public partial class DiscordWebhookProxy
         AppConfig.Set("webhooks", InternalName + "_sync", syncId);
     }
 
-    public async Task Execute()
+    public bool UsesSync => AppConfig.Get("webhooks", InternalName + "_useSync", false);
+
+    public async Task Execute() => await Execute(false);
+    public async Task Execute(bool skipSync)
     {
         if (!AppConfig.Get("advanced", "webhooks", false))
             return;
@@ -74,33 +77,37 @@ public partial class DiscordWebhookProxy
             GD.Print($"WH url failed: \"{urlEnding}\"");
             return;
         }
-        var syncId = AppConfig.Get("webhooks", InternalName + "_sync", "");
-        var syncThreadId = AppConfig.Get("webhooks", InternalName + "_syncThread", "");
-        var editResponse = await discordClient
-            .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?wait=true&thread_id={syncThreadId}", HttpMethod.Patch)
-            .SetJsonContent(new JsonObject() { ["content"] = uuid })
-            .Send();
-        if (!editResponse.IsSuccessStatusCode)
+
+        if(AppConfig.Get("webhooks", InternalName + "_useSync", false) && !skipSync)
         {
-            GD.Print($"WH edit response failed: {editResponse.ReasonPhrase}");
-            return;
+            var syncId = AppConfig.Get("webhooks", InternalName + "_sync", "");
+            var syncThreadId = AppConfig.Get("webhooks", InternalName + "_syncThread", "");
+            var editResponse = await discordClient
+                .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?wait=true&thread_id={syncThreadId}", HttpMethod.Patch)
+                .SetJsonContent(new JsonObject() { ["content"] = uuid })
+                .Send();
+            if (!editResponse.IsSuccessStatusCode)
+            {
+                GD.Print($"WH edit response failed: {editResponse.ReasonPhrase}");
+                return;
+            }
+            await Task.Delay(1000);
+            var winnerResponse = await discordClient
+                .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?thread_id={syncThreadId}", HttpMethod.Get)
+                .Send();
+            if (!winnerResponse.IsSuccessStatusCode)
+            {
+                GD.Print($"winner response failed: {winnerResponse.ReasonPhrase}");
+                return;
+            }
+            var winnerJson = await winnerResponse.Content.ReadFromJsonAsync<JsonObject>();
+            if (winnerJson["content"]?.ToString() != uuid)
+            {
+                GD.Print($"WH did not win (\"{winnerJson["content"]?.ToString()}\" != \"{uuid}\")");
+                return;
+            }
+            GD.Print("WH winner");
         }
-        await Task.Delay(1000);
-        var winnerResponse = await discordClient
-            .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?thread_id={syncThreadId}", HttpMethod.Get)
-            .Send();
-        if (!winnerResponse.IsSuccessStatusCode)
-        {
-            GD.Print($"winner response failed: {winnerResponse.ReasonPhrase}");
-            return;
-        }
-        var winnerJson = await winnerResponse.Content.ReadFromJsonAsync<JsonObject>();
-        if (winnerJson["content"]?.ToString() != uuid)
-        {
-            GD.Print($"WH did not win (\"{winnerJson["content"]?.ToString()}\" != \"{uuid}\")");
-            return;
-        }
-        GD.Print("WH winner");
 
         var imageTask = imageGenerator?.Invoke();
         if (imageTask is null)

@@ -10,6 +10,8 @@ public partial class DiscordWebhookSettings : Node
     [Export]
     ConfigTextHook urlEditor;
     [Export]
+    ConfigToggleHook syncToggleEditor;
+    [Export]
     ConfigTextHook syncEditor;
     [Export]
     ConfigTextHook threadEditor;
@@ -18,6 +20,7 @@ public partial class DiscordWebhookSettings : Node
     {
         toggleEditor.UpdateTargetSetting("webhooks", internalName + "_enabled");
         urlEditor.UpdateTargetSetting("webhooks", internalName+"_url");
+        syncToggleEditor.UpdateTargetSetting("webhooks", internalName + "_useSync");
         syncEditor.UpdateTargetSetting("webhooks", internalName + "_sync");
         threadEditor.UpdateTargetSetting("webhooks", internalName + "_syncThread");
     }

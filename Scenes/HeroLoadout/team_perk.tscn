@@ -1,74 +1,182 @@
-[gd_scene load_steps=10 format=3 uid="uid://ewoytphqxrj1"]
+[gd_scene load_steps=16 format=3 uid="uid://ewoytphqxrj1"]
 
-[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_2mltm"]
-[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_jq2el"]
-[ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="1_kpu7q"]
-[ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="2_kvbdw"]
+[ext_resource type="Script" uid="uid://ktfvvrrnivr6" path="res://Scripts/UserInterface/ListEntries/TeamPerkEntry.cs" id="1_jgwn6"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Sh_Materials/HeroLoadoutBGPulse.tres" id="2_cxxrj"]
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="2_w5yui"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_4jiys"]
+[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="4_botxt"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="4_kvbdw"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_40614"]
+[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="8_5c780"]
+[ext_resource type="Texture2D" uid="uid://dddk02ksaa86x" path="res://Images/InterfaceIcons/BanjoPlaceholders/Perk-TeamPerk-BlastFromThePast-128.png" id="8_717dr"]
+[ext_resource type="Texture2D" uid="uid://cvsasjr5owfgm" path="res://Images/InterfaceIcons/T-Icon-TeamPerkSlot-128x.png" id="9_717dr"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="9_st0ce"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="10_botxt"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="11_gpjek"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4nfbh"]
-resource_local_to_scene = true
-shader = ExtResource("1_kpu7q")
-shader_parameter/ControlSize = Vector2(192, 26)
-shader_parameter/scale = 0.5
-shader_parameter/Rand = 0.949645
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_st0ce"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.35, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_717dr"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="TeamPerk" type="MarginContainer"]
-script = ExtResource("1_jq2el")
+custom_minimum_size = Vector2(200, 44)
+offset_right = 200.0
+offset_bottom = 44.0
+script = ExtResource("1_jgwn6")
+activeColor = Color(0.23, 0.910167, 1, 1)
+inactiveColor = Color(0.7, 0.7, 0.7, 1)
+warningColor = Color(1, 0.23, 0.23, 1)
+defaultClearIconToNull = true
 
-[node name="Panel" type="TextureRect" parent="."]
-modulate = Color(0.51, 0.804, 1, 1)
-texture_repeat = 2
-material = SubResource("ShaderMaterial_4nfbh")
+[node name="LoadoutBG" type="Panel" parent="."]
+unique_name_in_owner = true
+material = ExtResource("2_cxxrj")
 layout_mode = 2
-texture = ExtResource("2_kvbdw")
-expand_mode = 1
+theme_override_styles/panel = ExtResource("4_botxt")
 script = ExtResource("3_4jiys")
-syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = ExtResource("8_5c780")
+
+[node name="PerkIcon" type="TextureRect" parent="HBoxContainer/PanelContainer"]
 material = ExtResource("4_kvbdw")
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("1_2mltm")
+texture = ExtResource("8_717dr")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="PerkName" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Blast from the Past"
+text_overrun_behavior = 3
 
-[node name="WarningIcon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-visible = false
-material = ExtResource("4_kvbdw")
+[node name="TeamPerkProgress" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
-texture = ExtResource("2_w5yui")
-expand_mode = 3
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="Requirements" type="Label" parent="MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/TeamPerkProgress"]
+layout_mode = 2
+theme_override_constants/separation = -16
+
+[node name="Panel" type="Panel" parent="HBoxContainer/TeamPerkProgress/HBoxContainer"]
+self_modulate = Color(0.19968, 0.1196, 0.52, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_st0ce")
+
+[node name="Panel2" type="Panel" parent="HBoxContainer/TeamPerkProgress/HBoxContainer"]
+self_modulate = Color(0.19968, 0.1196, 0.52, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_717dr")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/TeamPerkProgress"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/TeamPerkProgress/MarginContainer"]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/TeamPerkProgress/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="ActiveIcon" type="TextureRect" parent="HBoxContainer/TeamPerkProgress/MarginContainer/HBoxContainer/MarginContainer"]
+self_modulate = Color(0.23, 0.910167, 1, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("9_717dr")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer/TeamPerkProgress/MarginContainer/HBoxContainer"]
 visible = false
+layout_mode = 2
+
+[node name="Requirements" type="Label" parent="HBoxContainer/TeamPerkProgress/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "2/2"
 
+[node name="TooltipFallback" type="Control" parent="."]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="TooltipFallback" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("10_botxt")
+itemSource = NodePath("../..")
+componentList = ExtResource("11_gpjek")
+
 [node name="Responsive Button Area" parent="." instance=ExtResource("7_40614")]
 layout_mode = 2
 
-[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/TextureRect" method="set_texture"]
-[connection signal="NameChanged" from="." to="MarginContainer/HBoxContainer/Label" method="set_text"]
+[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("10_botxt")
+itemSource = NodePath("../..")
+componentList = ExtResource("11_gpjek")
+
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PerkWarning" type="TextureRect" parent="Overlay"]
+self_modulate = Color(1, 0.9, 0, 1)
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 4.0
+offset_top = 4.0
+texture = ExtResource("9_st0ce")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Overlay/PerkWarning"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_w5yui")
+expand_mode = 1
+
+[connection signal="IconChanged" from="." to="HBoxContainer/PanelContainer/PerkIcon" method="set_texture"]
+[connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
+[connection signal="NameChanged" from="." to="HBoxContainer/PerkName" method="set_text"]
+[connection signal="ProgressText" from="." to="HBoxContainer/TeamPerkProgress/MarginContainer/HBoxContainer/Requirements" method="set_text"]
+[connection signal="ProgressVisible" from="." to="HBoxContainer/TeamPerkProgress" method="set_visible"]
+[connection signal="StateColor" from="." to="HBoxContainer/TeamPerkProgress/MarginContainer/HBoxContainer/MarginContainer/ActiveIcon" method="set_self_modulate"]
+[connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
+[connection signal="WarningText" from="." to="Overlay/PerkWarning" method="set_tooltip_text"]
+[connection signal="WarningVisible" from="." to="Overlay/PerkWarning" method="set_visible"]

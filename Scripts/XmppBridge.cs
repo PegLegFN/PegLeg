@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 public partial class XmppBridge : Control
 {
@@ -100,6 +99,26 @@ public partial class XmppBridge : Control
     {
         CallDeferred(nameof(PartyText), string.Join("\n", account.XmppManager.Party.meta.Select(kvp => $"{kvp.Key} = {kvp.Value}")));
         //partyData.Text = string.Join("\n", obj.Select(kvp=>$"{kvp.Key} = {kvp.Value}"));
+    }
+
+    Dictionary<string, string> missionData = [];
+    public void CaptureMissions()
+    {
+        var meta = GameAccount.activeAccount.XmppManager.Party.members[GameAccount.activeAccount.accountId].meta;
+        missionData = [];
+        TransferMeta(meta, "Default:CampaignInfo_j");
+        TransferMeta(meta, "Default:ZoneInstanceId_s");
+    }
+
+    void TransferMeta(Dictionary<string,string> meta, string key)
+    {
+        if (meta.TryGetValue(key, out var val))
+            missionData[key] = val;
+    }
+
+    public async void PatchMissions()
+    {
+        await GameAccount.activeAccount.XmppManager.SendPartyMemberPatch(missionData);
     }
 
     void PartyText(string text)

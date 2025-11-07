@@ -6,6 +6,10 @@ public partial class ConfigToggleHook : Control
 {
     [Signal]
     public delegate void ConfigValueChangedEventHandler(bool newValue);
+    [Signal]
+    public delegate void OnTrueEventHandler();
+    [Signal]
+    public delegate void OnFalseEventHandler();
 
     [Export]
     string section;
@@ -27,9 +31,10 @@ public partial class ConfigToggleHook : Control
         this.key = key ?? this.key;
 
         valueIsChanging = true;
-        EmitSignal(SignalName.ConfigValueChanged, AppConfig.Get(this.section, this.key, defaultValue));
+        Emit(AppConfig.Get(this.section, this.key, defaultValue));
         valueIsChanging = false;
     }
+
     public override void _Ready()
     {
         if (tryBind)
@@ -47,7 +52,7 @@ public partial class ConfigToggleHook : Control
         base._Ready();
         AppConfig.OnConfigChanged += UpdateValue;
         valueIsChanging = true;
-        EmitSignal(SignalName.ConfigValueChanged, AppConfig.Get(section, key, defaultValue));
+        Emit(AppConfig.Get(section, key, defaultValue));
         valueIsChanging = false;
     }
 
@@ -56,13 +61,27 @@ public partial class ConfigToggleHook : Control
         if (section != this.section || key != this.key)
             return;
         valueIsChanging = true;
-        EmitSignal(SignalName.ConfigValueChanged, val.GetValue<bool>());
+        Emit(val.GetValue<bool>());
         valueIsChanging = false;
+    }
+
+    private void Emit(bool newVal)
+    {
+        if (newVal)
+            EmitSignalOnTrue();
+        else
+            EmitSignalOnFalse();
+        EmitSignalConfigValueChanged(newVal);
     }
 
     public void SetValue(bool newValue)
     {
         if (!valueIsChanging)
             AppConfig.Set(section, key, newValue);
+    }
+
+    public override void _ExitTree()
+    {
+        AppConfig.OnConfigChanged -= UpdateValue;
     }
 }

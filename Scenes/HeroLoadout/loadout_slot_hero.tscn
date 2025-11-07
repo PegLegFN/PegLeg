@@ -1,0 +1,70 @@
+[gd_scene load_steps=11 format=3 uid="uid://csgloybnhxnil"]
+
+[ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_vhc4q"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="1_xsoch"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_4fndh"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="2_a8kop"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_j1pml"]
+[ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="2_xwwiy"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_2twik"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="6_j1pml"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_4fndh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mywkx"]
+resource_local_to_scene = true
+shader = ExtResource("5_2twik")
+shader_parameter/ControlSize = Vector2(32, 32)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 2.0
+shader_parameter/ClipOOB = false
+
+[node name="LoadoutSlotHero" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroPerkEntry")]
+offset_right = 32.0
+offset_bottom = 32.0
+script = ExtResource("1_vhc4q")
+heroAbilityEntries = []
+heroPerkEntry = NodePath("PerkEntry")
+useHeroPerkDescription = true
+defaultClearIconToNull = true
+
+[node name="DisplayMode" type="Control" parent="."]
+visible = false
+layout_mode = 2
+script = ExtResource("2_4fndh")
+section = "inventory"
+key = "loadout_list_heroes"
+
+[node name="Aspect" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+texture = ExtResource("2_j1pml")
+expand_mode = 3
+
+[node name="PerkEntry" type="Node" parent="."]
+script = ExtResource("2_a8kop")
+defaultClearIconToNull = true
+
+[node name="PerkIcon" type="TextureRect" parent="."]
+visible = false
+material = ExtResource("1_xsoch")
+layout_mode = 2
+texture = ExtResource("2_xwwiy")
+expand_mode = 1
+
+[node name="HeroIcon" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_mywkx")
+layout_mode = 2
+texture = ExtResource("6_j1pml")
+expand_mode = 1
+script = ExtResource("7_4fndh")
+
+[connection signal="IconChanged" from="." to="HeroIcon" method="set_texture"]
+[connection signal="OnFalse" from="DisplayMode" to="PerkIcon" method="set_visible" binds= [true]]
+[connection signal="OnFalse" from="DisplayMode" to="HeroIcon" method="set_visible" binds= [false]]
+[connection signal="OnTrue" from="DisplayMode" to="PerkIcon" method="set_visible" binds= [false]]
+[connection signal="OnTrue" from="DisplayMode" to="HeroIcon" method="set_visible" binds= [true]]
+[connection signal="IconChanged" from="PerkEntry" to="PerkIcon" method="set_texture"]

@@ -1,5 +1,6 @@
 using Godot;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 public partial class ProcessSwitchingTabContainer : TabContainer
 {
@@ -31,20 +32,26 @@ public partial class ProcessSwitchingTabContainer : TabContainer
         UpdateDevState();
     }
 
-    void UpdateDevState()
+    async void UpdateDevState()
     {
         bool isAltParented = (GetParent() == altParent);
         bool shouldBeAltParented = AppConfig.Get("advanced", "developer", false) == hideInDevMode;
         GD.Print($"alt: {shouldBeAltParented}");
         if (isAltParented == shouldBeAltParented)
             return;
+        if (GetParent() is null)
+            return;
         if (shouldBeAltParented)
         {
-            Reparent(altParent);
+            defaultParent.RemoveChild(this);
+            await Helpers.WaitForFrame();
+            altParent.AddChild(this);
         }
         else
         {
-            Reparent(defaultParent);
+            altParent.RemoveChild(this);
+            await Helpers.WaitForFrame();
+            defaultParent.AddChild(this);
         }
     }
 

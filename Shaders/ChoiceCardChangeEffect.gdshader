@@ -1,4 +1,5 @@
 shader_type canvas_item;
+
 uniform float progress : hint_range(0, 2) = 0;
 uniform float scalar=100;
 uniform sampler2D bgTex;

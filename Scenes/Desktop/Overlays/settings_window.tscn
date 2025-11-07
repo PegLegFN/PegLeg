@@ -1,10 +1,11 @@
 [gd_scene load_steps=26 format=3 uid="uid://dt403r6613tos"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_p7b2a"]
-[ext_resource type="Script" uid="uid://g5i4usaw1fcl" path="res://Scripts/UIElements/VerticalTab.cs" id="2_c1ulb"]
 [ext_resource type="Script" uid="uid://objskpkxjfqt" path="res://Scripts/UserInterface/Settings/MiscSettings.cs" id="2_dybhj"]
+[ext_resource type="Script" uid="uid://ciko6xgyer33u" path="res://Scripts/UIElements/VerticalTabContainer.cs" id="2_lhoqf"]
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="2_y75ef"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="3_dewmg"]
+[ext_resource type="PackedScene" uid="uid://dedxnr814fng7" path="res://Scenes/verticalTab.tscn" id="3_h1p2y"]
 [ext_resource type="Script" uid="uid://bpj23p4ewlb5r" path="res://Scripts/UserInterface/Settings/ThemeSettings.cs" id="4_kkpd6"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_1lymk"]
 [ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="5_7ebkc"]
@@ -30,12 +31,9 @@ fill_from = Vector2(1, 0.5)
 fill_to = Vector2(0.5, 0.5)
 metadata/_snap_enabled = true
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_w03hs"]
-resource_name = "SettingsTabBtnGroup"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mjqpy"]
 shader = ExtResource("5_1lymk")
-shader_parameter/ControlSize = Vector2(0, 60)
+shader_parameter/ControlSize = Vector2(0, 200)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -73,30 +71,34 @@ custom_minimum_size = Vector2(350, 450)
 layout_mode = 2
 tab_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer" index="1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer" index="1" node_paths=PackedStringArray("tabParent", "pageParent")]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
+script = ExtResource("2_lhoqf")
+tabScene = ExtResource("3_h1p2y")
+tabParent = NodePath("SettingsTabs/MarginContainer/MarginContainer/VBoxContainer")
+pageParent = NodePath("MarginContainer/VBoxContainer/ScrollContainer/SettingsPages")
 
-[node name="MarginContainer2" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer" index="0"]
+[node name="SettingsTabs" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer" index="0"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 10
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs" index="0"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = -20
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer" index="0"]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 texture = SubResource("GradientTexture2D_w03hs")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer" index="1"]
 clip_contents = true
 layout_mode = 2
 theme_override_constants/margin_left = 20
@@ -104,111 +106,11 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer" index="0"]
 layout_mode = 2
 size_flags_vertical = 0
 mouse_filter = 0
 theme_override_constants/separation = 1
-
-[node name="InterfaceTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="0"]
-layout_mode = 2
-theme_override_constants/margin_right = 10
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab" index="0"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_pressed = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "Interface"
-alignment = 0
-script = ExtResource("2_c1ulb")
-
-[node name="AudioTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="1"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/AudioTab" index="0"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "Audio"
-alignment = 0
-script = ExtResource("2_c1ulb")
-
-[node name="ThemeTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="2"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/ThemeTab" index="0"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "Theme"
-alignment = 0
-script = ExtResource("2_c1ulb")
-
-[node name="MiscTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="3"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MiscTab" index="0"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "Misc"
-alignment = 0
-script = ExtResource("2_c1ulb")
-
-[node name="AdvancedTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="4"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab" index="0"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "Advanced"
-alignment = 0
-script = ExtResource("2_c1ulb")
-
-[node name="DCWebhooksTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="5"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/DCWebhooksTab" index="0"]
-visible = false
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("12_12lms")
-section = "advanced"
-key = "webhooks"
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/DCWebhooksTab" index="1"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "DC Webhooks"
-alignment = 0
-script = ExtResource("2_c1ulb")
-
-[node name="UpdatesTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer" index="6"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" index="0"]
-layout_mode = 2
-theme_type_variation = &"VTab"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_w03hs")
-text = "Updates"
-alignment = 0
-script = ExtResource("2_c1ulb")
 
 [node name="MarginContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(400, 410)
@@ -237,7 +139,7 @@ theme_override_constants/separation = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer" index="0"]
+[node name="SettingsPages" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -246,19 +148,19 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="0"]
+[node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Interface"
 
-[node name="SimpleCosmetics" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="1"]
+[node name="SimpleCosmetics" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="1"]
 layout_direction = 3
 layout_mode = 2
 text = "Compact cosmetic shop"
@@ -267,15 +169,15 @@ script = ExtResource("12_12lms")
 section = "item_shop"
 key = "simple_cosmetics"
 
-[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="2"]
+[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" index="0"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Compact Tiles "
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 100.0
@@ -291,20 +193,20 @@ key = "simple_cosmetic_tilesize"
 asInt = true
 defaultValue = 150.0
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles" index="2"]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" index="2"]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "150"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles" index="3"]
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" index="3"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 text = "Apply"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/Button" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/Button" index="0"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -315,7 +217,7 @@ grow_vertical = 2
 texture = ExtResource("12_pwy1u")
 expand_mode = 1
 
-[node name="ShowMissionBackgrounds" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="3"]
+[node name="ShowMissionBackgrounds" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="3"]
 layout_direction = 3
 layout_mode = 2
 button_pressed = true
@@ -326,7 +228,7 @@ section = "missions"
 key = "show_background"
 defaultValue = true
 
-[node name="FastAnims" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="4"]
+[node name="FastAnims" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="4"]
 layout_direction = 3
 layout_mode = 2
 text = "Fast purchase animation"
@@ -335,15 +237,15 @@ script = ExtResource("12_12lms")
 section = "misc"
 key = "fast_animations"
 
-[node name="UIScale" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="5"]
+[node name="UIScale" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="5"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale" index="0"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "UI Scale  "
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 0.5
@@ -358,20 +260,20 @@ section = "ui"
 key = "scale"
 defaultValue = 1.0
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale" index="2"]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale" index="2"]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "0.85"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale" index="3"]
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale" index="3"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 text = "Apply"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/Button" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/Button" index="0"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -382,18 +284,18 @@ grow_vertical = 2
 texture = ExtResource("12_pwy1u")
 expand_mode = 1
 
-[node name="NotifSection" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="6"]
+[node name="NotifSection" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="6"]
 layout_mode = 2
 
-[node name="NotifScale" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection" index="0"]
+[node name="NotifScale" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale" index="0"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Notif Scale"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
@@ -408,20 +310,20 @@ section = "notification"
 key = "scale"
 defaultValue = 1.0
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale" index="2"]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale" index="2"]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale" index="3"]
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale" index="3"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 text = "Apply"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/Button" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/Button" index="0"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -432,7 +334,7 @@ grow_vertical = 2
 texture = ExtResource("12_pwy1u")
 expand_mode = 1
 
-[node name="MinimiseNotif" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection" index="1"]
+[node name="MinimiseNotif" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection" index="1"]
 layout_direction = 3
 layout_mode = 2
 button_pressed = true
@@ -443,15 +345,15 @@ section = "notification"
 key = "on_minimised"
 defaultValue = true
 
-[node name="FPS" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer" index="7"]
+[node name="FPS" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="7"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS" index="0"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Target FPS"
 
-[node name="FPSSwitch" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS" index="1" node_paths=PackedStringArray("switchButtons")]
+[node name="FPSSwitch" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS" index="1" node_paths=PackedStringArray("switchButtons")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"CheckContainer"
@@ -462,11 +364,11 @@ values = PackedFloat32Array(30, 60, 144, -1)
 requirePressed = true
 switchButtons = [NodePath("HBoxContainer/30FPS"), NodePath("HBoxContainer/60FPS"), NodePath("HBoxContainer/144FPS"), NodePath("HBoxContainer/InfFPS")]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS/FPSSwitch" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="30FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="0"]
+[node name="30FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="0"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -476,7 +378,7 @@ text = " 30"
 alignment = 1
 metadata/zone = "s"
 
-[node name="60FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="1"]
+[node name="60FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -487,7 +389,7 @@ text = " 60"
 alignment = 1
 metadata/zone = "p"
 
-[node name="144FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="2"]
+[node name="144FPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -497,7 +399,7 @@ text = " 144"
 alignment = 1
 metadata/zone = "c"
 
-[node name="InfFPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="3"]
+[node name="InfFPS" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/FPS/FPSSwitch/HBoxContainer" index="3"]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -508,34 +410,33 @@ text = " Unlimited"
 alignment = 1
 metadata/zone = "c"
 
-[node name="Audio" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="1"]
-visible = false
+[node name="Audio" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="1"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Volume"
 
-[node name="Master" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="1" node_paths=PackedStringArray("volSlider")]
+[node name="Master" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="1" node_paths=PackedStringArray("volSlider")]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Master"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -548,14 +449,14 @@ scrollable = false
 tick_count = 7
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -570,21 +471,21 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Music" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="2" node_paths=PackedStringArray("volSlider")]
+[node name="Music" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="2" node_paths=PackedStringArray("volSlider")]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Music"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -596,14 +497,14 @@ scrollable = false
 tick_count = 9
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -618,21 +519,21 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SFX" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="3" node_paths=PackedStringArray("volSlider")]
+[node name="SFX" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="3" node_paths=PackedStringArray("volSlider")]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Sound FX"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -644,14 +545,14 @@ scrollable = false
 tick_count = 9
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -666,22 +567,22 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Hover" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="4" node_paths=PackedStringArray("volSlider")]
+[node name="Hover" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="4" node_paths=PackedStringArray("volSlider")]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 30
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "UI Hover"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -693,14 +594,14 @@ scrollable = false
 tick_count = 9
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -715,22 +616,22 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Press" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="5" node_paths=PackedStringArray("volSlider")]
+[node name="Press" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="5" node_paths=PackedStringArray("volSlider")]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 30
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "UI Press"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -742,14 +643,14 @@ scrollable = false
 tick_count = 9
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -764,22 +665,22 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Voices" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="6" node_paths=PackedStringArray("volSlider")]
+[node name="Voices" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="6" node_paths=PackedStringArray("volSlider")]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 30
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Voices"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -792,14 +693,14 @@ scrollable = false
 tick_count = 9
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -814,21 +715,21 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Notifications" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer" index="7" node_paths=PackedStringArray("volSlider")]
+[node name="Notifications" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer" index="7" node_paths=PackedStringArray("volSlider")]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 script = ExtResource("2_y75ef")
 volSlider = NodePath("HBoxContainer/HSlider")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Notifications"
 
-[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer" index="1"]
+[node name="HSlider" type="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer" index="1"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -840,14 +741,14 @@ scrollable = false
 tick_count = 9
 ticks_on_borders = true
 
-[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer" index="2"]
+[node name="MuteBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -862,23 +763,23 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Theme" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="2" node_paths=PackedStringArray("themeOptions", "backgroundPreview")]
+[node name="Theme" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="2" node_paths=PackedStringArray("themeOptions", "backgroundPreview")]
 visible = false
 layout_mode = 2
 script = ExtResource("4_kkpd6")
 themeOptions = NodePath("VBoxContainer/OptionButton")
 backgroundPreview = NodePath("VBoxContainer/Aspect/TextureRect")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Theme"
 
-[node name="OptionButton" type="OptionButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer" index="1"]
+[node name="OptionButton" type="OptionButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="1"]
 layout_mode = 2
 selected = 0
 item_count = 4
@@ -892,45 +793,45 @@ popup/item_2/id = 2
 popup/item_3/text = "another theme here"
 popup/item_3/id = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer" index="2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="2"]
 visible = false
 layout_mode = 2
 
-[node name="Left" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/HBoxContainer" index="0"]
+[node name="Left" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer" index="0"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 text = "<"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/HBoxContainer" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/HBoxContainer/MarginContainer" index="0"]
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer/MarginContainer" index="0"]
 layout_mode = 2
 theme_type_variation = &"PanelButtonSlanted"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/HBoxContainer/MarginContainer" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer/MarginContainer" index="1"]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" index="0"]
 layout_mode = 2
 text = "testing"
 horizontal_alignment = 1
 
-[node name="Right" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/HBoxContainer" index="2"]
+[node name="Right" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 text = ">"
 
-[node name="Aspect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer" index="3"]
+[node name="Aspect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="3"]
 self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 expand_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="0"]
 material = SubResource("ShaderMaterial_mjqpy")
 layout_mode = 1
 anchors_preset = 15
@@ -943,7 +844,7 @@ expand_mode = 1
 script = ExtResource("7_wim73")
 syncControlSize = true
 
-[node name="MusicPreviewButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect" index="1"]
+[node name="MusicPreviewButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="1"]
 visible = false
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 1
@@ -958,7 +859,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/MusicPreviewButton" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/MusicPreviewButton" index="0"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -972,7 +873,7 @@ grow_vertical = 2
 texture = ExtResource("8_nh2gq")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect" index="2"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="2"]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 1
 anchors_preset = -1
@@ -983,24 +884,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/MarginContainer" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/MarginContainer" index="0"]
 layout_mode = 2
 texture = SubResource("GradientTexture2D_eiysq")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/MarginContainer" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/MarginContainer" index="1"]
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_vertical = 8
 text = "Apply"
 horizontal_alignment = 1
 
-[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect" index="3" instance=ExtResource("9_yv42k")]
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="3" instance=ExtResource("9_yv42k")]
 layout_mode = 1
 useHold = true
 outlinePadding = 20.0
+holdTime = 0.75
+holdRecoverTime = 0.5
 
-[node name="Misc" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="3" node_paths=PackedStringArray("accountImportButton", "collectionBookSpinbox")]
+[node name="Misc" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="3" node_paths=PackedStringArray("accountImportButton", "collectionBookSpinbox")]
 visible = false
 layout_mode = 2
 script = ExtResource("2_dybhj")
@@ -1008,42 +911,42 @@ loginSceneFilePath = "res://Scenes/Desktop/desktopLogin.tscn"
 accountImportButton = NodePath("VBoxContainer/VBoxContainer/ImportButton")
 collectionBookSpinbox = NodePath("VBoxContainer/HBoxContainer/SpinBox")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Misc"
 
-[node name="Banjo" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="1"]
+[node name="Banjo" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="1"]
 visible = false
 layout_mode = 2
 text = "Extract Game Assets"
 
-[node name="SkipLlamaRewards" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="2"]
+[node name="SkipLlamaRewards" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="2"]
 visible = false
 layout_direction = 3
 layout_mode = 2
 text = "Skip all Llama rewards"
 alignment = 2
 
-[node name="ClaimFreeLlamas" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="3"]
+[node name="ClaimFreeLlamas" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="3"]
 visible = false
 layout_direction = 3
 layout_mode = 2
 text = "Auto-Claim free Llamas"
 alignment = 2
 
-[node name="RecycleFreeRewards" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="4"]
+[node name="RecycleFreeRewards" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="4"]
 visible = false
 layout_direction = 3
 layout_mode = 2
 text = "Auto-Recycle free Llama rewards"
 alignment = 2
 
-[node name="AutoCreatorCode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="5"]
+[node name="AutoCreatorCode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="5"]
 layout_direction = 3
 layout_mode = 2
 text = "Auto-apply creator code"
@@ -1052,7 +955,7 @@ script = ExtResource("12_12lms")
 section = "automation"
 key = "creatorcode"
 
-[node name="ShowMissionBackgrounds2" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="6"]
+[node name="ShowMissionBackgrounds2" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="6"]
 layout_direction = 3
 layout_mode = 2
 text = "Auto filter new cosmetics"
@@ -1061,7 +964,7 @@ script = ExtResource("12_12lms")
 section = "item_shop"
 key = "auto_filter_new"
 
-[node name="AutoDetectMissionReset" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="7"]
+[node name="AutoDetectMissionReset" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="7"]
 layout_direction = 3
 layout_mode = 2
 button_pressed = true
@@ -1072,66 +975,66 @@ section = "missions"
 key = "reset_detection"
 defaultValue = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="8"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="8"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "debug collection book"
 
-[node name="SpinBox" type="SpinBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/HBoxContainer" index="1"]
+[node name="SpinBox" type="SpinBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 min_value = -1.0
 max_value = 3.0
 value = -1.0
 rounded = true
 
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/HBoxContainer" index="2"]
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/HBoxContainer" index="2"]
 layout_mode = 2
 text = "Go"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer" index="9"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer" index="9"]
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 2
 
-[node name="ImportButton" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer" index="0"]
+[node name="ImportButton" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer" index="0"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"PanelContainerButton"
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/ImportButton" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/ImportButton" index="0"]
 layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
 horizontal_alignment = 1
 
-[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/ImportButton" index="1" instance=ExtResource("9_yv42k")]
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/ImportButton" index="1" instance=ExtResource("9_yv42k")]
 layout_mode = 2
 useHold = true
 holdTime = 2.5
 
-[node name="UserDataButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer" index="1"]
+[node name="UserDataButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer" index="1"]
 layout_mode = 2
 text = "Open AppData folder"
 
-[node name="InstallFolderButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer" index="2"]
+[node name="InstallFolderButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer" index="2"]
 layout_mode = 2
 text = "Open Installation folder"
 
-[node name="CloseAppButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer" index="3"]
+[node name="CloseAppButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer" index="3"]
 layout_mode = 2
 size_flags_vertical = 8
 text = "Close PegLeg"
 
-[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer" index="4"]
+[node name="ImportButtonOld" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer" index="4"]
 visible = false
 layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
 
-[node name="FileDialog" type="FileDialog" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" index="1"]
+[node name="FileDialog" type="FileDialog" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" index="1"]
 title = "Open a Directory"
 size = Vector2i(374, 175)
 ok_button_text = "Select Current Folder"
@@ -1139,30 +1042,30 @@ file_mode = 2
 access = 2
 use_native_dialog = true
 
-[node name="Advanced" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="4"]
+[node name="Advanced" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4"]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Advanced"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="1"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="AutoRecycleParamsLabel" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/VBoxContainer" index="0"]
+[node name="AutoRecycleParamsLabel" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/VBoxContainer" index="0"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 0
 text = "Auto-Recycle Parameters"
 
-[node name="AutoRecycleParams" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/VBoxContainer" index="1"]
+[node name="AutoRecycleParams" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/VBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Common | Uncommon | Rare"
@@ -1172,17 +1075,17 @@ section = "automation"
 key = "recycle_filter"
 defaultValue = "Common | Uncommon | Rare"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="2"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="2"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="DefaultMissionSearchLabel" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/VBoxContainer2" index="0"]
+[node name="DefaultMissionSearchLabel" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/VBoxContainer2" index="0"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 0
 text = "Default Mission Search"
 
-[node name="DefaultMissionSearch" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/VBoxContainer2" index="1"]
+[node name="DefaultMissionSearch" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/VBoxContainer2" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "eg: v-bucks | (legendary perk-up bundle)"
@@ -1190,7 +1093,7 @@ script = ExtResource("12_ld0ka")
 section = "missions"
 key = "default_search"
 
-[node name="DeveloperDetails" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="3"]
+[node name="DeveloperDetails" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="3"]
 layout_direction = 3
 layout_mode = 2
 text = "Enable developer features"
@@ -1199,7 +1102,7 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "developer"
 
-[node name="Offset" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="4"]
+[node name="Offset" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="4"]
 layout_direction = 3
 layout_mode = 2
 text = "Offset refresh countdown"
@@ -1209,7 +1112,7 @@ section = "advanced"
 key = "offset_refresh"
 defaultValue = true
 
-[node name="SuspendQuests" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="5"]
+[node name="SuspendQuests" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="5"]
 layout_direction = 3
 layout_mode = 2
 tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
@@ -1219,7 +1122,7 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "suspend_quests"
 
-[node name="AutoRestartToggle" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="6"]
+[node name="AutoRestartToggle" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="6"]
 layout_direction = 3
 layout_mode = 2
 tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
@@ -1229,15 +1132,15 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "auto_restart"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="7"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="7"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Auto Restart Hour"
 
-[node name="SpinBox" type="SpinBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/HBoxContainer" index="1"]
+[node name="SpinBox" type="SpinBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 max_value = 23.0
 alignment = 1
@@ -1250,7 +1153,7 @@ asInt = true
 defaultValue = 7.0
 requireApply = false
 
-[node name="ExperimentalNotifs" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="8"]
+[node name="ExperimentalNotifs" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="8"]
 layout_direction = 3
 layout_mode = 2
 text = "Enable Notifications"
@@ -1259,7 +1162,7 @@ script = ExtResource("12_12lms")
 section = "experimental"
 key = "notifications"
 
-[node name="BeastMode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer" index="9"]
+[node name="BeastMode" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="9"]
 layout_direction = 3
 layout_mode = 2
 text = "Beast Mode"
@@ -1268,58 +1171,79 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "beastmode"
 
-[node name="WebhooksTab" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="5"]
+[node name="DC Webhooks" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="5" groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab" index="0"]
+[node name="WebhookTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" index="0"]
+visible = false
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+button_pressed = true
+text = "
+"
+alignment = 2
+script = ExtResource("12_12lms")
+section = "advanced"
+key = "webhooks"
+defaultValue = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" index="1"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Discord Webhooks"
 
-[node name="DailySummary" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer" index="1" node_paths=PackedStringArray("toggleEditor", "urlEditor", "syncEditor", "threadEditor")]
+[node name="DailySummary" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer" index="1" node_paths=PackedStringArray("toggleEditor", "urlEditor", "syncToggleEditor", "syncEditor", "threadEditor")]
 layout_mode = 2
 theme_override_constants/separation = 3
 script = ExtResource("17_qg6jm")
 internalName = "dailySummary"
 toggleEditor = NodePath("CheckButton")
-urlEditor = NodePath("VBoxContainer/HBoxContainer/HBoxContainer/WH-URL")
-syncEditor = NodePath("VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer/WH-Sync")
-threadEditor = NodePath("VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer/WH-SyncThread")
+urlEditor = NodePath("MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer/WH-URL")
+syncToggleEditor = NodePath("MarginContainer/VBoxContainer/WH-UseSync")
+syncEditor = NodePath("MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer/WH-Sync")
+threadEditor = NodePath("MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer/WH-SyncThread")
 
-[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary" index="0"]
+[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary" index="0"]
 layout_mode = 2
+button_pressed = true
 text = "Daily Summnary"
 script = ExtResource("12_12lms")
 section = "webhooks"
 key = "summary_enabled"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer" index="0"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "URL:"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer" index="1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer/HBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = ".../webhooks/"
 
-[node name="WH-URL" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer/HBoxContainer" index="1"]
+[node name="WH-URL" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "webhookId/webhookToken"
@@ -1328,78 +1252,11 @@ script = ExtResource("12_ld0ka")
 section = "webhooks"
 key = "summary_url"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer" index="1"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 1
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer" index="0"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3" index="0"]
-custom_minimum_size = Vector2(90, 0)
-layout_mode = 2
-text = "Sync Thread:"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3" index="1"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer" index="0"]
-visible = false
-custom_minimum_size = Vector2(73, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 13
-text = "...?threadId="
-horizontal_alignment = 2
-
-[node name="WH-SyncThread" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer" index="1"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "threadId"
-script = ExtResource("12_ld0ka")
-section = "webhooks"
-key = "summary_syncThread"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer" index="1"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2" index="0"]
-custom_minimum_size = Vector2(90, 0)
-layout_mode = 2
-text = "Sync Msg:"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2" index="1"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer" index="0"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer" index="1"]
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-text = ".../messages/"
 
-[node name="WH-Sync" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer" index="1"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "messageId"
-script = ExtResource("12_ld0ka")
-section = "webhooks"
-key = "summary_sync"
-
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4" index="1"]
-layout_mode = 2
-theme_type_variation = &"LargeButton"
-text = "Create 
-Sync Msg"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer" index="2"]
-layout_mode = 2
-
-[node name="WH-Role" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer2" index="0"]
+[node name="WH-Role" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer2" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "vBuckRole"
@@ -1407,7 +1264,7 @@ script = ExtResource("12_ld0ka")
 section = "webhooks"
 key = "summary_vb"
 
-[node name="WH-Role2" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer2" index="1"]
+[node name="WH-Role2" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer2" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "legSurvRole"
@@ -1415,7 +1272,7 @@ script = ExtResource("12_ld0ka")
 section = "webhooks"
 key = "summary_ls"
 
-[node name="WH-Role3" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer2" index="2"]
+[node name="WH-Role3" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/HBoxContainer2" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "mythLeadRole"
@@ -1423,7 +1280,87 @@ script = ExtResource("12_ld0ka")
 section = "webhooks"
 key = "summary_ml"
 
-[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" index="6" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
+[node name="WH-UseSync" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer" index="2"]
+layout_mode = 2
+text = "Use Sync Message
+"
+script = ExtResource("12_12lms")
+section = "webhooks"
+key = "summary_useSync"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer" index="3"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3" index="0"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Sync Thread:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer" index="0"]
+visible = false
+custom_minimum_size = Vector2(73, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "...?threadId="
+horizontal_alignment = 2
+
+[node name="WH-SyncThread" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "threadId"
+script = ExtResource("12_ld0ka")
+section = "webhooks"
+key = "summary_syncThread"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2" index="0"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Sync Msg:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer" index="0"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = ".../messages/"
+
+[node name="WH-Sync" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "messageId"
+script = ExtResource("12_ld0ka")
+section = "webhooks"
+key = "summary_sync"
+
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4" index="1"]
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Create 
+Sync Msg"
+
+[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="6" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
 visible = false
 layout_mode = 2
 script = ExtResource("17_e6sed")
@@ -1432,105 +1369,102 @@ updateBtn = NodePath("VBoxContainer/HBoxContainer/UpdateLaunchBtn")
 releaseParent = NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
 releaseScene = ExtResource("17_xu4j7")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Updates"
 
-[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="1"]
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer" index="1"]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer" index="2"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/ScrollContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/ScrollContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/ScrollContainer/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/ScrollContainer/MarginContainer" index="0"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/ScrollContainer/MarginContainer" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/ScrollContainer/MarginContainer" index="1"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
 text = "Up to date :)"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer" index="3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer" index="3"]
 layout_mode = 2
 
-[node name="UpdateCheckBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer" index="0"]
+[node name="UpdateCheckBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/HBoxContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"LargeButton"
 text = "Check For Updates"
 
-[node name="UpdateLaunchBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer" index="1"]
+[node name="UpdateLaunchBtn" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"ActionButton"
 text = "Update"
 
-[connection signal="WindowOpened" from="." to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="UpdateActiveTheme"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/AudioTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/ThemeTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/MiscTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced" method="set_visible"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/DCWebhooksTab/CheckButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/DCWebhooksTab" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/DCWebhooksTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer2/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" method="set_visible"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmetics" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles" method="set_visible"]
-[connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/Button" method="set_disabled"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" method="SetValue"]
-[connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/Label2" method="set_text"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" method="ApplyValue"]
-[connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/Button" method="set_disabled"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/HSlider" method="SetValue"]
-[connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/Label2" method="set_text"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/UIScale/HSlider" method="ApplyValue"]
-[connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/Button" method="set_disabled"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" method="SetValue"]
-[connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/Label2" method="set_text"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" method="ApplyValue"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Master" method="ToggleMute"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Music" method="ToggleMute"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/SFX" method="ToggleMute"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Hover" method="ToggleMute"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Press" method="ToggleMute"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Voices" method="ToggleMute"]
-[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
-[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/HSlider" method="set_value_no_signal"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Audio/VBoxContainer/Notifications" method="ToggleMute"]
-[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme/VBoxContainer/Aspect/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Theme" method="ApplyTheme"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/HBoxContainer/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ClaimCollectionRewards"]
-[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/ImportButton/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenAppData"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/InstallFolderButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="OpenInstallationFolder"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/CloseAppButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="CloseApp"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc/VBoxContainer/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Misc" method="ImportAccounts"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/AutoRestartToggle" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/HBoxContainer" method="set_visible"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Advanced/VBoxContainer/ExperimentalNotifs" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Interface/VBoxContainer/NotifSection" method="set_visible"]
-[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/CheckButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer" method="set_visible"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary/VBoxContainer/HBoxContainer4/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/WebhooksTab/VBoxContainer/DailySummary" method="TryCreateSyncMsg"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer/UpdateCheckBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" method="CheckForUpdates"]
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates/VBoxContainer/HBoxContainer/UpdateLaunchBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/Updates" method="DownloadAndRunInstaller"]
+[connection signal="WindowOpened" from="." to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="UpdateActiveTheme"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmetics" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" method="set_visible"]
+[connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/Label2" method="set_text"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" method="ApplyValue"]
+[connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/Label2" method="set_text"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/UIScale/HSlider" method="ApplyValue"]
+[connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/Label2" method="set_text"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" method="ApplyValue"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Master" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Music" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/SFX" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Hover" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Press" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Voices" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" method="ToggleMute"]
+[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="ApplyTheme"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/HBoxContainer/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="ClaimCollectionRewards"]
+[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/ImportButton/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="ImportAccounts"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="OpenAppData"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/InstallFolderButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="OpenInstallationFolder"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/CloseAppButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="CloseApp"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="ImportAccounts"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/AutoRestartToggle" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/HBoxContainer" method="set_visible"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/ExperimentalNotifs" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection" method="set_visible"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" method="add_to_group" binds= ["HideTab", false]]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" method="remove_from_group" binds= ["HideTab"]]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/CheckButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer" method="set_visible"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/WH-UseSync" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer" method="set_visible"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer4/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer/DailySummary" method="TryCreateSyncMsg"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/HBoxContainer/UpdateCheckBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" method="CheckForUpdates"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/HBoxContainer/UpdateLaunchBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" method="DownloadAndRunInstaller"]

@@ -28,6 +28,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="ConnectBtn" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -97,5 +98,20 @@ size_flags_horizontal = 3
 [node name="UserList" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Capture"
+
+[node name="Button2" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Patch"
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/ConnectBtn" to="PanelContainer" method="Connect"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Button" to="PanelContainer" method="SetStatus"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer3/Button" to="PanelContainer" method="CaptureMissions"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer3/Button2" to="PanelContainer" method="PatchMissions"]

@@ -2,9 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GameMission;
 
-public partial class UpdateChecker : Node
+public partial class UpdateChecker : Control
 {
 	[Export]
 	Label failMsg;

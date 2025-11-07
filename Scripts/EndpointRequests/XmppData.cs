@@ -106,6 +106,10 @@ public record class XmppPresence
 public abstract record class XmppEpicMsg
 {
     public required string type;
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? UnknownData { get; set; }
+
+    public record class GenericXmppEpicMessage : XmppEpicMsg { }
 
     public abstract record class XmppEpicMsgV0 : XmppEpicMsg
     {
@@ -216,6 +220,9 @@ public abstract record class XmppEpicMsg
         public DateTime? joined_at;
         public DateTime? updated_at;
     }
+
+    //com.epicgames.social.party.notification.v0.MEMBER_CONNECTED
+    public record class PartyMemberConnected : PartyMemberMsg { }
 
     //com.epicgames.social.party.notification.v0.MEMBER_JOINED
     public record class PartyMemberJoined : PartyMemberMsg { }

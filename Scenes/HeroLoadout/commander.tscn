@@ -1,96 +1,167 @@
-[gd_scene load_steps=16 format=3 uid="uid://3ic5fe2i0n0w"]
+[gd_scene load_steps=30 format=3 uid="uid://3ic5fe2i0n0w"]
 
 [ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="1_2i6xj"]
 [ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_2pugj"]
-[ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="1_vxoke"]
-[ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="2_73y55"]
+[ext_resource type="Shader" uid="uid://xgsxnsbw0ic2" path="res://Shaders/HeroLoadoutPanel.gdshader" id="2_42vc3"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="2_jv7tl"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="2_upnrw"]
-[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="3_myod1"]
+[ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="3_3chwq"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_fjwg7"]
+[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="4_s62v0"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Sh_Materials/HeroLoadoutBGPulse.tres" id="5_3chwq"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_6kudg"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="6_2pugj"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="6_2xts0"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="7_a4v6l"]
+[ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="10_1eg8j"]
+[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="10_42vc3"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="10_73y55"]
 [ext_resource type="PackedScene" uid="uid://cb15vvccjgrdk" path="res://Scenes/PerkAndAbilityEntries/hero_ability_entry.tscn" id="12_73y55"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="12_a4v6l"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="13_y0vih"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="14_1eg8j"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="16_qo8q0"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="17_5bpsy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pft80"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mkpcl"]
 resource_local_to_scene = true
-shader = ExtResource("2_73y55")
-shader_parameter/ControlSize = Vector2(358, 54)
-shader_parameter/scale = 1.0
-shader_parameter/Rand = 0.952764
+shader = ExtResource("2_42vc3")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/scale = 0.5
+shader_parameter/Rand = 0.332907
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1eg8j"]
+resource_local_to_scene = true
+shader = ExtResource("5_6kudg")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ShiftDirection = Vector2(0, 0.5)
+shader_parameter/Fit = true
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 8.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="Gradient" id="Gradient_6kudg"]
+offsets = PackedFloat32Array(0.153846, 1)
+colors = PackedColorArray(0.982343, 0.982342, 0.982342, 1, 0.529066, 0.529067, 0.529067, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qo8q0"]
+gradient = SubResource("Gradient_6kudg")
+height = 16
+fill_to = Vector2(0.9, 0.1)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qejx1"]
+resource_local_to_scene = true
+shader = ExtResource("5_6kudg")
+shader_parameter/ControlSize = Vector2(77, 37)
+shader_parameter/ShiftDirection = Vector2(0, 0.5)
+shader_parameter/Fit = true
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qo8q0"]
+resource_local_to_scene = true
+shader = ExtResource("5_6kudg")
+shader_parameter/ControlSize = Vector2(77, 77)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5bpsy"]
+shader = ExtResource("7_a4v6l")
+shader_parameter/inset = 0.1
+shader_parameter/shade = 0.2
+shader_parameter/shadeAlpha = 0.8
 
 [node name="Commander" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry")]
 offset_right = 358.0
 offset_bottom = 54.0
 script = ExtResource("1_2pugj")
-heroAbilityEntries = [NodePath("MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry"), NodePath("MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry2"), NodePath("MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry3")]
-heroCommanderPerkEntry = NodePath("MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk")
+heroAbilityEntries = [NodePath("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry"), NodePath("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry2"), NodePath("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry3")]
+heroCommanderPerkEntry = NodePath("MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk")
+useCommanderPerkDescription = true
+defaultClearIconToNull = true
 
-[node name="Panel" type="TextureRect" parent="."]
+[node name="OldBG" type="TextureRect" parent="."]
+visible = false
 self_modulate = Color(0.9, 0.615, 0, 1)
 texture_repeat = 2
-material = SubResource("ShaderMaterial_pft80")
+material = SubResource("ShaderMaterial_mkpcl")
 layout_mode = 2
-texture = ExtResource("1_vxoke")
+texture = ExtResource("3_3chwq")
+expand_mode = 1
+script = ExtResource("2_jv7tl")
+syncControlSize = true
+
+[node name="LoadoutBG" type="Panel" parent="."]
+unique_name_in_owner = true
+material = ExtResource("5_3chwq")
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_s62v0")
+script = ExtResource("2_jv7tl")
+
+[node name="ItemBG" type="TextureRect" parent="."]
+visible = false
+modulate = Color(0.980392, 0.619608, 0, 1)
+self_modulate = Color(0.96, 0.96, 0.96, 0.752941)
+material = SubResource("ShaderMaterial_1eg8j")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_qo8q0")
 expand_mode = 1
 script = ExtResource("2_jv7tl")
 syncControlSize = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_right = 5
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_bottom = 0
+
+[node name="HeroName" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Tactical Assault Sledgehammer"
+text_overrun_behavior = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 80
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+[node name="TierController" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2" node_paths=PackedStringArray("tierImages")]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_constants/margin_left = 15
-
-[node name="HeroIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
-layout_mode = 2
-texture = ExtResource("4_fjwg7")
-expand_mode = 3
-
-[node name="Subtype" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon"]
-material = ExtResource("6_2pugj")
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = 12.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_2xts0")
-expand_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -4.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 10
-size_flags_vertical = 3
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_bottom = 2
-
-[node name="TierController" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer" node_paths=PackedStringArray("tierImages")]
-layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/separation = 0
 alignment = 1
 script = ExtResource("1_2i6xj")
 tierImages = [NodePath("TextureRect"), NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4"), NodePath("TextureRect5")]
 superchargeColor = Color(0, 0.708333, 0.85, 1)
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
 self_modulate = Color(0, 0.708333, 0.85, 1)
 material = ExtResource("6_2pugj")
 layout_mode = 2
@@ -98,138 +169,232 @@ size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController"]
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect4" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController"]
+[node name="TextureRect4" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect5" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController"]
+[node name="TextureRect5" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
 alignment = 1
 
-[node name="Name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="AbilityEntry" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 24
-text = "Deadly Blade Crash"
+size_flags_horizontal = 4
+defaultClearIconToNull = true
 
-[node name="CommanderPerk" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="LockIcon2" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry" index="0"]
+anchor_left = 0.5
+anchor_bottom = 0.5
+
+[node name="AbilityEntry2" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_horizontal = 4
+defaultClearIconToNull = true
+
+[node name="LockIcon2" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry2" index="0"]
+anchor_left = 0.5
+anchor_bottom = 0.5
+
+[node name="AbilityEntry3" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 4
+defaultClearIconToNull = true
+
+[node name="LockIcon2" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry3" index="0"]
+anchor_left = 0.5
+anchor_bottom = 0.5
+
+[node name="PanelContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 41)
+layout_mode = 2
+
+[node name="PerkBG" type="Panel" parent="MarginContainer/VBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+material = ExtResource("5_3chwq")
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_s62v0")
+script = ExtResource("2_jv7tl")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="CommanderPerk" type="PanelContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("10_42vc3")
 script = ExtResource("10_73y55")
+defaultClearIconToNull = true
 
-[node name="PerkIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk"]
+[node name="PerkIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk"]
 material = ExtResource("6_2pugj")
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(29, 29)
 layout_mode = 2
-texture = ExtResource("3_myod1")
+texture = ExtResource("10_1eg8j")
 expand_mode = 3
 
-[node name="PerkName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk"]
+[node name="PerkName" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
-text = "Corrosive Strikes +"
+text = "Plasma Overdrive +"
+text_overrun_behavior = 3
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/HBoxContainer"]
-visible = false
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
-
-[node name="VBoxContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
-custom_minimum_size = Vector2(0, 24)
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+self_modulate = Color(1, 0.633333, 0, 1)
+material = SubResource("ShaderMaterial_qejx1")
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/h_separation = 2
-theme_override_constants/v_separation = 2
+texture = SubResource("GradientTexture2D_qo8q0")
+expand_mode = 1
+script = ExtResource("2_jv7tl")
+syncControlSize = true
 
-[node name="AbilityEntry" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 8
+theme_override_constants/margin_top = -40
 
-[node name="LockIcon2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry" index="0"]
-anchor_left = 0.5
+[node name="HeroIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/MarginContainer"]
+material = SubResource("ShaderMaterial_qo8q0")
+layout_mode = 2
+texture = ExtResource("4_fjwg7")
+expand_mode = 3
+script = ExtResource("2_jv7tl")
+syncControlSize = true
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control"]
+self_modulate = Color(1, 0.633333, 0, 1)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
 anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_a4v6l")
+expand_mode = 3
 
-[node name="AbilityEntry2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="LockIcon2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry2" index="0"]
+[node name="SubtypeIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect"]
+material = SubResource("ShaderMaterial_5bpsy")
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_2xts0")
+expand_mode = 3
 
-[node name="AbilityEntry3" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+[node name="Control" type="Control" parent="."]
 layout_mode = 2
-size_flags_vertical = 3
 
-[node name="LockIcon2" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry3" index="0"]
-anchor_left = 0.5
-anchor_bottom = 0.5
-
-[node name="Control" type="Control" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="PowerLevelIndicator" parent="MarginContainer/Control" instance=ExtResource("13_y0vih")]
+[node name="PowerLevelIndicator" parent="Control" instance=ExtResource("13_y0vih")]
 layout_mode = 1
 offset_top = 6.0
-offset_right = 24.0
-offset_bottom = 20.0
+offset_right = 33.0
+offset_bottom = 26.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="HBoxContainer" parent="MarginContainer/Control/PowerLevelIndicator" index="2"]
+[node name="HBoxContainer" parent="Control/PowerLevelIndicator" index="2"]
 theme_override_constants/margin_bottom = 2
 
-[node name="PowerLevelLabel" parent="MarginContainer/Control/PowerLevelIndicator/HBoxContainer" index="0"]
+[node name="PowerLevelLabel" parent="Control/PowerLevelIndicator/HBoxContainer" index="0"]
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 16
+
+[node name="TooltipFallback" type="Control" parent="."]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="TooltipFallback" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("16_qo8q0")
+itemSource = NodePath("../..")
+componentList = ExtResource("17_5bpsy")
 
 [node name="Responsive Button Area" parent="." instance=ExtResource("14_1eg8j")]
 layout_mode = 2
 
-[connection signal="IconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon" method="set_texture"]
-[connection signal="MaxTierChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController" method="SetMaxTier"]
-[connection signal="NameChanged" from="." to="MarginContainer/HBoxContainer/VBoxContainer/Name" method="set_text"]
-[connection signal="RarityChanged" from="." to="Panel" method="set_self_modulate"]
-[connection signal="SubtypeIconChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/Subtype" method="set_texture"]
-[connection signal="SuperchargeChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController" method="SetSuperchargedTier"]
-[connection signal="TierChanged" from="." to="MarginContainer/HBoxContainer/MarginContainer/HeroIcon/MarginContainer/TierController" method="SetTier"]
-[connection signal="IconChanged" from="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk" to="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk/PerkIcon" method="set_texture"]
-[connection signal="NameChanged" from="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk" to="MarginContainer/HBoxContainer/VBoxContainer/CommanderPerk/PerkName" method="set_text"]
+[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+script = ExtResource("16_qo8q0")
+itemSource = NodePath("../..")
+componentList = ExtResource("17_5bpsy")
 
-[editable path="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry"]
-[editable path="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry2"]
-[editable path="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/AbilityEntry3"]
-[editable path="MarginContainer/Control/PowerLevelIndicator"]
+[connection signal="IconChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/MarginContainer/HeroIcon" method="set_texture"]
+[connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="ItemBG" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="Control/PowerLevelIndicator" method="set_visible"]
+[connection signal="ItemDoesNotExist" from="." to="LoadoutBG" method="set_visible"]
+[connection signal="MaxTierChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetMaxTier"]
+[connection signal="NameChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer3/HeroName" method="set_text"]
+[connection signal="RarityChanged" from="." to="ItemBG" method="set_modulate"]
+[connection signal="RarityChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/TextureRect" method="set_self_modulate"]
+[connection signal="RarityChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect" method="set_self_modulate"]
+[connection signal="RatingChanged" from="." to="Control/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="SubtypeIconChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect/SubtypeIcon" method="set_texture"]
+[connection signal="SuperchargeChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetSuperchargedTier"]
+[connection signal="TierChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetTier"]
+[connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
+[connection signal="IconChanged" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk" to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk/PerkIcon" method="set_texture"]
+[connection signal="NameChanged" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk" to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/PerkName" method="set_text"]
+
+[editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry"]
+[editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry2"]
+[editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry3"]
+[editable path="Control/PowerLevelIndicator"]

@@ -325,14 +325,15 @@ public static partial class Helpers
             GD.Print("result text was null");
             resultNode = new JsonObject()
             {
-                ["success"] = result.IsSuccessStatusCode,
-                ["code"] = (int)result.StatusCode
+                ["success"] = result?.IsSuccessStatusCode ?? false,
             };
-            if (result.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
+            if(result is not null)
+                resultNode["code"] = (int)result.StatusCode;
+            if (result?.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
                 resultNode["offline"] = true;
         }
 
-        if (result.IsSuccessStatusCode)
+        if (result?.IsSuccessStatusCode == true)
             resultNode ??= new JsonObject() { ["success"] = true };
         //todo: throw exception when encountering a response with an errorMessage
 

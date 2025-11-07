@@ -57,6 +57,7 @@ public partial class TrayIcon : StatusIndicator
         GetWindow().CloseRequested += Minimise;
         GetTree().AutoAcceptQuit = false;
 #endif
+        restartFlags ??= [];
         Pressed += (_, __) => Unminimise();
         menu.Clear();
         menu.AddItem("Restart PegLeg", 200);
@@ -100,7 +101,7 @@ public partial class TrayIcon : StatusIndicator
         if (DateTime.Now.Hour != restartHour)
             return;
         DirAccess.RemoveAbsolute(Bootstrap.processLockPath);
-        List<string> args = [..restartFlags];
+        List<string> args = [.. restartFlags];
         if (minimised)
             args.Add("--start-minimised");
         GetTree().Quit();

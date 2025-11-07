@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://bqp7ax1fjc306"]
+[gd_scene load_steps=68 format=3 uid="uid://bqp7ax1fjc306"]
 
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="1_ac3k7"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://con6bkc8e5wf6" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Repeat_128.png" id="6_xaony"]
 [ext_resource type="Script" uid="uid://bpaceopmh5sqo" path="res://Scripts/UserInterface/Dashboard/DashboardLlamasController.cs" id="7_3tsbl"]
 [ext_resource type="Texture2D" uid="uid://dw4hobglon36k" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Clock_128.png" id="7_ots04"]
+[ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="10_pll84"]
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="10_q8xc3"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="10_smvwj"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="10_ta6o0"]
 [ext_resource type="Texture2D" uid="uid://cdbip8w04ra2u" path="res://Images/InterfaceIcons/T-Icon-Quest-Journal-64.png" id="11_dlqc6"]
@@ -37,7 +39,6 @@
 [ext_resource type="Script" uid="uid://6kq5n7f3yc4n" path="res://Scripts/UserInterface/Dashboard/XpLimitController.cs" id="34_nh5vk"]
 [ext_resource type="Texture2D" uid="uid://c0n3kv5onb5c2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Items-Hero-PromotionCurrency-L.png" id="34_sp71l"]
 [ext_resource type="Script" uid="uid://bwua60il6w4x2" path="res://Scripts/UserInterface/Dashboard/XpLimitDisplay.cs" id="34_v863i"]
-[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="35_7he0n"]
 [ext_resource type="Shader" uid="uid://d1dxev01cxp3l" path="res://Shaders/StwXpBar.gdshader" id="35_7rx8s"]
 [ext_resource type="PackedScene" uid="uid://pcyuj0ewudy3" path="res://Scenes/LlamaEntries/llama_highlight_db_style.tscn" id="35_muen0"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="36_7rx8s"]
@@ -49,11 +50,27 @@
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="39_13buu"]
 [ext_resource type="Texture2D" uid="uid://dlbasrvn2ilmd" path="res://Images/TextureResources/progress-wheel.tres" id="40_at20a"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="43_4yf1i"]
-[ext_resource type="Texture2D" uid="uid://dbuf04r766lk6" path="res://Images/BanjoSuppliments/TypeIcons/T-Trap-Floor-TITLE.png" id="49_pll84"]
 [ext_resource type="PackedScene" uid="uid://cyyifj2tha4ri" path="res://Scenes/SharedImageGenerators/shareable_mission_summary.tscn" id="51_0op8k"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="52_q8xc3"]
 [ext_resource type="PackedScene" uid="uid://cschg8vgh0q5i" path="res://Scenes/SharedImageGenerators/shareable_llama_summary.tscn" id="53_pll84"]
 [ext_resource type="PackedScene" uid="uid://co461hhd3r2sk" path="res://Scenes/SharedImageGenerators/shareable_xp_summary.tscn" id="54_6ftts"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4qqas"]
+shader = ExtResource("10_q8xc3")
+shader_parameter/ControlSize = Vector2(6, 14)
+shader_parameter/SliceAmount = Vector2(6, 5)
+shader_parameter/FPS = 20.0
+shader_parameter/CellCount = 0
+shader_parameter/Fit = true
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = true
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("3_h2g04")
@@ -223,6 +240,25 @@ grow_vertical = 2
 texture = ExtResource("2_aag1n")
 expand_mode = 1
 
+[node name="Button2" type="Button" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("34_6qpji")
+expand_mode = 1
+
 [node name="TabContainer" type="TabContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3"]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
@@ -306,6 +342,44 @@ layout_mode = 2
 
 [node name="SmallLoadingIcon" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
 layout_mode = 2
+
+[node name="MissionCollection" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer" instance=ExtResource("1_a6luq")]
+custom_minimum_size = Vector2(250, 100)
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"Panel3PadB"
+testName = "PL160 Repeatable Rewards"
+testSearch = "LargeReward 160///bundle"
+sortByPower = true
+sortByZoneCat = true
+requireAnyUnlockedForVisibility = true
+
+[node name="Name" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
+text = "PL160 Repeatable Rewards"
+
+[node name="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" index="3"]
+visible = false
+
+[node name="SmallLoadingIcon" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Body" index="0"]
+mouse_filter = 0
+
+[node name="ScrollContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Body" index="1"]
+visible = false
+clip_contents = false
+custom_minimum_size = Vector2(80, 80)
+size_flags_vertical = 4
+mouse_filter = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementSpace = 0.0
+elementScene = ExtResource("10_pll84")
+dumbMode = true
+
+[node name="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer" index="0"]
+material = SubResource("ShaderMaterial_4qqas")
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("36_7rx8s")
 
 [node name="All" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "sortByPower", "filterPower", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 visible = false
@@ -1147,18 +1221,13 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/VBoxContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="Container" parent="BeastDashboard/VBoxContainer2/ScrollContainer"]
+[node name="MarginContainer" type="Container" parent="BeastDashboard/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1168,7 +1237,7 @@ minColumns = 1
 maxColumns = 4
 spacing = Vector2i(4, 4)
 
-[node name="Alert Summary" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
+[node name="Alert Summary" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
 custom_minimum_size = Vector2(478, 420)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
@@ -1177,26 +1246,26 @@ targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayl
 rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary"]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Alert Summary"
 horizontal_alignment = 1
 
-[node name="ShareBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2"]
+[node name="ShareBtn" type="Button" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2"]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2/ShareBtn"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2/ShareBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -1210,13 +1279,13 @@ grow_vertical = 2
 texture = ExtResource("34_6qpji")
 expand_mode = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="Reward" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Reward" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.5
@@ -1224,7 +1293,7 @@ theme_type_variation = &"Outline6"
 text = "Reward"
 horizontal_alignment = 1
 
-[node name="Stone" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Stone" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1232,7 +1301,7 @@ theme_type_variation = &"Outline6"
 text = "Stone"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Stone"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Stone"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -1244,7 +1313,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2296, 0.4264, 0.82, 1)
 
-[node name="Plank" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Plank" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1252,7 +1321,7 @@ theme_type_variation = &"Outline6"
 text = "Plank"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Plank"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Plank"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -1264,7 +1333,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.15, 1, 0, 1)
 
-[node name="Canny" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Canny" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1272,7 +1341,7 @@ theme_type_variation = &"Outline6"
 text = "Canny"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Canny"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Canny"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -1284,7 +1353,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.8, 0, 1)
 
-[node name="Twine" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Twine" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1292,7 +1361,7 @@ theme_type_variation = &"Outline6"
 text = "Twine"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Twine"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Twine"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -1304,7 +1373,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.683333, 0, 1, 1)
 
-[node name="Total" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Total" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1312,7 +1381,7 @@ theme_type_variation = &"Outline6"
 text = "Total"
 horizontal_alignment = 1
 
-[node name="Ventures" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Ventures" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1320,7 +1389,7 @@ theme_type_variation = &"Outline6"
 text = "Vent's"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
+[node name="TextureRect" type="ColorRect" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -1332,89 +1401,89 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.883333, 1, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="DashboardAlertSummary" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary2" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary2" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary3" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary3" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary4" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary4" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary5" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary5" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary6" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary6" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary7" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary7" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary8" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary8" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary9" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary9" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary10" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary10" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary11" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary11" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary12" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary12" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary13" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary13" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary14" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary14" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary15" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary15" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary16" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary16" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary17" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
+[node name="DashboardAlertSummary17" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("32_4xtrc")]
 visible = false
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
+[node name="SmallLoadingIcon" parent="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer"]
 custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 
-[node name="Container" type="Container" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer"]
+[node name="Container" type="Container" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer"]
 layout_mode = 2
 script = ExtResource("1_ac3k7")
 columnMinWidth = 237
@@ -1422,7 +1491,7 @@ minColumns = 1
 maxColumns = 2
 spacing = Vector2i(4, 4)
 
-[node name="MissionCollection" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container" instance=ExtResource("1_a6luq")]
+[node name="MissionCollection" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(237, 310)
 layout_mode = 2
 theme_type_variation = &"Panel3PadB"
@@ -1431,11 +1500,11 @@ testSearch = "LargeReward///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
+[node name="Name" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/MissionCollection/VBoxContainer/Header/HBoxContainer" index="0"]
 text = "x4-5 Missions"
 horizontal_alignment = 1
 
-[node name="Supercharger" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container" node_paths=PackedStringArray("entry", "noSuperchargerMessage", "checkmark", "loading")]
+[node name="Supercharger" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" node_paths=PackedStringArray("entry", "noSuperchargerMessage", "checkmark", "loading")]
 custom_minimum_size = Vector2(237, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -1446,61 +1515,61 @@ noSuperchargerMessage = NodePath("VBoxContainer/PanelContainer/VBoxContainer")
 checkmark = NodePath("VBoxContainer/PanelContainer/TextureRect")
 loading = NodePath("VBoxContainer/PanelContainer/SmallLoadingIcon")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Supercharger"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("10_smvwj")
 timerType = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer"]
 custom_minimum_size = Vector2(230, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"Panel3Pad"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 script = ExtResource("36_8isvq")
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = ExtResource("34_sp71l")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Hero Superharger"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "No Supercharger Quest"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 theme_override_font_sizes/font_size = 12
@@ -1508,7 +1577,7 @@ text = "Complete the Twine Peaks SSD 10
 to unlock Weekly Supercharger Quests"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer"]
 visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -1517,12 +1586,12 @@ size_flags_vertical = 8
 texture = ExtResource("39_13buu")
 expand_mode = 1
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer" instance=ExtResource("25_m2jhp")]
+[node name="SmallLoadingIcon" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer" instance=ExtResource("25_m2jhp")]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="LlamaShop" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container" node_paths=PackedStringArray("loadingIcon", "errorIcon", "llamaEntryContainer")]
+[node name="LlamaShop" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" node_paths=PackedStringArray("loadingIcon", "errorIcon", "llamaEntryContainer")]
 custom_minimum_size = Vector2(237, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -1532,31 +1601,31 @@ loadingIcon = NodePath("VBoxContainer/PanelContainer/SmallLoadingIcon")
 errorIcon = NodePath("VBoxContainer/PanelContainer/Error")
 llamaEntryContainer = NodePath("VBoxContainer/PanelContainer/VBoxContainer")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Llama Shop"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("10_smvwj")
 timerType = 1
 
-[node name="ShareBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
+[node name="ShareBtn" type="Button" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer/ShareBtn"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer/ShareBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -1570,50 +1639,50 @@ grow_vertical = 2
 texture = ExtResource("34_6qpji")
 expand_mode = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer"]
 custom_minimum_size = Vector2(230, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"Panel3Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="LlamaHighlightDBStyle" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+[node name="LlamaHighlightDBStyle" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
 visible = false
 layout_mode = 2
 
-[node name="LlamaHighlightDBStyle2" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+[node name="LlamaHighlightDBStyle2" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
 visible = false
 layout_mode = 2
 
-[node name="LlamaHighlightDBStyle3" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+[node name="LlamaHighlightDBStyle3" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
 visible = false
 layout_mode = 2
 
-[node name="LlamaHighlightDBStyle4" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
+[node name="LlamaHighlightDBStyle4" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/VBoxContainer" instance=ExtResource("35_muen0")]
 visible = false
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer" instance=ExtResource("25_m2jhp")]
+[node name="SmallLoadingIcon" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer" instance=ExtResource("25_m2jhp")]
 layout_mode = 2
 
-[node name="Error" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer"]
+[node name="Error" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error"]
 layout_mode = 2
 texture = ExtResource("10_ta6o0")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error"]
+[node name="VBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1621,11 +1690,11 @@ size_flags_vertical = 4
 texture = ExtResource("11_nlqir")
 expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 theme_override_font_sizes/font_size = 24
@@ -1633,14 +1702,14 @@ text = "Llamas
 Unavailable"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="RetryButton" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
+[node name="RetryButton" type="Button" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -1648,29 +1717,29 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("2_aag1n")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Retry"
 
-[node name="XPProgress" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+[node name="XPProgress" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer" node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
 custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
@@ -1687,31 +1756,31 @@ loading = NodePath("VBoxContainer/Body/SmallLoadingIcon")
 content = NodePath("VBoxContainer/Body/XPContent")
 superchargedContent = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer"]
+[node name="HBoxContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="Name" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
+[node name="Name" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_font_sizes/font_size = 24
 text = "Seasonal Pass XP"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="ShareBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer"]
+[node name="ShareBtn" type="Button" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -1725,13 +1794,13 @@ grow_vertical = 2
 texture = ExtResource("34_6qpji")
 expand_mode = 1
 
-[node name="RefreshBtn" type="Button" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer"]
+[node name="RefreshBtn" type="Button" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -1745,25 +1814,25 @@ grow_vertical = 2
 texture = ExtResource("2_aag1n")
 expand_mode = 1
 
-[node name="Body" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer"]
+[node name="Body" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer"]
 custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body" instance=ExtResource("25_m2jhp")]
+[node name="SmallLoadingIcon" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body" instance=ExtResource("25_m2jhp")]
 layout_mode = 2
 
-[node name="XPContent" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body"]
+[node name="XPContent" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body"]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
 theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
@@ -1772,16 +1841,16 @@ progressBar = NodePath("MarginContainer/ProgressBar")
 progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
 refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "STW Mission XP"
 
-[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -1799,14 +1868,14 @@ customWarningTime = 10080
 customCritTime = 4320
 progressBar = NodePath("TimerProgress")
 
-[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
 
-[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -1815,23 +1884,23 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+[node name="Panel" type="Panel" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("34_2nkp8")
 expand_mode = 3
 
-[node name="TimerLabel" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/shadow_offset_x = 1
@@ -1839,7 +1908,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "99h"
 
-[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/HBoxContainer/RefreshTimerContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -1852,13 +1921,13 @@ step = 0.0
 value = 0.615
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
 material = SubResource("ShaderMaterial_4yf1i")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
 
-[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1868,20 +1937,20 @@ max_value = 1.0
 value = 0.5
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = 5
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 12
 text = "3,999,999/4,000,000"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/outline_size = 6
@@ -1889,10 +1958,10 @@ theme_override_font_sizes/font_size = 12
 text = "99%"
 horizontal_alignment = 2
 
-[node name="HSeparator" type="HSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
 theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
@@ -1901,16 +1970,16 @@ progressBar = NodePath("MarginContainer/ProgressBar")
 progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
 refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Playtime XP"
 
-[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -1927,14 +1996,14 @@ customWarningTime = 10080
 customCritTime = 4320
 progressBar = NodePath("TimerProgress")
 
-[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
 
-[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -1943,23 +2012,23 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+[node name="Panel" type="Panel" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("34_2nkp8")
 expand_mode = 3
 
-[node name="TimerLabel" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/shadow_offset_x = 1
@@ -1967,7 +2036,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "99h"
 
-[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -1980,13 +2049,13 @@ step = 0.0
 value = 0.615
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
 material = SubResource("ShaderMaterial_k0h4l")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
 
-[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1996,20 +2065,20 @@ max_value = 1.0
 value = 0.51
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = 5
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 12
 text = "3,999,999/4,000,000"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/outline_size = 6
@@ -2017,10 +2086,10 @@ theme_override_font_sizes/font_size = 12
 text = "99%"
 horizontal_alignment = 2
 
-[node name="HSeparator" type="HSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
+[node name="HSeparator" type="HSeparator" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2"]
 layout_mode = 2
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+[node name="VBoxContainer3" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
 theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
@@ -2029,16 +2098,16 @@ progressBar = NodePath("MarginContainer/ProgressBar")
 progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
 refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Creative XP"
 
-[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -2055,14 +2124,14 @@ customWarningTime = 10080
 customCritTime = 4320
 progressBar = NodePath("TimerProgress")
 
-[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
 
-[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -2071,23 +2140,23 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+[node name="Panel" type="Panel" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("34_2nkp8")
 expand_mode = 3
 
-[node name="TimerLabel" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/shadow_offset_x = 1
@@ -2095,7 +2164,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "99h"
 
-[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/HBoxContainer/RefreshTimerContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -2108,13 +2177,13 @@ step = 0.0
 value = 0.615
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
 material = SubResource("ShaderMaterial_dlqc6")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
 
-[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -2124,20 +2193,20 @@ max_value = 1.0
 value = 0.03
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = 5
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 12
 text = "3,999,999/4,000,000"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/outline_size = 6
@@ -2145,11 +2214,11 @@ theme_override_font_sizes/font_size = 12
 text = "99%"
 horizontal_alignment = 2
 
-[node name="HSeparator" type="HSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
+[node name="HSeparator" type="HSeparator" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3"]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer4" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
+[node name="VBoxContainer4" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer" node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
 theme_override_constants/separation = 1
 script = ExtResource("34_v863i")
@@ -2158,19 +2227,19 @@ progressBar = NodePath("MarginContainer/ProgressBar")
 progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
 refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
 
-[node name="HSeparator" type="HSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+[node name="HSeparator" type="HSeparator" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Supercharged XP Remaining"
 
-[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 10
@@ -2188,14 +2257,14 @@ customWarningTime = 10080
 customCritTime = 4320
 progressBar = NodePath("TimerProgress")
 
-[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerPanel" type="PanelContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
 
-[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="LeavingSoonAlert" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -2204,23 +2273,23 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+[node name="Panel" type="Panel" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("34_2nkp8")
 expand_mode = 3
 
-[node name="TimerLabel" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/shadow_offset_x = 1
@@ -2228,7 +2297,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "99h"
 
-[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
+[node name="TimerProgress" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/HBoxContainer/RefreshTimerContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -2241,13 +2310,13 @@ step = 0.0
 value = 0.615
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4"]
 material = SubResource("ShaderMaterial_4kbf4")
 layout_mode = 2
 script = ExtResource("36_7rx8s")
 syncControlSize = true
 
-[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -2257,20 +2326,20 @@ max_value = 1.0
 value = 0.31
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = 5
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 12
 text = "3,999,999/4,000,000"
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/outline_size = 6
@@ -2278,14 +2347,14 @@ theme_override_font_sizes/font_size = 12
 text = "99%"
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
+[node name="VSeparator" type="VSeparator" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
 layout_mode = 2
 
-[node name="MarginContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
+[node name="MarginContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 max_value = 1.0
@@ -2298,7 +2367,7 @@ texture_progress = ExtResource("40_at20a")
 tint_under = Color(0, 0, 0, 1)
 tint_progress = Color(0, 0.766667, 1, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2306,136 +2375,62 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = -2
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Level"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = -1
 alignment = 1
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "??'???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "/80K"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = " to Lv 200"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/VBoxContainer2"]
-layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/VBoxContainer2/MarginContainer"]
-layout_mode = 2
-alignment = 2
-
-[node name="Button" type="Button" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer"]
-visible = false
-layout_mode = 2
-text = "Capture Daily"
-
-[node name="Button2" type="Button" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("34_6qpji")
-expand_mode = 1
-
-[node name="Button3" type="Button" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button3"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("49_pll84")
-expand_mode = 1
-
-[node name="CheckButton" type="CheckButton" parent="BeastDashboard/VBoxContainer2/MarginContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-button_mask = 0
-script = ExtResource("35_7he0n")
-section = "advanced"
-key = "developer"
-
-[node name="CheckButton2" type="CheckButton" parent="BeastDashboard/VBoxContainer2/MarginContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-button_mask = 0
-script = ExtResource("35_7he0n")
-section = "advanced"
-key = "webhooks"
 
 [node name="ShareableMissionSummary" parent="." instance=ExtResource("51_0op8k")]
 visible = false
@@ -2466,6 +2461,7 @@ layout_mode = 2
 render_target_update_mode = 0
 
 [connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="ReloadMissions"]
+[connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button2" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" method="set_visible"]
 [connection signal="OnFalse" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="set_stretch_ratio"]
@@ -2475,22 +2471,20 @@ render_target_update_mode = 0
 [connection signal="OnFalse" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All" method="set_stretch_ratio"]
 [connection signal="OnTrue" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All" method="set_stretch_ratio"]
 [connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All/VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/All" method="TurnOffFilters"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
-[connection signal="IconChanged" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/TextureRect" method="set_texture"]
-[connection signal="NameChanged" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/Label" method="set_text"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="ShareableLlamaSummary/LlamaSummaryViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/RetryButton" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop" method="ForceLoadShopLlamas"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress" method="ForceUpdateProfiles"]
-[connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
-[connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
-[connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
-[connection signal="value_changed" from="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
-[connection signal="pressed" from="BeastDashboard/VBoxContainer2/MarginContainer/HBoxContainer/Button2" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
-[connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
-[connection signal="ConfigValueChanged" from="BeastDashboard/VBoxContainer2/MarginContainer/CheckButton2" to="BeastDashboard/VBoxContainer2/MarginContainer" method="set_visible"]
+[connection signal="pressed" from="BeastDashboard/ScrollContainer/MarginContainer/Alert Summary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
+[connection signal="IconChanged" from="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="pressed" from="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="ShareableLlamaSummary/LlamaSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop/VBoxContainer/PanelContainer/Error/VBoxContainer/VBoxContainer/MarginContainer/RetryButton" to="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/LlamaShop" method="ForceLoadShopLlamas"]
+[connection signal="pressed" from="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn" to="BeastDashboard/ScrollContainer/MarginContainer/XPProgress" method="ForceUpdateProfiles"]
+[connection signal="value_changed" from="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="BeastDashboard/ScrollContainer/MarginContainer/XPProgress/VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 
-[editable path="BeastDashboard/VBoxContainer2/ScrollContainer/MarginContainer/MarginContainer/Container/MissionCollection"]
+[editable path="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MissionCollection"]
+[editable path="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/MissionCollection"]
 [editable path="ShareableMissionSummary"]
 [editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection"]
 [editable path="ShareableAlertSummary"]

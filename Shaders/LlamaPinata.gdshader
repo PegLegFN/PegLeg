@@ -1,4 +1,5 @@
 shader_type canvas_item;
+
 uniform sampler2D packIcon:hint_default_black;
 uniform bool useMask=false;
 uniform sampler2D mask;

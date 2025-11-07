@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Xml.Linq;
 
 public partial class GameItemEntry : Control, IRecyclableEntry
 {
@@ -97,18 +98,26 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void SuperchargeChangedEventHandler(int supercharge);
 
     [Signal]
+    public delegate void SelectionVisibleChangedEventHandler(Texture2D marker);
+
+    [Signal]
     public delegate void SelectionMarkerChangedEventHandler(Texture2D marker);
 
     [Signal]
     public delegate void SelectionTintChangedEventHandler(Color rarityColour);
+
     [Signal]
     public delegate void OverflowWarningEventHandler(bool value);
+
     [Signal]
     public delegate void DurabilityVisibleEventHandler(bool value);
+
     [Signal]
     public delegate void DurabilityValueEventHandler(float value);
+
     [Signal]
     public delegate void IsHeroEventHandler(bool value);
+
     [Signal]
     public delegate void IsSchematicEventHandler(bool value);
 
@@ -152,6 +161,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     [Export]
     public bool packImageAsSubtype = true;
     [Export]
+    public bool defaultClearIconToNull;
+    [Export]
     protected CheckButton selectionGraphics;
 
     protected static Texture2D missingIcon = ResourceLoader.Load<Texture2D>("res://Images/InterfaceIcons/T_UI_VKConnectionIndicator_Error_Icon.png");
@@ -165,6 +176,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
             Pressed += Inspect;
         if (autoLinkToRecycleSelection)
             Pressed += PerformRecycleSelection;
+        ClearItem();
         EmitSignal(SignalName.InteractableChanged, interactableWhenEmpty);
         AppConfig.OnConfigChanged += OnConfigChanged;
         GameAccount.BookmarksChanged += UpdateBookmark;
@@ -298,9 +310,10 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         if (type == "Worker")
             type = "Survivor";
 
+        string overrideSurvivorSquad = selector is GameItemSelector gameItemSelector ? gameItemSelector.overrideSurvivorSquad : null;
         float rating = displayItem.CalculateSurvivorRating(
-            useSquadForRating || selector?.overrideSurvivorSquad is not null, 
-            selector?.overrideSurvivorSquad
+            useSquadForRating || overrideSurvivorSquad is not null,
+            overrideSurvivorSquad
         );
         string ratingText = rating == 0 ? "" : rating.ToString();
 
@@ -349,12 +362,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         EmitSignal(
             SignalName.TooltipChanged,
-            CustomTooltip.GenerateSimpleTooltip(
-                name,
-                tooltipAmount,
-                [.. tooltipDescriptions],
-                (displayItem.template?.RarityColor ?? missingRarityColor).ToHtml()
-            )
+            CreateTooltip(displayItem, name, tooltipAmount, tooltipDescriptions)
         );
 
         var subtypeIcon = displayItem.template?.GetSubtypeTexture();
@@ -425,6 +433,14 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignalSuperchargeChanged(bonusMaxLevel / 2);
     }
 
+    protected virtual string CreateTooltip(GameItem displayItem, string itemName, string itemAmount, List<string> tooltipDescriptions) =>
+        CustomTooltip.GenerateSimpleTooltip(
+            itemName,
+            itemAmount,
+            [.. tooltipDescriptions],
+            (displayItem.template?.RarityColor ?? missingRarityColor).ToHtml()
+        );
+
     void RemoveItem()
     {
         if (unlinkOnInvalidHandle)
@@ -472,7 +488,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.Pressed);
     }
 
-    public void ClearItem() => ClearItem(PegLegResourceManager.defaultIcon);
+    public void ClearItem() => ClearItem(defaultClearIconToNull ? null : PegLegResourceManager.defaultIcon);
     public virtual void ClearItem(Texture2D clearIcon)
     {
         if (currentItem is not null)
@@ -487,6 +503,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.ItemDoesNotExist, true);
         EmitSignal(SignalName.NameChanged, "");
         EmitSignal(SignalName.DescriptionChanged, "");
+        EmitSignal(SignalName.TooltipChanged, "");
         EmitSignal(SignalName.IconChanged, clearIcon);
         EmitSignal(SignalName.SubtypeIconChanged, clearIcon);
         EmitSignal(SignalName.TypeChanged, "");
@@ -514,63 +531,45 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     //public static bool TypeShouldBeInteractable(string type) => autoInteractableTypes.Contains(type.ToLower());
 
     protected IRecyclableElementProvider<GameItem> itemProvider;
-    protected GameItemSelector selector;
+    protected ISelectableElementProvider<GameItem> selector;
     public virtual void SetRecyclableElementProvider(IRecyclableElementProvider provider)
     {
-        if (provider is GameItemSelector newSelector)
-        {
-            itemProvider = selector = newSelector;
-        }
-        else if (provider is IRecyclableElementProvider<GameItem> newHandleProvider)
-        {
-            itemProvider = newHandleProvider;
-            selector = null;
-        }
+        itemProvider = provider is IRecyclableElementProvider<GameItem> newProvider ? newProvider : null;
+        selector = provider is ISelectableElementProvider<GameItem> newSelector ? newSelector : null;
     }
 
     protected int recycleIndex = 0;
     public virtual void SetRecycleIndex(int index)
     {
-        if (itemProvider is not null)
-        {
-            recycleIndex = index;
-            SetItem(itemProvider.GetRecycleElement(index));
-            if (selector is not null)
-                EmitSignal(SignalName.InteractableChanged, selector.selectablePredicate.Try(currentItem));
-            UpdateSelectionVisuals();
-        }
+        if (itemProvider is null)
+            return;
+        recycleIndex = index;
+        SetItem(itemProvider.GetRecycleElement(index));
+        if (selector is not null)
+            EmitSignal(SignalName.InteractableChanged, selector.IsSelectable(currentItem));
+        UpdateSelectionVisuals();
     }
 
-    public virtual void PerformRecycleSelection()
+    public void PerformRecycleSelection() => PerformRecycleSelection("");
+    public virtual void PerformRecycleSelection(string ctx)
     {
-        if (itemProvider is not null)
-        {
-            itemProvider.OnElementSelected(recycleIndex);
-            UpdateSelectionVisuals();
-        }
+        if (itemProvider is null)
+            return;
+        itemProvider.OnElementSelected(recycleIndex, ctx);
+        UpdateSelectionVisuals();
     }
 
     public virtual void ClearRecycleIndex() => ClearItem();
 
-    void UpdateSelectionVisuals()
+    protected virtual void UpdateSelectionVisuals()
     {
         if (selector is null || selectionGraphics is null)
             return;
 
-        bool isSelected = selector.ItemIsSelected(currentItem);
-        bool isSelectable = selector.selectablePredicate.Try(currentItem);
+        bool isSelected = selector.IsSelected(currentItem);
+        bool isSelectable = selector.IsSelectable(currentItem);
         selectionGraphics.ButtonPressed = isSelected || !isSelectable;
-        if (!isSelectable)
-        {
-            EmitSignal(SignalName.SelectionTintChanged, selector.unselectableTintColor);
-            EmitSignal(SignalName.SelectionMarkerChanged, selector.unselectableMarkerTex);
-            return;
-        }
-        if (isSelected)
-        {
-            bool isCollectable = currentItem.isCollectedCache ?? false;
-            EmitSignal(SignalName.SelectionTintChanged, isCollectable ? selector.collectionTintColor : selector.selectedTintColor);
-            EmitSignal(SignalName.SelectionMarkerChanged, isCollectable ? selector.collectionMarkerTex : selector.selectedMarkerTex);
-        }
+        EmitSignal(SignalName.SelectionTintChanged, selector.GetSelectableColor(currentItem));
+        EmitSignal(SignalName.SelectionMarkerChanged, selector.GetSelectableIcon(currentItem));
     }
 }

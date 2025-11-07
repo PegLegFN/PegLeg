@@ -23,15 +23,31 @@ public partial class DailySummaryWebhookDispatcher : Node
 
     async void ExecuteWebhookDelayed()
     {
-        await Helpers.WaitForTimer(6);
-		ExecuteWebhook();
+        if (webhook.UsesSync)
+        {
+            //waits 6 seconds, abandons if missions arent fetched by then
+            await Helpers.WaitForTimer(6);
+        }
+        else
+        {
+            //waits for missions to be fetched, times out after 10 seconds
+            await Task.WhenAny(
+                GameMission.UpdateMissions(),
+                Helpers.WaitForTimer(10)
+            );
+        }
+
+        if (GameMission.currentMissions is null)
+            return;
+        await webhook.Execute();
     }
 
-    async void ExecuteWebhook()
+    public async void ForceExecuteWebhook()
     {
-		if (GameMission.currentMissions is null)
-			return;
-		await webhook.Execute();
+        if (GameMission.currentMissions is null)
+            await GameMission.UpdateMissions();
+        await Helpers.WaitForFrames(5);
+        await webhook.Execute(true);
     }
 
     static async Task<Image[]> GenerateImage()

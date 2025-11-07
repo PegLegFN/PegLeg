@@ -22,6 +22,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     bool sortByPower;
     [Export]
     bool sortByZoneCat;
+    [Export]
+    bool requireAnyUnlockedForVisibility;
 
     List<GameMission> filteredMissions = [];
 
@@ -37,10 +39,11 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
         GameAccount.ActiveAccountChanged += SetMissionsDirty;
         GameMission.OnMissionsUpdated += SetMissionsDirty;
         GameMission.OnMissionsInvalidated += ClearMissions;
-        VisibilityChanged += FilterMissions;
+        CtrlParent.VisibilityChanged += FilterMissions;
         if (playableFilter is not null)
             playableFilter.Pressed += SetMissionsDirty;
         EmitSignal(SignalName.NameChanged, testName);
+        ClearMissions();
         UpdateFilters();
         SetMissionsDirty();
     }
@@ -102,6 +105,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     {
         loadingIcon.Visible = true;
         missionList.Visible = false;
+        if (requireAnyUnlockedForVisibility)
+            Visible = false;
     }
 
     public void SetMissionsDirty()
@@ -112,18 +117,28 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 
     bool missionsDirty = false;
 
+    Control CtrlParent => GetParent() as Control;
+
     public void FilterMissions()
     {
-        if (!missionsDirty || !IsVisibleInTree())
+        if (!missionsDirty || !CtrlParent.IsVisibleInTree())
             return;
+
         missionsDirty = false;
 
         loadingIcon.Visible = false;
         missionList.Visible = true;
 
         var sortedMissions =
-            GameMission.currentMissions?
-            .Where(MissionFilter).OrderBy(m=>1) ?? default;
+            (GameMission.currentMissions?
+            .Where(MissionFilter) ?? []).OrderBy(m=>1);
+
+        if(requireAnyUnlockedForVisibility)
+        {
+            Visible = sortedMissions.Any();
+            if (!Visible)
+                return;
+        }
 
         if (sortByZoneCat)
         {

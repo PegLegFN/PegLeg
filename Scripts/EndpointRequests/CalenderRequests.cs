@@ -199,7 +199,7 @@ public static class CalenderRequests
 
     public static int BRSeasonNumber => currentCalender.GetCurrentState().state.seasonNumber;
 
-    static EventTimeRange? BRSeasonRange => currentCalender.GetCurrentState().ActiveEvents.TryGetValue($"EventFlag.Event_S{BRSeasonNumber}_StoryQuests", out var range) ? range : null;
+    static EventTimeRange? BRSeasonRange => currentCalender.GetCurrentState().ActiveEvents.TryGetValue($"EventFlag.Event_S{BRSeasonNumber}_Discovery", out var range) ? range : null;
     public static DateTime? BRSeasonStart => BRSeasonRange?.activeSince;
     public static int? BRSeasonWeek => BRSeasonRange is EventTimeRange range ? Mathf.FloorToInt((DateTime.UtcNow - range.activeSince).TotalDays) / 7 : null;
     public static DateTime? BRSeasonEnd => BRSeasonRange?.activeUntil;
