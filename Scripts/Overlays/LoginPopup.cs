@@ -76,7 +76,7 @@ public partial class LoginPopup : ModalWindow
 
     public async void AttemptExchange()
     {
-        var exchangeCodeResponse = await GameClient.LoginWithExchangeCode(exchangeCodeBox.Text);
+        var exchangeCodeResponse = await GameClient.PreferredClient.LoginWithExchangeCode(exchangeCodeBox.Text);
         if (exchangeCodeResponse?["access_token"] is not null)
             return;
         GameAccount.LoginToAccount(exchangeCodeResponse);

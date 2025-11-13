@@ -236,11 +236,22 @@ public partial class GameAccount
         account.SetAuthentication(accountAuthResponse);
     }
 
+    public GameClient TargetClient { get; private set; }
     public XmppManager XmppManager { get; private set; }
     public GameAccount(string accountId)
     {
         this.accountId = accountId;
         XmppManager = new(this);
+        if (GetLocalData("GameClient")?.ToString() is string clientId)
+        {
+            TargetClient = GameClient.clients.TryGetValue(clientId, out var c) ? c : null;
+        }
+        else if (GetLocalData("DeviceDetails") is not null)
+        {
+            TargetClient = GameClient.NewSwitchClient;
+            SetLocalData("GameClient", TargetClient.ClientID);
+        }
+        TargetClient ??= GameClient.PreferredClient;
     }
 
     public Action OnAccountUpdated;
@@ -392,7 +403,7 @@ public partial class GameAccount
 
         if (!RefreshTokenExpired)
         {
-            var refreshAuth = await GameClient.LoginWithRefreshToken(refreshToken);
+            var refreshAuth = await TargetClient.LoginWithRefreshToken(refreshToken);
 
             if (refreshAuth?["access_token"] is not null)
             {
@@ -405,9 +416,8 @@ public partial class GameAccount
             else
                 GD.Print("Refresh token error: "+refreshAuth.ToString());
         }
-
         var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
-        JsonNode deviceAuth = await GameClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
+        JsonNode deviceAuth = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
 
         if (deviceAuth?["access_token"] is not null)
         {
@@ -578,10 +588,6 @@ public partial class GameAccount
     {
         if (!await Authenticate())
             return;
-        if(GetLocalData("DeviceDetails") is not null)
-        {
-            await RemoveDeviceDetails(true);
-        }
 
         //generate device details
         JsonObject deviceDetails = (await Helpers.MakeRequest(
@@ -593,6 +599,15 @@ public partial class GameAccount
             ""
         ))?.AsObject();
 
+        if (deviceDetails["errorCode"] is not null)
+            return;
+
+        if (GetLocalData("DeviceDetails") is not null)
+        {
+            await RemoveDeviceDetails(true);
+        }
+
+        SetLocalData("Client", TargetClient.ClientID);
         SetLocalData("DeviceDetails", new JsonArray([.. EncryptDeviceDetails(deviceDetails).Select(b => (JsonNode)b)]));
     }
 

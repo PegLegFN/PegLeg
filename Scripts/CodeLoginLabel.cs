@@ -41,7 +41,7 @@ public partial class CodeLoginLabel : Node
         }
 
         gettingClient=true;
-        var linkData = await GameClient.GetLoginLinkData();
+        var linkData = await GameClient.PreferredClient.GetLoginLinkData();
         gettingClient = false;
 
         if (linkData is not null && linkData["errorMessage"] is null)
@@ -96,7 +96,7 @@ public partial class CodeLoginLabel : Node
 
     async void CheckForCode()
     {
-        var linkCheckRequest = await GameClient.CheckLoginLinkCode();
+        var linkCheckRequest = await GameClient.PreferredClient.CheckLoginLinkCode();
         if (linkCheckRequest?["access_token"] is null)
             return;
 

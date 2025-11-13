@@ -35,6 +35,7 @@ public partial class DailySummaryWebhookDispatcher : Node
                 GameMission.UpdateMissions(),
                 Helpers.WaitForTimer(10)
             );
+            await Helpers.WaitForFrames(3);
         }
 
         if (GameMission.currentMissions is null)
