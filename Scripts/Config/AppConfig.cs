@@ -36,7 +36,7 @@ public partial class AppConfig
         return false;
     }
 
-    public static bool TryGet<T>(string path, out T value)
+    public static bool TryGetValue<T>(string path, out T value)
     {
         value = default;
         return TryGetNode(path, out JsonNode val) && val is JsonValue jval && jval.TryGetValue(out value);
@@ -65,12 +65,23 @@ public partial class AppConfig
         }
     }
 
-    public static T Get<T>(string section, string key, T fallback = default)
+    public static bool TryGet<T>(string section, string key, out T value)
     {
+        value = default;
         LoadConfig();
         var possibleVal = ConfigData[section]?[key]?.AsValue();
-        if (possibleVal is JsonValue val)
-            return val.TryGetValue<T>(out var typedVal) ? typedVal : fallback;
+        if(possibleVal is JsonValue val && val.TryGetValue<T>(out var typedVal))
+        {
+            value = typedVal;
+            return true;
+        }
+        return false;
+    }
+
+    public static T Get<T>(string section, string key, T fallback = default)
+    {
+        if (TryGet<T>(section, key, out var val))
+            return val;
         return fallback;
     }
 
@@ -84,11 +95,6 @@ public partial class AppConfig
         using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Write);
         configFile.StoreString(ConfigData.ToString());
     }
-
-    static readonly JsonSerializerOptions jsonOptions = new()
-    {
-        IncludeFields = true,
-    };
 
     public static void PreloadConfig() => _configData ??= LoadConfig();
 

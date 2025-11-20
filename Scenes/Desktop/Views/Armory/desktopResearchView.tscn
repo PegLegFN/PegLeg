@@ -1,4 +1,90 @@
-[gd_scene format=3 uid="uid://cg7cidflywcge"]
+[gd_scene load_steps=20 format=3 uid="uid://cg7cidflywcge"]
+
+[ext_resource type="Shader" uid="uid://b0bpebmxi5gce" path="res://Shaders/LiquidProgress.gdshader" id="1_ale23"]
+[ext_resource type="Texture2D" uid="uid://yo8vdumjwxd3" path="res://Images/InterfaceIcons/Research/BubblePattern.png" id="2_o1j5s"]
+[ext_resource type="Texture2D" uid="uid://c2qcjrhnbpcsi" path="res://Images/InterfaceIcons/Research/ResearchBeakerMask.png" id="3_hoqfx"]
+[ext_resource type="Texture2D" uid="uid://c4b8vmsg3u70d" path="res://Images/InterfaceIcons/Research/ResearchFlaskMask.png" id="3_j8doi"]
+[ext_resource type="Texture2D" uid="uid://campfbyt1ucf" path="res://Images/InterfaceIcons/Research/ResearchFlaskOverlay.png" id="4_5nqhm"]
+[ext_resource type="Texture2D" uid="uid://ctwaeu15e60t5" path="res://Images/InterfaceIcons/Research/ResearchBeakerOverlay.png" id="4_gyheh"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="5_yeqc8"]
+[ext_resource type="Texture2D" uid="uid://7taj4xrecshe" path="res://Images/InterfaceIcons/T-Icon-ResearchPoint-128.png" id="6_yeqc8"]
+[ext_resource type="Texture2D" uid="uid://cvwtk44p8tt24" path="res://Images/BanjoSuppliments/FORTIcons/T-Icon-Fortitude-128.png" id="9_3q61y"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="9_f4kjt"]
+[ext_resource type="Texture2D" uid="uid://becuvle4r3ykw" path="res://Images/BanjoSuppliments/FORTIcons/T-Icon-Offense-128.png" id="10_f4kjt"]
+[ext_resource type="Texture2D" uid="uid://hvyy4b23ntuf" path="res://Images/BanjoSuppliments/FORTIcons/T-Icon-Defense-128.png" id="11_70e20"]
+[ext_resource type="Texture2D" uid="uid://bjx3s01dyryrx" path="res://Images/BanjoSuppliments/FORTIcons/T-Icon-Tech-128.png" id="12_edefc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j8doi"]
+shader = ExtResource("1_ale23")
+shader_parameter/progress = 1.0
+shader_parameter/progressMin = 0.0
+shader_parameter/progressMax = 0.96
+shader_parameter/amp = 0.005
+shader_parameter/speed = 0.105
+shader_parameter/freq = 5.0
+shader_parameter/bubbles = ExtResource("2_o1j5s")
+shader_parameter/bubbleScale = 1.75
+shader_parameter/bubbleSpeed = 0.75
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sk8jm"]
+bg_color = Color(0.184314, 0.184314, 0.184314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ale23"]
+shader = ExtResource("1_ale23")
+shader_parameter/progress = 0.6
+shader_parameter/progressMin = 0.0
+shader_parameter/progressMax = 0.97
+shader_parameter/amp = 0.005
+shader_parameter/speed = 0.1
+shader_parameter/freq = 8.0
+shader_parameter/bubbles = ExtResource("2_o1j5s")
+shader_parameter/bubbleScale = 1.0
+shader_parameter/bubbleSpeed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f4kjt"]
+shader = ExtResource("1_ale23")
+shader_parameter/progress = 1.0
+shader_parameter/progressMin = 0.0
+shader_parameter/progressMax = 0.97
+shader_parameter/amp = 0.01
+shader_parameter/speed = 0.1
+shader_parameter/freq = 8.0
+shader_parameter/bubbles = ExtResource("2_o1j5s")
+shader_parameter/bubbleScale = 1.0
+shader_parameter/bubbleSpeed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_70e20"]
+shader = ExtResource("1_ale23")
+shader_parameter/progress = 0.2
+shader_parameter/progressMin = 0.0
+shader_parameter/progressMax = 0.97
+shader_parameter/amp = 0.01
+shader_parameter/speed = 0.1
+shader_parameter/freq = 8.0
+shader_parameter/bubbles = ExtResource("2_o1j5s")
+shader_parameter/bubbleScale = 1.0
+shader_parameter/bubbleSpeed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_edefc"]
+shader = ExtResource("1_ale23")
+shader_parameter/progress = 0.7
+shader_parameter/progressMin = 0.0
+shader_parameter/progressMax = 0.97
+shader_parameter/amp = 0.01
+shader_parameter/speed = 0.1
+shader_parameter/freq = 8.0
+shader_parameter/bubbles = ExtResource("2_o1j5s")
+shader_parameter/bubbleScale = 1.0
+shader_parameter/bubbleSpeed = 1.0
 
 [node name="Research" type="MarginContainer"]
 anchors_preset = 15
@@ -15,3 +101,295 @@ ratio = 1.5
 layout_mode = 2
 theme_override_constants/margin_left = -100
 theme_override_constants/margin_right = -100
+
+[node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer5" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 256)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Liquid" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5"]
+self_modulate = Color(0, 0.69, 0.1265, 0.811765)
+material = SubResource("ShaderMaterial_j8doi")
+layout_mode = 2
+texture = ExtResource("3_j8doi")
+expand_mode = 3
+
+[node name="Beaker" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5"]
+layout_mode = 2
+texture = ExtResource("4_5nqhm")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 20
+
+[node name="InInventory" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("5_yeqc8")
+compactifyAmount = true
+showSingleItemAmount = true
+
+[node name="Panel" type="Panel" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sk8jm")
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = " You have: "
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Icon" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("6_yeqc8")
+expand_mode = 3
+
+[node name="AmountText" type="Label" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
+z_index = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.635294, 0.635294, 0.305882, 1)
+
+[node name="MarginContainer2" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer2"]
+z_index = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.662745, 0.321569, 0.321569, 1)
+
+[node name="MarginContainer3" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer3"]
+z_index = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.380392, 0.560784, 0.745098, 1)
+
+[node name="MarginContainer4" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer4"]
+z_index = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+color = Color(0.282353, 0.52549, 0.392157, 1)
+
+[node name="PanelContainer" type="PanelContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"Panel5PadB"
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = -25
+
+[node name="GridContainer" type="HBoxContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Liquid" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer"]
+self_modulate = Color(0.65, 0.65, 0, 0.698039)
+material = SubResource("ShaderMaterial_ale23")
+layout_mode = 2
+texture = ExtResource("3_hoqfx")
+expand_mode = 5
+
+[node name="Beaker" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("4_gyheh")
+expand_mode = 1
+
+[node name="FORT" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer/Beaker"]
+z_index = 1
+material = ExtResource("9_f4kjt")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.65
+anchor_right = 0.65
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("9_3q61y")
+expand_mode = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Liquid" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer2"]
+self_modulate = Color(0.79, 0.3002, 0.3002, 0.756863)
+material = SubResource("ShaderMaterial_f4kjt")
+layout_mode = 2
+texture = ExtResource("3_hoqfx")
+expand_mode = 5
+
+[node name="Beaker" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer2"]
+layout_mode = 2
+texture = ExtResource("4_gyheh")
+expand_mode = 1
+
+[node name="FORT" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer2/Beaker"]
+z_index = 1
+material = ExtResource("9_f4kjt")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.65
+anchor_right = 0.65
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("10_f4kjt")
+expand_mode = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Liquid" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer3"]
+self_modulate = Color(0.0164, 0.4182, 0.82, 0.772549)
+material = SubResource("ShaderMaterial_70e20")
+layout_mode = 2
+texture = ExtResource("3_hoqfx")
+expand_mode = 5
+
+[node name="Beaker" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer3"]
+layout_mode = 2
+texture = ExtResource("4_gyheh")
+expand_mode = 1
+
+[node name="FORT" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer3/Beaker"]
+z_index = 1
+material = ExtResource("9_f4kjt")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.65
+anchor_right = 0.65
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("11_70e20")
+expand_mode = 1
+
+[node name="MarginContainer4" type="MarginContainer" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Liquid" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer4"]
+self_modulate = Color(0.2204, 0.58, 0.38222, 0.752941)
+material = SubResource("ShaderMaterial_edefc")
+layout_mode = 2
+texture = ExtResource("3_hoqfx")
+expand_mode = 5
+
+[node name="Beaker" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer4"]
+layout_mode = 2
+texture = ExtResource("4_gyheh")
+expand_mode = 1
+
+[node name="FORT" type="TextureRect" parent="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer/PanelContainer/MarginContainer/GridContainer/MarginContainer4/Beaker"]
+z_index = 1
+material = ExtResource("9_f4kjt")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.65
+anchor_right = 0.65
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_edefc")
+expand_mode = 1
+
+[connection signal="AmountChanged" from="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory" to="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
+[connection signal="IconChanged" from="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory" to="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="TooltipChanged" from="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory" to="AspectRatioContainer/MarginContainer/PanelContainer/HBoxContainer/MarginContainer5/MarginContainer/InInventory" method="set_tooltip_text"]

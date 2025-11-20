@@ -1512,6 +1512,11 @@ public class GameProfile
         if (result.ContainsKey("notifications"))
         {
             var notifs = result["notifications"].AsArray();
+            var toRemove = notifs.Where(n => n["type"].ToString() == "redeemStwTokensNotification").ToArray();
+            foreach(var notif in toRemove)
+            {
+                notifs.Remove(notif);
+            }
             GD.Print("Notifications: "+notifs.ToString());
             return notifs;
         }

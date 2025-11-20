@@ -29,69 +29,132 @@ public partial class MusicController : Node
         OnThemeUpdated();
     }
 
-    bool hasPlayedIntro = false;
-    bool isStopping = true;
-    bool isStopped = true;
-    AppTheme.MusicPlaylist currentPlaylist;
-    AppTheme.MusicTrack currentTrack;
-    AppTheme.MusicFile currentLayer;
+    record struct MusicState(AppTheme.MusicPlaylist playlist)
+    {
+        public bool isOverride = false;
+        public AppTheme.MusicPlaylist playlist = playlist;
+        public AppTheme.MusicTrack track = null;
+        public AppTheme.MusicFile layer = null;
+        public float time;
+    }
+
+    bool isSwappingState = false;
+    MusicState preservedState;
+    MusicState currentState;
+    MusicState nextState;
 
     Tween currentTransition;
 
-    async void OnThemeUpdated()
+    void OnThemeUpdated()
     {
-        if (!isStopping)
-        {
-            StopMusic();
-            await Helpers.WaitForTimer(muteTime);
-            ChangePlaylist();
-            ResumeMusic(true);
-        }
+        SetMainState(new(ThemeController.activeTheme?.PickPlaylist()));
     }
 
-    void ChangePlaylist()
+    void SetMainState(MusicState state)
     {
-        currentPlaylist = ThemeController.activeTheme?.PickPlaylist();
+        if (currentState.isOverride)
+            preservedState = state;
+        else
+            TransitionToState(state with { isOverride = false });
     }
-    
-    void PlayMusic() => PlayMusic(0);
-    void PlayMusic(float resumeTime)
+
+    void SetOverrideState(MusicState state)
     {
-        if (isStopped || currentPlaylist is null)
+        TransitionToState(state with { isOverride = true});
+    }
+
+    void ClearOverride()
+    {
+        if (currentState.isOverride)
+            TransitionToState(preservedState);
+    }
+
+    async void TransitionToState(MusicState state)
+    {
+        nextState = state;
+        if (isSwappingState || (state.playlist == null && currentState.playlist == null))
+            return;
+        isSwappingState = true;
+
+        if (currentState.playlist != null)
+        {
+            EndMusic(muteTime);
+            await Helpers.WaitForTimer(muteTime);
+        }
+
+        if (nextState.isOverride && !currentState.isOverride)
+            preservedState = currentState with { time = musicA.GetPlaybackPosition() };
+        currentState = nextState;
+
+        isSwappingState = false;
+        BeginMusic();
+    }
+
+    void BeginMusic()
+    {
+        if (currentState.playlist == null)
+            return;
+        if (currentState.layer != null)
+        {
+            //resume layer from timestamp
+            musicA.Stream = currentState.layer.File;
+            musicA.Play(currentState.time);
+        }
+        else
+        {
+            PlayMusic();
+        }
+
+        if (isSwappingState)
             return;
 
-        bool switchTracks = GD.Randf() <= currentPlaylist.trackSwitchChance;
-        bool switchLayers = GD.Randf() <= currentPlaylist.layerSwitchChance && !isStopping;
+        if (currentTransition?.IsValid() ?? false)
+            currentTransition.Kill();
 
-        if (!(switchTracks || switchLayers || currentTrack is null))
+        currentTransition = GetTree().CreateTween().SetTrans(Tween.TransitionType.Expo);
+        currentTransition.Parallel().TweenProperty(musicA, "volume_db", 0, muteTime).SetEase(Tween.EaseType.Out);
+    }
+
+    void PlayMusic()
+    {
+        if (currentState.playlist is null)
+            return;
+
+        bool switchTracks = GD.Randf() <= currentState.playlist.trackSwitchChance;
+        bool switchLayers = GD.Randf() <= currentState.playlist.layerSwitchChance && !isSwappingState;
+
+        if (!switchTracks && !switchLayers && currentState.track is not null && currentState.layer is not null)
         {
+            musicA.Stream = currentState.layer.File;
             musicA.Play();
             return;
         }
 
-        if (switchTracks || currentTrack is null)
-            currentTrack = currentPlaylist.PickTrack(currentTrack);
-
-        var prevLayer = currentLayer;
-        if (switchLayers || currentLayer is null)
+        var prevLayer = currentState.layer;
+        if (currentState.track is null)
         {
-            currentLayer = currentTrack.PickLayer(currentLayer);
+            currentState.layer = null;
+            switchTracks = true;
+            switchLayers = false;
         }
-        if (prevLayer == currentLayer)
+
+        if (switchTracks)
+            currentState.track = currentState.playlist.PickTrack(currentState.track);
+
+        if (switchLayers || currentState.layer is null)
+            currentState.layer = currentState.track.PickLayer(currentState.layer);
+
+        if (prevLayer == currentState.layer)
             switchLayers = false;
 
-        if (switchLayers && resumeTime == 0 && prevLayer is not null)
+        if (switchLayers && prevLayer is not null)
         {
-            //GD.Print($"track {currentTrack + 1} out of {currentPlaylist.tracks.Length}");
-            //GD.Print($"layer {currentLayer + 1} out of {currentPlaylist.layerCount} (from {prevLayer + 1})");
-            var fromStream = prevLayer.File;
-            var toStream = currentLayer.File;
 
+            musicB.VolumeDb = musicA.VolumeDb;
             musicA.VolumeDb = -80;
-            musicB.VolumeDb = 0;
 
-            musicA.Stream = toStream;
-            musicB.Stream = fromStream;
+            musicA.Stream = currentState.layer.File;
+            musicB.Stream = prevLayer.File;
 
             musicA.Play();
             musicB.Play();
@@ -102,7 +165,7 @@ public partial class MusicController : Node
             currentTransition = GetTree().CreateTween().SetTrans(Tween.TransitionType.Expo);
 
             double transitionDelay = GD.RandRange(transitionDelayMin, transitionDelayMax);
-            transitionDelay = Mathf.Min(transitionDelay, toStream.GetLength() - (transitionTime + 1));
+            transitionDelay = Mathf.Min(transitionDelay, musicA.Stream.GetLength() - (transitionTime + 1));
 
             currentTransition.TweenInterval(transitionDelay);
             currentTransition.Parallel().TweenProperty(musicA, "volume_db", 0, transitionTime).SetEase(Tween.EaseType.Out);
@@ -110,38 +173,24 @@ public partial class MusicController : Node
         }
         else
         {
-            //GD.Print($"track {currentTrack+1} out of {currentPlaylist.tracks.Length}");
-            if(prevLayer is null)
-                GD.Print($"layer {currentTrack.IndexOf(currentLayer) + 1} out of {currentTrack.Layers.Length}");
-            var toStream = currentLayer.File;
+            //if (prevLayer is null)
+            //    GD.Print($"layer {currentState.track.IndexOf(currentState.layer) + 1} out of {currentState.track.Layers.Length}");
+            musicA.Stream = currentState.layer.File;
 
-            if (!hasPlayedIntro && currentPlaylist.PickIntro()?.File is AudioStream introStream)
+            if (prevLayer is null && currentState.playlist.PickIntro() is AppTheme.MusicFile introFile)
             {
                 //GD.Print($"using intro");
-                toStream = introStream;
-                currentTrack = null;
+                musicA.Stream = introFile.File;
+                currentState.track = null;
+                currentState.layer = introFile;
             }
-            hasPlayedIntro = true;
 
-            musicA.Stream = toStream;
             musicA.Play();
-
-            if (isStopping)
-                return;
-
-            if (currentTransition?.IsValid() ?? false)
-                currentTransition.Kill();
-
-            currentTransition = GetTree().CreateTween().SetTrans(Tween.TransitionType.Expo);
-            currentTransition.Parallel().TweenProperty(musicA, "volume_db", 0, resumeTime).SetEase(Tween.EaseType.Out);
         }
     }
 
-    void StopMusicInst(float time)
+    void EndMusic(float time)
     {
-        if (isStopping)
-            return;
-        isStopping = true;
         if (currentTransition?.IsValid() ?? false)
             currentTransition.Kill();
         currentTransition = GetTree().CreateTween().SetTrans(Tween.TransitionType.Expo).SetParallel();
@@ -149,24 +198,19 @@ public partial class MusicController : Node
         currentTransition.TweenProperty(musicB, "volume_db", -80, time).SetEase(Tween.EaseType.In);
         currentTransition.Finished += () =>
         {
-            isStopped = true;
             musicA.Stop();
             musicB.Stop();
         };
     }
 
-    public static void StopMusic() => StopMusic(instance.muteTime);
-    public static void StopMusic(float time) => instance.StopMusicInst(time);
-    public static void ResumeMusic(bool playIntro = false) => ResumeMusic(instance.muteTime, playIntro);
-    public static void ResumeMusic(float time, bool playIntro = false)
+    public static void StopMusic() => instance.SetOverrideState(new(null));
+    public static void ResumeMusic() => instance.ClearOverride();
+
+    public static void OverridePlaylist(AppTheme.MusicPlaylist playlist)
     {
-        if (playIntro)
-            instance.hasPlayedIntro = false;
-        instance.ChangePlaylist();
-        instance.currentLayer = null;
-        instance.currentTrack = null;
-        instance.isStopping = false;
-        instance.isStopped = false;
-        instance.PlayMusic(time);
+        if (playlist is null)
+            instance.ClearOverride();
+        else
+            instance.SetOverrideState(new(playlist));
     }
 }

@@ -2,7 +2,7 @@ shader_type canvas_item;
 #include "Includes/SDFHelpers.gdshaderinc"
 
 uniform sampler2D blendFrom;
-instance uniform float blendAmount:hint_range(0,1)=1;
+uniform float blendAmount:hint_range(0,1)=1;
 uniform float threshold:hint_range(0,1) = 0.45;
 uniform float smoothness:hint_range(0,1) = 0.1;
 uniform bool msdf = false;

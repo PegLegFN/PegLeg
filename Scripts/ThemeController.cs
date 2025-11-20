@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -42,7 +43,7 @@ public partial class ThemeController : Node
 
     public override void _Ready()
 	{
-        seasonTheme = GetSeasonTheme();
+        seasonTheme = GetSeasonThemeName();
         ImportThemes();
         SetActiveTheme(AppConfig.Get("theme", "current", ""));
         RefreshTimerController.OnDayChanged += CheckForNewSeason;
@@ -56,7 +57,7 @@ public partial class ThemeController : Node
 
     void CheckForNewSeason()
     {
-        var newSeasonTheme = GetSeasonTheme();
+        var newSeasonTheme = GetSeasonThemeName();
         if (newSeasonTheme != seasonTheme)
         {
             seasonTheme = newSeasonTheme;
@@ -65,7 +66,7 @@ public partial class ThemeController : Node
         }
     }
 
-    static string GetSeasonTheme()
+    static string GetSeasonThemeName()
     {
         //TODO: timeline-related logic should be moved to a timeline class
         int weekCount = ((RefreshTimerController.RightNow.Date - referenceStartDate).Days / 7) % weeksInSeasonalYear;
@@ -121,11 +122,12 @@ public partial class ThemeController : Node
 
     public static AppTheme GetTheme(string key) => appThemes[GetWorkingThemeKey(key)];
     public static bool HasTheme(string key) => appThemes.ContainsKey(key);
-    static string GetWorkingThemeKey(string key)=> 
+    public static string ThemeKeyOf(AppTheme theme) => appThemes?.FirstOrDefault(kvp => kvp.Value == theme).Key;
+    public static string GetWorkingThemeKey(string key) =>
         appThemes.ContainsKey(key) ?
             key :
             (
-                appThemes.ContainsKey(seasonTheme) ?
+                key != seasonTheme && appThemes.ContainsKey(seasonTheme) ?
                     seasonTheme :
                     blankTheme
             );
@@ -156,12 +158,29 @@ public class AppTheme : IJsonOnDeserialized
         Array.ForEach(backgroundFiles, b => b.SetRoot(themePath));
         Array.ForEach(musicPlaylists, m => m.SetRoot(themePath));
     }
+    public string GetThemeKey() => ThemeController.ThemeKeyOf(this);
 
-    public TextureFile PickBackground(TextureFile prev = null, float[] weights = null) =>
-        backgroundFiles.PickFromWeights(p => p.Weight, prev, weights);
+    public TextureFile PickBackground(TextureFile prev = null, float[] weights = null)
+    {
+        var key = GetThemeKey();
+        if (AppConfig.TryGet("theme", $"{key}_bgpref", out int pref))
+        {
+            if (pref >= 0 && pref < backgroundFiles.Length)
+                return backgroundFiles[pref];
+        }
+        return backgroundFiles.PickFromWeights(p => p.Weight, prev, weights);
+    }
 
-    public MusicPlaylist PickPlaylist(MusicPlaylist prev = null, float[] weights = null) =>
-        musicPlaylists.PickFromWeights(p => p.weight, prev, weights);
+    public MusicPlaylist PickPlaylist(MusicPlaylist prev = null, float[] weights = null)
+    {
+        var key = GetThemeKey();
+        if(AppConfig.TryGet("theme", $"{key}_musicpref", out int pref))
+        {
+            if (pref >= 0 && pref < musicPlaylists.Length)
+                return musicPlaylists[pref];
+        }
+        return musicPlaylists.PickFromWeights(p => p.weight, prev, weights);
+    }
 
     public class TextureFile : ThemeFile<Texture2D>
     {
@@ -182,6 +201,10 @@ public class AppTheme : IJsonOnDeserialized
         JsonElement tracks { get; init; }
         MusicTrack[] musicTracks;
         public MusicTrack[] Tracks => musicTracks ?? [];
+        [JsonInclude]
+        string displayName { get; init; }
+        [JsonIgnore]
+        public string DisplayName => displayName ?? musicTracks?.FirstOrDefault()?.Layers?.FirstOrDefault()?.DisplayName;
         public float weight { get; init; } = 1;
         public float layerSwitchChance { get; init; } = 0.15f;
         public float trackSwitchChance { get; init; } = 0.5f;
@@ -244,6 +267,10 @@ public class AppTheme : IJsonOnDeserialized
         string themeRoot;
         [JsonRequired]
         public string path { get; init; }
+        [JsonInclude]
+        string displayName { get; init; }
+        [JsonIgnore]
+        public string DisplayName => displayName ?? path.Split('/')[^1].Split('.')[0].Replace("_", " ");
         public float weight { private get; init; } = 1;
         T file;
 
@@ -252,6 +279,6 @@ public class AppTheme : IJsonOnDeserialized
         [JsonIgnore]
         public float Weight => File is null ? 0 : weight;
         [JsonIgnore]
-        public T File => file ??= PegLegResourceManager.LoadResourceAsset<T>(themeRoot + path);
+        public T File => file ??= PegLegResourceManager.LoadResourceAsset<T>(Path.Combine(themeRoot, path));
     }
 }

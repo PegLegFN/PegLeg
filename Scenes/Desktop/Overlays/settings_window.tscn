@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dt403r6613tos"]
+[gd_scene load_steps=35 format=3 uid="uid://dt403r6613tos"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_p7b2a"]
 [ext_resource type="Script" uid="uid://objskpkxjfqt" path="res://Scripts/UserInterface/Settings/MiscSettings.cs" id="2_dybhj"]
@@ -13,13 +13,19 @@
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_wim73"]
 [ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="8_nh2gq"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="9_yv42k"]
+[ext_resource type="Texture2D" uid="uid://bolcgvghoolg2" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Pause_128.png" id="12_1rpfy"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="12_12lms"]
 [ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="12_ld0ka"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="12_pwy1u"]
 [ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="12_v5jo8"]
+[ext_resource type="Texture2D" uid="uid://uip5g34801wx" path="res://Images/Wallpapers/Fortnite_-_Unknown_Location.png" id="14_7rbbf"]
+[ext_resource type="Texture2D" uid="uid://bmye5mskqg8ib" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Shuffle_128.png" id="15_d27tu"]
+[ext_resource type="StyleBox" uid="uid://cam4t61h3jmpx" path="res://GodotThemes/Styleboxes/ActionButton/ActionButton.tres" id="16_h1p2y"]
+[ext_resource type="Texture2D" uid="uid://wlgvx7s0uplf" path="res://Images/InterfaceIcons/T-Icon-Sound-On-L.png" id="16_yr55s"]
 [ext_resource type="Script" uid="uid://dull1xj5ergmg" path="res://Scripts/UserInterface/Settings/UpdateChecker.cs" id="17_e6sed"]
 [ext_resource type="Script" uid="uid://cddr668av6e55" path="res://Scripts/DiscordWebhooks/DiscordWebhookSettings.cs" id="17_qg6jm"]
 [ext_resource type="PackedScene" uid="uid://dwba88ym1rkl5" path="res://Scenes/updateVersion.tscn" id="17_xu4j7"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="18_1rpfy"]
 
 [sub_resource type="Gradient" id="Gradient_c1ulb"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -33,14 +39,20 @@ metadata/_snap_enabled = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mjqpy"]
 shader = ExtResource("5_1lymk")
-shader_parameter/ControlSize = Vector2(0, 200)
+shader_parameter/ControlSize = Vector2(374, 150)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
 shader_parameter/UseGlobalCorners = false
 shader_parameter/ApplyCornersToFit = false
-shader_parameter/CornerRadius = 10.0
+shader_parameter/CornerRadius = 5.0
 shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sahv1"]
+shader = ExtResource("18_1rpfy")
+shader_parameter/inset = 0.0
+shader_parameter/shade = 0.0
+shader_parameter/shadeAlpha = 0.8
 
 [sub_resource type="Gradient" id="Gradient_ew55o"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -51,6 +63,24 @@ fill = 1
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(1, 1)
 metadata/_snap_enabled = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omoh7"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7rbbf"]
+bg_color = Color(9.2411e-06, 0.66226, 0.833269, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="SettingsWindow" instance=ExtResource("1_p7b2a")]
 isUserClosable = true
@@ -149,7 +179,6 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0"]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0"]
@@ -412,7 +441,6 @@ alignment = 1
 metadata/zone = "c"
 
 [node name="Audio" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="1"]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio" index="0"]
@@ -765,12 +793,19 @@ texture = ExtResource("3_dewmg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Theme" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="2" node_paths=PackedStringArray("themeOptions", "backgroundPreview")]
+[node name="Theme" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="2" node_paths=PackedStringArray("themeOptions", "backgroundPreview", "backgroundOptions", "musicOptions", "musicPreviewButton", "musicPreviewProgress", "applyBtnSection")]
 visible = false
 layout_mode = 2
 script = ExtResource("4_kkpd6")
-themeOptions = NodePath("VBoxContainer/OptionButton")
-backgroundPreview = NodePath("VBoxContainer/Aspect/TextureRect")
+themeOptions = NodePath("VBoxContainer/VBoxContainer/OptionButton")
+backgroundPreview = NodePath("VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect/CurBG")
+backgroundOptions = NodePath("VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/OptionButton")
+musicOptions = NodePath("VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer/OptionButton")
+musicPreviewButton = NodePath("VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer/Button")
+musicPreviewProgress = NodePath("VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer/ProgressBar")
+applyBtnSection = NodePath("VBoxContainer/VBoxContainer2")
+playIcon = ExtResource("8_nh2gq")
+pauseIcon = ExtResource("12_1rpfy")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" index="0"]
 layout_mode = 2
@@ -781,7 +816,10 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Theme"
 
-[node name="OptionButton" type="OptionButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer" index="0"]
 layout_mode = 2
 selected = 0
 item_count = 4
@@ -795,45 +833,55 @@ popup/item_2/id = 2
 popup/item_3/text = "another theme here"
 popup/item_3/id = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="2"]
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer" index="2"]
 visible = false
 layout_mode = 2
 
-[node name="Left" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer" index="0"]
+[node name="Left" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/HBoxContainer" index="0"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 text = "<"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/HBoxContainer" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer/MarginContainer" index="0"]
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/HBoxContainer/MarginContainer" index="0"]
 layout_mode = 2
 theme_type_variation = &"PanelButtonSlanted"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer/MarginContainer" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/HBoxContainer/MarginContainer" index="1"]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" index="0"]
 layout_mode = 2
 text = "testing"
 horizontal_alignment = 1
 
-[node name="Right" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/HBoxContainer" index="2"]
+[node name="Right" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 text = ">"
 
-[node name="Aspect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="3"]
+[node name="BGSelector" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer" index="3"]
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector" index="0"]
+layout_mode = 2
+
+[node name="Aspect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer" index="0"]
 self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(0, 200)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 expand_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="0"]
+[node name="CurBG" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect" index="0"]
 material = SubResource("ShaderMaterial_mjqpy")
 layout_mode = 1
 anchors_preset = 15
@@ -846,36 +894,41 @@ expand_mode = 1
 script = ExtResource("7_wim73")
 syncControlSize = true
 
-[node name="MusicPreviewButton" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="1"]
+[node name="NextBG" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect" index="1"]
 visible = false
-custom_minimum_size = Vector2(20, 20)
+material = SubResource("ShaderMaterial_mjqpy")
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_type_variation = &"TinyButton"
-
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/MusicPreviewButton" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_nh2gq")
+texture = ExtResource("14_7rbbf")
+expand_mode = 1
+script = ExtResource("7_wim73")
+syncControlSize = true
+
+[node name="Shuffle" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect" index="2"]
+visible = false
+material = SubResource("ShaderMaterial_sahv1")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_d27tu")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="2"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect" index="3"]
+visible = false
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 1
 anchors_preset = -1
@@ -886,22 +939,134 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/MarginContainer" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect/MarginContainer" index="0"]
 layout_mode = 2
 texture = SubResource("GradientTexture2D_eiysq")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/MarginContainer" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer/Aspect/MarginContainer" index="1"]
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_vertical = 8
-text = "Apply"
+text = "Shuffle Backgrounds"
 horizontal_alignment = 1
 
-[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect" index="3" instance=ExtResource("9_yv42k")]
+[node name="OptionButton" type="OptionButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/BGSelector/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+clip_text = true
+selected = 0
+fit_to_longest_item = false
+item_count = 5
+popup/item_0/text = "Shuffle Backgrounds"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "BG 1"
+popup/item_2/id = 2
+popup/item_3/text = "BG 2"
+popup/item_3/id = 3
+popup/item_4/text = "BG 3"
+popup/item_4/id = 4
+
+[node name="MusicSelector" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer" index="4"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector" index="0"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+texture = ExtResource("16_yr55s")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Shuffle" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer/TextureRect" index="0"]
+visible = false
+material = SubResource("ShaderMaterial_sahv1")
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_right = 16.0
+grow_vertical = 0
+texture = ExtResource("15_d27tu")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+clip_text = true
+selected = 0
+fit_to_longest_item = false
+item_count = 5
+popup/item_0/text = "Shuffle Music"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Mus 1"
+popup/item_2/id = 2
+popup/item_3/text = "Mus 2"
+popup/item_3/id = 3
+popup/item_4/text = "Mus 3"
+popup/item_4/id = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer" index="1"]
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_omoh7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7rbbf")
+max_value = 1.0
+value = 0.3
+show_percentage = false
+
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer/MusicSelector/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+icon = ExtResource("8_nh2gq")
+expand_icon = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer2" index="0"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer2" index="1"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer2/MarginContainer" index="0"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("16_h1p2y")
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer2/MarginContainer/PanelContainer" index="0"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0.25098, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "Apply Changes"
+horizontal_alignment = 1
+
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer2/MarginContainer" index="1" instance=ExtResource("9_yv42k")]
+layout_mode = 2
 useHold = true
-outlinePadding = 20.0
 holdTime = 0.75
 holdRecoverTime = 0.5
 
@@ -1045,6 +1210,7 @@ access = 2
 use_native_dialog = true
 
 [node name="Advanced" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" index="0"]
@@ -1461,7 +1627,7 @@ text = "Update"
 [connection signal="UpdateMuteIcon" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
 [connection signal="UpdateVolumeState" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/HSlider" method="set_value_no_signal"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications/HBoxContainer/MuteBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio/VBoxContainer/Notifications" method="ToggleMute"]
-[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/Aspect/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="ApplyTheme"]
+[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme/VBoxContainer/VBoxContainer2/MarginContainer/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="ApplyTheme"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/HBoxContainer/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="ClaimCollectionRewards"]
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/ImportButton/Responsive Button Area" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="ImportAccounts"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/UserDataButton" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="OpenAppData"]

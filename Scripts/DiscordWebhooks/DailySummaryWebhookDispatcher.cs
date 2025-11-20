@@ -25,8 +25,8 @@ public partial class DailySummaryWebhookDispatcher : Node
     {
         if (webhook.UsesSync)
         {
-            //waits 6 seconds, abandons if missions arent fetched by then
-            await Helpers.WaitForTimer(6);
+            //waits 9 seconds, abandons if missions arent fetched by then
+            await Helpers.WaitForTimer(9);
         }
         else
         {
