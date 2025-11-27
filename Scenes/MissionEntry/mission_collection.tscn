@@ -8,10 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_xict5"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="6_b35vf"]
 
-[node name="MissionCollection" type="PanelContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "playableFilter")]
-custom_minimum_size = Vector2(255, 150)
-offset_right = 240.0
-offset_bottom = 150.0
+[node name="MissionCollection" type="PanelContainer" unique_id=747623071 node_paths=PackedStringArray("missionList", "loadingIcon", "playableFilter")]
+custom_minimum_size = Vector2(255, 100)
+offset_right = 255.0
+offset_bottom = 100.0
 theme_type_variation = &"Panel3Pad"
 script = ExtResource("1_4v5fq")
 testName = "Name"
@@ -20,32 +20,32 @@ missionList = NodePath("VBoxContainer/Body/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/Body/SmallLoadingIcon")
 playableFilter = NodePath("VBoxContainer/Header/HBoxContainer/CheckButton")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=916347623]
 layout_mode = 2
 
-[node name="Header" type="MarginContainer" parent="VBoxContainer"]
+[node name="Header" type="MarginContainer" parent="VBoxContainer" unique_id=470678899]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Header"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Header" unique_id=1195399814]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="VBoxContainer/Header/HBoxContainer"]
+[node name="Name" type="Label" parent="VBoxContainer/Header/HBoxContainer" unique_id=1351444261]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Collection Name Very Long"
 text_overrun_behavior = 3
 
-[node name="SearchBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer"]
+[node name="SearchBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=1406356965]
 visible = false
 custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/SearchBtn"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/SearchBtn" unique_id=913995161]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -59,13 +59,13 @@ grow_vertical = 2
 texture = ExtResource("2_ma4gr")
 expand_mode = 1
 
-[node name="EditBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer"]
+[node name="EditBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=1458520016]
 visible = false
 custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/EditBtn"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/EditBtn" unique_id=492407310]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -79,14 +79,14 @@ grow_vertical = 2
 texture = ExtResource("1_p305g")
 expand_mode = 1
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer" unique_id=1448874012]
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 tooltip_text = "Only show Missions that can be accessed on this account"
 theme_type_variation = &"EmptySquareCheckButton"
 button_pressed = true
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/CheckButton" unique_id=255142132]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -100,14 +100,15 @@ grow_vertical = 2
 texture = ExtResource("4_27twl")
 expand_mode = 3
 
-[node name="Body" type="MarginContainer" parent="VBoxContainer"]
+[node name="Body" type="MarginContainer" parent="VBoxContainer" unique_id=1670169597]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/Body" instance=ExtResource("4_xict5")]
+[node name="SmallLoadingIcon" parent="VBoxContainer/Body" unique_id=714341080 instance=ExtResource("4_xict5")]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Body" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Body" unique_id=1827722497 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("6_b35vf")
@@ -117,7 +118,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("3_2dnay")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/ScrollContainer" unique_id=903324575]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -127,18 +128,18 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer" unique_id=2032039684]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1132644234]
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" unique_id=24286078]
 layout_mode = 2
 mouse_filter = 0
 
-[node name="Padding" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1314459456]
 layout_mode = 2
 
 [connection signal="NameChanged" from="." to="VBoxContainer/Header/HBoxContainer/Name" method="set_text"]

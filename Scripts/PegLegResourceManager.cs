@@ -424,15 +424,14 @@ public class PegLegResourceManager
         return array;
     }
 
-
-    public static T LoadResourceAsset<T>(string resource, bool allowOverrides = true) where T : Resource
+    public static T LoadResourceAsset<T>(string resource, bool cache = false) where T : Resource
     {
         bool exclude = externalResourceExclusions.Any(resource.StartsWith);
-        if (allowOverrides && !exclude && FileAccess.FileExists(overrideResourcePath + resource))
-        {
-            //todo: handle importing external resources and caching with weakrefs
-            //return null;
-        }
+        //if (allowOverrides && !exclude && FileAccess.FileExists(overrideResourcePath + resource))
+        //{
+        //    //todo: handle importing external resources and caching with weakrefs
+        //    //return null;
+        //}
         if (!exclude && ResourceLoader.Exists(resourcePath + resource))
         {
             return ResourceLoader.Load<T>(resourcePath + resource);
@@ -987,6 +986,7 @@ public class GameItemTemplate
         List<string> tags =
         [
             DisplayName,
+            //Description,
             Rarity ?? (assumeUncommon ? "Uncommon" : null),
             Type,
             SubType,
@@ -999,7 +999,10 @@ public class GameItemTemplate
             foreach (var ability in abilities)
             {
                 if (!ability?.DisplayName?.EndsWith("+") ?? false)
+                {
                     tags.Add(ability.DisplayName);
+                    //tags.Add(ability.Description);
+                }
             }
         }
         if(GetTeamPerk() is GameItemTemplate teamPerk)

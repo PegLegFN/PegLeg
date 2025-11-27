@@ -1,0 +1,1081 @@
+﻿using Godot;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+
+public partial class AppData
+{
+    public string lastAccount;
+}
+
+public enum OrderRange
+{
+    Daily,
+    Weekly,
+    Monthly
+}
+
+public readonly struct FORTStats(float fortitude, float offense, float resistance, float technology)
+{
+    //todo: export this via BanjoBotAssets
+    static DataTableCurve homebaseRatingCurve;
+    static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= new("HomebaseRatingMapping.json", "UIMonsterRating");
+
+    public readonly float fortitude = fortitude;
+    public readonly float offense = offense;
+    public readonly float resistance = resistance;
+    public readonly float technology = technology;
+
+    public float PowerLevel => HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology));
+}
+
+public partial class GameAccount
+{
+    public const string accountDataPath = "user://accounts";
+    static readonly AesContext deviceDetailEncryptor = new();
+
+    static string GetDeviceDetailsKey()
+    {
+        string deviceDetailKey = System.Environment.MachineName + "custard";
+        int baseLength = deviceDetailKey.Length;
+        for (int i = 0; i < 32 - baseLength; i++)
+        {
+            deviceDetailKey += "custard"[i % 7];
+        }
+        return deviceDetailKey[..32];
+    }
+
+    static byte[] EncryptDeviceDetails(JsonObject fromDetails)
+    {
+        //stringify and add padding
+        string deviceDetalsString = fromDetails.ToString();
+        int remainder = deviceDetalsString.Length % 16;
+
+        for (int i = 0; i < 16 - remainder; i++)
+        {
+            deviceDetalsString += "^";
+        }
+
+        string deviceDetailKey = GetDeviceDetailsKey();
+
+        //encrypt
+        deviceDetailEncryptor.Start(AesContext.Mode.EcbEncrypt, deviceDetailKey.ToUtf8Buffer());
+        byte[] encryptedDetails = deviceDetailEncryptor.Update(deviceDetalsString.ToUtf8Buffer());
+        deviceDetailEncryptor.Finish();
+        return encryptedDetails;
+    }
+
+    static JsonObject DecryptDeviceDetails(byte[] encryptedDetails)
+    {
+        if (encryptedDetails is null)
+            return null;
+        if (encryptedDetails.Length % 16 != 0)
+            return null;
+
+        string deviceDetailKey = GetDeviceDetailsKey();
+        if (deviceDetailKey.Length != 32)
+            return null;
+
+        //decrypt
+        deviceDetailEncryptor.Start(AesContext.Mode.EcbDecrypt, deviceDetailKey.ToUtf8Buffer());
+        byte[] decryptedDetails = deviceDetailEncryptor.Update(encryptedDetails);
+        deviceDetailEncryptor.Finish();
+        string deviceDetalsString = Encoding.UTF8.GetString(decryptedDetails, 0, decryptedDetails.Length);
+
+
+        //remove padding and convert to json
+        while (deviceDetalsString.EndsWith('^'))
+        {
+            deviceDetalsString = deviceDetalsString[..^1];
+        }
+
+        JsonObject resultDetails = null;
+        try
+        {
+            resultDetails = JsonNode.Parse(deviceDetalsString).AsObject();
+        }
+        catch (Exception) { }
+        return resultDetails;
+    }
+
+    static GameAccount[] LoadStoredAccounts()
+    {
+        if (!DirAccess.DirExistsAbsolute(accountDataPath))
+            return [];
+
+        using var accountDir = DirAccess.Open(accountDataPath);
+        return accountDir.GetFiles().Where(f => !f.Contains('.') && gameAccountCache?.ContainsKey(f) != true).Select(f => new GameAccount(f)).ToArray();
+    }
+
+    static Dictionary<string, GameAccount> gameAccountCache = LoadStoredAccounts().ToDictionary(a => a.accountId);
+    public static void UpdateAccountCache()
+    {
+        var newCache = LoadStoredAccounts();
+        foreach (var item in newCache)
+        {
+            gameAccountCache.TryAdd(item.accountId, item);
+        }
+        foreach (var item in gameAccountCache)
+        {
+            item.Value.localData = null;
+        }
+    }
+
+    public static GameAccount[] OwnedAccounts => [.. gameAccountCache.Values.Where(a => a.isOwned)];
+    public static GameAccount GetOrCreateAccount(string accountId) => gameAccountCache.ContainsKey(accountId) ? gameAccountCache[accountId] : gameAccountCache[accountId] = new(accountId);
+    public static async Task<bool> RemoveAccount(string accountId, bool force = false)
+    {
+        if (!gameAccountCache.TryGetValue(accountId, out GameAccount account))
+            return true;
+        if (!await account.RemoveDeviceDetails(force))
+            return false;
+        account.DeleteLocalData();
+        gameAccountCache.Remove(accountId);
+        account.accountId = null;
+        if (_activeAccount == account)
+            _activeAccount = null;
+        return true;
+    }
+
+    public static async Task<GameAccount> SearchForAccount(string username)
+    {
+        var activeAccount = GameAccount.activeAccount;
+        if (!await activeAccount.Authenticate())
+            return null;
+        var searchResult = await Helpers.MakeRequest(
+            HttpMethod.Get,
+            FnWebAddresses.userSearch,
+            $"/api/v1/search/{activeAccount.accountId}?platform=epic&prefix={username}",
+            "{}",
+            activeAccount.AuthHeader
+        );
+        if (searchResult is not JsonArray accountArray || accountArray.Count == 0)
+            return null;
+        var resultAccount = GetOrCreateAccount(accountArray[0]["accountId"].ToString());
+        if (resultAccount is not null && accountArray[0]["matches"]?[0]?["value"]?.ToString() is string displayName)
+            resultAccount.SetLocalData("DisplayName", displayName);
+        return resultAccount;
+    }
+
+    static GameAccount _activeAccount;
+    public static GameAccount activeAccount => _activeAccount ??= new(null);
+    public static event Action ActiveAccountChangedEarly;
+    public static event Action ActiveAccountChanged;
+    public static event Action BookmarksChanged;
+
+    public static async Task<bool> SetActiveAccount(string accountId, Action<string> progress = null)
+    {
+        if (!gameAccountCache.TryGetValue(accountId, out GameAccount account))
+            return false;
+        progress?.Invoke("Logging in");
+        if (await account.Authenticate())
+        {
+            var profile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+            if (!profile.hasProfile)
+                return false;
+            progress?.Invoke("Fetching profiles");
+            await account.QueryAllProfiles();
+            progress?.Invoke("Checking calendar");
+            await account.CheckCalender();
+            progress?.Invoke("");
+            _activeAccount = account;
+            ActiveAccountChangedEarly?.Invoke();
+            ActiveAccountChanged?.Invoke();
+            BookmarksChanged?.Invoke();
+            AppConfig.Set("account", "lastUsed", accountId);
+            return true;
+        }
+        return false;
+    }
+
+    public static async Task RefreshActiveAccount()
+    {
+        if (!await activeAccount.Authenticate())
+            return;
+        _activeAccount.fortStats = null;
+        _activeAccount.ventureFortStats = null;
+        _activeAccount.localData = [];
+        _activeAccount.localPinnedQuests = [];
+        foreach (var profile in _activeAccount.profiles.Values)
+        {
+            profile.InvalidateProfile();
+        }
+        await _activeAccount.QueryAllProfiles(true);
+        await _activeAccount.CheckLocalPinnedQuests();
+        await SetActiveAccount(_activeAccount.accountId);
+    }
+
+    public static void LoginToAccount(JsonObject accountAuthResponse)
+    {
+        if (accountAuthResponse["account_id"]?.ToString() is not string accountId)
+            return;
+        var account = GetOrCreateAccount(accountId);
+        account.SetAuthentication(accountAuthResponse);
+    }
+
+    public GameClient TargetClient { get; private set; }
+    public XmppManager XmppManager { get; private set; }
+    public GameAccount(string accountId)
+    {
+        this.accountId = accountId;
+        XmppManager = new(this);
+        if (GetLocalData("GameClient")?.ToString() is string clientId)
+        {
+            TargetClient = GameClient.clients.TryGetValue(clientId, out var c) ? c : null;
+        }
+        else if (GetLocalData("DeviceDetails") is not null)
+        {
+            TargetClient = GameClient.NewSwitchClient;
+            SetLocalData("GameClient", TargetClient.ClientID);
+        }
+        TargetClient ??= GameClient.PreferredClient;
+    }
+
+    public Action OnAccountUpdated;
+
+    bool isBeta;
+    public string accountId { get; private set; }
+    bool isValid => !string.IsNullOrWhiteSpace(accountId);
+
+    public bool loginFailure { get; private set; }
+    public string loginFailureMessage { get; private set; }
+    public bool isAuthed => isValid && !loginFailure && !AuthTokenExpired;
+    public bool isOwned => isValid && (isAuthed || GetLocalData("DeviceDetails") is not null);
+
+    public string DisplayName => GetLocalData("DisplayName")?.ToString() ?? $"<{accountId}>";
+    public Texture2D ProfileIcon => GetLocalData("IconPath")?.ToString() is string iconPath ? CatalogRequests.GetLocalCosmeticResource(iconPath) : null;
+
+    public async Task FetchDisplayNames(params GameAccount[] accounts)
+    {
+        if (accounts.Length > 100)
+        {
+            await FetchDisplayNames(accounts[..100]);
+            await FetchDisplayNames(accounts[100..]);
+            return;
+        }
+        var res = await FnWebAddresses.account
+            .MakeRequest($"/account/api/public/account?{string.Join("&", accounts.Select(a => $"accountId={a.accountId}"))}")
+            .SetAuthorisation(AuthHeader)
+            .Send();
+        if (!res.IsSuccessStatusCode)
+            return;
+        //GD.Print(await res.Content.ReadAsStringAsync());
+        var displayNames = await res.Content.ReadFromJsonAsync<AccountDisplayNames[]>(Helpers.JsonOptions.Fields);
+        var displayNameDict = displayNames.ToDictionary(d => d.id);
+        foreach (var acc in accounts)
+        {
+            if (displayNameDict.TryGetValue(acc.accountId, out var dnData))
+                acc.SetLocalData("DisplayName", dnData.DisplayName);
+        }
+    }
+
+    Dictionary<string, GameProfile> profiles = [];
+
+    public GameProfile this[string profileId] => GetProfile(profileId);
+    public GameProfile GetProfile(string profileId) => profiles.ContainsKey(profileId ?? "") ? profiles[profileId ?? ""] : profiles[profileId ?? ""] = new(this, profileId ?? "");
+    public bool HasProfile(string profileId) => profiles.ContainsKey(profileId);
+
+    Dictionary<string, FriendData> friends = [];
+    public IEnumerable<FriendData> Friends => friends.Values;
+    public FriendData? GetFriend(string accountId) => friends.TryGetValue(accountId, out var friendData) ? friendData : null;
+
+    public async Task FetchFriends()
+    {
+        var res = await FnWebAddresses.friends
+            .MakeRequest($"friends/api/v1/{accountId}/summary")
+            .SetAuthorisation(AuthHeader)
+            .Send();
+        if (!res.IsSuccessStatusCode)
+            return;
+        var friendData = await res.Content.ReadFromJsonAsync<FriendSummary>(Helpers.JsonOptions.Fields);
+        //GD.Print(await res.Content.ReadAsStringAsync());
+        friends = friendData.friends.ToDictionary(f => f.accountId ?? "");
+        var userIds =
+            friends.Keys
+            .Union(friendData.incoming.Select(f => f.accountId))
+            .Union(friendData.outgoing.Select(f => f.accountId))
+            .Union(friendData.blocklist.Select(f => f.accountId))
+            .Distinct();
+        await FetchDisplayNames([.. userIds.Select(GetOrCreateAccount)]);
+    }
+
+    public async Task<GameAccount> EnsureProfile(string profileId, bool force = false)
+    {
+        await GetProfile(profileId).Query(force);
+        return this;
+    }
+
+    public async Task QueryAllProfiles(bool force = false)
+    {
+        await profileOperationSemaphore.WaitAsync();
+        try
+        {
+            if (!isOwned)
+            {
+                if (activeAccount is null)
+                    return;
+                await Task.WhenAll(
+                    GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.Common).QueryUnsafe(force)
+                );
+            }
+            else
+            {
+                await Task.WhenAll(
+                    GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.Common).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.CosmeticInventory).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.PeopleCollection).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.SchematicCollection).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.Backpack).QueryUnsafe(force),
+                    GetProfile(FnProfileTypes.Storage).QueryUnsafe(force)
+                );
+
+                //await GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force);
+                //await GetProfile(FnProfileTypes.Common).QueryUnsafe(force);
+                //await GetProfile(FnProfileTypes.CosmeticInventory).QueryUnsafe(force);
+                //await GetProfile(FnProfileTypes.PeopleCollection).QueryUnsafe(force);
+                //await GetProfile(FnProfileTypes.SchematicCollection).QueryUnsafe(force);
+                //await GetProfile(FnProfileTypes.Backpack).QueryUnsafe(force);
+                //await GetProfile(FnProfileTypes.Storage).QueryUnsafe(force);
+            }
+
+        }
+        finally
+        {
+            profileOperationSemaphore.Release();
+        }
+    }
+
+    string authToken;
+    int authExpiresAt = -999;
+    string refreshToken;
+    int refreshExpiresAt = -999;
+    AuthenticationHeaderValue accountAuthHeader;
+    //fails 60 seconds before it would actualy expire
+    public bool AuthTokenExpired => authExpiresAt <= (Time.GetTicksMsec() * 0.001) + 60;
+    bool RefreshTokenExpired => refreshExpiresAt <= (Time.GetTicksMsec() * 0.001) + 10;
+    public string AuthToken => authToken;
+    public AuthenticationHeaderValue AuthHeader => accountAuthHeader;
+    public async Task<bool> Authenticate(bool loadingOverlay = false, bool assumeValid = true)
+    {
+        if (isAuthed && assumeValid)
+            return true;
+        if (!isOwned)
+            return false;
+
+        using var loadToken = LoadingOverlay.CreateToken("authentication");
+        if (!loadingOverlay)
+            loadToken.Dispose();
+
+        if (!assumeValid)
+        {
+            using var req = await FnWebAddresses.account
+                .MakeRequest("account/api/oauth/verify")
+                .SetAuthorisation(AuthHeader)
+                .Send();
+            if (req.IsSuccessStatusCode)
+                return true;
+        }
+
+        if (!RefreshTokenExpired)
+        {
+            var refreshAuth = await TargetClient.LoginWithRefreshToken(refreshToken);
+
+            if (refreshAuth?["access_token"] is not null)
+            {
+                SetAuthentication(refreshAuth);
+                return true;
+            }
+
+            if (refreshAuth?["errorMessage"] is JsonNode errorNode)
+                GD.Print("Refresh token error: " + errorNode.ToString());
+            else
+                GD.Print("Refresh token error: " + refreshAuth.ToString());
+        }
+        var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
+        JsonNode deviceAuth = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
+
+        if (deviceAuth?["access_token"] is not null)
+        {
+            SetAuthentication(deviceAuth);
+            return true;
+        }
+        bool offline = deviceAuth?["offline"] is JsonValue val && val.GetValueKind() == JsonValueKind.True;
+        string failMsg = offline ? "Offline" : deviceAuth?["errorMessage"].ToString();
+        GD.Print(failMsg);
+        if (!loginFailure)
+        {
+            loginFailure = true;
+            loginFailureMessage = failMsg;
+            OnAccountUpdated?.Invoke();
+
+            if (offline)
+            {
+                //dont send login failure notif when offline
+                return false;
+            }
+
+            NotificationManager.Push([new()
+            {
+                header = "Login Failure",
+                icon = ProfileIcon,
+                itemColor = Color.FromHtml("#aa0000"),
+                body=$"""
+                Could not Login to {DisplayName}, please Login again from the Account Selector
+                Err: {loginFailureMessage}
+                """
+            }]);
+        }
+
+        return false;
+    }
+
+    public void ForceExpireToken() => authExpiresAt = 0;
+
+    public async Task<string> GenerateExchangeCode()
+    {
+        var result = await Helpers.MakeRequest(
+            HttpMethod.Get,
+            FnWebAddresses.account,
+            "account/api/oauth/exchange",
+            $"consumingClientId=launcherAppClient2",
+            accountAuthHeader
+        );
+        return result["code"].ToString();
+    }
+
+    public SemaphoreSlim profileOperationSemaphore { get; private set; } = new(1);
+
+    public async Task<JsonArray> PurchaseOffer(GameOffer offer, int purchaseQuantity = 1)
+    {
+        JsonObject shopRequestBody = new()
+        {
+            ["offerId"] = offer.OfferId,
+            ["purchaseQuantity"] = purchaseQuantity,
+            ["currency"] = offer["prices"][0]["currencyType"].ToString(),
+            ["currencySubType"] = offer["prices"][0]["currencySubType"].ToString(),
+            ["expectedTotalPrice"] = (await offer.GetPersonalPrice(true, true)).quantity * purchaseQuantity,
+            ["gameContext"] = "Pegleg",
+        };
+        var profile = GetProfile(FnProfileTypes.Common);
+        var result = await profile.PerformOperation("PurchaseCatalogEntry", shopRequestBody.ToString());
+        offer.NotifyChanged();
+        return result;
+    }
+
+    public async Task<bool> SetAsActiveAccount(Action<string> progress = null) => await SetActiveAccount(accountId, progress);
+
+    void SetAuthentication(JsonNode accountAuthResponse)
+    {
+        if (accountId is null)
+            return;
+        authToken = accountAuthResponse["access_token"].ToString();
+        SetLocalData("DisplayName", accountAuthResponse["displayName"].ToString());
+        accountAuthHeader = new("Bearer", authToken);
+        authExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + accountAuthResponse["expires_in"].GetValue<int>();
+        if (accountAuthResponse["refresh_expires"]?.GetValue<int>() is int refreshExpires)
+        {
+            refreshExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + refreshExpires;
+            refreshToken = accountAuthResponse["refresh_token"].ToString();
+        }
+        loginFailure = false;
+        OnAccountUpdated?.Invoke();
+    }
+
+    SemaphoreSlim iconSemaphore = new(1);
+
+    public async void UpdateIcon()
+    {
+        await UpdateIcon(this);
+    }
+    public async Task UpdateIcon(GameAccount asAccount)
+    {
+        if (iconSemaphore.CurrentCount <= 0)
+            return;
+        await iconSemaphore.WaitAsync();
+        try
+        {
+            if (!await asAccount.Authenticate())
+                return;
+
+            var avatarData = await Helpers.MakeRequest(
+                HttpMethod.Get,
+                FnWebAddresses.avatar,
+                $"/v1/avatar/fortnite/ids?accountIds={accountId}",
+                "{}",
+                asAccount.AuthHeader
+            );
+            if (avatarData is JsonObject obj)
+            {
+                GD.Print($"avatar fetch error: \n{obj}");
+                return;
+            }
+
+            string skinId = avatarData[0]?["avatarId"]?.ToString() is string avId ? avId.Split(":")[^1] : null;
+            GD.Print($"skinID: {skinId}");
+            if (string.IsNullOrWhiteSpace(skinId) || skinId == "CID_STWHERO") //todo: add dedicated icon for STW Hero skins
+            {
+                SetLocalData("IconPath", null);
+                return;
+            }
+
+            var skinData = await Helpers.MakeRequest(
+                HttpMethod.Get,
+                WebClients.fnApi,
+                $"/v2/cosmetics/br/{skinId}",
+                "{}",
+                null,
+                addCosmeticHeader: true
+            );
+
+            string skinIconServerPath = null;
+            try
+            {
+                skinIconServerPath =
+                    skinData["data"]?["images"]?["icon"]?.ToString() ??
+                    skinData["data"]?["images"]?["smallIcon"]?.ToString();
+            }
+            catch { }
+            if (skinIconServerPath is null)
+            {
+                SetLocalData("IconPath", null);
+                return;
+            }
+
+            var skinIcon = await CatalogRequests.GetCosmeticResource(skinIconServerPath);
+
+            if (skinIcon is null)
+            {
+                SetLocalData("IconPath", null);
+                return;
+            }
+            SetLocalData("IconPath", skinIconServerPath);
+
+            OnAccountUpdated?.Invoke();
+        }
+        finally
+        {
+            iconSemaphore.Release();
+        }
+
+    }
+
+    public async Task SaveDeviceDetails()
+    {
+        if (!await Authenticate())
+            return;
+
+        //generate device details
+        JsonObject deviceDetails = (await Helpers.MakeRequest(
+            HttpMethod.Post,
+            FnWebAddresses.account,
+            $"account/api/public/account/{accountId}/deviceAuth",
+            "",
+            AuthHeader,
+            ""
+        ))?.AsObject();
+
+        if (deviceDetails["errorCode"] is not null)
+            return;
+
+        if (GetLocalData("DeviceDetails") is not null)
+        {
+            await RemoveDeviceDetails(true);
+        }
+
+        SetLocalData("Client", TargetClient.ClientID);
+        SetLocalData("DeviceDetails", new JsonArray([.. EncryptDeviceDetails(deviceDetails).Select(b => (JsonNode)b)]));
+    }
+
+    public async Task<bool> RemoveDeviceDetails(bool force = false)
+    {
+        if (!force && !await Authenticate())
+        {
+            GD.Print("Authentication failed, aborting device detail deletion");
+            return false;
+        }
+        var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
+        if (DecryptDeviceDetails(dd) is JsonObject deviceDetails)
+        {
+            //tell epic we're not using the device any more. probably unneccecary, but its common courtesy
+            var result = await Helpers.MakeRequest(
+                HttpMethod.Delete,
+                FnWebAddresses.account,
+                $"account/api/public/account/{accountId}/deviceAuth/{deviceDetails["deviceId"]}",
+                "",
+                AuthHeader,
+                ""
+            );
+
+            if (!force && (result is null || result["errorMessage"] is not null))
+            {
+                GD.Print($"Could not delete device details: {result["errorMessage"]}");
+                return false;
+            }
+
+            ClearLocalData("DeviceDetails");
+            return true;
+        }
+        return false;
+    }
+
+    JsonObject localData;
+    void LoadLocalData()
+    {
+        if (!isValid || !DirAccess.DirExistsAbsolute(accountDataPath))
+        {
+            GD.Print("invalid or no folder");
+            localData = [];
+            return;
+        }
+        using FileAccess localDataFile = FileAccess.Open($"{accountDataPath}/{accountId}", FileAccess.ModeFlags.Read);
+        if (localDataFile is null)
+        {
+            GD.Print("no file");
+            localData = [];
+            return;
+        }
+        var localDataString = localDataFile.GetAsText();
+
+        try
+        {
+            localData = JsonNode.Parse(localDataString).AsObject();
+            return;
+        }
+        catch (Exception)
+        {
+            GD.Print("Warning: Failed to load local data, data may be overwritten");
+        }
+        localData = [];
+    }
+
+    public JsonNode GetLocalData(string key)
+    {
+        if (localData is null)
+            LoadLocalData();
+        return localData[key];
+    }
+
+    public void ClearLocalData(string key) => SetLocalData(key, null);
+    public void SetLocalData(string key, JsonNode value)
+    {
+        if (localData is null)
+            LoadLocalData();
+        localData[key] = value.SafeDeepClone();
+
+        if (!isValid || !localData.ContainsKey("DeviceDetails"))
+            return;
+
+        if (!DirAccess.DirExistsAbsolute(accountDataPath))
+            DirAccess.MakeDirAbsolute(accountDataPath);
+        using FileAccess localDataFile = FileAccess.Open($"{accountDataPath}/{accountId}", FileAccess.ModeFlags.Write);
+        localDataFile?.StoreString(localData.ToString());
+    }
+
+    void DeleteLocalData()
+    {
+        if (!DirAccess.DirExistsAbsolute(accountDataPath) || !FileAccess.FileExists($"{accountDataPath}/{accountId}"))
+            return;
+        using DirAccess dir = DirAccess.Open(accountDataPath);
+        dir.Remove(accountId);
+    }
+
+
+    public event Action<GameAccount> OnFortStatsChanged;
+    FORTStats? fortStats;
+    public FORTStats FortStats => GetFORTStats();
+    public void MarkFortStatsDirty() => fortStats = null;
+    public FORTStats GetFORTStats(bool force = false)
+    {
+        if (!force && fortStats is not null)
+            return fortStats.Value;
+
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        //var researchStats = accountItems.statAttributes["research_levels"];
+        var statItems = accountItems.GetItems("Stat");
+        var equippedWorkerItems = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
+
+        int LookupStatItem(string statId) => statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
+
+        float LookupWorkers(string squadId)
+        {
+            var matchingWorkers = equippedWorkerItems
+                .Where(item => item.attributes["squad_id"].ToString() == squadId);
+            return matchingWorkers.Select(item => item.CalculateSurvivorRating()).Sum();
+        }
+
+        //+ profileStats["fortitude"].GetValue<int>()
+        float fortitude = LookupStatItem("Stat:fortitude") + LookupStatItem("Stat:fortitude_team") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
+        float offense = LookupStatItem("Stat:offense") + LookupStatItem("Stat:offense_team") + LookupWorkers("squad_attribute_arms_fireteamalpha") + LookupWorkers("squad_attribute_arms_closeassaultsquad");
+        float resistance = LookupStatItem("Stat:resistance") + LookupStatItem("Stat:resistance_team") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
+        float technology = LookupStatItem("Stat:technology") + LookupStatItem("Stat:technology_team") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
+
+        GD.Print($"Main FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
+
+        fortStats = new(fortitude, offense, resistance, technology);
+        OnFortStatsChanged?.Invoke(this);
+        return fortStats.Value;
+    }
+
+    public event Action<GameAccount> OnVentureFortStatsChanged;
+    FORTStats? ventureFortStats;
+    public FORTStats VentureFortStats => GetVentureFORTStats();
+    public void MarkVentureFortStatsDirty() => ventureFortStats = null;
+    public FORTStats GetVentureFORTStats(bool force = false)
+    {
+        if (!force && ventureFortStats is not null)
+            return ventureFortStats.Value;
+
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        var statItems = accountItems.GetItems("Stat");
+        int LookupStatItem(string statId) => statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
+
+        //+ profileStats["fortitude"].GetValue<int>()
+        float fortitude = LookupStatItem("Stat:fortitude_phoenix") + LookupStatItem("Stat:fortitude_team_phoenix");
+        float offense = LookupStatItem("Stat:offense_phoenix") + LookupStatItem("Stat:resistance_team_phoenix");
+        float resistance = LookupStatItem("Stat:resistance_phoenix") + LookupStatItem("Stat:resistance_team_phoenix");
+        float technology = LookupStatItem("Stat:technology_phoenix") + LookupStatItem("Stat:technology_team_phoenix");
+
+        GD.Print($"Venture FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
+
+        ventureFortStats = new(fortitude, offense, resistance, technology);
+        OnVentureFortStatsChanged?.Invoke(this);
+        return ventureFortStats.Value;
+    }
+
+    public async Task GenerateXRayLlamaResults(bool force = false)
+    {
+        var campaign = GetProfile(FnProfileTypes.AccountItems);
+        var existingPrerolls = campaign.GetItems("PrerollData");
+        if (force || existingPrerolls.Length == 0 || existingPrerolls.Any(p => (p.attributes["expiration"]?.Deserialize<DateTime>() ?? default) < DateTime.UtcNow))
+            await campaign.PerformOperation("PopulatePrerolledOffers");
+    }
+
+    public async Task<float> GetSurvivorBonus(string bonusID, int perSquadRequirement = 2, float boostBase = 5)
+    {
+        if (!await Authenticate())
+            return 0f;
+        var matchingSurvivors = (await GetProfile(FnProfileTypes.AccountItems).Query()).GetItems("Worker", gameItem =>
+        {
+            if (gameItem.attributes["squad_id"] is null || gameItem.attributes["set_bonus"] is null)
+                return false;
+            var thisBonus = gameItem.attributes["set_bonus"].ToString().Split(".")[^1];
+            return thisBonus == bonusID;
+        })
+        .GroupBy(gameItem => gameItem.attributes["squad_id"].ToString());
+
+        int boostMatchCount = matchingSurvivors.Select(g => g.Count() / perSquadRequirement).Sum();
+
+        return boostBase * boostMatchCount;
+    }
+
+    public async Task<JsonObject> GetOrderCounts(OrderRange range)
+    {
+        var commonData = await GetProfile(FnProfileTypes.Common).Query();
+
+        var orderRange = commonData.statAttributes[range.ToAttribute()];
+        var lastInterval = orderRange?["lastInterval"]?.ToString();
+        if (lastInterval is null)
+            return null;
+
+        var lastIntervalTime = DateTime.Parse(lastInterval, null, DateTimeStyles.RoundtripKind);
+        if (lastIntervalTime != range.ToInterval())
+            return null;
+
+        return orderRange["purchaseList"].AsObject();
+    }
+
+    public async Task<int> GetPurchaseLimit(GameOffer offer)
+    {
+        int totalLimit = 999;
+
+        if (offer.DailyLimit != -1)
+        {
+            int purchaseAmount = (await GetOrderCounts(OrderRange.Daily))?[offer.OfferId]?.GetValue<int>() ?? 0;
+            //GD.Print($"Daily Limit: {purchaseAmount}/{dailyLimit}");
+            totalLimit = Mathf.Min(totalLimit, offer.DailyLimit - purchaseAmount);
+        }
+
+        if (totalLimit > 0 && offer.WeeklyLimit != -1)
+        {
+            int purchaseAmount = (await GetOrderCounts(OrderRange.Weekly))?[offer.OfferId]?.GetValue<int>() ?? 0;
+            //GD.Print($"Weekly Limit: {purchaseAmount}/{weeklyLimit}");
+            totalLimit = Mathf.Min(totalLimit, offer.WeeklyLimit - purchaseAmount);
+        }
+
+        if (totalLimit > 0 && offer.MonthlyLimit != -1)
+        {
+            int purchaseAmount = (await GetOrderCounts(OrderRange.Monthly))?[offer.OfferId]?.GetValue<int>() ?? 0;
+            //GD.Print($"Monthly Limit: {purchaseAmount}/{monthlyLimit}");
+            totalLimit = Mathf.Min(totalLimit, offer.MonthlyLimit - purchaseAmount);
+        }
+
+        if (totalLimit > 0 && offer.EventLimit != -1)
+        {
+            var commonData = await GetProfile(FnProfileTypes.Common).Query();
+            GameItem eventTracker = commonData.GetItems("EventPurchaseTracker", item =>
+                    item.attributes?["event_instance_id"]?.ToString() == offer.EventId
+                ).FirstOrDefault();
+
+            int purchaseAmount = eventTracker?.attributes?["event_purchases"]?[offer.OfferId]?.GetValue<int>() ?? 0;
+            //GD.Print($"Event Limit: {purchaseAmount}/{eventLimit}");
+            totalLimit = Mathf.Min(totalLimit, offer.EventLimit - purchaseAmount);
+        }
+
+        //TODO: export and check the items internal purchase limit instead of hardcoding it
+        if (offer.itemGrants[0].templateId == "Token:accountinventorybonus")
+        {
+            var accountItemData = await GetProfile(FnProfileTypes.AccountItems).Query();
+            totalLimit = Mathf.Min(totalLimit, 3000 - accountItemData.GetFirstTemplateItem("Token:accountinventorybonus")?.quantity ?? 0);
+        }
+
+        if (offer.itemGrants[0].templateId == "CampaignHeroLoadout:purchaseabledefaultloadout")
+        {
+            var accountItemData = await GetProfile(FnProfileTypes.AccountItems).Query();
+            totalLimit = Mathf.Min(totalLimit, 11 - accountItemData.GetTemplateItems("CampaignHeroLoadout:purchaseabledefaultloadout").Length);
+        }
+
+        return totalLimit;
+    }
+
+    public async Task<int> GetAffordableLimit(GameOffer offer, bool cosmetic = false)
+    {
+        var pricePerPurchase = cosmetic ? await offer.GetPersonalPrice() : offer.Price;
+        if ((pricePerPurchase?.quantity ?? 0) == 0)
+            return 999;
+        if (cosmetic)
+        {
+            int vbucks = 0;//put vbucks here
+            return Mathf.FloorToInt((float)vbucks / pricePerPurchase.quantity);
+        }
+        var inInventory = (await GetProfile(FnProfileTypes.AccountItems).Query()).GetFirstTemplateItem(pricePerPurchase.templateId);
+        return Mathf.FloorToInt((float)(inInventory?.quantity ?? 0) / pricePerPurchase.quantity);
+    }
+
+    public async Task<bool> MatchesFulfillmentRequirements(GameOffer offer)
+    {
+        if (offer.FulfillmentDenyList.Count > 0)
+        {
+            var commonData = await GetProfile(FnProfileTypes.Common).Query();
+            var fulfillments = commonData.statAttributes["in_app_purchases"]?["fulfillmentCounts"];
+            if (offer.FulfillmentDenyList.Any(check => (fulfillments[check.Key]?.GetValue<int>() ?? 0) >= check.Value))
+                return false;
+        }
+
+        if (offer.FulfillmentRequireList.Count > 0)
+        {
+            var commonData = await GetProfile(FnProfileTypes.Common).Query();
+            var fulfillments = commonData.statAttributes["in_app_purchases"]?["fulfillmentCounts"];
+            if (offer.FulfillmentRequireList.Any(check => (fulfillments[check.Key]?.GetValue<int>() ?? 0) < check.Value))
+                return false;
+        }
+
+        return true;
+    }
+
+    public bool MatchesItemRequirements(GameOffer offer) =>
+        offer.ItemDenyList.Count == 0 ||
+        !offer
+        .ItemDenyList
+        .Any(check =>
+            profiles
+            .Select(p =>
+                p.Value
+                .GetItem(check.Key)?
+                .quantity ?? 0
+            ).Sum() >= check.Value
+        );
+
+    public async Task<string> GetSACCode(bool addExpiredText = true)
+    {
+        var commonData = await GetProfile(FnProfileTypes.Common).Query();
+        var lastSetTime = DateTime.TryParse(commonData.statAttributes["mtx_affiliate_set_time"]?.ToString(), null, DateTimeStyles.RoundtripKind, out var dt) ? dt : DateTime.UtcNow.AddDays(-15);
+        bool isExpired = (DateTime.UtcNow - lastSetTime).Days > 13;
+        var creator = commonData.statAttributes["mtx_affiliate"]?.ToString();
+        return (creator ?? "None") + (isExpired && creator is not null && addExpiredText ? " (Expired)" : "");
+    }
+
+    public async Task<bool> IsSACExpired() => Mathf.FloorToInt(await GetSACTime()) > 13;
+
+    public async Task<double> GetSACTime()
+    {
+        var commonData = await GetProfile(FnProfileTypes.Common).Query();
+        var lastSetTimeString = commonData.statAttributes["mtx_affiliate_set_time"]?.ToString();
+        if (lastSetTimeString is null)
+            return 999;
+        var lastSetTime = DateTime.Parse(lastSetTimeString, null, DateTimeStyles.RoundtripKind);
+        return (DateTime.UtcNow - lastSetTime).TotalDays;
+    }
+
+    public async Task<bool> SetSACCode(string newName)
+    {
+        await GetProfile(FnProfileTypes.Common).PerformOperation("SetAffiliateName", "{\"affiliateName\":\"" + newName + "\"}");
+        //TODO: return false if creator code not found
+        return true;
+    }
+
+    HashSet<string> bookmarkedItems;
+
+    public void ToggleBookmarked(GameItemTemplate template)
+    {
+        if (!isOwned || template?.CanBeFavourited != true)
+            return;
+        if (template.Tier > 1)
+        {
+            template = GameItemTemplate.Get(TierSubstitute().Replace(template.TemplateId, "_t01"));
+        }
+        bookmarkedItems ??= GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        var tid = template.TemplateId.ToLower();
+        bool isBookmarked = bookmarkedItems.Contains(tid);
+        //GD.Print($"already: {isBookmarked} ({tid})");
+        if (isBookmarked)
+        {
+            var tidSearch = RaritySubstitute().Replace(tid, "_..?_");
+            tidSearch = TierSubstitute().Replace(tidSearch, "_t0\\d");
+            //GD.Print("reminder removal search " + tidSearch);
+            var toRemove = bookmarkedItems.Where(x => Regex.IsMatch(x, tidSearch));
+            foreach (var item in toRemove)
+            {
+                bookmarkedItems.Remove(item);
+                GD.Print("reminder removed " + item);
+            }
+        }
+        else
+        {
+            bookmarkedItems.Add(tid);
+            GD.Print("reminder added " + tid);
+            while (template.TryGetNextRarity() is GameItemTemplate upgradedTemplate)
+            {
+                tid = upgradedTemplate.TemplateId.ToLower();
+                if (!bookmarkedItems.Contains(tid))
+                {
+                    bookmarkedItems.Add(tid);
+                    GD.Print("reminder added " + tid);
+                }
+                else
+                {
+                    break;
+                }
+                template = upgradedTemplate;
+            }
+        }
+        SetLocalData("bookmarkedItems", JsonSerializer.SerializeToNode(bookmarkedItems));
+        BookmarksChanged?.Invoke();
+    }
+
+    public bool IsBookmarked(GameItemTemplate template)
+    {
+        if (template?.CanBeFavourited != true)
+            return false;
+        bookmarkedItems ??= GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        var result = bookmarkedItems.Contains(TierSubstitute().Replace(template.TemplateId, "_t01").ToLower());
+        return result;
+    }
+
+    [GeneratedRegex("_(?:(?:c)|(?:uc)|(?:r)|(?:vr)|(?:sr)|(?:ur))_")]
+    private static partial Regex RaritySubstitute();
+    [GeneratedRegex("_t0\\d")]
+    private static partial Regex TierSubstitute();
+
+    HashSet<string> localPinnedQuests = [];
+    DateTime questsLastRefreshedAt = DateTime.MinValue;
+    async Task<GameProfile> CheckLocalPinnedQuests()
+    {
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        bool outOfDate = (questsLastRefreshedAt - DateTime.UtcNow).TotalMinutes > 5;
+        if (localPinnedQuests != null && !outOfDate)
+            return accountItems;
+
+        await accountItems.Query();
+        localPinnedQuests = accountItems.statAttributes["client_settings"]["pinnedQuestInstances"].Deserialize<HashSet<string>>();
+        return accountItems;
+    }
+
+    public async Task ClientQuestLoginCampaign()
+    {
+        await GetProfile(FnProfileTypes.AccountItems)
+            .PerformOperation("ClientQuestLogin", @"{""streamingAppKey"": """"}");
+    }
+    public async Task ClientQuestLoginAthena()
+    {
+        await GetProfile(FnProfileTypes.CosmeticInventory)
+            .PerformOperation("ClientQuestLogin", @"{""streamingAppKey"": """"}");
+    }
+
+    public async Task AddPinnedQuest(GameItem item)
+    {
+        var accountItems = await CheckLocalPinnedQuests();
+        if (item.templateId.StartsWith("Quest") && item.profile == accountItems && !localPinnedQuests.Contains(item.uuid))
+        {
+            localPinnedQuests.Add(item.uuid);
+            accountItems.SendItemUpdate(item);
+            SendLocalPinnedQuests(accountItems);
+        }
+    }
+
+    public async Task RemovePinnedQuest(GameItem item)
+    {
+        var accountItems = await CheckLocalPinnedQuests();
+        if (localPinnedQuests.Contains(item.uuid))
+        {
+            localPinnedQuests.Remove(item.uuid);
+            accountItems.SendItemUpdate(item);
+            SendLocalPinnedQuests(accountItems);
+        }
+    }
+
+    public void ClearPinnedQuests()
+    {
+        GD.Print("clearing all pinned");
+        var unpinnedQuests = localPinnedQuests?.ToArray() ?? [];
+        localPinnedQuests?.Clear();
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        foreach (var item in unpinnedQuests)
+        {
+            accountItems.SendItemUpdate(accountItems.GetItem(item));
+        }
+        SendLocalPinnedQuests(accountItems);
+    }
+
+    async void SendLocalPinnedQuests(GameProfile accountItems)
+    {
+        JsonObject content = new()
+        {
+            ["pinnedQuestIds"] = new JsonArray(localPinnedQuests.Select(q => (JsonValue)q).ToArray())
+        };
+        await accountItems.PerformOperation("SetPinnedQuests", content.ToString());
+    }
+
+    public bool HasPinnedQuest(GameItem item) => item is not null && localPinnedQuests.Contains(item.uuid);
+
+    public async Task<GameItem> RerollQuest(GameItem item)
+    {
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        if (item.profile != accountItems)
+            return null;
+        GD.Print("rerolling quest " + item.uuid);
+        JsonObject content = new()
+        {
+            ["questId"] = item.uuid
+        };
+        var notif = (await accountItems.PerformOperation("FortRerollDailyQuest", content.ToString()))
+            .FirstOrDefault(n => n["type"].ToString() == "dailyQuestReroll");
+        if (notif is null)
+            return null;
+        return accountItems.GetItems("Quest", item => item.templateId == notif["newQuestId"].ToString()).FirstOrDefault();
+    }
+
+    public bool CanRerollQuest() => (GetProfile(FnProfileTypes.AccountItems).statAttributes?["quest_manager"]?["dailyQuestRerolls"]?.GetValue<int>() ?? 0) > 0;
+}
+

@@ -665,8 +665,18 @@ static class CatalogRequests
         imageFile.SeekEnd(-1);
         imageFile.Store8(temp);
 
+        var imageSize = resourceImage.GetSize();
+        var clampedSize = imageSize;
+        if (clampedSize.X > 256)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (256.0f / clampedSize.X));
+        if (clampedSize.Y > 256)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (256.0f / clampedSize.Y));
+        if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
+            resourceImage.Resize(clampedSize.X, clampedSize.Y);
+
         var imageTex = ImageTexture.CreateFromImage(resourceImage);
-        imageTex.ResourceName = serverPath;
+        //imageTex.ResourceName = serverPath;
+        imageTex.ResourcePath = serverPath;
         lock (activeResourceCache)
         {
             activeResourceCache[serverPath] = GodotObject.WeakRef(imageTex);
@@ -740,8 +750,18 @@ static class CatalogRequests
             imageFile.StoreBuffer(imageBuffer);
         }
 
+        var imageSize = resourceImage.GetSize();
+        var clampedSize = imageSize;
+        if (clampedSize.X > 256)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (256 / clampedSize.X));
+        if (clampedSize.Y > 256)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (256 / clampedSize.Y));
+        if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
+            resourceImage.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+
         var imageTex = ImageTexture.CreateFromImage(resourceImage);
-        imageTex.ResourceName = serverPath;
+        //imageTex.ResourceName = serverPath;
+        imageTex.ResourcePath = serverPath;
 
         lock (activeResourceCache)
         {
