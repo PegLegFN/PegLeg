@@ -573,8 +573,12 @@ public class GameItem
         return rating;
     }
 
-    public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview) => GetTexture(textureType, PegLegResourceManager.defaultIcon);
-    public Texture2D GetTexture(Texture2D fallbackIcon) => GetTexture(FnItemTextureType.Preview, fallbackIcon);
+    public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview, bool largePreview = false) => 
+        GetTexture(textureType, PegLegResourceManager.defaultIcon, largePreview);
+    public Texture2D GetTexture(bool largePreview) =>
+        GetTexture(FnItemTextureType.Preview, PegLegResourceManager.defaultIcon, largePreview);
+    public Texture2D GetTexture(Texture2D fallbackIcon, bool largePreview = false) => 
+        GetTexture(FnItemTextureType.Preview, fallbackIcon, largePreview);
 
     const string llamaDefaultPreviewImage = "PinataStandardPack";
     public static readonly Texture2D[] llamaTierIcons =
@@ -584,7 +588,7 @@ public class GameItem
         ResourceLoader.Load<Texture2D>("res://Images/Llamas/PinataGold.png", "Texture2D"),
     ];
 
-    public Texture2D GetTexture(FnItemTextureType textureType, Texture2D fallbackIcon)
+    public Texture2D GetTexture(FnItemTextureType textureType, Texture2D fallbackIcon, bool largePreview = false)
     {
         if (textureType == FnItemTextureType.Personality)
             return GetPersonalityTexture(fallbackIcon);
@@ -593,7 +597,7 @@ public class GameItem
             return GetSetBonusTexture(fallbackIcon);
 
         if (textureType == FnItemTextureType.Preview && GameItemTemplate.Get(attributes?["portrait"]?.ToString()) is GameItemTemplate portraitTemplate)
-            return portraitTemplate.GetTexture(fallbackIcon);
+            return portraitTemplate.GetTexture(fallbackIcon, largePreview);
         if (template?.Type == "CardPack")
         {
             if (attributes?.ContainsKey("options") ?? false)
@@ -615,7 +619,7 @@ public class GameItem
             }
         }
 
-        return template?.GetTexture(textureType, fallbackIcon);
+        return template?.GetTexture(textureType, fallbackIcon, largePreview);
     }
     
     Texture2D GetPersonalityTexture(Texture2D fallbackIcon = null)

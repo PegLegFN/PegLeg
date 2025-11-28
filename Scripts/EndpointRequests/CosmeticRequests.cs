@@ -182,6 +182,8 @@ public static class CosmeticRequests
         return await LoadRemoteImage(() => WebClients.dillyApi.MakeRequest($"v1/export?Path={path}"), filename);
     }
 
+    const float imageSizeLimit = 256;
+
     static ImageTexture LoadLocalImage(string identifier)
     {
         if (identifier is null)
@@ -205,8 +207,22 @@ public static class CosmeticRequests
                 imageFile.SeekEnd(-1);
                 imageFile.Store8(temp);
 
+                var imageSize = image.GetSize();
+                var startingSize = imageSize;
+                var clampedSize = imageSize;
+                if (clampedSize.X > imageSizeLimit)
+                    clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.X));
+                if (clampedSize.Y > imageSizeLimit)
+                    clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.Y));
+                if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
+                {
+                    if (imageSize.X < 1 || imageSize.Y == 1)
+                        GD.PushWarning($"Cosmetic Size Error: {startingSize} >> {imageSize}");
+                    image.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+                }
+
                 var imageTex = ImageTexture.CreateFromImage(image);
-                imageTex.ResourceName = identifier;
+                imageTex.ResourcePath = identifier;
                 lock (imageCache)
                 {
                     imageCache[identifier] = GodotObject.WeakRef(imageTex);
@@ -235,8 +251,22 @@ public static class CosmeticRequests
                     imageFile.StoreBuffer(imageBuffer);
                 }
 
+                var imageSize = image.GetSize();
+                var startingSize = imageSize;
+                var clampedSize = imageSize;
+                if (clampedSize.X > imageSizeLimit)
+                    clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.X));
+                if (clampedSize.Y > imageSizeLimit)
+                    clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.Y));
+                if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
+                {
+                    if (imageSize.X < 1 || imageSize.Y == 1)
+                        GD.PushWarning($"Cosmetic Size Error: {startingSize} >> {imageSize}");
+                    image.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+                }
+
                 var imageTex = ImageTexture.CreateFromImage(image);
-                imageTex.ResourceName = identifier;
+                imageTex.ResourcePath = identifier;
                 lock (imageCache)
                 {
                     imageCache[identifier] = GodotObject.WeakRef(imageTex);

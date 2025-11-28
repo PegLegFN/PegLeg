@@ -771,35 +771,25 @@ public class GameItemTemplate
 
     public string[] AlterationExclusions => rawData["AlterationNamedExclusions"]?.Deserialize<string[]>() ?? [];
 
-    public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview) => GetTexture(textureType, PegLegResourceManager.defaultIcon);
-    public Texture2D GetTexture(Texture2D fallbackIcon) => GetTexture(FnItemTextureType.Preview, fallbackIcon);
+    public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview, bool largePreview = false) => GetTexture(textureType, PegLegResourceManager.defaultIcon, largePreview);
+    public Texture2D GetTexture(Texture2D fallbackIcon, bool largePreview = false) => GetTexture(FnItemTextureType.Preview, fallbackIcon, largePreview);
 
-    Dictionary<FnItemTextureType, Texture2D> textures = [];
-    public Texture2D GetTexture(FnItemTextureType textureType, Texture2D fallbackIcon)
+    Dictionary<FnItemTextureType, Texture2D> persistantTextureCache = [];
+    public Texture2D GetTexture(FnItemTextureType textureType, Texture2D fallbackIcon, bool largePreview = false)
     {
-        if (textures.TryGetValue(textureType, out var cachedTex))
+        if (persistantTextureCache.TryGetValue(textureType, out var cachedTex) && (!largePreview || textureType != FnItemTextureType.Preview))
             return cachedTex;
 
-        if 
-        (
-            (
-                Type == "TeamPerk" || 
-                Type == "Ability"
-            ) && 
-            textureType == FnItemTextureType.Preview
-        )
+        if ((Type == "TeamPerk" ||  Type == "Ability") && textureType == FnItemTextureType.Preview)
             textureType = FnItemTextureType.Icon;
 
-        if
-        (
-            Type == "Worker" &&
+        if(Type == "Worker" &&
             (
                 rawData["ImagePaths"]?
                 ["SmallPreview"]?
                 .ToString()
                 .Contains("GenericWorker") ?? false
-            )
-        )
+            ))
             return GetSubtypeTexture(SubType ?? "Survivor", fallbackIcon);
 
         if 
@@ -812,23 +802,36 @@ public class GameItemTemplate
         )
             return goldLlama;
 
-        if (!TryGetTexturePath(out var texturePath, textureType))
+        if (!TryGetTexturePath(out var texturePath, out var wasLargePreview, textureType, largePreview))
             return fallbackIcon;
         var loadedTex = PegLegResourceManager.LoadResourceAsset<Texture2D>("GameAssets/" + texturePath);
-        if (loadedTex is not null)
-            textures[textureType] = loadedTex;
+        if (loadedTex is not null && !wasLargePreview)
+            persistantTextureCache[textureType] = loadedTex;
         return loadedTex ?? fallbackIcon;
     }
 
-    public bool TryGetTexturePath(out string foundPath, FnItemTextureType textureType = FnItemTextureType.Preview)
+    public bool TryGetTexturePath(out string foundPath, FnItemTextureType textureType = FnItemTextureType.Preview) =>
+        TryGetTexturePath(out foundPath, out _, textureType, false);
+    
+
+    public bool TryGetTexturePath(out string foundPath, out bool wasLargePreview, FnItemTextureType textureType, bool preferLargePreview)
     {
         foundPath = null;
+        wasLargePreview = false;
         JsonObject imagePaths = rawData["ImagePaths"]?.AsObject();
         if (imagePaths is null)
             return false;
 
         if (textureType == FnItemTextureType.Preview)
-            foundPath = (imagePaths["LargePreview"] ?? imagePaths["SmallPreview"])?.ToString();
+        {
+            if (preferLargePreview)
+            {
+                wasLargePreview = imagePaths["LargePreview"] is not null;
+                foundPath = (imagePaths["LargePreview"] ?? imagePaths["SmallPreview"])?.ToString();
+            }
+            else
+                foundPath = (imagePaths["SmallPreview"] ?? imagePaths["LargePreview"])?.ToString();
+        }
         else
             foundPath = imagePaths[textureType.ToString()]?.ToString();
 

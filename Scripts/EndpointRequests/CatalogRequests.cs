@@ -638,6 +638,8 @@ static class CatalogRequests
         return localPath;
     }
 
+    const float imageSizeLimit = 256;
+
     public static ImageTexture GetLocalCosmeticResource(string serverPath)
     {
         lock (activeResourceCache)
@@ -666,13 +668,19 @@ static class CatalogRequests
         imageFile.Store8(temp);
 
         var imageSize = resourceImage.GetSize();
+        var startingSize = imageSize;
         var clampedSize = imageSize;
-        if (clampedSize.X > 256)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (256.0f / clampedSize.X));
-        if (clampedSize.Y > 256)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (256.0f / clampedSize.Y));
+        if (clampedSize.X > imageSizeLimit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.X));
+        if (clampedSize.Y > imageSizeLimit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.Y));
         if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
-            resourceImage.Resize(clampedSize.X, clampedSize.Y);
+        {
+
+            if (imageSize.X < 1 || imageSize.Y == 1)
+                GD.PushWarning($"Cosmetic Size Error: {startingSize} >> {imageSize}");
+            resourceImage.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+        }
 
         var imageTex = ImageTexture.CreateFromImage(resourceImage);
         //imageTex.ResourceName = serverPath;
@@ -751,13 +759,19 @@ static class CatalogRequests
         }
 
         var imageSize = resourceImage.GetSize();
+        var startingSize = imageSize;
         var clampedSize = imageSize;
-        if (clampedSize.X > 256)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (256 / clampedSize.X));
-        if (clampedSize.Y > 256)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (256 / clampedSize.Y));
+        if (clampedSize.X > imageSizeLimit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.X));
+        if (clampedSize.Y > imageSizeLimit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.Y));
         if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
+        {
+
+            if (imageSize.X < 1 || imageSize.Y == 1)
+                GD.PushWarning($"Cosmetic Size Error: {startingSize} >> {imageSize}");
             resourceImage.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+        }
 
         var imageTex = ImageTexture.CreateFromImage(resourceImage);
         //imageTex.ResourceName = serverPath;

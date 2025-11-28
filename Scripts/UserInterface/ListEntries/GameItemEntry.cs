@@ -129,6 +129,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     [Export]
     public bool compactifyAmount;
     [Export]
+    public bool useLargePreview;
+    [Export]
     public bool includeDescriptionInTooltip = false;
     [Export]
     public bool preventInteractability;
@@ -284,7 +286,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         string name = displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1];
         string description = displayItem.template?.Description;
         string type = displayItem.template?.Type;
-        Texture2D mainIcon = displayItem.GetTexture();
+        Texture2D mainIcon = displayItem.GetTexture(missingIcon, useLargePreview);
 
         description ??= "";
         var personalityText = displayItem.Personality;

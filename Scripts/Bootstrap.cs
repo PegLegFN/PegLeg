@@ -12,8 +12,8 @@ public partial class Bootstrap : Node
 {
     public const string processLockPath = "user://pid";
     const string pipeName = "PegLegPipe";
-    const int majorPackageVersion = 1;
-    const int minorPackageVersion = 1;
+    const int majorPackageVersion = 2;
+    const int minorPackageVersion = 0;
 
     [Export]
     Vector2I windowSize = new(1350, 720);
