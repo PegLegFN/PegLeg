@@ -177,7 +177,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             resourceTarget.Visible = true;
             return;
         }
-        var tex = await CatalogRequests.GetCosmeticResource(imageUrl, withDisplayAsset);
+        var tex = await CatalogRequests.GetCosmeticResource(imageUrl, withDisplayAsset, imageResolutionScale);
         if (tex is not null)
             ApplyResource(tex);
         else
@@ -291,6 +291,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
     string shopUrl = null;
     string layoutId = null;
     public string imageUrl { get; private set; } = null;
+    public float imageResolutionScale = 1;
     public string displayName { get; private set; } = null;
     public string displayType { get; private set; } = null;
     string imageDisplayAssetPath = null;
@@ -304,6 +305,14 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
     {
         offerId = entryData["offerId"].ToString();
         cellWidth = (int)cellSize.X;
+        imageResolutionScale = cellWidth switch
+        {
+            1 => 1,
+            2 => 1.5f,
+            3 => 2.25f,
+            4 => 3,
+            _ => 1
+        };
         layoutId = entryData["layout"]?["id"]?.ToString();
 
         int oldPrice = entryData["regularPrice"].GetValue<int>();
@@ -474,7 +483,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             imageUrl = "https://export-service.dillyapis.com/v1/export?path=" + possibleRenderImage.Split('.')[0];
         }
 
-        if (imageUrl is not null && CatalogRequests.GetLocalCosmeticResource(imageUrl) is ImageTexture tex && tex is not null)
+        if (imageUrl is not null && CatalogRequests.GetLocalCosmeticResource(imageUrl, imageResolutionScale) is ImageTexture tex && tex is not null)
             ApplyResource(tex);
     }
 

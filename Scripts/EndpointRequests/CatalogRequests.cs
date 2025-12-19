@@ -640,7 +640,7 @@ static class CatalogRequests
 
     const float imageSizeLimit = 256;
 
-    public static ImageTexture GetLocalCosmeticResource(string serverPath)
+    public static ImageTexture GetLocalCosmeticResource(string serverPath, float resolutionScale = 1)
     {
         lock (activeResourceCache)
         {
@@ -668,12 +668,13 @@ static class CatalogRequests
         imageFile.Store8(temp);
 
         var imageSize = resourceImage.GetSize();
+        var limit = imageSizeLimit * resolutionScale;
         var startingSize = imageSize;
         var clampedSize = imageSize;
-        if (clampedSize.X > imageSizeLimit)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.X));
-        if (clampedSize.Y > imageSizeLimit)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.Y));
+        if (clampedSize.X > limit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (limit / clampedSize.X));
+        if (clampedSize.Y > limit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (limit / clampedSize.Y));
         if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
         {
 
@@ -693,9 +694,9 @@ static class CatalogRequests
         return imageTex;
     }
 
-    public static async Task<ImageTexture> GetCosmeticResource(string serverPath, bool printSuccess = false)
+    public static async Task<ImageTexture> GetCosmeticResource(string serverPath, bool printSuccess = false, float resolutionScale = 1)
     {
-        if (GetLocalCosmeticResource(serverPath) is ImageTexture localImageTex)
+        if (GetLocalCosmeticResource(serverPath, resolutionScale) is ImageTexture localImageTex)
         {
             if (localImageTex is not null)
                 return localImageTex;
@@ -759,12 +760,13 @@ static class CatalogRequests
         }
 
         var imageSize = resourceImage.GetSize();
+        var limit = imageSizeLimit * resolutionScale;
         var startingSize = imageSize;
         var clampedSize = imageSize;
-        if (clampedSize.X > imageSizeLimit)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.X));
-        if (clampedSize.Y > imageSizeLimit)
-            clampedSize = (Vector2I)((Vector2)clampedSize * (imageSizeLimit / clampedSize.Y));
+        if (clampedSize.X > limit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (limit / clampedSize.X));
+        if (clampedSize.Y > limit)
+            clampedSize = (Vector2I)((Vector2)clampedSize * (limit / clampedSize.Y));
         if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
         {
 

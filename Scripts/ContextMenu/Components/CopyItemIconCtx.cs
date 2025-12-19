@@ -11,7 +11,7 @@ public partial class CopyItemIconCtx : BaseContextComponent
 
     public void Copy()
     {
-        var img = currentItem?.GetTexture(null)?.GetImage();
+        var img = currentItem?.GetTexture(null, true)?.GetImage();
         if (img is null)
             return;
         Win64Helpers.ClipboardSetImage(img);

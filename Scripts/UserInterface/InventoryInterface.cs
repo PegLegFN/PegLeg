@@ -36,6 +36,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     Control inMissionIndicator;
     [Export]
     Control heavySearchWarning;
+    [Export]
+    HomebasePowerLevel powerLevel;
 
     public override void _Ready()
     {
@@ -189,6 +191,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         currentProfile = await account.GetProfile(targetProfile).Query();
 
         inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
+
+        powerLevel?.SetAccountManual(account);
 
         currentProfile.OnProfileChanged += ApplyFilters;
         ApplyFilters();

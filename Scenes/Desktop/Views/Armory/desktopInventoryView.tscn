@@ -1,15 +1,18 @@
-[gd_scene load_steps=25 format=3 uid="uid://udk47ipcpsbq"]
+[gd_scene load_steps=29 format=3 uid="uid://udk47ipcpsbq"]
 
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="1_cq0hx"]
 [ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_ix0kh"]
 [ext_resource type="StyleBox" uid="uid://cg5f2hwe5io65" path="res://GodotThemes/Styleboxes/CheckButton/CheckContainer.tres" id="2_ytjya"]
 [ext_resource type="StyleBox" uid="uid://cvljwgex83ynh" path="res://GodotThemes/Styleboxes/CheckButton/UnselectedCheck.tres" id="3_jwnrv"]
 [ext_resource type="Texture2D" uid="uid://cir0axuy4xjte" path="res://Images/InterfaceIcons/T_OpenGlow.png" id="3_l2jv4"]
+[ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="4_hn8my"]
 [ext_resource type="Texture2D" uid="uid://frsfbmj2qyxu" path="res://Images/InterfaceIcons/T_Icon_FavoriteTab_64.png" id="4_incdt"]
 [ext_resource type="Texture2D" uid="uid://bo36hhtrb2njg" path="res://Images/InterfaceIcons/T-Icon-Manage-New-32.png" id="4_m3xe0"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="4_q3ge8"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="5_g4jqb"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="5_mx4ls"]
 [ext_resource type="Texture2D" uid="uid://boywmwfvrbmwp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Cogs_128.png" id="6_6h6v6"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="6_8o7d2"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="6_a3sqn"]
 [ext_resource type="Texture2D" uid="uid://bufu4bggy6lrs" path="res://Images/InterfaceIcons/T-Icon-Defenders_-CARD.png" id="9_my6h5"]
 [ext_resource type="Texture2D" uid="uid://dw4n1jlpyogxw" path="res://Images/InterfaceIcons/T-Icon-Nav-Squad-128.png" id="10_17ihq"]
@@ -39,6 +42,18 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvrrd"]
+bg_color = Color(0.184314, 0.184314, 0.184314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+
 [sub_resource type="ButtonGroup" id="ButtonGroup_xh1u0"]
 resource_name = "InventoryTypeFilter"
 
@@ -50,7 +65,7 @@ shader_parameter/smoothness = 0.25
 shader_parameter/msdf = false
 shader_parameter/skipSDF = false
 
-[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning")]
+[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -67,6 +82,7 @@ typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource"
 creatorImageParent = NodePath("Creators")
 inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
 heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
+powerLevel = NodePath("VBoxContainer/HBoxContainer/PowerLevel")
 
 [node name="Creators" type="Control" parent="."]
 layout_mode = 2
@@ -98,6 +114,7 @@ layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_type_variation = &"Panel3Pad"
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer"]
@@ -108,7 +125,74 @@ text = "Press Enter to filter longer lists"
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 0
 placeholder_text = "Search items"
+
+[node name="PowerLevel" type="MarginContainer" parent="VBoxContainer/HBoxContainer" node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+script = ExtResource("4_hn8my")
+homebaseNumberLabel = NodePath("MarginContainer/HBoxContainer/PowerLevelNumber")
+homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelProgressBar")
+tooltipColor = Color(0.596078, 0, 0.729412, 1)
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PowerLevel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wvrrd")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PowerLevel"]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+max_value = 1.0
+step = 0.0
+value = 0.35
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("5_mx4ls")
+texture_progress = ExtResource("5_mx4ls")
+tint_under = Color(0.145098, 0.145098, 0.145098, 1)
+tint_progress = Color(0.596167, 0, 0.73, 1)
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_8o7d2")
+expand_mode = 1
+
+[node name="PowerLevelNumber" type="Label" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
+text = "144"
+horizontal_alignment = 1
 
 [node name="HBoxContainer2" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2

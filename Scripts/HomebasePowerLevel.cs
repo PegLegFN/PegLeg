@@ -3,7 +3,8 @@ using System.Threading;
 
 public partial class HomebasePowerLevel : Control
 {
-
+    [Export]
+    bool useCurrent = true;
     [Export]
     Label homebaseNumberLabel;
     [Export]
@@ -15,9 +16,13 @@ public partial class HomebasePowerLevel : Control
 
     public override void _Ready()
     {
-        GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
-        OnActiveAccountChanged();
+        if (useCurrent)
+        {
+            GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
+            OnActiveAccountChanged();
+        }
     }
+
     //todo: move fort stat change detection logic to GameAccount and GameProfile, and subscribe to OnFortStatChanged
     CancellationTokenSource accountChangeCts = new();
     async void OnActiveAccountChanged()
@@ -51,6 +56,12 @@ public partial class HomebasePowerLevel : Control
 
         currentProfile.OnStatsChanged += OnProfileStatChanged;
 
+        UpdateStatsVisuals();
+    }
+
+    public async void SetAccountManual(GameAccount account)
+    {
+        currentProfile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
         UpdateStatsVisuals();
     }
 

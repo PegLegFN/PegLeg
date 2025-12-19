@@ -227,7 +227,7 @@ public class PegLegResourceManager
             if (templatesPerFrame < 0)
             {
                 await Helpers.WaitForFrame();
-                templatesPerFrame = OS.HasFeature("mobile") ? 20 : 60;
+                templatesPerFrame = OS.HasFeature("mobile") ? 40 : 60;
             }
         }
         GD.Print($"loaded {templatesTotal} template textures");
@@ -1064,12 +1064,12 @@ class DataTable
     public DataTableCurve this[string key] => curves[key];
 }
 
-class DataTableCurve
+public class DataTableCurve
 {
-    readonly List<float> times = [];
-    readonly List<float> values = [];
-    readonly float minTime = 0;
-    readonly float maxTime = 0;
+    public readonly List<double> times = [];
+    public readonly List<double> values = [];
+    double minTime = 0;
+    double maxTime = 0;
 
     public DataTableCurve(string filepath, string curveKey)
     {
@@ -1086,30 +1086,54 @@ class DataTableCurve
 
         var keysArray = dataTableCurveJson["Keys"].AsArray();
 
-        minTime = keysArray[0]["Time"].GetValue<float>();
-        maxTime = keysArray[^1]["Time"].GetValue<float>();
+        minTime = keysArray[0]["Time"].GetValue<double>();
+        maxTime = keysArray[^1]["Time"].GetValue<double>();
 
         foreach (var curvePointKey in keysArray)
         {
-            times.Add(curvePointKey["Time"].GetValue<float>());
-            values.Add(curvePointKey["Value"].GetValue<float>());
+            times.Add(curvePointKey["Time"].GetValue<double>());
+            values.Add(curvePointKey["Value"].GetValue<double>());
         }
     }
 
     public DataTableCurve(JsonObject dataTableCurveJson)
     {
         var keysArray = dataTableCurveJson["Keys"].AsArray();
-        minTime = keysArray[0]["Time"].GetValue<float>();
-        maxTime = keysArray[^1]["Time"].GetValue<float>();
+        minTime = keysArray[0]["Time"].GetValue<double>();
+        maxTime = keysArray[^1]["Time"].GetValue<double>();
 
         foreach (var curvePointKey in keysArray)
         {
-            times.Add(curvePointKey["Time"].GetValue<float>());
-            values.Add(curvePointKey["Value"].GetValue<float>());
+            times.Add(curvePointKey["Time"].GetValue<double>());
+            values.Add(curvePointKey["Value"].GetValue<double>());
         }
     }
 
-    public float Sample(float time)
+    public static DataTableCurve LoadHomebaseRatingMap()
+    {
+        using FileAccess dataTableFile = PegLegResourceManager.LoadResourceFile("GameAssets/HomebaseRatingMap.json", false);
+        if (dataTableFile is null)
+            return new();
+
+        var keysArray = JsonNode.Parse(dataTableFile.GetAsText()).AsArray();
+
+        DataTableCurve toReturn = new()
+        {
+            minTime = keysArray[0]["Key"].GetValue<double>(),
+            maxTime = keysArray[^1]["Key"].GetValue<double>()
+        };
+
+        foreach (var curvePointKey in keysArray)
+        {
+            toReturn.times.Add(curvePointKey["Key"].GetValue<double>());
+            toReturn.values.Add(curvePointKey["Value"].GetValue<double>());
+        }
+        return toReturn;
+    }
+
+    DataTableCurve(){}
+
+    public double Sample(double time)
     {
         if (time < minTime)
         {
@@ -1123,7 +1147,7 @@ class DataTableCurve
         }
 
         // higher/lower search for time range
-        int GetClosestTimeIndexFloored(int fromIndex, int toIndex, float time)
+        int GetClosestTimeIndexFloored(int fromIndex, int toIndex, double time)
         {
             if (toIndex - fromIndex < 3)
             {
@@ -1145,14 +1169,60 @@ class DataTableCurve
 
         int lowerIndex = GetClosestTimeIndexFloored(0, times.Count - 1, time);
 
-        float lowerTime = times[lowerIndex];
-        float upperTime = times[lowerIndex + 1];
+        double lowerTime = times[lowerIndex];
+        double upperTime = times[lowerIndex + 1];
 
-        float betweenTimeBlend = (time - lowerTime) / (upperTime - lowerTime);
+        double betweenTimeBlend = (time - lowerTime) / (upperTime - lowerTime);
 
-        float lowerValue = values[lowerIndex];
-        float upperValue = values[lowerIndex + 1];
+        double lowerValue = values[lowerIndex];
+        double upperValue = values[lowerIndex + 1];
 
         return lowerValue + ((upperValue - lowerValue) * betweenTimeBlend);
+    }
+    public double SampleInverse(double value)
+    {
+        if (value < values[0])
+        {
+            //handle pre-infinity
+            return minTime;
+        }
+        if (value > values[^1])
+        {
+            //handle post-infinity
+            return maxTime;
+        }
+
+        // higher/lower search for time range
+        int GetClosestValueIndexFloored(int fromIndex, int toIndex, double value)
+        {
+            if (toIndex - fromIndex < 3)
+            {
+                toIndex = Mathf.Clamp(toIndex, 0, values.Count);
+                while (value <= values[toIndex] && toIndex > 0)
+                    toIndex--;
+                return toIndex;
+            }
+
+            int middleIndex = Mathf.CeilToInt((toIndex - fromIndex) * 0.5f) + fromIndex;
+
+            if (value == values[middleIndex])
+                return middleIndex;
+            else if (value > values[middleIndex])
+                return GetClosestValueIndexFloored(middleIndex, toIndex, value);
+            else
+                return GetClosestValueIndexFloored(fromIndex, middleIndex, value);
+        }
+
+        int lowerIndex = GetClosestValueIndexFloored(0, times.Count - 1, value);
+
+        double lowerVal = values[lowerIndex];
+        double upperVal = values[lowerIndex + 1];
+
+        double betweenValBlend = (value - lowerVal) / (upperVal - lowerVal);
+
+        double lowerTime = times[lowerIndex];
+        double upperTime = times[lowerIndex + 1];
+
+        return lowerTime + ((upperTime - lowerTime) * betweenValBlend);
     }
 }

@@ -25,18 +25,28 @@ public enum OrderRange
     Monthly
 }
 
-public readonly struct FORTStats(float fortitude, float offense, float resistance, float technology)
+public readonly struct FORTStats(float fortitude, float offense, float resistance, float technology, double heroRating, double backpackRating)
 {
     //todo: export this via BanjoBotAssets
     static DataTableCurve homebaseRatingCurve;
-    static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= new("HomebaseRatingMapping.json", "UIMonsterRating");
+    public static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= DataTableCurve.LoadHomebaseRatingMap();
 
     public readonly float fortitude = fortitude;
     public readonly float offense = offense;
     public readonly float resistance = resistance;
     public readonly float technology = technology;
+    public readonly double heroRating = heroRating;
+    public readonly double backpackRating = backpackRating;
 
-    public float PowerLevel => HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology));
+    public float PowerLevel
+    {
+        get
+        {
+            double fortRating = HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology)) - 1;
+
+            return (float)((fortRating + (backpackRating + heroRating)/2) / 2);
+        }
+    }
 }
 
 public partial class GameAccount
@@ -229,21 +239,20 @@ public partial class GameAccount
     {
         this.accountId = accountId;
         XmppManager = new(this);
-        if (GetLocalData("GameClient")?.ToString() is string clientId)
-        {
-            TargetClient = GameClient.clients.TryGetValue(clientId, out var c) ? c : null;
-        }
-        else if (GetLocalData("DeviceDetails") is not null)
-        {
-            TargetClient = GameClient.NewSwitchClient;
-            SetLocalData("GameClient", TargetClient.ClientID);
-        }
+        //if (GetLocalData("GameClient")?.ToString() is string clientId)
+        //{
+        //    TargetClient = GameClient.clients.TryGetValue(clientId, out var c) ? c : null;
+        //}
+        //else if (GetLocalData("DeviceDetails") is not null)
+        //{
+        //    TargetClient = GameClient.NewSwitchClient;
+        //    SetLocalData("GameClient", TargetClient.ClientID);
+        //}
         TargetClient ??= GameClient.PreferredClient;
     }
 
     public Action OnAccountUpdated;
 
-    bool isBeta;
     public string accountId { get; private set; }
     bool isValid => !string.IsNullOrWhiteSpace(accountId);
 
@@ -702,28 +711,67 @@ public partial class GameAccount
             return fortStats.Value;
 
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        var backpack = GetProfile(FnProfileTypes.Backpack);
         //var researchStats = accountItems.statAttributes["research_levels"];
         var statItems = accountItems.GetItems("Stat");
         var equippedWorkerItems = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
 
-        int LookupStatItem(string statId) => statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
+        int LookupStatItem(string statId)
+        {
+            var stat = statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
+            GD.Print($"Stat:{statId}:{stat}");
+            return stat;
+        }
 
         float LookupWorkers(string squadId)
         {
             var matchingWorkers = equippedWorkerItems
                 .Where(item => item.attributes["squad_id"].ToString() == squadId);
-            return matchingWorkers.Select(item => item.CalculateSurvivorRating()).Sum();
+            var stat = matchingWorkers.Select(item => item.CalculateSurvivorRating()).Sum();
+            GD.Print($"Squad:{squadId}:{stat}");
+            return stat;
         }
 
+        var backpackPowerLevels = backpack
+            .GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged")
+            .Select(item => item.CalculateRating())
+            .OrderDescending()
+            .ToArray();
+
+        if (backpackPowerLevels.Length > 3)
+            backpackPowerLevels = backpackPowerLevels[..3];
+
+        GD.Print($"Backpack:{string.Join(", ", backpackPowerLevels)}");
+
+        double backpackPower = 0;
+
+        if (backpackPowerLevels.Length >= 1)
+            backpackPower += (5 * backpackPowerLevels[0]) / 10d;
+        if (backpackPowerLevels.Length >= 2)
+            backpackPower += (3 * backpackPowerLevels[1]) / 10d;
+        if (backpackPowerLevels.Length >= 3)
+            backpackPower += (2 * backpackPowerLevels[2]) / 10d;
+
+        double heroPower = 0;
+        var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
+        heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
+        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"].ToString())?.CalculateRating() ?? 0)) / 100d;
+        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"].ToString())?.CalculateRating() ?? 0)) / 100d;
+        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"].ToString())?.CalculateRating() ?? 0)) / 100d;
+        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"].ToString())?.CalculateRating() ?? 0)) / 100d;
+        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"].ToString())?.CalculateRating() ?? 0)) / 100d;
+
+
         //+ profileStats["fortitude"].GetValue<int>()
-        float fortitude = LookupStatItem("Stat:fortitude") + LookupStatItem("Stat:fortitude_team") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
-        float offense = LookupStatItem("Stat:offense") + LookupStatItem("Stat:offense_team") + LookupWorkers("squad_attribute_arms_fireteamalpha") + LookupWorkers("squad_attribute_arms_closeassaultsquad");
-        float resistance = LookupStatItem("Stat:resistance") + LookupStatItem("Stat:resistance_team") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
-        float technology = LookupStatItem("Stat:technology") + LookupStatItem("Stat:technology_team") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
+        float fortitude = LookupStatItem("Stat:fortitude") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
+        float offense = LookupStatItem("Stat:offense") + LookupWorkers("squad_attribute_arms_fireteamalpha") + LookupWorkers("squad_attribute_arms_closeassaultsquad");
+        float resistance = LookupStatItem("Stat:resistance") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
+        float technology = LookupStatItem("Stat:technology") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
 
         GD.Print($"Main FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
+        GD.Print($"Extra Power: {heroPower}, {backpackPower}");
 
-        fortStats = new(fortitude, offense, resistance, technology);
+        fortStats = new(fortitude, offense, resistance, technology, heroPower, backpackPower);
         OnFortStatsChanged?.Invoke(this);
         return fortStats.Value;
     }
@@ -742,14 +790,14 @@ public partial class GameAccount
         int LookupStatItem(string statId) => statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
 
         //+ profileStats["fortitude"].GetValue<int>()
-        float fortitude = LookupStatItem("Stat:fortitude_phoenix") + LookupStatItem("Stat:fortitude_team_phoenix");
-        float offense = LookupStatItem("Stat:offense_phoenix") + LookupStatItem("Stat:resistance_team_phoenix");
-        float resistance = LookupStatItem("Stat:resistance_phoenix") + LookupStatItem("Stat:resistance_team_phoenix");
-        float technology = LookupStatItem("Stat:technology_phoenix") + LookupStatItem("Stat:technology_team_phoenix");
+        float fortitude = LookupStatItem("Stat:fortitude_phoenix");
+        float offense = LookupStatItem("Stat:offense_phoenix");
+        float resistance = LookupStatItem("Stat:resistance_phoenix");
+        float technology = LookupStatItem("Stat:technology_phoenix");
 
         GD.Print($"Venture FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
 
-        ventureFortStats = new(fortitude, offense, resistance, technology);
+        ventureFortStats = new(fortitude, offense, resistance, technology, 0, 0);
         OnVentureFortStatsChanged?.Invoke(this);
         return ventureFortStats.Value;
     }

@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://ce7ueoaicvi5a"]
+
+[ext_resource type="Script" uid="uid://d0w6s54ikip2c" path="res://Scripts/UserInterface/Extra/InversePLNode.cs" id="1_1fu5x"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="1_idvqj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1fu5x"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[node name="GraphElement" type="GraphElement" node_paths=PackedStringArray("lab", "line")]
+script = ExtResource("1_1fu5x")
+lab = NodePath("Control/CenterContainer/GraphLabel")
+line = NodePath("Control/GraphLine")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="GraphLine" type="Panel" parent="Control"]
+custom_minimum_size = Vector2(1, 4)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_right = 16.86
+offset_bottom = 2.0
+grow_vertical = 2
+pivot_offset = Vector2(0, 2)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1fu5x")
+
+[node name="CenterContainer" type="CenterContainer" parent="Control"]
+layout_mode = 0
+use_top_left = true
+
+[node name="TextureRect" type="TextureRect" parent="Control/CenterContainer"]
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+texture = ExtResource("1_idvqj")
+expand_mode = 1
+
+[node name="GraphLabel" type="Label" parent="Control/CenterContainer"]
+z_index = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = -1
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 8
+text = "100
+10000"
+horizontal_alignment = 1
+vertical_alignment = 1

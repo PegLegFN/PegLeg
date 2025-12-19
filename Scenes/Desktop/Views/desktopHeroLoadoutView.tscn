@@ -163,36 +163,18 @@ size_flags_horizontal = 8
 useActiveAccount = false
 interactable = false
 
-[node name="Actions" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
-custom_minimum_size = Vector2(300, 110)
+[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-alignment = 1
-
-[node name="Button" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"ActionButton"
-theme_override_font_sizes/font_size = 24
-text = "Apply Changes"
-
-[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions"]
-layout_mode = 2
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 24
 text = "Set As Active Slot"
 
-[node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2"]
+[node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Button2"]
 script = ExtResource("8_4wsl6")
 
-[node name="Button3" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Actions"]
-visible = false
-layout_mode = 2
-theme_type_variation = &"LargeButton"
-theme_override_font_sizes/font_size = 24
-text = "Load Preset"
-
-[connection signal="IsCurrent" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2/InvertVisible" method="EmitInverted"]
+[connection signal="IsCurrent" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Button2/InvertVisible" method="EmitInverted"]
 [connection signal="LoadoutName" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/Label" method="set_text"]
-[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
-[connection signal="InvertedValue" from="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2/InvertVisible" to="HBoxContainer/LoadoutPreview/VBoxContainer/Actions/Button2" method="set_visible"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
+[connection signal="InvertedValue" from="HBoxContainer/LoadoutPreview/VBoxContainer/Button2/InvertVisible" to="HBoxContainer/LoadoutPreview/VBoxContainer/Button2" method="set_visible"]
