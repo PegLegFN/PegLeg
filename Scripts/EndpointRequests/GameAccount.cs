@@ -754,12 +754,15 @@ public partial class GameAccount
 
         double heroPower = 0;
         var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
-        heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
-        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"].ToString())?.CalculateRating() ?? 0)) / 100d;
-        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"].ToString())?.CalculateRating() ?? 0)) / 100d;
-        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"].ToString())?.CalculateRating() ?? 0)) / 100d;
-        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"].ToString())?.CalculateRating() ?? 0)) / 100d;
-        heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"].ToString())?.CalculateRating() ?? 0)) / 100d;
+        if(loadoutItem is not null)
+        {
+            heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"].ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"].ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"].ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"].ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"].ToString())?.CalculateRating() ?? 0)) / 100d;
+        }
 
 
         //+ profileStats["fortitude"].GetValue<int>()
@@ -917,7 +920,7 @@ public partial class GameAccount
         {
             var commonData = await GetProfile(FnProfileTypes.Common).Query();
             var fulfillments = commonData.statAttributes["in_app_purchases"]?["fulfillmentCounts"];
-            if (offer.FulfillmentDenyList.Any(check => (fulfillments[check.Key]?.GetValue<int>() ?? 0) >= check.Value))
+            if (offer.FulfillmentDenyList.Any(check => (fulfillments[check.Key ?? ""]?.GetValue<int>() ?? 0) >= check.Value))
                 return false;
         }
 
@@ -925,7 +928,7 @@ public partial class GameAccount
         {
             var commonData = await GetProfile(FnProfileTypes.Common).Query();
             var fulfillments = commonData.statAttributes["in_app_purchases"]?["fulfillmentCounts"];
-            if (offer.FulfillmentRequireList.Any(check => (fulfillments[check.Key]?.GetValue<int>() ?? 0) < check.Value))
+            if (offer.FulfillmentRequireList.Any(check => (fulfillments[check.Key ?? ""]?.GetValue<int>() ?? 0) < check.Value))
                 return false;
         }
 
