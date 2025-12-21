@@ -47,7 +47,7 @@ public partial class DailySummaryWebhookDispatcher : Node
     {
         if (GameMission.currentMissions is null)
             await GameMission.UpdateMissions();
-        await Helpers.WaitForFrames(5);
+        await Helpers.WaitForFrames(3);
         await webhook.Execute(true);
     }
 

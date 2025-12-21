@@ -72,9 +72,14 @@ public partial class DiscordWebhookProxy
         if (!AppConfig.Get("webhooks", InternalName + "_enabled", false))
             return;
         var urlEnding = AppConfig.Get("webhooks", InternalName + "_url", "");
+        if (urlEnding.StartsWith("https://discord.com/api/webhooks/"))
+        {
+            urlEnding = urlEnding[33..];
+            AppConfig.Set("webhooks", InternalName + "_url", urlEnding);
+        }
         if (!UrlRegex().Match(urlEnding).Success)
         {
-            GD.Print($"WH url failed: \"{urlEnding}\"");
+            GD.Print($"WH: URL ending failed to validate: \"{urlEnding}\"");
             return;
         }
 
@@ -88,7 +93,7 @@ public partial class DiscordWebhookProxy
                 .Send();
             if (!editResponse.IsSuccessStatusCode)
             {
-                GD.Print($"WH edit response failed: {editResponse.ReasonPhrase}");
+                GD.Print($"WH: edit response failed: {editResponse.ReasonPhrase}");
                 return;
             }
             await Task.Delay(1000);
@@ -97,28 +102,28 @@ public partial class DiscordWebhookProxy
                 .Send();
             if (!winnerResponse.IsSuccessStatusCode)
             {
-                GD.Print($"winner response failed: {winnerResponse.ReasonPhrase}");
+                GD.Print($"WH: winner response failed: {winnerResponse.ReasonPhrase}");
                 return;
             }
             var winnerJson = await winnerResponse.Content.ReadFromJsonAsync<JsonObject>();
             if (winnerJson["content"]?.ToString() != uuid)
             {
-                GD.Print($"WH did not win (\"{winnerJson["content"]?.ToString()}\" != \"{uuid}\")");
+                GD.Print($"WH: did not win (\"{winnerJson["content"]?.ToString()}\" != \"{uuid}\")");
                 return;
             }
-            GD.Print("WH winner");
+            //GD.Print("WH: winner");
         }
 
         var imageTask = imageGenerator?.Invoke();
         if (imageTask is null)
         {
-            GD.Print($"WH image task null");
+            GD.Print($"WH: image task null");
             return;
         }
         var images = await imageTask;
         if (images.Length == 0)
         {
-            GD.Print($"WH no images");
+            GD.Print($"WH: no images");
             return;
         }
         MultipartFormDataContent formContent = [];
@@ -140,12 +145,12 @@ public partial class DiscordWebhookProxy
             .Send();
         if(!executionResponse.IsSuccessStatusCode)
         {
-            GD.Print($"WH execution response failed: {executionResponse.ReasonPhrase}");
+            GD.Print($"WH: execution response failed: {executionResponse.ReasonPhrase}");
             return;
         }
-        GD.Print($"WH executed successfully");
+        GD.Print($"WH: executed successfully");
     }
 
-    [GeneratedRegex("^\\w*/(?:\\w|_)*$")]
+    [GeneratedRegex("^\\d*/[\\w_\\-]*$")]
     private static partial Regex UrlRegex();
 }

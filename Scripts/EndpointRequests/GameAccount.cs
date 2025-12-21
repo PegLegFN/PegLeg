@@ -916,18 +916,17 @@ public partial class GameAccount
 
     public async Task<bool> MatchesFulfillmentRequirements(GameOffer offer)
     {
+        JsonObject fulfillments = null;
         if (offer.FulfillmentDenyList.Count > 0)
         {
-            var commonData = await GetProfile(FnProfileTypes.Common).Query();
-            var fulfillments = commonData.statAttributes["in_app_purchases"]?["fulfillmentCounts"];
+            fulfillments ??= (await GetProfile(FnProfileTypes.Common).Query()).statAttributes["in_app_purchases"]?["fulfillmentCounts"]?.AsObject() ?? [];
             if (offer.FulfillmentDenyList.Any(check => (fulfillments[check.Key ?? ""]?.GetValue<int>() ?? 0) >= check.Value))
                 return false;
         }
 
         if (offer.FulfillmentRequireList.Count > 0)
         {
-            var commonData = await GetProfile(FnProfileTypes.Common).Query();
-            var fulfillments = commonData.statAttributes["in_app_purchases"]?["fulfillmentCounts"];
+            fulfillments ??= (await GetProfile(FnProfileTypes.Common).Query()).statAttributes["in_app_purchases"]?["fulfillmentCounts"]?.AsObject() ?? [];
             if (offer.FulfillmentRequireList.Any(check => (fulfillments[check.Key ?? ""]?.GetValue<int>() ?? 0) < check.Value))
                 return false;
         }
