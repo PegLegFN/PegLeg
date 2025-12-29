@@ -12,7 +12,7 @@ public partial class DailySummaryWebhookDispatcher : Node
 	{
 		inst = this;
 		if(!DiscordWebhookProxy.TryGetProxy("dailySummary", out webhook))
-			webhook = new("PegLeg Daily Summary", "dailySummary", GenerateImage);
+			webhook = new("PegLeg Daily Summary", "dailySummary", imageProvider: GenerateImage);
 		RefreshTimerController.OnDayChanged += ExecuteWebhookDelayed;
 	}
 

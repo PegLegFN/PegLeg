@@ -17,7 +17,7 @@ threadEditor = NodePath("MarginContainer/PanelContainer/VBoxContainer/VBoxContai
 [node name="CheckButton" type="CheckButton" parent="."]
 layout_mode = 2
 button_pressed = true
-text = "Daily Summnary"
+text = "Daily Summary"
 script = ExtResource("2_0je5u")
 section = "webhooks"
 key = "summary_enabled"
@@ -184,7 +184,7 @@ theme_type_variation = &"LargeButton"
 text = "Create 
 Sync Msg"
 
-[connection signal="ConfigValueChanged" from="CheckButton" to="MarginContainer" method="set_visible"]
+[connection signal="toggled" from="CheckButton" to="MarginContainer" method="set_visible"]
 [connection signal="toggled" from="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/MarginContainer/CheckButton" to="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/WH-URL" method="set_secret"]
 [connection signal="ConfigValueChanged" from="MarginContainer/PanelContainer/VBoxContainer/WH-UseSync" to="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" method="set_visible"]
 [connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/Button" to="." method="TryCreateSyncMsg"]

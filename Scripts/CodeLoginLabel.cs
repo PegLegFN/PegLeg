@@ -25,6 +25,7 @@ public partial class CodeLoginLabel : Node
     bool CodeExpired => codeExpiresAt <= (Time.GetTicksMsec() * 0.001) - 10;
     bool gettingClient = false;
     bool started = false;
+    string currentUserCode;
 
     public async void GenerateCode(bool force = false)
     {
@@ -53,11 +54,19 @@ public partial class CodeLoginLabel : Node
             EmitSignal(SignalName.LoginStarted);
             EmitSignal(SignalName.LoginActiveChanged, true);
 
-            EmitSignal(SignalName.UserCodeChanged, linkData["user_code"].ToString());
+            currentUserCode = linkData["user_code"].ToString();
+            EmitSignal(SignalName.UserCodeChanged, currentUserCode);
             return;
         }
 
         GD.Print(linkData?["errorMessage"]);
+    }
+
+    public void CopyCode()
+    {
+        if (!started)
+            return;
+        DisplayServer.ClipboardSet(currentUserCode);
     }
 
     public void Cancel()
@@ -83,6 +92,7 @@ public partial class CodeLoginLabel : Node
             EmitSignal(SignalName.LoginEnded);
             EmitSignal(SignalName.LoginActiveChanged, false);
 
+            currentUserCode = "";
             EmitSignal(SignalName.UserCodeChanged, "");
             return;
         }
@@ -112,6 +122,7 @@ public partial class CodeLoginLabel : Node
         EmitSignal(SignalName.LoginEnded);
         EmitSignal(SignalName.LoginActiveChanged, false);
 
+        currentUserCode = "";
         EmitSignal(SignalName.UserCodeChanged, "");
 
         GameAccount.LoginToAccount(linkCheckRequest?.AsObject());

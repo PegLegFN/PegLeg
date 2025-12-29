@@ -1,14 +1,28 @@
-[gd_scene load_steps=5 format=3 uid="uid://ck8c2h6xv2h48"]
+[gd_scene load_steps=9 format=3 uid="uid://ck8c2h6xv2h48"]
 
 [ext_resource type="PackedScene" uid="uid://wb5ukb74fot1" path="res://Scenes/OfferEntries/game_offer_entry.tscn" id="1_gsuog"]
 [ext_resource type="Texture2D" uid="uid://3atkm5dd5sh1" path="res://Images/AspectRatios/2x3Aspect.png" id="1_k6rgv"]
 [ext_resource type="Shader" uid="uid://cypncf62qx5bc" path="res://Shaders/CardTriangleEffect.tres" id="2_tlh5d"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="4_5dy1e"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="5_t10t0"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="6_2sn11"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4iqr2"]
 resource_local_to_scene = true
 shader = ExtResource("2_tlh5d")
 shader_parameter/TriangleTint = Color(0.9, 0.51, 0, 1)
 shader_parameter/TimeOffset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jb8b3"]
+resource_local_to_scene = true
+shader = ExtResource("4_5dy1e")
+shader_parameter/ControlSize = Vector2(200, 300)
+shader_parameter/Fit = false
+shader_parameter/VerticalShift = 0.5
+shader_parameter/IsHero = true
+shader_parameter/IsSchematic = false
+shader_parameter/Noise = ExtResource("6_2sn11")
+shader_parameter/HeroTriangles = ExtResource("5_t10t0")
 
 [node name="GameOfferEntryTall" instance=ExtResource("1_gsuog")]
 
@@ -17,6 +31,9 @@ texture = ExtResource("1_k6rgv")
 
 [node name="Triangles" parent="Control/AspectTexture" index="0"]
 material = SubResource("ShaderMaterial_4iqr2")
+
+[node name="ItemIcon2" parent="." index="4"]
+material = SubResource("ShaderMaterial_jb8b3")
 
 [node name="TypeLabel" parent="DetailsArea/NameBox/VBoxContainer" index="0"]
 theme_override_font_sizes/font_size = 12

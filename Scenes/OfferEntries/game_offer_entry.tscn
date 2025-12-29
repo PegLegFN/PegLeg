@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://wb5ukb74fot1"]
+[gd_scene load_steps=27 format=3 uid="uid://wb5ukb74fot1"]
 
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="1_hvr15"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="1_io7lf"]
@@ -12,7 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://hskfanlp03l8" path="res://Images/InterfaceIcons/T-UI-SoldOut.png" id="8_e6bid"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="8_gu5mh"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="8_ocl4j"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="8_r4evi"]
 [ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="9_2uptj"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="9_g50ko"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="10_cxs4q"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="11_mgblp"]
 [ext_resource type="Resource" uid="uid://7km1btwc7syu" path="res://Scripts/ContextMenu/ComponentLists/ShopOfferCtxList.tres" id="12_j05ur"]
 
@@ -32,6 +35,17 @@ shader = ExtResource("2_6kl4y")
 shader_parameter/TriangleTint = Color(0.9, 0.51, 0, 1)
 shader_parameter/TimeOffset = 0.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sgac5"]
+resource_local_to_scene = true
+shader = ExtResource("8_r4evi")
+shader_parameter/ControlSize = Vector2(200, 200)
+shader_parameter/Fit = false
+shader_parameter/VerticalShift = 0.5
+shader_parameter/IsHero = true
+shader_parameter/IsSchematic = false
+shader_parameter/Noise = ExtResource("10_cxs4q")
+shader_parameter/HeroTriangles = ExtResource("9_g50ko")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nb4if"]
 content_margin_left = 3.0
 content_margin_right = 3.0
@@ -46,13 +60,6 @@ bg_color = Color(1, 1, 1, 1)
 skew = Vector2(0, -0.05)
 expand_margin_bottom = 10.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3n3on"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pt1cr"]
 content_margin_left = 2.0
 content_margin_top = 0.0
@@ -63,6 +70,13 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3n3on"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 
 [node name="GameOfferEntry" type="MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
 custom_minimum_size = Vector2(200, 0)
@@ -81,12 +95,14 @@ texture = ExtResource("1_io7lf")
 expand_mode = 5
 
 [node name="RarityGradient" type="TextureRect" parent="."]
+visible = false
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 2
 texture = SubResource("GradientTexture2D_cgiwg")
 expand_mode = 1
 
 [node name="Control" type="Control" parent="."]
+visible = false
 clip_contents = true
 layout_mode = 2
 
@@ -116,17 +132,26 @@ expand_mode = 1
 script = ExtResource("4_qji8a")
 
 [node name="ItemIcon" type="TextureRect" parent="."]
+visible = false
 layout_mode = 2
 texture = ExtResource("5_wjuhi")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="SoldOut" type="MarginContainer" parent="."]
+[node name="ItemIcon2" type="TextureRect" parent="."]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+material = SubResource("ShaderMaterial_sgac5")
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+texture = ExtResource("5_wjuhi")
+expand_mode = 1
+script = ExtResource("4_qji8a")
+syncControlSize = true
+
+[node name="SoldOut" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="TextureRect" type="TextureRect" parent="SoldOut"]
 material = ExtResource("8_gu5mh")
@@ -232,36 +257,31 @@ theme_override_font_sizes/font_size = 15
 text = "10000"
 text_overrun_behavior = 3
 
-[node name="Outline" type="Panel" parent="."]
-self_modulate = Color(0.901961, 0.509804, 0, 1)
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3n3on")
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="Control" type="Control" parent="Outline"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-grow_horizontal = 0
-
-[node name="StockPanel" type="PanelContainer" parent="Outline/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -32.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = 19.0
-grow_horizontal = 0
+[node name="StockPanel" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
 
-[node name="Stock" type="Label" parent="Outline/Control/StockPanel"]
+[node name="Stock" type="Label" parent="MarginContainer/StockPanel"]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "x999"
+
+[node name="Outline" type="Panel" parent="."]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3n3on")
 
 [node name="Responsive Button Area" parent="." instance=ExtResource("8_ahbeu")]
 layout_mode = 2
@@ -274,14 +294,18 @@ offerSource = NodePath("../..")
 componentList = ExtResource("12_j05ur")
 
 [connection signal="IsInStockChanged" from="." to="SoldOut/TextureRect/InStock" method="EmitInverted"]
-[connection signal="IsInStockChanged" from="." to="Outline/Control" method="set_visible"]
-[connection signal="IsLimitedStockChanged" from="." to="Outline/Control/StockPanel" method="set_visible"]
+[connection signal="IsLimitedStockChanged" from="." to="MarginContainer/StockPanel" method="set_visible"]
 [connection signal="NameChanged" from="." to="DetailsArea/NameBox/VBoxContainer/NameLabel" method="set_text"]
-[connection signal="StockChanged" from="." to="Outline/Control/StockPanel/Stock" method="set_text"]
+[connection signal="StockChanged" from="." to="MarginContainer/StockPanel/Stock" method="set_text"]
 [connection signal="InvertedValue" from="SoldOut/TextureRect/InStock" to="SoldOut/TextureRect" method="set_visible"]
 [connection signal="IconChanged" from="DetailsArea" to="ItemIcon" method="set_texture"]
+[connection signal="IconChanged" from="DetailsArea" to="ItemIcon2" method="set_texture"]
+[connection signal="IconFit" from="DetailsArea" to="ItemIcon2" method="SetShaderBool" binds= ["Fit"]]
+[connection signal="IsHero" from="DetailsArea" to="ItemIcon2" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsSchematic" from="DetailsArea" to="ItemIcon2" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="RarityChanged" from="DetailsArea" to="RarityGradient" method="set_self_modulate"]
 [connection signal="RarityChanged" from="DetailsArea" to="Outline" method="set_self_modulate"]
+[connection signal="RarityChanged" from="DetailsArea" to="ItemIcon2" method="set_self_modulate"]
 [connection signal="RarityChanged" from="DetailsArea" to="Control/AspectTexture/Triangles" method="SetShaderColor" binds= ["TriangleTint"]]
 [connection signal="TooltipChanged" from="DetailsArea" to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="TypeChanged" from="DetailsArea" to="DetailsArea/NameBox/VBoxContainer/TypeLabel" method="set_text"]

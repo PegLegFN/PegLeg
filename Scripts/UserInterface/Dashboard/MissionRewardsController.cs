@@ -178,6 +178,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     public static bool ItemIsNotable(GameItem item)
     {
         var template = item.sortingTemplate;
+        if (template.TemplateId == "Schematic:sid_edged_axe_scavenger_sr_ore_t01")
+            return true; // Legendary Hack Axe, courtesy of AS407
         if (template.RarityLevel == 6 && template.Type == "Worker")
             return true; // mythic leads
         if (template.VBucksOrXRayTickets)

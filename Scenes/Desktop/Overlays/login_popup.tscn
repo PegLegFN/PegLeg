@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cji2iyaxon6uv"]
+[gd_scene load_steps=10 format=3 uid="uid://cji2iyaxon6uv"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_3q6po"]
 [ext_resource type="Script" uid="uid://bflrpf336hbmc" path="res://Scripts/CodeLoginLabel.cs" id="2_8s2bt"]
 [ext_resource type="Script" uid="uid://co6jq50tgpbqc" path="res://Scripts/Overlays/LoginPopup.cs" id="2_byygk"]
 [ext_resource type="StyleBox" uid="uid://0tj4whr53nxd" path="res://GodotThemes/Styleboxes/WindowBGTransparant.tres" id="3_droq3"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="5_lc2bf"]
+[ext_resource type="Texture2D" uid="uid://bespxm5jylsra" path="res://Images/InterfaceIcons/T_UI_Icon_FilterUnion.png" id="5_v7nvv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6l75"]
 bg_color = Color(0.301961, 0.301961, 0.301961, 0)
@@ -13,15 +14,27 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v7nvv"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.145098, 0.145098, 0.145098, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mkapk"]
+content_margin_top = 10.0
 
 [node name="LoginPopup" node_paths=PackedStringArray("loginLabel", "exchangeCodeBox", "confirmLoginButton") instance=ExtResource("1_3q6po")]
 offset_left = 0.0
 offset_right = 0.0
 script = ExtResource("2_byygk")
-loginLabel = NodePath("Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText")
+loginLabel = NodePath("Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText")
 exchangeCodeBox = NodePath("Control/WindowContents/TabContainer/Exchange Code/VBoxContainer/LineEdit")
-confirmLoginButton = NodePath("Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/HBoxContainer/CompleteLogin")
+confirmLoginButton = NodePath("Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer/CompleteLogin")
 isUserClosable = true
 
 [node name="CloseBtn" parent="." index="1"]
@@ -35,13 +48,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
-theme_override_styles/disabled = ExtResource("3_droq3")
-theme_override_styles/hover = ExtResource("3_droq3")
-theme_override_styles/pressed = ExtResource("3_droq3")
 theme_override_styles/normal = ExtResource("3_droq3")
+theme_override_styles/pressed = ExtResource("3_droq3")
+theme_override_styles/hover = ExtResource("3_droq3")
+theme_override_styles/disabled = ExtResource("3_droq3")
+theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
 
 [node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents" index="0"]
+visible = false
 custom_minimum_size = Vector2(300, 0)
 anchors_preset = 8
 anchor_left = 0.5
@@ -55,83 +69,7 @@ offset_bottom = 88.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Activation Code" type="MarginContainer" parent="Control/WindowContents/PanelContainer" index="0"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/PanelContainer/Activation Code" index="0"]
-custom_minimum_size = Vector2(0, 152)
-layout_mode = 2
-
-[node name="GreetingText" type="Label" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer" index="0"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_constants/line_spacing = 0
-text = "To log in to your Epic Games account, click the link and enter in the code shown below."
-autowrap_mode = 3
-
-[node name="LinkButton2" type="LinkButton" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer" index="1"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 12
-text = "https://www.epicgames.com/id/activate"
-uri = "https://www.epicgames.com/id/activate"
-
-[node name="Control" type="Control" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer" index="2"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="LinkCodeText" type="LineEdit" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer" index="3"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/selection_color = Color(1, 1, 1, 1)
-theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
-theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-theme_override_styles/read_only = SubResource("StyleBoxEmpty_mkapk")
-placeholder_text = "########"
-alignment = 1
-editable = false
-script = ExtResource("2_8s2bt")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer" index="4"]
-layout_mode = 2
-size_flags_vertical = 10
-
-[node name="CompleteLogin" type="Button" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/HBoxContainer" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ActionButton"
-theme_override_font_sizes/font_size = 24
-text = "Login"
-
-[node name="RetryLogn" type="Button" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/HBoxContainer" index="1"]
-visible = false
-custom_minimum_size = Vector2(32, 0)
-layout_mode = 2
-tooltip_text = "Retry Login"
-theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/HBoxContainer/RetryLogn" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_lc2bf")
-expand_mode = 1
-
 [node name="TabContainer" type="TabContainer" parent="Control/WindowContents" index="1"]
-visible = false
 custom_minimum_size = Vector2(300, 0)
 anchors_preset = 8
 anchor_left = 0.5
@@ -148,13 +86,121 @@ theme_override_font_sizes/font_size = 12
 tab_alignment = 1
 current_tab = 0
 
-[node name="Exchange Code" type="MarginContainer" parent="Control/WindowContents/TabContainer" index="1"]
+[node name="Activation Code" type="MarginContainer" parent="Control/WindowContents/TabContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/TabContainer/Activation Code" index="0"]
+custom_minimum_size = Vector2(0, 152)
+layout_mode = 2
+
+[node name="GreetingText" type="Label" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+text = "To log in to your Epic Games account, click the link and enter in the code shown below."
+autowrap_mode = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_v7nvv")
+
+[node name="LinkButton" type="LinkButton" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/PanelContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 12
+text = "https://www.epicgames.com/id/activate"
+uri = "https://www.epicgames.com/id/activate"
+
+[node name="LinkButton2" type="LinkButton" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer" index="2"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "https://www.epicgames.com/id/activate"
+uri = "https://www.epicgames.com/id/activate"
+
+[node name="Control" type="Control" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer" index="3"]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer" index="4"]
+layout_mode = 2
+alignment = 1
+
+[node name="LinkCodeText" type="LineEdit" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0.29586616, 0.29586673, 0.29586628, 1)
+theme_override_colors/selection_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_mkapk")
+placeholder_text = "########"
+alignment = 1
+editable = false
+script = ExtResource("2_8s2bt")
+
+[node name="Button" type="Button" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2" index="1"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+icon = ExtResource("5_v7nvv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer" index="5"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="CompleteLogin" type="Button" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 24
+text = "Login"
+
+[node name="RetryLogn" type="Button" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer" index="1"]
+visible = false
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+tooltip_text = "Retry Login"
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer/RetryLogn" index="0"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_lc2bf")
+expand_mode = 1
+
+[node name="Exchange Code" type="MarginContainer" parent="Control/WindowContents/TabContainer" index="2"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
-metadata/_tab_index = 0
+metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/TabContainer/Exchange Code" index="0"]
 custom_minimum_size = Vector2(0, 152)
@@ -180,11 +226,12 @@ theme_override_font_sizes/font_size = 24
 text = "Login"
 
 [connection signal="pressed" from="CloseBtn2" to="." method="Cancel"]
-[connection signal="LoginFailed" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="." method="OnFail"]
-[connection signal="LoginFailed" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" method="set_placeholder" binds= ["Failed"]]
-[connection signal="LoginFailed" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/HBoxContainer/RetryLogn" method="set_visible" binds= [true]]
-[connection signal="LoginStarted" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/HBoxContainer/RetryLogn" method="set_visible" binds= [false]]
-[connection signal="LoginSucceeded" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" method="set_placeholder" binds= ["Success!"]]
-[connection signal="LoginSuccess" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="." method="RecieveAccount"]
-[connection signal="UserCodeChanged" from="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" to="Control/WindowContents/PanelContainer/Activation Code/VBoxContainer/LinkCodeText" method="set_text"]
+[connection signal="LoginFailed" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="." method="OnFail"]
+[connection signal="LoginFailed" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" method="set_placeholder" binds= ["Failed"]]
+[connection signal="LoginFailed" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer/RetryLogn" method="set_visible" binds= [true]]
+[connection signal="LoginStarted" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer/RetryLogn" method="set_visible" binds= [false]]
+[connection signal="LoginSucceeded" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" method="set_placeholder" binds= ["Success!"]]
+[connection signal="LoginSuccess" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="." method="RecieveAccount"]
+[connection signal="UserCodeChanged" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" to="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" method="set_text"]
+[connection signal="pressed" from="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/Button" to="Control/WindowContents/TabContainer/Activation Code/VBoxContainer/HBoxContainer2/LinkCodeText" method="CopyCode"]
 [connection signal="pressed" from="Control/WindowContents/TabContainer/Exchange Code/VBoxContainer/CompleteLogin" to="." method="AttemptExchange"]

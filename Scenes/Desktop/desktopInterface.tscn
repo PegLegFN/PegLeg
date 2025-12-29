@@ -368,12 +368,11 @@ visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 2
+current_tab = 0
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 7
 
 [node name="Ventures" parent="Content/MainTabs/Extra" instance=ExtResource("35_s7yuu")]
-visible = false
 layout_mode = 2
 
 [node name="Balancing" parent="Content/MainTabs/Extra" instance=ExtResource("37_c6nfh")]
@@ -382,6 +381,7 @@ layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="Team Loadouts" parent="Content/MainTabs/Extra" instance=ExtResource("42_i2466")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -441,9 +441,6 @@ layout_mode = 2
 targetProfile = "theater2"
 metadata/_tab_index = 7
 
-[node name="PowerLevel" parent="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack/VBoxContainer/HBoxContainer" index="2"]
-visible = true
-
 [node name="CheckButton" parent="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" index="0"]
 button_group = SubResource("ButtonGroup_r4l5r")
 
@@ -466,7 +463,17 @@ button_group = SubResource("ButtonGroup_r4l5r")
 button_group = SubResource("ButtonGroup_r4l5r")
 
 [node name="ScrollContainer" parent="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack/VBoxContainer" index="2"]
+elementSpace = 10.0
 elementScene = ExtResource("34_hoc2f")
+
+[node name="MarginContainer" parent="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack/VBoxContainer/ScrollContainer" index="0"]
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Grid" parent="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" index="1"]
+Spacing = Vector2(10, 10)
 
 [node name="Recycle Bin" parent="Content/MainTabs/Extra/Game Profiles (Dev)" instance=ExtResource("33_7d0l0")]
 visible = false
@@ -698,65 +705,70 @@ visible = false
 layout_mode = 2
 color = Color(1, 1, 1, 0.188235)
 
-[node name="OverlayWindows" type="Control" parent="Content"]
+[node name="OverlayWindows" type="Control" parent="."]
 z_index = 6
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="AccountSwitcher" parent="Content/OverlayWindows" instance=ExtResource("26_xb41w")]
+[node name="AccountSwitcher" parent="OverlayWindows" instance=ExtResource("26_xb41w")]
 visible = false
 layout_mode = 1
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="MissionViewer" parent="Content/OverlayWindows" instance=ExtResource("26_fna7y")]
+[node name="MissionViewer" parent="OverlayWindows" instance=ExtResource("26_fna7y")]
 visible = false
 layout_mode = 1
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="CardPackOpenerWindow" parent="Content/OverlayWindows" instance=ExtResource("41_alhak")]
+[node name="CardPackOpenerWindow" parent="OverlayWindows" instance=ExtResource("41_alhak")]
 visible = false
 layout_mode = 1
 
-[node name="GameItemSelector" parent="Content/OverlayWindows" instance=ExtResource("44_m211x")]
+[node name="GameItemSelector" parent="OverlayWindows" instance=ExtResource("44_m211x")]
 visible = false
 layout_mode = 1
 
-[node name="GameItemViewer" parent="Content/OverlayWindows" instance=ExtResource("25_r7yrq")]
+[node name="GameItemViewer" parent="OverlayWindows" instance=ExtResource("25_r7yrq")]
 visible = false
 layout_mode = 1
 anchors_preset = -1
 
-[node name="SettingsWindow" parent="Content/OverlayWindows" instance=ExtResource("99_hfy7e")]
+[node name="SettingsWindow" parent="OverlayWindows" instance=ExtResource("99_hfy7e")]
 visible = false
 layout_mode = 1
 
-[node name="ShopPurchaseAnimation" parent="Content/OverlayWindows" instance=ExtResource("96_2bhmt")]
+[node name="ShopPurchaseAnimation" parent="OverlayWindows" instance=ExtResource("96_2bhmt")]
 visible = false
 layout_mode = 1
 
-[node name="LoginPopup" parent="Content/OverlayWindows" instance=ExtResource("41_kf5nt")]
+[node name="LoginPopup" parent="OverlayWindows" instance=ExtResource("41_kf5nt")]
 visible = false
 layout_mode = 1
 
-[node name="CopyImage" parent="Content/OverlayWindows" instance=ExtResource("62_wqw3e")]
+[node name="CopyImage" parent="OverlayWindows" instance=ExtResource("62_wqw3e")]
 visible = false
 layout_mode = 1
 
-[node name="DevText" parent="Content/OverlayWindows" instance=ExtResource("60_o7hny")]
+[node name="DevText" parent="OverlayWindows" instance=ExtResource("60_o7hny")]
 visible = false
 layout_mode = 1
 
-[node name="GenericLineEditWindow" parent="Content/OverlayWindows" instance=ExtResource("45_vujc8")]
+[node name="GenericLineEditWindow" parent="OverlayWindows" instance=ExtResource("45_vujc8")]
 visible = false
 layout_mode = 1
 
-[node name="GenericConfirmationWindow" parent="Content/OverlayWindows" instance=ExtResource("46_fbpme")]
+[node name="GenericConfirmationWindow" parent="OverlayWindows" instance=ExtResource("46_fbpme")]
 visible = false
 layout_mode = 1
 
-[node name="LoadingOverlay" parent="Content/OverlayWindows" instance=ExtResource("31_v6low")]
+[node name="LoadingOverlay" parent="OverlayWindows" instance=ExtResource("31_v6low")]
 visible = false
 layout_mode = 1
 startOpen = false
@@ -826,9 +838,9 @@ process_material = SubResource("ParticleProcessMaterial_s7yuu")
 
 [connection signal="IconChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
-[connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="Content/OverlayWindows/AccountSwitcher" method="OpenWindow"]
-[connection signal="pressed" from="Content/StatusBar/Left/RefreshBtn" to="Content/OverlayWindows/AccountSwitcher" method="ReloadAccount"]
-[connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="Content/OverlayWindows/SettingsWindow" method="OpenWindow"]
+[connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="OverlayWindows/AccountSwitcher" method="OpenWindow"]
+[connection signal="pressed" from="Content/StatusBar/Left/RefreshBtn" to="OverlayWindows/AccountSwitcher" method="ReloadAccount"]
+[connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindow" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]
 [connection signal="pressed" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="ToggleMute"]
 

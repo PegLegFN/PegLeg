@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://bqp7ax1fjc306"]
+[gd_scene load_steps=69 format=3 uid="uid://bqp7ax1fjc306"]
 
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="1_ac3k7"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="2_dckmf"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="3_h2g04"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="4_hmk5g"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_q8xc3"]
 [ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="5_dwmk6"]
 [ext_resource type="Texture2D" uid="uid://bsopcpbc1h78o" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-Leader-CARD.png" id="6_vrldu"]
 [ext_resource type="Texture2D" uid="uid://con6bkc8e5wf6" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Repeat_128.png" id="6_xaony"]
@@ -265,6 +266,16 @@ stretch_mode = 5
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
+
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button3"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("4_q8xc3")
+section = "webhooks"
+key = "dailySummary_enabled"
 
 [node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button3"]
 layout_mode = 1
@@ -2597,6 +2608,7 @@ render_target_update_mode = 0
 [connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="ReloadMissions"]
 [connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button2" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button3" to="ShareableMissionSummary/SummaryDispatcher" method="ExecuteWebhookDelayed"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button3/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/HBoxContainer/Button3" method="set_visible"]
 [connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" method="set_visible"]
 [connection signal="OnFalse" from="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/HBoxContainer/CheckButton/Node" to="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable" method="set_stretch_ratio"]

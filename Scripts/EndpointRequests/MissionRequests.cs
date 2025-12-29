@@ -175,11 +175,13 @@ public class GameMission
     static uint? missionHash;
     static SemaphoreSlim missionCheckSemaphore = new(1);
     static bool checkMissionsState = false;
+
     public static async Task<bool> MissionsNeedUpdate(bool ignoreHashCheck = false)
     {
         var (result, _) = await MissionsNeedUpdateInternal(ignoreHashCheck);
         return result;
     }
+
     static async Task<(bool, JsonNode)> MissionsNeedUpdateInternal(bool ignoreHashCheck = false)
     {
         using var st = await missionCheckSemaphore.AwaitToken();
@@ -225,10 +227,13 @@ public class GameMission
     }
 
     static SemaphoreSlim missionUpdateSemaphore = new(1);
+
     public static async Task UpdateMissions() => await UpdateMissions(null);
+
     public static async Task ReparseMissions(JsonNode customData = null) => await UpdateMissions(customData ?? recentMissionData, customData is not null);
 
     static JsonNode recentMissionData;
+
     static async Task UpdateMissions(JsonNode missionData, bool ignoreExpiry = false)
     {
         using var st = await missionUpdateSemaphore.AwaitToken();
@@ -317,19 +322,177 @@ public class GameMission
             .ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
             ];
             OnMissionsUpdated?.Invoke();
+
+            ArchiveMissions();
+
             return;
         }
     }
 
+    static JsonSerializerOptions archiveSerialisation = new()
+    {
+        IncludeFields = true,
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    };
+
+    static DiscordWebhookProxy archiveWebhook;
+    static void ArchiveMissions()
+    {
+        if (!AppConfig.TryGet("advanced", "archive_missions", out bool enabled) || !enabled)
+            return;
+        var archiveDirPath = AppConfig.Get("mission_archive", "target_folder", "user://mission_archive/");
+        if (!DirAccess.DirExistsAbsolute(archiveDirPath))
+        {
+            try
+            {
+                DirAccess.MakeDirAbsolute(archiveDirPath);
+            }
+            catch
+            {
+                GD.Print($"Failed to create archive directory \"{archiveDirPath}\"");
+                return;
+            }
+        }
+        using var archiveDir = DirAccess.Open(archiveDirPath);
+        var groupedMissions = currentMissions.GroupBy(m => m.theaterInfo);
+        List<ArchiveData.CompactTheater> compactedTheaters = [];
+        foreach (var pair in groupedMissions)
+        {
+            compactedTheaters.Add(new()
+            {
+                theaterId = pair.Key.uniqueId,
+                theaterName = pair.Key.displayName,
+                missions = [..pair.Select(m =>
+                    new ArchiveData.CompactMission()
+                    {
+                        missionName = m.DisplayName,
+                        zoneName = m.zoneTheme is GameItemTemplate zt ? $"{zt.DisplayName} - {m.TheaterName}" : m.tile.zoneTheme,
+                        powerLevel = m.PowerLevel,
+                        fourPlayer = m.difficultyInfo?.DisplayName?.EndsWith("4 Players") ?? false,
+                        rewards = m.missionData.missionRewards.NamedItems,
+                        modifiers = m.alertData?.missionAlertModifiers.NamedItems,
+                        alertRewards = m.alertData?.missionAlertRewards.NamedItems,
+
+                        tileIndex = m.TileIdx,
+                        missionGuid = m.missionData.missionGuid,
+                        alertGuid = m.alertData?.missionAlertGuid,
+                        missionGenerator = m.missionData.missionGenerator,
+                        zoneTheme = m.tile.zoneTheme,
+                        difficultyRow = m.missionData.DifficultyRow
+                    }
+                ).OrderBy(m=>m.powerLevel).ThenBy(m=>m.tileIndex)]
+            });
+        }
+
+        ArchiveData archiveData = new()
+        {
+            beganUTC = missionReset.AddDays(-1),
+            expiresUTC = missionReset,
+            beganEST = missionReset.AddDays(-1).AddHours(-5),
+            expiresEST = missionReset.AddHours(-5),
+            theaters = [..compactedTheaters]
+        };
+
+        try
+        {
+            TimeZoneInfo easternTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            archiveData.beganEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.beganUTC, easternTimeZone);
+            archiveData.expiresEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.expiresUTC, easternTimeZone);
+        }
+        catch
+        {
+            GD.PushWarning("EST Time Conversion failed, mission archive times will not account for EST Daylight Savings");
+        }
+
+        string archiveContent = JsonSerializer.Serialize(archiveData, archiveSerialisation);
+
+        DateTime archiveDateSample = AppConfig.Get("mission_archive", "sample_utc", true) ? archiveData.beganUTC : archiveData.beganEST;
+
+        string archiveDate = archiveDateSample.ToString(AppConfig.Get("mission_archive", "date_format", "yyyy-MM-dd"));
+        int increment = 1;
+        string archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}.json";
+        string archiveName = $"{archiveDate}";
+        var prevArchivePath = archivePath;
+        while (archiveDir.FileExists(archivePath))
+        {
+            increment++;
+            prevArchivePath = archivePath;
+            archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}_{increment}.json";
+            archiveName = $"{archiveDate}, Part {increment}";
+        }
+        if (prevArchivePath != archivePath)
+        {
+            using var existingArchiveFile = FileAccess.Open(prevArchivePath, FileAccess.ModeFlags.Read);
+            if (existingArchiveFile.GetAsText().Hash() == archiveContent.Hash())
+                return;
+        }
+
+        bool writeSuccess = false;
+        try
+        {
+            using var archiveFile = FileAccess.Open(archivePath, FileAccess.ModeFlags.Write);
+            writeSuccess = archiveFile?.StoreString(archiveContent) ?? false;
+        }
+        catch { }
+        if (!writeSuccess)
+        {
+            GD.PushWarning($"Failed to archive missions as \"{archivePath}\"");
+            return;
+        }
+        GD.Print($"Missions archived as \"{archivePath}\"");
+
+        //optionally post a webhook message for each new file generated
+        archiveWebhook ??= new("PegLeg Mission Archive", "missionArchive");
+        archiveWebhook.Execute(
+            () => Task.FromResult(archiveName), 
+            () => Task.FromResult<string[]>([archivePath])
+        ).StartTask();
+    }
+
+    record struct ArchiveData()
+    {
+        public int peglegArchiveFormat = 1;
+        public DateTime beganUTC;
+        public DateTime beganEST;
+        public DateTime expiresUTC;
+        public DateTime expiresEST;
+        public CompactTheater[] theaters;
+
+        public record struct CompactTheater()
+        {
+            public string theaterId;
+            public string theaterName;
+            public CompactMission[] missions;
+        }
+
+        public record struct CompactMission()
+        {
+            public string missionName;
+            public string zoneName;
+            public int powerLevel;
+            public bool fourPlayer;
+            public ItemReward[] rewards;
+            public ItemReward[] modifiers;
+            public ItemReward[] alertRewards;
+
+            public int tileIndex;
+            public string missionGuid;
+            public string alertGuid;
+            public string missionGenerator;
+            public string zoneTheme;
+            public string difficultyRow;
+        }
+    }
+
     static string ParseItemPath(string itemPath) => itemPath[(itemPath.LastIndexOf('.') + 1)..itemPath.LastIndexOf('\'')];
-    static JsonSerializerOptions serialiserOptions = new() { IncludeFields = true, WriteIndented = true };
-    public record struct Requirements
+    public record struct Requirements()
     {
         public int personalPowerRating;
         public int maxPersonalPowerRating;
-        public string[] activeQuestDefinitions;
-        public string questDefinition;
-        public string eventFlag;
+        public string[] activeQuestDefinitions = [];
+        public string questDefinition = "None";
+        public string eventFlag = "";
 
         public bool MeetsRequirements(GameAccount account, bool ventures)
         {
@@ -348,6 +511,7 @@ public class GameMission
                         return false;
                 }
             }
+            activeQuestDefinitions ??= [];
             foreach (var questDef in activeQuestDefinitions)
             {
                 var quest = account.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem($"Quest:{ParseItemPath(questDef)}");
@@ -358,10 +522,11 @@ public class GameMission
         }
     }
 
-    public record struct ItemReward
+    public record struct ItemReward()
     {
+        public string name;
         public string itemType;
-        public int quantity;
+        public int quantity = 1;
         public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity);
     }
 
@@ -369,18 +534,36 @@ public class GameMission
     {
         public string tierGroupName;
         public ItemReward[] items;
+        [JsonIgnore]
+        public ItemReward[] NamedItems
+        {
+            get
+            {
+                items ??= [];
+                for (int i = 0; i < items.Length; i++)
+                {
+                    items[i].name = GameItemTemplate.Get(items[i].itemType)?.DisplayName ?? $"<{items[i].itemType}>";
+                }
+                return items;
+            }
+        }
     }
 
     public record class TheaterInfo
     {
         //fill this in manually
+        public string uniqueId;
         public string displayName;
         public string category;
+        [JsonIgnore]
+        public Region[] regions;
+        [JsonIgnore]
+        public Tile[] tiles;
 
         public Requirements requirements;
         [JsonInclude]
-        ModifierPair[] gameplayModifierList;
-        struct ModifierPair
+        public ModifierPair[] gameplayModifierList;
+        public struct ModifierPair
         {
             public string eventFlagName;
             public string gameplayModifier;
@@ -390,7 +573,7 @@ public class GameMission
             //for each pair, check if calender has event flag (or if event flag is empty) and get the modifier template 
             return [];
         }
-        public override string ToString() => JsonSerializer.Serialize(this, serialiserOptions);
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
     public record class MissionData
@@ -410,8 +593,9 @@ public class GameMission
         }
 
         public GameItemTemplate GetMissionGenerator() => GameItemTemplate.Get($"MissionGen:{missionGenerator[(missionGenerator.LastIndexOf('.') + 1)..]}");
-        public DifficultyInfo GetDifficultyInfo() => PegLegResourceManager.DifficultyInfo?[missionDifficultyInfo.rowName]?.Deserialize<DifficultyInfo>(serialiserOptions);
-        public override string ToString() => JsonSerializer.Serialize(this, serialiserOptions);
+        public string DifficultyRow => missionDifficultyInfo.rowName;
+        public DifficultyInfo GetDifficultyInfo() => PegLegResourceManager.DifficultyInfo?[missionDifficultyInfo.rowName]?.Deserialize<DifficultyInfo>(Helpers.JsonOptions.Fields);
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
     public record class DifficultyInfo
@@ -421,7 +605,7 @@ public class GameMission
         public int MaximumRating;
         public int RecommendedRating;
         public int RequiredRating;
-        public override string ToString() => JsonSerializer.Serialize(this, serialiserOptions);
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
     public record class AlertData
@@ -431,14 +615,13 @@ public class GameMission
         public DateTime availableUntil;
         public ItemCollection missionAlertRewards;
         public ItemCollection missionAlertModifiers;
-        public override string ToString() => JsonSerializer.Serialize(this, serialiserOptions);
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
     public record class Tile
     {
         public string tileType;
-        [JsonInclude]
-        string zoneTheme;
+        public string zoneTheme;
         public GameItemTemplate GetZoneTheme() => GameItemTemplate.Get($"ZoneTheme:{zoneTheme[(zoneTheme.IndexOf('.') + 1)..]}");
         public Requirements requirements;
         [JsonInclude]
@@ -447,7 +630,7 @@ public class GameMission
         int yCoordinate;
         [JsonIgnore]
         public Vector2I Coordinates => new(xCoordinate, yCoordinate);
-        public override string ToString() => JsonSerializer.Serialize(this, serialiserOptions);
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
     public record class Region
@@ -462,7 +645,7 @@ public class GameMission
         }
         public Requirements requirements;
         //display mission weights to user?
-        public override string ToString() => JsonSerializer.Serialize(this, serialiserOptions);
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
     static List<GameMission> GenerateMissions(JsonNode rootNode)
@@ -505,7 +688,7 @@ public class GameMission
                 _ => "v"
             };
             bool isVentures = theaterCat == "v";
-            var theaterInfo = theater["runtimeInfo"].Deserialize<TheaterInfo>(serialiserOptions) with
+            var theaterInfo = theater["runtimeInfo"].Deserialize<TheaterInfo>(Helpers.JsonOptions.Fields) with
             {
                 displayName = theaterName,
                 category = theaterCat,
@@ -515,20 +698,20 @@ public class GameMission
             var theaterMissions = allMissions
                 .FirstOrDefault(t => t["theaterId"].ToString() == theaterID)
                 ["availableMissions"]
-                .Deserialize<MissionData[]>(serialiserOptions);
+                .Deserialize<MissionData[]>(Helpers.JsonOptions.Fields);
 
             //Mission Alerts (indexed by Tile Index, as that is the common factor between missions and mission alerts)
             var missionAlertDict = allMissionAlerts
                 .FirstOrDefault(t => t["theaterId"].ToString() == theaterID)
                 ["availableMissionAlerts"]
-                .Deserialize<AlertData[]>(serialiserOptions)
+                .Deserialize<AlertData[]>(Helpers.JsonOptions.Fields)
                 .Reverse()
                 .DistinctBy(a => a.tileIndex)
                 .ToDictionary(a => a.tileIndex);
 
-            var missionTiles = theater["tiles"].Deserialize<Tile[]>(serialiserOptions);
-
-            var missionRegionList = theater["regions"].Deserialize<Region[]>(serialiserOptions);
+            theaterInfo.uniqueId = theater["uniqueId"].ToString();
+            theaterInfo.tiles = theater["tiles"].Deserialize<Tile[]>(Helpers.JsonOptions.Fields);
+            theaterInfo.regions = theater["regions"].Deserialize<Region[]>(Helpers.JsonOptions.Fields);
 
             foreach (var missionData in theaterMissions)
             {
@@ -536,8 +719,8 @@ public class GameMission
                     continue;
                 missionList.Add(new(
                     theaterInfo,
-                    [.. missionRegionList.Where(r => r.IncludesTile(missionData.tileIndex) == true)],
-                    missionTiles[missionData.tileIndex],
+                    [.. theaterInfo.regions.Where(r => r.IncludesTile(missionData.tileIndex) == true)],
+                    theaterInfo.tiles[missionData.tileIndex],
                     missionData,
                     missionAlertDict.TryGetValue(missionData.tileIndex, out var alertData) ? alertData : null
                 ));

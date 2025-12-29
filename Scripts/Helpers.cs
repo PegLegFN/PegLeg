@@ -615,6 +615,19 @@ public static partial class Helpers
         control.OffsetLeft = 0;
         control.OffsetRight = 0;
     }
+    public static void SafeConnect(this Node node, StringName signalName, Callable callable)
+    {
+        var connections = node.GetSignalConnectionList(signalName);
+        if (!connections?.Any(c => c["callable"].AsCallable().Equals(callable)) ?? false)
+            node.Connect(signalName, callable);
+    }
+
+    public static void SafeDisconnect(this Node node, StringName signalName, Callable callable)
+    {
+        var connections = node.GetSignalConnectionList(signalName);
+        if (connections?.Any(c => c["callable"].AsCallable().Equals(callable)) ?? false)
+            node.Disconnect(signalName, callable);
+    }
 
     public static async Task<GameAccount> EnsureProfile(this Task<GameAccount> accountTask, string profileId, bool force = false)
     {

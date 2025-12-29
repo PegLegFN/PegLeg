@@ -19,9 +19,12 @@ public partial class VerticalTab : Control
             triggerButton ??= FindChildren("*", "Button").FirstOrDefault() is Button b ? b : null;
             marginContainer ??= FindChildren("*", "MarginContainer").FirstOrDefault() is MarginContainer m ? m : null;
         }
-        if (triggerButton is not null)
-            triggerButton.Pressed += PressResponse;
 	}
+
+    public override void _EnterTree()
+    {
+        triggerButton?.SafeConnect(Button.SignalName.Pressed, Callable.From(PressResponse));
+    }
 
 	VerticalTabContainer tabContainer;
 	int tabIndex;
@@ -83,12 +86,11 @@ public partial class VerticalTab : Control
 
     public override void _ExitTree()
     {
-        if (OS.HasFeature("editor_hint") && pageNode is not null)
+        if (OS.HasFeature("editor_hint") && pageNode is not null && pageNode.IsInsideTree())
         {
-            pageNode.Renamed -= UpdatePageName;
-            pageNode.VisibilityChanged -= PressResponse;
+            pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
+            pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
         }
-        if (triggerButton is not null)
-            triggerButton.Pressed -= PressResponse;
+        triggerButton?.SafeDisconnect(Button.SignalName.Pressed, Callable.From(PressResponse));
     }
 }

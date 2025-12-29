@@ -56,6 +56,11 @@ public static class WebHelpers
         multipartFormContent.Add(new StringContent(content, Encoding.UTF8, "application/text"), name);
         return multipartFormContent;
     }
+    public static MultipartFormDataContent AddTextFileContent(this MultipartFormDataContent multipartFormContent, string name, string content, string filename = "content.txt")
+    {
+        multipartFormContent.Add(new StringContent(content, Encoding.UTF8, "application/text"), name, filename);
+        return multipartFormContent;
+    }
     public static MultipartFormDataContent AddImageContent(this MultipartFormDataContent multipartFormContent, string name, Image content, string filename="image")
     {
         multipartFormContent.Add(new ByteArrayContent(content.SavePngToBuffer()), name, filename+".png");

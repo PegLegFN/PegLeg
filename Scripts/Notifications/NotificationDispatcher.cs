@@ -19,6 +19,7 @@ public partial class NotificationDispatcher : Node
     {
         public DateTime lastDailyCheck { get; set; }
         public DateTime lastWeeklyCheck { get; set; }
+        public bool lastWeeklySucceeded { get; set; }
         public DateTime lastHourlyCheck { get; set; }
     }
 
@@ -96,14 +97,23 @@ public partial class NotificationDispatcher : Node
             CheckFreeLlamas(ct),
             ..DailyNotifs(ct)
         ];
-
         //save refresh times
-        using var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Write);
-        timerFile.StoreString(JsonSerializer.Serialize(notifTimes));
+        notifTimes.lastWeeklySucceeded = false;
+        using (var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Write))
+        {
+            timerFile.StoreString(JsonSerializer.Serialize(notifTimes));
+        }
 
         var notifs = (await Task.WhenAll(notifTasks)).SelectMany(n => n);
         if (ct.IsCancellationRequested)
             return;
+
+        //save weekly success
+        notifTimes.lastWeeklySucceeded = notifs.Any(n => (n.expires.Date - DateTime.UtcNow.Date).TotalDays > 1);
+        using (var timerFile = FileAccess.Open(notifTimerPath, FileAccess.ModeFlags.Write))
+        {
+            timerFile.StoreString(JsonSerializer.Serialize(notifTimes));
+        }
 
         NotificationManager.Push(notifs);
     }
@@ -130,9 +140,10 @@ public partial class NotificationDispatcher : Node
         if (notifTimes.lastWeeklyCheck >= thisThursday && !isForced)
             return [];
         notifTimes.lastWeeklyCheck = DateTime.UtcNow.Date;
+
         return [
             //if week is new, send 160 reward as notif
-            CheckBdayLlamas(ct),
+            CheckWeeklyLlamas(ct),
             //check weekly/event shop
         ];
     }
@@ -260,16 +271,14 @@ public partial class NotificationDispatcher : Node
         return [.. notifs];
     }
 
-    NotificationData? bDayLlamaNotif;
-    NotificationData BDayLlamaNotif => bDayLlamaNotif ??= LlamaNotif with
+    NotificationData? weeklyLlamaNotif;
+    NotificationData WeeklyLlamaNotif => weeklyLlamaNotif ??= LlamaNotif with
     {
-        header = "Birthday Llama",
-        body = "A free Birthday Llama is available until the next weekly reset",
         sound = superLlamaSound,
         itemColor = Color.FromHtml("#bf00ff"),
     };
 
-    async Task<NotificationData[]> CheckBdayLlamas(CancellationToken ct)
+    async Task<NotificationData[]> CheckWeeklyLlamas(CancellationToken ct)
     {
         if (ct.IsCancellationRequested)
             return [];
@@ -277,14 +286,16 @@ public partial class NotificationDispatcher : Node
         var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
         if (ct.IsCancellationRequested)
             return [];
-        if (xrayStorefront.Offers.FirstOrDefault(o => o.WeeklyLimit > 0) is GameOffer bdayOffer)
+        if (xrayStorefront.Offers.FirstOrDefault(o => o.WeeklyLimit > 0) is GameOffer weeklyOffer)
         {
             //deliver bday llama notif
             //todo: if birthday llama contains item with reminder, show notification
-            var contents = await bdayOffer.GetXRayLlamaData(GameAccount.activeAccount);
-            return [BDayLlamaNotif with
+            var contents = await weeklyOffer.GetXRayLlamaData(GameAccount.activeAccount);
+            return [WeeklyLlamaNotif with
             {
-                icon = bdayOffer.itemGrants[0].GetTexture(),
+                header = "{Weekly Llama}",
+                body = "A free {Weekly Llama} is available until the next weekly reset",
+                icon = weeklyOffer.itemGrants[0].GetTexture(),
                 expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Weekly),
                 items = [.. contents.GetPrerollItems().Select(i => new NotificationItemData() { item = i })]
             }];

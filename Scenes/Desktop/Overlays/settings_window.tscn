@@ -179,6 +179,7 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0"]
@@ -1349,11 +1350,11 @@ script = ExtResource("12_12lms")
 section = "advanced"
 key = "beastmode"
 
-[node name="DC Webhooks" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="5" groups=["HideTab"]]
+[node name="Webhooks" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="5" groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
-[node name="WebhookTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" index="0"]
+[node name="WebhookTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" index="0"]
 visible = false
 layout_direction = 3
 layout_mode = 2
@@ -1366,20 +1367,97 @@ alignment = 2
 script = ExtResource("12_12lms")
 section = "advanced"
 key = "webhooks"
-defaultValue = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" index="1"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer" index="0"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Discord Webhooks"
 
-[node name="DailySummary" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/VBoxContainer" index="1" instance=ExtResource("24_1rpfy")]
+[node name="DailySummary" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer" index="1" instance=ExtResource("24_1rpfy")]
 layout_mode = 2
 
-[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="6" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
+[node name="MissionArchive" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer" index="2" instance=ExtResource("24_1rpfy")]
+layout_mode = 2
+internalName = "missionArchive"
+
+[node name="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer/MissionArchive" index="0"]
+text = "Mission Archive"
+
+[node name="Archive" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="6" groups=["HideTab"]]
+layout_mode = 2
+
+[node name="ArchiveTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="0"]
+visible = false
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+button_pressed = true
+text = "
+"
+alignment = 2
+script = ExtResource("12_12lms")
+section = "advanced"
+key = "archive_missions"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Mission Archive"
+
+[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer" index="1"]
+layout_mode = 2
+button_pressed = true
+text = "Use UTC for Date"
+script = ExtResource("12_12lms")
+section = "mission_archive"
+key = "sample_utc"
+defaultValue = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer" index="2"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LocalArchiveFolderLabel" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer/VBoxContainer" index="0"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Local Archive Folder"
+
+[node name="LocalArchiveFolder" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer/VBoxContainer" index="1"]
+layout_mode = 2
+placeholder_text = "user://mission_archive/"
+script = ExtResource("12_ld0ka")
+section = "mission_archive"
+key = "target_folder"
+defaultValue = "user://mission_archive/"
+
+[node name="VBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer" index="3"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LocalArchiveFolderLabel" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer/VBoxContainer2" index="0"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/line_spacing = 0
+text = "Date Format"
+
+[node name="LocalArchiveFolder" type="LineEdit" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/VBoxContainer/VBoxContainer2" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+placeholder_text = "yyyy-MM-dd"
+script = ExtResource("12_ld0ka")
+section = "mission_archive"
+key = "date_format"
+defaultValue = "yyyy-MM-dd"
+
+[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
 visible = false
 layout_mode = 2
 script = ExtResource("17_e6sed")
@@ -1478,9 +1556,15 @@ text = "Update"
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/VBoxContainer/VBoxContainer/ImportButtonOld" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" method="ImportAccounts"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/AutoRestartToggle" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/HBoxContainer" method="set_visible"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer/ExperimentalNotifs" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection" method="set_visible"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" method="add_to_group" binds= ["HideTab", false]]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/DC Webhooks" method="remove_from_group" binds= ["HideTab"]]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" method="add_to_group" binds= ["HideTab", false]]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" method="remove_from_group" binds= ["HideTab"]]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="add_to_group" binds= ["HideTab", false]]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="remove_from_group" binds= ["HideTab"]]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/HBoxContainer/UpdateCheckBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" method="CheckForUpdates"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates/VBoxContainer/HBoxContainer/UpdateLaunchBtn" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" method="DownloadAndRunInstaller"]
+
+[editable path="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer/MissionArchive"]

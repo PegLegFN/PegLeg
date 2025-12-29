@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ysh5ajklts1q"]
+[gd_scene load_steps=26 format=3 uid="uid://ysh5ajklts1q"]
 
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/InterfaceIcons/PegLegIcon256.png" id="1_7xbjg"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="1_r66cy"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cld8bvva5hkbq" path="res://Scripts/UserInterface/OnboardingInterface.cs" id="5_p8lju"]
 [ext_resource type="Script" uid="uid://bflrpf336hbmc" path="res://Scripts/CodeLoginLabel.cs" id="6_t48oj"]
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="8_42nsr"]
+[ext_resource type="Texture2D" uid="uid://bespxm5jylsra" path="res://Images/InterfaceIcons/T_UI_Icon_FilterUnion.png" id="8_xg3me"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="9_gp42o"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="10_cpy3n"]
 [ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="11_6kqv5"]
@@ -21,7 +22,19 @@
 [ext_resource type="PackedScene" uid="uid://b7rnaw5epqkd6" path="res://Scenes/download_cube.tscn" id="15_jvi10"]
 [ext_resource type="AudioStream" uid="uid://cb1e6fcri5nxg" path="res://Audio/SFX/AssetLoading/loadingSequence.tres" id="18_pbj83"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xg3me"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.145098, 0.145098, 0.145098, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tyimv"]
+content_margin_top = 10.0
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_rx0xh"]
 
@@ -126,18 +139,32 @@ theme_override_font_sizes/font_size = 15
 text = "To log in to your Epic Games account, click the link and enter in the code shown below."
 autowrap_mode = 3
 
-[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
 layout_mode = 2
-theme_override_constants/margin_bottom = -10
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_xg3me")
+
+[node name="LinkButton" type="LinkButton" parent="CenterContainer/MarginContainer/Content/LoginCode/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 12
+text = "https://www.epicgames.com/id/activate"
+uri = "https://www.epicgames.com/id/activate"
+
+[node name="MarginContainer2" type="HBoxContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+layout_mode = 2
+alignment = 1
 
 [node name="LinkCodeText" type="LineEdit" parent="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/selection_color = Color(1, 1, 1, 1)
-theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
 theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 8
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0.29586616, 0.29586673, 0.29586628, 1)
+theme_override_colors/selection_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_tyimv")
 placeholder_text = "########"
@@ -145,12 +172,15 @@ alignment = 1
 editable = false
 script = ExtResource("6_t48oj")
 
-[node name="LinkButton" type="LinkButton" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+[node name="Button" type="Button" parent="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2"]
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 12
-text = "https://www.epicgames.com/id/activate"
-uri = "https://www.epicgames.com/id/activate"
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+icon = ExtResource("8_xg3me")
+icon_alignment = 1
+expand_icon = true
 
 [node name="ImportButton" type="Button" parent="CenterContainer/MarginContainer/Content/LoginCode"]
 layout_mode = 2
@@ -489,6 +519,7 @@ bus = &"SFX"
 [connection signal="LoginSucceeded" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="set_placeholder" binds= ["Success"]]
 [connection signal="LoginSuccess" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer" method="LoginCodeSuccess"]
 [connection signal="UserCodeChanged" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="set_text"]
+[connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/Button" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="CopyCode"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/ImportButton" to="CenterContainer" method="ImportAccounts"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/CompleteLogin" to="CenterContainer" method="ComplateCodeLogin"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/RetryLogn" to="CenterContainer" method="StartLogin"]

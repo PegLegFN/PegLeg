@@ -225,12 +225,13 @@ public partial class GameAccount
         await SetActiveAccount(_activeAccount.accountId);
     }
 
-    public static void LoginToAccount(JsonObject accountAuthResponse)
+    public static GameAccount LoginToAccount(JsonObject accountAuthResponse)
     {
         if (accountAuthResponse["account_id"]?.ToString() is not string accountId)
-            return;
+            return null;
         var account = GetOrCreateAccount(accountId);
         account.SetAuthentication(accountAuthResponse);
+        return account;
     }
 
     public GameClient TargetClient { get; private set; }
@@ -757,11 +758,11 @@ public partial class GameAccount
         if(loadoutItem is not null)
         {
             heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"].ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"].ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"].ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"].ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"].ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
         }
 
 
@@ -772,9 +773,10 @@ public partial class GameAccount
         float technology = LookupStatItem("Stat:technology") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
 
         GD.Print($"Main FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
-        GD.Print($"Extra Power: {heroPower}, {backpackPower}");
+        GD.Print($"Hero Power: {heroPower}, Backpack Power: {backpackPower}");
 
         fortStats = new(fortitude, offense, resistance, technology, heroPower, backpackPower);
+        GD.Print($"Estimated PL: {fortStats.Value.PowerLevel:0.##}");
         OnFortStatsChanged?.Invoke(this);
         return fortStats.Value;
     }

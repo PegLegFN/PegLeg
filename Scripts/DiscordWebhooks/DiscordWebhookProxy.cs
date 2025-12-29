@@ -18,14 +18,18 @@ public partial class DiscordWebhookProxy
 
     string displayName;
     public string InternalName { get; private set; }
-    Func<Task<Image[]>> imageGenerator;
+    Func<Task<string>> contentProvider;
+    Func<Task<Image[]>> imageProvider;
+    Func<Task<string[]>> filepathProvider;
     string uuid = Guid.NewGuid().ToString();
 
-    public DiscordWebhookProxy(string displayName, string internalName, Func<Task<Image[]>> imageGenerator)
+    public DiscordWebhookProxy(string displayName, string internalName, Func<Task<string>> contentProvider = null, Func<Task<string[]>> filepathProvider = null, Func<Task<Image[]>> imageProvider = null)
     {
         this.displayName = displayName;
         InternalName = internalName;
-        this.imageGenerator = imageGenerator;
+        this.contentProvider = contentProvider;
+        this.filepathProvider = filepathProvider;
+        this.imageProvider = imageProvider;
         proxyDict[internalName] = this;
     }
 
@@ -64,8 +68,18 @@ public partial class DiscordWebhookProxy
 
     public bool UsesSync => AppConfig.Get("webhooks", InternalName + "_useSync", false);
 
-    public async Task Execute() => await Execute(false);
-    public async Task Execute(bool skipSync)
+    public async Task Execute(
+        Func<Task<string>> currentContentProvider=null, 
+        Func<Task<string[]>> currentFilepathProvider = null, 
+        Func<Task<Image[]>> currentImageProvider = null
+    ) => await Execute(false, currentContentProvider, currentFilepathProvider, currentImageProvider);
+
+    public async Task Execute(
+        bool skipSync,
+        Func<Task<string>> currentContentProvider = null,
+        Func<Task<string[]>> currentFilepathProvider = null, 
+        Func<Task<Image[]>> currentImageProvider = null
+    )
     {
         if (!AppConfig.Get("advanced", "webhooks", false))
             return;
@@ -114,27 +128,57 @@ public partial class DiscordWebhookProxy
             //GD.Print("WH: winner");
         }
 
-        var imageTask = imageGenerator?.Invoke();
-        if (imageTask is null)
-        {
-            GD.Print($"WH: image task null");
-            return;
-        }
-        var images = await imageTask;
-        if (images.Length == 0)
-        {
-            GD.Print($"WH: no images");
-            return;
-        }
-        MultipartFormDataContent formContent = [];
+        currentFilepathProvider ??= filepathProvider;
+        currentImageProvider ??= imageProvider;
 
+        string content = null;
+        if (currentContentProvider?.Invoke() is Task<string> contentTask)
+            content = await contentTask;
+
+        string[] filepaths = [];
+        if (currentFilepathProvider?.Invoke() is Task<string[]> filepathTask)
+            filepaths = await filepathTask;
+
+        Image[] images = [];
+        if (currentImageProvider?.Invoke() is Task<Image[]> imageTask)
+            images = await imageTask;
+
+        if (filepaths.Length == 0 && images.Length == 0 && content == null)
+        {
+            GD.Print($"WH: no content");
+            return;
+        }
+
+        MultipartFormDataContent formContent = [];
+        int fileIdx = 0;
         formContent.AddStringContent("username", displayName);
-        for (int i = 0; i < Mathf.Min(10, images.Length); i++)
+        if (content != null)
+            formContent.AddStringContent("content", content);
+        for (int i = 0; i < filepaths.Length; i++)
+        {
+            if (!FileAccess.FileExists(filepaths[i]))
+                continue;
+            string filename = filepaths[i].Split("/")[^1];
+            string fileContent = "";
+            using (var targetFile = FileAccess.Open(filepaths[i], FileAccess.ModeFlags.Read))
+                fileContent = targetFile.GetAsText();
+            formContent.AddTextFileContent($"files[{fileIdx}]", fileContent, filename);
+            fileIdx++;
+        }
+
+        for (int i = 0; i < images.Length; i++)
         {
             string filename = images[i].ResourceName;
             if (string.IsNullOrEmpty(filename))
                 filename = "image";
-            formContent.AddImageContent("file" + i, images[i], filename);
+            formContent.AddImageContent($"files[{fileIdx}]", images[i], filename);
+            fileIdx++;
+        }
+
+        if (fileIdx==0 && content == null)
+        {
+            GD.Print($"WH: no valid content");
+            return;
         }
 
         var stringContent = await formContent.ReadAsStringAsync();

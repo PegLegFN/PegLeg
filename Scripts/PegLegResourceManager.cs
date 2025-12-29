@@ -47,10 +47,27 @@ public class PegLegResourceManager
         PackageVersion[] AllRequirements => [ MajorBasis, MinorBasis, this ];
         public PackageVersion[] Requirements => [.. AllRequirements.Distinct().Order()];
 
-        public readonly string LocalPackagePath => globalPackageFolderPath + $"PegLegResources-{version}.pck";
+        public readonly string PackageFilename => $"PegLegResources-{version}.pck";
+        public readonly string LocalPackagePath => globalPackageFolderPath + PackageFilename;
 
         public readonly bool HasLocalPackage() =>
             FileAccess.FileExists(LocalPackagePath);
+
+        public void ClearOutdatedPackages()
+        {
+            using DirAccess packageDir = DirAccess.Open(globalPackageFolderPath);
+            var files = packageDir.GetFiles().Where(f => f.EndsWith(".pck")).ToList();
+            files.Remove("ExtraPatch.pck");
+            files.Remove(PackageFilename);
+            if (version.patch > 0)
+                files.Remove(MinorBasis.PackageFilename);
+            if(version.minor>0)
+                files.Remove(MajorBasis.PackageFilename);
+            foreach (var item in files)
+            {
+                packageDir.Remove(item);
+            }
+        }
 
         public void LoadAllPackages()
         {
@@ -115,9 +132,10 @@ public class PegLegResourceManager
             await asset.DownloadTo(fileStream, downloadProgress);
         }
         await Helpers.WaitForFrame();
-        if(FileAccess.FileExists(globalPackageFolderPath+"ExtraPatch.pck"))
+        if (FileAccess.FileExists(globalPackageFolderPath + "ExtraPatch.pck"))
             ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
         latestVersion.LoadAllPackages();
+        latestVersion.ClearOutdatedPackages();
         onProgress?.Invoke("Loading Resources");
         await Task.WhenAll(
             LoadDataSources(),
