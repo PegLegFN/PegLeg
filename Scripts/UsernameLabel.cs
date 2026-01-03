@@ -17,6 +17,6 @@ public partial class UsernameLabel : Label
 
     private void UpdateAccount()
     {
-        Text = GameAccount.activeAccount?.DisplayName;
+        Text = GameAccount.ActiveAccount?.DisplayName;
     }
 }

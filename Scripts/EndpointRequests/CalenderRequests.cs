@@ -97,7 +97,7 @@ public static class CalenderRequests
     }
 
     static SemaphoreSlim calenderCheck = new(1);
-    public static async Task CheckCalender() => await GameAccount.activeAccount.CheckCalender();
+    public static async Task CheckCalender() => await GameAccount.ActiveAccount.CheckCalender();
     public static async Task CheckCalender(this GameAccount account)
     {
         bool? notify = null;
@@ -115,7 +115,7 @@ public static class CalenderRequests
             catch (JsonException) { }
         }
 
-        GD.Print($"Calender: {{expiresUTC: {currentCalender.cacheExpire}, currentlyUTC: {DateTime.UtcNow}, fetch: {currentCalender.cacheExpire < DateTime.UtcNow}}}");
+        //GD.Print($"Calender: {{expiresUTC: {currentCalender.cacheExpire}, currentlyUTC: {DateTime.UtcNow}, fetch: {currentCalender.cacheExpire < DateTime.UtcNow}}}");
         await calenderCheck.WaitAsync();
         try
         {
@@ -140,15 +140,15 @@ public static class CalenderRequests
 
     static async Task<bool?> RequestCalender(GameAccount account)
     {
-        var calResponse = await Helpers.MakeRequest(
-            HttpMethod.Get,
-            FnWebAddresses.game,
-            "/fortnite/api/calendar/v1/timeline",
-            "",
-            account.AuthHeader,
-            ""
-        );
-        var newData = calResponse?.AsObject();
+        var calenderResponse = await FnWebAddresses.FortGame
+            .MakeRequest("/fortnite/api/calendar/v1/timeline")
+            .SetAccount(account)
+            .Send();
+
+        if (await calenderResponse.CheckForError())
+            return null;
+
+        var newData = await calenderResponse.ReadJson<JsonObject>();
 
         if (!newData.ContainsKey("channels"))
         {

@@ -62,11 +62,9 @@ public partial class ItemShopInterface : Control
                 return;
             }
 
-            var account = GameAccount.activeAccount;
-            if (!await account.Authenticate())
-                return;
-
             linkedStorefront = await GameStorefront.GetStorefront(useEventShop ? FnStorefrontTypes.EventShopCatalog : FnStorefrontTypes.WeeklyShopCatalog, timerType);
+            if (linkedStorefront is null)
+                return;
             linkedStorefront.OnOfferAdded += AddShopOffer;
             linkedStorefront.OnOfferRemoved += RemoveShopOffer;
 

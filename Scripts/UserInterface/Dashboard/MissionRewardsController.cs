@@ -20,6 +20,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     [Export]
     Button filterStory;
     [Export]
+    Control emptyContent;
+    [Export]
+    TextureRect emptyIcon;
+    [Export]
     bool notableMode;
 
     [Export]
@@ -197,6 +201,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         var missions = GameMission.currentMissions;
         if (lockFilter || missions is null)
             return;
+        if (emptyIcon is not null)
+            emptyIcon.Texture = GameMission.DailyCat;
         loadingIcon.Visible = false;
         rewards = [];
         if (!IsVisibleInTree())
@@ -205,8 +211,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
             return;
         }
         needsRefresh = false;
-        int curPL = (int)GameAccount.activeAccount.FortStats.PowerLevel;
-        int ventPL = (int)GameAccount.activeAccount.VentureFortStats.PowerLevel;
+        int curPL = (int)GameAccount.ActiveAccount.FortStats.PowerLevel;
+        int ventPL = (int)GameAccount.ActiveAccount.VentureFortStats.PowerLevel;
 
         Predicate<GameMission> missionPredicate = null;
         Predicate<GameItem> itemPredicate = null;
@@ -224,7 +230,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
             {
                 if (requiredZones.Count > 0 && !requiredZones.Contains(m.TheaterCat))
                     return false;
-                if (filterPower?.ButtonPressed == true && !m.PlayableBy(GameAccount.activeAccount))
+                if (filterPower?.ButtonPressed == true && !m.PlayableBy(GameAccount.ActiveAccount))
                     return false;
                 if (filterStory?.ButtonPressed != true && m.IsStoryMission)
                     return false;
@@ -333,6 +339,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
         rewards = [.. sortedRewards];
 
+        if (emptyContent is not null)
+            emptyContent.Visible = rewards.Count == 0;
+
         missionList.UpdateList(true);
         missionList.Visible = true;
     }
@@ -341,6 +350,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     {
         loadingIcon.Visible = true;
         missionList.Visible = false;
+        if (emptyContent is not null)
+            emptyContent.Visible = false;
     }
 }
 

@@ -1,4 +1,5 @@
 using Godot;
+using System.Text.Json.Nodes;
 
 public partial class CodeLoginLabel : Node
 {
@@ -45,21 +46,18 @@ public partial class CodeLoginLabel : Node
         var linkData = await GameClient.PreferredClient.GetLoginLinkData();
         gettingClient = false;
 
-        if (linkData is not null && linkData["errorMessage"] is null)
-        {
-            cooldown = 0;
-            started = true;
-            codeExpiresAt = linkData["expires_at"].GetValue<int>();
-
-            EmitSignal(SignalName.LoginStarted);
-            EmitSignal(SignalName.LoginActiveChanged, true);
-
-            currentUserCode = linkData["user_code"].ToString();
-            EmitSignal(SignalName.UserCodeChanged, currentUserCode);
+        if (linkData is null)
             return;
-        }
 
-        GD.Print(linkData?["errorMessage"]);
+        cooldown = 0;
+        started = true;
+        codeExpiresAt = linkData["expires_at"].GetValue<int>();
+
+        EmitSignal(SignalName.LoginStarted);
+        EmitSignal(SignalName.LoginActiveChanged, true);
+
+        currentUserCode = linkData["user_code"].ToString();
+        EmitSignal(SignalName.UserCodeChanged, currentUserCode);
     }
 
     public void CopyCode()
@@ -107,14 +105,15 @@ public partial class CodeLoginLabel : Node
     async void CheckForCode()
     {
         var linkCheckRequest = await GameClient.PreferredClient.CheckLoginLinkCode();
-        if (linkCheckRequest?["access_token"] is null)
+        if (await linkCheckRequest.CheckForError())
             return;
+        var linkData = await linkCheckRequest.ReadJson<JsonObject>();
 
         started = false;
 
         GD.Print("APPROVE: " + linkCheckRequest);
 
-        EmitSignal(SignalName.LoginSuccess, linkCheckRequest["account_id"].ToString());
+        EmitSignal(SignalName.LoginSuccess, linkData["account_id"].ToString());
 
         EmitSignal(SignalName.LoginSucceeded);
         EmitSignal(SignalName.LoginResultChanged, true);
@@ -125,7 +124,7 @@ public partial class CodeLoginLabel : Node
         currentUserCode = "";
         EmitSignal(SignalName.UserCodeChanged, "");
 
-        GameAccount.LoginToAccount(linkCheckRequest?.AsObject());
+        GameAccount.LoginToAccount(linkData);
         return;
     }
 }

@@ -52,13 +52,10 @@ public partial class XpLimitController : Control
         content.Visible = false;
         try
         {
-            var account = GameAccount.activeAccount;
-            if (!await account.Authenticate())
-                return;
-
-            stwProfile = account.GetProfile(FnProfileTypes.AccountItems);
-            brProfile = account.GetProfile(FnProfileTypes.CosmeticInventory);
-            await GameAccount.activeAccount.ClientQuestLoginAthena();
+            var acc = GameAccount.ActiveAccount;
+            stwProfile = acc.GetProfile(FnProfileTypes.AccountItems);
+            brProfile = acc.GetProfile(FnProfileTypes.CosmeticInventory);
+            await acc.ClientQuestLoginAthena();
 
             await UpdateProfiles(false);
         }
@@ -76,6 +73,8 @@ public partial class XpLimitController : Control
         content.Visible = false;
         try
         {
+            if (force)
+                GD.PushWarning("XPForceUpdate");
             //for some reason, XP stat changes don't increment the profile revision, so we need to completely re-fetch the BR profile
             await Task.WhenAll(
                 stwProfile.Query(force),
@@ -139,7 +138,7 @@ public partial class XpLimitController : Control
                 restedMax,
                 null
             );
-            GD.Print($"Mult: {restedMult}");
+            //GD.Print($"Mult: {restedMult}");
             superchargedXpDisplay.TooltipText = $"The next {rested.Notate()} XP will be earned {restedMult:0.#}x faster than usual";
             superchargedContent.Visible = true;
         }

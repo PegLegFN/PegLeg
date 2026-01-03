@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bcllm2n3omok8"]
+[gd_scene load_steps=11 format=3 uid="uid://bcllm2n3omok8"]
 
 [ext_resource type="Script" uid="uid://b0j1smbi1nuqg" path="res://Scripts/Bootstrap.cs" id="1_6qsod"]
 [ext_resource type="PackedScene" uid="uid://ysh5ajklts1q" path="res://Scenes/Desktop/desktopOnboarding.tscn" id="2_frb0b"]
@@ -16,7 +16,31 @@ shader_parameter/Expo = true
 shader_parameter/AlphaStart = 0.0
 shader_parameter/CornerRadius = 39.05
 
-[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("background", "curtain", "progressLabel")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g0s4o"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_se0d1"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("background", "curtain", "progressLabel", "progressBar")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -25,7 +49,8 @@ grow_vertical = 2
 script = ExtResource("1_6qsod")
 background = NodePath("TextureRect")
 curtain = NodePath("Curtain")
-progressLabel = NodePath("MarginContainer/Label")
+progressLabel = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer/Label2")
+progressBar = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer/ProgressBar")
 desktopOnboarding = ExtResource("2_frb0b")
 desktopInterface = ExtResource("3_js2t5")
 shareMenu = ExtResource("4_efo63")
@@ -53,6 +78,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="MarginContainer"]
+visible = false
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -61,7 +87,60 @@ theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="Control" type="Control" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -103.5
+offset_top = -42.0
+offset_right = 103.5
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Control/CenterContainer"]
+self_modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = " Starting PegLeg... "
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+text = "Loading status with feedback
+plus another line"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_g0s4o")
+theme_override_styles/fill = SubResource("StyleBoxFlat_se0d1")
+max_value = 1.0
+show_percentage = false
+indeterminate = true
+editor_preview_indeterminate = true
+
 [node name="Curtain" type="ColorRect" parent="."]
 visible = false
 layout_mode = 2
 color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2

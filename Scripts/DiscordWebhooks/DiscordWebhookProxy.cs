@@ -6,13 +6,12 @@ using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HttpClient = System.Net.Http.HttpClient;
 
 public partial class DiscordWebhookProxy
 {
     static Dictionary<string, DiscordWebhookProxy> proxyDict = [];
 
-    static HttpClient discordClient = new() { BaseAddress = new("https://discord.com") };
+    static Uri discordAddress = new("https://discord.com");
 
     public static bool TryGetProxy(string internalId, out DiscordWebhookProxy proxy) => proxyDict.TryGetValue(internalId, out proxy);
 
@@ -47,9 +46,14 @@ public partial class DiscordWebhookProxy
         }
         var syncThreadId = AppConfig.Get("webhooks", InternalName + "_syncThread", "");
 
-        var executionResponse = await discordClient
+        var executionResponse = await discordAddress
             .MakeRequest($"/api/webhooks/{urlEnding}?wait=true&thread_id={syncThreadId}", HttpMethod.Post)
-            .SetJsonContent(new JsonObject() { ["username"] = "Sync: " + displayName, ["content"] = "Blank Sync Message" })
+            .SetJsonContent($$"""
+            {
+                "username": "Sync: {{displayName}}", 
+                "content": "Blank Sync Message"
+            }
+            """)
             .Send();
         if (!executionResponse.IsSuccessStatusCode)
         {
@@ -101,9 +105,13 @@ public partial class DiscordWebhookProxy
         {
             var syncId = AppConfig.Get("webhooks", InternalName + "_sync", "");
             var syncThreadId = AppConfig.Get("webhooks", InternalName + "_syncThread", "");
-            var editResponse = await discordClient
+            var editResponse = await discordAddress
                 .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?wait=true&thread_id={syncThreadId}", HttpMethod.Patch)
-                .SetJsonContent(new JsonObject() { ["content"] = uuid })
+                .SetJsonContent($$"""
+                {
+                    "content": "{{uuid}}"
+                }
+                """)
                 .Send();
             if (!editResponse.IsSuccessStatusCode)
             {
@@ -111,7 +119,7 @@ public partial class DiscordWebhookProxy
                 return;
             }
             await Task.Delay(1000);
-            var winnerResponse = await discordClient
+            var winnerResponse = await discordAddress
                 .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?thread_id={syncThreadId}", HttpMethod.Get)
                 .Send();
             if (!winnerResponse.IsSuccessStatusCode)
@@ -183,7 +191,7 @@ public partial class DiscordWebhookProxy
 
         var stringContent = await formContent.ReadAsStringAsync();
 
-        var executionResponse = await discordClient
+        var executionResponse = await discordAddress
             .MakeRequest($"/api/webhooks/{urlEnding}", HttpMethod.Post)
             .SetContent(formContent)
             .Send();

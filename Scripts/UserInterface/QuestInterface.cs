@@ -45,7 +45,7 @@ public partial class QuestInterface : Control
             .Values
             .OrderBy(col=> col.priority)
         ];
-        GD.Print("questCollections: " + questGroupCollectionData.Length);
+        //GD.Print("questCollections: " + questGroupCollectionData.Length);
         RefreshTimerController.OnDayChanged += ReloadQuests;
         GameAccount.ActiveAccountChanged += ReloadQuests;
         ReloadQuests();
@@ -65,9 +65,9 @@ public partial class QuestInterface : Control
 
         if (!AppConfig.Get("advanced", "suspend_quests", false))
         {
-            await GameAccount.activeAccount.ClientQuestLoginCampaign();
+            await GameAccount.ActiveAccount.ClientQuestLoginCampaign();
             if (AppConfig.Get("advanced", "bulk_quest_refresh", false))
-                BulkClientQuestLogin(GameAccount.activeAccount);
+                BulkClientQuestLoginCampaign(GameAccount.ActiveAccount);
         }
 
         questsDirty = true;
@@ -75,16 +75,9 @@ public partial class QuestInterface : Control
             LoadQuests();
     }
 
-    private static async void BulkClientQuestLogin(GameAccount except)
+    private static async void BulkClientQuestLoginCampaign(GameAccount except)
     {
-        await Task.WhenAll(GameAccount.OwnedAccounts.Select(a => a != except ? BulkClientQuestLoginSubtask(a) : Task.CompletedTask));
-    }
-
-    private static async Task BulkClientQuestLoginSubtask(GameAccount target)
-    {
-        if (!await target.Authenticate())
-            return;
-        await target.ClientQuestLoginCampaign();
+        await Task.WhenAll(GameAccount.OwnedAccounts.Except([except]).Select(a => a.ClientQuestLoginCampaign()));
     }
 
     public override void _ExitTree()
@@ -93,13 +86,8 @@ public partial class QuestInterface : Control
         GameAccount.ActiveAccountChanged -= ReloadQuests;
     }
 
-    public async void ClearPinnedQuests()
-    {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-        account.ClearPinnedQuests();
-    }
+    public void ClearPinnedQuests() => 
+        GameAccount.ActiveAccount.ClearPinnedQuests();
 
     bool questsDirty = true;
     SemaphoreSlim loadQuestsSemaphore = new(1);
@@ -112,10 +100,8 @@ public partial class QuestInterface : Control
         if (!questsDirty)
             return;
 
-        if (!await GameAccount.activeAccount.Authenticate())
-            return;
-        await GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).Query();
-        await GameAccount.activeAccount.CheckCalender();
+        await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+        await GameAccount.ActiveAccount.CheckCalender();
 
         questGroupViewer.Visible = false;
         questListLayout.Visible = false;

@@ -166,7 +166,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
         filteredItems = [];
         ApplySorting();
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         if (!string.IsNullOrEmpty(targetUser?.Text) && allowDevMode)
         {
             if (targetUser.Text.Length==32)
@@ -230,7 +230,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             return true;
         };
         var toRecycle = await GameItemSelector.Instance.OpenSelector(filteredItems, null);
-        if ((toRecycle?.Length ?? 0) > 0 && await currentProfile.account.Authenticate())
+        if ((toRecycle?.Length ?? 0) > 0)
         {
             JsonObject content = new()
             {

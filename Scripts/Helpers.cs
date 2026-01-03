@@ -200,9 +200,23 @@ public static partial class Helpers
     static async Task WaitForFrame(this SceneTree sceneTree) => 
         await sceneTree.ToSignal(sceneTree, SceneTree.SignalName.ProcessFrame);
 
-    public static async Task WaitForTimer(double time) => await MainLoopSceneTree.WaitForTimer(time);
-    static async Task WaitForTimer(this SceneTree sceneTree, double time)=>await sceneTree.CreateTimer(time).WaitForTimer();
-    public static async Task WaitForTimer(this SceneTreeTimer timer) => await timer.ToSignal(timer, SceneTreeTimer.SignalName.Timeout);
+    public static async Task WaitForTimer(double time, Action<double> timeLeft = null) => await MainLoopSceneTree.WaitForTimer(time, timeLeft);
+    static async Task WaitForTimer(this SceneTree sceneTree, double time, Action<double> timeLeft = null) => await sceneTree.CreateTimer(time).WaitForTimer(timeLeft);
+    public static async Task WaitForTimer(this SceneTreeTimer timer, Action<double> timeLeft = null)
+    {
+        if(timeLeft is null)
+        {
+            await timer.ToSignal(timer, SceneTreeTimer.SignalName.Timeout);
+            return;
+        }
+        bool finished = false;
+        timer.Timeout += () => finished = true;
+        while (!finished)
+        {
+            timeLeft.Invoke((float)timer.TimeLeft); 
+            await MainLoopSceneTree.WaitForFrame();
+        }
+    }
 
     public static KeyValuePair<string, JsonNode> CreateKVP(this JsonObject from, string keyTerm)
     {
@@ -287,6 +301,7 @@ public static partial class Helpers
     //}
 
     public const string cosmeticSalsa = "676b8175-a049-4f03-b829-323c95153a43";
+    /* Old Web Request system
     public static async Task<JsonNode> MakeRequest(HttpMethod method, System.Net.Http.HttpClient endpoint, string uri, string body, AuthenticationHeaderValue authentication, string mediaType = "application/x-www-form-urlencoded", bool addCosmeticHeader = false)
     {
         using StringContent content = mediaType != "" ? new(body, Encoding.UTF8, mediaType) : null;
@@ -386,6 +401,7 @@ public static partial class Helpers
         }
         return response;
     }
+    */
 
     //assumes google is online
     public static async Task<bool> IsOffline()

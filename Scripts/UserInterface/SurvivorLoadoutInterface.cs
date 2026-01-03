@@ -116,7 +116,7 @@ public partial class SurvivorLoadoutInterface : Node
                 return;
         }
 
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         var loadouts = account.GetLocalData(LoadoutKey)?.AsObject() ?? [];
 
         loadoutName ??= await GenericLineEditWindow.ShowLineEdit("Enter Survivor Loadout Name", validator: val =>
@@ -127,9 +127,6 @@ public partial class SurvivorLoadoutInterface : Node
         });
 
         if (loadoutName is null)
-            return;
-
-        if (!await account.Authenticate())//show error message?
             return;
 
         var allWorkers = (await account.GetProfile(FnProfileTypes.AccountItems).Query())
@@ -167,7 +164,7 @@ public partial class SurvivorLoadoutInterface : Node
         if (eggTimer > 0 || overrideAccount is not null)
             return;
 
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
 
         var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
         var allWorkers = accountItems.GetItems("Worker");
@@ -225,10 +222,6 @@ public partial class SurvivorLoadoutInterface : Node
         eggTimer = 3;
 
         using var _ = LoadingOverlay.CreateToken();
-
-        if (!await account.Authenticate())
-            return;
-
         await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray([.. survivorSquadIds.Select(s => (JsonNode)s)]) });
         await accountItems.PerformOperation("AssignWorkerToSquadBatch", flattenedLoadout);
         await Helpers.WaitForTimer(0.1);
@@ -238,7 +231,7 @@ public partial class SurvivorLoadoutInterface : Node
     {
         if (overrideAccount is not null)
             return;
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         var loadouts = account.GetLocalData(LoadoutKey).AsObject();
         string newLoadoutName = await GenericLineEditWindow.ShowLineEdit("Enter Survivor Loadout Name", validator: val =>
         {
@@ -273,7 +266,7 @@ public partial class SurvivorLoadoutInterface : Node
         ) != true)
             return;
 
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         var loadouts = account.GetLocalData(LoadoutKey).AsObject();
 
         loadouts.Remove(loadoutName);
@@ -306,14 +299,7 @@ public partial class SurvivorLoadoutInterface : Node
         ) != true)
             return;
         using var _ = LoadingOverlay.CreateToken();
-        
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
-        var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
-        var existingWorkers = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
-
+        var accountItems = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems);
         await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray([.. survivorSquadIds.Select(s => (JsonNode)s)]) });
     }
 
@@ -322,7 +308,7 @@ public partial class SurvivorLoadoutInterface : Node
         loadoutSelector.Clear();
         loadoutSelector.AddItem("[Create New Loadout]");
         loadoutSelector.AddSeparator("Loadouts");
-        var loadouts = GameAccount.activeAccount.GetLocalData("SurvivorLoadouts")?.AsObject() ?? [];
+        var loadouts = GameAccount.ActiveAccount.GetLocalData("SurvivorLoadouts")?.AsObject() ?? [];
         foreach (var kvp in loadouts)
         {
             loadoutSelector.AddItem(kvp.Key);
@@ -343,12 +329,7 @@ public partial class SurvivorLoadoutInterface : Node
     async void DebugRecycle()
     {
         using var loadingToken = LoadingOverlay.CreateToken();
-
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
-        var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+        var accountItems = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
 
         GameItem[] filteredItems = accountItems.GetItems(recycleFilter);
 

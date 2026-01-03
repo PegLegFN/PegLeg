@@ -141,19 +141,10 @@ public partial class GameOfferEntry : Control
         if (currentOffer is null)
             return;
         accountDirty = false;
-        var account = GameAccount.activeAccount;
-        var isAuthenticated = await account.Authenticate();
-        if (ct.IsCancellationRequested || currentOffer is null)
-            return;
-        if (!isAuthenticated)
-        {
-            //show warning symbol or something
-            EmitSignal(SignalName.IsErrored, true);
-            return;
-        }
+        var account = GameAccount.ActiveAccount;
         EmitSignal(SignalName.IsErrored, false);
 
-        int stockLimit = await account.GetPurchaseLimit(currentOffer);
+        int stockLimit = await account.GetStockLimit(currentOffer);
         if (ct.IsCancellationRequested || currentOffer is null)
             return;
         if (!account.MatchesItemRequirements(currentOffer)) //todo: proper item requirement check
@@ -175,7 +166,7 @@ public partial class GameOfferEntry : Control
 
         if (cosmeticMode)
         {
-            var finalPrice = await currentOffer.GetPersonalPrice();
+            var finalPrice = await currentOffer.CalculatePersonalPrice();
             if (ct.IsCancellationRequested || currentOffer is null)
                 return;
             pricePerPurchase = finalPrice;
@@ -183,7 +174,7 @@ public partial class GameOfferEntry : Control
 
         if ((pricePerPurchase?.quantity ?? 0) > 0)
         {
-            var inventoryItem = await currentOffer.GetPriceInventoryItem();
+            var inventoryItem = await currentOffer.GetCurrencyItem();
             if (ct.IsCancellationRequested || currentOffer is null)
                 return;
             currentPriceInInventory = inventoryItem?.quantity ?? 0;

@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using XmppDotNet.Xmpp.Sasl;
 
 public class GameClient
 {
@@ -53,101 +54,106 @@ public class GameClient
 
     public async Task<AuthenticationHeaderValue> GetClientTokenHeader()
     {
-        
         if (!ClientTokenExpired)
             return clientTokenHeader;
 
-        var tokenRequest = await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            "/account/api/oauth/token",
-            $"grant_type=client_credentials",
-            ClientHeader
-        );
+        var response = await RequestToken("grant_type=client_credentials");
+        if (await response.CheckForError(true))
+            return null;
 
-        if (tokenRequest is not null && tokenRequest["errorMessage"] is null)
-        {
-            GD.Print("client token success");
-            clientExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + tokenRequest["expires_in"].GetValue<int>();
-            return clientTokenHeader = new("Bearer", tokenRequest["access_token"].ToString());
-        }
+        var tokenData = await response.ReadJson();
 
-        //show error
-
-        return null;
+        GD.Print("client token success");
+        clientExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + tokenData["expires_in"].GetValue<int>();
+        return clientTokenHeader = new("Bearer", tokenData["access_token"].ToString());
     }
 
-    public async Task<JsonObject> LoginWithOneTimeCode(string oneTimeCode)
+    private Task<HttpResponseMessage> RequestToken(string formContent) =>
+        FnWebAddresses.EpicAccount
+            .MakeRequest("account/api/oauth/token", HttpMethod.Post)
+            .SetAuthorisation(ClientHeader)
+            .SetFormContent(formContent)
+            .Send();
+
+    public Task<HttpResponseMessage> LoginWithOneTimeCode(string oneTimeCode)
     {
         if(string.IsNullOrWhiteSpace(oneTimeCode))
-            return null;
-        return (await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            "account/api/oauth/token",
+            return Task.FromResult(new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                ReasonPhrase = "No authorization code provided"
+            });
+        return RequestToken(
             $"grant_type=authorization_code&" +
             $"code={oneTimeCode}&" +
-            $"token_type=eg1",
-            ClientHeader
-        )).AsObject();
-    }
-
-    public async Task<JsonObject> LoginWithRefreshToken(string refreshToken)
-    {
-        if (string.IsNullOrWhiteSpace(refreshToken))
-            return null;
-        return (await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            "account/api/oauth/token",
-            $"grant_type=refresh_token&" +
-            $"refresh_token={refreshToken}&" +
-            $"token_type=eg1",
-            ClientHeader
-        )).AsObject();
-    }
-
-    public async Task<JsonObject> LoginWithExchangeCode(string exchangeCode)
-    {
-        if (string.IsNullOrWhiteSpace(exchangeCode))
-            return null;
-        return (await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            "account/api/oauth/token",
-            $"grant_type=exchange_code&" +
-            $"exchange_code={exchangeCode}&" +
-            $"token_type=eg1",
-            ClientHeader
-        )).AsObject();
-    }
-
-    public async Task<JsonObject> LoginWithDeviceAuth(JsonObject deviceDetails)
-    {
-        if (deviceDetails is null)
-            return null;
-        return await LoginWithDeviceAuth(
-            deviceDetails["accountId"]?.ToString(), 
-            deviceDetails["deviceId"]?.ToString(), 
-            deviceDetails["secret"]?.ToString()
+            $"token_type=eg1"
         );
     }
 
-    public async Task<JsonObject> LoginWithDeviceAuth(string accountId, string deviceId, string deviceSecret)
+    public Task<HttpResponseMessage> LoginWithRefreshToken(string refreshToken)
     {
-        if (string.IsNullOrWhiteSpace(accountId) || string.IsNullOrWhiteSpace(deviceId) || string.IsNullOrWhiteSpace(deviceSecret))
-            return null;
-        return (await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            "account/api/oauth/token",
+        if (string.IsNullOrWhiteSpace(refreshToken))
+            return Task.FromResult(new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                ReasonPhrase = "No refresh token provided"
+            });
+        return RequestToken(
+            $"grant_type=refresh_token&" +
+            $"refresh_token={refreshToken}&" +
+            $"token_type=eg1"
+        );
+    }
+
+    public Task<HttpResponseMessage> LoginWithExchangeCode(string exchangeCode)
+    {
+        if (string.IsNullOrWhiteSpace(exchangeCode))
+            return Task.FromResult(new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                ReasonPhrase = "No exchange code provided"
+            });
+        return RequestToken(
+            $"grant_type=exchange_code&" +
+            $"exchange_code={exchangeCode}&" +
+            $"token_type=eg1"
+        );
+    }
+
+    public Task<HttpResponseMessage> LoginWithDeviceAuth(JsonObject deviceDetails)=> 
+        LoginWithDeviceAuth(
+            deviceDetails?["accountId"]?.ToString(), 
+            deviceDetails?["deviceId"]?.ToString(), 
+            deviceDetails?["secret"]?.ToString()
+        );
+
+    public Task<HttpResponseMessage> LoginWithDeviceAuth(string accountId, string deviceId, string deviceSecret)
+    {
+        if (string.IsNullOrWhiteSpace(accountId))
+            return Task.FromResult(new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                ReasonPhrase = "No account ID provided"
+            });
+        if (string.IsNullOrWhiteSpace(deviceId))
+            return Task.FromResult(new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                ReasonPhrase = "No device ID provided"
+            });
+        if (string.IsNullOrWhiteSpace(deviceSecret))
+            return Task.FromResult(new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                ReasonPhrase = "No device secret provided"
+            });
+        return RequestToken(
             $"grant_type=device_auth&" +
             $"account_id={accountId}&" +
             $"device_id={deviceId}&" +
             $"secret={deviceSecret}&" +
-            $"token_type=eg1",
-            ClientHeader
-        ))?.AsObject();
+            $"token_type=eg1"
+        );
     }
 
     JsonObject activeLinkData;
@@ -165,74 +171,67 @@ public class GameClient
         if(await GetClientTokenHeader() is not AuthenticationHeaderValue clientTokenHeader)
             return null;
 
-        var linkGetResult = await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            "/account/api/oauth/deviceAuthorization",
-            "",
-            clientTokenHeader
-        );
+        var linkGetResponse = await FnWebAddresses.EpicAccount
+            .MakeRequest("/account/api/oauth/deviceAuthorization", HttpMethod.Post)
+            .SetAuthorisation(clientTokenHeader)
+            .Send();
+        if (await linkGetResponse.CheckForError(true))
+            return null;
 
-        if(linkGetResult is not null && linkGetResult["errorMessage"] is null)
-        {
-            activeLinkData = linkGetResult.AsObject();
-            linkCodeExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + activeLinkData["expires_in"].GetValue<int>();
-            activeLinkData["expires_at"] = linkCodeExpiresAt;
-            deviceCode = activeLinkData["device_code"].ToString();
-        }
+        activeLinkData = await linkGetResponse.ReadJson<JsonObject>();
+        linkCodeExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + activeLinkData["expires_in"].GetValue<int>();
+        activeLinkData["expires_at"] = linkCodeExpiresAt;
+        deviceCode = activeLinkData["device_code"].ToString();
 
-        return linkGetResult?.AsObject();
+        return activeLinkData;
     }
 
-    JsonObject lastCheckResult = null;
     DateTime lastChecked = DateTime.MinValue;
-    public async Task<JsonObject> CheckLoginLinkCode()
+    public async Task<HttpResponseMessage> CheckLoginLinkCode()
     {
         if (ClientID != fortNewSwitchClientId)
         {
-            var checkResult = await NewSwitchClient.CheckLoginLinkCode();
+            var checkResponse = await NewSwitchClient.CheckLoginLinkCode();
+            if (!checkResponse.IsSuccessStatusCode)
+                return checkResponse;
 
-            if (checkResult?["access_token"]?.ToString() is not string accessToken)
-                return checkResult;
+            GD.Print("temporary auth recieved, preparing to exchange client type...");
 
-            GD.Print("temporary auth recieved, generatcing exchange...");
+            var tempData = await checkResponse.ReadJson();
+            var exchangeResponse = await FnWebAddresses.EpicAccount
+                .MakeRequest("account/api/oauth/exchange")
+                .SetAuthorisation(new("Bearer", tempData["access_token"].ToString()))
+                .Send();
+            if(!exchangeResponse.IsSuccessStatusCode)
+                return exchangeResponse;
 
-            AuthenticationHeaderValue authHeader = new("Bearer", accessToken);
+            GD.Print("exchanging client types...");
 
-            var exchangeData = (await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.account,
-                "account/api/oauth/exchange",
-                "",
-                authHeader
-            ))?.AsObject();
-
-            GD.Print(exchangeData?.ToJsonString());
-
-            if (exchangeData?["code"]?.ToString() is not string exchangeCode)
-                return exchangeData;
-
-            GD.Print("exchanging...");
-
-            return await LoginWithExchangeCode(exchangeCode);
+            var exchangeData = await exchangeResponse.ReadJson();
+            return await LoginWithExchangeCode(exchangeData?["code"]?.ToString());
         }
 
         if (LinkCodeExpired)
-            return null;
-        if ((DateTime.Now - lastChecked).TotalSeconds < 10)
-            return lastCheckResult;
+            return new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.GatewayTimeout,
+                ReasonPhrase = "Link code timed out"
+            };
+        var timeSinceLastCheck = (DateTime.Now - lastChecked).TotalSeconds;
+        if (timeSinceLastCheck < 10)
+            return new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.TooManyRequests,
+                ReasonPhrase = $"Link code can be checked again in {10-timeSinceLastCheck:0.#} seconds"
+            };
         lastChecked = DateTime.Now;
-        lastCheckResult = (await Helpers.MakeRequest(
-                HttpMethod.Post,
-                FnWebAddresses.account,
-                "/account/api/oauth/token",
-                $"grant_type=device_code&" +
-                $"device_code={deviceCode}&" +
-                $"token_type=eg1",
-                ClientHeader
-            ))?.AsObject();
-        if (lastCheckResult is not null && lastCheckResult["errorMessage"] is null)
+        var tokenResponse = await RequestToken(
+            $"grant_type=device_code&" +
+            $"device_code={deviceCode}&" +
+            $"token_type=eg1"
+        );
+        if (tokenResponse.IsSuccessStatusCode)
             linkCodeExpiresAt = -999;
-        return lastCheckResult;
+        return tokenResponse;
     }
 }

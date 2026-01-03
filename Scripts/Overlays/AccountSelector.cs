@@ -111,7 +111,7 @@ public partial class AccountSelector : ModalWindow
     {
         bool loggedIn = false;
 
-        using (var _ = LoadingOverlay.CreateToken())
+        using (LoadingOverlay.CreateToken())
         {
             loggedIn = await GameAccount.SetActiveAccount(accountId);
         }
@@ -121,8 +121,8 @@ public partial class AccountSelector : ModalWindow
     async void RemoveAccount(string accountId)
     {
         bool hasAuth = false;
+        using (LoadingOverlay.CreateToken())
         {
-            using var _ = LoadingOverlay.CreateToken();
             var account = GameAccount.GetOrCreateAccount(accountId);
             hasAuth = await account.Authenticate();
         }
@@ -137,9 +137,8 @@ public partial class AccountSelector : ModalWindow
         ) != true)
             return;
 
+        using (LoadingOverlay.CreateToken())
         {
-            using var _ = LoadingOverlay.CreateToken();
-
             if (await GameAccount.RemoveAccount(accountId, true))
             {
                 bool hasNextAccount = false;

@@ -25,18 +25,11 @@ public enum OrderRange
     Monthly
 }
 
-public readonly struct FORTStats(float fortitude, float offense, float resistance, float technology, double heroRating, double backpackRating)
+public readonly record struct FORTStats(float fortitude, float offense, float resistance, float technology, double loadoutRating, double backpackRating)
 {
     //todo: export this via BanjoBotAssets
     static DataTableCurve homebaseRatingCurve;
     public static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= DataTableCurve.LoadHomebaseRatingMap();
-
-    public readonly float fortitude = fortitude;
-    public readonly float offense = offense;
-    public readonly float resistance = resistance;
-    public readonly float technology = technology;
-    public readonly double heroRating = heroRating;
-    public readonly double backpackRating = backpackRating;
 
     public float PowerLevel
     {
@@ -44,8 +37,17 @@ public readonly struct FORTStats(float fortitude, float offense, float resistanc
         {
             double fortRating = HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology)) - 1;
 
-            return (float)((fortRating + (backpackRating + heroRating)/2) / 2);
+            return (float)((fortRating + (backpackRating + loadoutRating)/2) / 2);
         }
+    }
+
+    public void Print(string prefix = "")
+    {
+        if (!string.IsNullOrWhiteSpace(prefix))
+        {
+            prefix = prefix.Trim() + " ";
+        }
+        GD.Print($"{prefix}PL Estimate: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (Loadout: {loadoutRating}) (Backpack: {backpackRating})");
     }
 }
 
@@ -157,19 +159,18 @@ public partial class GameAccount
         return true;
     }
 
-    public static async Task<GameAccount> SearchForAccount(string username)
+    public static async Task<GameAccount> SearchForAccount(string username, GameAccount asAccount = null)
     {
-        var activeAccount = GameAccount.activeAccount;
-        if (!await activeAccount.Authenticate())
+        asAccount ??= ActiveAccount;
+        var searchResponse = await FnWebAddresses.EpicUserSearch
+            .MakeRequest($"/api/v1/search/{asAccount.accountId}?platform=epic&prefix={username}")
+            .SetJsonContent()
+            .SetAccount(asAccount)
+            .Send();
+        if (await searchResponse.CheckForError())
             return null;
-        var searchResult = await Helpers.MakeRequest(
-            HttpMethod.Get,
-            FnWebAddresses.userSearch,
-            $"/api/v1/search/{activeAccount.accountId}?platform=epic&prefix={username}",
-            "{}",
-            activeAccount.AuthHeader
-        );
-        if (searchResult is not JsonArray accountArray || accountArray.Count == 0)
+        var accountArray = await searchResponse.ReadJson<JsonArray>();
+        if (accountArray.Count == 0)
             return null;
         var resultAccount = GetOrCreateAccount(accountArray[0]["accountId"].ToString());
         if (resultAccount is not null && accountArray[0]["matches"]?[0]?["value"]?.ToString() is string displayName)
@@ -178,7 +179,7 @@ public partial class GameAccount
     }
 
     static GameAccount _activeAccount;
-    public static GameAccount activeAccount => _activeAccount ??= new(null);
+    public static GameAccount ActiveAccount => _activeAccount ??= new(null);
     public static event Action ActiveAccountChangedEarly;
     public static event Action ActiveAccountChanged;
     public static event Action BookmarksChanged;
@@ -188,30 +189,32 @@ public partial class GameAccount
         if (!gameAccountCache.TryGetValue(accountId, out GameAccount account))
             return false;
         progress?.Invoke("Logging in");
-        if (await account.Authenticate())
-        {
-            var profile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
-            if (!profile.hasProfile)
-                return false;
-            progress?.Invoke("Fetching profiles");
-            await account.QueryAllProfiles();
-            progress?.Invoke("Checking calendar");
-            await account.CheckCalender();
-            progress?.Invoke("");
-            _activeAccount = account;
-            ActiveAccountChangedEarly?.Invoke();
-            ActiveAccountChanged?.Invoke();
-            BookmarksChanged?.Invoke();
-            AppConfig.Set("account", "lastUsed", accountId);
-            return true;
-        }
-        return false;
+        if (!await account.Authenticate())
+            return false;
+        var profile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+        if (!profile.hasProfile)
+            return false;
+        progress?.Invoke("Fetching profiles");
+        await account.CheckLocalPinnedQuests();
+        await account.QueryAllProfiles();
+        progress?.Invoke("Checking calendar");
+        await account.CheckCalender();
+        progress?.Invoke("");
+        _activeAccount = account;
+        ActiveAccountChangedEarly?.Invoke();
+        ActiveAccountChanged?.Invoke();
+        BookmarksChanged?.Invoke();
+        AppConfig.Set("account", "lastUsed", accountId);
+        return true;
     }
 
     public static async Task RefreshActiveAccount()
     {
-        if (!await activeAccount.Authenticate())
+        if (!await ActiveAccount.Authenticate(assumeValid:false))
+        {
+            GenericConfirmationWindow.ShowError("Failed to authenticate", "Refresh Failed").StartTask();
             return;
+        }
         _activeAccount.fortStats = null;
         _activeAccount.ventureFortStats = null;
         _activeAccount.localData = [];
@@ -273,11 +276,11 @@ public partial class GameAccount
             await FetchDisplayNames(accounts[100..]);
             return;
         }
-        var res = await FnWebAddresses.account
+        var res = await FnWebAddresses.EpicAccount
             .MakeRequest($"/account/api/public/account?{string.Join("&", accounts.Select(a => $"accountId={a.accountId}"))}")
-            .SetAuthorisation(AuthHeader)
+            .SetAccount(this)
             .Send();
-        if (!res.IsSuccessStatusCode)
+        if (await res.CheckForError())
             return;
         //GD.Print(await res.Content.ReadAsStringAsync());
         var displayNames = await res.Content.ReadFromJsonAsync<AccountDisplayNames[]>(Helpers.JsonOptions.Fields);
@@ -301,11 +304,11 @@ public partial class GameAccount
 
     public async Task FetchFriends()
     {
-        var res = await FnWebAddresses.friends
+        var res = await FnWebAddresses.EpicFriends
             .MakeRequest($"friends/api/v1/{accountId}/summary")
-            .SetAuthorisation(AuthHeader)
+            .SetAccount(this)
             .Send();
-        if (!res.IsSuccessStatusCode)
+        if (await res.CheckForError())
             return;
         var friendData = await res.Content.ReadFromJsonAsync<FriendSummary>(Helpers.JsonOptions.Fields);
         //GD.Print(await res.Content.ReadAsStringAsync());
@@ -332,7 +335,7 @@ public partial class GameAccount
         {
             if (!isOwned)
             {
-                if (activeAccount is null)
+                if (ActiveAccount is null)
                     return;
                 await Task.WhenAll(
                     GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force),
@@ -390,51 +393,58 @@ public partial class GameAccount
 
         if (!assumeValid)
         {
-            using var req = await FnWebAddresses.account
+            using var req = await FnWebAddresses.EpicAccount
                 .MakeRequest("account/api/oauth/verify")
-                .SetAuthorisation(AuthHeader)
+                .SetAccount(this)
                 .Send();
             if (req.IsSuccessStatusCode)
                 return true;
+            ForceExpireToken();
         }
 
         if (!RefreshTokenExpired)
         {
-            var refreshAuth = await TargetClient.LoginWithRefreshToken(refreshToken);
+            var refreshRequest = await TargetClient.LoginWithRefreshToken(refreshToken);
 
-            if (refreshAuth?["access_token"] is not null)
+            if (!await refreshRequest.CheckForError())
             {
-                SetAuthentication(refreshAuth);
+                GD.Print("Token refreshed");
+                SetAuthentication(await refreshRequest.ReadJson());
                 return true;
             }
-
-            if (refreshAuth?["errorMessage"] is JsonNode errorNode)
-                GD.Print("Refresh token error: " + errorNode.ToString());
-            else
-                GD.Print("Refresh token error: " + refreshAuth.ToString());
+            GD.Print("Refresh token error");
         }
         var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
-        JsonNode deviceAuth = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
+        var deviceRequest = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
 
-        if (deviceAuth?["access_token"] is not null)
+        (var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
+        if (!didError)
         {
-            SetAuthentication(deviceAuth);
+            GD.Print("Token regenerated");
+            SetAuthentication(await deviceRequest.ReadJson());
             return true;
         }
-        bool offline = deviceAuth?["offline"] is JsonValue val && val.GetValueKind() == JsonValueKind.True;
-        string failMsg = offline ? "Offline" : deviceAuth?["errorMessage"].ToString();
-        GD.Print(failMsg);
+
+        //check if offline by pinging googles dns
+        bool offline = !await WebHelpers.Ping("8.8.8.8");
+
+        string failMsg = offline ? 
+            "Offline" : 
+            (
+                errorContent?["errorMessage"].ToString() ?? 
+                deviceRequest.ReasonPhrase ?? 
+                "Unknown error"
+            );
+        GD.Print("Login failure: " + failMsg);
         if (!loginFailure)
         {
             loginFailure = true;
             loginFailureMessage = failMsg;
             OnAccountUpdated?.Invoke();
 
+            //dont send login failure notif when offline
             if (offline)
-            {
-                //dont send login failure notif when offline
                 return false;
-            }
 
             NotificationManager.Push([new()
             {
@@ -455,31 +465,30 @@ public partial class GameAccount
 
     public async Task<string> GenerateExchangeCode()
     {
-        var result = await Helpers.MakeRequest(
-            HttpMethod.Get,
-            FnWebAddresses.account,
-            "account/api/oauth/exchange",
-            $"consumingClientId=launcherAppClient2",
-            accountAuthHeader
-        );
-        return result["code"].ToString();
+        var response = await FnWebAddresses.EpicAccount
+            .MakeRequest("account/api/oauth/exchange")
+            .SetFormContent("consumingClientId=launcherAppClient2")
+            .SetAccount(this)
+            .Send();
+        var result = await response.ReadJson();
+        return result["code"]?.ToString();
     }
 
     public SemaphoreSlim profileOperationSemaphore { get; private set; } = new(1);
 
     public async Task<JsonArray> PurchaseOffer(GameOffer offer, int purchaseQuantity = 1)
     {
-        JsonObject shopRequestBody = new()
-        {
-            ["offerId"] = offer.OfferId,
-            ["purchaseQuantity"] = purchaseQuantity,
-            ["currency"] = offer["prices"][0]["currencyType"].ToString(),
-            ["currencySubType"] = offer["prices"][0]["currencySubType"].ToString(),
-            ["expectedTotalPrice"] = (await offer.GetPersonalPrice(true, true)).quantity * purchaseQuantity,
-            ["gameContext"] = "Pegleg",
-        };
-        var profile = GetProfile(FnProfileTypes.Common);
-        var result = await profile.PerformOperation("PurchaseCatalogEntry", shopRequestBody.ToString());
+        var result = await GetProfile(FnProfileTypes.Common)
+            .PerformOperation("PurchaseCatalogEntry", $$"""
+            {
+                "offerId": "{{offer.OfferId}}",
+                "purchaseQuantity": "{{purchaseQuantity}}",
+                "currency": "{{offer["prices"][0]["currencyType"]}}",
+                "currencySubType": "{{offer["prices"][0]["currencySubType"]}}",
+                "expectedTotalPrice": "{{(await offer.CalculatePersonalPrice(this, true)).quantity * purchaseQuantity}}",
+                "gameContext": "PegLeg",
+            }
+            """);
         offer.NotifyChanged();
         return result;
     }
@@ -509,6 +518,7 @@ public partial class GameAccount
     {
         await UpdateIcon(this);
     }
+
     public async Task UpdateIcon(GameAccount asAccount)
     {
         if (iconSemaphore.CurrentCount <= 0)
@@ -516,19 +526,17 @@ public partial class GameAccount
         await iconSemaphore.WaitAsync();
         try
         {
-            if (!await asAccount.Authenticate())
+            var avatarResponse = await FnWebAddresses.EpicAvatar
+                .MakeRequest($"/v1/avatar/fortnite/ids?accountIds={accountId}")
+                .SetJsonContent()
+                .SetAccount(asAccount)
+                .Send();
+            if(await avatarResponse.CheckForError())
                 return;
-
-            var avatarData = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.avatar,
-                $"/v1/avatar/fortnite/ids?accountIds={accountId}",
-                "{}",
-                asAccount.AuthHeader
-            );
+            var avatarData = await avatarResponse.ReadJson();
             if (avatarData is JsonObject obj)
             {
-                GD.Print($"avatar fetch error: \n{obj}");
+                GD.Print($"avatar fetch error (which is strange since this shouldve been caught): \n{obj}");
                 return;
             }
 
@@ -540,14 +548,12 @@ public partial class GameAccount
                 return;
             }
 
-            var skinData = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                WebClients.fnApi,
-                $"/v2/cosmetics/br/{skinId}",
-                "{}",
-                null,
-                addCosmeticHeader: true
-            );
+            var skinResponse = await ApiWebAddresses.fnDashApi
+                .MakeRequest($"/v2/cosmetics/br/{skinId}")
+                .SetJsonContent()
+                .AddCosmeticHeader()
+                .Send();
+            var skinData = await skinResponse.ReadJson();
 
             string skinIconServerPath = null;
             try
@@ -583,21 +589,16 @@ public partial class GameAccount
 
     public async Task SaveDeviceDetails()
     {
-        if (!await Authenticate())
-            return;
-
         //generate device details
-        JsonObject deviceDetails = (await Helpers.MakeRequest(
-            HttpMethod.Post,
-            FnWebAddresses.account,
-            $"account/api/public/account/{accountId}/deviceAuth",
-            "",
-            AuthHeader,
-            ""
-        ))?.AsObject();
+        var deviceResponse = await FnWebAddresses.EpicAccount
+            .MakeRequest($"account/api/public/account/{accountId}/deviceAuth", HttpMethod.Post)
+            .SetAccount(this)
+            .Send();
 
-        if (deviceDetails["errorCode"] is not null)
+        if (await deviceResponse.CheckForError())
             return;
+
+        JsonObject deviceDetails = await deviceResponse.ReadJson<JsonObject>();
 
         if (GetLocalData("DeviceDetails") is not null)
         {
@@ -618,23 +619,19 @@ public partial class GameAccount
         var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
         if (DecryptDeviceDetails(dd) is JsonObject deviceDetails)
         {
-            //tell epic we're not using the device any more. probably unneccecary, but its common courtesy
-            var result = await Helpers.MakeRequest(
-                HttpMethod.Delete,
-                FnWebAddresses.account,
-                $"account/api/public/account/{accountId}/deviceAuth/{deviceDetails["deviceId"]}",
-                "",
-                AuthHeader,
-                ""
-            );
-
-            if (!force && (result is null || result["errorMessage"] is not null))
+            var response = await FnWebAddresses.EpicAccount
+                .MakeRequest($"account/api/public/account/{accountId}/deviceAuth/{deviceDetails["deviceId"]}", HttpMethod.Delete)
+                .SetAccount(this)
+                .Send();
+            if(await response.CheckForError())
             {
-                GD.Print($"Could not delete device details: {result["errorMessage"]}");
-                return false;
+                GD.Print("Could not unregister device");
+                if (!force)
+                    return false;
+                GD.Print("Device removal forced, so error is disregarded");
             }
-
             ClearLocalData("DeviceDetails");
+            GD.Print("Device details deleted");
             return true;
         }
         return false;
@@ -701,6 +698,45 @@ public partial class GameAccount
         dir.Remove(accountId);
     }
 
+    double GetBackpackPower()
+    {
+        var backpack = GetProfile(FnProfileTypes.Backpack);
+        var backpackPowerLevels = backpack
+            .GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged")
+            .Select(item => item.CalculateRating())
+            .OrderDescending()
+            .ToArray();
+
+        if (backpackPowerLevels.Length > 3)
+            backpackPowerLevels = backpackPowerLevels[..3];
+
+        double backpackPower = 0;
+
+        if (backpackPowerLevels.Length >= 1)
+            backpackPower += (5 * backpackPowerLevels[0]) / 10d;
+        if (backpackPowerLevels.Length >= 2)
+            backpackPower += (3 * backpackPowerLevels[1]) / 10d;
+        if (backpackPowerLevels.Length >= 3)
+            backpackPower += (2 * backpackPowerLevels[2]) / 10d;
+        return backpackPower;
+    }
+
+    double GetLoadoutPower()
+    {
+        var accountItems = GetProfile(FnProfileTypes.AccountItems);
+        double heroPower = 0;
+        var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
+        if (loadoutItem is not null)
+        {
+            heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
+        }
+        return heroPower;
+    }
 
     public event Action<GameAccount> OnFortStatsChanged;
     FORTStats? fortStats;
@@ -712,15 +748,13 @@ public partial class GameAccount
             return fortStats.Value;
 
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
-        var backpack = GetProfile(FnProfileTypes.Backpack);
-        //var researchStats = accountItems.statAttributes["research_levels"];
         var statItems = accountItems.GetItems("Stat");
         var equippedWorkerItems = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
 
         int LookupStatItem(string statId)
         {
             var stat = statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
-            GD.Print($"Stat:{statId}:{stat}");
+            //GD.Print($"Stat:{statId}:{stat}");
             return stat;
         }
 
@@ -729,42 +763,12 @@ public partial class GameAccount
             var matchingWorkers = equippedWorkerItems
                 .Where(item => item.attributes["squad_id"].ToString() == squadId);
             var stat = matchingWorkers.Select(item => item.CalculateSurvivorRating()).Sum();
-            GD.Print($"Squad:{squadId}:{stat}");
+            //GD.Print($"Squad:{squadId}:{stat}");
             return stat;
         }
 
-        var backpackPowerLevels = backpack
-            .GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged")
-            .Select(item => item.CalculateRating())
-            .OrderDescending()
-            .ToArray();
-
-        if (backpackPowerLevels.Length > 3)
-            backpackPowerLevels = backpackPowerLevels[..3];
-
-        GD.Print($"Backpack:{string.Join(", ", backpackPowerLevels)}");
-
-        double backpackPower = 0;
-
-        if (backpackPowerLevels.Length >= 1)
-            backpackPower += (5 * backpackPowerLevels[0]) / 10d;
-        if (backpackPowerLevels.Length >= 2)
-            backpackPower += (3 * backpackPowerLevels[1]) / 10d;
-        if (backpackPowerLevels.Length >= 3)
-            backpackPower += (2 * backpackPowerLevels[2]) / 10d;
-
-        double heroPower = 0;
-        var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
-        if(loadoutItem is not null)
-        {
-            heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-        }
-
+        double backpackPower = GetBackpackPower();
+        double loadoutPower = GetLoadoutPower();
 
         //+ profileStats["fortitude"].GetValue<int>()
         float fortitude = LookupStatItem("Stat:fortitude") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
@@ -772,13 +776,15 @@ public partial class GameAccount
         float resistance = LookupStatItem("Stat:resistance") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
         float technology = LookupStatItem("Stat:technology") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
 
-        GD.Print($"Main FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
-        GD.Print($"Hero Power: {heroPower}, Backpack Power: {backpackPower}");
 
-        fortStats = new(fortitude, offense, resistance, technology, heroPower, backpackPower);
-        GD.Print($"Estimated PL: {fortStats.Value.PowerLevel:0.##}");
-        OnFortStatsChanged?.Invoke(this);
-        return fortStats.Value;
+        FORTStats newFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
+        if (fortStats != newFortStats)
+        {
+            newFortStats.Print("Main");
+            fortStats = newFortStats;
+            OnFortStatsChanged?.Invoke(this);
+        }
+        return newFortStats;
     }
 
     public event Action<GameAccount> OnVentureFortStatsChanged;
@@ -794,16 +800,22 @@ public partial class GameAccount
         var statItems = accountItems.GetItems("Stat");
         int LookupStatItem(string statId) => statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
 
+        double loadoutPower = GetLoadoutPower();
+        double backpackPower = GetBackpackPower();
+
         //+ profileStats["fortitude"].GetValue<int>()
         float fortitude = LookupStatItem("Stat:fortitude_phoenix");
         float offense = LookupStatItem("Stat:offense_phoenix");
         float resistance = LookupStatItem("Stat:resistance_phoenix");
         float technology = LookupStatItem("Stat:technology_phoenix");
 
-        GD.Print($"Venture FORT Stats: {fortitude}, {offense}, {resistance}, {technology}");
-
-        ventureFortStats = new(fortitude, offense, resistance, technology, 0, 0);
-        OnVentureFortStatsChanged?.Invoke(this);
+        FORTStats newVentureFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
+        if (ventureFortStats != newVentureFortStats)
+        {
+            newVentureFortStats.Print("Venture");
+            ventureFortStats = newVentureFortStats;
+            OnVentureFortStatsChanged?.Invoke(this);
+        }
         return ventureFortStats.Value;
     }
 
@@ -817,8 +829,6 @@ public partial class GameAccount
 
     public async Task<float> GetSurvivorBonus(string bonusID, int perSquadRequirement = 2, float boostBase = 5)
     {
-        if (!await Authenticate())
-            return 0f;
         var matchingSurvivors = (await GetProfile(FnProfileTypes.AccountItems).Query()).GetItems("Worker", gameItem =>
         {
             if (gameItem.attributes["squad_id"] is null || gameItem.attributes["set_bonus"] is null)
@@ -837,7 +847,7 @@ public partial class GameAccount
     {
         var commonData = await GetProfile(FnProfileTypes.Common).Query();
 
-        var orderRange = commonData.statAttributes[range.ToAttribute()];
+        var orderRange = commonData.statAttributes?[range.ToAttribute()];
         var lastInterval = orderRange?["lastInterval"]?.ToString();
         if (lastInterval is null)
             return null;
@@ -850,6 +860,16 @@ public partial class GameAccount
     }
 
     public async Task<int> GetPurchaseLimit(GameOffer offer)
+    {
+        var stockLimitTask = GetStockLimit(offer);
+        var affordableLimitTask = GetAffordableLimit(offer);
+        return Mathf.Min(
+            await stockLimitTask,
+            await affordableLimitTask
+        );
+    }
+
+    public async Task<int> GetStockLimit(GameOffer offer)
     {
         int totalLimit = 999;
 
@@ -904,7 +924,8 @@ public partial class GameAccount
 
     public async Task<int> GetAffordableLimit(GameOffer offer, bool cosmetic = false)
     {
-        var pricePerPurchase = cosmetic ? await offer.GetPersonalPrice() : offer.Price;
+        var pricePerPurchase = cosmetic ? await offer.CalculatePersonalPrice() : offer.Price;
+        pricePerPurchase ??= offer.Price; //if personal price fails, fall back to standard price
         if ((pricePerPurchase?.quantity ?? 0) == 0)
             return 999;
         if (cosmetic)
@@ -972,7 +993,12 @@ public partial class GameAccount
 
     public async Task<bool> SetSACCode(string newName)
     {
-        await GetProfile(FnProfileTypes.Common).PerformOperation("SetAffiliateName", "{\"affiliateName\":\"" + newName + "\"}");
+        await GetProfile(FnProfileTypes.Common)
+            .PerformOperation("SetAffiliateName", $$"""
+            {
+                "affiliateName": "{{newName}}"
+            }
+            """);
         //TODO: return false if creator code not found
         return true;
     }
@@ -1045,11 +1071,13 @@ public partial class GameAccount
     async Task<GameProfile> CheckLocalPinnedQuests()
     {
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
-        bool outOfDate = (questsLastRefreshedAt - DateTime.UtcNow).TotalMinutes > 5;
+        double diff = (DateTime.UtcNow - questsLastRefreshedAt).TotalMinutes;
+        bool outOfDate = diff > 5;
         if (localPinnedQuests != null && !outOfDate)
             return accountItems;
 
-        await accountItems.Query();
+        await accountItems.Query(true);
+        questsLastRefreshedAt = DateTime.UtcNow;
         localPinnedQuests = accountItems.statAttributes["client_settings"]["pinnedQuestInstances"].Deserialize<HashSet<string>>();
         return accountItems;
     }
@@ -1059,6 +1087,7 @@ public partial class GameAccount
         await GetProfile(FnProfileTypes.AccountItems)
             .PerformOperation("ClientQuestLogin", @"{""streamingAppKey"": """"}");
     }
+
     public async Task ClientQuestLoginAthena()
     {
         await GetProfile(FnProfileTypes.CosmeticInventory)
@@ -1081,6 +1110,7 @@ public partial class GameAccount
         var accountItems = await CheckLocalPinnedQuests();
         if (localPinnedQuests.Contains(item.uuid))
         {
+            GD.Print("Pinned Quests: " + localPinnedQuests.Count);
             localPinnedQuests.Remove(item.uuid);
             accountItems.SendItemUpdate(item);
             SendLocalPinnedQuests(accountItems);

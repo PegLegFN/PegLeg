@@ -91,7 +91,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 
     bool MissionFilter(GameMission mission)
     {
-        if (playableFilter?.ButtonPressed == true && !mission.PlayableBy(GameAccount.activeAccount))
+        if (playableFilter?.ButtonPressed == true && !mission.PlayableBy(GameAccount.ActiveAccount))
             return false;
         if (!PLSearch.EvaluateInstructions(missionSearchInstructions, mission.SearchObject))
             return false;

@@ -170,7 +170,7 @@ public class GameMission
     public static event Action OnMissionsInvalidated;
     public static GameMission[] currentMissions { get; private set; }
     public static DateTime missionReset { get; private set; }
-
+    public static ImageTexture DailyCat {  get; private set; }
 
     static uint? missionHash;
     static SemaphoreSlim missionCheckSemaphore = new(1);
@@ -194,23 +194,15 @@ public class GameMission
         if (!ignoreHashCheck)
             return (checkMissionsState = false, null);
 
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
+        var missionResponse = await FnWebAddresses.FortGame
+            .MakeRequest("fortnite/api/game/v2/world/info")
+            .SetAccount()
+            .Send();
+
+        if (await missionResponse.CheckForError())
             return (checkMissionsState = false, null);
 
-        JsonNode missionData = await Helpers.MakeRequest(
-            HttpMethod.Get,
-            FnWebAddresses.game,
-            "fortnite/api/game/v2/world/info",
-            "",
-            account.AuthHeader
-        );
-
-        if (missionData["errorMessage"] is not null)
-        {
-            GD.Print("Error: " + missionData.ToString());
-            return (checkMissionsState = false, missionData);
-        }
+        JsonNode missionData = await missionResponse.ReadJson<JsonObject>();
 
         var newHash = missionData["missionAlerts"].ToString().Hash();
         if (missionHash == newHash)
@@ -241,10 +233,6 @@ public class GameMission
             return;
         bool delayFirst = DateTime.Now.Minute == 0 && DateTime.Now.Second == 0;
 
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
         currentMissions = null;
         missionReset = DateTime.Now;
         OnMissionsInvalidated?.Invoke();
@@ -262,17 +250,22 @@ public class GameMission
                 missionData = null;
             }
             GD.Print($"Requesting Missions...");
-            missionData ??= await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.game,
-                "fortnite/api/game/v2/world/info",
-                "",
-                account.AuthHeader
-            );
+
+            FetchDailyCat();
+            var missionResponse = await FnWebAddresses.FortGame
+                .MakeRequest("fortnite/api/game/v2/world/info")
+                .SetAccount()
+                .Send();
+
+            if (await missionResponse.CheckForError())
+                return;
+
+            missionData = await missionResponse.ReadJson<JsonObject>();
+
             recentMissionData = missionData.DeepClone();
             var newHash = missionData["missionAlerts"].ToString().Hash();
 
-            GD.Print($"[{DateTime.Now}] {missionHash} >> {newHash}");
+            GD.Print($"[{DateTime.UtcNow}] {missionHash?.ToString() ?? "{No Missions}"} >> {newHash}");
             await Helpers.WaitForFrame();
             missionHash = newHash;
             var expiryDate = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
@@ -328,6 +321,23 @@ public class GameMission
             return;
         }
     }
+    //https://cataas.com/cat?width=64&height=64
+    static async void FetchDailyCat()
+    {
+        var catResponse = await WebHelpers
+                .MakeRequest("https://cataas.com/cat?width=64&height=64")
+                .AddHeader("Accept", "image/jpeg")
+                .Send();
+        if (await catResponse.CheckForError())
+            return;
+        var catImage = await catResponse.ReadImage();
+        if (catImage is null)
+            return;
+        if (DailyCat is null)
+            DailyCat = ImageTexture.CreateFromImage(catImage);
+        else
+            DailyCat.Update(catImage);
+    }
 
     static JsonSerializerOptions archiveSerialisation = new()
     {
@@ -354,6 +364,13 @@ public class GameMission
                 return;
             }
         }
+
+        if (!currentMissions.Any(m => m.DisplayName is not null))
+        {
+            GD.Print($"Archiving abandoned due to missing resources");
+            return;
+        }
+
         using var archiveDir = DirAccess.Open(archiveDirPath);
         var groupedMissions = currentMissions.GroupBy(m => m.theaterInfo);
         List<ArchiveData.CompactTheater> compactedTheaters = [];
@@ -387,9 +404,7 @@ public class GameMission
 
         ArchiveData archiveData = new()
         {
-            beganUTC = missionReset.AddDays(-1),
             expiresUTC = missionReset,
-            beganEST = missionReset.AddDays(-1).AddHours(-5),
             expiresEST = missionReset.AddHours(-5),
             theaters = [..compactedTheaters]
         };
@@ -397,7 +412,7 @@ public class GameMission
         try
         {
             TimeZoneInfo easternTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            archiveData.beganEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.beganUTC, easternTimeZone);
+            //archiveData.beganEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.beganUTC, easternTimeZone);
             archiveData.expiresEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.expiresUTC, easternTimeZone);
         }
         catch
@@ -407,7 +422,8 @@ public class GameMission
 
         string archiveContent = JsonSerializer.Serialize(archiveData, archiveSerialisation);
 
-        DateTime archiveDateSample = AppConfig.Get("mission_archive", "sample_utc", true) ? archiveData.beganUTC : archiveData.beganEST;
+        DateTime archiveDateSample = AppConfig.Get("mission_archive", "sample_utc", true) ? archiveData.expiresUTC : archiveData.expiresEST;
+        archiveDateSample = archiveDateSample.AddDays(-1);
 
         string archiveDate = archiveDateSample.ToString(AppConfig.Get("mission_archive", "date_format", "yyyy-MM-dd"));
         int increment = 1;
@@ -419,7 +435,7 @@ public class GameMission
             increment++;
             prevArchivePath = archivePath;
             archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}_{increment}.json";
-            archiveName = $"{archiveDate}, Part {increment}";
+            archiveName = $"{archiveDate}, Revision {increment}";
         }
         if (prevArchivePath != archivePath)
         {
@@ -452,13 +468,12 @@ public class GameMission
 
     record struct ArchiveData()
     {
-        public int peglegArchiveFormat = 1;
-        public DateTime beganUTC;
-        public DateTime beganEST;
+        public ArchiveVersion blakebeardArchiveFormat = new(1, 0);
         public DateTime expiresUTC;
         public DateTime expiresEST;
         public CompactTheater[] theaters;
 
+        public record struct ArchiveVersion(int major, int minor);
         public record struct CompactTheater()
         {
             public string theaterId;

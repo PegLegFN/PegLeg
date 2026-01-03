@@ -101,7 +101,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
     private void AccountChanged()
     {
         //emit false if complete
-        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.activeAccount) != true && !ignoreAccountStatus);
+        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.ActiveAccount) != true && !ignoreAccountStatus);
         currentMission?.UpdateRewardNotifications(true);
     }
 
@@ -133,7 +133,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
         EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
 
         //emit false if complete
-        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.activeAccount) != true && !ignoreAccountStatus);
+        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.ActiveAccount) != true && !ignoreAccountStatus);
 
         EmitSignalTheaterNameChanged(currentMission.TheaterName);
         EmitSignalVenturesIndicatorVisible(currentMission.TheaterCat == "v");

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cyyifj2tha4ri"]
+[gd_scene load_steps=18 format=3 uid="uid://cyyifj2tha4ri"]
 
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_4dqrj"]
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_h68g4"]
@@ -8,12 +8,25 @@
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="6_4t8kw"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="7_emma3"]
 [ext_resource type="PackedScene" uid="uid://dx5ueh2xxydys" path="res://Scenes/MissionEntry/mission_reward_entry_accountless.tscn" id="8_0ubh0"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="9_2noju"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="9_ay20g"]
 [ext_resource type="PackedScene" uid="uid://bsmb8rbqn537o" path="res://Scenes/MissionEntry/mission_collection_entry_accountless.tscn" id="10_4ptmh"]
+[ext_resource type="Texture2D" uid="uid://d3xmte5l018rl" path="res://Images/InterfaceIcons/T_WavePattern_01.png" id="10_6jjmv"]
 [ext_resource type="Script" uid="uid://bosi6o0a0u7eb" path="res://Scripts/UserInterface/Dashboard/DashboardSuperchargerController.cs" id="11_fkcfa"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="12_qu71t"]
 [ext_resource type="Texture2D" uid="uid://c0n3kv5onb5c2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Items-Hero-PromotionCurrency-L.png" id="13_cvjj8"]
 [ext_resource type="Script" uid="uid://d2gdvkomm7sxb" path="res://Scripts/DiscordWebhooks/DailySummaryWebhookDispatcher.cs" id="14_d41r0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rymeg"]
+shader = ExtResource("9_2noju")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
 
 [node name="ShareableMissionSummary" type="SubViewportContainer"]
 size_flags_horizontal = 0
@@ -34,7 +47,7 @@ offset_bottom = 64.0
 [node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark"]
 layout_mode = 2
 
-[node name="NotableRewards" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="NotableRewards" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -43,6 +56,8 @@ theme_type_variation = &"Panel5PadB"
 script = ExtResource("3_2noju")
 missionList = NodePath("VBoxContainer/MarginContainer/ScrollContainer")
 loadingIcon = NodePath("Control")
+emptyContent = NodePath("VBoxContainer/MarginContainer/EmptyContent")
+emptyIcon = NodePath("VBoxContainer/MarginContainer/EmptyContent/HBoxContainer/TextureRect")
 notableMode = true
 rarityFilters = []
 zoneFilters = []
@@ -139,6 +154,28 @@ mouse_filter = 0
 [node name="Padding" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+
+[node name="EmptyContent" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+material = SubResource("ShaderMaterial_rymeg")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("10_6jjmv")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "No Notable Rewards
+Instead, here's a cat"
 
 [node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
 layout_mode = 2

@@ -111,7 +111,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
 
     public static Predicate<GameItem> GenerateAutorecyclePredicate()
     {
-        var recycleFilter = GameAccount.activeAccount.GetLocalData("RecycleFilter")?.ToString() ?? "Common | Uncommon | Rare";
+        var recycleFilter = GameAccount.ActiveAccount.GetLocalData("RecycleFilter")?.ToString() ?? "Common | Uncommon | Rare";
         var autoselectInstructions = PLSearch.GenerateSearchInstructions(recycleFilter);
         return item => PLSearch.EvaluateInstructions(autoselectInstructions, item.RawData);
     }

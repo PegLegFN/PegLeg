@@ -17,10 +17,10 @@ public partial class VirtualPartyInterface: Control
     private async void UpdateAccount()
     {
         currentParty = null;
-        var acc = GameAccount.activeAccount;
-        var req = await FnWebAddresses.party
+        var acc = GameAccount.ActiveAccount;
+        var req = await FnWebAddresses.EpicParty
             .MakeRequest($"/party/api/v1/Fortnite/user/{acc.accountId}")
-            .SetAuthorisation(acc.AuthHeader)
+            .SetAccount(acc)
             .Send();
         if (!req.IsSuccessStatusCode)
             return;

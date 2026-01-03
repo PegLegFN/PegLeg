@@ -79,7 +79,7 @@ public partial class QuestGroupEntry : Control
         questGroupData = questGroup;
         questSlotList.Clear();
 
-        var profile = GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems);
+        var profile = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems);
 
         if (questGroup.chain)
         {

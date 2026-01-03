@@ -24,12 +24,13 @@ public static class CosmeticRequests
     public static async Task LoadCosmeticShopData()
     {
         //preloads the FNAPI shop, the latest cosmetics and display assets from dillyapi, and a cosmetic lookup table from dillyapi
-        var fnapiShopTask = WebClients.fnApi.MakeRequest("v2/shop?responseFlags=4")
-            .AddHeader("x-api-key", "676b8175-a049-4f03-b829-323c95153a43")
+        var fnapiShopTask = ApiWebAddresses.fnDashApi
+            .MakeRequest("v2/shop?responseFlags=4")
+            .AddCosmeticHeader()
             .Send();
-        var dillyDisplayAssets = WebClients.dillyApi.MakeRequest("v1/export/displayassets/parsed").Send();
-        var dillyNewCosmetics = WebClients.dillyApi.MakeRequest("v1/cosmetics/new").Send();
-        var dillyCosmeticPaths = WebClients.dillyApi.MakeRequest("v1/export/cosmetics/all").Send();
+        var dillyDisplayAssets = ApiWebAddresses.fnDotApi.MakeRequest("v1/export/displayassets/parsed").Send();
+        var dillyNewCosmetics = ApiWebAddresses.fnDotApi.MakeRequest("v1/cosmetics/new").Send();
+        var dillyCosmeticPaths = ApiWebAddresses.fnDotApi.MakeRequest("v1/export/cosmetics/all").Send();
         try
         {
             await Task.WhenAll(fnapiShopTask, dillyDisplayAssets, dillyNewCosmetics, dillyCosmeticPaths);
@@ -115,7 +116,7 @@ public static class CosmeticRequests
 
         try
         {
-            var rawResponse = await WebClients.dillyApi.MakeRequest($"v1/export?Path={itemPath}").Send();
+            var rawResponse = await ApiWebAddresses.fnDotApi.MakeRequest($"v1/export?Path={itemPath}").Send();
             var rawObjArray = (await rawResponse.Content.ReadFromJsonAsync<JsonNode>())?["jsonOutput"]?.AsArray();
             var rawCosmeticNode = rawObjArray.FirstOrDefault(n => n["Name"].ToString().Equals(itemId, StringComparison.InvariantCultureIgnoreCase));
             var rawCosmetic = rawCosmeticNode.Deserialize<RawCosmetic>();
@@ -179,7 +180,7 @@ public static class CosmeticRequests
             return null;
         exportTimestamps.Enqueue(DateTime.Now);
 
-        return await LoadRemoteImage(() => WebClients.dillyApi.MakeRequest($"v1/export?Path={path}"), filename);
+        return await LoadRemoteImage(() => ApiWebAddresses.fnDotApi.MakeRequest($"v1/export?Path={path}"), filename);
     }
 
     const float imageSizeLimit = 256;
@@ -346,11 +347,11 @@ public static class CosmeticRequests
                 return cached;
 
             if (newDisplayAsset is not null)
-                return await LoadRemoteImage(() => WebClients.fnApi.MakeLinkRequest(newDisplayAsset?.renderImages[0].image), newDisplayAsset?.id);
+                return await LoadRemoteImage(() => WebHelpers.MakeRequest(newDisplayAsset?.renderImages[0].image), newDisplayAsset?.id);
             if (FirstCosmeticInternal is FNAPICosmetic first)
-                return await LoadRemoteImage(() => WebClients.fnApi.MakeLinkRequest(first.images?.featured), first.Id);
+                return await LoadRemoteImage(() => WebHelpers.MakeRequest(first.images?.featured), first.Id);
             if (tracks?.Length > 0)
-                return await LoadRemoteImage(() => WebClients.fnApiJamTrakcs.MakeLinkRequest(tracks[0].albumArt), tracks[0].Id);
+                return await LoadRemoteImage(() => WebHelpers.MakeRequest(tracks[0].albumArt), tracks[0].Id);
             return null;
         }
 

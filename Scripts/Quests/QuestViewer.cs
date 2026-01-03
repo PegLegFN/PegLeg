@@ -53,7 +53,7 @@ public partial class QuestViewer : Control
     QuestSlot currentQuest;
     async void UpdatePinnedState()
     {
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         if (
             currentQuest is null || 
             !currentQuest.isUnlocked || 
@@ -62,18 +62,13 @@ public partial class QuestViewer : Control
             )
             return;
 
-        using var _ = LoadingOverlay.CreateToken();
-
-        if (!await account.Authenticate())
-            return;
-
         await currentQuest.questItem.SetPinnedAsync(pinButton.ButtonPressed);
         pinButton.ButtonPressed = currentQuest.isPinned;
     }
 
     async void RerollQuest()
     {
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         if (currentQuest is null || 
             !currentQuest.isUnlocked ||
             currentQuest.questItem?.profile?.account != account
@@ -82,12 +77,11 @@ public partial class QuestViewer : Control
 
         using var _ = LoadingOverlay.CreateToken();
 
-        if (!await account.Authenticate())
+        var newQuest = await account.RerollQuest(currentQuest.questItem);
+        if (newQuest == null)
             return;
 
-        var newQuest = await account.RerollQuest(currentQuest.questItem);
         currentQuest.LinkQuestItem(newQuest);
-
         SetupQuest(currentQuest);
         rerollButton.Visible = account.CanRerollQuest();
     }

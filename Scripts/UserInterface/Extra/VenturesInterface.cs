@@ -147,7 +147,7 @@ public partial class VenturesInterface : Control
         if (!hasSeason)
             return;
 
-        var profile = await GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+        var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         var ventureXP = profile.GetFirstTemplateItem("AccountResource:phoenixxp")?.quantity ?? 0;
         int currentLevel = 0;
 

@@ -11,14 +11,14 @@ public partial class BookmarkItemCtx : BaseContextComponent
     {
         currentItem = hook?.itemSource?.currentItem;
         SetDisabled(currentItem?.template.CanBeFavourited != true);
-        toggleIcon.SetState(GameAccount.activeAccount.IsBookmarked(currentItem?.template));
+        toggleIcon.SetState(GameAccount.ActiveAccount.IsBookmarked(currentItem?.template));
     }
 
     public void ToggleBookmark()
     {
         if (currentItem?.template.CanBeFavourited != true)
             return;
-        GameAccount.activeAccount.ToggleBookmarked(currentItem.template);
-        toggleIcon.Animate(GameAccount.activeAccount.IsBookmarked(currentItem.template));
+        GameAccount.ActiveAccount.ToggleBookmarked(currentItem.template);
+        toggleIcon.Animate(GameAccount.ActiveAccount.IsBookmarked(currentItem.template));
     }
 }

@@ -56,10 +56,9 @@ public partial class RefreshTimerController : Node
 
     private async void UpdateCalender()
     {
-        var account = GameAccount.activeAccount;
-        if (account is null || !await account.Authenticate())
+        if (GameAccount.ActiveAccount is null)
             return;
-        await account.CheckCalender();
+        await GameAccount.ActiveAccount.CheckCalender();
     }
 
     DateTime lastTime;

@@ -194,7 +194,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     private void UpdateBookmark()
     {
         if (currentItem is not null)
-            EmitSignalBookmarkChanged(GameAccount.activeAccount.IsBookmarked(currentItem.template));
+            EmitSignalBookmarkChanged(GameAccount.ActiveAccount.IsBookmarked(currentItem.template));
     }
 
     public override void _ExitTree()
@@ -259,7 +259,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         if (
             !forceShowVBucks &&
             displayItem.templateId == "AccountResource:currency_hybrid_mtx_xrayllama" &&
-            GameAccount.activeAccount
+            GameAccount.ActiveAccount
                 .GetProfile(FnProfileTypes.AccountItems)
                 .GetFirstTemplateItem("Token:receivemtxcurrency") is null
         )
@@ -428,7 +428,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         EmitSignalOverflowWarning(displayItem.attributes?["inventory_overflow_date"]?.GetValueKind()==System.Text.Json.JsonValueKind.String);
         EmitSignalNotificationChanged(!displayItem.IsSeen);
-        EmitSignalBookmarkChanged(GameAccount.activeAccount.IsBookmarked(displayItem.template));
+        EmitSignalBookmarkChanged(GameAccount.ActiveAccount.IsBookmarked(displayItem.template));
         EmitSignalFavoriteChanged(displayItem.IsFavourited);
         EmitSignalMaxTierChanged(Mathf.Min((displayItem.template?.RarityLevel ?? 0) + 1, 5));
         EmitSignalTierChanged(tier);

@@ -1,4 +1,5 @@
 using Godot;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 public partial class LoginPopup : ModalWindow
@@ -78,13 +79,16 @@ public partial class LoginPopup : ModalWindow
     {
         using var _ = LoadingOverlay.CreateToken();
         var exchangeCodeResponse = await GameClient.PreferredClient.LoginWithExchangeCode(exchangeCodeBox.Text);
-        if (exchangeCodeResponse?["access_token"] is null)
+        if (await exchangeCodeResponse.CheckForError(true))
         {
-            GenericConfirmationWindow.ShowError("Login failed").StartTask();
+            SetWindowOpen(false);
             return;
         }
-        var acc = GameAccount.LoginToAccount(exchangeCodeResponse);
-        await acc?.SaveDeviceDetails();
+        var acc = GameAccount.LoginToAccount(await exchangeCodeResponse.ReadJson<JsonObject>());
+        if (acc is not null)
+            await acc.SaveDeviceDetails();
+        else
+            GD.Print("Account Missing?");
         SetWindowOpen(false);
     }
 }

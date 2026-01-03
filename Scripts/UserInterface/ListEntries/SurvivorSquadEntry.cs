@@ -97,7 +97,7 @@ public partial class SurvivorSquadEntry : Control
 
         accountChangeCts = accountChangeCts.CancelAndRegenerate(out var ct);
 
-        var account = overrideAccount ?? GameAccount.activeAccount;
+        var account = overrideAccount ?? GameAccount.ActiveAccount;
         var newProfile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
         if (newProfile is null || ct.IsCancellationRequested)
             return;
@@ -187,14 +187,13 @@ public partial class SurvivorSquadEntry : Control
             };
         }
 
-        if (body is not null && await profile?.account.Authenticate() && profile.profileId == FnProfileTypes.AccountItems)
+        if (body is not null && profile.profileId == FnProfileTypes.AccountItems)
         {
             try
             {
                 squadLocked = true;
                 await profile.PerformOperation("AssignWorkerToSquad", body.ToString());
-                GD.Print(profile.lastOp);
-                profile.account.GetFORTStats(true);
+                GD.Print("Last Op: "+profile.lastOp);
             }
             finally
             {

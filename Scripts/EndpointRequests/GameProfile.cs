@@ -12,7 +12,7 @@ static class FnProfileTypes
     public const string AccountItems = "campaign";
     public const string Backpack = "theater0";
     public const string Storage = "outpost0";
-    //const string VentureBackpack = "theater2";
+    public const string VentureBackpack = "theater2";
     public const string PeopleCollection = "collection_book_people0";
     public const string SchematicCollection = "collection_book_schematics0";
     public const string CosmeticInventory = "athena";
@@ -270,6 +270,8 @@ public class GameProfile
     }
     #endregion
 
+
+    DateTime lastClientQuestLoginAttempt = DateTime.MinValue;
     public JsonObject lastOp { get; private set; }
     async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry = false, bool silent = false, bool witholdChanges = false)
     {
@@ -291,12 +293,9 @@ public class GameProfile
             }
         }
 
-        var actingAccount = account.isOwned ? account : GameAccount.activeAccount;
-        if (!await actingAccount.Authenticate())
-        {
-            GD.Print($"Authentication failed");
-            return null;
-        }
+        var actingAccount = account.isOwned ? account : GameAccount.ActiveAccount;
+        //if (!await actingAccount.Authenticate())
+        //    return null;
 
         if (operation == "MarkItemSeen")
         {
@@ -315,46 +314,42 @@ public class GameProfile
             if (!hasUnseen)
                 return null;
         }
-
-        StringContent jsonContent = new(content, Encoding.UTF8, "application/json");
-        using var request =
-            new HttpRequestMessage(
-                HttpMethod.Post,
-                $"fortnite/api/game/v2/profile/{account.accountId}/{(account.isOwned ? "client" : "public")}/{operation}?profileId={profileId}&rvn={rvn}"
-            )
-            {
-                Content = jsonContent
-            };
-        request.Headers.Authorization = actingAccount.AuthHeader;
-
-        var result = (await Helpers.MakeRequest(FnWebAddresses.game, request))?.AsObject();
-        lastOp = result;
-        if (result is null)
-            return null;
-        if (result.ContainsKey("errorCode"))
+        if(operation == "ClientQuestLogin")
         {
-            if (result["errorCode"].ToString().EndsWith("token_verification_failed") && !isRetry)
-            {
-                actingAccount.ForceExpireToken();
-                await actingAccount.Authenticate();
-                return await PerformOperationUnsafe(operation, content, true, silent, witholdChanges);
-            }
-            else
-            {
-                GD.Print($"operation failed ({operation}({(account.isOwned ? "client" : "public")}) in {profileId} as {account.DisplayName})");
-                if (!silent)
-                {
-                    _ = GenericConfirmationWindow.ShowErrorForWebResult(result);
-                }
-            }
-            return null;
+            if ((DateTime.UtcNow - lastClientQuestLoginAttempt).TotalSeconds < 10)
+                return null;
+            lastClientQuestLoginAttempt = DateTime.UtcNow;
         }
+
+        var opResponse = await FnWebAddresses.FortGame
+            .MakeRequest(
+                "fortnite/api/game/v2/profile/" +
+                $"{account.accountId}/{(account.isOwned ? "client" : "public")}/" +
+                $"{operation}?profileId={profileId}&rvn={rvn}",
+                HttpMethod.Post
+            )
+            .SetJsonContent(content)
+            .SetAccount(actingAccount)
+            .Send();
+
+        JsonObject result = null;
+        try
+        {
+            result = await opResponse.ReadJson<JsonObject>();
+        }
+        catch { }
+        lastOp = result;
+
+
+        if (await opResponse.CheckForError(!silent))
+            return null;
 
         if (witholdChanges)
             return [];
 
         var changes = result["profileChanges"]?.AsArray();
 
+        bool fullUpdate = false;
         if (changes is null)
         {
             GD.Print($"unknown profile op result: {result}");
@@ -363,7 +358,8 @@ public class GameProfile
         if (changes.Count == 0) { }
         else if (changes[0]["changeType"].ToString() == "fullProfileUpdate")
         {
-            GD.Print("FULLUPDATE: " + profileId);
+            //GD.Print("FULLUPDATE: " + profileId);
+            fullUpdate = true;
             var resultItems = result["profileChanges"][0]["profile"]["items"].AsObject();
             var resultStats = result["profileChanges"][0]["profile"]["stats"]["attributes"].AsObject();
             if (hasProfile)
@@ -434,7 +430,11 @@ public class GameProfile
         }
         printChanges = false;
 
-        GD.Print($"operation complete ({operation}({(account.isOwned ? "client" : "public")}) in {profileId} as {account.DisplayName})");
+        string fullText = fullUpdate ? " (Full Update)" : "";
+        if (actingAccount != account)
+            GD.Print($"operation complete ({operation} in {profileId} of {account.DisplayName} as {actingAccount.DisplayName}){fullText}");
+        else
+            GD.Print($"operation complete ({operation} in {profileId} as {account.DisplayName}){fullText}");
 
         if (result.ContainsKey("notifications"))
         {
@@ -444,7 +444,8 @@ public class GameProfile
             {
                 notifs.Remove(notif);
             }
-            GD.Print("Notifications: " + notifs.ToString());
+            if (notifs.Count > 0)
+                GD.Print("Notifications: " + notifs.ToString());
             return notifs;
         }
         return [];
@@ -513,8 +514,20 @@ public class GameProfile
 
     public void ApplyProfileChanges(JsonArray profileChanges)
     {
-        account.MarkFortStatsDirty();
-        account.MarkVentureFortStatsDirty();
+        if (profileId == FnProfileTypes.AccountItems)
+        {
+            account.GetFORTStats(true);
+            account.GetVentureFORTStats(true);
+        }
+        else if (profileId == FnProfileTypes.Backpack)
+        {
+            account.GetFORTStats(true);
+        }
+        else if (profileId == FnProfileTypes.VentureBackpack)
+        {
+            account.GetVentureFORTStats(true);
+        }
+
         List<GameItem> itemsToNotify = [];
         List<GameItem> itemsToIgnore = [];
         Dictionary<string, GameItem> reassociations = [];

@@ -156,13 +156,14 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     CancellationTokenSource updateCheckCTS = new();
     async void StartUpdateCheckTimer()
     {
-        if (!AppConfig.Get("missions", "reset_detection", true))
+        var now = DateTime.UtcNow;
+        if (now.Hour > 1 || !AppConfig.Get("missions", "reset_detection", true))
             return;
         GD.Print("Starting update check timer");
         updateCheckCTS.CancelAndRegenerate(out var ct);
         while (true)
         {
-            var now = DateTime.UtcNow;
+            now = DateTime.UtcNow;
             if (now.Hour > 1 || !AppConfig.Get("missions", "reset_detection", true))
             {
                 GD.Print("Ending update check timer");
@@ -273,7 +274,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     {
         if (!theaterFilter.Contains(mission.TheaterCat[0]))
             return false;
-        if (playableFilter?.ButtonPressed == true && !mission.PlayableBy(GameAccount.activeAccount))
+        if (playableFilter?.ButtonPressed == true && !mission.PlayableBy(GameAccount.ActiveAccount))
             return false;
         if (storyFilter?.ButtonPressed != true && mission.IsStoryMission)
             return false;

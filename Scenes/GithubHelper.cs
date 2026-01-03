@@ -24,14 +24,7 @@ public static class GithubHelper
         }
     }
 
-    static readonly System.Net.Http.HttpClient githubApi = new()
-    {
-        BaseAddress = new Uri("https://api.github.com")
-    };
-    static readonly System.Net.Http.HttpClient githubDownload = new()
-    {
-        BaseAddress = new Uri("https://github.com")
-    };
+    static readonly Uri githubApi = new("https://api.github.com");
     static JsonSerializerOptions serialiserOptions = new() { IncludeFields = true, WriteIndented = true };
 
     public record struct ReleaseData
@@ -55,9 +48,7 @@ public static class GithubHelper
 
         public async Task DownloadTo(Stream dest, IProgress<(long, long)> progress = null, CancellationToken ct = default)
         {
-            await githubDownload
-                .MakeLinkRequest(browser_download_url)
-                .AddHeader("User-Agent", "PegLeg")
+            await WebHelpers.MakeRequest(browser_download_url)
                 .SendAsDownload(dest, progress, ct);
         }
     }
@@ -135,8 +126,9 @@ public static class GithubHelper
     {
         using var releasesResponse = await githubApi
             .MakeRequest($"/repos/{user}/{repo}/releases")
-            .AddHeader("User-Agent", "PegLeg")
             .Send();
+        if (await releasesResponse.CheckForError())
+            return [];
         return await releasesResponse
                 .Content
                 .ReadFromJsonAsync<ReleaseData[]>(serialiserOptions);

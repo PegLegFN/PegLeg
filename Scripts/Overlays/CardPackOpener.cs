@@ -168,11 +168,11 @@ public partial class CardPackOpener : Control
             return;
         }
 
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate(true))
+        var account = GameAccount.ActiveAccount;
+        if (!await account.Authenticate(true, false))
             return;
 
-        LoadingOverlay.TaskToken? stacheLoadingToken = null;
+        LoadingOverlay.TaskToken stacheLoadingToken = null;
 
         try
         {
@@ -189,7 +189,7 @@ public partial class CardPackOpener : Control
             llamaItem ??= defaultLlamaItem;
             if (llamaOffer is not null)
             {
-                llamaTier = llamaOffer.GetXRayLlamaDataUnsafe(account)?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
+                llamaTier = llamaOffer.GetLocalXRayLlamaData(account)?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
                 if (llamaItem.template.DisplayName.Contains("Legendary"))
                     llamaTier = 2;
                 llamaItem.customData["llamaTier"] = llamaTier;
@@ -843,10 +843,6 @@ public partial class CardPackOpener : Control
                 return;
             isChosing = false;
 
-            var account = GameAccount.activeAccount;
-            if (!await account.Authenticate())
-                return;
-
             skipChoiceButton.Visible = false;
 
             int nextChoiceIndex = choicesOnly ? nextPullIndex - 1 : nextPullIndex - (queuedItems.Count + 1);
@@ -856,7 +852,7 @@ public partial class CardPackOpener : Control
                 ["cardPackItemId"] = queuedChoices[nextChoiceIndex].uuid,
                 ["selectionIdx"] = index
             };
-            var operationTask = account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPack", body.ToString());
+            var operationTask = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPack", body.ToString());
 
             for (int i = 0; i < choiceCards.Length; i++)
             {
@@ -940,7 +936,7 @@ public partial class CardPackOpener : Control
             if (resultNotification is not null)
             {
                 JsonNode resultItemData = resultNotification["lootGranted"]["items"][0];
-                resultItem = account.GetProfile(resultItemData["itemProfile"].ToString()).GetItem(resultItemData["itemGuid"].ToString());
+                resultItem = GameAccount.ActiveAccount.GetProfile(resultItemData["itemProfile"].ToString()).GetItem(resultItemData["itemGuid"].ToString());
                 topCard.SetItem(resultItem);
                 queuedChoices[nextChoiceIndex] = resultItem;
             }
@@ -994,10 +990,6 @@ public partial class CardPackOpener : Control
 
     async Task ShowRecyclePopup()
     {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
         var resultItems = queuedChoices
                     .Union(queuedItems)
                     .Select(item => item.template.IsCollectable ? (item.inspectorOverride ?? item) : item);
@@ -1018,13 +1010,13 @@ public partial class CardPackOpener : Control
             GameItemSelector.Instance.unselectableMarkerTex = null;
             GameItemSelector.Instance.unselectableTintColor = Colors.Transparent;
             var toRecycle = await GameItemSelector.Instance.OpenSelector(resultItems, null);
-            if (toRecycle.Length > 0 && await account.Authenticate())
+            if (toRecycle.Length > 0)
             {
                 JsonObject content = new()
                 {
                     ["targetItemIds"] = new JsonArray(toRecycle.Select(item => (JsonNode)item.uuid).ToArray())
                 };
-                await account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content);
+                await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content);
             }
         }
     }

@@ -338,7 +338,7 @@ public class GameItem
 
     public async void SetRewardNotification(GameAccount account = null, bool force = false)
     {
-        account ??= GameAccount.activeAccount;
+        account ??= GameAccount.ActiveAccount;
         if (profile is not null || (!force && isSeenLocal != null))
             return;
 
@@ -398,7 +398,7 @@ public class GameItem
         if (template?.IsCollectable != true)
             return null;
 
-        account ??= profile?.account ?? GameAccount.activeAccount;
+        account ??= profile?.account ?? GameAccount.ActiveAccount;
         await account.GetProfile(template.CollectionProfile).Query();
 
         var collectionBook = account.GetProfile(template.CollectionProfile);

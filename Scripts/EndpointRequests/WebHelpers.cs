@@ -1,9 +1,13 @@
 ﻿
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -12,28 +16,75 @@ using HttpClient = System.Net.Http.HttpClient;
 
 public static class WebHelpers
 {
-    public class BoundHttpsRequestMessage(HttpClient client, HttpMethod method, string uri) : HttpRequestMessage(method, uri)
+    static HttpClient plClient = null;
+    public static HttpClient PLClient
     {
-        public HttpClient BoundClient { get; set; } = client;
+        get
+        {
+            if (plClient is not null)
+                return plClient;
+            plClient = new HttpClient();
+            plClient.DefaultRequestHeaders.Add("User-Agent", "PegLeg"); //add pegleg version number?
+            return plClient;
+        }
     }
 
-    public static BoundHttpsRequestMessage MakeRequest(this HttpClient client, string uri, HttpMethod method = null) =>
-        new(client, method ?? HttpMethod.Get, uri);
+    public class BoundHttpsRequestMessage : HttpRequestMessage
+    {
+        public BoundHttpsRequestMessage() : base() { }
+        public BoundHttpsRequestMessage(HttpClient client, HttpMethod method, Uri uri) : base(method, uri)
+        {
+            BoundClient = client;
+        }
+        public HttpClient BoundClient { get; set; }
+        public GameAccount BoundAccount { get; set; }
+    }
 
-    public static BoundHttpsRequestMessage MakeLinkRequest(this HttpClient client, string link, HttpMethod method = null) =>
-        new(client, method ?? HttpMethod.Get, link[client.BaseAddress.OriginalString.Length..]);
+    public static async Task<bool> Ping(string hostnameOrAddress)
+    {
+        using Ping ping = new();
+        bool success = false;
+        try
+        {
+            var reply = await ping.SendPingAsync(hostnameOrAddress);
+            success = reply.Status == IPStatus.Success;
+        }
+        catch(Exception e)
+        {
+            GD.PrintErr(e);
+        }
+        return success;
+    }
 
+    public static BoundHttpsRequestMessage MakeRequest(this Uri uri, string path, HttpMethod method = null) =>
+        new(PLClient, method ?? HttpMethod.Get, new(uri, path));
 
-    public static HttpRequestMessage MakeRequest(string uri, HttpMethod method = null) => new(method ?? HttpMethod.Get, uri);
+    public static BoundHttpsRequestMessage MakeRequest(string uri, HttpMethod method = null) =>
+        new(PLClient, method ?? HttpMethod.Get, new(uri));
+
     public static T SetAuthorisation<T>(this T msg, AuthenticationHeaderValue auth) where T: HttpRequestMessage
     {
         msg.Headers.Authorization = auth;
         return msg;
     }
 
+    public static T SetAccount<T>(this T msg, GameAccount account = null) where T : BoundHttpsRequestMessage
+    {
+        account ??= GameAccount.ActiveAccount;
+        msg.BoundAccount = account;
+        msg.Headers.Authorization = account.AuthHeader;
+        return msg;
+    }
+
     public static T AddHeader<T>(this T msg, string name, string value) where T : HttpRequestMessage
     {
         msg.Headers.Add(name, value);
+        return msg;
+    }
+
+    public static T AddCosmeticHeader<T>(this T msg) where T : HttpRequestMessage
+    {
+        msg.Headers.Add("x-api-key", Helpers.cosmeticSalsa);
         return msg;
     }
 
@@ -89,8 +140,65 @@ public static class WebHelpers
         return msg;
     }
 
-    public static async Task<HttpResponseMessage> Send(this BoundHttpsRequestMessage msg, bool disposeMsg = true) =>
-        await msg.SendTo(msg.BoundClient);
+
+
+    public static async Task<HttpResponseMessage> Send(this BoundHttpsRequestMessage msg, bool disposeMsg = true)
+    {
+        BoundHttpsRequestMessage secondMsg = null;
+        if (msg.BoundAccount is not null)
+        {
+            await msg.BoundAccount.Authenticate();
+            secondMsg = await msg.CloneMessageAsync();
+        }
+        var response = await msg.SendTo(msg.BoundClient, disposeMsg);
+
+        if (
+            msg.BoundAccount is not null &&
+            !response.IsSuccessStatusCode &&
+            response.Headers.TryGetValues("x-epic-error-code", out var errCode) && 
+            errCode.FirstOrDefault() == "1031"
+        )
+        {
+            GD.Print("token invalid, exiring token and retrying with new token...");
+            msg.BoundAccount.ForceExpireToken();
+            await msg.BoundAccount.Authenticate();
+
+            response = await secondMsg.SendTo(msg.BoundClient, disposeMsg);
+        }
+        return response;
+    }
+
+    public static async Task<T> CloneMessageAsync<T>(this T req) where T : HttpRequestMessage, new()
+    {
+        T clone = new()
+        {
+            Method = req.Method,
+            RequestUri = req.RequestUri
+        };
+
+        // Copy the request's content (via a MemoryStream) into the cloned object
+        var ms = new MemoryStream();
+        if (req.Content != null)
+        {
+            await req.Content.CopyToAsync(ms).ConfigureAwait(false);
+            ms.Position = 0;
+            clone.Content = new StreamContent(ms);
+
+            // Copy the content headers
+            foreach (var h in req.Content.Headers)
+                clone.Content.Headers.Add(h.Key, h.Value);
+        }
+
+        clone.Version = req.Version;
+
+        foreach (KeyValuePair<string, object?> option in req.Options)
+            clone.Options.Set(new HttpRequestOptionsKey<object?>(option.Key), option.Value);
+
+        foreach (KeyValuePair<string, IEnumerable<string>> header in req.Headers)
+            clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+
+        return clone;
+    }
 
     public static async Task<HttpResponseMessage> SendTo(this HttpRequestMessage msg, HttpClient client, bool disposeMsg = true)
     {
@@ -142,5 +250,85 @@ public static class WebHelpers
         await download.CopyToAsync(dest, 81920, relativeProgress, ct);
         progress.Report((contentLength.Value, contentLength.Value));
         return response;
+    }
+
+    public static Task<JsonNode> ReadJson(this HttpResponseMessage response) => 
+        response.ReadJson<JsonNode>();
+
+    public static Task<T> ReadJson<T>(this HttpResponseMessage response)
+    {
+        if (response.Content.Headers.ContentType.MediaType != "application/json")
+            return Task.FromResult<T>(default);
+        return response.Content.ReadFromJsonAsync<T>();
+    }
+
+    public static async Task<Image> ReadImage(this HttpResponseMessage response)
+    {
+        var mediaType = response.Content?.Headers?.ContentType?.MediaType;
+        if (!mediaType.StartsWith("image/"))
+            return null;
+        string subtype = mediaType.Split("/")[1];
+        Image image = new();
+        Error status = subtype switch
+        {
+            "jpeg" => image.LoadJpgFromBuffer(await response.Content.ReadAsByteArrayAsync()),
+            "png" => image.LoadPngFromBuffer(await response.Content.ReadAsByteArrayAsync()),
+            "webp" => image.LoadWebpFromBuffer(await response.Content.ReadAsByteArrayAsync()),
+            _ => Error.CantOpen
+        };
+        if (status == Error.Ok)
+            return image;
+        return null;
+    }
+
+    public static async Task<bool> CheckForError(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true)
+    {
+        (var res, _) = await response.CheckForErrorJson(showErrorPopup, logError);
+        return res;
+    }
+
+    public static async Task<(bool, JsonNode)> CheckForErrorJson(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true)
+    {
+        if (response.IsSuccessStatusCode)
+            return (false, null);
+        if (response.Headers.TryGetValues("x-epic-error-code", out var errCode) && errCode.FirstOrDefault() == "1031")
+        {
+            string code = errCode.FirstOrDefault();
+            if (code == "1031")
+            {
+                GD.Print("token invalid, expiring token");
+                if (response.RequestMessage is BoundHttpsRequestMessage boundMsg)
+                    boundMsg.BoundAccount?.ForceExpireToken();
+            }
+            else if (code == "1012")
+            {
+                //waiting for link code to complete, error should be silent
+                logError = false;
+                showErrorPopup = false;
+            }
+        }
+
+        JsonNode errorContent = await response.ReadJson();
+
+        if (logError)
+            GD.Print("Web Request Error: " + response);
+
+        if (showErrorPopup)
+        {
+            GenericConfirmationWindow.ShowConfirmation(
+                "Uh oh! Something Goofed",
+                "Continue",
+                contextText:
+                    errorContent?["errorMessage"].ToString() ??
+                    response.ReasonPhrase ??
+                    "An uncaught web error occured",
+                warningText:
+                    errorContent?["errorCode"].ToString() ??
+                    response.StatusCode.ToString(),
+                allowCancel: false
+            ).StartTask();
+        }
+
+        return (true, errorContent);
     }
 }

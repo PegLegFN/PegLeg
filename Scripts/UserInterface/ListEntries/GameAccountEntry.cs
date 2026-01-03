@@ -59,7 +59,7 @@ public partial class GameAccountEntry : Control
     {
         if (!useActiveAccount)
             return;
-        SetAccountInternal(GameAccount.activeAccount);
+        SetAccountInternal(GameAccount.ActiveAccount);
     }
 
     void SetAccountInternal(GameAccount account)

@@ -46,16 +46,16 @@ public partial class VerticalTab : Control
 	{
         if (OS.HasFeature("editor_hint") && pageNode is not null)
         {
-            pageNode.Renamed -= UpdatePageName;
-            pageNode.VisibilityChanged -= PressResponse;
+            pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
+            pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
         }
         pageNode = newPageNode;
         UpdatePageName();
         SetState(triggerButton?.ButtonPressed ?? false);
         if (OS.HasFeature("editor_hint") && pageNode is not null)
         {
-            pageNode.Renamed += UpdatePageName;
-            pageNode.VisibilityChanged += PressResponse;
+            pageNode.SafeConnect(SignalName.Renamed, Callable.From(UpdatePageName));
+            pageNode.SafeConnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
         }
     }
 
@@ -76,7 +76,7 @@ public partial class VerticalTab : Control
         }
 		if(triggerButton is not null)
 			triggerButton.ButtonPressed = pressed;
-		if(pageNode is not null)
+		if(pageNode is not null && pageNode.IsInsideTree())
         {
             visibilityLocked = true;
             pageNode.Visible = pressed;

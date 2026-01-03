@@ -88,8 +88,7 @@ public partial class NotificationDispatcher : Node
         notifTimes.lastHourlyCheck = hour;
         notifCTS = notifCTS.CancelAndRegenerate(out var ct);
 
-        bool hasAuth = await GameAccount.activeAccount.Authenticate();
-        if (!hasAuth || ct.IsCancellationRequested)
+        if (!await GameAccount.ActiveAccount.Authenticate(assumeValid:false) || ct.IsCancellationRequested)
             return;
 
         Task<NotificationData[]>[] notifTasks =
@@ -216,7 +215,7 @@ public partial class NotificationDispatcher : Node
                 ).Select(o => o.OfferId)
             )}");
             //deliver 1hr daily notif
-            var contents = (await offer.GetXRayLlamaData(GameAccount.activeAccount))?.GetPrerollItems() ?? [];
+            var contents = (await offer.GetXRayLlamaData(GameAccount.ActiveAccount))?.GetPrerollItems() ?? [];
             foreach (var item in contents)
             {
                 item.SetRewardNotification();
@@ -244,7 +243,7 @@ public partial class NotificationDispatcher : Node
         if (xrayStorefront.Offers.FirstOrDefault(o => o.OfferId == monthlyFreeLlamaOfferId) is GameOffer freeOffer)
         {
             //deliver 24hr daily notif
-            var contents = await freeOffer.GetXRayLlamaData(GameAccount.activeAccount);
+            var contents = await freeOffer.GetXRayLlamaData(GameAccount.ActiveAccount);
             notifs.Add(FreeLlamaNotif with
             {
                 body = "These Llamas are available for 24 hours, and return at the start of each month.",
@@ -257,7 +256,7 @@ public partial class NotificationDispatcher : Node
         {
             //deliver event llama notif
             //todo: list amount of llamas, and the event item in the current one
-            var contents = await evtOffer.GetXRayLlamaData(GameAccount.activeAccount);
+            var contents = await evtOffer.GetXRayLlamaData(GameAccount.ActiveAccount);
             if (ct.IsCancellationRequested)
                 return [];
             notifs.Add(EventLlamaNotif with
@@ -290,7 +289,7 @@ public partial class NotificationDispatcher : Node
         {
             //deliver bday llama notif
             //todo: if birthday llama contains item with reminder, show notification
-            var contents = await weeklyOffer.GetXRayLlamaData(GameAccount.activeAccount);
+            var contents = await weeklyOffer.GetXRayLlamaData(GameAccount.ActiveAccount);
             return [WeeklyLlamaNotif with
             {
                 header = "{Weekly Llama}",

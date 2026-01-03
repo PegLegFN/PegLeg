@@ -288,12 +288,7 @@ public partial class LlamaInterface : Control
             llamaItemProfile = null;
         }
 
-        //refresh cardpacks
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate() || ct.IsCancellationRequested)
-            return;
-
-        var newLlamaItemProfile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+        var newLlamaItemProfile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         if (ct.IsCancellationRequested)
             return;
 
@@ -355,15 +350,11 @@ public partial class LlamaInterface : Control
 
             var prevSelectedOffer = currentOfferSelection?.OfferId;
 
-            var account = GameAccount.activeAccount;
-            if (!await account.Authenticate() || ct.IsCancellationRequested)
-                return;
-
             var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, force ? null : RefreshTimeType.Hourly);
             var randomStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.RandomLlamaCatalog, force ? null : RefreshTimeType.Hourly);
             if (ct.IsCancellationRequested)
                 return;
-            await account.GenerateXRayLlamaResults();
+            await GameAccount.ActiveAccount.GenerateXRayLlamaResults();
 
             int catalogEntryIndex = 0;
             var allOffers = xrayStorefront.Offers.Union(randomStorefront.Offers);
@@ -425,7 +416,7 @@ public partial class LlamaInterface : Control
         if(offer.OfferId==TokenUpgradeId)
             return true;
 
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
 
         if (!await account.MatchesFulfillmentRequirements(offer))
             return false;
@@ -433,10 +424,10 @@ public partial class LlamaInterface : Control
         string priceTemplateId = offer.Price?.templateId;
         int price = offer.Price?.quantity ?? 0;
         if (price == 1)
-            return (await account.GetProfile(FnProfileTypes.AccountItems).Query())
-                .GetTemplateItems(priceTemplateId)
-                .Select(item => item.quantity)
-                .Sum() >= 1;
+        {
+            var profile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+            return profile.GetFirstTemplateItem(priceTemplateId) is not null;
+        }
 
         return true;
     }
@@ -489,7 +480,7 @@ public partial class LlamaInterface : Control
         offerCts = offerCts.CancelAndRegenerate(out var ct);
 
         //show loading icon
-        var account = GameAccount.activeAccount;
+        var account = GameAccount.ActiveAccount;
         if (!await account.Authenticate() || ct.IsCancellationRequested)
             return;
 
@@ -505,7 +496,7 @@ public partial class LlamaInterface : Control
         else
             altPurchaseButton.Visible = false;
 
-        var purchaseLimit = await account.GetPurchaseLimit(offer);
+        var purchaseLimit = await account.GetStockLimit(offer);
         bool inStock = purchaseLimit > 0;
         if (ct.IsCancellationRequested)
             return;

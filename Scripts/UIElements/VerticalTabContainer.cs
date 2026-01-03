@@ -33,7 +33,11 @@ public partial class VerticalTabContainer : Node
         }
     }
 
-    public void RefreshTabs() => GenerateTabs();
+    public async void RefreshTabs()
+    {
+        await Helpers.WaitForFrame();
+        GenerateTabs();
+    }
 
     private void PageAdded(Node node) => GenerateTabs();
     private void PageRemoved(Node node) => GenerateTabs(node);

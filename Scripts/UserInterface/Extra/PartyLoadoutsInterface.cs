@@ -61,7 +61,7 @@ public partial class PartyLoadoutsInterface : Control
         Clear(true);
         try
         {
-            GameAccount targetUser = GameAccount.activeAccount;
+            GameAccount targetUser = GameAccount.ActiveAccount;
             //if(targetFriendUsername?.Text is string targetUsername && !string.IsNullOrWhiteSpace(targetUsername))
             //{
             //    if(await GameAccount.SearchForAccount(targetUsername) is GameAccount potentialAccount)
@@ -83,7 +83,7 @@ public partial class PartyLoadoutsInterface : Control
             //}
 
             string[] teammateIds = [];
-            if (targetUser != GameAccount.activeAccount)
+            if (targetUser != GameAccount.ActiveAccount)
                 teammateIds = [.. await GetTeammatesFromParty(targetUser)];
             if (teammateIds.Length == 0)
                 teammateIds = [.. await GetTeammatesFromMatch()];
@@ -130,9 +130,9 @@ public partial class PartyLoadoutsInterface : Control
             try
             {
                 var unknownUsers = teammateAccounts.Select(a => a.accountId).Union([targetUser.accountId]).Where(id => !knownUsernames.ContainsKey(id));
-                var displayNameResponse = await FnWebAddresses.account
+                var displayNameResponse = await FnWebAddresses.EpicAccount
                     .MakeRequest($"/account/api/public/account?{string.Join("&", unknownUsers.Select(id => $"accountId={id}"))}")
-                    .SetAuthorisation(GameAccount.activeAccount.AuthHeader)
+                    .SetAccount(GameAccount.ActiveAccount)
                     .Send();
                 if (displayNameResponse.IsSuccessStatusCode)
                 {
@@ -197,9 +197,9 @@ public partial class PartyLoadoutsInterface : Control
 
     private async Task<IEnumerable<string>> GetTeammatesFromMatch()
     {
-        var matchResponse = await FnWebAddresses.game
-            .MakeRequest($"/fortnite/api/matchmaking/session/findPlayer/{GameAccount.activeAccount.accountId}")
-            .SetAuthorisation(GameAccount.activeAccount.AuthHeader)
+        var matchResponse = await FnWebAddresses.FortGame
+            .MakeRequest($"/fortnite/api/matchmaking/session/findPlayer/{GameAccount.ActiveAccount.accountId}")
+            .SetAccount(GameAccount.ActiveAccount)
             .Send();
         var matchData = ((await matchResponse.Content.ReadFromJsonAsync<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault()).Value;
         if (matchData.attributes.Gamemode != "FORTPVE")
@@ -210,10 +210,10 @@ public partial class PartyLoadoutsInterface : Control
 
     private async Task<IEnumerable<string>> GetTeammatesFromParty(GameAccount fromAccount = null)
     {
-        fromAccount ??= GameAccount.activeAccount;
-        var partyResponse = await FnWebAddresses.party
+        fromAccount ??= GameAccount.ActiveAccount;
+        var partyResponse = await FnWebAddresses.EpicParty
             .MakeRequest($"/party/api/v1/Fortnite/members/user/{fromAccount.accountId}")
-            .SetAuthorisation(GameAccount.activeAccount.AuthHeader)
+            .SetAccount(GameAccount.ActiveAccount)
             .Send();
         var partyData = await partyResponse.Content.ReadFromJsonAsync<PartyCollection>(Helpers.JsonOptions.Fields);
         if (partyData.current.Length == 0)
@@ -269,9 +269,9 @@ public partial class PartyLoadoutsInterface : Control
             try
             {
                 var unknownUsers = allAccounts.Select(a => a.accountId).Where(id => !knownUsernames.ContainsKey(id));
-                var displayNameResponse = await FnWebAddresses.account
+                var displayNameResponse = await FnWebAddresses.EpicAccount
                     .MakeRequest($"/account/api/public/account?{string.Join("&", unknownUsers.Select(id => $"accountId={id}"))}")
-                    .SetAuthorisation(GameAccount.activeAccount.AuthHeader)
+                    .SetAccount(GameAccount.ActiveAccount)
                     .Send();
                 if (displayNameResponse.IsSuccessStatusCode)
                 {

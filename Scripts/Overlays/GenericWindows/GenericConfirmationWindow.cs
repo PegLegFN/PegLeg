@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 
 public partial class GenericConfirmationWindow : ModalWindow
@@ -30,52 +31,65 @@ public partial class GenericConfirmationWindow : ModalWindow
     bool allowCancel = false;
     bool? result = null;
 
-    public static async Task ShowErrorForWebResult(JsonObject errorResult)
+    //public static async Task ShowErrorForWebResult(JsonObject errorResult)
+    //{
+    //    errorResult ??= [];
+    //    if (!errorResult.ContainsKey("errorMessage"))
+    //        errorResult["errorMessage"] = "(No Message Provided)";
+    //    await instance.ShowConfirmationInst("Uh oh! Something Goofed", "Continue", "", errorResult["errorMessage"].ToString(), errorResult["errorCode"].ToString(), false, 8);
+    //}
+
+    public static async Task ShowError(string description, string header = "Error")
     {
-        errorResult ??= [];
-        if (!errorResult.ContainsKey("errorMessage"))
-            errorResult["errorMessage"] = "(No Message Provided)";
-        await instance.ShowConfirmationInst("Uh oh! Something Goofed", "Continue", "", errorResult["errorMessage"].ToString(), errorResult["errorCode"].ToString(), false, 8);
+        if(instance is not null)
+            await instance.ShowConfirmationInst(header, null, "Close", description, "", false, 8);
     }
 
-    public static async Task ShowError(string description, string header = "Error") =>
-        await instance.ShowConfirmationInst(header, null, "Close", description, "", false, 8);
-
     public static async Task<bool?> ShowConfirmation(string headerText, string postiveText = "Confirm", string negativeText = "", string contextText = "", string warningText = "", bool allowCancel = true, int headerSpace = 8) =>
-        await instance.ShowConfirmationInst(headerText, postiveText, negativeText, contextText, warningText, allowCancel, headerSpace);
+        instance is null ? null : await instance.ShowConfirmationInst(headerText, postiveText, negativeText, contextText, warningText, allowCancel, headerSpace);
+
+    SemaphoreSlim msgSemaphone = new(1);
 
     public async Task<bool?> ShowConfirmationInst(string headerText, string positiveText, string negativeText, string contextText, string warningText, bool allowCancel, int headerSpace)
     {
-        for (int i = 0; i < headerSpace; i++)
+        await msgSemaphone.WaitAsync();
+        try
         {
-            headerText += " ";
+            for (int i = 0; i < headerSpace; i++)
+            {
+                headerText += " ";
+            }
+            header.Text = headerText;
+            header.SetVisibleIfHasContent();
+
+            content.Text = contextText;
+            content.SetVisibleIfHasContent();
+
+            warningLabel.Text = warningText;
+            warningLabel.SetVisibleIfHasContent();
+
+            this.allowCancel = allowCancel;
+            cancelButton.Visible = allowCancel;
+
+            positiveButton.Text = positiveText;
+            positiveButton.Visible = !string.IsNullOrWhiteSpace(positiveText);
+
+            negativeButton.Text = negativeText;
+            negativeButton.Visible = !string.IsNullOrWhiteSpace(negativeText);
+
+            isSelecting = true;
+            result = null;
+            SetWindowOpen(true);
+            while (isSelecting)
+                await Helpers.WaitForFrame();
+            SetWindowOpen(false);
+
+            return result;
         }
-        header.Text = headerText;
-        header.SetVisibleIfHasContent();
-
-        content.Text = contextText;
-        content.SetVisibleIfHasContent();
-
-        warningLabel.Text = warningText;
-        warningLabel.SetVisibleIfHasContent();
-
-        this.allowCancel = allowCancel;
-        cancelButton.Visible = allowCancel;
-
-        positiveButton.Text = positiveText;
-        positiveButton.Visible = !string.IsNullOrWhiteSpace(positiveText);
-
-        negativeButton.Text = negativeText;
-        negativeButton.Visible = !string.IsNullOrWhiteSpace(negativeText);
-
-        isSelecting = true;
-        result = null;
-        SetWindowOpen(true);
-        while (isSelecting)
-            await Helpers.WaitForFrame();
-        SetWindowOpen(false);
-
-        return result;
+        finally
+        {
+            msgSemaphone.Release();
+        }
     }
 
     protected override void CloseWindowViaInput() => Cancel();

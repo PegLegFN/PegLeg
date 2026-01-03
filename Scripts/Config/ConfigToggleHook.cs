@@ -22,6 +22,8 @@ public partial class ConfigToggleHook : Control
 
     [Export]
     bool tryBind = true;
+    [Export]
+    bool logChanges = false;
 
     bool valueIsChanging;
 
@@ -72,6 +74,8 @@ public partial class ConfigToggleHook : Control
         else
             EmitSignalOnFalse();
         EmitSignalConfigValueChanged(newVal);
+        if (logChanges)
+            GD.Print($"{section}:{key} = {newVal}");
     }
 
     public void SetValue(bool newValue)

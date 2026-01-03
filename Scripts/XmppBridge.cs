@@ -39,7 +39,7 @@ public partial class XmppBridge : Control
         {
             AddAccount(f.accountId, "Unknown/Offline");
         }
-        await GameAccount.activeAccount.XmppManager.Connect();
+        await GameAccount.ActiveAccount.XmppManager.Connect();
         //GD.Print(lastUsedAccount.AuthToken);
         //var party = await FnWebAddresses.party
         //    .MakeRequest($"/party/api/v1/Fortnite/user/{lastUsedAccount.accountId}")
@@ -104,7 +104,7 @@ public partial class XmppBridge : Control
     Dictionary<string, string> missionData = [];
     public void CaptureMissions()
     {
-        var meta = GameAccount.activeAccount.XmppManager.Party.members[GameAccount.activeAccount.accountId].meta;
+        var meta = GameAccount.ActiveAccount.XmppManager.Party.members[GameAccount.ActiveAccount.accountId].meta;
         missionData = [];
         TransferMeta(meta, "Default:CampaignInfo_j");
         TransferMeta(meta, "Default:ZoneInstanceId_s");
@@ -118,7 +118,7 @@ public partial class XmppBridge : Control
 
     public async void PatchMissions()
     {
-        await GameAccount.activeAccount.XmppManager.SendPartyMemberPatch(missionData);
+        await GameAccount.ActiveAccount.XmppManager.SendPartyMemberPatch(missionData);
     }
 
     void PartyText(string text)
@@ -137,6 +137,6 @@ public partial class XmppBridge : Control
 
     public async void SetStatus()
     {
-        await GameAccount.activeAccount.XmppManager.SendStatus(status.Text);
+        await GameAccount.ActiveAccount.XmppManager.SendStatus(status.Text);
     }
 }

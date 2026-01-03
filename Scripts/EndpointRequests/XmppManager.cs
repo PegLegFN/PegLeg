@@ -70,9 +70,9 @@ public class XmppManager
 
         try
         {
-            var partyReq = await FnWebAddresses.party
+            var partyReq = await FnWebAddresses.EpicParty
                 .MakeRequest($"/party/api/v1/Fortnite/user/{account.accountId}")
-                .SetAuthorisation(account.AuthHeader)
+                .SetAccount(account)
                 .Send();
             var partyContainer = await partyReq.Content.ReadFromJsonAsync<PartyContainer>(Helpers.JsonOptions.CamelCase);
             party = partyContainer.current.Length > 0 ? partyContainer.current[0] : null;
@@ -389,9 +389,9 @@ public class XmppManager
         PartyPatch patch = new(party.revision, toPatch);
         GD.Print("Patching: " + JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields));
 
-        var patchReq = await FnWebAddresses.party
+        var patchReq = await FnWebAddresses.EpicParty
             .MakeRequest($"/party/api/v1/Fortnite/parties/{party.id}", System.Net.Http.HttpMethod.Patch)
-            .SetAuthorisation(account.AuthHeader)
+            .SetAccount(account)
             .SetJsonContent(JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields))
             .Send();
 
@@ -411,9 +411,9 @@ public class XmppManager
         PartyMemberPatch patch = new(party.revision, toPatch);
         GD.Print("Patching: " + JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields));
 
-        var patchReq = await FnWebAddresses.party
+        var patchReq = await FnWebAddresses.EpicParty
             .MakeRequest($"/party/api/v1/Fortnite/parties/{party.id}/members/{account.accountId}", System.Net.Http.HttpMethod.Patch)
-            .SetAuthorisation(account.AuthHeader)
+            .SetAccount(account)
             .SetJsonContent(JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields))
             .Send();
 

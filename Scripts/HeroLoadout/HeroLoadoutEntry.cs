@@ -34,7 +34,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
         if (useActiveAccount)
         {
             GameAccount.ActiveAccountChanged += UpdateActive;
-            SetAccount(GameAccount.activeAccount);
+            SetAccount(GameAccount.ActiveAccount);
         }
     }
 
@@ -45,7 +45,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
     void UpdateActive()
     {
-        SetAccount(GameAccount.activeAccount);
+        SetAccount(GameAccount.ActiveAccount);
     }
 
     public void SetAccount(GameAccount account)

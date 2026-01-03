@@ -35,18 +35,21 @@ public partial class CurrencyHighlight : GameItemEntry
     public async void SetCurrencyTemplate(GameItemTemplate currencyTemplate)
     {
         currentTemplate = currencyTemplate;
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate() || currencyTemplate is null)
+
+        if (currencyTemplate is null)
         {
             ClearItem();
             Visible = false;
             return;
         }
+        Visible = true;
+
+        if (currentItem?.template != currencyTemplate)
+            SetItem(currencyTemplate.CreateInstance(0));
+
+        var account = GameAccount.ActiveAccount;
         var profileItem = (await account.GetProfile(FnProfileTypes.AccountItems).Query()).GetFirstTemplateItem(currencyTemplate.TemplateId);
-        if (profileItem is not null)
-        {
-            SetItem(profileItem);
-            Visible = true;
-        }
+
+        SetItem(profileItem ?? currencyTemplate.CreateInstance(0));
     }
 }

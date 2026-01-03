@@ -21,7 +21,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         if (useActiveAccount)
         {
             GameAccount.ActiveAccountChanged += UpdateActive;
-            SetAccount(GameAccount.activeAccount);
+            SetAccount(GameAccount.ActiveAccount);
         }
     }
 
@@ -32,7 +32,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 
     void UpdateActive()
     {
-        SetAccount(GameAccount.activeAccount);
+        SetAccount(GameAccount.ActiveAccount);
     }
 
     public enum SelectionMode

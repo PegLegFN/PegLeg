@@ -27,8 +27,9 @@ public partial class MiscSettings : Control
 
     void SetInterfaceScale(float newInterfaceScale)
     {
-        GetWindow().ContentScaleFactor = newInterfaceScale;
+        GetWindow().ContentScaleFactor = newInterfaceScale * (OS.HasFeature("mobile") ? 1 : 1);
     }
+
     public override void _UnhandledKeyInput(InputEvent @event)
     {
         if (@event is InputEventKey keyEvent && !keyEvent.IsEcho() && keyEvent.Pressed && keyEvent.Keycode == Key.M && keyEvent.CtrlPressed)
@@ -74,7 +75,7 @@ public partial class MiscSettings : Control
     public async void ClaimCollectionRewards()
     {
         using var loadToken = LoadingOverlay.CreateToken();
-        var profile = GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems);
+        var profile = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems);
         JsonArray notifs = [];
         while (notifs is not null)
         {

@@ -216,7 +216,7 @@ public partial class PerkViewer : Control
         {
             string perkUpAlteration = rarityUpRecipe["Result"].ToString();
             perkUpEntry.SetPerkAlteration(perkUpAlteration, true);
-            perkUpEntry.SetInteractable(currentItem?.profile?.account == GameAccount.activeAccount || currentItem?.profile?.account == null);
+            perkUpEntry.SetInteractable(currentItem?.profile?.account == GameAccount.ActiveAccount || currentItem?.profile?.account == null);
             perkUpArea.Visible = true;
         }
         else
@@ -233,7 +233,7 @@ public partial class PerkViewer : Control
             }
 
             reperkEntries[i].SetPerkAlteration(perk, true, i + 1);
-            reperkEntries[i].SetInteractable(currentItem?.profile?.account == GameAccount.activeAccount || currentItem?.profile?.account == null);
+            reperkEntries[i].SetInteractable(currentItem?.profile?.account == GameAccount.ActiveAccount || currentItem?.profile?.account == null);
             reperkEntries[i].Visible = true;
         }
         //if(index == 5 && !isTrap)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://bqp7ax1fjc306"]
+[gd_scene load_steps=72 format=3 uid="uid://bqp7ax1fjc306"]
 
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="1_ac3k7"]
@@ -17,10 +17,12 @@
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="10_q8xc3"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="10_smvwj"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="10_ta6o0"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="11_6ftts"]
 [ext_resource type="Texture2D" uid="uid://cdbip8w04ra2u" path="res://Images/InterfaceIcons/T-Icon-Quest-Journal-64.png" id="11_dlqc6"]
 [ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="11_k0h4l"]
 [ext_resource type="Texture2D" uid="uid://bs2rkwdm3joj1" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Caution_128.png" id="11_nlqir"]
 [ext_resource type="Texture2D" uid="uid://clu8pwf3ou6au" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Ranged-CARD.png" id="11_rguep"]
+[ext_resource type="Texture2D" uid="uid://d3xmte5l018rl" path="res://Images/InterfaceIcons/T_WavePattern_01.png" id="12_8h2ix"]
 [ext_resource type="Texture2D" uid="uid://c5pk5nlltrbxc" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Melee-CARD.png" id="12_jv2yv"]
 [ext_resource type="Texture2D" uid="uid://b50pdjevad7c6" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Traps-CARD.png" id="13_y3ww7"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="14_p2qwn"]
@@ -55,6 +57,17 @@
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="52_q8xc3"]
 [ext_resource type="PackedScene" uid="uid://cschg8vgh0q5i" path="res://Scenes/SharedImageGenerators/shareable_llama_summary.tscn" id="53_pll84"]
 [ext_resource type="PackedScene" uid="uid://co461hhd3r2sk" path="res://Scenes/SharedImageGenerators/shareable_xp_summary.tscn" id="54_6ftts"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8h2ix"]
+shader = ExtResource("11_6ftts")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4qqas"]
 shader = ExtResource("10_q8xc3")
@@ -119,7 +132,7 @@ corner_radius_bottom_left = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4yf1i"]
 shader = ExtResource("35_7rx8s")
-shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/ControlSize = Vector2(362, 16)
 shader_parameter/progress = 0.5
 shader_parameter/tileScale = 0.15
 shader_parameter/tileSpeed = 0.15
@@ -153,7 +166,7 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k0h4l"]
 shader = ExtResource("35_7rx8s")
-shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/ControlSize = Vector2(362, 16)
 shader_parameter/progress = 0.51
 shader_parameter/tileScale = 0.4
 shader_parameter/tileSpeed = 0.2
@@ -165,7 +178,7 @@ shader_parameter/tint = Color(0.95, 1, 0.4, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dlqc6"]
 shader = ExtResource("35_7rx8s")
-shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/ControlSize = Vector2(362, 16)
 shader_parameter/progress = 0.03
 shader_parameter/tileScale = 0.5
 shader_parameter/tileSpeed = 0.35
@@ -177,7 +190,7 @@ shader_parameter/tint = Color(0, 0.9, 1, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4kbf4"]
 shader = ExtResource("35_7rx8s")
-shader_parameter/ControlSize = Vector2(119, 16)
+shader_parameter/ControlSize = Vector2(362, 16)
 shader_parameter/progress = 0.31
 shader_parameter/tileScale = 0.25
 shader_parameter/tileSpeed = 0.275
@@ -298,7 +311,7 @@ layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="Notable" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="Notable" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -307,6 +320,8 @@ theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_rx870")
 missionList = NodePath("VBoxContainer/MarginContainer/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
+emptyContent = NodePath("VBoxContainer/MarginContainer/EmptyContent")
+emptyIcon = NodePath("VBoxContainer/MarginContainer/EmptyContent/HBoxContainer/TextureRect")
 notableMode = true
 rarityFilters = []
 zoneFilters = []
@@ -375,6 +390,28 @@ layout_mode = 2
 
 [node name="SmallLoadingIcon" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer" instance=ExtResource("25_m2jhp")]
 layout_mode = 2
+
+[node name="EmptyContent" type="MarginContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/EmptyContent"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+material = SubResource("ShaderMaterial_8h2ix")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("12_8h2ix")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "No Notable Rewards
+Instead, here's a cat"
 
 [node name="MissionCollection" parent="BeastDashboard/PanelContainer/VBoxContainer3/TabContainer/Notable/VBoxContainer" instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(250, 100)

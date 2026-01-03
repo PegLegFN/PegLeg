@@ -81,9 +81,9 @@ public class PegLegResourceManager
         public override string ToString() => version.ToString();
     }
 
-    public static async Task FetchAndLoadPackages(int targetMajor, int targetMinor, Action<string> onProgress = null)
+    public static async Task FetchAndLoadPackages(int targetMajor, int targetMinor, Action<string, float> onProgress = null)
     {
-        onProgress?.Invoke("Checking for resource updates");
+        onProgress?.Invoke("Checking for resource updates", -1);
         Dictionary<PackageVersion, GithubHelper.ReleaseAsset> releases = [];
         try
         {
@@ -127,7 +127,7 @@ public class PegLegResourceManager
                 continue;
             }
             WebHelpers.DownloadProgressHandle downloadProgress = new();
-            downloadProgress.OnProgress += () => onProgress?.Invoke($"Downloading Resource Pack: {requirement.version} ({downloadProgress.ProgressPercent:0.0}%)");
+            downloadProgress.OnProgress += () => onProgress?.Invoke($"Downloading Resource Pack\n{requirement.version}", downloadProgress.ProgressPercent/100);
             using FileAccessStream fileStream = new(requirement.LocalPackagePath, FileAccess.ModeFlags.Write);
             await asset.DownloadTo(fileStream, downloadProgress);
         }
@@ -136,7 +136,7 @@ public class PegLegResourceManager
             ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
         latestVersion.LoadAllPackages();
         latestVersion.ClearOutdatedPackages();
-        onProgress?.Invoke("Loading Resources");
+        onProgress?.Invoke("Loading Resources", -1);
         await Task.WhenAll(
             LoadDataSources(),
             LoadNamedItems()
@@ -232,23 +232,32 @@ public class PegLegResourceManager
         GameItemTemplate.SetImportedTemplates(namedItemsCC.ToFrozenDictionary(StringComparer.InvariantCultureIgnoreCase));
     }
 
-    public static async Task PreloadTemplateTextures()
+    public static async Task PreloadTemplateTextures(Action<string, float> onProgress = null)
     {
-        int templatesTotal = 0;
+        int templatesProcessed = 0;
         int templatesPerFrame = 0;
-        GD.Print($"loading template textures...");
-        foreach (var template in GameItemTemplate.GetTemplates())
+        var templates = GameItemTemplate.GetTemplates().ToArray();
+        int templatesTotal = templates.Length;
+
+        if (templatesTotal == 0)
+        {
+            GD.Print("No templates???");
+            return;
+        }
+        GD.Print("begin loading template textures");
+        foreach (var template in templates)
         {
             template.GetTexture();
             templatesPerFrame--;
-            templatesTotal++;
+            templatesProcessed++;
+            onProgress?.Invoke("Caching Textures", (float)templatesProcessed / templatesTotal);
             if (templatesPerFrame < 0)
             {
                 await Helpers.WaitForFrame();
                 templatesPerFrame = OS.HasFeature("mobile") ? 40 : 60;
             }
         }
-        GD.Print($"loaded {templatesTotal} template textures");
+        GD.Print($"loaded {templatesProcessed} template textures");
     }
 
     public static bool ResourceExists(string resource, bool allowOverrides = true)
@@ -294,7 +303,7 @@ public class PegLegResourceManager
         {
             return FileAccess.Open(resourcePath + resource, FileAccess.ModeFlags.Read);
         }
-        GD.Print("fallback file: " + fallbackResourcePath + resource);
+        //GD.Print("fallback file: " + fallbackResourcePath + resource);
         return FileAccess.Open(fallbackResourcePath + resource, FileAccess.ModeFlags.Read);
     }
 

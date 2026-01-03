@@ -165,15 +165,11 @@ public partial class CosmeticShopInterface : Control
 
     private async Task UpdateSAC()
     {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
-        string currentSACCode = await account.GetSACCode(false);
-        if (currentSACCode != "None" && await account.GetSACTime() > 1 && AppConfig.Get("automation", "creatorcode", false))
+        string currentSACCode = await GameAccount.ActiveAccount.GetSACCode(false);
+        if (currentSACCode != "None" && await GameAccount.ActiveAccount.GetSACTime() > 1 && AppConfig.Get("automation", "creatorcode", false))
         {
             //GD.Print(currentSACCode);
-            await account.SetSACCode(currentSACCode);
+            await GameAccount.ActiveAccount.SetSACCode(currentSACCode);
         }
         sacButton.Text = currentSACCode;
     }
@@ -182,7 +178,7 @@ public partial class CosmeticShopInterface : Control
     {
         if (section != "item_shop")
             return;
-        if(key=="simple_cosmetics")
+        if (key == "simple_cosmetics")
         {
             if (AppConfig.Get<bool>("item_shop", "simple_cosmetics"))
                 navContainer.Visible = false;
@@ -205,9 +201,9 @@ public partial class CosmeticShopInterface : Control
         }
     }
 
-    public override void _PhysicsProcess(double delta)
+    public override void _Process(double delta)
     {
-        if (Visible && (Engine.GetPhysicsFrames() % 5) == 1)//only do this every 5 physics ticks
+        if (Visible && (Engine.GetProcessFrames() % 10) == 1)//only do this every 10 frames
             UpdateShopOfferResourceLoading();
     }
 
@@ -235,12 +231,8 @@ public partial class CosmeticShopInterface : Control
 
         using var _ = LoadingOverlay.CreateToken();
 
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-
-        await account.SetSACCode(newCode);
-        sacButton.Text = await account.IsSACExpired() ? "None" : (await account.GetSACCode());
+        await GameAccount.ActiveAccount.SetSACCode(newCode);
+        sacButton.Text = await GameAccount.ActiveAccount.IsSACExpired() ? "None" : (await GameAccount.ActiveAccount.GetSACCode());
 
     }
 

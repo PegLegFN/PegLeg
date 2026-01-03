@@ -24,6 +24,8 @@ public partial class Bootstrap : Node
     [Export]
     Label progressLabel;
     [Export]
+    ProgressBar progressBar;
+    [Export]
     bool shareInEditor;
     [ExportGroup("Scenes")]
 	[Export]
@@ -138,6 +140,7 @@ public partial class Bootstrap : Node
     async Task Initialise(Window window)
     {
         AppConfig.PreloadConfig();
+        GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
 
 #if GODOT_WINDOWS
         if (FileAccess.FileExists(Helpers.GlobalisePath("res://update.exe")))
@@ -153,10 +156,24 @@ public partial class Bootstrap : Node
 #endif
 
         //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
-        await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, p => progressLabel.Text = $"{p}...");
+        await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, (text, prog) => {
+            progressLabel.Text = text;
+            progressBar.Indeterminate = prog < 0;
+            progressBar.Visible = prog <= 1;
+            progressBar.Value = prog;
+        });
         //await PegLegResourceManager.TempImportResources();
         await Helpers.WaitForFrame();
-        var preloadTexturesTask = PegLegResourceManager.PreloadTemplateTextures();
+        bool showCachingProgress = false;
+        var preloadTexturesTask = PegLegResourceManager.PreloadTemplateTextures((text, prog) => {
+            if (!showCachingProgress)
+                return;
+            progressBar.Value = prog;
+        });
+
+        progressBar.Indeterminate = true;
+        progressBar.Visible = true;
+        progressBar.Value = 0;
 
         var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
         bool hasAccount = false;
@@ -164,7 +181,8 @@ public partial class Bootstrap : Node
         {
             GD.Print("last: " + lastUsedId);
             var lastUsedAccount = GameAccount.GetOrCreateAccount(lastUsedId);
-            hasAccount = await lastUsedAccount.SetAsActiveAccount(p => progressLabel.Text = $"{p}...");
+            hasAccount = await lastUsedAccount.SetAsActiveAccount(p => progressLabel.Text = p);
+            GD.Print("hasAccount: " + hasAccount);
         }
 
         //TODO: if more than one account has device details, show account selector
@@ -172,40 +190,48 @@ public partial class Bootstrap : Node
         {
             foreach (var a in GameAccount.OwnedAccounts)
             {
-                progressLabel.Text = "Login Failed. Attempting another account...";
-                await Helpers.WaitForTimer(1.5);
-                if (!await a.SetAsActiveAccount(p => progressLabel.Text = $"{p}..."))
+                progressLabel.Text = "Login Failed\nWill try another account";
+                progressBar.Indeterminate = false;
+                await Helpers.WaitForTimer(1.5, t => progressBar.Value = t / 1.5);
+                progressBar.Indeterminate = true;
+                if (!await a.SetAsActiveAccount(p => progressLabel.Text = p))
                     continue;
                 hasAccount = true;
                 break;
             }
             if (!hasAccount && GameAccount.OwnedAccounts.Length > 0)
             {
-
-                progressLabel.Text = "Login Failed. No accounts remaining";
-                await Helpers.WaitForTimer(1.5);
+                progressLabel.Text = "Login Failed\nAll accounts attempted";
+                progressBar.Indeterminate = false;
+                await Helpers.WaitForTimer(1.5, t => progressBar.Value = t / 1.5);
             }
         }
-        if (GameAccount.activeAccount is not null)
+        if (GameAccount.ActiveAccount.isAuthed)
         {
-            progressLabel.Text = "Fetching missions...";
+            progressBar.Visible = true;
+            progressBar.Indeterminate = true;
+            progressLabel.Text = "Fetching missions";
             await GameMission.UpdateMissions();
-            progressLabel.Text = "Fetching catalog...";
+            progressLabel.Text = "Fetching catalog";
             await GameStorefront.UpdateCatalog();
-            progressLabel.Text = "Generating XRay Llama contents...";
-            await GameAccount.activeAccount.GenerateXRayLlamaResults();
-            progressLabel.Text = "Updating quests...";
-            await GameAccount.activeAccount.ClientQuestLoginCampaign();
-            await GameAccount.activeAccount.ClientQuestLoginAthena();
+            progressLabel.Text = "Updating XRay Llamas";
+            await GameAccount.ActiveAccount.GenerateXRayLlamaResults();
+            progressLabel.Text = "Updating quests";
+            await GameAccount.ActiveAccount.ClientQuestLoginCampaign();
+            await GameAccount.ActiveAccount.ClientQuestLoginAthena();
         }
 
-        if(preloadTexturesTask is not null)
+        if (preloadTexturesTask is not null)
         {
-            progressLabel.Text = "Caching Textures...";
+            progressBar.Indeterminate = false;
+            progressBar.Visible = true;
+            progressLabel.Text = "Caching textures";
+            showCachingProgress = true;
             await preloadTexturesTask;
         }
 
-        progressLabel.Text = "";
+        progressBar.Visible = false;
+        progressLabel.Text = "Loading interface";
         curtain.Visible = true;
         await Helpers.WaitForFrame();
         window.Size = windowSize;
@@ -223,7 +249,7 @@ public partial class Bootstrap : Node
 
 
         //todo: autoselect desktop/mobile scenes here
-
+        GetWindow().ContentScaleFactor = 1;
         if (hasAccount)
         {
             if (UseShareMenu)

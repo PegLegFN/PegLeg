@@ -126,15 +126,12 @@ static class CatalogRequests
         using var st = await cosmeticLayoutSemaphore.AwaitToken();
         if (!st.wasImmediate && !force)
             return cachedCosmeticLayouts;
-        var rawLayoutData = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.content,
-                "content/api/pages/fortnite-game/mp-item-shop",
-                "",
-                null
-            );
-        if (rawLayoutData["errorMessage"] is not null)
+        var  layoutResponse = await FnWebAddresses.FortContent
+            .MakeRequest("/content/api/pages/fortnite-game/mp-item-shop")
+            .Send();
+        if (await layoutResponse.CheckForError())
             return cachedCosmeticLayouts;
+        var rawLayoutData = await layoutResponse.ReadJson();
         JsonObject layoutResult = [];
         await Task.Run(() =>
         {
@@ -474,7 +471,6 @@ static class CatalogRequests
 
         if (storefrontCache is null)
         {
-            GD.Print("requesting storefront");
             activeStorefrontRequest ??= RequestStorefront();
             await Task.WhenAny(activeStorefrontRequest);
         }
@@ -482,35 +478,22 @@ static class CatalogRequests
 
     static async Task<JsonObject> RequestStorefront()
     {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return null;
-
         GD.Print("retrieving catalog from epic...");
-        JsonNode fullStorefront = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.game,
-                "fortnite/api/storefront/v2/catalog",
-                "",
-                account.AuthHeader
-            );
-        if (fullStorefront["errorCode"] is not null)
-        {
-            await GenericConfirmationWindow.ShowErrorForWebResult(fullStorefront.AsObject());
+        var sfResponse = await FnWebAddresses.FortGame
+            .MakeRequest("/fortnite/api/storefront/v2/catalog")
+            .SetAccount(GameAccount.ActiveAccount)
+            .Send();
+        if(await sfResponse.CheckForError())
             return null;
-        }
+        JsonNode fullStorefront = await sfResponse.ReadJson();
         storefrontCache = SimplifyStorefront(fullStorefront);
-        //save to file
-        //using FileAccess storefrontFile = FileAccess.Open(storefrontCacheSavePath, FileAccess.ModeFlags.Write);
-        //storefrontFile.StoreString(storefrontCache.ToString());
-        //storefrontFile.Flush();
         return storefrontCache;
     }
 
     public static async Task<FrozenDictionary<string, string[]>> RequestCosmeticBestsellingData()
     {
         GD.Print("retrieving cosmetic bestsellers from epic...");
-        var res = await FnWebAddresses.epicCDN
+        var res = await FnWebAddresses.UnrealCDN
             .MakeRequest("/fn_bsdata/ebb74910-dd35-44b8-b826-d58dc16c6456.json")
             .Send();
         if (!res.IsSuccessStatusCode)
@@ -518,6 +501,7 @@ static class CatalogRequests
         var responseDict = await res.Content.ReadFromJsonAsync<Dictionary<string, BestsellerData>>(Helpers.JsonOptions.CamelCase);
         return responseDict.ToFrozenDictionary(kvp => kvp.Key, kvp => kvp.Value.offerList ?? []);
     }
+
     record struct BestsellerData
     {
         [JsonPropertyName("expiry_date")]
@@ -529,7 +513,7 @@ static class CatalogRequests
     public static async Task<FrozenDictionary<string, JamTrackData>> RequestJamtrackData()
     {
         GD.Print("retrieving jam tracks from epic...");
-        var res = await FnWebAddresses.content
+        var res = await FnWebAddresses.FortContent
             .MakeRequest("/content/api/pages/fortnite-game/spark-tracks")
             .Send();
         if (!res.IsSuccessStatusCode)
@@ -572,29 +556,27 @@ static class CatalogRequests
     public static async Task<JsonObject> RequestCosmeticDisplayData()
     {
         GD.Print("retrieving cosmetic visuals from fortnite-api...");
-        JsonNode cosmeticDisplayData = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                WebClients.fnApi,
-                "v2/shop?responseFlags=4", // 1 = paths, 2 = gameplayTags, 4 = shop history
-                "",
-                null,
-                addCosmeticHeader:true
-            );
-        if (cosmeticDisplayData["data"]?["entries"]?.AsArray().Count == 0)
+        var response = await ApiWebAddresses.fnDashApi
+            .MakeRequest("/v2/shop?responseFlags=4")
+            .Send();
+        if (await response.CheckForError())
+            return [];
+        JsonNode cosmeticDisplayData = await response.ReadJson();
+        if ((cosmeticDisplayData["data"]?["entries"]?.AsArray().Count ?? 0) == 0)
             GD.Print(cosmeticDisplayData.ToString());
         return new(cosmeticDisplayData["data"]["entries"].AsArray()
             .Select(n => n.AsObject().CreateKVP("offerId")));
     }
 
-    public static readonly string[] relevantStorefronts = new string[]
-    {
+    public static readonly string[] relevantStorefronts =
+    [
         FnStorefrontTypes.XRayLlamaCatalog,
         FnStorefrontTypes.RandomLlamaCatalog,
         FnStorefrontTypes.WeeklyShopCatalog,
         FnStorefrontTypes.EventShopCatalog,
         FnStorefrontTypes.WeeklyCosmeticShopCatalog,
         FnStorefrontTypes.DailyCosmeticShopCatalog
-    };
+    ];
 
     static JsonObject SimplifyStorefront(JsonNode fullStorefront)
     {
@@ -610,9 +592,9 @@ static class CatalogRequests
         return jsonFilteredStorefronts;
     }
 
-    const string fnapiLinkPrefix = "https://fortnite-api.com/images/cosmetics/";
-    const string fnapiJamTrackPrefix = "https://cdn.fortnite-api.com/tracks/";
-    const string dillyPrefix = "https://export-service.dillyapis.com/v1/export?path=";
+    const string fnDashApiPrefix = "https://fortnite-api.com/images/cosmetics/";
+    const string fnDashApiCdnPrefix = "https://cdn.fortnite-api.com/tracks/";
+    const string fnDotApiPrefix = "https://export-service.dillyapis.com/v1/export?path=";
     const string imageCacheFolderPath = "user://cosmetic_images/";
     const string metaCacheFolderPath = "user://cosmetic_meta/";
     static readonly Dictionary<string, WeakRef> activeResourceCache = [];
@@ -620,20 +602,20 @@ static class CatalogRequests
 
     public static string LocalCosmeticResourcePath(string serverPath)
     {
-        bool isJamTrack = serverPath.StartsWith(fnapiJamTrackPrefix);
-        bool isFNCentral = serverPath.StartsWith(dillyPrefix);
+        bool isJamTrack = serverPath.StartsWith(fnDashApiCdnPrefix);
+        bool isFNDot = serverPath.StartsWith(fnDotApiPrefix);
         string localPath = imageCacheFolderPath;
-        if (isFNCentral)
+        if (isFNDot)
         {
             localPath += "/" + serverPath.Split('/')[^1] + ".png";
         }
         else if (isJamTrack)
         {
-            localPath += serverPath[fnapiJamTrackPrefix.Length..].Replace("/", "-");
+            localPath += serverPath[fnDashApiCdnPrefix.Length..].Replace("/", "-");
         }
         else
         {
-            localPath += serverPath[fnapiLinkPrefix.Length..].Replace("/", "-");
+            localPath += serverPath[fnDashApiPrefix.Length..].Replace("/", "-");
         }
         return localPath;
     }
@@ -704,8 +686,8 @@ static class CatalogRequests
                 GD.Print("NULL LOCAL TEXTURE");
         }
 
-        bool isJamTrack = serverPath.StartsWith(fnapiJamTrackPrefix);
-        bool isFNCentral = serverPath.StartsWith(dillyPrefix);
+        bool isJamTrack = serverPath.StartsWith(fnDashApiCdnPrefix);
+        bool isFNCentral = serverPath.StartsWith(fnDotApiPrefix);
         //if (isJamTrack)
         //{
         //    GD.Print("Interpreting as Jam Track");
@@ -713,33 +695,17 @@ static class CatalogRequests
         //    GD.Print(ExternalEndpoints.jamTracksEndpoint);
         //}
         string localPath = imageCacheFolderPath;
-        string halfPath = "";
-        var client = WebClients.fnApi;
         if (isFNCentral)
-        {
-            client = WebClients.dillyApi;
             localPath += "/" + serverPath.Split('/')[^1] + ".png";
-            halfPath = "/v1/export?path=" + serverPath[dillyPrefix.Length..];
-        }
         else if (isJamTrack)
-        {
-            client = WebClients.fnApiJamTrakcs;
-            localPath += serverPath[fnapiJamTrackPrefix.Length..].Replace("/", "-");
-            halfPath = "/tracks/" + serverPath[fnapiJamTrackPrefix.Length..];
-        }
+            localPath += serverPath[fnDashApiCdnPrefix.Length..].Replace("/", "-");
         else
-        {
-            localPath += serverPath[fnapiLinkPrefix.Length..].Replace("/", "-");
-            halfPath = "/images/cosmetics/" + serverPath[fnapiLinkPrefix.Length..];
-        }
+            localPath += serverPath[fnDashApiPrefix.Length..].Replace("/", "-");
 
-        GD.Print($"Requesting cosmetic ({client.BaseAddress}, {halfPath}, {localPath}, {serverPath})");
-        using var result = await Helpers.MakeRequestRaw(client, new(HttpMethod.Get, halfPath));
-        if (!result.IsSuccessStatusCode)
-        {
-            GD.Print("Err: "+result);
+        GD.Print($"Requesting cosmetic ({serverPath})");
+        using var result = await WebHelpers.MakeRequest(serverPath).Send();
+        if (await result.CheckForError())
             return null;
-        }
         if (printSuccess)
             GD.Print("remote file exists");
 
@@ -833,10 +799,10 @@ static class CatalogRequests
         {
             //treat as path (probably display asset)
             GD.Print("Meta: "+pathOrTemplateID.Split('.')[0]);
-            var res = await WebHelpers
-                .MakeRequest(WebClients.dillyApi, $"v1/export?path={pathOrTemplateID.Split('.')[0]}")
+            var res = await ApiWebAddresses.fnDotApi
+                .MakeRequest($"/v1/export?path={pathOrTemplateID.Split('.')[0]}")
                 .Send();
-            var resultObject = await res.Content.ReadFromJsonAsync<JsonNode>();
+            var resultObject = await res.ReadJson();
             GD.Print("MetaRes: "+resultObject);
             if (resultObject is not null && resultObject?["result"]?.ToString()?.StartsWith("Too many requests") != true && resultObject["errored"]?.GetValue<bool>() != true)
             {
@@ -849,17 +815,14 @@ static class CatalogRequests
             string[] remotePaths = CosmeticTemplateToPaths(pathOrTemplateID);
             foreach (var remotePath in remotePaths)
             {
-                JsonNode resultObject = await Helpers.MakeRequest(
-                    HttpMethod.Get,
-                    WebClients.dillyApi,
-                    $"v1/export?path={remotePath}",
-                    "",
-                    null
-                );
+                var res = await ApiWebAddresses.fnDotApi
+                    .MakeRequest($"/v1/export?path={remotePath}")
+                    .Send();
+                JsonNode resultObject = await res.ReadJson();
                 if (resultObject is null)
                     continue;
                 if (resultObject?["result"]?.ToString()?.StartsWith("Too many requests") ?? false)
-                    continue;
+                    break;//stop immediately at rate limit
                 if (resultObject?["errored"]?.GetValue<bool>() == true)
                     continue;
 
@@ -884,12 +847,12 @@ static class CatalogRequests
                 if (dataList.FirstOrDefault(n => n["LargeIcon"] is not null)?["LargeIcon"]?["AssetPathName"]?.ToString() is string largeImagePath)
                 {
                     metaObject["images"] ??= new JsonObject();
-                    metaObject["images"]["icon"] = dillyPrefix + largeImagePath.Split('.')[0];
+                    metaObject["images"]["icon"] = fnDotApiPrefix + largeImagePath.Split('.')[0];
                 }
                 if (dataList.FirstOrDefault(n => n["Icon"] is not null)?["Icon"]?["AssetPathName"]?.ToString() is string smallImagePath)
                 {
                     metaObject["images"] ??= new JsonObject();
-                    metaObject["images"]["smallIcon"] = dillyPrefix + smallImagePath.Split('.')[0];
+                    metaObject["images"]["smallIcon"] = fnDotApiPrefix + smallImagePath.Split('.')[0];
                 }
             }
         }
@@ -924,20 +887,20 @@ static class CatalogRequests
         if (splitTemplateId.Length <= 1)
         {
             GD.Print("Can't split: " + templateId);
-            return Array.Empty<string>();
+            return [];
         }
         return splitTemplateId[0] switch
         {
-            "AthenaCharacter" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/Characters/{splitTemplateId[1]}.uasset" },
-            "AthenaBackpack" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/Backpacks/{splitTemplateId[1]}.uasset" },
-            "AthenaPickaxe" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/Pickaxes/{splitTemplateId[1]}.uasset" },
-            "AthenaGlider" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/Gliders/{splitTemplateId[1]}.uasset" },
-            "AthenaSkyDiveContrail" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/Contrails/{splitTemplateId[1]}.uasset" },
-            "AthenaDance" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/Dances/{splitTemplateId[1]}.uasset" },
-            "AthenaItemWrap" => new string[] { $"BRCosmetics/Athena/Items/Cosmetics/ItemWraps/{splitTemplateId[1]}.uasset" },
+            "AthenaCharacter" => [$"BRCosmetics/Athena/Items/Cosmetics/Characters/{splitTemplateId[1]}.uasset"],
+            "AthenaBackpack" => [$"BRCosmetics/Athena/Items/Cosmetics/Backpacks/{splitTemplateId[1]}.uasset"],
+            "AthenaPickaxe" => [$"BRCosmetics/Athena/Items/Cosmetics/Pickaxes/{splitTemplateId[1]}.uasset"],
+            "AthenaGlider" => [$"BRCosmetics/Athena/Items/Cosmetics/Gliders/{splitTemplateId[1]}.uasset"],
+            "AthenaSkyDiveContrail" => [$"BRCosmetics/Athena/Items/Cosmetics/Contrails/{splitTemplateId[1]}.uasset"],
+            "AthenaDance" => [$"BRCosmetics/Athena/Items/Cosmetics/Dances/{splitTemplateId[1]}.uasset"],
+            "AthenaItemWrap" => [$"BRCosmetics/Athena/Items/Cosmetics/ItemWraps/{splitTemplateId[1]}.uasset"],
 
             //TODO: car parts, instruments, etc
-            _ => Array.Empty<string>(),
+            _ => [],
         };
     }
 
@@ -1004,67 +967,74 @@ public class GameStorefront
     static Dictionary<string, GameStorefront> storefronts = [];
     public static bool RequiresUpdate(RefreshTimeType? refreshType)
     {
-        return storefronts is null || refreshType is null || DateTime.UtcNow.CompareTo(expirationDates[refreshType.Value]) >= 0;
+        return refreshType is null || DateTime.UtcNow.CompareTo(expirationDates[refreshType.Value]) >= 0;
     }
+
+    static SemaphoreSlim catalogSemaphore = new(1);
 
     public static async Task<bool> UpdateCatalog(RefreshTimeType? refreshType = null)
     {
         if (!RequiresUpdate(refreshType))
             return true;
-
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return false;
-
-        GD.Print("retrieving catalog from epic...");
-        var catalog = await Helpers.MakeRequest(
-                HttpMethod.Get,
-                FnWebAddresses.game,
-                "fortnite/api/storefront/v2/catalog",
-                "",
-                account.AuthHeader
-            );
-        if (catalog["errorCode"] is not null)
+        await catalogSemaphore.WaitAsync();
+        try
         {
-            await GenericConfirmationWindow.ShowErrorForWebResult(catalog.AsObject());
-            return false;
-        }
-        storefrontCache = catalog["storefronts"].AsArray().Select(n => n.AsObject()).ToDictionary(n => n["name"].ToString());
+            if (!RequiresUpdate(refreshType))
+                return true;
 
-        List<string> toRemove = [];
-        foreach (var kvp in storefronts)
-        {
-            if(!storefrontCache.ContainsKey(kvp.Key))
+            GD.Print("retrieving catalog from epic...");
+            var response = await FnWebAddresses.FortGame
+                .MakeRequest("fortnite/api/storefront/v2/catalog")
+                .SetAccount(GameAccount.ActiveAccount)
+                .Send();
+            if (await response.CheckForError())
+                return false;
+            var catalog = await response.ReadJson();
+
+            storefrontCache = catalog["storefronts"]
+                .AsArray()
+                .Select(n => n.AsObject())
+                .ToDictionary(n => n["name"].ToString());
+
+            List<string> toRemove = [];
+            foreach (var kvp in storefronts)
             {
-                toRemove.Add(kvp.Key);
-                continue;
+                if (!storefrontCache.ContainsKey(kvp.Key))
+                {
+                    toRemove.Add(kvp.Key);
+                    continue;
+                }
+                kvp.Value.CheckForChanges(storefrontCache[kvp.Key]["catalogEntries"].AsArray());
             }
-            kvp.Value.CheckForChanges(storefrontCache[kvp.Key]["catalogEntries"].AsArray());
-        }
-        foreach (var sfKey in toRemove)
-        {
-            GD.Print("disconnecting SF");
-            storefronts[sfKey].DisconnectAll();
-            storefronts.Remove(sfKey);
-        }
+            foreach (var sfKey in toRemove)
+            {
+                GD.Print("disconnecting SF");
+                storefronts[sfKey].DisconnectAll();
+                storefronts.Remove(sfKey);
+            }
 
-        foreach (var refreshTypeKey in expirationDates.Keys)
-        {
-            expirationDates[refreshTypeKey] = RefreshTimerController.GetRefreshTime(refreshTypeKey);
-        }
+            foreach (var refreshTypeKey in expirationDates.Keys)
+            {
+                expirationDates[refreshTypeKey] = RefreshTimerController.GetRefreshTime(refreshTypeKey);
+            }
 
-        return true;
+            return true;
+        }
+        finally
+        {
+            catalogSemaphore.Release();
+        }
     }
 
     static GameStorefront GetOrCreateStorefront(string storefrontKey, RefreshTimeType? refreshType = null)
     {
-        if (storefronts.ContainsKey(storefrontKey))
-            return storefronts[storefrontKey];
+        if (storefronts.TryGetValue(storefrontKey, out GameStorefront value) == true)
+            return value;
 
-        if (!storefrontCache.ContainsKey(storefrontKey))
-            return null;
+        if (storefrontCache?.TryGetValue(storefrontKey, out JsonObject sfData) == true)
+            return storefronts[storefrontKey] = new(sfData, refreshType);
 
-        return storefronts[storefrontKey] = new(storefrontCache[storefrontKey], refreshType);
+        return null;
     }
 
     public static async Task<GameStorefront> GetStorefront(string storefrontKey, RefreshTimeType? refreshType = null)
@@ -1239,7 +1209,6 @@ public class GameOffer
     Dictionary<string, int> conditionalDiscounts;
     GameItem price;
     public GameItem Price => price ??= GetRegularPrice();
-    GameItem personalPrice;
 
     public GameItem[] itemGrants { get; private set; }
 
@@ -1284,7 +1253,6 @@ public class GameOffer
             basePrice = priceTemplate?.CreateInstance(basePriceAmount);
         }
         price = null;
-        personalPrice = null;
     }
 
 
@@ -1359,65 +1327,56 @@ public class GameOffer
         return newPriceItem;
     }
 
-    public async Task<int> GetPriceInInventory()
+    public async Task<int> GetPriceInInventory(GameAccount account = null)
     {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return 0;
+        account ??= GameAccount.ActiveAccount;
         var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
         return accountItems.GetFirstTemplateItem(basePrice?.templateId)?.quantity ?? 0;
     }
 
-    public async Task<GameItem> GetPriceInventoryItem()
+    public async Task<GameItem> GetCurrencyItem(GameAccount account = null)
     {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return null;
+        account ??= GameAccount.ActiveAccount;
         var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
         return accountItems.GetFirstTemplateItem(basePrice?.templateId);
     }
 
-    public async Task<GameItem> GetPersonalPrice(bool forcePrice = false, bool forceCosmetics = false)
+    public async Task<GameItem> CalculatePersonalPrice(GameAccount account = null, bool forceCosmetics = false)
     {
-        if (!forcePrice && personalPrice is not null)
-            return personalPrice;
-
         int price = basePrice?.quantity ?? 0;
         price -= discountAmount;
 
         //if dynamic bundle, generate discount based on owned items
-        var account = GameAccount.activeAccount;
+        account ??= GameAccount.ActiveAccount;
         if (IsDiscountBundle && await account.Authenticate())
         {
             var cosmeticItems = await account.GetProfile(FnProfileTypes.CosmeticInventory).Query(forceCosmetics);
             foreach (var kvp in conditionalDiscounts)
             {
-                if (cosmeticItems.GetTemplateItems(kvp.Key).Any())
+                if (cosmeticItems.GetFirstTemplateItem(kvp.Key) is not null)
                     price -= kvp.Value;
             }
         }
 
         price = Mathf.Max(price, discountMin);
 
-        return personalPrice = basePrice?.template?.CreateInstance(price);
+        return basePrice?.template?.CreateInstance(price);
     }
 
     public async Task<GameItem> GetXRayLlamaData(GameAccount account = null)
     {
         if (!IsXRayLlama)
             return null;
-        account ??= GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return null;
+        account ??= GameAccount.ActiveAccount;
         await account.GetProfile(FnProfileTypes.AccountItems).Query();
-        return GetXRayLlamaDataUnsafe(account);
+        return GetLocalXRayLlamaData(account);
     }
 
-    public GameItem GetXRayLlamaDataUnsafe(GameAccount account = null)
+    public GameItem GetLocalXRayLlamaData(GameAccount account = null)
     {
         if (!IsXRayLlama)
             return null;
-        account ??= GameAccount.activeAccount;
+        account ??= GameAccount.ActiveAccount;
         var prerollItems = account.GetProfile(FnProfileTypes.AccountItems).GetItems("PrerollData");
         var match = prerollItems.FirstOrDefault(item => item.attributes?["offerId"].ToString() == OfferId);
         return match;

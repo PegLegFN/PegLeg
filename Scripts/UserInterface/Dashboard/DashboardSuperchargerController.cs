@@ -47,7 +47,7 @@ public partial class DashboardSuperchargerController : Control
 
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
-        var profile = await GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+        var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         var possibleQuest = profile.GetFirstItem("Quest", q => q.templateId.StartsWith("Quest:weekly_elder"));
         GD.Print(possibleQuest?.template?.DisplayName ?? "NoSupercharger");
 

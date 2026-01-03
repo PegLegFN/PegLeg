@@ -16,7 +16,7 @@ public partial class EpicFixesInterface : Node
 			//GD.Print(text);
             data = JsonSerializer.Deserialize<TempDataTable[]>(text)[0];
         }
-        var profile = await GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+        var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         (var level, var xp) = GetRequiredXP(profile);
         GD.Print($"Next XP ({level}+1): {xp.Notate()}");
     }
@@ -30,7 +30,7 @@ public partial class EpicFixesInterface : Node
     public async void ClaimCollectionRewards()
 	{
         using var loadToken = LoadingOverlay.CreateToken();
-        var profile = GameAccount.activeAccount.GetProfile(FnProfileTypes.AccountItems);
+        var profile = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems);
         JsonArray notifs = [];
         while (notifs is not null)
         {

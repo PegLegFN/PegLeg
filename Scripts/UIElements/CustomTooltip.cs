@@ -152,7 +152,7 @@ public partial class CustomTooltip : Control
             offerStockLabel.Text = (offerObj["stock"]?.GetValue<int>().ToString()) ?? "Inf";
             var template = GameItemTemplate.Get(offerObj["costType"].ToString());
             offerCostEntry.SetItem(template.CreateInstance(offerObj["costAmount"].GetValue<int>()));
-            if (GameAccount.activeAccount is GameAccount acc && acc.isAuthed)
+            if (GameAccount.ActiveAccount is GameAccount acc && acc.isAuthed)
             {
                 offerInventoryEntry.Visible = true;
                 var profileId = offerObj["costProfile"]?.ToString() ?? FnProfileTypes.AccountItems;
@@ -164,14 +164,14 @@ public partial class CustomTooltip : Control
         }
         else if (contentObject["offer"] is JsonValue val && val.GetValueKind() == System.Text.Json.JsonValueKind.String)
         {
-            var acc = GameAccount.activeAccount;
+            var acc = GameAccount.ActiveAccount;
             if (await acc.Authenticate())
             {
                 var offerId = val.ToString();
                 var offer = GameStorefront.GetExistingOffer(offerId);
                 offerCostEntry.SetItem(offer.Price);
-                offerInventoryEntry.SetItem(await offer.GetPriceInventoryItem());
-                offerStockLabel.Text = (await acc.GetPurchaseLimit(offer)).ToString();
+                offerInventoryEntry.SetItem(await offer.GetCurrencyItem());
+                offerStockLabel.Text = (await acc.GetStockLimit(offer)).ToString();
                 offerContent.Visible = true;
             }
         }

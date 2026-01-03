@@ -156,13 +156,7 @@ public partial class GameItemViewer : ModalWindow
         SetDisplayItem(currentItem);
         SetWindowOpen(true);
         await currentOfferEntry.SetOffer(currentOffer);
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
-        var totalLimit = Mathf.Min(
-            await account.GetPurchaseLimit(currentOffer),
-            await account.GetAffordableLimit(currentOffer)
-            );
+        var totalLimit = await GameAccount.ActiveAccount.GetPurchaseLimit(currentOffer);
         purchaseSpinner.MaxValue = totalLimit;
         purchaseSpinner.Visible = totalLimit > 1;
         purchaseSpinner.Value = 1;
@@ -298,7 +292,7 @@ public partial class GameItemViewer : ModalWindow
         {
             await heroStatsQueuedSemaphore.WaitAsync();
             await heroStatsActiveSemaphore.WaitAsync();
-            var account = displayedItem.profile?.account ?? GameAccount.activeAccount;
+            var account = displayedItem.profile?.account ?? GameAccount.ActiveAccount;
             var fortStats = account.FortStats;
 
             statsTree.Clear();
@@ -414,9 +408,9 @@ public partial class GameItemViewer : ModalWindow
 
     async Task PurchaseTask()
     {
-        var account = GameAccount.activeAccount;
-        if (!await account.Authenticate())
-            return;
+        //var account = GameAccount.ActiveAccount;
+        //if (!await account.Authenticate())
+        //    return;
 
         //GD.Print("attempting to purchase offer: " + currentOffer.OfferId);
         //fake it to test purchase animation
@@ -424,7 +418,7 @@ public partial class GameItemViewer : ModalWindow
         //ShopPurchaseAnimation.PlayAnimation(latestItem.GetTemplate().GetItemTexture(), (int)purchaseCountSpinner.Value);
         //return;
 
-        var notifs = await account.PurchaseOffer(currentOffer, currentOfferEntry.currentPurchaseQuantity);
+        var notifs = await GameAccount.ActiveAccount.PurchaseOffer(currentOffer, currentOfferEntry.currentPurchaseQuantity);
         //GD.Print(notifs);
         SetWindowOpen(false);
 
