@@ -1078,7 +1078,7 @@ public partial class GameAccount
 
         await accountItems.Query(true);
         questsLastRefreshedAt = DateTime.UtcNow;
-        localPinnedQuests = accountItems.statAttributes["client_settings"]["pinnedQuestInstances"].Deserialize<HashSet<string>>();
+        localPinnedQuests = accountItems.statAttributes["client_settings"]?["pinnedQuestInstances"]?.Deserialize<HashSet<string>>() ?? [];
         return accountItems;
     }
 
