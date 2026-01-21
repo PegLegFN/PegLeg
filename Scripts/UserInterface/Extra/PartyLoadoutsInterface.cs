@@ -27,6 +27,11 @@ public partial class PartyLoadoutsInterface : Control
         Clear();
     }
 
+    public override void _ExitTree()
+    {
+        GameAccount.ActiveAccountChanged -= Clear;
+    }
+
     struct MatchData
     {
         public MatchAttributes attributes;

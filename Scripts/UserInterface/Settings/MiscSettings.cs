@@ -38,7 +38,7 @@ public partial class MiscSettings : Control
 
     void ImportAccounts()
     {
-        bool isBeta = AppConfig.PegLegVersion.prerelease > 0;
+        bool isBeta = AppConfig.PegLegVersion.IsBeta;
         string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
         foreach (var file in DirAccess.GetFilesAt(fromPath))
         {

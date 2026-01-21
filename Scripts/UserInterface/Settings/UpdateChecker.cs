@@ -75,11 +75,11 @@ public partial class UpdateChecker : Control
             //    }
             //}
 
-			bool useBeta = currentVer.prerelease > 0;
+			bool useBeta = currentVer.IsBeta;
             try
             {
                 var releases = await GithubHelper.FetchReleases("TomatechGames", "PegLeg");
-                var filteredReleases = releases.Where(r => r.Version > currentVer && (useBeta || r.Version.prerelease == 0)).ToArray();
+                var filteredReleases = releases.Where(r => r.Version > currentVer && (useBeta || !r.Version.IsBeta)).ToArray();
                 if (filteredReleases.Length == 0)
                 {
                     failMsg.Text = "Up to date :)";
@@ -127,24 +127,36 @@ public partial class UpdateChecker : Control
 	{
 		if (latestRelease is null)
 			return;
-		var realRelease = latestRelease ?? default;
-		var asset = realRelease.assets.FirstOrDefault(a => a.name == "PegLeg-Win64.msi");
+#if GODOT_WINDOWS
+        var asset = latestRelease.Value.assets.FirstOrDefault(a => a.name.EndsWith(".msi"));
 		if (asset == default)
-			return;
-		using var _ = LoadingOverlay.CreateToken();
-		try
         {
-            using (FileAccessStream fileStream = new(Helpers.GlobalisePath("res://update.msi"), FileAccess.ModeFlags.Write))
+            await GenericConfirmationWindow.ShowError("No installer file found");
+            return;
+        }
+		using var overlay = LoadingOverlay.CreateToken();
+        try
+        {
+            var updatePath = Helpers.GlobalisePath("user://update.msi");
+            if (!FileAccess.FileExists(updatePath))
             {
-                await asset.DownloadTo(fileStream);
+                using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
+                {
+                    await asset.DownloadTo(fileStream, overlay);
+                }
+                await Helpers.WaitForTimer(1);
             }
-			int pid = OS.CreateProcess(Helpers.GlobalisePath("res://update.msi"), []);
-            if (pid != -1)
-                GetTree().Quit();
+            overlay.Dispose();
+            await GenericConfirmationWindow.ShowError(updatePath);
+            int pid = OS.CreateProcess("msiexec", [$"/i", updatePath], true);
+            GetTree().Quit();
         }
 		catch
-		{
-			GD.PushWarning("Failed to update");
-		}
+        {
+            await GenericConfirmationWindow.ShowError("Update failed");
+        }
+#else
+        await GenericConfirmationWindow.ShowError("Update unavailable on this platform");
+#endif
     }
 }

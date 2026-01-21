@@ -53,7 +53,7 @@ public static class GithubHelper
         }
     }
 
-    public record struct ReleaseVersion(int major, int minor, int patch, int prerelease) : IComparable<ReleaseVersion>
+    public record struct ReleaseVersion(int major, int minor, int patch) : IComparable<ReleaseVersion>
     {
         public static bool Parse(
             string versionText,
@@ -69,8 +69,11 @@ public static class GithubHelper
             int major = int.TryParse(groups[1], out var mj) ? mj : 0;
             int minor = int.TryParse(groups[2], out var mn) ? mn : 0;
             int patch = int.TryParse(groups[3], out var pt) ? pt : 0;
-            bool hasPrerelease = groups.Length > 4 && !string.IsNullOrEmpty(groups[4]);
-            int prerelease = hasPrerelease && int.TryParse(groups[4], out var pr) ? pr : 0;
+            if (groups.Length > 4 && int.TryParse(groups[4], out var beta)) 
+            {
+                patch *= 100;
+                patch += beta;
+            }
             if (major.ToString() != groups[1])
             {
                 GD.Print($"Incorrect number format in Major version number ({major} != {groups[1]}, \"{versionText}\")");
@@ -86,22 +89,13 @@ public static class GithubHelper
                 GD.Print($"Incorrect number format in Patch version number ({patch} != {groups[3]}, \"{versionText}\")");
                 return false;
             }
-            if (hasPrerelease)
-            {
-                if (prerelease==0)
-                {
-                    GD.Print($"Prerelease cannot be 0 (\"{versionText}\")");
-                    return false;
-                }
-                if (prerelease.ToString() != groups[4])
-                {
-                    GD.Print($"Incorrect number format in Prerelease version number ({prerelease} != {groups[4]}, \"{versionText}\")");
-                    return false;
-                }
-            }
-            version = new(major, minor, patch, prerelease);
+            version = new(major, minor, patch);
             return true;
         }
+
+        public int PatchNum => patch / 100;
+        public int BetaNum => patch % 100;
+        public bool IsBeta => BetaNum > 0;
 
         public readonly int CompareTo(ReleaseVersion other)
         {
@@ -109,9 +103,7 @@ public static class GithubHelper
                 return major.CompareTo(other.major);
             if (minor != other.minor)
                 return minor.CompareTo(other.minor);
-            if (patch != other.patch)
-                return patch.CompareTo(other.patch);
-            return prerelease.CompareTo(other.prerelease);
+            return patch.CompareTo(other.patch);
         }
 
         public static bool operator >(ReleaseVersion first, ReleaseVersion second) => first.CompareTo(second) > 0;
@@ -119,7 +111,7 @@ public static class GithubHelper
         public static bool operator >=(ReleaseVersion first, ReleaseVersion second) => first.CompareTo(second) >= 0;
         public static bool operator <=(ReleaseVersion first, ReleaseVersion second) => first.CompareTo(second) <= 0;
 
-        public override readonly string ToString() => $"v{major}.{minor}.{patch}{(prerelease==0?"":$"-b{prerelease}")}";
+        public override readonly string ToString() => $"v{major}.{minor}.{patch}";
     }
 
     public static async Task<ReleaseData[]> FetchReleases(string user, string repo)

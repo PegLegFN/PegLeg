@@ -40,8 +40,7 @@ public partial class AppConfig
                 currentVer = new(
                     int.Parse(verData[0]),
                     int.Parse(verData[1]),
-                    patch,
-                    beta
+                    betaAndPatch
                 );
             }
             return currentVer;

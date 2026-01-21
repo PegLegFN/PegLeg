@@ -40,7 +40,7 @@ public partial class OnboardingInterface : Control
         curtain.Visible = true;
 
         importButton.Visible = DirAccess.DirExistsAbsolute("user://../accounts");
-        importButton.Text = AppConfig.PegLegVersion.prerelease > 0 ? "Import Accounts from PegLeg (Release)" : "Import Accounts from PegLeg Beta Branch";
+        importButton.Text = AppConfig.PegLegVersion.IsBeta ? "Import Accounts from PegLeg (Release)" : "Import Accounts from PegLeg Beta Branch";
 
         MusicController.StopMusic();
         music.VolumeDb = -80;
@@ -68,7 +68,7 @@ public partial class OnboardingInterface : Control
         loginCodeContent.Visible = false;
         loadingWheel.Visible = true;
         bool hasAccount = false;
-        bool isBeta = AppConfig.PegLegVersion.prerelease > 0;
+        bool isBeta = AppConfig.PegLegVersion.IsBeta;
         string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
 
         try

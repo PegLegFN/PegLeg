@@ -76,6 +76,11 @@ public partial class SurvivorSquadEntry : Control
         GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
     }
 
+    public override void _ExitTree()
+    {
+        GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;
+    }
+
     void OnActiveAccountChanged()
     {
         if (overrideAccount is null)

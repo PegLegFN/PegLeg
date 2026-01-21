@@ -226,6 +226,12 @@ public static class WebHelpers
         }
     }
 
+    public static ActionProgress AsProgress(this Action<long, long> action) => new(action);
+    public class ActionProgress(Action<long, long> action) : IProgress<(long, long)>
+    {
+        public void Report((long, long) tuple) => action?.Invoke(tuple.Item1, tuple.Item2);
+    }
+
     public static async Task SendAsDownload(this BoundHttpsRequestMessage msg, Stream dest, IProgress<(long, long)> progress = null, CancellationToken ct = default)
     {
         using var response = await msg.SendAsDownloadR(dest, progress, ct);

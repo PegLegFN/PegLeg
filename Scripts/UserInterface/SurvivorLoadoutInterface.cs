@@ -47,6 +47,11 @@ public partial class SurvivorLoadoutInterface : Node
         UpdateAccount();
     }
 
+    public override void _ExitTree()
+    {
+        GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;
+    }
+
     private void OnActiveAccountChanged()
     {
         if (overrideAccount is null)

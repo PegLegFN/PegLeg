@@ -65,7 +65,7 @@ public partial class LoadingOverlay : ModalWindow
     public static TaskToken CreateToken(string taskName = null, float initialProgress = 0, float maxProgress = 1) =>
         TaskToken.Create(taskName, initialProgress, maxProgress);
 
-    public class TaskToken() : IDisposable
+    public class TaskToken() : IDisposable, IProgress<(long, long)>
     {
         public bool disposed { get; private set;}
         public string taskName { get; private set; }
@@ -91,6 +91,7 @@ public partial class LoadingOverlay : ModalWindow
         public void IncrementLoadingProgress() => SetLoadingProgress(progress + 1);
         public void SetLoadingProgress(float newProgress)=>
             SetLoadingProgress(newProgress, maxProgress);
+        public void Report((long, long) tuple) => SetLoadingProgress(tuple.Item1, tuple.Item2);
         public void SetLoadingProgress(float newProgress, float maxProgress)
         {
             if (disposed)

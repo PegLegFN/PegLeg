@@ -242,6 +242,7 @@ public partial class GameMission
                     var reset = DateTime.Parse(expiryDate, CultureInfo.InvariantCulture);
                     if (reset > DateTime.UtcNow)
                         return new HttpResponseMessage() { Content = new StringContent(missionText) };
+                    GD.Print("latest lite missions out of date");
                 }
             }
             return await ApiWebAddresses.pegLegLiteBucket
@@ -334,7 +335,7 @@ public partial class GameMission
                 if (string.IsNullOrWhiteSpace(latestOutput))
                     latestOutput = "user://latestMissions";
                 latestOutput += ".json";
-                string latestOutputParent = latestOutput[(latestOutput.LastIndexOf('/') + 1)..];
+                string latestOutputParent = latestOutput[..(latestOutput.LastIndexOf('/') + 1)];
                 if (!DirAccess.DirExistsAbsolute(latestOutputParent))
                     DirAccess.MakeDirAbsolute(latestOutputParent);
                 using var latestMissionsFile = FileAccess.Open(latestOutput, FileAccess.ModeFlags.Write);
