@@ -38,6 +38,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void SubtypeIconChangedEventHandler(Texture2D icon);
 
     [Signal]
+    public delegate void PackIconChangedEventHandler(Texture2D icon);
+
+    [Signal]
     public delegate void AmmoIconChangedEventHandler(Texture2D icon); //also used for trap subtype
 
     [Signal]
@@ -122,6 +125,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void IsSchematicEventHandler(bool value);
 
     [Signal]
+    public delegate void IsPackEventHandler(bool value);
+
+    [Signal]
     public delegate void PressedEventHandler();
 
     [Export]
@@ -165,6 +171,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     [Export]
     public bool defaultClearIconToNull;
     [Export]
+    string placeholderItem;
+    [Export]
     protected CheckButton selectionGraphics;
 
     protected static Texture2D missingIcon = ResourceLoader.Load<Texture2D>("res://Images/InterfaceIcons/T_UI_VKConnectionIndicator_Error_Icon.png");
@@ -181,8 +189,12 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         ClearItem();
         EmitSignal(SignalName.InteractableChanged, interactableWhenEmpty);
         AppConfig.OnConfigChanged += OnConfigChanged;
-        GameAccount.BookmarksChanged += UpdateBookmark;
+        GameAccount.RemindersChanged += UpdateBookmark;
         GameAccount.ActiveAccountChanged += UpdateItem;
+        if (!string.IsNullOrWhiteSpace(placeholderItem))
+        {
+            SetItem(GameItemTemplate.Get(placeholderItem)?.CreateInstance());
+        }
     }
 
 
@@ -194,13 +206,13 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     private void UpdateBookmark()
     {
         if (currentItem is not null)
-            EmitSignalBookmarkChanged(GameAccount.ActiveAccount.IsBookmarked(currentItem.template));
+            EmitSignalBookmarkChanged(GameAccount.ActiveAccount.HasReminder(currentItem.template));
     }
 
     public override void _ExitTree()
     {
         GameAccount.ActiveAccountChanged -= UpdateItem;
-        GameAccount.BookmarksChanged -= UpdateBookmark;
+        GameAccount.RemindersChanged -= UpdateBookmark;
         AppConfig.OnConfigChanged -= OnConfigChanged;
         if (currentItem is not null)
         {
@@ -289,6 +301,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         Texture2D mainIcon = displayItem.GetTexture(missingIcon, useLargePreview);
 
         description ??= "";
+        if (type == "GameplayModifier")
+            description = description.Replace("\r\n", " ");
+
         var personalityText = displayItem.Personality;
         var setBonusText = displayItem.SetBonus;
         if (type == "Worker" && name == "Survivor")
@@ -368,15 +383,18 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         );
 
         var subtypeIcon = displayItem.template?.GetSubtypeTexture();
+        var packIcon = displayItem.GetTexture(FnItemTextureType.PackImage, null);
 
-        if (packImageAsSubtype && type == "CardPack" && displayItem.GetTexture(FnItemTextureType.PackImage, null) is Texture2D packIcon)
+        if (packImageAsSubtype && type == "CardPack")
             subtypeIcon = packIcon;
 
         EmitSignalIconChanged(mainIcon ?? missingIcon);
         EmitSignalIconFit(!(type == "Hero" || type == "Survivor" || type == "Defender"));
         EmitSignalSubtypeIconChanged(subtypeIcon);
+        EmitSignalPackIconChanged(packIcon);
         EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
 
+        EmitSignalIsPack(type == "CardPack");
         EmitSignalIsSchematic(type == "Schematic");
         EmitSignalIsHero(type == "Hero");
 
@@ -428,7 +446,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         EmitSignalOverflowWarning(displayItem.attributes?["inventory_overflow_date"]?.GetValueKind()==System.Text.Json.JsonValueKind.String);
         EmitSignalNotificationChanged(!displayItem.IsSeen);
-        EmitSignalBookmarkChanged(GameAccount.ActiveAccount.IsBookmarked(displayItem.template));
+        EmitSignalBookmarkChanged(GameAccount.ActiveAccount.HasReminder(displayItem.template));
         EmitSignalFavoriteChanged(displayItem.IsFavourited);
         EmitSignalMaxTierChanged(Mathf.Min((displayItem.template?.RarityLevel ?? 0) + 1, 5));
         EmitSignalTierChanged(tier);

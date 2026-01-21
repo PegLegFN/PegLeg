@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://buf6p8qyydofm"]
+[gd_scene load_steps=63 format=3 uid="uid://buf6p8qyydofm"]
 
 [ext_resource type="Script" uid="uid://vil6mmu5pyy3" path="res://Scripts/Overlays/GameItemViewer/GameItemViewer.cs" id="1_5fxot"]
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_croo3"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="19_gnbdk"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="19_ictwk"]
 [ext_resource type="Script" uid="uid://ddyudnu605xw2" path="res://Scripts/Overlays/GameItemViewer/GameItemUpgrader.cs" id="19_kk5po"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="20_ictwk"]
 [ext_resource type="Texture2D" uid="uid://docjdjoems0ia" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Black-L.png" id="20_iom1u"]
 [ext_resource type="Texture2D" uid="uid://xcnetq4h582o" path="res://Images/TextureResources/BlankTexture.tres" id="20_nu85e"]
 [ext_resource type="Shader" uid="uid://c7bkre6g0tn1b" path="res://Shaders/UpgradeBarShader.gdshader" id="21_t6pm5"]
@@ -160,6 +161,28 @@ shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hrq73"]
+shader = ExtResource("20_ictwk")
+shader_parameter/ControlSize = Vector2(200, 64)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 5.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="Gradient" id="Gradient_dqphe"]
+colors = PackedColorArray(1, 1, 1, 0.6901961, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ictwk"]
+gradient = SubResource("Gradient_dqphe")
+height = 16
+fill = 1
+fill_from = Vector2(0, 0.5)
+fill_to = Vector2(0.90000004, 0.5)
+metadata/_snap_enabled = true
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6pdq1"]
 content_margin_left = 3.0
 content_margin_top = 3.0
@@ -287,7 +310,7 @@ shader_parameter/minVal = 25.0
 shader_parameter/currentVal = 45.0
 shader_parameter/limitVal = 48.0
 shader_parameter/totalVal = 50.0
-shader_parameter/time = 43.048
+shader_parameter/time = 40.876
 
 [sub_resource type="Gradient" id="Gradient_usvpd"]
 offsets = PackedFloat32Array(0.681199, 0.746594, 0.809264, 0.959044)
@@ -308,7 +331,8 @@ metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_asdem"]
 
-[node name="GameItemViewer" node_paths=PackedStringArray("displayItemEntry", "activeTabParent", "inactiveTabParent", "upgrader", "perkDetailsPanel", "heroDetailsPanel", "heroAbilityEntries", "heroPerkEntry", "heroCommanderPerkEntry", "teamPerkEntry", "tierSlider", "levelSlider", "statsTreeContainer", "statsTree", "devTextContainer", "devText", "searchResult", "itemChoiceParent", "itemChoiceEntries", "itemChoiceLayoutSections", "currentOfferEntry", "purchaseSpinner") instance=ExtResource("1_iqrw2")]
+[node name="GameItemViewer" node_paths=PackedStringArray("displayItemEntry", "activeTabParent", "inactiveTabParent", "upgrader", "perkDetailsPanel", "heroDetailsPanel", "heroAbilityEntries", "heroPerkEntry", "heroCommanderPerkEntry", "teamPerkEntry", "tierSlider", "levelSlider", "statsTreeContainer", "statsTree", "devTextContainer", "devText", "searchTextEdit", "searchResult", "itemChoiceParent", "itemChoiceEntries", "itemChoiceLayoutSections", "currentOfferEntry", "purchaseSpinner") instance=ExtResource("1_iqrw2")]
+z_index = 3
 theme = ExtResource("1_croo3")
 script = ExtResource("1_5fxot")
 displayItemEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry")
@@ -327,10 +351,11 @@ statsTreeContainer = NodePath("Control/WindowContents/CenterContainer/window/Mai
 statsTree = NodePath("Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Stats/VBoxContainer/StatTree")
 devTextContainer = NodePath("Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev")
 devText = NodePath("Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/Data/CodeEdit")
+searchTextEdit = NodePath("Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest/VBoxContainer/LineEdit")
 searchResult = NodePath("Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest/VBoxContainer/CodeEdit")
 itemChoiceParent = NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector")
-itemChoiceEntries = [NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/RewardEntryHorizontal"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/RewardEntryHorizontal"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal")]
-itemChoiceLayoutSections = [NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3")]
+itemChoiceEntries = [NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal")]
+itemChoiceLayoutSections = [NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2"), NodePath("Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3")]
 currentOfferEntry = NodePath("Control/WindowContents/CenterContainer/window/PurchasePanel")
 purchaseSpinner = NodePath("Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseSpinBox")
 isUserClosable = true
@@ -515,6 +540,7 @@ perkUpArea = NodePath("Perks/Perk Option Selector/VBoxContainer/UpgradePerkLayou
 perkUpEntry = NodePath("Perks/Perk Option Selector/VBoxContainer/UpgradePerkLayout/MarginContainer/UpgradePerk")
 reperkEntries = [NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk1"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk2"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk3"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk4"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk5"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk6")]
 perkApplyButton = NodePath("Perks/Perk Option Selector/VBoxContainer/PanelContainer/MarginContainer/HBoxContainer2/ApplyButton")
+previewMaxTierByDefault = true
 metadata/_tab_index = 0
 
 [node name="Perks" type="Control" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Perks" index="0"]
@@ -771,9 +797,10 @@ metadata/_tab_index = 3
 [node name="TabContainer" type="TabContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev" index="0"]
 layout_mode = 2
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_mq0my")
-current_tab = 0
+current_tab = 1
 
 [node name="Data" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer" index="1"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -806,7 +833,6 @@ auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 
 [node name="SearchTest" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer" index="2"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -817,8 +843,9 @@ metadata/_tab_index = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest" index="0"]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest/VBoxContainer" index="0"]
+[node name="LineEdit" type="TextEdit" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest/VBoxContainer" index="0"]
 layout_mode = 2
+scroll_fit_content_height = true
 
 [node name="CodeEdit" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest/VBoxContainer" index="1"]
 layout_mode = 2
@@ -836,29 +863,19 @@ size_flags_horizontal = 4
 [node name="ChoiceItemSelector" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector" index="0"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_type_variation = &"Panel5Pad"
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector" index="0"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector" index="1"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector" index="0"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer" index="0"]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer" index="0"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -872,10 +889,10 @@ forceInteractability = true
 autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/RewardEntryHorizontal" index="0"]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal" index="0"]
 material = SubResource("ShaderMaterial_ictwk")
 
-[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control" index="1"]
+[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control" index="1"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -889,7 +906,7 @@ mouse_filter = 2
 button_pressed = true
 button_group = SubResource("ButtonGroup_wrarj")
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/CheckButton" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/CheckButton" index="0"]
 self_modulate = Color(1, 0, 0, 1)
 z_index = 2
 custom_minimum_size = Vector2(24, 24)
@@ -908,13 +925,13 @@ mouse_filter = 2
 texture = ExtResource("15_pox86")
 expand_mode = 1
 
-[node name="ORTexture" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer" index="1"]
+[node name="ORTexture" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer" index="1"]
 layout_mode = 2
 texture = ExtResource("16_3ck4t")
 expand_mode = 3
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/ORTexture" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/ORTexture" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -926,11 +943,11 @@ text = "or"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control2" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer" index="2"]
+[node name="Control2" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer" index="2"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -944,10 +961,10 @@ forceInteractability = true
 autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/RewardEntryHorizontal" index="0"]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal" index="0"]
 material = SubResource("ShaderMaterial_dqphe")
 
-[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2" index="1"]
+[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2" index="1"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -960,7 +977,7 @@ grow_vertical = 2
 mouse_filter = 2
 button_group = SubResource("ButtonGroup_wrarj")
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/CheckButton" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/CheckButton" index="0"]
 visible = false
 self_modulate = Color(1, 0, 0, 1)
 z_index = 2
@@ -980,18 +997,18 @@ mouse_filter = 2
 texture = ExtResource("15_pox86")
 expand_mode = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer" index="3"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer" index="3"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="ORTexture" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2" index="0"]
+[node name="ORTexture" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2" index="0"]
 layout_mode = 2
 texture = ExtResource("16_3ck4t")
 expand_mode = 3
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/ORTexture" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/ORTexture" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1003,11 +1020,11 @@ text = "or"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control3" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2" index="1"]
+[node name="Control3" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2" index="1"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1021,10 +1038,10 @@ forceInteractability = true
 autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" index="0"]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" index="0"]
 material = SubResource("ShaderMaterial_6i3b5")
 
-[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3" index="1"]
+[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3" index="1"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -1037,7 +1054,7 @@ grow_vertical = 2
 mouse_filter = 2
 button_group = SubResource("ButtonGroup_wrarj")
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/CheckButton" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/CheckButton" index="0"]
 visible = false
 self_modulate = Color(1, 0, 0, 1)
 z_index = 2
@@ -1057,18 +1074,18 @@ mouse_filter = 2
 texture = ExtResource("15_pox86")
 expand_mode = 1
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer" index="4"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer" index="4"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="ORTexture" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3" index="0"]
+[node name="ORTexture" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3" index="0"]
 layout_mode = 2
 texture = ExtResource("16_3ck4t")
 expand_mode = 3
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/ORTexture" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/ORTexture" index="0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1080,11 +1097,11 @@ text = "or"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control4" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3" index="1"]
+[node name="Control4" type="Control" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3" index="1"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1098,10 +1115,10 @@ forceInteractability = true
 autoLinkToViewer = false
 selectionGraphics = NodePath("../CheckButton")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" index="0"]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" index="0"]
 material = SubResource("ShaderMaterial_36phr")
 
-[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4" index="1"]
+[node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4" index="1"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -1114,7 +1131,7 @@ grow_vertical = 2
 mouse_filter = 2
 button_group = SubResource("ButtonGroup_wrarj")
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/CheckButton" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/CheckButton" index="0"]
 visible = false
 self_modulate = Color(1, 0, 0, 1)
 z_index = 2
@@ -1133,6 +1150,82 @@ pivot_offset = Vector2(12, 12)
 mouse_filter = 2
 texture = ExtResource("15_pox86")
 expand_mode = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector" index="1"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2" index="0"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer" index="0"]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+material = SubResource("ShaderMaterial_hrq73")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_ictwk")
+expand_mode = 1
+flip_h = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Previous"
+
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer" index="1" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
+layout_mode = 2
+forceInteractability = true
+autoLinkToViewer = false
+selectionGraphics = NodePath("../../../../HBoxContainer/Control/CheckButton")
+
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal" index="0"]
+material = SubResource("ShaderMaterial_ictwk")
+
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer" index="2" instance=ExtResource("3_f2ac1")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2" index="1"]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -3
+text = "9999
+/9999"
+horizontal_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2" index="2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2" index="0"]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+material = SubResource("ShaderMaterial_hrq73")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_ictwk")
+expand_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2" index="1"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="RewardEntryHorizontal2" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer" index="0" node_paths=PackedStringArray("selectionGraphics") instance=ExtResource("15_8sk0j")]
+layout_mode = 2
+forceInteractability = true
+autoLinkToViewer = false
+selectionGraphics = NodePath("../../../../HBoxContainer/Control/CheckButton")
+
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2" index="0"]
+material = SubResource("ShaderMaterial_ictwk")
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer" index="1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Next"
+
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2" index="2" instance=ExtResource("3_f2ac1")]
+layout_mode = 2
 
 [node name="ActionButtons" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="2"]
 visible = false
@@ -1606,10 +1699,10 @@ ticks_on_borders = true
 [connection signal="NameChanged" from="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Abilities/VBoxContainer/TeamPerk" to="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Abilities/VBoxContainer/TeamPerk/VBoxContainer/HBoxContainer/Label2" method="set_text"]
 [connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Abilities/VBoxContainer/TeamPerk" to="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Abilities/VBoxContainer/TeamPerk" method="set_tooltip_text"]
 [connection signal="text_changed" from="Control/WindowContents/CenterContainer/window/MainContent/TabContainer/Dev/TabContainer/SearchTest/VBoxContainer/LineEdit" to="." method="SetSearchText"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/CheckButton/TextureRect" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/CheckButton/TextureRect" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/CheckButton/TextureRect" method="set_visible"]
-[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/CheckButton/TextureRect" method="set_visible"]
+[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/CheckButton/TextureRect" method="set_visible"]
+[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/CheckButton/TextureRect" method="set_visible"]
+[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/CheckButton/TextureRect" method="set_visible"]
+[connection signal="toggled" from="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/CheckButton" to="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/CheckButton/TextureRect" method="set_visible"]
 [connection signal="IsAffordableChanged" from="Control/WindowContents/CenterContainer/window/PurchasePanel" to="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/AffordableToggle" method="EmitValues"]
 [connection signal="IsInStockChanged" from="Control/WindowContents/CenterContainer/window/PurchasePanel" to="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockToggle" method="EmitValues"]
 [connection signal="InvertedValue" from="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockToggle" to="Control/WindowContents/CenterContainer/window/PurchasePanel/OutOfStockLabel" method="set_visible"]
@@ -1625,7 +1718,9 @@ ticks_on_borders = true
 
 [editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/RewardEntry"]
 [editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/VBoxContainer/MarginContainer/Control/PowerLevelIndicator"]
-[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control/RewardEntryHorizontal"]
-[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/Control2/RewardEntryHorizontal"]
-[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"]
-[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/MarginContainer/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal"]
+[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal"]
+[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal"]
+[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"]
+[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal"]
+[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal"]
+[editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2"]

@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -148,6 +149,7 @@ public static class WebHelpers
         if (msg.BoundAccount is not null)
         {
             await msg.BoundAccount.Authenticate();
+            msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
             secondMsg = await msg.CloneMessageAsync();
         }
         var response = await msg.SendTo(msg.BoundClient, disposeMsg);
@@ -162,7 +164,7 @@ public static class WebHelpers
             GD.Print("token invalid, exiring token and retrying with new token...");
             msg.BoundAccount.ForceExpireToken();
             await msg.BoundAccount.Authenticate();
-
+            secondMsg.Headers.Authorization = msg.BoundAccount.AuthHeader;
             response = await secondMsg.SendTo(msg.BoundClient, disposeMsg);
         }
         return response;
@@ -291,7 +293,7 @@ public static class WebHelpers
     {
         if (response.IsSuccessStatusCode)
             return (false, null);
-        if (response.Headers.TryGetValues("x-epic-error-code", out var errCode) && errCode.FirstOrDefault() == "1031")
+        if (response.Headers.TryGetValues("x-epic-error-code", out var errCode))
         {
             string code = errCode.FirstOrDefault();
             if (code == "1031")
@@ -308,7 +310,12 @@ public static class WebHelpers
             }
         }
 
-        JsonNode errorContent = await response.ReadJson();
+        JsonNode errorContent = null;
+        try
+        {
+            errorContent = await response.ReadJson();
+        }
+        catch (ObjectDisposedException) { }
 
         if (logError)
             GD.Print("Web Request Error: " + response);
@@ -319,11 +326,11 @@ public static class WebHelpers
                 "Uh oh! Something Goofed",
                 "Continue",
                 contextText:
-                    errorContent?["errorMessage"].ToString() ??
+                    errorContent?["errorMessage"]?.ToString() ??
                     response.ReasonPhrase ??
                     "An uncaught web error occured",
                 warningText:
-                    errorContent?["errorCode"].ToString() ??
+                    errorContent?["errorCode"]?.ToString() ??
                     response.StatusCode.ToString(),
                 allowCancel: false
             ).StartTask();

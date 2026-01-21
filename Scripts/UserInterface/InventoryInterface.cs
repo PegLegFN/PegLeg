@@ -18,7 +18,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     [Export]
     LineEdit targetUser;
     [Export]
-    Control devAllButton;
+    Control devAllPanel;
+    [Export]
+    CheckButton devAllButton;
     [Export]
     VirtualTabBar tabBar;
     [Export]
@@ -63,11 +65,12 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             targetUser.Visible = dev;
             targetUser.Text = dev ? AppConfig.Get("inventory", "customUser", "") : "";
         }
+        if (devAllPanel is not null)
+            devAllPanel.Visible = dev;
         if (devAllButton is not null)
-            devAllButton.Visible = dev;
-        currentTypeFilter = typeFilters[0];
-        tabBar.CurrentTab = 0;
-        tabBar.TabChanged += SetTypeFilter;
+            devAllButton.Toggled += SetTypeFilter;
+        tabBar.SetTabPressed(0);
+        tabBar.TabsChanged += SetTypeFilter;
         AppConfig.OnConfigChanged += OnConfigChanged;
         VisibilityChanged += TryFilter;
         UpdateAccount();
@@ -97,8 +100,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             return;
 
         bool dev = AppConfig.Get("advanced", "developer", false) && allowDevMode;
-        if (devAllButton is not null)
-            devAllButton.Visible = dev;
+        if (devAllPanel is not null)
+            devAllPanel.Visible = dev;
         if (targetUser is not null)
         {
             targetUser.Visible = dev;
@@ -106,7 +109,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             if (!dev && string.IsNullOrEmpty(currentTypeFilter))
             {
                 currentTypeFilter = typeFilters[0];
-                tabBar.CurrentTab = 0;
             }
             UpdateAccount();
         }
@@ -133,11 +135,13 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         ApplyFilters();
     }
 
-    void SetTypeFilter(int index)
+    void SetTypeFilter(bool _) => SetTypeFilter();
+    void SetTypeFilter()
     {
+        int index = tabBar.LatestTab;
         if (index < 0 || index >= typeFilters.Length)
             return;
-        currentTypeFilter = typeFilters[index];
+        currentTypeFilter = (index==0 && devAllButton?.ButtonPressed==true) ? "" : typeFilters[index];
         ApplyFilters();
     }
 
@@ -313,6 +317,16 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
     }
 
+    static bool EvaluateTypeFilter(GameItem item, string filter)
+    {
+        if (filter.Contains(':'))
+        {
+            var splitFilter = filter.Split(':');
+            return item.template?.Type == splitFilter[0] && item.template?.Category == splitFilter[1];
+        }
+        return item.template?.Type == filter;
+    }
+
     bool isFiltering = false;
     async void ApplyFilters()
     {
@@ -345,7 +359,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
                     (item.template is not null || AppConfig.Get("advanced", "developer", false)) &&
                     (!filterNew || !item.IsSeen) &&
                     (!filterFavorite || item.IsFavourited) &&
-                    (possibleTypes?.Contains(item.template?.Type) ?? true) &&
+                    (possibleTypes?.Any(f=>EvaluateTypeFilter(item,f)) ?? true) &&
                     PLSearch.EvaluateInstructions(instructions, item.RawData)
                 )
             ];

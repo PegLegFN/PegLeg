@@ -38,9 +38,11 @@ public partial class MiscSettings : Control
 
     void ImportAccounts()
     {
-        foreach (var file in DirAccess.GetFilesAt("user://../accounts"))
+        bool isBeta = AppConfig.PegLegVersion.prerelease > 0;
+        string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
+        foreach (var file in DirAccess.GetFilesAt(fromPath))
         {
-            DirAccess.CopyAbsolute($"user://../accounts/{file}", $"user://accounts/{file}");
+            DirAccess.CopyAbsolute($"{fromPath}/{file}", $"user://accounts/{file}");
         }
         GameAccount.UpdateAccountCache();
         accountImportButton.Visible = false;
@@ -64,6 +66,11 @@ public partial class MiscSettings : Control
     void ReturnToLogin()
     {
         GetTree().ChangeSceneToFile(loginSceneFilePath);
+    }
+
+    void ForceHourlySignal()
+    {
+        RefreshTimerController.ForceHourChanged();
     }
 
     (int, int) GetRequiredXP(GameProfile campaignProfile)

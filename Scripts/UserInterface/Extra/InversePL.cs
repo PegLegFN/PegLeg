@@ -12,10 +12,14 @@ public partial class InversePL : Node
     [Export]
     Vector2 graphUnit;
     [Signal]
+    public delegate void OnSampleEventHandler(float value);
+    [Signal]
     public delegate void OnInverseEventHandler(float value);
 
     public override void _Ready()
     {
+        if (editor is null)
+            return;
         var keys = FORTStats.HomebaseRatingCurve.times.ToArray();
         var values = FORTStats.HomebaseRatingCurve.values.ToArray();
 
@@ -46,5 +50,10 @@ public partial class InversePL : Node
     public void SetValue(float inputValue)
     {
         EmitSignalOnInverse((float?)FORTStats.HomebaseRatingCurve?.SampleInverse(inputValue) ?? 0);
+    }
+
+    public void SampleValue(float inputValue)
+    {
+        EmitSignalOnInverse((float?)FORTStats.HomebaseRatingCurve?.Sample(inputValue) ?? 0);
     }
 }

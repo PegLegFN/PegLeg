@@ -376,24 +376,27 @@ public partial class NotificationDispatcher : Node
 
         List<NotificationItemData> mainItems = [];
         List<NotificationItemData> ventItems = [];
+        var notableFilter = MissionRewardsController.CreateNotableFilter();
+        int limit = AppConfig.Get("missions", "notable_count", 20);
 
         await Task.Run(() =>
         {
             foreach (var mission in missions)
             {
                 var list = mission.TheaterCat == "v" ? ventItems : mainItems;
-                foreach (var item in mission.alertRewardItems ?? [])
+                foreach (var item in (mission.alertRewardItems ?? []).Where(notableFilter))
                 {
-                    if (MissionRewardsController.ItemIsNotable(item))
+                    list.Add(new()
                     {
-                        list.Add(new()
-                        {
-                            item = item,
-                            powerLabel = $"{mission.PowerLevel}",
-                            powerTooltip = $"{mission.TheaterName}, Power Level {mission.PowerLevel}"
-                        });
-                    }
+                        item = item,
+                        powerLabel = $"{mission.PowerLevel}",
+                        powerTooltip = $"{mission.TheaterName}, Power Level {mission.PowerLevel}"
+                    });
+                    if (list.Count >= limit)
+                        break;
                 }
+                if (list.Count >= limit)
+                    break;
             }
         }, ct);
 

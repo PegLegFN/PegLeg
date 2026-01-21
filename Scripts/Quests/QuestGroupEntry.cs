@@ -69,6 +69,7 @@ public partial class QuestGroupEntry : Control
     bool hasNotification = false;
     public bool HasNotification => hasNotification;
     public bool HasQuests => questSlotList.Any(q => q.isUnlocked && (questGroupData.ShowComplete || !q.isClaimed));
+    
 
     public List<QuestSlot> questSlotList { get; private set; } = [];
     public QuestGroupData questGroupData { get; private set; }
@@ -88,7 +89,7 @@ public partial class QuestGroupEntry : Control
             foreach (var qline in questGroup.Questlines)
             {
                 GameItem questItem = profile.GetFirstTemplateItem(qline.FirstOrDefault()?.TemplateId);
-                if (questItem is null)
+                if (questItem is null && questGroup.Questlines.Length > 1)
                     continue;
                 foreach (var quest in qline)
                 {
@@ -104,7 +105,6 @@ public partial class QuestGroupEntry : Control
                 }
                 break;
             }
-
             UpdateSequenceProgress();
             UpdateEventTimer();
             UpdateNotificationAndIcon();
@@ -141,6 +141,8 @@ public partial class QuestGroupEntry : Control
 
     public void UpdateSequenceProgress()
     {
+        if (sequenceProgress is null)
+            return;
         if (!questGroupData.ShowProgress)
         {
             sequenceProgress.Visible = false;
@@ -156,6 +158,8 @@ public partial class QuestGroupEntry : Control
 
     public void UpdateEventTimer()
     {
+        if (eventTimer is null)
+            return;
         eventTimer.Visible = true;
         switch (questGroupData.timer)
         {
@@ -187,11 +191,14 @@ public partial class QuestGroupEntry : Control
     
     public void UpdateNotificationAndIcon()
     {
-        var notif = questSlotList.Any(questData => questData.isNew && (questGroupData.ShowComplete || !questData.isClaimed));
-        notification.Visible = notif;
+        var notif = questSlotList.Any(questData => questData.isNew && !questData.isClaimed);
+        if (notification is not null)
+            notification.Visible = notif;
         EmitSignalNotificationVisible(notif);
-        pinnedIcon.Visible = questSlotList.Any(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isPinned);
-        completeIcon.Visible = questSlotList.All(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isClaimed);
+        if (pinnedIcon is not null)
+            pinnedIcon.Visible = questSlotList.Any(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isPinned);
+        if (completeIcon is not null)
+            completeIcon.Visible = questSlotList.All(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isClaimed);
     }
 
     public void LinkButtonGroup(ButtonGroup buttonGroup)

@@ -14,6 +14,7 @@ public partial class RefreshTimerController : Node
     int monthsToAddDebug = 0;
     [Export]
     int yearsToAddDebug = 0;
+    int timeTravelDays = 0;
 
     static RefreshTimerController instance;
 
@@ -45,19 +46,23 @@ public partial class RefreshTimerController : Node
         lastTime = DateTime.UtcNow;
         AppConfig.OnConfigChanged += OnConfigChanged;
         offset = AppConfig.Get("advanced", "offset_refresh", true) ? 0 : 2;
+        timeTravelDays = AppConfig.Get("advanced", "time_travel", 0);
     }
 
     float offset = 2;
     private void OnConfigChanged(string section, string key, JsonValue value)
     {
-        if (section == "advanced" && key == "offset_refresh")
-            offset = value.TryGetValue(out bool val) && val ? 0 : 2;
+        if (section == "advanced")
+        {
+            if (key == "offset_refresh")
+                offset = AppConfig.Get("advanced", "offset_refresh", true) ? 0 : 2;
+            if (key == "time_travel")
+                timeTravelDays = AppConfig.Get("advanced", "time_travel", 0);
+        }
     }
 
     private async void UpdateCalender()
     {
-        if (GameAccount.ActiveAccount is null)
-            return;
         await GameAccount.ActiveAccount.CheckCalender();
     }
 
@@ -65,13 +70,16 @@ public partial class RefreshTimerController : Node
     private void UpdateTimers()
     {
         OnSecondChanged?.Invoke();
-        var currentTime = DateTime.UtcNow.AddSeconds(-offset);
+        var currentTime = RightNow;
         if (currentTime.Hour != lastTime.Hour)
             OnHourChanged?.Invoke();
         if (currentTime.Day != lastTime.Day)
             OnDayChanged?.Invoke();
         lastTime = currentTime;
     }
+
+    public static void ForceHourChanged() =>
+            OnHourChanged?.Invoke();
 
     static readonly DateTime referenceStartDate = new(2024, 1, 25);
     static readonly int[] seasonLengths =
@@ -88,9 +96,10 @@ public partial class RefreshTimerController : Node
         instance is null ?
             DateTime.UtcNow :
             DateTime.UtcNow
-                .AddDays(instance.daysToAddDebug)
-                .AddMonths(instance.monthsToAddDebug)
-                .AddYears(instance.yearsToAddDebug)
+                //.AddDays(instance.daysToAddDebug)
+                .AddDays(instance.timeTravelDays)
+                //.AddMonths(instance.monthsToAddDebug)
+                //.AddYears(instance.yearsToAddDebug)
                 .AddSeconds(-instance.offset);
 
     public enum Season
@@ -100,6 +109,28 @@ public partial class RefreshTimerController : Node
         BlastedBadlands,
         Hexsylvania,
         FrozenFjords
+    }
+
+    public static int GetSeasonIndex()
+    {
+        var rightNow = RightNow;
+        var today = rightNow.Date;
+
+        int dayCount = (today - referenceStartDate).Days;
+        dayCount %= (weeksInSeasonalYear * 7);
+        int targetIndex = 0;
+        int startDayOffset = 0;
+        for (int i = 0; i < seasonLengths.Length; i++)
+        {
+            int reducedDayCount = dayCount - startDayOffset;
+            if (reducedDayCount < seasonLengths[i] * 7)
+            {
+                targetIndex = i;
+                break;
+            }
+            startDayOffset += seasonLengths[i] * 7;
+        }
+        return targetIndex;
     }
 
     public static DateTime GetRefreshTime(RefreshTimeType refreshType)

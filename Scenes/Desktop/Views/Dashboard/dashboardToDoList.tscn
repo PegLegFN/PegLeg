@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://cqrhkmo2wovb1"]
+
+[ext_resource type="Script" uid="uid://b5p17hdo00lc6" path="res://Scripts/UserInterface/Dashboard/MissionToDoListController.cs" id="1_lc68b"]
+[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="2_fx5x7"]
+[ext_resource type="PackedScene" uid="uid://dfetgl4vetabf" path="res://Scenes/MissionEntry/mission_entry_compact.tscn" id="3_y2dh3"]
+
+[node name="To-Do List (0)" type="MarginContainer" node_paths=PackedStringArray("missionList")]
+script = ExtResource("1_lc68b")
+missionList = NodePath("ScrollContainer")
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_fx5x7")
+elementSpace = 4.0
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
+elementScene = ExtResource("3_y2dh3")
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Offset" type="Control" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DynGridContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="Padding" type="Control" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2

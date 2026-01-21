@@ -69,7 +69,7 @@ public partial class CustomTooltip : Control
 	{
 		JsonObject contentObject;
 
-        if (!content.StartsWith("{"))
+        if (!content.StartsWith('{'))
 		{
 			contentObject = new JsonObject()
 			{

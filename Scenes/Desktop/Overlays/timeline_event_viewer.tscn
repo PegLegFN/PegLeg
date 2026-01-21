@@ -1,0 +1,432 @@
+[gd_scene load_steps=22 format=3 uid="uid://b6k4ahn0pth81"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_yg7md"]
+[ext_resource type="Shader" uid="uid://bltfyj0s6dc6x" path="res://Shaders/TimelineEvent.gdshader" id="2_b4yag"]
+[ext_resource type="Script" uid="uid://cr22d7ivsf7vd" path="res://Scripts/Overlays/TimelineEventViewer.cs" id="2_ywonf"]
+[ext_resource type="Texture2D" uid="uid://b4bciexx47o70" path="res://Images/TimelineBanners/TemparateBanner.png" id="3_jhobe"]
+[ext_resource type="Texture2D" uid="uid://c6n51dty0q28d" path="res://Images/TimelineBanners/AridBanner.png" id="3_qdvah"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_rvomx"]
+[ext_resource type="Texture2D" uid="uid://cbm22c4pgh4u1" path="res://Images/TimelineBanners/FrozenBanner.png" id="4_yrxmg"]
+[ext_resource type="Texture2D" uid="uid://u4k5h7f7kx7t" path="res://Images/TimelineBanners/SwampBanner.png" id="5_l5jof"]
+[ext_resource type="Texture2D" uid="uid://dxvp287jaaqg6" path="res://Images/TimelineBanners/TropicalBanner.png" id="7_co0ry"]
+[ext_resource type="PackedScene" uid="uid://besrr0rxxa6pi" path="res://Scenes/Quests/questGroupPanelCompact.tscn" id="7_oefnn"]
+[ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="8_4n3dc"]
+[ext_resource type="Script" uid="uid://cdvq6qv3t1bf6" path="res://Scripts/Quests/QuestGroupEntry.cs" id="9_4oqdh"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="10_ltvvw"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="11_eivch"]
+[ext_resource type="PackedScene" uid="uid://exr4yaiid7j0" path="res://Scenes/UI/TabBar/virtualTabExpanded.tscn" id="12_eivch"]
+[ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="15_ltvvw"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="16_5750y"]
+[ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="16_eivch"]
+[ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="17_eivch"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="18_wpvld"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oefnn"]
+resource_local_to_scene = true
+shader = ExtResource("2_b4yag")
+shader_parameter/ControlSize = Vector2(800, 71)
+shader_parameter/Parallax = Vector2(0, 0)
+shader_parameter/CornerRadius = 8.0
+shader_parameter/HeaderSpace = 250.0
+shader_parameter/SkySpace = 0.2
+shader_parameter/ParallaxScale = 350.0
+shader_parameter/background = ExtResource("3_jhobe")
+
+[node name="TimelineEventViewer" node_paths=PackedStringArray("questGroupEntry", "questGroupViewer", "nameLabel", "descriptionLabel", "timerPrefix", "timer", "styleTarget", "questButton", "keyItemPanel", "seasonPanel", "keyItems", "seasonLlama", "seasonModifier", "ventureModifiers", "questGroupTabs") instance=ExtResource("1_yg7md")]
+script = ExtResource("2_ywonf")
+questGroupEntry = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/QuestGroupViewer/QuestGroupEntry")
+questGroupViewer = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/QuestGroupViewer")
+nameLabel = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/Label")
+descriptionLabel = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/Label2")
+timerPrefix = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/TimerPrefix")
+timer = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/RefreshTimerContainer")
+styleTarget = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/ColorRect")
+questButton = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/Button")
+keyItemPanel = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer")
+seasonPanel = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2")
+keyItems = [NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry2"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry3"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry4"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry5")]
+seasonLlama = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2/RewardEntry")
+seasonModifier = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry")
+ventureModifiers = [NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4")]
+styles = Dictionary[String, Texture2D]({
+"arid": ExtResource("3_qdvah"),
+"frozen": ExtResource("4_yrxmg"),
+"swamp": ExtResource("5_l5jof"),
+"temparate": ExtResource("3_jhobe"),
+"tropical": ExtResource("7_co0ry")
+})
+questGroupTabs = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar")
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="0"]
+use_top_left = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer" index="0"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(500, 55)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer" index="0"]
+self_modulate = Color(0.0996, 0.30654666, 0.83, 1)
+texture_repeat = 2
+material = SubResource("ShaderMaterial_oefnn")
+layout_mode = 2
+script = ExtResource("4_rvomx")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer" index="1"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+text = "Name of an event"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/line_spacing = -1
+theme_override_constants/outline_size = 8
+text = "Lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem"
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Go to Quests"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="TimerPrefix" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" index="0"]
+layout_mode = 2
+text = "Returns in "
+
+[node name="RefreshTimerContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" index="1" instance=ExtResource("10_ltvvw")]
+layout_mode = 2
+useWeeks = true
+
+[node name="VirtualTabBar" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="1" instance=ExtResource("11_eivch")]
+layout_mode = 2
+virtualTabScene = ExtResource("12_eivch")
+
+[node name="Tab" parent="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="0" instance=ExtResource("12_eivch")]
+layout_mode = 2
+mode = -1
+text = "First"
+IsPressed = true
+
+[node name="Tab2" parent="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" instance=ExtResource("12_eivch")]
+layout_mode = 2
+text = "Second"
+
+[node name="Tab3" parent="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="2" instance=ExtResource("12_eivch")]
+layout_mode = 2
+mode = 1
+text = "Third"
+
+[node name="QuestGroupViewer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="2" instance=ExtResource("7_oefnn")]
+custom_minimum_size = Vector2(800, 450)
+layout_mode = 2
+forceShowAll = true
+
+[node name="QuestGroupEntry" type="Control" parent="Control/WindowContents/CenterContainer/VBoxContainer/QuestGroupViewer" index="2"]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("9_4oqdh")
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="3"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer" index="0"]
+layout_mode = 2
+text = "Key Items:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer" index="1"]
+layout_mode = 2
+alignment = 1
+
+[node name="RewardEntry" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="0" instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry2" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="1" instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry3" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="2" instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry4" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="3" instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry5" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="4" instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="4"]
+visible = false
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2" index="0"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer" index="0"]
+layout_mode = 2
+text = "Seasonal Llama:"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="RewardEntry" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" index="0" instance=ExtResource("15_ltvvw")]
+layout_mode = 2
+script = ExtResource("16_eivch")
+includeAmountInName = false
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" index="1"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label3" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2" index="0"]
+layout_mode = 2
+text = "Common Modifier:"
+
+[node name="MissionAlertItemEntry" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2" index="1"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+script = ExtResource("16_5750y")
+
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" index="0"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("17_eivch")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Metal Corosion"
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description Test"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer" index="1"]
+layout_mode = 2
+text = "Ventures Modifiers:"
+
+[node name="HBoxContainer" type="Container" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer" index="2"]
+layout_mode = 2
+script = ExtResource("18_wpvld")
+
+[node name="MissionAlertItemEntry" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("16_5750y")
+
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" index="0"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("17_eivch")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Metal Corosion"
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description Test"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("16_5750y")
+
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" index="0"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("17_eivch")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Metal Corosion"
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description Test"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("16_5750y")
+
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" index="0"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("17_eivch")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Metal Corosion"
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description Test"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer" index="3"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("16_5750y")
+
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" index="0"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+texture = ExtResource("17_eivch")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer" index="0"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Metal Corosion"
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer" index="1"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description Test"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2/RewardEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2/Label" method="set_text"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry/VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry" method="set_tooltip_text"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry" method="set_tooltip_text"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2" method="set_tooltip_text"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3" method="set_tooltip_text"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4/TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" to="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4" method="set_tooltip_text"]
+
+[editable path="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar"]

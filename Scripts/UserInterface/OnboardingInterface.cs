@@ -12,6 +12,8 @@ public partial class OnboardingInterface : Control
     AudioStreamPlayer music;
     [Export]
     Control loadingWheel;
+    [Export]
+    string bootScenePath = "res://Scenes/boot_scene.tscn";
 
     [ExportGroup("Login Code")]
     [Export]
@@ -38,6 +40,7 @@ public partial class OnboardingInterface : Control
         curtain.Visible = true;
 
         importButton.Visible = DirAccess.DirExistsAbsolute("user://../accounts");
+        importButton.Text = AppConfig.PegLegVersion.prerelease > 0 ? "Import Accounts from PegLeg (Release)" : "Import Accounts from PegLeg Beta Branch";
 
         MusicController.StopMusic();
         music.VolumeDb = -80;
@@ -54,17 +57,25 @@ public partial class OnboardingInterface : Control
         StartLogin();
     }
 
+    void SwitchToLite()
+    {
+        AppConfig.Set("core", "litemode", true);
+        GetTree().ChangeSceneToFile(bootScenePath);
+    }
+
     async void ImportAccounts()
     {
         loginCodeContent.Visible = false;
         loadingWheel.Visible = true;
         bool hasAccount = false;
+        bool isBeta = AppConfig.PegLegVersion.prerelease > 0;
+        string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
 
         try
         {
-            foreach (var file in DirAccess.GetFilesAt("user://../accounts"))
+            foreach (var file in DirAccess.GetFilesAt(fromPath))
             {
-                DirAccess.CopyAbsolute($"user://../accounts/{file}", $"user://accounts/{file}");
+                DirAccess.CopyAbsolute($"{fromPath}/{file}", $"user://accounts/{file}");
             }
             GameAccount.UpdateAccountCache();
 

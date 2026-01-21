@@ -5,16 +5,14 @@ using System.Linq;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
-public static class PLSearch
+public static partial class PLSearch
 {
-    const RegexOptions regexOptions = RegexOptions.IgnorePatternWhitespace;
-
     const string termExpression =
 @"
 (?>
  (?>
-  (?<=\ |\A)+
-  (?>[ (]|\!\()*
+  (?<=\s|\A)+
+  (?>[\s(]|\!\()*
  )
  (?:
   (?<Prefix>\!)?
@@ -36,12 +34,16 @@ public static class PLSearch
    (?<SearchQuery>[\w:\-_.!?\/\\]+)
   )
  )
- (?>[ )]+|\Z)
+ (?>[\s)]+|\Z)
 )|
-(?<Failure>[^ \b]+)
+(?<Failure>[^\s\b]+)
 ";
 
-    const string bracketExpression = @"^(?:[^()]|(?<Push>\()|(?<Pop-Push>\)))*(?(Push)(?!))$";
+    [GeneratedRegex(termExpression, RegexOptions.IgnorePatternWhitespace)]
+    private static partial Regex SearchTermParserRegex();
+
+    [GeneratedRegex(@"^(?:[^()]|(?<Push>\()|(?<Pop-Push>\)))*(?(Push)(?!))$", RegexOptions.IgnorePatternWhitespace)]
+    private static partial Regex BracketRegex();
 
     public enum InstructionOperation
     {
@@ -62,7 +64,7 @@ public static class PLSearch
         List<Instruction> instructions = [];
         failureText = "";
 
-        var match = Regex.Match(fromText, bracketExpression, regexOptions);
+        var match = BracketRegex().Match(fromText);
         if (!match.Success)
         {
             failureText = "Bracket Pattern Failure";
@@ -79,7 +81,7 @@ public static class PLSearch
         }
 
         string partialFailText = null;
-        EvaluateRegexMatches(fromText, termExpression, match =>
+        EvaluateRegexMatches(fromText, match =>
         {
             var validGroups = match.Groups.Values.Where(g => g.Name != "0" && !string.IsNullOrEmpty(g.Value)).ToArray();
             var firstGroup = validGroups[0];
@@ -399,7 +401,8 @@ public static class PLSearch
                             skipUntilIndex = item.endIndex;
                         bool comparisonTrue = false;
                         string checkString = item.meta.ToString();
-                        if (target["uuid"]?.GetValue<string>() is string uuid && uuid== checkString)
+                        string uuid = target["uuid"]?.GetValue<string>();
+                        if (uuid == checkString)
                         {
                             comparisonTrue = true;
                         }
@@ -407,6 +410,10 @@ public static class PLSearch
                         {
                             //special query that checks an items isSeen property
                             comparisonTrue = !(itemAttributes["item_seen"]?.GetValue<bool>() ?? false);
+                        }
+                        else if (checkString == "REMINDER" && GameAccount.ActiveAccount.HasReminder(target["templateId"]?.ToString()))
+                        {
+                            comparisonTrue = true;
                         }
                         else if (target["searchTags"] is JsonArray tagArray)
                         {
@@ -504,9 +511,9 @@ public static class PLSearch
             return sourceString == content;
     }
 
-    static void EvaluateRegexMatches(string sourceText, string expression, Action<Match> doPerMatch)
+    static void EvaluateRegexMatches(string sourceText, Action<Match> doPerMatch)
     {
-        var matches = Regex.Matches(sourceText, expression, regexOptions);
+        var matches = SearchTermParserRegex().Matches(sourceText);
         foreach (var item in matches.Cast<Match>())
         {
             doPerMatch?.Invoke(item);

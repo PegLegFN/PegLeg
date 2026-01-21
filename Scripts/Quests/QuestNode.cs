@@ -57,7 +57,7 @@ public partial class QuestNode : Control
     void RefreshQuestNode()
     {
         questItemEntry.SetItem(questData.isUnlocked ? questData.questItem : questData.questTemplate.CreateInstance());
-        EmitSignal(SignalName.NotificationVisible, questData.isNew);
+        EmitSignal(SignalName.NotificationVisible, questData.isNew && !questData.isClaimed);
 
         flagParent.Visible = false;
         flags[0].Visible = false;

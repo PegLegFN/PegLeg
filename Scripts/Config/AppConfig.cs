@@ -24,6 +24,30 @@ public partial class AppConfig
     static JsonObject _configData;
     static JsonObject ConfigData => _configData ??= LoadConfig();
 
+    public static GithubHelper.ReleaseVersion PegLegVersion
+    {
+        get
+        {
+            GithubHelper.ReleaseVersion currentVer = default;
+            string[] verData = ProjectSettings.GetSetting("application/config/version").AsString().Split(".");
+            if (verData.Length == 3)
+            {
+                int betaAndPatch = int.Parse(verData[2]);
+                int patch = betaAndPatch / 1000;
+                int beta = betaAndPatch % 1000;
+
+                //release version
+                currentVer = new(
+                    int.Parse(verData[0]),
+                    int.Parse(verData[1]),
+                    patch,
+                    beta
+                );
+            }
+            return currentVer;
+        }
+    }
+
     public static bool TryRead<T>(string path, out T value)
     {
         //reflection or source generation?...

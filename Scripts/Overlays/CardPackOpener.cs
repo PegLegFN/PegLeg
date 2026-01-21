@@ -289,7 +289,7 @@ public partial class CardPackOpener : Control
             }
             extraItems ??= [];
             extraCardPacks ??= [];
-            extraCardPacks = extraCardPacks.Union(cardPacks).ToArray();
+            extraCardPacks = [.. extraCardPacks.Union(cardPacks)];
 
             //step 1: separate the choice cardpacks from the regular ones
             List<GameItem> openableCardPacks = [];

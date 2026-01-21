@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-public struct QuestGroupCollectionData
+public struct QuestGroupCollectionData()
 {
+    static Dictionary<string,QuestGroupCollectionData> _collectionData;
+    public static Dictionary<string, QuestGroupCollectionData> CollectionData => _collectionData ?? LoadCollections();
+    static Dictionary<string, QuestGroupCollectionData> LoadCollections() => _collectionData =
+        PegLegResourceManager.LoadResourceDict<QuestGroupCollectionData>("QuestGroups/questGroupIndex.json");
+
     [JsonRequired]
     [JsonInclude]
     public string displayName { get; private set; } = null;
@@ -20,9 +25,9 @@ public struct QuestGroupCollectionData
     string content { get; set; } = null;
     [JsonInclude]
     bool autoPopulateQuestlines { get; set; } = false;
-    QuestGroupData[] questGroups;
+    Dictionary<string, QuestGroupData> questGroups;
     [JsonIgnore]
-    public QuestGroupData[] QuestGroups
+    public Dictionary<string, QuestGroupData> QuestGroups
     {
         get
         {
@@ -36,22 +41,21 @@ public struct QuestGroupCollectionData
                     .SelectMany(arr=>arr);
                 var eventQuestLines = PegLegResourceManager.LoadResourceDict<EventQuestLine>("GameAssets/EventQuestLines.json");
                 //generate groups from questlines
-                return questGroups =
-                [
-                    new("Campaign", mainQuestLines.Select(GameItemTemplate.Get).ToArray()),
-                    ..eventQuestLines.Select(kvp=>new QuestGroupData(kvp.Key, kvp.Value.Quests.Select(GameItemTemplate.Get).ToArray(), kvp.Value.EventTag))
-                ];
+                var questlineDict = eventQuestLines
+                        .Select(kvp => new QuestGroupData(kvp.Key, [.. kvp.Value.Quests.Select(GameItemTemplate.Get)], kvp.Value.EventTag))
+                        .ToDictionary(data => data.eventFlag);
+                questlineDict["campaign"] = new("Campaign", [.. mainQuestLines.Select(GameItemTemplate.Get)]);
+                return questGroups = questlineDict;
             }
             if (PegLegResourceManager.ResourceExists(content))
             {
                 //load from content file
-                return questGroups = [.. PegLegResourceManager.LoadResourceDict<QuestGroupData>($"QuestGroups/{content}").Values];
+                return questGroups = PegLegResourceManager.LoadResourceDict<QuestGroupData>($"QuestGroups/{content}");
             }
             return questGroups = [];
         }
     }
 
-    public QuestGroupCollectionData() { }
 
     struct EventQuestLine
     {
@@ -66,32 +70,34 @@ public struct QuestGroupData
 {
     [JsonRequired]
     [JsonInclude]
-    public string displayName { get; private set; } = null;
+    public string displayName { get; set; } = null;
     [JsonInclude]
-    bool auto { get; set; } = false;
+    public string shortName { get; set; } = null;
     [JsonInclude]
-    public bool chain { get; private set; } = false;
+    public bool auto { get; set; } = false;
     [JsonInclude]
-    bool sequence { get; set; } = false;
+    public bool chain { get; set; } = false;
+    [JsonInclude]
+    public bool sequence { get; set; } = false;
     [JsonIgnore]
     public readonly bool Sequence => sequence || chain;
     [JsonInclude]
-    bool? showLocked { get; set; } = null;
+    public bool? showLocked { get; set; } = null;
     [JsonIgnore]
     public readonly bool ShowLocked => showLocked ?? Sequence;
     [JsonInclude]
-    bool? showComplete { get; set; } = null;
+    public bool? showComplete { get; set; } = null;
     [JsonIgnore]
     public readonly bool ShowComplete => showComplete ?? Sequence;
     [JsonInclude]
-    bool? showProgress { get; set; } = null;
+    public bool? showProgress { get; set; } = null;
     [JsonIgnore]
     public readonly bool ShowProgress => showProgress ?? ShowLocked && ShowComplete;
     [JsonInclude]
     [JsonConverter(typeof(JsonStringEnumConverter<QuestTimerMode>))]
-    public QuestTimerMode timer { get; private set; } = QuestTimerMode.None;
+    public QuestTimerMode timer { get; set; } = QuestTimerMode.None;
     [JsonInclude]
-    public string eventFlag { get; private set; } = null;
+    public string eventFlag { get; set; } = null;
     [JsonRequired]
     [JsonInclude]
     JsonElement? predicate { get; set; }

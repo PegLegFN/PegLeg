@@ -10,10 +10,10 @@ public partial class MissionViewer : ModalWindow
     [Export]
     MissionEntry secondMissionEntry;
 
+
     public override void _Ready()
 	{
 		instance = this;
-
         base._Ready();
 	}
 

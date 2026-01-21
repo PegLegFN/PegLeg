@@ -59,6 +59,8 @@ public partial class GameItemViewer : ModalWindow
     [Export]
     CodeEdit devText;
     [Export]
+    TextEdit searchTextEdit;
+    [Export]
     Label searchResult;
 
     [ExportGroup("Buttons")]
@@ -182,7 +184,7 @@ public partial class GameItemViewer : ModalWindow
         devTextContainer.Reparent(inactiveTabParent);
 
         var type = item.template?.Type;
-        if (type == "Hero")
+        if (type == "Hero" && !OS.HasFeature("lite"))
         {
             //parse hero stuff
             heroDetailsPanel.Reparent(activeTabParent);
@@ -273,8 +275,9 @@ public partial class GameItemViewer : ModalWindow
             activeTabParent.CurrentTab = 0;
     }
 
-    public void SetSearchText(string searchText)
+    public void SetSearchText()
     {
+        string searchText = searchTextEdit?.Text;
         if (searchResult is null || currentItem is null)
             return;
         PLSearch.Instruction[] itemSearchInstructions = PLSearch.GenerateSearchInstructions(searchText) ?? Array.Empty<PLSearch.Instruction>();

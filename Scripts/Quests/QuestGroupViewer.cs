@@ -33,6 +33,8 @@ public partial class QuestGroupViewer : Control
     QuestNode[] questNodes = [];
     [Export(PropertyHint.ArrayType)]
     ShaderHook[] questArrows = [];
+    [Export]
+    bool forceShowAll;
 
     List<QuestNode> questNodeList;
     List<ShaderHook> questArrowList;
@@ -53,8 +55,8 @@ public partial class QuestGroupViewer : Control
     {
         base._Ready();
 
-        questNodeList = new(questNodes);
-        questArrowList = new(questArrows);
+        questNodeList = [.. questNodes];
+        questArrowList = [.. questArrows];
 
         //start with 5 nodes and 5 arrows
 
@@ -101,7 +103,7 @@ public partial class QuestGroupViewer : Control
         var groupData = questGroup.questGroupData;
         useArrows = groupData.Sequence;
 
-        questDataList = questGroup.questSlotList.Where(q => (q.isUnlocked || groupData.ShowLocked) && (!q.isClaimed || groupData.ShowComplete)).ToList();
+        questDataList = [.. questGroup.questSlotList.Where(q => forceShowAll || ((q.isUnlocked || groupData.ShowLocked) && (!q.isClaimed || groupData.ShowComplete)))];
         if (questDataList.FirstOrDefault()?.questTemplate.DisplayName.Contains("Endurance") ?? false)
             questDataList = [.. questDataList.OrderBy(q => int.Parse(q.questTemplate.DisplayName.Split(" ")[^1]))];
         firstUnlocked = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isClaimed);
@@ -123,9 +125,11 @@ public partial class QuestGroupViewer : Control
 			nodesPerPage = Mathf.Max(questDataList.Count, 1);
         currentQuestIndex = 0;
 
-        if (questDataList.Count>0)
+        if (questDataList.Count > 0)
         {
             var focusNode = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isClaimed, null) ?? questDataList[^1];
+            if (!focusNode.isUnlocked)
+                focusNode = questDataList[0];
             if (!useArrows)
                 focusNode = questDataList.FirstOrDefault(q => q.isPinned) ?? questDataList[0];
             currentQuestIndex = questDataList.IndexOf(focusNode);
@@ -137,6 +141,8 @@ public partial class QuestGroupViewer : Control
         currentPage = currentQuestIndex / nodesPerPage;
         maxPage = Mathf.Max((questDataList.Count - 1) / nodesPerPage, 0);
         SetPage(currentPage);
+        int nodeIdx = currentQuestIndex - (currentPage * nodesPerPage);
+        scrollContainer.ScrollHorizontal = (int)(questNodeList[nodeIdx].GlobalPosition.X - scrollContainer.GlobalPosition.X);
     }
 
     void OnQuestPressed(int nodeIndex)

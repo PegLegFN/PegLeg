@@ -8,6 +8,8 @@ public partial class VenturesInterface : Control
 {
     [ExportGroup("Status Bar")]
     [Export]
+    Control statusBarRoot;
+    [Export]
     Label currentLevelLabel;
     [Export]
     ProgressBar levelProgress;
@@ -28,16 +30,19 @@ public partial class VenturesInterface : Control
 
     [ExportGroup("Main Rewards")]
     [Export(PropertyHint.ArrayType)]
-    GameItemEntry[] mainItems;
-    [Export(PropertyHint.ArrayType)]
-    Control[] mainCheckmarks;
-    Control[] mainCheckmarkImages;
+    Control[] mainItems;
+    [Export]
+    CheckButton legendaryToggle;
+    GameItemEntry[] mainItemEntries;
+    Control[] mainItemCheckmarks;
+    Label[] mainItemLabels;
 
     [ExportGroup("Extra Rewards")]
     [Export(PropertyHint.ArrayType)]
-    GameItemEntry[] extraItems;
-    [Export]
-    Control nextExtraHighlight;
+    Control[] extraItems;
+    GameItemEntry[] extraItemEntries;
+    Control[] extraItemCheckmarks;
+    Label[] extraItemLabels;
 
     bool hasSeason = false;
     VentureSeasonProgressData currentSeason;
@@ -46,7 +51,32 @@ public partial class VenturesInterface : Control
     {
         ventureSeasons = PegLegResourceManager.LoadResourceObj<Dictionary<string, VentureSeasonProgressData>>("GameAssets/VenturesSeasons.json");
         RefreshTimerController.OnDayChanged += CheckSeason;
-        mainCheckmarkImages = mainCheckmarks.Select(c => c.GetChild(0) as Control).ToArray();
+        legendaryToggle.Toggled += _ => FilterLegendaryItems();
+
+        mainItemEntries = new GameItemEntry[mainItems.Length];
+        mainItemCheckmarks = new Control[mainItems.Length];
+        mainItemLabels = new Label[mainItems.Length];
+
+        for (int i = 0; i < mainItems.Length; i++)
+        {
+            var item = mainItems[i];
+            mainItemEntries[i] = item.GetNode<GameItemEntry>("%RewardEntry");
+            mainItemCheckmarks[i] = item.GetNode<Control>("%Checkmark");
+            mainItemLabels[i] = item.GetNode<Label>("%Label");
+        }
+
+        extraItemEntries = new GameItemEntry[extraItems.Length];
+        extraItemCheckmarks = new Control[extraItems.Length];
+        extraItemLabels = new Label[extraItems.Length];
+
+        for (int i = 0; i < extraItems.Length; i++)
+        {
+            var item = extraItems[i];
+            extraItemEntries[i] = item.GetNode<GameItemEntry>("%RewardEntry");
+            extraItemCheckmarks[i] = item.GetNode<Control>("%Checkmark");
+            extraItemLabels[i] = item.GetNode<Label>("%Label");
+        }
+
         CheckSeason();
 
         GameAccount.ActiveAccountChanged += UpdateAccount;
@@ -58,24 +88,31 @@ public partial class VenturesInterface : Control
         RefreshTimerController.OnDayChanged -= CheckSeason;
     }
 
-    async void CheckSeason()
+    void CheckSeason()
     {
-        await CalenderRequests.CheckCalender();
-        string currentSeasonFlag = null;
-        hasSeason = false;
-        currentSeason = default;
-        foreach (var key in ventureSeasons.Keys)
+        //await CalenderRequests.CheckCalender();
+        string currentSeasonFlag = RefreshTimerController.GetSeasonIndex() switch
         {
-            if (CalenderRequests.EventFlagActive(key))
-            {
-                hasSeason = true;
-                if (currentSeason == ventureSeasons[key])
-                    return;
-                currentSeasonFlag = key;
-                currentSeason = ventureSeasons[key];
-                break;
-            }
-        }
+            0 => "EventFlag.Phoenix.NewBeginnings",
+            1 => "EventFlag.Phoenix.Adventure",
+            2 => "EventFlag.Phoenix.RoadTrip",
+            3 => "EventFlag.Phoenix.Fortnitemares",
+            4 => "EventFlag.Phoenix.Winterfest",
+            _ => null
+        };
+        hasSeason = ventureSeasons.TryGetValue(currentSeasonFlag, out currentSeason);
+        //foreach (var key in ventureSeasons.Keys)
+        //{
+        //    if (CalenderRequests.EventFlagActive(key))
+        //    {
+        //        hasSeason = true;
+        //        if (currentSeason == ventureSeasons[key])
+        //            return;
+        //        currentSeasonFlag = key;
+        //        currentSeason = ventureSeasons[key];
+        //        break;
+        //    }
+        //}
 
         string[] modifiers = currentSeasonFlag switch
         {
@@ -117,35 +154,69 @@ public partial class VenturesInterface : Control
         for (int i = 1; i < levels.Length; i++)
         {
             mainItems[i-1].Visible = true;
-            mainItems[i-1].SetItem(levels[i].Rewards[0].AsItem());
-            mainCheckmarks[i-1].Visible = true;
+            mainItemEntries[i-1].SetItem(levels[i].Rewards[0].AsItem());
+            mainItemLabels[i - 1].Text = $"Lv {i+1}";
+            mainItemCheckmarks[i-1].Visible = false;
         }
         for (int i = levels.Length-1; i < mainItems.Length; i++)
         {
             if (i < 0)
                 continue;
             mainItems[i].Visible = false;
-            mainCheckmarks[i].Visible = false;
         }
 
         var pastLevels = currentSeason.PastLevels ?? [];
         for (int i = 0; i < pastLevels.Length; i++)
         {
             extraItems[i].Visible = true;
-            extraItems[i].SetItem(pastLevels[i].AsItem());
+            extraItemLabels[i].Text = $"Lv {50+i+1}";
+            extraItemEntries[i].SetItem(pastLevels[i].AsItem());
+            extraItemCheckmarks[i].Visible = false;
         }
         for (int i = pastLevels.Length; i < extraItems.Length; i++)
         {
             extraItems[i].Visible = false;
         }
 
+        FilterLegendaryItems();
         UpdateAccount();
+    }
+
+    void FilterLegendaryItems()
+    {
+        bool requireLegendary = legendaryToggle.ButtonPressed;
+        var levelCount = currentSeason.Levels?.Length ?? 0;
+        for (int i = 1; i < levelCount; i++)
+        {
+            //GD.Print($"reward {i}: {mainItemEntries[i - 1].currentItem?.template?.Rarity == "Legendary"}");
+            mainItems[i - 1].Visible = !requireLegendary || mainItemEntries[i - 1].currentItem?.template?.Rarity == "Legendary";
+        }
     }
 
     async void UpdateAccount()
     {
         if (!hasSeason)
             return;
+
+        var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
+        var pastLevels = currentSeason.PastLevels ?? [];
+
+        if (!GameAccount.ActiveAccount.isOwned)
+        {
+            statusBarRoot.Visible = false;
+            for (int i = 1; i < levels.Length; i++)
+            {
+                mainItemCheckmarks[i - 1].Visible = false;
+            }
+
+            for (int i = 0; i < pastLevels.Length; i++)
+            {
+                extraItemLabels[i].Text = $"Lv {50 + i + 1}";
+                extraItemCheckmarks[i].Visible = false;
+            }
+            return;
+        }
+        statusBarRoot.Visible = true;
 
         var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         var ventureXP = profile.GetFirstTemplateItem("AccountResource:phoenixxp")?.quantity ?? 0;
@@ -159,11 +230,10 @@ public partial class VenturesInterface : Control
         GameItem nextMilestone = null;
         int milestoneLevel = 0;
 
-        var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
         for (int i = 1; i < levels.Length; i++)
         {
             bool aboveLevel = ventureXP > levels[i].TotalRequiredXP;
-            mainCheckmarkImages[i-1].Visible = aboveLevel;
+            mainItemCheckmarks[i-1].Visible = aboveLevel;
             if (aboveLevel)
             {
                 currentLevel = i;
@@ -183,6 +253,7 @@ public partial class VenturesInterface : Control
             }
         }
 
+
         if (currentLevel == currentSeason.Levels.Length-1)
         {
             var pastMaxXP = ventureXP - levels[^1].TotalRequiredXP;
@@ -192,11 +263,26 @@ public partial class VenturesInterface : Control
             currentLevel += pastMaxLevel;
             totalTarget = levels[^1].TotalRequiredXP + ((pastMaxLevel + 1) * currentSeason.PastLevelXPRequirement);
 
-            var rewardIndex = pastMaxLevel % currentSeason.PastLevels.Length;
-            nextItem = currentSeason.PastLevels[rewardIndex].AsItem();
+            var nextRewardIndex = pastMaxLevel % currentSeason.PastLevels.Length;
+            nextItem = currentSeason.PastLevels[nextRewardIndex].AsItem();
+
+            var startingPoint = pastMaxLevel - nextRewardIndex;
+            for (int i = 0; i < pastLevels.Length; i++)
+            {
+                extraItemLabels[i].Text = $"Lv {startingPoint + i+1}";
+                extraItemCheckmarks[i].Visible = nextRewardIndex > i;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < pastLevels.Length; i++)
+            {
+                extraItemLabels[i].Text = $"Lv {50 + i + 1}";
+                extraItemCheckmarks[i].Visible = false;
+            }
         }
 
-        currentLevelLabel.Text = $"Lv {currentLevel+1}";
+            currentLevelLabel.Text = $"Lv {currentLevel + 1}";
         levelProgress.Value = (float)currentProgress / targetProgress;
         levelProgress.TooltipText = $"{(targetProgress - currentProgress).Notate()} XP to Lv {currentLevel + 2} ({ventureXP.Notate()}/{totalTarget.Notate()})";
         nextLevelLabel.Text = $"Lv {currentLevel+2}";

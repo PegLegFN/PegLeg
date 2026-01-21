@@ -1,0 +1,317 @@
+[gd_scene load_steps=38 format=3 uid="uid://bqsjh027im66f"]
+
+[ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="1_3xb32"]
+[ext_resource type="Script" uid="uid://dvt4k5o8may3h" path="res://Scripts/Audio/AutoButtonSounds.cs" id="2_dvlk7"]
+[ext_resource type="Script" uid="uid://b3iwjw1wn5hoe" path="res://Scripts/RefreshTimerController.cs" id="3_46a0c"]
+[ext_resource type="Script" uid="uid://dibhuhscalt6l" path="res://Scripts/ThemeController.cs" id="4_8rh3e"]
+[ext_resource type="Script" uid="uid://cmqvrwj5exg33" path="res://Scripts/UIElements/TooltipFixer.cs" id="5_88t62"]
+[ext_resource type="PackedScene" uid="uid://bsbgxpgoycn6r" path="res://Scenes/Desktop/desktopTooltip.tscn" id="6_yoojj"]
+[ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="11_gwx6v"]
+[ext_resource type="PackedScene" uid="uid://t4w5qw4ysj2m" path="res://Scenes/Desktop/Notifications/desktop_notificationV2_window.tscn" id="12_0jcd2"]
+[ext_resource type="Script" uid="uid://jce56trwawgy" path="res://Scripts/Notifications/NotificationDispatcher.cs" id="13_4kahm"]
+[ext_resource type="Texture2D" uid="uid://dufn5f0er7tu7" path="res://Images/Llamas/PinataStandardPack.png" id="14_v726o"]
+[ext_resource type="AudioStream" uid="uid://qe86vjs1x5xq" path="res://Audio/SFX/LlamaSounds/Greet/UI_Frontend_Llama_PopUp_Silver.ogg" id="15_x4ly8"]
+[ext_resource type="AudioStream" uid="uid://belvq04k8nvcu" path="res://Audio/SFX/LlamaSounds/Greet/UI_Frontend_Llama_PopUp_Gold.ogg" id="16_llww6"]
+[ext_resource type="Texture2D" uid="uid://d4g8ui1d04ui3" path="res://Images/Flipbook/AtlasOneShot.png" id="17_i1xpj"]
+[ext_resource type="AudioStream" uid="uid://b7nif883tap0j" path="res://Audio/SFX/Notifs/PLMissionNotif.ogg" id="18_fu1xu"]
+[ext_resource type="Texture2D" uid="uid://d21c3cdy7sqyf" path="res://Images/Flipbook/VendingSheet.png" id="19_xmpkd"]
+[ext_resource type="AudioStream" uid="uid://bjjgpivjq30po" path="res://Audio/SFX/Notifs/VendingMachine_Vend_Sparkle.wav" id="20_j5m3u"]
+[ext_resource type="PackedScene" uid="uid://kgl0dydu0mtf" path="res://Scenes/Desktop/desktopContextMenu.tscn" id="21_psdk2"]
+[ext_resource type="PackedScene" uid="uid://53fn442ut5dy" path="res://Scenes/Desktop/Overlays/mission_viewer.tscn" id="22_u6s0m"]
+[ext_resource type="PackedScene" uid="uid://bciw7pflkhsnd" path="res://Scenes/Desktop/Views/Lite/desktopLiteDashboardView.tscn" id="22_x4ly8"]
+[ext_resource type="PackedScene" uid="uid://buf6p8qyydofm" path="res://Scenes/Desktop/Overlays/game_item_viewer.tscn" id="23_87p11"]
+[ext_resource type="PackedScene" uid="uid://ciamgottppk7s" path="res://Scenes/Desktop/Overlays/image_copy_window.tscn" id="25_0jcd2"]
+[ext_resource type="PackedScene" uid="uid://bm216dwkg2p58" path="res://Scenes/Desktop/Views/Extra/desktopVenturesView.tscn" id="25_i1xpj"]
+[ext_resource type="PackedScene" uid="uid://bbpdgupjy1ovb" path="res://Scenes/Desktop/Overlays/dev_text_overlay.tscn" id="26_4kahm"]
+[ext_resource type="PackedScene" uid="uid://outqvmv6p0pm" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_line_edit_window.tscn" id="27_v726o"]
+[ext_resource type="PackedScene" uid="uid://2okdom0nii2b" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_confirmation_window.tscn" id="28_x4ly8"]
+[ext_resource type="PackedScene" uid="uid://c4lt6qwfc4cou" path="res://Scenes/Desktop/Overlays/loading_overlay.tscn" id="29_llww6"]
+[ext_resource type="Script" uid="uid://c2hxn6v6r3mvf" path="res://Scripts/BackgroundController.cs" id="30_gwx6v"]
+[ext_resource type="Script" uid="uid://840dnd45qqla" path="res://Scripts/UIElements/MobilePadding.cs" id="30_pkwxh"]
+[ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="31_0jcd2"]
+[ext_resource type="Script" uid="uid://cu5f8smruq3v0" path="res://Scripts/UIElements/ProcessSwitchingTabContainer.cs" id="31_082wr"]
+[ext_resource type="PackedScene" uid="uid://dr02ht35ldsgb" path="res://Scenes/Desktop/Overlays/settings_window_lite.tscn" id="31_fu1xu"]
+[ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="32_aqo04"]
+[ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="33_llww6"]
+[ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="33_xs1ek"]
+[ext_resource type="Texture2D" uid="uid://cjtv2aa84wwwr" path="res://Images/InterfaceIcons/T_Icon_Spray_Adjustments_Tab_128.png" id="44_6q5er"]
+[ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="45_pbdue"]
+[ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="46_hiis4"]
+
+[node name="DesktopInterfaceLite" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NonUI" type="Node" parent="."]
+
+[node name="TargetResolution" type="Node" parent="NonUI"]
+script = ExtResource("1_3xb32")
+
+[node name="AutoButtonSounds" type="Node" parent="NonUI"]
+script = ExtResource("2_dvlk7")
+
+[node name="RefreshTimerController" type="Node" parent="NonUI"]
+script = ExtResource("3_46a0c")
+
+[node name="ThemeController" type="Node" parent="NonUI"]
+script = ExtResource("4_8rh3e")
+
+[node name="TooltipFixer" type="Node" parent="NonUI" node_paths=PackedStringArray("tooltipControl")]
+script = ExtResource("5_88t62")
+tooltipControl = NodePath("Tooltip")
+
+[node name="Tooltip" parent="NonUI/TooltipFixer" instance=ExtResource("6_yoojj")]
+visible = false
+
+[node name="NotifWindow" type="Window" parent="NonUI"]
+auto_translate_mode = 1
+transparent_bg = true
+use_hdr_2d = true
+size = Vector2i(400, 135)
+mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
+visible = false
+wrap_controls = true
+exclusive = true
+borderless = true
+always_on_top = true
+transparent = true
+unfocusable = true
+theme = ExtResource("11_gwx6v")
+
+[node name="DesktopNotificationV2Window" parent="NonUI/NotifWindow" instance=ExtResource("12_0jcd2")]
+
+[node name="NotifDispatcher" type="Node" parent="NonUI"]
+script = ExtResource("13_4kahm")
+llamaIcon = ExtResource("14_v726o")
+llamaSound = ExtResource("15_x4ly8")
+superLlamaSound = ExtResource("16_llww6")
+missionIcon = ExtResource("17_i1xpj")
+missionSound = ExtResource("18_fu1xu")
+shopIcon = ExtResource("19_xmpkd")
+shopSound = ExtResource("20_j5m3u")
+
+[node name="DesktopContextMenu" parent="NonUI" instance=ExtResource("21_psdk2")]
+mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
+visible = false
+
+[node name="BGController" type="Control" parent="." node_paths=PackedStringArray("bgMain", "bgOverlay")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("30_gwx6v")
+bgMain = NodePath("BG")
+bgOverlay = NodePath("BGFade")
+
+[node name="BG" type="TextureRect" parent="BGController"]
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("31_0jcd2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BGFade" type="TextureRect" parent="BGController"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("31_0jcd2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 4
+script = ExtResource("30_pkwxh")
+extraPaddingOnMobile = Vector4i(16, 128, 16, 16)
+
+[node name="MainTabs" type="TabContainer" parent="Content"]
+custom_minimum_size = Vector2(720, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"MenuTabContainer"
+tab_alignment = 1
+current_tab = 0
+script = ExtResource("31_082wr")
+
+[node name="Dashboard" parent="Content/MainTabs" instance=ExtResource("22_x4ly8")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Timeline" parent="Content/MainTabs" instance=ExtResource("32_aqo04")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Compendium" parent="Content/MainTabs" instance=ExtResource("33_xs1ek")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Ventures" parent="Content/MainTabs" instance=ExtResource("25_i1xpj")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="Node" type="Node" parent="Content/MainTabs"]
+
+[node name="DevParent" type="Control" parent="Content/MainTabs/Node"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StatusBar" type="MarginContainer" parent="Content"]
+z_index = 5
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 5
+
+[node name="Left" type="HBoxContainer" parent="Content/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 0
+theme_override_constants/separation = 2
+
+[node name="Right" type="HBoxContainer" parent="Content/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 0
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="SettingsButton" type="Button" parent="Content/StatusBar/Right"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Settings"
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/SettingsButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("44_6q5er")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MuteBtn" type="Button" parent="Content/StatusBar/Right"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"LargeButton"
+script = ExtResource("45_pbdue")
+targetBusName = "Master"
+
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/MuteBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("46_hiis4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect" type="ColorRect" parent="Content/StatusBar"]
+visible = false
+layout_mode = 2
+color = Color(1, 1, 1, 0.188235)
+
+[node name="OverlayWindows" type="Control" parent="."]
+z_index = 6
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MissionViewer" parent="OverlayWindows" instance=ExtResource("22_u6s0m")]
+visible = false
+layout_mode = 1
+offset_left = 0.0
+offset_right = 0.0
+
+[node name="TimelineEventViewer" parent="OverlayWindows" instance=ExtResource("33_llww6")]
+visible = false
+layout_mode = 1
+
+[node name="GameItemViewer" parent="OverlayWindows" instance=ExtResource("23_87p11")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="SettingsWindowLite" parent="OverlayWindows" instance=ExtResource("31_fu1xu")]
+visible = false
+layout_mode = 1
+
+[node name="CopyImage" parent="OverlayWindows" instance=ExtResource("25_0jcd2")]
+visible = false
+layout_mode = 1
+
+[node name="DevText" parent="OverlayWindows" instance=ExtResource("26_4kahm")]
+visible = false
+layout_mode = 1
+
+[node name="GenericLineEditWindow" parent="OverlayWindows" instance=ExtResource("27_v726o")]
+visible = false
+layout_mode = 1
+
+[node name="GenericConfirmationWindow" parent="OverlayWindows" instance=ExtResource("28_x4ly8")]
+visible = false
+layout_mode = 1
+
+[node name="LoadingOverlay" parent="OverlayWindows" instance=ExtResource("29_llww6")]
+visible = false
+layout_mode = 1
+startOpen = false
+isUserClosable = true
+
+[connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindowLite" method="OpenWindow"]
+[connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="pressed" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="ToggleMute"]

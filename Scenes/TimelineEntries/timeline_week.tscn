@@ -1,36 +1,28 @@
-[gd_scene load_steps=2 format=3 uid="uid://c6ih4milkcxr8"]
+[gd_scene format=3 uid="uid://c6ih4milkcxr8"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a2lhs"]
-bg_color = Color(0.1, 0.1, 0.1, 1)
-expand_margin_left = 1.0
-
-[node name="TimelineWeek" type="Control"]
+[node name="TimelineWeek" type="MarginContainer"]
 custom_minimum_size = Vector2(350, 0)
-layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_right = 350.0
 grow_vertical = 2
 size_flags_vertical = 3
 
-[node name="VSeparator" type="VSeparator" parent="."]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 4.0
-grow_vertical = 2
-theme_override_constants/separation = 0
-theme_override_styles/separator = SubResource("StyleBoxFlat_a2lhs")
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -20.0
-grow_horizontal = 2
-grow_vertical = 0
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
 theme_override_colors/font_color = Color(0.501961, 0.501961, 0.501961, 1)
-text = "Week of xx/xx"
+text = "Week x"
 horizontal_alignment = 1
 vertical_alignment = 2

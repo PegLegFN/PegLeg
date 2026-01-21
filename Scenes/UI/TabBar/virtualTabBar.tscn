@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3uijhkj8mpwg"]
+
+[ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="1_in4fc"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="2_8ycs5"]
+
+[node name="VirtualTabBar" type="PanelContainer" node_paths=PackedStringArray("virtualTabParent")]
+custom_minimum_size = Vector2(14, 26)
+offset_right = 14.0
+offset_bottom = 26.0
+theme_type_variation = &"CheckContainer"
+script = ExtResource("1_in4fc")
+virtualTabScene = ExtResource("2_8ycs5")
+virtualTabParent = NodePath("HBoxContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0

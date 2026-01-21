@@ -28,7 +28,6 @@ public partial class QuestInterface : Control
     [Export]
     Control loadingIcon;
 
-    QuestGroupCollectionData[] questGroupCollectionData;
     List<Foldout> questGroupCollections = [];
     List<QuestGroupEntry> questGroups = [];
 
@@ -39,12 +38,6 @@ public partial class QuestInterface : Control
             if (IsVisibleInTree())
                 LoadQuests();
         };
-        questGroupCollectionData = 
-        [.. 
-            PegLegResourceManager.LoadResourceDict<QuestGroupCollectionData>("QuestGroups/questGroupIndex.json")
-            .Values
-            .OrderBy(col=> col.priority)
-        ];
         //GD.Print("questCollections: " + questGroupCollectionData.Length);
         RefreshTimerController.OnDayChanged += ReloadQuests;
         GameAccount.ActiveAccountChanged += ReloadQuests;
@@ -117,13 +110,13 @@ public partial class QuestInterface : Control
             questGroupCollections.Clear();
 
             ButtonGroup questButtonGroup = new();
-            foreach (var collection in questGroupCollectionData)
+            foreach (var collection in QuestGroupCollectionData.CollectionData.Values.OrderBy(col => col.priority))
             {
                 //create foldout
                 var foldout = foldoutScene.Instantiate<Foldout>();
                 foldout.SetFoldoutName(collection.displayName);
                 List<QuestGroupEntry> groupsInFoldout = [];
-                foreach (var group in collection.QuestGroups)
+                foreach (var group in collection.QuestGroups.Values)
                 {
                     var groupEntry = questGroupScene.Instantiate<QuestGroupEntry>();
                     groupEntry.SetupQuestGroup(group);

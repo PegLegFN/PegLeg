@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using XmppDotNet.Xmpp.XHtmlIM;
 
 public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>
 {
@@ -14,9 +15,13 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     [Export]
     LineEdit searchBar;
     [Export]
+    LineEdit itemSearchBar;
+    [Export]
     Button sortByPower;
     [Export]
     Button filterPower;
+    [Export]
+    Control filterPowerContainer;
     [Export]
     Button filterStory;
     [Export]
@@ -66,11 +71,17 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
             sortByPower.Toggled += _ => FilterMissions();
         if (filterPower is not null)
             filterPower.Toggled += _ => FilterMissions();
+        if (filterPowerContainer is not null)
+            filterPowerContainer.Visible = GameAccount.ActiveAccount.isOwned;
         if (filterStory is not null)
             filterStory.Toggled += _ => FilterMissions();
         if(searchBar is not null)
         {
             searchBar.TextChanged += _ => UpdateSearch();
+        }
+        if(itemSearchBar is not null)
+        {
+            itemSearchBar.TextChanged += _ => UpdateSearch();
         }
         foreach (var filter in repeatabilityFilters)
         {
@@ -80,9 +91,28 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         }
         GameMission.OnMissionsUpdated += FilterMissions;
         GameMission.OnMissionsInvalidated += ClearMissions;
-        GameAccount.ActiveAccountChanged += FilterMissions;
+        GameAccount.ActiveAccountChanged += OnAccountChanged;
+        GameAccount.RemindersChanged += FilterMissions;
+        AppConfig.OnConfigChanged += OnConfigChanged;
         VisibilityChanged += TryRefresh;
         FilterMissions();
+    }
+
+    private void OnAccountChanged()
+    {
+        if (filterPowerContainer is not null)
+            filterPowerContainer.Visible = GameAccount.ActiveAccount.isOwned;
+        FilterMissions();
+    }
+
+    private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonValue value)
+    {
+        if (section != "missions")
+            return;
+        if (key == "notable_filter" && notableMode)
+            FilterMissions();
+        if (key == "notable_count" && notableMode)
+            FilterMissions();
     }
 
     void SetupFilters(CheckButton[] filters)
@@ -115,7 +145,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     {
         GameMission.OnMissionsUpdated -= FilterMissions;
         GameMission.OnMissionsInvalidated -= ClearMissions;
-        GameAccount.ActiveAccountChanged -= FilterMissions;
+        GameAccount.ActiveAccountChanged -= OnAccountChanged;
+        GameAccount.RemindersChanged -= FilterMissions;
+        AppConfig.OnConfigChanged -= OnConfigChanged;
     }
 
     public void TurnOffFilters()
@@ -164,35 +196,39 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     PLSearch.Instruction[] itemSearchInstructions = [];
     void UpdateSearch()
     {
-        var searchText = searchBar?.Text ?? "";
-        if (searchText.Contains("///"))
-        {
-            string[] splitSearchText = searchText.Split("///");
-            missionSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[0]) ?? [];
-            itemSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[1..].Join()) ?? [];
-        }
-        else
-        {
-            missionSearchInstructions = [];
-            itemSearchInstructions = PLSearch.GenerateSearchInstructions(searchText) ?? [];
-        }
+        missionSearchInstructions = PLSearch.GenerateSearchInstructions(searchBar?.Text ?? "") ?? [];
+        itemSearchInstructions = PLSearch.GenerateSearchInstructions(itemSearchBar?.Text ?? "") ?? [];
+        //var searchText = searchBar?.Text ?? "";
+        //if (searchText.Contains("///"))
+        //{
+        //    string[] splitSearchText = searchText.Split("///");
+        //    missionSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[0]) ?? [];
+        //    itemSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[1..].Join()) ?? [];
+        //}
+        //else
+        //{
+        //    missionSearchInstructions = [];
+        //    itemSearchInstructions = PLSearch.GenerateSearchInstructions(searchText) ?? [];
+        //}
         FilterMissions();
     }
 
-    public static bool ItemIsNotable(GameItem item)
+    public static Func<GameItem, bool> CreateNotableFilter()
     {
-        var template = item.sortingTemplate;
-        if (template.TemplateId == "Schematic:sid_edged_axe_scavenger_sr_ore_t01")
-            return true; // Legendary Hack Axe, courtesy of AS407
-        if (template.RarityLevel == 6 && template.Type == "Worker")
-            return true; // mythic leads
-        if (template.VBucksOrXRayTickets)
-            return true; // v-bucks
-        if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
-            return true; // upgrade llamas
-        if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
-            return true; // legendary survivor (excl. leads)
-        return false;
+        var notableFilterText = AppConfig.Get("missions", "notable_filter", "");
+        if (string.IsNullOrWhiteSpace(notableFilterText))
+        {
+            notableFilterText = """
+                (Mythic Survivor) |
+                (V-Bucks | X-Ray) |
+                (Upgrade Llama) |
+                (Legendary Survivor !Lead) |
+                REMINDER
+                """;
+        }
+        var notableSearchInstructions = PLSearch.GenerateSearchInstructions(notableFilterText);
+        //templateId="Schematic:sid_edged_axe_scavenger_sr_ore_t01"
+        return item => PLSearch.EvaluateInstructions(notableSearchInstructions, item.RawData);
     }
 
     bool needsRefresh = false;
@@ -214,11 +250,11 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         int curPL = (int)GameAccount.ActiveAccount.FortStats.PowerLevel;
         int ventPL = (int)GameAccount.ActiveAccount.VentureFortStats.PowerLevel;
 
-        Predicate<GameMission> missionPredicate = null;
-        Predicate<GameItem> itemPredicate = null;
+        Func<GameMission, bool> missionPredicate = null;
+        Func<GameItem, bool> itemPredicate = null;
         if (notableMode)
         {
-            itemPredicate = ItemIsNotable;
+            itemPredicate = CreateNotableFilter();
         }
         else
         {
@@ -226,6 +262,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                 .Select(c => c.ButtonPressed && c.GetMeta("zone", "").ToString() is string result && !string.IsNullOrWhiteSpace(result) ? result : null)
                 .Where(result => result is not null)
             ];
+
             missionPredicate = m =>
             {
                 if (requiredZones.Count > 0 && !requiredZones.Contains(m.TheaterCat))
@@ -312,12 +349,14 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                     if (!notableMode)
                         return 0;
                     var template = r.item.sortingTemplate;
+                    if(GameAccount.ActiveAccount.HasReminder(template))
+                        return -25; // reminder items
                     if (template.RarityLevel == 6 && template.Type == "Worker")
                         return -20; // mythic leads
                     if (template.VBucksOrXRayTickets)
                         return -19; // v-bucks
-                    if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
-                        return -18; // upgrade llamas
+                    //if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
+                    //    return -18; // upgrade llamas
                     if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
                         return -17; // legendary survivor (excl. leads)
                     return 0;
@@ -325,6 +364,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         }
 
         sortedRewards = sortedRewards
+                .ThenBy(r => !GameAccount.ActiveAccount.HasReminder(r.item.templateId))
                 .ThenBy(r => !(
                     r.item.template.VBucksOrXRayTickets ||
                     r.item.sortingTemplate.CanBeLeveled ||
@@ -338,6 +378,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                 .ThenBy(r => -r.item.quantity);
 
         rewards = [.. sortedRewards];
+        int limit = AppConfig.Get("missions", "notable_count", 20);
+        if (notableMode && rewards.Count > limit)
+            rewards = rewards[..limit];
 
         if (emptyContent is not null)
             emptyContent.Visible = rewards.Count == 0;

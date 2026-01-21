@@ -63,6 +63,9 @@ public partial class MissionEntry : Control, IRecyclableEntry
     Control highlightedRewardParent;
 
     [Export]
+    Control toDoListContent;
+
+    [Export]
     Texture2D defaultBackground;
 
     public GameMission currentMission { get; private set; } = null;
@@ -72,6 +75,8 @@ public partial class MissionEntry : Control, IRecyclableEntry
 
     public override void _Ready()
     {
+        if (toDoListContent is not null)
+            toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
         GameAccount.ActiveAccountChanged += AccountChanged;
         MissionToDoListController.OnToDoListUpdated += ToDoListChanged;
         AppConfig.OnConfigChanged += OnConfigChanged;
@@ -84,6 +89,12 @@ public partial class MissionEntry : Control, IRecyclableEntry
             return;
         if (key == "show_background")
             EmitSignalBackgroundVisible(!val.TryGetValue(out bool show) || show);
+        if (key == "hide_lock")
+            EmitSignalMissionLocked(
+                !AppConfig.Get("missions", "hide_lock", false) &&
+                currentMission?.PlayableBy(GameAccount.ActiveAccount) != true &&
+                !ignoreAccountStatus
+            );
     }
 
     public override void _ExitTree()
@@ -101,8 +112,14 @@ public partial class MissionEntry : Control, IRecyclableEntry
     private void AccountChanged()
     {
         //emit false if complete
-        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.ActiveAccount) != true && !ignoreAccountStatus);
+        EmitSignalMissionLocked(
+            !AppConfig.Get("missions", "hide_lock", false) &&
+            currentMission?.PlayableBy(GameAccount.ActiveAccount) != true &&
+            !ignoreAccountStatus
+        );
         currentMission?.UpdateRewardNotifications(true);
+        if (toDoListContent is not null)
+            toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
     }
 
     IRecyclableElementProvider<GameMission> missionProvider;
@@ -133,7 +150,11 @@ public partial class MissionEntry : Control, IRecyclableEntry
         EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
 
         //emit false if complete
-        EmitSignalMissionLocked(currentMission?.PlayableBy(GameAccount.ActiveAccount) != true && !ignoreAccountStatus);
+        EmitSignalMissionLocked(
+            !AppConfig.Get("missions", "hide_lock", false) &&
+            currentMission?.PlayableBy(GameAccount.ActiveAccount) != true &&
+            !ignoreAccountStatus
+        );
 
         EmitSignalTheaterNameChanged(currentMission.TheaterName);
         EmitSignalVenturesIndicatorVisible(currentMission.TheaterCat == "v");

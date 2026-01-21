@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://bky7r16i1cb1t"]
+
+[ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="1_3tg1s"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="2_ux6nd"]
+[ext_resource type="Texture2D" uid="uid://c220ltun2a5lc" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_128.png" id="3_qm7my"]
+
+[node name="VenturesReward" type="VBoxContainer"]
+theme_override_constants/separation = 0
+
+[node name="RewardEntry" parent="." instance=ExtResource("1_3tg1s")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(95, 95)
+layout_mode = 2
+
+[node name="Checkmark" type="TextureRect" parent="RewardEntry"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(0.0166667, 1, 0, 1)
+material = ExtResource("2_ux6nd")
+custom_minimum_size = Vector2(47, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("3_qm7my")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Lv 45"
+horizontal_alignment = 1

@@ -1,5 +1,6 @@
 using Godot;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 
 public partial class ProcessSwitchingTabContainer : TabContainer
@@ -32,26 +33,35 @@ public partial class ProcessSwitchingTabContainer : TabContainer
         UpdateDevState();
     }
 
+    SemaphoreSlim stateQueue = new(1);
     async void UpdateDevState()
     {
-        bool isAltParented = (GetParent() == altParent);
-        bool shouldBeAltParented = AppConfig.Get("advanced", "developer", false) == hideInDevMode;
-        GD.Print($"alt: {shouldBeAltParented}");
-        if (isAltParented == shouldBeAltParented)
-            return;
-        if (GetParent() is null)
-            return;
-        if (shouldBeAltParented)
+        await stateQueue.WaitAsync();
+        try
         {
-            defaultParent.RemoveChild(this);
-            await Helpers.WaitForFrame();
-            altParent.AddChild(this);
+            bool isAltParented = (GetParent() == altParent);
+            bool shouldBeAltParented = AppConfig.Get("advanced", "developer", false) == hideInDevMode;
+            GD.Print($"alt: {shouldBeAltParented}");
+            if (isAltParented == shouldBeAltParented)
+                return;
+            if (GetParent() is null)
+                return;
+            if (shouldBeAltParented)
+            {
+                defaultParent.RemoveChild(this);
+                await Helpers.WaitForFrame();
+                altParent.AddChild(this);
+            }
+            else
+            {
+                altParent.RemoveChild(this);
+                await Helpers.WaitForFrame();
+                defaultParent.AddChild(this);
+            }
         }
-        else
+        finally
         {
-            altParent.RemoveChild(this);
-            await Helpers.WaitForFrame();
-            defaultParent.AddChild(this);
+            stateQueue.Release();
         }
     }
 

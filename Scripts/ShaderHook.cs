@@ -9,6 +9,8 @@ public partial class ShaderHook : Control
     [Export]
     bool syncControlSize = false;
     [Export]
+    bool syncParallax = false;
+    [Export]
     double modTime = 0;
 
     //for Labels
@@ -50,10 +52,9 @@ public partial class ShaderHook : Control
 
     private void OnRectUpdated()
     {
-        if (Material is null)
+        if (Material is null || !syncControlSize)
             return;
-        if (syncControlSize)
-            SetShaderVector(Size, "ControlSize");
+        SetShaderVector(Size, "ControlSize");
     }
 
     ulong syncTimeUntil = 0;
@@ -68,9 +69,15 @@ public partial class ShaderHook : Control
     {
         if (Material is null)
             return;
-        UpdateTime(Time.GetTicksMsec());
+        if (syncTimeProperty)
+            UpdateTime(Time.GetTicksMsec());
+        if (syncParallax && !AppConfig.Get("ui", "disable_parallax", false))
+            SetShaderVector(GlobalPosition, "Parallax");
         if (Engine.IsEditorHint())
-            SetShaderVector(Size, "ControlSize");
+        {
+            if(syncControlSize)
+                SetShaderVector(Size, "ControlSize");
+        }
     }
 
     public void SetTimeOffset(ulong offset)

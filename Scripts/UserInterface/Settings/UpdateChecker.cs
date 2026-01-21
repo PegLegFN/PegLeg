@@ -34,7 +34,7 @@ public partial class UpdateChecker : Control
             releaseParent.Visible = false;
             updateBtn.Visible = false;
 			latestRelease = null;
-            GithubHelper.ReleaseVersion currentVer;
+            var currentVer = AppConfig.PegLegVersion;
 
             if (OS.HasFeature("editor"))
             {
@@ -42,38 +42,38 @@ public partial class UpdateChecker : Control
                 return;
             }
 
-            using (var verFile = FileAccess.Open(Helpers.GlobalisePath("res://v.txt"), FileAccess.ModeFlags.Read))
-			{
-				if(verFile is null || verFile.GetError() != Error.Ok)
-				{
-					failMsg.Text = "Failed to read current version.";
-					return;
-				}
-				if(!GithubHelper.ReleaseVersion.Parse(verFile.GetAsText(), out currentVer))
-                {
-                    failMsg.Text = "Failed to parse current version.";
-                    return;
-                }
-			}
+            //         using (var verFile = FileAccess.Open(Helpers.GlobalisePath("res://v.txt"), FileAccess.ModeFlags.Read))
+            //{
+            //	if(verFile is null || verFile.GetError() != Error.Ok)
+            //	{
+            //		failMsg.Text = "Failed to read current version.";
+            //		return;
+            //	}
+            //	if(!GithubHelper.ReleaseVersion.Parse(verFile.GetAsText(), out currentVer))
+            //             {
+            //                 failMsg.Text = "Failed to parse current version.";
+            //                 return;
+            //             }
+            //}
 
-            if (false)
-            {
-                string[] verData = ProjectSettings.GetSetting("application/config/version").AsString().Split(".");
-                if (verData.Length >= 3)
-                {
-                    //release version
-                    currentVer = new(
-                        int.Parse(verData[0]),
-                        int.Parse(verData[1]),
-                        int.Parse(verData[2]),
-                        0
-                    );
-                    if (verData.Length >= 4)
-                    {
-                        currentVer = currentVer with { prerelease = int.Parse(verData[3]) };
-                    }
-                }
-            }
+            //if (true)
+            //{
+            //    string[] verData = ProjectSettings.GetSetting("application/config/version").AsString().Split(".");
+            //    if (verData.Length == 3)
+            //    {
+            //        int betaAndPatch = int.Parse(verData[2]);
+            //        int patch = betaAndPatch / 1000;
+            //        int beta = betaAndPatch % 1000;
+                    
+            //        //release version
+            //        currentVer = new(
+            //            int.Parse(verData[0]),
+            //            int.Parse(verData[1]),
+            //            patch,
+            //            beta
+            //        );
+            //    }
+            //}
 
 			bool useBeta = currentVer.prerelease > 0;
             try
@@ -128,18 +128,18 @@ public partial class UpdateChecker : Control
 		if (latestRelease is null)
 			return;
 		var realRelease = latestRelease ?? default;
-		var asset = realRelease.assets.FirstOrDefault(a => a.name == "PegLegInstaller-Win64.exe");
+		var asset = realRelease.assets.FirstOrDefault(a => a.name == "PegLeg-Win64.msi");
 		if (asset == default)
 			return;
 		using var _ = LoadingOverlay.CreateToken();
 		try
         {
-            using (FileAccessStream fileStream = new(Helpers.GlobalisePath("res://update.exe"), FileAccess.ModeFlags.Write))
+            using (FileAccessStream fileStream = new(Helpers.GlobalisePath("res://update.msi"), FileAccess.ModeFlags.Write))
             {
                 await asset.DownloadTo(fileStream);
             }
-			int pid = OS.CreateProcess(Helpers.GlobalisePath("res://update.exe"), [$"--update={Helpers.GlobalisePath("res://")}", $"--ver={realRelease.Version}"]);
-            if(pid!=-1)
+			int pid = OS.CreateProcess(Helpers.GlobalisePath("res://update.msi"), []);
+            if (pid != -1)
                 GetTree().Quit();
         }
 		catch

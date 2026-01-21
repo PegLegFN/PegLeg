@@ -83,6 +83,8 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     VirtualTabBar zoneFilterTabBar;
     [Export]
 	LineEdit searchBar;
+    [Export]
+    LineEdit itemSearchBar;
 
     [Export]
     CheckButton[] itemFilterButtons = [];
@@ -107,7 +109,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         instance = this;
         missionList.Visible = false;
         loadingIcon.Visible = true;
-        searchBar.Text = AppConfig.Get("missions", "default_search", "");
+        //searchBar.Text = AppConfig.Get("missions", "default_search", "");
 
         VisibilityChanged += () =>
         {
@@ -115,9 +117,11 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
                 FilterMissions();
         };
 
-        zoneFilterTabBar.TabChanged += _ => FilterMissions();
+        zoneFilterTabBar.TabsChanged += FilterMissions;
         searchBar.TextSubmitted += _ => UpdateFilters();
 		searchBar.TextChanged += _ => UpdateFilters();
+        itemSearchBar.TextSubmitted += _ => UpdateFilters();
+        itemSearchBar.TextChanged += _ => UpdateFilters();
         playableFilter.Pressed += FilterMissions;
         storyFilter.Pressed += FilterMissions;
         foreach (var button in itemFilterButtons)
@@ -149,6 +153,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         RefreshTimerController.OnDayChanged -= ForceReloadMissions;
         RefreshTimerController.OnDayChanged -= StartUpdateCheckTimer;
 
+        GameAccount.ActiveAccountChanged -= FilterMissions;
         GameMission.OnMissionsUpdated -= OnMissionsUpdated;
         GameMission.OnMissionsInvalidated -= OnMissionsInvalidated;
     }
@@ -215,18 +220,8 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
     string[] extraItemFilters = [];
     void UpdateFilters()
     {
-        var searchText = searchBar.Text;
-        if (searchText.Contains("///"))
-        {
-            string[] splitSearchText = searchText.Split("///");
-            missionSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[0]) ?? [];
-            itemSearchInstructions = PLSearch.GenerateSearchInstructions(splitSearchText[1..].Join()) ?? [];
-        }
-        else
-        {
-            missionSearchInstructions = PLSearch.GenerateSearchInstructions(searchText) ?? [];
-            itemSearchInstructions = [];
-        }
+        missionSearchInstructions = PLSearch.GenerateSearchInstructions(searchBar.Text) ?? [];
+        itemSearchInstructions = PLSearch.GenerateSearchInstructions(itemSearchBar.Text) ?? [];
 
         List<string> extraItemFilterList = [];
         for (int i = 0; i < itemFilters.Length; i++)
@@ -269,7 +264,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         return matchesItemFilters;
     }
 
-    string theaterFilter => theaterFilters[zoneFilterTabBar.CurrentTab];
+    string theaterFilter => theaterFilters[Mathf.Max(zoneFilterTabBar.LatestTab, 0)];
     bool MissionFilter(GameMission mission)
     {
         if (!theaterFilter.Contains(mission.TheaterCat[0]))
@@ -279,16 +274,16 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         if (storyFilter?.ButtonPressed != true && mission.IsStoryMission)
             return false;
 
-        var currentItemInstructions = itemSearchInstructions;
+        //var currentItemInstructions = itemSearchInstructions;
         if (!PLSearch.EvaluateInstructions(missionSearchInstructions, mission.SearchObject))
         {
-            if (currentItemInstructions.Length == 0)
-                currentItemInstructions = missionSearchInstructions;
-            else
+            //if (currentItemInstructions.Length == 0)
+            //    currentItemInstructions = missionSearchInstructions;
+            //else
                 return false;
         }
 
-        return mission.allItems?.Any(item => MatchItemOrEquivelent(item, currentItemInstructions, extraItemFilters)) ?? false;
+        return mission.allItems?.Any(item => MatchItemOrEquivelent(item, itemSearchInstructions, extraItemFilters)) ?? false;
     }
 
     bool needsFilter = false;

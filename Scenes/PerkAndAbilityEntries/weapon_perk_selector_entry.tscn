@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://be5lic7x1too2"]
+[gd_scene load_steps=11 format=3 uid="uid://be5lic7x1too2"]
 
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_dh4tg"]
 [ext_resource type="StyleBox" uid="uid://c2skfgtbdx32l" path="res://GodotThemes/Styleboxes/Light/LightBox.tres" id="1_e65vr"]
 [ext_resource type="Script" uid="uid://dsefwi3qe51cu" path="res://Scripts/UserInterface/ListEntries/PerkEntry.cs" id="2_t8u73"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="3_8d8tg"]
 [ext_resource type="Texture2D" uid="uid://b7xndv3hrkxn6" path="res://Images/InterfaceIcons/T-Icon-Lock-64.png" id="4_i1bcj"]
+[ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="5_ylbgw"]
 
 [sub_resource type="Gradient" id="Gradient_55f67"]
 offsets = PackedFloat32Array(0.5, 1)
@@ -135,6 +136,12 @@ vertical_alignment = 1
 autowrap_mode = 2
 text_overrun_behavior = 3
 
+[node name="InteractionArrow" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+texture = ExtResource("5_ylbgw")
+expand_mode = 1
+
 [node name="Responsive Button Area" parent="." instance=ExtResource("3_8d8tg")]
 layout_mode = 2
 usePressSound = false
@@ -142,6 +149,7 @@ usePressSound = false
 [connection signal="ElementIconChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/ElementBG/ElementIcon" method="set_texture"]
 [connection signal="ElementIconVisibilityChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/ElementBG" method="set_visible"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
+[connection signal="InteractableChanged" from="." to="MarginContainer/HBoxContainer/InteractionArrow" method="set_visible"]
 [connection signal="LockColorChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/LockIconPos/LockIcon2" method="set_self_modulate"]
 [connection signal="LockTextChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/LockIconPos/Label" method="set_text"]
 [connection signal="LockVisibilityChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/LockIconPos" method="set_visible"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c78gt6b2m1utg"]
+[gd_scene load_steps=30 format=3 uid="uid://c78gt6b2m1utg"]
 
 [ext_resource type="Script" uid="uid://c6amov6qaydfm" path="res://Scripts/UserInterface/MissionInterface.cs" id="1_474w2"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="2_88mxw"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="5_6m3c7"]
 [ext_resource type="Texture2D" uid="uid://cdbip8w04ra2u" path="res://Images/InterfaceIcons/T-Icon-Quest-Journal-64.png" id="6_jmsy3"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="6_p6lk0"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="6_xqcf1"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="7_0gdkn"]
 [ext_resource type="Texture2D" uid="uid://gak2hv6itgoo" path="res://Images/InterfaceIcons/T-Icon-Survivor-Leader-CARD.png" id="7_lvf0s"]
 [ext_resource type="Texture2D" uid="uid://fo5dt3fnvrt0" path="res://Images/InterfaceIcons/SchematicIcon128.png" id="7_nyegd"]
@@ -24,12 +25,14 @@
 [ext_resource type="PackedScene" uid="uid://dd5q64xdgxtxp" path="res://Scenes/MissionEntry/mission_entry_v5.tscn" id="17_eyhau"]
 [ext_resource type="Texture2D" uid="uid://dwam1asop7ckw" path="res://Images/InterfaceIcons/PinataMiniRewardPack.png" id="17_n40x5"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="18_phyx5"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="21_nyegd"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="22_0gdkn"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="26_nyegd"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_fb3nj"]
 resource_name = "MissionZoneFilter"
 
-[node name="Missions" type="MarginContainer" node_paths=PackedStringArray("zoneFilterTabBar", "searchBar", "playableFilter", "storyFilter", "missionList", "loadingIcon")]
+[node name="Missions" type="MarginContainer" node_paths=PackedStringArray("zoneFilterTabBar", "searchBar", "itemSearchBar", "playableFilter", "storyFilter", "missionList", "loadingIcon")]
 self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,8 +42,9 @@ grow_vertical = 2
 script = ExtResource("1_474w2")
 unexpectedResetNotifIcon = ExtResource("2_nynxn")
 unexpectedResetSound = ExtResource("3_m7b6w")
-zoneFilterTabBar = NodePath("VBoxContainer/HBoxContainer/Filters/ZoneFilters")
+zoneFilterTabBar = NodePath("VBoxContainer/HBoxContainer/Filters/VirtualTabBar")
 searchBar = NodePath("VBoxContainer/HBoxContainer/SearchBox")
+itemSearchBar = NodePath("VBoxContainer/HBoxContainer/SearchBox2")
 playableFilter = NodePath("VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton")
 storyFilter = NodePath("VBoxContainer/HBoxContainer/Filters/StoryFilter/CheckButton")
 missionList = NodePath("VBoxContainer/Control/ScrollContainer")
@@ -74,6 +78,7 @@ texture = ExtResource("2_88mxw")
 expand_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 10
 
@@ -99,6 +104,12 @@ vertical_alignment = 1
 script = ExtResource("2_rrtg2")
 timerType = 1
 
+[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" instance=ExtResource("6_xqcf1")]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+size_flags_vertical = 4
+formatType = 0
+
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
@@ -107,7 +118,15 @@ size_flags_horizontal = 3
 [node name="SearchBox" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Search in missions"
+placeholder_text = "Search missions"
+context_menu_enabled = false
+clear_button_enabled = true
+
+[node name="SearchBox2" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+placeholder_text = "Search items"
 context_menu_enabled = false
 clear_button_enabled = true
 
@@ -168,6 +187,17 @@ offset_bottom = -1.0
 grow_vertical = 2
 texture = ExtResource("7_0gdkn")
 expand_mode = 3
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("6_p6lk0")
+section = "missions"
+key = "filter_power_default"
+defaultValue = true
 
 [node name="ItemFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
 visible = false
@@ -377,11 +407,11 @@ texture = ExtResource("14_fvpat")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters" node_paths=PackedStringArray("checkButtonParent")]
+[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 script = ExtResource("4_ebt37")
-checkButtonParent = NodePath("HBoxContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters"]
 layout_mode = 2
@@ -437,7 +467,42 @@ theme_type_variation = &"RightCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " V"
 
+[node name="VirtualTabBar" parent="VBoxContainer/HBoxContainer/Filters" instance=ExtResource("21_nyegd")]
+layout_mode = 2
+
+[node name="Tab6" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="0" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+mode = -1
+text = "Main"
+IsPressed = true
+
+[node name="Tab7" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="1" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+text = "All"
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="2" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+text = "Sw"
+
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="3" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+text = "Pl"
+
+[node name="Tab3" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="4" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+text = "CV"
+
+[node name="Tab4" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="5" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+text = "TP"
+
+[node name="Tab5" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="6" instance=ExtResource("22_0gdkn")]
+layout_mode = 2
+mode = 1
+text = "Ve"
+
 [node name="TestNotif" type="Button" parent="VBoxContainer/HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 tooltip_text = "Debug Notification"
@@ -488,7 +553,6 @@ elementScene = ExtResource("17_eyhau")
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Control/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -503,7 +567,6 @@ layout_mode = 2
 
 [node name="DynGridContainer" type="Container" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-mouse_filter = 0
 script = ExtResource("18_phyx5")
 MinCols = 3
 CompressSpacing = true
@@ -516,5 +579,8 @@ layout_mode = 2
 layout_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ForceRefresh" to="." method="ForceReloadMissions"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton/CheckButton" to="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton" method="set_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/TestNotif" to="." method="FakeUnexpectedReset"]
 [connection signal="ConfigValueChanged" from="VBoxContainer/HBoxContainer/TestNotif/CheckButton" to="VBoxContainer/HBoxContainer/TestNotif" method="set_visible"]
+
+[editable path="VBoxContainer/HBoxContainer/Filters/VirtualTabBar"]

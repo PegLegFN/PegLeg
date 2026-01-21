@@ -1,130 +1,1803 @@
-[gd_scene load_steps=6 format=3 uid="uid://4fogvp3kkhkf"]
+[gd_scene load_steps=19 format=3 uid="uid://4fogvp3kkhkf"]
 
 [ext_resource type="PackedScene" uid="uid://c6ih4milkcxr8" path="res://Scenes/TimelineEntries/timeline_week.tscn" id="1_05ouq"]
+[ext_resource type="Script" uid="uid://b6y1ax7shx2pt" path="res://Scripts/Timeline/TimelineController.cs" id="1_wvyw3"]
+[ext_resource type="Script" uid="uid://docf2pqw6qowi" path="res://Scripts/Timeline/TimelineStripPlacer.cs" id="2_6mc3c"]
 [ext_resource type="PackedScene" uid="uid://btkd1lcscyrac" path="res://Scenes/TimelineEntries/timeline_shop.tscn" id="2_l6ek5"]
 [ext_resource type="PackedScene" uid="uid://cnggvfd2x7nu2" path="res://Scenes/TimelineEntries/timeline_event.tscn" id="3_fwiak"]
 [ext_resource type="PackedScene" uid="uid://cfut7jqglsle3" path="res://Scenes/TimelineEntries/timeline_season.tscn" id="4_hashl"]
-[ext_resource type="PackedScene" uid="uid://cd6brxw00l3" path="res://Scenes/TimelineEntries/timeline_month.tscn" id="5_0j4um"]
+[ext_resource type="PackedScene" uid="uid://5unkemnryffl" path="res://Scenes/TimelineEntries/timeline_event_short.tscn" id="5_uxk8n"]
+[ext_resource type="PackedScene" uid="uid://cd6brxw00l3" path="res://Scenes/TimelineEntries/timeline_month.tscn" id="7_0lnsw"]
+[ext_resource type="Script" uid="uid://yroee6412pwf" path="res://Scripts/Timeline/TimelineContentContainer.cs" id="7_6mc3c"]
+[ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="7_ikx1i"]
+[ext_resource type="Script" uid="uid://cldmhg4lf5vpj" path="res://Scripts/Timeline/ScrollEventPassthrough.cs" id="7_y0et6"]
+[ext_resource type="Script" uid="uid://b3ijrivr05qtp" path="res://Scripts/Timeline/TimelineMinimap.cs" id="8_bjmsb"]
+[ext_resource type="PackedScene" uid="uid://c05wr0e7f85bf" path="res://Scenes/TimelineEntries/timeline_mini_marker.tscn" id="9_6mc3c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ikx1i"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_right = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uxk8n"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0.1, 0.1, 0.1, 0)
+border_blend = true
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qahwk"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6mc3c"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bjmsb"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="Timeline" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 61.0
-offset_right = -5.0
-offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." node_paths=PackedStringArray("minimap", "stripPlacer")]
+custom_minimum_size = Vector2(0, 675)
 layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("1_wvyw3")
+minimap = NodePath("PanelContainer/ScrollContainer/MarginContainer")
+stripPlacer = NodePath("HBoxContainer/PanelContainer/MarginContainer")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
-scroll_horizontal_custom_step = 320.0
-scroll_vertical_custom_step = 320.0
-vertical_scroll_mode = 0
+placeholder_text = "Search Timeline"
+clear_button_enabled = true
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/separation = -16
 
-[node name="Weeks" type="HBoxContainer" parent="PanelContainer/ScrollContainer/MarginContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2"]
+layout_mode = 2
+theme_override_constants/margin_right = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="MarginContainer6" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer6"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikx1i")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer6"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+theme_override_font_sizes/font_size = 12
+text = "Months"
+
+[node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer5"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikx1i")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer5"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+theme_override_font_sizes/font_size = 12
+text = "Game Events"
+
+[node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer4"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikx1i")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer4"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+theme_override_font_sizes/font_size = 12
+text = "Questlines"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikx1i")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 12
+text = "Shop Items"
+horizontal_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer2"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikx1i")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+theme_override_font_sizes/font_size = 12
+text = "Seasons"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer3"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(2, 2)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikx1i")
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/MarginContainer3"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+theme_override_font_sizes/font_size = 12
+text = "Week Numbers"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3Pad"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer" node_paths=PackedStringArray("stripParent", "timelineScrollArea", "weekParent")]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 3
+script = ExtResource("2_6mc3c")
+SeasonStripScene = ExtResource("4_hashl")
+ShopStripScene = ExtResource("2_l6ek5")
+EventStripScene = ExtResource("3_fwiak")
+SmallEventStripScene = ExtResource("5_uxk8n")
+MonthStripScene = ExtResource("7_0lnsw")
+stripParent = NodePath("ScrollContainer/MarginContainer/EventStrips")
+timelineScrollArea = NodePath("ScrollContainer")
+weekParent = NodePath("ScrollContainer/MarginContainer/Weeks")
+seasonStartHeight = -17.0
+shopStartHeight = -58.0
+questlineStartHeight = -110.0
+eventStartHeight = -255.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer" node_paths=PackedStringArray("target")]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 1
+script = ExtResource("7_y0et6")
+target = NodePath("../../../../../PanelContainer/HScrollBar")
+scale = -4.0
+
+[node name="Weeks" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="TimelineWeek" parent="PanelContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+[node name="TimelineWeek" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
 layout_mode = 2
 
-[node name="TimelineWeek2" parent="PanelContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+[node name="TimelineWeek2" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
 layout_mode = 2
 
-[node name="TimelineWeek3" parent="PanelContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+[node name="TimelineWeek3" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
 layout_mode = 2
 
-[node name="TimelineWeek4" parent="PanelContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+[node name="TimelineWeek4" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="PanelContainer/ScrollContainer/MarginContainer"]
+[node name="TimelineWeek5" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ScrollContainer/MarginContainer/Control"]
+[node name="TimelineWeek6" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek7" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek8" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek9" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek10" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek11" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek12" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek13" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek14" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek15" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek16" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek17" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek18" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek19" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek20" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek21" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek22" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek23" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek24" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek25" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek26" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek27" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek28" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek29" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek30" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek31" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek32" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek33" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek34" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek35" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek36" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek37" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek38" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek39" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek40" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek41" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek42" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek43" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek44" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek45" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek46" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek47" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek48" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek49" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek50" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek51" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="TimelineWeek52" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Weeks" instance=ExtResource("1_05ouq")]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control"]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
-theme_override_constants/margin_bottom = 30
+theme_override_constants/margin_bottom = 16
 
-[node name="EventRows" type="Control" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer"]
+[node name="EventStripsOld" type="Control" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="TimelineShop" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("2_l6ek5")]
-layout_mode = 1
-offset_top = -134.0
-offset_right = 304.0
-offset_bottom = -70.0
+[node name="TimelineShortEvent" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_top = -330.0
+offset_right = 50.0
+offset_bottom = -270.0
+grow_vertical = 1
 
-[node name="TimelineShop2" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("2_l6ek5")]
+[node name="TimelineShortEvent2" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 50.0
+offset_top = -450.0
+offset_right = 100.0
+offset_bottom = -390.0
+grow_vertical = 1
+
+[node name="TimelineShortEvent3" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 100.0
+offset_top = -450.0
+offset_right = 150.0
+offset_bottom = -390.0
+grow_vertical = 1
+
+[node name="TimelineShortEvent4" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 150.0
+offset_top = -510.0
+offset_right = 200.0
+offset_bottom = -450.0
+grow_vertical = 1
+
+[node name="TimelineShortEvent5" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 200.0
+offset_top = -510.0
+offset_right = 250.0
+offset_bottom = -450.0
+grow_vertical = 1
+
+[node name="TimelineShortEvent6" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 250.0
+offset_top = -510.0
+offset_right = 300.0
+offset_bottom = -450.0
+grow_vertical = 1
+
+[node name="TimelineShortEvent7" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("5_uxk8n")]
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 300.0
+offset_top = -510.0
+offset_right = 350.0
+offset_bottom = -450.0
+grow_vertical = 1
+
+[node name="TimelineEvent2" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("3_fwiak")]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 1
+offset_top = -266.0
+offset_right = 350.0
+offset_bottom = -210.0
+
+[node name="TimelineEvent" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("3_fwiak")]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 1
 offset_left = 350.0
-offset_top = -134.0
-offset_right = 654.0
-offset_bottom = -70.0
+offset_top = -209.0
+offset_right = 1050.0
+offset_bottom = -153.0
 
-[node name="TimelineShop3" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("2_l6ek5")]
+[node name="TimelineEvent3" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("3_fwiak")]
+layout_mode = 1
+offset_top = -152.0
+offset_right = 2100.0
+offset_bottom = -96.0
+
+[node name="TimelineShop" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("2_l6ek5")]
+layout_mode = 1
+offset_top = -93.0
+offset_bottom = -43.0
+
+[node name="TimelineShop2" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("2_l6ek5")]
+layout_mode = 1
+offset_left = 350.0
+offset_top = -93.0
+offset_right = 538.0
+offset_bottom = -43.0
+
+[node name="TimelineShop3" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("2_l6ek5")]
 layout_mode = 1
 offset_left = 700.0
-offset_top = -134.0
-offset_right = 1004.0
-offset_bottom = -70.0
+offset_top = -93.0
+offset_right = 888.0
+offset_bottom = -43.0
 
-[node name="TimelineShop4" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("2_l6ek5")]
+[node name="TimelineShop4" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("2_l6ek5")]
 layout_mode = 1
 offset_left = 1050.0
-offset_top = -134.0
-offset_right = 1354.0
-offset_bottom = -70.0
+offset_top = -93.0
+offset_right = 1238.0
+offset_bottom = -43.0
 
-[node name="TimelineEvent" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("3_fwiak")]
+[node name="TimelineSeason" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld" instance=ExtResource("4_hashl")]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 1
-offset_top = -204.0
-offset_right = 700.0
-offset_bottom = -140.0
+offset_top = -42.0
+offset_right = 3500.0
+offset_bottom = -4.0
 
-[node name="TimelineEvent2" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("3_fwiak")]
-layout_mode = 1
-offset_left = 700.0
-offset_top = -204.0
-offset_right = 1400.0
-offset_bottom = -140.0
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld"]
+visible = false
+layout_mode = 0
+offset_left = 1417.0
+offset_top = -350.0
+offset_right = 1680.0
+offset_bottom = -310.0
 
-[node name="TimelineSeason" parent="PanelContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventRows" instance=ExtResource("4_hashl")]
-layout_mode = 1
-offset_right = 1400.0
-
-[node name="Months" type="HBoxContainer" parent="PanelContainer/ScrollContainer/MarginContainer/Control"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer"]
 layout_mode = 2
-offset_right = 6400.0
-offset_bottom = 32.0
-size_flags_vertical = 0
+color = Color(0, 0, 0, 1)
 
-[node name="TimelineMonth2" parent="PanelContainer/ScrollContainer/MarginContainer/Control/Months" instance=ExtResource("5_0j4um")]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer"]
+layout_mode = 2
+color = Color(0.4351923, 0.43519226, 0.43519226, 1)
+
+[node name="MarginContainer" type="Control" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer" node_paths=PackedStringArray("stripRoot")]
+layout_mode = 2
+script = ExtResource("7_6mc3c")
+stripRoot = NodePath("../..")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 0
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(0, 0, 1, 1)
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 0
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(1, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(0, 1, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/Control/MarginContainer/EventStripsOld/MarginContainer/MarginContainer/MarginContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+color = Color(0, 0, 1, 1)
+
+[node name="EventStrips" type="Control" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/ScrollContainer/MarginContainer/Control"]
-custom_minimum_size = Vector2(100, 0)
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/EventStrips"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 353.0
+offset_left = 4.0
+offset_top = -372.0
+offset_right = 44.0
+offset_bottom = -332.0
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-theme_override_constants/line_spacing = 0
-text = "x:xx:xx:xx"
-vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uxk8n")
+
+[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_uxk8n")
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 102)
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer" node_paths=PackedStringArray("markerParent", "scrollContainer", "fullScrollContainer", "scrollBar", "customPage")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+script = ExtResource("8_bjmsb")
+markerScene = ExtResource("9_6mc3c")
+markerParent = NodePath("MarkerScale1/MarkerScale2/Markers")
+scrollContainer = NodePath("..")
+fullScrollContainer = NodePath("../../../HBoxContainer/PanelContainer/MarginContainer/ScrollContainer")
+scrollBar = NodePath("../../HScrollBar")
+customPage = NodePath("../../MarginContainer/Control2/MarginContainer")
+sizeOfWeek = 70.0
+sizeOfLane = 10.0
+
+[node name="Weeks" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer2"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer3"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer4" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer4"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer5" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer5"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer6" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer6"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer7" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer7"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer8" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer8"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer9" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer9"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer10" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer10"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer11" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer11"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer12" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer12"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer13" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer13"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer14" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer14"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer15" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer15"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer16" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer16"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer17" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer17"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer18" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer18"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer19" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer19"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer20" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer20"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer21" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer21"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer22" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer22"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer23" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer23"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer24" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer24"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer25" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer25"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer26" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer26"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer27" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer27"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer28" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer28"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer29" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer29"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer30" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer30"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer31" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer31"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer32" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer32"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer33" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer33"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer34" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer34"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer35" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer35"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer36" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer36"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer37" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer37"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer38" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer38"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer39" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer39"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer40" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer40"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer41" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer41"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer42" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer42"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer43" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer43"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer44" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer44"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer45" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer45"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer46" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer46"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer47" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer47"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer48" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer48"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer49" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer49"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer50" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer50"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer51" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer51"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarginContainer52" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/Weeks/MarginContainer52"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qahwk")
+
+[node name="MarkerScale1" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="MarkerScale2" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/MarkerScale1"]
+layout_mode = 1
+anchor_right = 0.001
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Markers" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/MarkerScale1/MarkerScale2"]
+layout_mode = 1
+anchor_right = 19.231
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProtoMarkerLanes" type="VBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel4" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel5" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel6" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel7" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel10" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer11"]
+modulate = Color(0.6862745, 0.3529412, 0.92941177, 1)
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer12" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel4" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer12"]
+modulate = Color(0.74, 0.73494333, 0.43660003, 1)
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel5" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer12"]
+modulate = Color(0.74, 0.73494333, 0.43660003, 1)
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer13" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel4" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer13"]
+modulate = Color(0.74, 0.73494333, 0.43660003, 1)
+custom_minimum_size = Vector2(168, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer14" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer2"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer2"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer2"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer3"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer3"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer3"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer4"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer4"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer4"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer5"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer5"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer5"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer6"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer6"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer6"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer7"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer7"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer7"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer8"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer8"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer8"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer9"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer9"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer9"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer10"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer10"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer10"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer11"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer11"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer11"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer12" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer12"]
+modulate = Color(0.9, 0, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer12"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel9" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer14/HBoxContainer12"]
+modulate = Color(0.8980392, 0.5686275, 0, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="HBoxContainer15" type="HBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel2" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer15"]
+modulate = Color(0.46313995, 0.4067, 0.83, 1)
+custom_minimum_size = Vector2(462, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel3" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer15"]
+modulate = Color(0.5976, 0.83, 0.82225335, 1)
+custom_minimum_size = Vector2(378, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel4" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer15"]
+modulate = Color(0.83, 0.42537504, 0.29050002, 1)
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Panel5" type="Panel" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes/HBoxContainer15"]
+modulate = Color(0.5962166, 0.83, 0.29050002, 1)
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mc3c")
+
+[node name="Control" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/ProtoMarkerLanes"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 123
+theme_override_constants/margin_right = 123
+
+[node name="Control2" type="Control" parent="VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/MarginContainer/Control2"]
+custom_minimum_size = Vector2(245, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -4
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -4
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer"]
+modulate = Color(0.59, 0.59, 0.59, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjmsb")
+
+[node name="HoverFX" type="MarginContainer" parent="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Panel2" type="Panel" parent="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer/HoverFX"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bjmsb")
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer/HoverFX"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture = ExtResource("7_ikx1i")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer/HoverFX"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("7_ikx1i")
+expand_mode = 1
+flip_h = true
+
+[node name="HScrollBar" type="HScrollBar" parent="VBoxContainer/PanelContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 1
+page = 10.0
+
+[connection signal="mouse_entered" from="VBoxContainer/PanelContainer/HScrollBar" to="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer/HoverFX" method="set_visible" binds= [true]]
+[connection signal="mouse_exited" from="VBoxContainer/PanelContainer/HScrollBar" to="VBoxContainer/PanelContainer/MarginContainer/Control2/MarginContainer/HoverFX" method="set_visible" binds= [false]]

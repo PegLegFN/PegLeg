@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://dr02ht35ldsgb"]
+
+[ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="1_qe3ko"]
+
+[node name="SettingsWindowLite" instance=ExtResource("1_qe3ko")]
+
+[node name="NotifSection" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="3"]
+visible = false
+
+[node name="SimpleCosmetics" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="4"]
+visible = false
+
+[node name="SimpleCosmeticTiles" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="5"]
+visible = false
+
+[node name="FastAnims" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="7"]
+visible = false
+
+[node name="Missions" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="3"]
+visible = true
+
+[node name="ShowMissionBackgrounds" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer" index="0"]
+visible = false
+
+[node name="HideMissionLock" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer" index="1"]
+visible = false
+
+[node name="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer/NotableItemCap" index="1"]
+max_value = 50.0
+
+[node name="Misc" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4" groups=["HideTab"]]
+
+[node name="Advanced" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="6"]
+visible = false
+
+[node name="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="1"]
+visible = false
+
+[node name="Offset" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="2"]
+visible = false
+
+[node name="SuspendQuests" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="3"]
+visible = false
+
+[node name="BulkRefreshQuests" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" index="4"]
+visible = false
+
+[node name="WebhookTabVisibility" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" index="0"]
+section = ""
+key = ""
+
+[node name="ArchiveTabVisibility" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="0"]
+section = ""
+key = ""
+
+[node name="Updates" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" groups=["HideTab"]]
+
+[node name="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core/VBoxContainer/VBoxContainer" index="1"]
+visible = false
+
+[node name="Button2" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core/VBoxContainer/VBoxContainer" index="2"]
+layout_mode = 2
+text = "Disable Lite Mode"
+
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core/VBoxContainer/VBoxContainer/Button2" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" method="SetLiteMode" binds= [false]]
+
+[editable path="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer/MissionArchive"]

@@ -1,22 +1,52 @@
-[gd_scene load_steps=2 format=3 uid="uid://cd6brxw00l3"]
+[gd_scene load_steps=5 format=3 uid="uid://cd6brxw00l3"]
+
+[ext_resource type="Script" uid="uid://dyu00a5f1uw5" path="res://Scripts/Timeline/Strips/TimelineMonthStrip.cs" id="1_e4ft1"]
+[ext_resource type="Script" uid="uid://yroee6412pwf" path="res://Scripts/Timeline/TimelineContentContainer.cs" id="2_jfe6l"]
+
+[sub_resource type="Gradient" id="Gradient_e4ft1"]
+offsets = PackedFloat32Array(0, 0.167, 0.4548611, 0.7430556, 0.8888889, 1)
+colors = PackedColorArray(0.25379997, 0.7227034, 0.94, 1, 0.61050004, 1, 0.43, 1, 0.85, 0.77860004, 0.13600002, 1, 0.89, 0.5007733, 0.1602, 1, 0.3007, 0.43456003, 0.97, 1, 0.25490198, 0.72156864, 0.9411765, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6i51b"]
 corner_radius_top_left = 4
 corner_radius_top_right = 4
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
-[node name="TimelineMonth" type="MarginContainer"]
-custom_minimum_size = Vector2(1600, 32)
+[node name="TimelineMonth" type="MarginContainer" node_paths=PackedStringArray("colorTarget", "label")]
+custom_minimum_size = Vector2(0, 20)
+offset_right = 653.0
+offset_bottom = 18.0
+script = ExtResource("1_e4ft1")
+colorGradient = SubResource("Gradient_e4ft1")
+colorTarget = NodePath("Panel")
+label = NodePath("MarginContainer/Control/MarginContainer/Label")
 
 [node name="Panel" type="Panel" parent="."]
 self_modulate = Color(0, 0.831373, 1, 1)
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_6i51b")
 
-[node name="Label" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_right = 7
+
+[node name="Control" type="Control" parent="MarginContainer" node_paths=PackedStringArray("stripRoot")]
+layout_mode = 2
+script = ExtResource("2_jfe6l")
+stripRoot = NodePath("../..")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+theme_override_constants/margin_top = -1
+
+[node name="Label" type="Label" parent="MarginContainer/Control/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "June"
 horizontal_alignment = 1
-vertical_alignment = 1

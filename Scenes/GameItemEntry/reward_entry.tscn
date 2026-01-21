@@ -18,11 +18,11 @@ offset_right = 64.0
 offset_bottom = 64.0
 size_flags_horizontal = 4
 size_flags_vertical = 3
-tooltip_text = "amongus"
 theme = ExtResource("1_ww2ku")
 script = ExtResource("2_jy1bu")
 compactifyAmount = true
 hideMythicLeadSquad = true
+packImageAsSubtype = false
 
 [node name="TextureRect" type="TextureRect" parent="."]
 self_modulate = Color(0.901961, 0.509804, 0, 1)
@@ -140,8 +140,10 @@ componentList = ExtResource("13_4i2dj")
 [connection signal="InteractableChanged" from="." to="Overlays/InteractableIcon" method="set_visible"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
 [connection signal="IsHero" from="." to="TextureRect" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsPack" from="." to="TextureRect" method="SetShaderBool" binds= ["IsPack"]]
 [connection signal="IsSchematic" from="." to="TextureRect" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="NotificationChanged" from="." to="Overlays/NotificationLabel" method="set_visible"]
+[connection signal="PackIconChanged" from="." to="TextureRect" method="SetShaderTexture" binds= ["MainPackIcon"]]
 [connection signal="PersonalityIconChanged" from="." to="Overlays/AmountContainer/LeftIcon" method="set_texture"]
 [connection signal="RarityChanged" from="." to="TextureRect" method="set_self_modulate"]
 [connection signal="SubtypeIconChanged" from="." to="Overlays/AmountContainer/RightIcon" method="set_texture"]

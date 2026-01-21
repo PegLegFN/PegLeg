@@ -27,6 +27,7 @@ itemEntry = NodePath("MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/M
 show_behind_parent = true
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
+mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
 [node name="Ctx" type="Node" parent="Button" node_paths=PackedStringArray("missionSource", "itemSource")]
@@ -35,7 +36,7 @@ missionSource = NodePath("../../MissionEntry")
 itemSource = NodePath("../../MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem")
 componentList = ExtResource("3_b0eut")
 
-[node name="MissionEntry" type="MarginContainer" parent="."]
+[node name="MissionEntry" type="MarginContainer" parent="." node_paths=PackedStringArray("toDoListContent")]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -43,6 +44,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 script = ExtResource("1_n2fx7")
+toDoListContent = NodePath("HBoxContainer/MarginContainer2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry"]
 layout_mode = 2
@@ -82,13 +84,17 @@ expand_mode = 3
 
 [node name="TextureRect2" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer/Icon"]
 self_modulate = Color(1, 0.37, 0.37, 1)
-custom_minimum_size = Vector2(24, 0)
+custom_minimum_size = Vector2(12, 12)
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -12.0
+offset_top = -12.0
+grow_horizontal = 0
+grow_vertical = 0
 tooltip_text = "This mission can't be accessed with this account alone "
 texture = ExtResource("7_n4hef")
 expand_mode = 1
@@ -140,6 +146,7 @@ visible = false
 layout_mode = 2
 
 [node name="Responsive Button Area2" parent="MissionEntry/HBoxContainer/MarginContainer" instance=ExtResource("6_bof5f")]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 outlinePadding = 3.0
@@ -171,6 +178,7 @@ theme_override_constants/margin_bottom = 3
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Add to To-Do List"
+mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
 [node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button"]

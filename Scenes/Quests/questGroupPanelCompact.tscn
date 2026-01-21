@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://besrr0rxxa6pi"]
+
+[ext_resource type="PackedScene" uid="uid://c3okokomiywve" path="res://Scenes/Quests/questGroupPanel.tscn" id="1_x6ejf"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_8btdp"]
+
+[node name="QuestGroupViewer" instance=ExtResource("1_x6ejf")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+
+[node name="VBoxContainer" parent="MarginContainer" index="0"]
+theme_override_constants/separation = 4
+
+[node name="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/QuestViewer/MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer" index="0"]
+size_flags_vertical = 0
+
+[node name="Icon" parent="MarginContainer/VBoxContainer/MarginContainer/QuestViewer/MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 48)
+size_flags_vertical = 0
+expand_mode = 3
+
+[node name="RerollButton" parent="MarginContainer/VBoxContainer/MarginContainer/QuestViewer/MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+visible = false
+
+[node name="PinButton" parent="MarginContainer/VBoxContainer/MarginContainer/QuestViewer/MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="1"]
+visible = false
+
+[node name="Label" parent="MarginContainer/VBoxContainer/MarginContainer/QuestViewer/MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives" index="0"]
+theme_override_font_sizes/font_size = 20
+
+[node name="Label" parent="MarginContainer/VBoxContainer/MarginContainer/QuestViewer/MarginContainer/HSplitContainer/Rewards/VBoxContainer" index="0"]
+theme_override_font_sizes/font_size = 20
+
+[node name="QuestNodes" parent="MarginContainer/VBoxContainer" index="1"]
+z_index = 1
+size_flags_vertical = 8
+
+[node name="MarginContainer" parent="MarginContainer/VBoxContainer/QuestNodes" index="1"]
+custom_minimum_size = Vector2(0, 100)
+
+[node name="HBoxContainer" parent="MarginContainer/VBoxContainer/QuestNodes/MarginContainer" index="0"]
+custom_minimum_size = Vector2(0, 90)
+
+[node name="ScrollContainer" parent="MarginContainer/VBoxContainer/QuestNodes/MarginContainer/HBoxContainer" index="1"]
+size_flags_vertical = 4
+
+[node name="Unselected" parent="MarginContainer/VBoxContainer/QuestNodes/MarginContainer/HBoxContainer/ScrollContainer/MarginContainer/Control" index="0"]
+button_group = SubResource("ButtonGroup_8btdp")
+
+[node name="QuestNodeContainer" parent="MarginContainer/VBoxContainer/QuestNodes/MarginContainer/HBoxContainer/ScrollContainer/MarginContainer" index="1"]
+custom_minimum_size = Vector2(0, 90)
+
+[editable path="MarginContainer/VBoxContainer/MarginContainer/QuestViewer"]

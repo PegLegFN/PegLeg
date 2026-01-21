@@ -81,6 +81,55 @@ value = 1.0
 allow_greater = true
 editable = false
 
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Power Score"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme = ExtResource("2_du2bm")
+min_value = 1.0
+max_value = 100000.0
+value = 1.0
+alignment = 2
+update_on_text_changed = true
+custom_arrow_step = 1.0
+
+[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "=> Power Level"
+
+[node name="SpinBox2" type="SpinBox" parent="VBoxContainer/PanelContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme = ExtResource("2_du2bm")
+theme_override_constants/buttons_width = 0
+theme_override_constants/set_min_buttons_width_from_icons = 0
+theme_override_icons/updown = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/up = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/up_hover = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/up_pressed = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/up_disabled = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/down = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/down_hover = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/down_pressed = SubResource("GradientTexture1D_oikmq")
+theme_override_icons/down_disabled = SubResource("GradientTexture1D_oikmq")
+step = 0.01
+allow_greater = true
+editable = false
+
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -93,4 +142,6 @@ show_grid_buttons = false
 show_arrange_button = false
 
 [connection signal="OnInverse" from="VBoxContainer/PanelContainer/VBoxContainer" to="VBoxContainer/PanelContainer/VBoxContainer/SpinBox2" method="set_value"]
+[connection signal="OnSample" from="VBoxContainer/PanelContainer/VBoxContainer" to="VBoxContainer/PanelContainer2/VBoxContainer/SpinBox2" method="set_value"]
 [connection signal="value_changed" from="VBoxContainer/PanelContainer/VBoxContainer/SpinBox" to="VBoxContainer/PanelContainer/VBoxContainer" method="SetValue"]
+[connection signal="value_changed" from="VBoxContainer/PanelContainer2/VBoxContainer/SpinBox" to="VBoxContainer/PanelContainer/VBoxContainer" method="SampleValue"]

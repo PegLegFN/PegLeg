@@ -16,24 +16,39 @@ public partial class Bootstrap : Node
     const int minorPackageVersion = 0;
 
     [Export]
+    Vector2I bootSize = new(300, 300);
+    [Export]
     Vector2I windowSize = new(1350, 720);
     [Export]
     Control background;
     [Export]
     Control curtain;
     [Export]
+    Control loadingContent;
+    [Export]
     Label progressLabel;
     [Export]
     ProgressBar progressBar;
     [Export]
     bool shareInEditor;
+    [Export]
+    GpuParticles2D downloadParticles;
     [ExportGroup("Scenes")]
-	[Export]
+    [Export]
+    PackedScene testingScene;
+    [Export]
+    bool testingRequiresAccount = true;
+    [Export]
 	PackedScene desktopOnboarding;
     [Export]
     PackedScene desktopInterface;
     [Export]
+    PackedScene liteInterface;
+    [Export]
     PackedScene shareMenu;
+    [ExportGroup("UserPrefs")]
+    [Export]
+    Control liteContent;
 
     static void DeleteContents(string path)
     {
@@ -54,11 +69,29 @@ public partial class Bootstrap : Node
     public static bool StartMinimised { get; private set; } = cmdLineArgs.Contains("--start-minimised");
     public static bool UseShareMenu { get; private set; } = cmdLineArgs.Contains("--share-menu");
 
-    public override async void _Ready()
+    static bool hasBooted = false;
+
+    public override void _Ready()
     {
         var window = GetWindow();
-        window.ContentScaleSize = window.Size;
+
+        window.Mode = Window.ModeEnum.Windowed;
+        window.ContentScaleSize = window.Size = bootSize;
+        window.Transparent = true;
+        window.TransparentBg = true;
+        window.Borderless = true;
+        window.Unfocusable = false;
         window.MoveToCenter();
+
+        if (hasBooted)
+        {
+            Initialise();
+            return;
+        }
+        hasBooted = true;
+
+        liteContent.Visible = false;
+        loadingContent.Visible = true;
         progressLabel.Text = "Preparing...";
 
 #if GODOT_ANDROID
@@ -87,6 +120,7 @@ public partial class Bootstrap : Node
             )
             {
                 GD.Print("PegLeg already running, exiting process");
+                window.Mode = Window.ModeEnum.Minimized;
                 try
                 {
                     using NamedPipeClientStream pipeClient = new(pipeName);
@@ -96,6 +130,7 @@ public partial class Bootstrap : Node
                     {
                         GD.Print("Pipe connected");
                         using StreamWriter writer = new(pipeClient);
+                        //if this instance was trying to open a file, forward the file to the running instance
                         writer.WriteLine("showWindow");
                         writer.WriteLine("disconnect");
                         writer.Flush();
@@ -127,7 +162,7 @@ public partial class Bootstrap : Node
 #if GODOT_WINDOWS
             NamedPipeContainer.OpenPipe();
 #endif
-            await Initialise(window);
+            Initialise();
         }
         catch(Exception e)
         {
@@ -137,11 +172,21 @@ public partial class Bootstrap : Node
         }
     }
 
-    async Task Initialise(Window window)
+    async void Initialise()
     {
+        liteContent.Visible = false;
+        loadingContent.Visible = false;
+
+        if (!AppConfig.TryGet("core", "litemode", out bool lite))
+        {
+            liteContent.Visible = true;
+            return;
+        }
+
+        loadingContent.Visible = true;
+
         AppConfig.PreloadConfig();
         GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
-
 #if GODOT_WINDOWS
         if (FileAccess.FileExists(Helpers.GlobalisePath("res://update.exe")))
             DirAccess.RemoveAbsolute(Helpers.GlobalisePath("res://update.exe"));
@@ -158,11 +203,14 @@ public partial class Bootstrap : Node
         //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
         await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, (text, prog) => {
             progressLabel.Text = text;
+            downloadParticles.Emitting = prog > 0 && prog < 1;
             progressBar.Indeterminate = prog < 0;
             progressBar.Visible = prog <= 1;
             progressBar.Value = prog;
         });
-        //await PegLegResourceManager.TempImportResources();
+        downloadParticles.Emitting = false;
+
+
         await Helpers.WaitForFrame();
         bool showCachingProgress = false;
         var preloadTexturesTask = PegLegResourceManager.PreloadTemplateTextures((text, prog) => {
@@ -171,12 +219,33 @@ public partial class Bootstrap : Node
             progressBar.Value = prog;
         });
 
+        if (lite || (OS.HasFeature("editor") && testingScene is not null && !testingRequiresAccount))
+        {
+            GameAccount.ClearActiveAccount();
+
+            progressBar.Visible = true;
+            progressBar.Indeterminate = true;
+            progressLabel.Text = "Fetching missions";
+            await GameMission.UpdateMissions();
+
+            if (preloadTexturesTask is not null)
+            {
+                progressBar.Indeterminate = false;
+                progressBar.Visible = true;
+                progressLabel.Text = "Caching textures";
+                showCachingProgress = true;
+                await preloadTexturesTask;
+            }
+            LoadSceneWithPrefs();
+            return;
+        }
+
         progressBar.Indeterminate = true;
         progressBar.Visible = true;
         progressBar.Value = 0;
 
-        var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
         bool hasAccount = false;
+        var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
         if (lastUsedId is not null)
         {
             GD.Print("last: " + lastUsedId);
@@ -206,6 +275,7 @@ public partial class Bootstrap : Node
                 await Helpers.WaitForTimer(1.5, t => progressBar.Value = t / 1.5);
             }
         }
+
         if (GameAccount.ActiveAccount.isAuthed)
         {
             progressBar.Visible = true;
@@ -230,11 +300,35 @@ public partial class Bootstrap : Node
             await preloadTexturesTask;
         }
 
-        progressBar.Visible = false;
-        progressLabel.Text = "Loading interface";
+        LoadSceneWithPrefs();
+    }
+
+    void LoadSceneWithPrefs()
+    {
+        loadingContent.Visible = false;
+        if (!AppConfig.TryGet("core", "litemode", out bool lite))
+        {
+            liteContent.Visible = true;
+            return;
+        }
+        LoadScene(lite);
+    }
+
+    public void SetLiteMode(bool lite)
+    {
+        liteContent.Visible = false;
+        AppConfig.Set("core", "litemode", lite);
+        Initialise();
+    }
+
+    async void LoadScene(bool lite)
+    {
+        loadingContent.Visible = true;
+        Window window = GetWindow();
         curtain.Visible = true;
         await Helpers.WaitForFrame();
         window.Size = windowSize;
+        window.ContentScaleSize = windowSize;
         window.MoveToCenter();
         window.Transparent = false;
         window.TransparentBg = true;
@@ -247,12 +341,16 @@ public partial class Bootstrap : Node
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
 
-
         //todo: autoselect desktop/mobile scenes here
         GetWindow().ContentScaleFactor = 1;
-        if (hasAccount)
+
+        if (lite)
+            GetTree().ChangeSceneToPacked(liteInterface);
+        else if (GameAccount.ActiveAccount.isOwned)
         {
-            if (UseShareMenu)
+            if (OS.HasFeature("editor") && testingScene is not null)
+                GetTree().ChangeSceneToPacked(testingScene);
+            else if (UseShareMenu)
                 GetTree().ChangeSceneToPacked(shareMenu);
             else
                 GetTree().ChangeSceneToPacked(desktopInterface);

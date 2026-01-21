@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://xvc01jygcwse"]
+[gd_scene load_steps=9 format=3 uid="uid://xvc01jygcwse"]
 
-[ext_resource type="Script" uid="uid://birwiuiks1yhp" path="res://Scripts/ResponsiveButtonArea.cs" id="1_3bhad"]
+[ext_resource type="Script" uid="uid://birwiuiks1yhp" path="res://Scripts/UIElements/ResponsiveButton.cs" id="1_3bhad"]
 [ext_resource type="Shader" uid="uid://c1cu5jabwr16n" path="res://Shaders/ButtonOutlineShader.gdshader" id="2_gilom"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="3_8ncov"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_f4dwi"]
+[ext_resource type="StyleBox" uid="uid://vtwl7umgtbgo" path="res://GodotThemes/Styleboxes/Heavy/HeavyBox.tres" id="5_kcvs0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_133ye"]
 resource_local_to_scene = true
@@ -11,16 +12,32 @@ shader = ExtResource("2_gilom")
 shader_parameter/ControlSize = Vector2(1360, 730)
 shader_parameter/TargetSize = Vector2(1200, 675)
 shader_parameter/LineSize = 3.0
-shader_parameter/ProgressFade = 0.02
 shader_parameter/Progress = 0.0
+shader_parameter/ProgressFade = 0.02
 shader_parameter/Circle = false
+shader_parameter/VerticalHold = false
 
-[node name="Responsive Button Area" type="TextureButton" node_paths=PackedStringArray("target", "outlineObject") groups=["ExcludeButtonSounds"]]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbo8k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q0tpk"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0.4)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 18
+
+[node name="Responsive Button Area" type="TextureButton" node_paths=PackedStringArray("target", "outlineObject", "fallbackOutlineObject", "fallbackProgressBar") groups=["ExcludeButtonSounds"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_3bhad")
 outlinePadding = 10.0
 hoverTime = 0.075
@@ -28,6 +45,8 @@ baseOffset = 5
 baseLineSize = 2
 target = NodePath("MarginContainer")
 outlineObject = NodePath("MarginContainer/TextureRect")
+fallbackOutlineObject = NodePath("MarginContainer/Panel")
+fallbackProgressBar = NodePath("MarginContainer/ProgressBar")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -52,3 +71,20 @@ texture = ExtResource("3_8ncov")
 expand_mode = 1
 script = ExtResource("4_f4dwi")
 syncControlSize = true
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("5_kcvs0")
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 1
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxEmpty_lbo8k")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q0tpk")
+max_value = 1.0
+value = 0.34
+show_percentage = false

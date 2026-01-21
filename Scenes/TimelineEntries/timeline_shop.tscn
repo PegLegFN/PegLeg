@@ -1,205 +1,198 @@
-[gd_scene load_steps=9 format=3 uid="uid://btkd1lcscyrac"]
+[gd_scene load_steps=15 format=3 uid="uid://btkd1lcscyrac"]
 
-[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="1_dqaet"]
+[ext_resource type="Script" uid="uid://bykd41jdx8njf" path="res://Scripts/Timeline/Strips/TimelineShopStrip.cs" id="1_8xeqp"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="2_pxpuh"]
 [ext_resource type="Texture2D" uid="uid://cfu6gwsnycjjg" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_shoppingcart_128.png" id="2_rqt4n"]
-[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="3_bek10"]
-[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="4_uy3oc"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_e4spb"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_e4spb"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="4_y2hyi"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="5_7dhfh"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="6_pxpuh"]
+[ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="6_y2hyi"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="7_8xeqp"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vqjp7"]
-content_margin_top = 1.0
-content_margin_right = 8.0
-content_margin_bottom = 1.0
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-expand_margin_left = 1.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uyuq4"]
+resource_local_to_scene = true
+shader = ExtResource("2_pxpuh")
+shader_parameter/ControlSize = Vector2(185, 50)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 8.0
+shader_parameter/ClipOOB = false
 
-[sub_resource type="Gradient" id="Gradient_bmpou"]
-colors = PackedColorArray(0.5, 0.5, 0.5, 1, 1, 1, 1, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y2hyi"]
+resource_local_to_scene = true
+shader = ExtResource("7_8xeqp")
+shader_parameter/ControlSize = Vector2(64, 62)
+shader_parameter/CornerRadius = 6.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_e4spb")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_aqusk"]
-gradient = SubResource("Gradient_bmpou")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8xeqp"]
+resource_local_to_scene = true
+shader = ExtResource("7_8xeqp")
+shader_parameter/ControlSize = Vector2(64, 62)
+shader_parameter/CornerRadius = 6.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_e4spb")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i4gmn"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 10
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7dhfh"]
+resource_local_to_scene = true
+shader = ExtResource("7_8xeqp")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 6.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_e4spb")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
 
-[node name="TimelineShop" type="MarginContainer"]
-custom_minimum_size = Vector2(0, 64)
+[node name="TimelineShop" type="MarginContainer" node_paths=PackedStringArray("shopItems", "resetIndicator")]
+custom_minimum_size = Vector2(0, 50)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = 188.0
 grow_vertical = 0
 size_flags_horizontal = 0
 mouse_filter = 2
-theme_override_constants/margin_left = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 1
+script = ExtResource("1_8xeqp")
+shopItems = [NodePath("MarginContainer/HBoxContainer/HBoxContainer/RewardEntry"), NodePath("MarginContainer/HBoxContainer/HBoxContainer/RewardEntry2")]
+resetIndicator = NodePath("MarginContainer/TextureRect3")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_direction = 3
+[node name="BG" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_uyuq4")
 layout_mode = 2
-size_flags_vertical = 3
+texture = ExtResource("4_y2hyi")
+expand_mode = 1
+script = ExtResource("3_e4spb")
+syncControlSize = true
 
-[node name="Element" type="MarginContainer" parent="HBoxContainer"]
-layout_direction = 3
+[node name="BG2" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.24313726)
+material = SubResource("ShaderMaterial_uyuq4")
 layout_mode = 2
-theme_override_constants/margin_left = -15
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_bottom = 1
+texture = ExtResource("5_7dhfh")
+expand_mode = 1
+script = ExtResource("3_e4spb")
+syncControlSize = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Element"]
-modulate = Color(0.701961, 0, 1, 1)
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="PanelContainer" type="Panel" parent="HBoxContainer/Element/HBoxContainer"]
-layout_direction = 2
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_vqjp7")
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Element/HBoxContainer"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_aqusk")
-expand_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Element"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 10
-
-[node name="Image" type="TextureRect" parent="HBoxContainer/Element/MarginContainer"]
-layout_mode = 2
-texture = ExtResource("1_dqaet")
-expand_mode = 3
-
-[node name="Element2" type="MarginContainer" parent="HBoxContainer"]
-layout_direction = 3
-layout_mode = 2
-theme_override_constants/margin_left = -15
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_bottom = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Element2"]
-modulate = Color(0, 0.32549, 1, 1)
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="PanelContainer" type="Panel" parent="HBoxContainer/Element2/HBoxContainer"]
-layout_direction = 2
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_vqjp7")
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Element2/HBoxContainer"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_aqusk")
-expand_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Element2"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 10
-
-[node name="Image" type="TextureRect" parent="HBoxContainer/Element2/MarginContainer"]
-layout_mode = 2
-texture = ExtResource("1_dqaet")
-expand_mode = 3
-
-[node name="Element3" type="MarginContainer" parent="HBoxContainer"]
-layout_direction = 3
-layout_mode = 2
-theme_override_constants/margin_left = -15
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_bottom = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Element3"]
-modulate = Color(1, 0.501961, 0.0745098, 1)
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="PanelContainer" type="Panel" parent="HBoxContainer/Element3/HBoxContainer"]
-layout_direction = 2
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_vqjp7")
-
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Element3/HBoxContainer"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_aqusk")
-expand_mode = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Element3"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 10
-
-[node name="Image" type="TextureRect" parent="HBoxContainer/Element3/MarginContainer"]
-layout_mode = 2
-texture = ExtResource("1_dqaet")
-expand_mode = 3
-
-[node name="Title" type="MarginContainer" parent="HBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="Panel" type="Panel" parent="HBoxContainer/Title"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_i4gmn")
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Title"]
-custom_minimum_size = Vector2(64, 0)
-layout_direction = 2
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = -5
+theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/Title/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="Title" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Title"]
 visible = false
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
 theme_override_constants/line_spacing = -2
+theme_override_constants/outline_size = 2
 text = "Shop Refresh"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Title/MarginContainer"]
-self_modulate = Color(0, 0, 0, 1)
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Title"]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_bottom = -2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Title/MarginContainer"]
+self_modulate = Color(0.27999997, 0.9399999, 1, 1)
 layout_mode = 2
 texture = ExtResource("2_rqt4n")
 expand_mode = 3
+stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/Title/MarginContainer/TextureRect"]
-self_modulate = Color(1, 0.666667, 0, 1)
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.3
-anchor_bottom = 0.7
-grow_vertical = 0
-rotation = 0.139626
-texture = ExtResource("3_bek10")
-expand_mode = 3
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
 
-[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/Title/MarginContainer/TextureRect"]
+[node name="RewardEntry" parent="MarginContainer/HBoxContainer/HBoxContainer" instance=ExtResource("6_y2hyi")]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_override_constants/margin_top = -16
+placeholderItem = "Hero:hid_ninja_027_bunnyninja_sr_t01"
+
+[node name="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/RewardEntry" index="0"]
+material = SubResource("ShaderMaterial_y2hyi")
+
+[node name="RewardEntry2" parent="MarginContainer/HBoxContainer/HBoxContainer" instance=ExtResource("6_y2hyi")]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_override_constants/margin_top = -16
+placeholderItem = "Schematic:sid_launcher_grenade_easter_sr_ore_t01"
+
+[node name="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/RewardEntry2" index="0"]
+material = SubResource("ShaderMaterial_8xeqp")
+
+[node name="RewardEntry3" parent="MarginContainer/HBoxContainer/HBoxContainer" instance=ExtResource("6_y2hyi")]
+visible = false
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_override_constants/margin_top = -16
+
+[node name="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/RewardEntry3" index="0"]
+material = SubResource("ShaderMaterial_7dhfh")
+
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer"]
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(0, 24)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 0.9
-anchor_right = 1.0
-anchor_bottom = 0.9
-grow_horizontal = 0
-grow_vertical = 0
-tooltip_text = "Note: Current Event items will be 
-removed from the shop next week "
-texture = ExtResource("4_uy3oc")
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+tooltip_text = "The Event Shop will be reset this week "
+texture = ExtResource("6_pxpuh")
 expand_mode = 3
+
+[editable path="MarginContainer/HBoxContainer/HBoxContainer/RewardEntry"]
+[editable path="MarginContainer/HBoxContainer/HBoxContainer/RewardEntry2"]
+[editable path="MarginContainer/HBoxContainer/HBoxContainer/RewardEntry3"]

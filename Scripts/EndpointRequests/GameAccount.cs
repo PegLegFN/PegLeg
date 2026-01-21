@@ -31,13 +31,15 @@ public readonly record struct FORTStats(float fortitude, float offense, float re
     static DataTableCurve homebaseRatingCurve;
     public static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= DataTableCurve.LoadHomebaseRatingMap();
 
+    double FORTRating => HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology));
+
     public float PowerLevel
     {
         get
         {
-            double fortRating = HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology)) - 1;
+            var fortRating = FORTRating;
 
-            return (float)((fortRating + (backpackRating + loadoutRating)/2) / 2);
+            return (float)((fortRating + Mathf.Sqrt((fortRating*0.9) * (loadoutRating*1.1)) + Mathf.Sqrt((fortRating * 0.9) * (backpackRating * 1.1))) / 3);
         }
     }
 
@@ -47,7 +49,7 @@ public readonly record struct FORTStats(float fortitude, float offense, float re
         {
             prefix = prefix.Trim() + " ";
         }
-        GD.Print($"{prefix}PL Estimate: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (Loadout: {loadoutRating}) (Backpack: {backpackRating})");
+        GD.Print($"{prefix}PL Estimate: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (FORT Rating: {FORTRating:0.##}) (Loadout: {loadoutRating:0.##}) (Backpack: {backpackRating:0.##})");
     }
 }
 
@@ -179,10 +181,11 @@ public partial class GameAccount
     }
 
     static GameAccount _activeAccount;
-    public static GameAccount ActiveAccount => _activeAccount ??= new(null);
+    static GameAccount emptyAccount = new(null);
+    public static GameAccount ActiveAccount => _activeAccount ??= emptyAccount;
     public static event Action ActiveAccountChangedEarly;
     public static event Action ActiveAccountChanged;
-    public static event Action BookmarksChanged;
+    public static event Action RemindersChanged;
 
     public static async Task<bool> SetActiveAccount(string accountId, Action<string> progress = null)
     {
@@ -203,10 +206,12 @@ public partial class GameAccount
         _activeAccount = account;
         ActiveAccountChangedEarly?.Invoke();
         ActiveAccountChanged?.Invoke();
-        BookmarksChanged?.Invoke();
+        RemindersChanged?.Invoke();
         AppConfig.Set("account", "lastUsed", accountId);
         return true;
     }
+
+    public static void ClearActiveAccount() => _activeAccount = emptyAccount;
 
     public static async Task RefreshActiveAccount()
     {
@@ -380,73 +385,78 @@ public partial class GameAccount
     bool RefreshTokenExpired => refreshExpiresAt <= (Time.GetTicksMsec() * 0.001) + 10;
     public string AuthToken => authToken;
     public AuthenticationHeaderValue AuthHeader => accountAuthHeader;
+    SemaphoreSlim authSemaphore = new(1);
     public async Task<bool> Authenticate(bool loadingOverlay = false, bool assumeValid = true)
     {
         if (isAuthed && assumeValid)
             return true;
         if (!isOwned)
             return false;
-
-        using var loadToken = LoadingOverlay.CreateToken("authentication");
-        if (!loadingOverlay)
-            loadToken.Dispose();
-
-        if (!assumeValid)
+        await authSemaphore.WaitAsync();
+        try
         {
-            using var req = await FnWebAddresses.EpicAccount
-                .MakeRequest("account/api/oauth/verify")
-                .SetAccount(this)
-                .Send();
-            if (req.IsSuccessStatusCode)
-                return true;
-            ForceExpireToken();
-        }
+            using var loadToken = LoadingOverlay.CreateToken("authentication");
+            if (!loadingOverlay)
+                loadToken.Dispose();
 
-        if (!RefreshTokenExpired)
-        {
-            var refreshRequest = await TargetClient.LoginWithRefreshToken(refreshToken);
-
-            if (!await refreshRequest.CheckForError())
+            if (!assumeValid)
             {
-                GD.Print("Token refreshed");
-                SetAuthentication(await refreshRequest.ReadJson());
+                using var req = await FnWebAddresses.EpicAccount
+                    .MakeRequest("account/api/oauth/verify")
+                    .SetAuthorisation(AuthHeader)
+                    .Send();
+                if (req.IsSuccessStatusCode)
+                    return true;
+                ForceExpireToken();
+            }
+
+            if (!RefreshTokenExpired)
+            {
+                var refreshRequest = await TargetClient.LoginWithRefreshToken(refreshToken);
+
+                if (!await refreshRequest.CheckForError())
+                {
+                    GD.Print($"Token refreshed for {DisplayName}");
+                    var json = await refreshRequest.ReadJson();
+                    GD.Print(json);
+                    SetAuthentication(json);
+                    return true;
+                }
+                GD.Print($"Refresh token error for {DisplayName}");
+            }
+            var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
+            var deviceRequest = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
+
+            (var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
+            if (!didError)
+            {
+                GD.Print($"Token created for {DisplayName}");
+                SetAuthentication(await deviceRequest.ReadJson());
                 return true;
             }
-            GD.Print("Refresh token error");
-        }
-        var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
-        var deviceRequest = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
 
-        (var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
-        if (!didError)
-        {
-            GD.Print("Token regenerated");
-            SetAuthentication(await deviceRequest.ReadJson());
-            return true;
-        }
+            //check if offline by pinging googles dns
+            bool offline = !await WebHelpers.Ping("8.8.8.8");
 
-        //check if offline by pinging googles dns
-        bool offline = !await WebHelpers.Ping("8.8.8.8");
+            string failMsg = offline ?
+                "Offline" :
+                (
+                    errorContent?["errorMessage"].ToString() ??
+                    deviceRequest.ReasonPhrase ??
+                    "Unknown error"
+                );
+            GD.Print("Login failure: " + failMsg);
+            if (!loginFailure)
+            {
+                loginFailure = true;
+                loginFailureMessage = failMsg;
+                OnAccountUpdated?.Invoke();
 
-        string failMsg = offline ? 
-            "Offline" : 
-            (
-                errorContent?["errorMessage"].ToString() ?? 
-                deviceRequest.ReasonPhrase ?? 
-                "Unknown error"
-            );
-        GD.Print("Login failure: " + failMsg);
-        if (!loginFailure)
-        {
-            loginFailure = true;
-            loginFailureMessage = failMsg;
-            OnAccountUpdated?.Invoke();
+                //dont send login failure notif when offline
+                if (offline)
+                    return false;
 
-            //dont send login failure notif when offline
-            if (offline)
-                return false;
-
-            NotificationManager.Push([new()
+                NotificationManager.Push([new()
             {
                 header = "Login Failure",
                 icon = ProfileIcon,
@@ -456,9 +466,14 @@ public partial class GameAccount
                 Err: {loginFailureMessage}
                 """
             }]);
-        }
+            }
 
-        return false;
+            return false;
+        }
+        finally
+        {
+            authSemaphore.Release();
+        }
     }
 
     public void ForceExpireToken() => authExpiresAt = 0;
@@ -482,11 +497,11 @@ public partial class GameAccount
             .PerformOperation("PurchaseCatalogEntry", $$"""
             {
                 "offerId": "{{offer.OfferId}}",
-                "purchaseQuantity": "{{purchaseQuantity}}",
+                "purchaseQuantity": {{purchaseQuantity}},
                 "currency": "{{offer["prices"][0]["currencyType"]}}",
                 "currencySubType": "{{offer["prices"][0]["currencySubType"]}}",
-                "expectedTotalPrice": "{{(await offer.CalculatePersonalPrice(this, true)).quantity * purchaseQuantity}}",
-                "gameContext": "PegLeg",
+                "expectedTotalPrice": {{(await offer.CalculatePersonalPrice(this, true)).quantity * purchaseQuantity}},
+                "gameContext": "PegLeg"
             }
             """);
         offer.NotifyChanged();
@@ -679,7 +694,14 @@ public partial class GameAccount
     {
         if (localData is null)
             LoadLocalData();
-        localData[key] = value.SafeDeepClone();
+        if (value is null)
+        {
+            if (!localData.ContainsKey(key))
+                return;
+            localData.Remove(key);
+        }
+        else
+            localData[key] = value.SafeDeepClone();
 
         if (!isValid || !localData.ContainsKey("DeviceDetails"))
             return;
@@ -746,6 +768,8 @@ public partial class GameAccount
     {
         if (!force && fortStats is not null)
             return fortStats.Value;
+        if (!isOwned)
+            return default;
 
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
         var statItems = accountItems.GetItems("Stat");
@@ -829,6 +853,8 @@ public partial class GameAccount
 
     public async Task<float> GetSurvivorBonus(string bonusID, int perSquadRequirement = 2, float boostBase = 5)
     {
+        if (!isOwned)
+            return 0;
         var matchingSurvivors = (await GetProfile(FnProfileTypes.AccountItems).Query()).GetItems("Worker", gameItem =>
         {
             if (gameItem.attributes["squad_id"] is null || gameItem.attributes["set_bonus"] is null)
@@ -1003,9 +1029,9 @@ public partial class GameAccount
         return true;
     }
 
-    HashSet<string> bookmarkedItems;
+    HashSet<string> reminderItems;
 
-    public void ToggleBookmarked(GameItemTemplate template)
+    public void ToggleReminder(GameItemTemplate template)
     {
         if (!isOwned || template?.CanBeFavourited != true)
             return;
@@ -1013,51 +1039,60 @@ public partial class GameAccount
         {
             template = GameItemTemplate.Get(TierSubstitute().Replace(template.TemplateId, "_t01"));
         }
-        bookmarkedItems ??= GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        reminderItems ??= 
+            GetLocalData("reminderItems")?.Deserialize<HashSet<string>>() ??
+            GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        ClearLocalData("bookmarkedItems");
+        
         var tid = template.TemplateId.ToLower();
-        bool isBookmarked = bookmarkedItems.Contains(tid);
+        bool hasReminder = reminderItems.Contains(tid);
         //GD.Print($"already: {isBookmarked} ({tid})");
-        if (isBookmarked)
+        if (hasReminder)
         {
             var tidSearch = RaritySubstitute().Replace(tid, "_..?_");
             tidSearch = TierSubstitute().Replace(tidSearch, "_t0\\d");
             //GD.Print("reminder removal search " + tidSearch);
-            var toRemove = bookmarkedItems.Where(x => Regex.IsMatch(x, tidSearch));
+            var toRemove = reminderItems.Where(x => Regex.IsMatch(x, tidSearch));
             foreach (var item in toRemove)
             {
-                bookmarkedItems.Remove(item);
+                reminderItems.Remove(item);
                 GD.Print("reminder removed " + item);
             }
         }
         else
         {
-            bookmarkedItems.Add(tid);
+            reminderItems.Add(tid);
             GD.Print("reminder added " + tid);
             while (template.TryGetNextRarity() is GameItemTemplate upgradedTemplate)
             {
                 tid = upgradedTemplate.TemplateId.ToLower();
-                if (!bookmarkedItems.Contains(tid))
-                {
-                    bookmarkedItems.Add(tid);
-                    GD.Print("reminder added " + tid);
-                }
-                else
-                {
+                if (reminderItems.Contains(tid))
                     break;
-                }
+                reminderItems.Add(tid);
+                GD.Print("reminder added " + tid);
                 template = upgradedTemplate;
             }
         }
-        SetLocalData("bookmarkedItems", JsonSerializer.SerializeToNode(bookmarkedItems));
-        BookmarksChanged?.Invoke();
+        SetLocalData("reminderItems", JsonSerializer.SerializeToNode(reminderItems));
+        RemindersChanged?.Invoke();
     }
 
-    public bool IsBookmarked(GameItemTemplate template)
+    public bool HasReminder(GameItemTemplate template)
     {
         if (template?.CanBeFavourited != true)
             return false;
-        bookmarkedItems ??= GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
-        var result = bookmarkedItems.Contains(TierSubstitute().Replace(template.TemplateId, "_t01").ToLower());
+        return HasReminder(template.TemplateId);
+    }
+
+    public bool HasReminder(string templateId)
+    {
+        if (templateId is null)
+            return false;
+        reminderItems ??=
+            GetLocalData("reminderItems")?.Deserialize<HashSet<string>>() ??
+            GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
+        ClearLocalData("bookmarkedItems");
+        var result = reminderItems.Contains(TierSubstitute().Replace(templateId, "_t01").ToLower());
         return result;
     }
 

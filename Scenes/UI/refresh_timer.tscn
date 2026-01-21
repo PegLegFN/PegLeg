@@ -1,0 +1,110 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5j52ymk713sh"]
+
+[ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="1_fgkoy"]
+[ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="2_os1vn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4n3dc"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.6, 0.6, 0.6, 0.752941)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2fwwi"]
+bg_color = Color(1, 0.470588, 0, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ywonf"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4oqdh"]
+bg_color = Color(0, 0.75, 0.75, 1)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="RefreshTimer" type="VBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+offset_right = 47.0
+offset_bottom = 19.0
+size_flags_horizontal = 10
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.0
+tooltip_text = "test"
+mouse_filter = 0
+theme_override_constants/separation = 0
+script = ExtResource("1_fgkoy")
+target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
+tooltipTarget = NodePath(".")
+timerType = 1
+formatType = 2
+customWarningTime = 10080
+customCritTime = 4320
+progressBar = NodePath("TimerProgress")
+
+[node name="TimerPanel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(47, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4n3dc")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="TimerPanel"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="TimerPanel/LeavingSoonAlert"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2fwwi")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TimerPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="TimerPanel/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_os1vn")
+expand_mode = 3
+
+[node name="TimerLabel" type="Label" parent="TimerPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "99h"
+
+[node name="TimerProgress" type="ProgressBar" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_ywonf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4oqdh")
+min_value = -0.1
+max_value = 1.0
+step = 0.0
+value = 0.615
+show_percentage = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://ysh5ajklts1q"]
+[gd_scene load_steps=27 format=3 uid="uid://ysh5ajklts1q"]
 
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/InterfaceIcons/PegLegIcon256.png" id="1_7xbjg"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="1_r66cy"]
@@ -20,6 +20,7 @@
 [ext_resource type="Shader" uid="uid://tr0f3tuiuk55" path="res://Shaders/OnboardingCurtain.gdshader" id="13_m3fci"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="14_eunyv"]
 [ext_resource type="PackedScene" uid="uid://b7rnaw5epqkd6" path="res://Scenes/download_cube.tscn" id="15_jvi10"]
+[ext_resource type="Texture2D" uid="uid://cvs1fvndmmumc" path="res://Images/InterfaceIcons/PegLegLogo.png" id="18_5geer"]
 [ext_resource type="AudioStream" uid="uid://cb1e6fcri5nxg" path="res://Audio/SFX/AssetLoading/loadingSequence.tres" id="18_pbj83"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xg3me"]
@@ -71,7 +72,6 @@ stretch_mode = 6
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_ko31a")
-bus = &"Music"
 
 [node name="CenterContainer" type="CenterContainer" parent="." node_paths=PackedStringArray("curtain", "music", "loadingWheel", "loginCodeContent", "loginLabel", "retryLoginButton", "continueButton", "importButton")]
 layout_mode = 1
@@ -92,7 +92,7 @@ continueButton = NodePath("MarginContainer/Content/LoginCode/VBoxContainer/HBoxC
 importButton = NodePath("MarginContainer/Content/LoginCode/ImportButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(300, 320)
+custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 
 [node name="Panel" type="Panel" parent="CenterContainer/MarginContainer"]
@@ -102,7 +102,7 @@ theme_override_styles/panel = ExtResource("2_c5h7f")
 [node name="Content" type="MarginContainer" parent="CenterContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 70
+theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
@@ -110,14 +110,14 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 95)
 layout_mode = 2
 
 [node name="GreetingText" type="Label" parent="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
-text = "Welcome to Pegleg! To begin, you'll need to log in to your Epic Games account. Click the link and enter in the code shown below."
+text = "To use Regular mode, you'll need to log in to your Epic Games account. Click the link and enter in the code shown below, or switch to Lite mode."
 horizontal_alignment = 3
 autowrap_mode = 3
 
@@ -188,6 +188,13 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 12
 text = "Import accounts from PegLeg (Release)"
+
+[node name="LiteButton" type="Button" parent="CenterContainer/MarginContainer/Content/LoginCode"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+text = "Use Lite Mode Instead"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer/Content/LoginCode"]
 layout_mode = 2
@@ -376,26 +383,25 @@ visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 
-[node name="Control2" type="Control" parent="CenterContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MarginContainer"]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="MuteBtn" type="Button" parent="CenterContainer/MarginContainer/Control2"]
+[node name="MuteBtn" type="Button" parent="CenterContainer/MarginContainer/MarginContainer"]
 custom_minimum_size = Vector2(16, 16)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_top = 4.0
-offset_right = -4.0
-grow_horizontal = 0
-size_flags_vertical = 4
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
 tooltip_text = "Mute/Unmute"
 theme_type_variation = &"TinyButton"
 script = ExtResource("8_42nsr")
 targetBusName = "Master"
 
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/MarginContainer/Control2/MuteBtn"]
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/MarginContainer/MarginContainer/MuteBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -410,8 +416,19 @@ texture = ExtResource("9_gp42o")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AppIcon" type="TextureRect" parent="CenterContainer/MarginContainer/Control2"]
-custom_minimum_size = Vector2(128, 128)
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Control2" type="Control" parent="CenterContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AppIcon" type="HBoxContainer" parent="CenterContainer/MarginContainer/Control2"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -419,9 +436,26 @@ anchor_right = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(128, 128)
-mouse_filter = 0
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="AppIcon" type="TextureRect" parent="CenterContainer/MarginContainer/Control2/AppIcon"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
 texture = ExtResource("1_7xbjg")
 expand_mode = 1
+
+[node name="AppLogo" type="TextureRect" parent="CenterContainer/MarginContainer/Control2/AppIcon"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("18_5geer")
+expand_mode = 3
 
 [node name="Curtain" type="ColorRect" parent="."]
 visible = false
@@ -521,7 +555,8 @@ bus = &"SFX"
 [connection signal="UserCodeChanged" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="set_text"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/Button" to="CenterContainer/MarginContainer/Content/LoginCode/MarginContainer2/LinkCodeText" method="CopyCode"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/ImportButton" to="CenterContainer" method="ImportAccounts"]
+[connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/LiteButton" to="CenterContainer" method="SwitchToLite"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/CompleteLogin" to="CenterContainer" method="ComplateCodeLogin"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/LoginCode/VBoxContainer/HBoxContainer/RetryLogn" to="CenterContainer" method="StartLogin"]
 [connection signal="pressed" from="CenterContainer/MarginContainer/Content/ErrorMessage/ErrorContent/VBoxContainer/Button" to="CenterContainer/MarginContainer/Content/ErrorMessage" method="set_visible" binds= [false]]
-[connection signal="pressed" from="CenterContainer/MarginContainer/Control2/MuteBtn" to="CenterContainer/MarginContainer/Control2/MuteBtn" method="ToggleMute"]
+[connection signal="pressed" from="CenterContainer/MarginContainer/MarginContainer/MuteBtn" to="CenterContainer/MarginContainer/MarginContainer/MuteBtn" method="ToggleMute"]

@@ -35,14 +35,15 @@ public partial class XpLimitController : Control
     {
         content.Visible = false;
         loading.Visible = true;
-        RefreshTimerController.OnHourChanged += ForceUpdateProfiles;
+        GD.Print(GetPath());
+        RefreshTimerController.OnHourChanged += UpdateProfiles;
         GameAccount.ActiveAccountChanged += UpdateAccount;
         UpdateAccount();
     }
 
     public override void _ExitTree()
     {
-        RefreshTimerController.OnHourChanged -= ForceUpdateProfiles;
+        RefreshTimerController.OnHourChanged -= UpdateProfiles;
         GameAccount.ActiveAccountChanged -= UpdateAccount;
     }
 
@@ -57,7 +58,7 @@ public partial class XpLimitController : Control
             brProfile = acc.GetProfile(FnProfileTypes.CosmeticInventory);
             await acc.ClientQuestLoginAthena();
 
-            await UpdateProfiles(false);
+            await UpdateProfileTask();
         }
         finally
         {
@@ -65,22 +66,27 @@ public partial class XpLimitController : Control
         }
     }
 
-    private async void UpdateProfiles() => await UpdateProfiles(false);
-    private async void ForceUpdateProfiles() => await UpdateProfiles(true);
-    private async Task UpdateProfiles(bool force)
+    private async void UpdateProfiles() => await UpdateProfileTask();
+    static Task profileFetchTask = null;
+    private async Task UpdateProfileTask()
     {
         loading.Visible = true;
         content.Visible = false;
         try
         {
-            if (force)
-                GD.PushWarning("XPForceUpdate");
             //for some reason, XP stat changes don't increment the profile revision, so we need to completely re-fetch the BR profile
-            await Task.WhenAll(
-                stwProfile.Query(force),
-                brProfile.Query(force, force),
+
+            profileFetchTask ??= Task.WhenAll(
+                stwProfile.Query(true),
+                brProfile.Query(true, true),
                 CalenderRequests.CheckCalender()
             );
+
+            //this weird task summersault ensures that multiple XPLimitControllers refreshing simultaniously wont cause multiple profile updates
+            var toAwait = profileFetchTask;
+            await toAwait;
+            profileFetchTask = null;
+
             UpdateXP();
             content.Visible = true;
         }
@@ -93,7 +99,7 @@ public partial class XpLimitController : Control
     void CheckForNewWeek()
     {
         if (stwReset < DateTime.Now || playtimeReset < DateTime.Now)
-            ForceUpdateProfiles();
+            UpdateProfiles();
     }
 
     DateTime stwReset;

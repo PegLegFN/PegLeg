@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://exr4yaiid7j0"]
+
+[ext_resource type="Script" uid="uid://j3y0qknppuhg" path="res://Scripts/UIElements/VirtualTab.cs" id="1_wvpqi"]
+
+[node name="Tab" type="MarginContainer" node_paths=PackedStringArray("button", "label", "labelPadding", "iconRect")]
+offset_right = 76.0
+offset_bottom = 22.0
+size_flags_horizontal = 3
+script = ExtResource("1_wvpqi")
+button = NodePath("CheckButton")
+label = NodePath("MarginContainer/HBoxContainer/Label")
+labelPadding = NodePath("MarginContainer/HBoxContainer/LabelPadding")
+iconRect = NodePath("MarginContainer/HBoxContainer/Icon")
+
+[node name="CheckButton" type="CheckButton" parent="."]
+layout_mode = 2
+theme_type_variation = &"MiddleCheckButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="LabelPadding" type="Control" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2

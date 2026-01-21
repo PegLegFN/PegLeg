@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://u5ag0k8n6eqm"]
+[gd_scene load_steps=78 format=3 uid="uid://u5ag0k8n6eqm"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_3bqtb"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="2_34fsc"]
@@ -58,6 +58,7 @@
 [ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/card_pack_opener_window.tscn" id="41_alhak"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="41_kf5nt"]
 [ext_resource type="PackedScene" uid="uid://cr3cku76polyu" path="res://Scenes/Desktop/Views/Extra/desktopPartyLoadoutsView.tscn" id="42_i2466"]
+[ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="43_4gcek"]
 [ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="44_3p6h5"]
 [ext_resource type="PackedScene" uid="uid://cvc7hj4ng7c04" path="res://Scenes/Desktop/Overlays/game_item_selector.tscn" id="44_m211x"]
 [ext_resource type="PackedScene" uid="uid://outqvmv6p0pm" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_line_edit_window.tscn" id="45_vujc8"]
@@ -66,8 +67,8 @@
 [ext_resource type="Script" uid="uid://dbi4mg37e4bvq" path="res://Scripts/CurtainOpener.cs" id="50_2a2nn"]
 [ext_resource type="Shader" uid="uid://tr0f3tuiuk55" path="res://Shaders/OnboardingCurtain.gdshader" id="51_jeshi"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="52_pam8h"]
-[ext_resource type="Texture2D" uid="uid://dhv0msu3x04at" path="res://Images/Flipbook/LoadingIconV2/PegLegLoadingWheelRenderSmall.png" id="57_lrsor"]
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="58_7yvd6"]
+[ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="59_4gcek"]
 [ext_resource type="PackedScene" uid="uid://bbpdgupjy1ovb" path="res://Scenes/Desktop/Overlays/dev_text_overlay.tscn" id="60_o7hny"]
 [ext_resource type="PackedScene" uid="uid://ciamgottppk7s" path="res://Scenes/Desktop/Overlays/image_copy_window.tscn" id="62_wqw3e"]
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
@@ -96,47 +97,6 @@ shader = ExtResource("51_jeshi")
 shader_parameter/ControlSize = Vector2(1350, 720)
 shader_parameter/RevealScale = 0.0
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_poio5"]
-particles_animation = true
-particles_anim_h_frames = 10
-particles_anim_v_frames = 10
-particles_anim_loop = true
-
-[sub_resource type="Gradient" id="Gradient_cd5d5"]
-interpolation_mode = 2
-offsets = PackedFloat32Array(0, 0.666, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.752941, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_8g5mb"]
-gradient = SubResource("Gradient_cd5d5")
-
-[sub_resource type="Curve" id="Curve_kr8xl"]
-_data = [Vector2(0, 0), 0.0, 34.2685, 0, 0, Vector2(0.153257, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.3674, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_6pg76"]
-curve = SubResource("Curve_kr8xl")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s7yuu"]
-particle_flag_disable_z = true
-emission_shape_offset = Vector3(0, -100, 0)
-emission_shape = 6
-emission_ring_axis = Vector3(0, 2, 1)
-emission_ring_height = 0.0
-emission_ring_radius = 20.0
-emission_ring_inner_radius = 0.0
-emission_ring_cone_angle = 90.0
-angle_min = -124.7
-angle_max = 1.07288e-05
-radial_accel_min = -100.0
-radial_accel_max = -100.0
-scale_min = 0.2
-scale_max = 0.2
-scale_curve = SubResource("CurveTexture_6pg76")
-color_ramp = SubResource("GradientTexture1D_8g5mb")
-anim_speed_min = 0.4
-anim_speed_max = 0.4
-
 [node name="Root" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -151,7 +111,6 @@ theme = ExtResource("1_3bqtb")
 [node name="TargetResolution" type="Node" parent="NonUI" node_paths=PackedStringArray("rootNode")]
 script = ExtResource("2_34fsc")
 rootNode = NodePath("../..")
-TargetResolution = Vector2i(950, 720)
 
 [node name="AutoButtonSounds" type="Node" parent="NonUI"]
 script = ExtResource("2_db3cl")
@@ -290,11 +249,6 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Compendium" parent="Content/MainTabs" instance=ExtResource("24_sj3vv")]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 3
-
 [node name="Armoury" type="TabContainer" parent="Content/MainTabs"]
 visible = false
 layout_mode = 2
@@ -302,7 +256,7 @@ theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
 current_tab = 2
 script = ExtResource("16_hsemp")
-metadata/_tab_index = 4
+metadata/_tab_index = 3
 
 [node name="Survivor Squads" parent="Content/MainTabs/Armoury" instance=ExtResource("25_ag48h")]
 visible = false
@@ -335,7 +289,7 @@ theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
 current_tab = 0
 script = ExtResource("16_hsemp")
-metadata/_tab_index = 5
+metadata/_tab_index = 4
 
 [node name="Weekly Shop" parent="Content/MainTabs/Item Shop" instance=ExtResource("26_fltvm")]
 layout_mode = 2
@@ -361,6 +315,11 @@ metadata/_tab_index = 2
 [node name="Quests" parent="Content/MainTabs" instance=ExtResource("28_rt2uq")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 5
+
+[node name="Timeline" parent="Content/MainTabs" instance=ExtResource("43_4gcek")]
+visible = false
+layout_mode = 2
 metadata/_tab_index = 6
 
 [node name="Extra" type="TabContainer" parent="Content/MainTabs"]
@@ -372,18 +331,24 @@ current_tab = 0
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 7
 
-[node name="Ventures" parent="Content/MainTabs/Extra" instance=ExtResource("35_s7yuu")]
+[node name="Compendium" parent="Content/MainTabs/Extra" instance=ExtResource("24_sj3vv")]
 layout_mode = 2
+metadata/_tab_index = 0
 
-[node name="Balancing" parent="Content/MainTabs/Extra" instance=ExtResource("37_c6nfh")]
+[node name="Ventures" parent="Content/MainTabs/Extra" instance=ExtResource("35_s7yuu")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Team Loadouts" parent="Content/MainTabs/Extra" instance=ExtResource("42_i2466")]
+[node name="Balancing" parent="Content/MainTabs/Extra" instance=ExtResource("37_c6nfh")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="Team Loadouts" parent="Content/MainTabs/Extra" instance=ExtResource("42_i2466")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
 
 [node name="Game Profiles (Dev)" type="TabContainer" parent="Content/MainTabs/Extra" node_paths=PackedStringArray("altParent")]
 visible = false
@@ -393,7 +358,7 @@ tab_alignment = 1
 current_tab = 0
 script = ExtResource("16_hsemp")
 altParent = NodePath("../../Node/DevParent")
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 
 [node name="Athena" parent="Content/MainTabs/Extra/Game Profiles (Dev)" instance=ExtResource("33_7d0l0")]
 layout_mode = 2
@@ -727,6 +692,10 @@ layout_mode = 1
 offset_left = 0.0
 offset_right = 0.0
 
+[node name="TimelineEventViewer" parent="OverlayWindows" instance=ExtResource("59_4gcek")]
+visible = false
+layout_mode = 1
+
 [node name="CardPackOpenerWindow" parent="OverlayWindows" instance=ExtResource("41_alhak")]
 visible = false
 layout_mode = 1
@@ -774,30 +743,6 @@ layout_mode = 1
 startOpen = false
 isUserClosable = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-visible = false
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-grow_horizontal = 2
-theme_override_constants/separation = 0
-
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(1, 0, 0, 1)
-
-[node name="ColorRect2" type="ColorRect" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0, 1, 1, 1)
-
-[node name="ColorRect3" type="ColorRect" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0, 1, 0, 1)
-
 [node name="Curtain" type="ColorRect" parent="."]
 visible = false
 z_index = 50
@@ -818,24 +763,6 @@ modTime = 8.0
 script = ExtResource("50_2a2nn")
 curtain = NodePath("..")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="Control"]
-material = SubResource("CanvasItemMaterial_poio5")
-emitting = false
-amount = 10
-texture = ExtResource("57_lrsor")
-lifetime = 1.5
-process_material = SubResource("ParticleProcessMaterial_s7yuu")
-
 [connection signal="IconChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="OverlayWindows/AccountSwitcher" method="OpenWindow"]
@@ -846,3 +773,4 @@ process_material = SubResource("ParticleProcessMaterial_s7yuu")
 
 [editable path="Content/MainTabs/Item Shop/Event Shop"]
 [editable path="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack"]
+[editable path="Content/MainTabs/Extra/Game Profiles (Dev)/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2"]

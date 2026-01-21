@@ -1,12 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://bcllm2n3omok8"]
+[gd_scene load_steps=19 format=3 uid="uid://bcllm2n3omok8"]
 
 [ext_resource type="Script" uid="uid://b0j1smbi1nuqg" path="res://Scripts/Bootstrap.cs" id="1_6qsod"]
 [ext_resource type="PackedScene" uid="uid://ysh5ajklts1q" path="res://Scenes/Desktop/desktopOnboarding.tscn" id="2_frb0b"]
 [ext_resource type="PackedScene" uid="uid://u5ag0k8n6eqm" path="res://Scenes/Desktop/desktopInterface.tscn" id="3_js2t5"]
+[ext_resource type="PackedScene" uid="uid://bqsjh027im66f" path="res://Scenes/Desktop/desktopInterfaceLite.tscn" id="4_1cfp7"]
 [ext_resource type="PackedScene" uid="uid://ceg4ywbjaq5o" path="res://Scenes/SharedImageGenerators/shareableMenu.tscn" id="4_efo63"]
 [ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="4_p8jt0"]
 [ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="5_efo63"]
 [ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="5_g0s4o"]
+[ext_resource type="Texture2D" uid="uid://qfp8atpjqj8m" path="res://Images/Flipbook/LoadingIconV2/BlugloLoadSheet.png" id="8_se0d1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g0s4o"]
 shader = ExtResource("4_p8jt0")
@@ -15,6 +17,47 @@ shader_parameter/ControlSizeScale = Vector2(1, 1)
 shader_parameter/Expo = true
 shader_parameter/AlphaStart = 0.0
 shader_parameter/CornerRadius = 39.05
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1cfp7"]
+particles_animation = true
+particles_anim_h_frames = 6
+particles_anim_v_frames = 5
+particles_anim_loop = true
+
+[sub_resource type="Gradient" id="Gradient_rxgfw"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.666, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.752941, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8g5mb"]
+gradient = SubResource("Gradient_rxgfw")
+
+[sub_resource type="Curve" id="Curve_q4hqm"]
+_data = [Vector2(0, 0), 0.0, 27.387728, 0, 0, Vector2(0.21755725, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.3674, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_6pg76"]
+curve = SubResource("Curve_q4hqm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_i47mm"]
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 128.0
+emission_ring_inner_radius = 128.0
+emission_ring_cone_angle = 90.0
+angle_min = -124.7
+angle_max = 1.07288e-05
+radial_accel_min = -200.0
+radial_accel_max = -200.0
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_6pg76")
+color_ramp = SubResource("GradientTexture1D_8g5mb")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_offset_max = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g0s4o"]
 content_margin_left = 2.0
@@ -40,7 +83,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("background", "curtain", "progressLabel", "progressBar")]
+[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("background", "curtain", "loadingContent", "progressLabel", "progressBar", "downloadParticles", "liteContent")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -49,11 +92,16 @@ grow_vertical = 2
 script = ExtResource("1_6qsod")
 background = NodePath("TextureRect")
 curtain = NodePath("Curtain")
-progressLabel = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer/Label2")
-progressBar = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer/ProgressBar")
+loadingContent = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Loading")
+progressLabel = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Loading/Label2")
+progressBar = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Loading/ProgressBar")
+downloadParticles = NodePath("MarginContainer/Control2/GPUParticles2D")
+testingRequiresAccount = false
 desktopOnboarding = ExtResource("2_frb0b")
 desktopInterface = ExtResource("3_js2t5")
+liteInterface = ExtResource("4_1cfp7")
 shareMenu = ExtResource("4_efo63")
+liteContent = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/LiteMode")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 visible = false
@@ -76,6 +124,20 @@ color = Color(0, 0, 0, 0.784314)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="Control2" type="Control" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="MarginContainer/Control2"]
+self_modulate = Color(0.72, 0.986, 1, 1)
+material = SubResource("CanvasItemMaterial_1cfp7")
+emitting = false
+amount = 15
+texture = ExtResource("8_se0d1")
+lifetime = 1.5
+process_material = SubResource("ParticleProcessMaterial_i47mm")
 
 [node name="Label" type="Label" parent="MarginContainer"]
 visible = false
@@ -110,24 +172,25 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer"]
+[node name="Loading" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = " Starting PegLeg... "
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading"]
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 text = "Loading status with feedback
 plus another line"
 horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/Control/CenterContainer/PanelContainer/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_g0s4o")
@@ -137,6 +200,37 @@ show_percentage = false
 indeterminate = true
 editor_preview_indeterminate = true
 
+[node name="LiteMode" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Use Lite Mode?"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+text = "Lite mode uses a subset of features that don't require a Login. Lite mode can be enabled or disabled at any time."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use Lite mode"
+
+[node name="Button2" type="Button" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use Regular mode"
+
 [node name="Curtain" type="ColorRect" parent="."]
 visible = false
 layout_mode = 2
@@ -144,3 +238,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 2
+mouse_filter = 2
+
+[connection signal="pressed" from="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer/Button" to="." method="SetLiteMode" binds= [true]]
+[connection signal="pressed" from="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer/Button2" to="." method="SetLiteMode" binds= [false]]

@@ -33,6 +33,9 @@ public partial class RecycleListContainer : ScrollContainer
         basis.node.Visible = false;
         basis.node.Size = Vector2.Zero;
         basisSize = basis.BasisSize;
+
+        ItemRectChanged += CheckForListUpdate;
+        GetChild<Control>(0).ItemRectChanged += CheckForListUpdate;
         //GD.Print($"basis {basisSize} initialised from {basis.node.Name}");
 
         //SetProvider(new TestRecyclableElementProvider());
@@ -51,7 +54,8 @@ public partial class RecycleListContainer : ScrollContainer
     int lastStartingIndex = 0;
     int lastOnScreenElements = 0;
     bool lockList = false;
-    public void UpdateList(bool force = false)
+    public void UpdateList() => UpdateList(false);
+    public void UpdateList(bool force)
     {
         if(linkedProvider is null)
         {
@@ -217,15 +221,21 @@ public partial class RecycleListContainer : ScrollContainer
 
     int lastScroll;
     Vector2 lastSize;
-    public override void _Process(double delta)
+
+    async void CheckForListUpdate()
+    {
+        await Helpers.WaitForFrame();
+        UpdateList();
+    }
+
+    public override void _PhysicsProcess(double delta)
     {
         if (lastSize != Size || lastScroll != ScrollVertical)
             UpdateList();
         lastSize = Size;
         lastScroll = ScrollVertical;
-
-        //if pooled entries is more than the length of active entries (plus a buffer of 2), remove 1 pooled entry per frame
-        if (pooledEntries.Count > activeEntries.Count + 2)
+        //if pooled entries is more than the length of active entries (plus a buffer of 20), remove 1 pooled entry per physics frame
+        if (pooledEntries.Count > activeEntries.Count + 20)
         {
             var toFree = pooledEntries.Dequeue();
             toFree.node.QueueFree();

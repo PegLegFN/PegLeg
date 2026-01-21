@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c70qnky0xyx4w"]
+[gd_scene load_steps=9 format=3 uid="uid://c70qnky0xyx4w"]
 
 [ext_resource type="Script" uid="uid://bj4gqyg63bw8" path="res://Scripts/UserInterface/ListEntries/MissionCollection.cs" id="1_4v5fq"]
 [ext_resource type="Texture2D" uid="uid://dj7i2q6htu5st" path="res://Images/InterfaceIcons/T_UI_IconLibrary_Pencil_128.png" id="1_p305g"]
@@ -6,12 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="3_2dnay"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="4_27twl"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_xict5"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="5_neet1"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="6_b35vf"]
 
-[node name="MissionCollection" type="PanelContainer" unique_id=747623071 node_paths=PackedStringArray("missionList", "loadingIcon", "playableFilter")]
-custom_minimum_size = Vector2(255, 100)
+[node name="MissionCollection" type="PanelContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "playableFilter")]
+custom_minimum_size = Vector2(255, 60)
 offset_right = 255.0
-offset_bottom = 100.0
+offset_bottom = 97.0
+mouse_filter = 1
 theme_type_variation = &"Panel3Pad"
 script = ExtResource("1_4v5fq")
 testName = "Name"
@@ -20,32 +22,32 @@ missionList = NodePath("VBoxContainer/Body/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/Body/SmallLoadingIcon")
 playableFilter = NodePath("VBoxContainer/Header/HBoxContainer/CheckButton")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=916347623]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Header" type="MarginContainer" parent="VBoxContainer" unique_id=470678899]
+[node name="Header" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Header" unique_id=1195399814]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Header"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="VBoxContainer/Header/HBoxContainer" unique_id=1351444261]
+[node name="Name" type="Label" parent="VBoxContainer/Header/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Collection Name Very Long"
 text_overrun_behavior = 3
 
-[node name="SearchBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=1406356965]
+[node name="SearchBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/SearchBtn" unique_id=913995161]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/SearchBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -59,13 +61,13 @@ grow_vertical = 2
 texture = ExtResource("2_ma4gr")
 expand_mode = 1
 
-[node name="EditBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=1458520016]
+[node name="EditBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 theme_type_variation = &"TinyButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/EditBtn" unique_id=492407310]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/EditBtn"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -79,14 +81,15 @@ grow_vertical = 2
 texture = ExtResource("1_p305g")
 expand_mode = 1
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer" unique_id=1448874012]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer"]
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 tooltip_text = "Only show Missions that can be accessed on this account"
+mouse_filter = 1
 theme_type_variation = &"EmptySquareCheckButton"
 button_pressed = true
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/CheckButton" unique_id=255142132]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/CheckButton"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -100,17 +103,29 @@ grow_vertical = 2
 texture = ExtResource("4_27twl")
 expand_mode = 3
 
-[node name="Body" type="MarginContainer" parent="VBoxContainer" unique_id=1670169597]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer/CheckButton"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("5_neet1")
+section = "missions"
+key = "filter_power_default"
+defaultValue = true
+
+[node name="Body" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/Body" unique_id=714341080 instance=ExtResource("4_xict5")]
+[node name="SmallLoadingIcon" parent="VBoxContainer/Body" instance=ExtResource("4_xict5")]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Body" unique_id=1827722497 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Body" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 script = ExtResource("6_b35vf")
 elementSpace = 4.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
@@ -118,29 +133,28 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("3_2dnay")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/ScrollContainer" unique_id=903324575]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 0
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer" unique_id=2032039684]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1132644234]
+[node name="Offset" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" unique_id=24286078]
+[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-mouse_filter = 0
 
-[node name="Padding" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1314459456]
+[node name="Padding" type="Control" parent="VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [connection signal="NameChanged" from="." to="VBoxContainer/Header/HBoxContainer/Name" method="set_text"]
 [connection signal="pressed" from="VBoxContainer/Header/HBoxContainer/SearchBtn" to="." method="GoToSearch"]
+[connection signal="toggled" from="VBoxContainer/Header/HBoxContainer/CheckButton/CheckButton" to="VBoxContainer/Header/HBoxContainer/CheckButton" method="set_pressed"]

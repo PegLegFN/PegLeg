@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class AppConfig
 {
@@ -16,17 +17,39 @@ public partial class AppConfig
 }
 public partial class VolumeController : Node
 {
-    static Window mainWindow;
+    static List<Window> appWindows = [];
     public override async void _Ready()
     {
         await Helpers.WaitForFrame();
-        mainWindow = GetWindow();
-        musicMuted = !mainWindow.HasFocus() || mainWindow.Mode == Window.ModeEnum.Minimized;
+        GetTree().NodeAdded += RegisterWindow;
+        GetTree().NodeRemoved += UnregisterWindow;
+        RegisterWindow(GetWindow());
+        musicMuted = appWindows.All(WindowUnfocused);
         musicVolumeScalar = musicMuted ? 0 : 1;
         RefreshVolumeLevels();
-        mainWindow.FocusEntered += RefreshMusicMuteState;
-        mainWindow.FocusExited += RefreshMusicMuteState;
     }
+
+    private void RegisterWindow(Node node)
+    {
+        if (node is not Window window)
+            return;
+        appWindows.Add(window);
+        window.FocusEntered += RefreshMusicMuteState;
+        window.FocusExited += RefreshMusicMuteState;
+        RefreshMusicMuteState();
+    }
+
+    private void UnregisterWindow(Node node)
+    {
+        if (node is not Window window)
+            return;
+        appWindows.Remove(window);
+        window.FocusEntered -= RefreshMusicMuteState;
+        window.FocusExited -= RefreshMusicMuteState;
+        RefreshMusicMuteState();
+    }
+
+    static bool WindowUnfocused(Window w) => !w.HasFocus() || w.Mode == Window.ModeEnum.Minimized;
 
     static bool musicMuted = false;
     static float musicVolumeScalar = 1;
@@ -43,7 +66,8 @@ public partial class VolumeController : Node
 
     void RefreshMusicMuteState()
     {
-        bool newState = !mainWindow.HasFocus() || mainWindow.Mode == Window.ModeEnum.Minimized;
+        //GD.Print("focused: "+string.Join(", ",appWindows.Where(w => !WindowUnfocused(w)).Select(w => w.Name)));
+        bool newState = appWindows.All(WindowUnfocused);
         if (newState == musicMuted)
             return;
         musicMuted = newState;
@@ -100,7 +124,7 @@ public partial class VolumeController : Node
             return baseValue;
         var invScalar = 1 - musicVolumeScalar;
         var expScalar = 1 - (invScalar * invScalar);
-        var lerped = Mathf.Lerp(-80, baseValue, expScalar);
+        var lerped = Mathf.Lerp(-100, baseValue, expScalar);
         //GD.Print($"lerp to {baseValue} ({musicVolumeScalar}) = {lerped}");
         return lerped;
     }

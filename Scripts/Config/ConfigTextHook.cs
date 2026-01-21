@@ -38,13 +38,17 @@ public partial class ConfigTextHook : Control
     {
         if (tryBind)
         {
-            if (HasSignal("text_changed"))
-            {
-                Connect("text_changed", Callable.From<string>(TrySetValue));
-            }
             if ((string)Get("text") is not null)
             {
                 ConfigValueChanged += SetText;
+                SetText(AppConfig.Get(section, key, defaultValue));
+            }
+            if (HasSignal("text_changed"))
+            {
+                if (Get("highlight_all_occurrences").VariantType == Variant.Type.Bool)
+                    Connect("text_changed", Callable.From(() => TrySetValue((string)Get("text"))));
+                else
+                    Connect("text_changed", Callable.From<string>(TrySetValue));
             }
         }
 
@@ -57,9 +61,8 @@ public partial class ConfigTextHook : Control
 
     private void SetText(string newVal)
     {
-        var cursorPos = Get("caret_column").AsInt32();
-        Set("text", newVal);
-        Set("caret_column", cursorPos);
+        if (!valueIsChanging)
+            Set("text", newVal);
     }
 
     private void UpdateValue(string section, string key, JsonValue val)

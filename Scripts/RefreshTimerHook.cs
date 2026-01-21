@@ -17,6 +17,8 @@ public partial class RefreshTimerHook : Control
     [Export]
     int customCritTime;
     [Export]
+    bool useWeeks;
+    [Export]
     ProgressBar progressBar;
 
     string CustomText
@@ -69,6 +71,7 @@ public partial class RefreshTimerHook : Control
             5 => customWarningTime,
             _ => 60,
         };
+        RefreshTimerController.OnDayChanged += UpdateRefreshTime;
         RefreshTimerController.OnSecondChanged += UpdateTimeText;
         UpdateTimeText();
 
@@ -83,7 +86,7 @@ public partial class RefreshTimerHook : Control
         UpdateTimeText();
     }
 
-    public void SetCustomRefreshTime(DateTime customRefreshTime, DateTime customLastRefreshTime)
+    public void SetCustomRefreshTime(DateTime customRefreshTime, DateTime? customLastRefreshTime = null)
     {
         timerType = 5;
         refreshTime = customRefreshTime;
@@ -95,7 +98,7 @@ public partial class RefreshTimerHook : Control
     }
 
     DateTime refreshTime;
-    DateTime lastRefreshTime;
+    DateTime? lastRefreshTime;
     int criticalCountdownTime = 1;
     int warningCountdownTime = 60;
     void UpdateRefreshTime()
@@ -142,12 +145,19 @@ public partial class RefreshTimerHook : Control
             2 => Helpers.TimeFormat.SigLong,
             1 => Helpers.TimeFormat.SigShort,
             _ => Helpers.TimeFormat.Full,
-        });
+        }, useWeeks);
         if(progressBar is not null)
         {
-            var duration = (refreshTime - lastRefreshTime).TotalDays;
-            var progress = (RefreshTimerController.RightNow - lastRefreshTime).TotalDays;
-            progressBar.Value = progress / duration;
+            if(lastRefreshTime is DateTime realLastRefresh)
+            {
+                var duration = (refreshTime - realLastRefresh).TotalDays;
+                var progress = (RefreshTimerController.RightNow - realLastRefresh).TotalDays;
+                progressBar.Value = progress / duration;
+            }
+            else
+            {
+                progressBar.Value = 0;
+            }
         }
         if (DateTime.UtcNow.CompareTo(refreshTime) >= 0)
             UpdateRefreshTime();

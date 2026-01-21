@@ -59,6 +59,11 @@ public partial class ConfigRangeHook : Node
         EmitSignal(SignalName.UnappliedLabelChanged, startValue.ToString()[..Mathf.Min(startValue.ToString().Length, 4)]);
     }
 
+    public override void _ExitTree()
+    {
+        AppConfig.OnConfigChanged -= UpdateValue;
+    }
+
     private void UpdateValue(string section, string key, JsonValue val)
     {
         if (section != this.section || key != this.key)

@@ -345,6 +345,9 @@ public class GameItem
         if(!IsSeen)
             SetSeenLocal(true);
 
+        if (!account.isOwned)
+            return;
+
         bool exists = await SetCollected(account) ?? true;
 
         if (!exists)
@@ -609,13 +612,18 @@ public class GameItem
             }
             else if (textureType == FnItemTextureType.PackImage && ((template.TryGetTexturePath(out var previewPath) && !previewPath.Contains("Pinata")) || template.DisplayName.Contains("Mini")))
                 return null;
-            else if (textureType == FnItemTextureType.Preview && customData?["llamaTier"]?.GetValue<int>() is int llamaTier)
+            else if (textureType == FnItemTextureType.Preview)
             {
                 string llamaPinataName =
                     (template.TryGetTexturePath(out var imagePath) ? imagePath : null)
                     ?.ToString().Split("\\")[^1];
                 if (llamaPinataName?.StartsWith(llamaDefaultPreviewImage) ?? false)
+                {
+                    int llamaTier = customData?["llamaTier"]?.GetValue<int>() ?? 0;
+                    if (template.Rarity == "Legendary")
+                        llamaTier = 2;//force gold tier for legendary rarity llamas
                     return llamaTierIcons[llamaTier];
+                }
             }
         }
 

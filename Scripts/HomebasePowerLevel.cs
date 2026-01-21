@@ -39,7 +39,10 @@ public partial class HomebasePowerLevel : Control
 
             currentProfile = null;
         }
-
+        if (GameAccount.ActiveAccount.accountId == null)
+        {
+            return;
+        }
         var newProfile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
         if (ct.IsCancellationRequested)
             return;

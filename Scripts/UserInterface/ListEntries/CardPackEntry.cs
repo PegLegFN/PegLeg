@@ -1,8 +1,6 @@
 using Godot;
 using System.Linq;
 using System.Text.Json.Nodes;
-using System.Threading;
-using System.Threading.Tasks;
 
 public partial class CardPackEntry : GameItemEntry
 {
@@ -73,15 +71,13 @@ public partial class CardPackEntry : GameItemEntry
 
 
         int llamaTier = item.customData?["llamaTier"]?.GetValue<int>() ?? 0;
-        //if (debug)
-        //    GD.Print("cardPackTier: " + llamaTier);
+        if (item.template.Rarity == "Legendary")
+            llamaTier = 2;//force gold tier for legendary rarity llamas
         string llamaPinataName =
             (item.template.TryGetTexturePath(out var imagePath) ? imagePath : null)
             ?.ToString().Split("\\")[^1];
         if (llamaPinataName?.StartsWith(defaultPreviewImage) ?? false)
         {
-            //if (debug)
-            //    GD.Print("using tier");
             llamaPinataName = llamaTier switch
             {
                 2 => "Gold",

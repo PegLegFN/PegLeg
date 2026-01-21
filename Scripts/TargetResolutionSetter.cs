@@ -11,16 +11,16 @@ public partial class TargetResolutionSetter : Node
 {
 	[Export]
 	Control rootNode;
-	[Export]
-	Vector2I TargetResolution = new(1280, 720);
+    [Export]
+	Vector2I TargetResolution = new(950, 720);
     [Export]
     Vector2I MinResolution = new(360, 360);
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
         var window = GetTree().Root;
-        SetSize(window, (float)AppConfig.Get("ui", "scale", 1.0));
         window.MinSize = MinResolution;
+        SetSize(window, (float)AppConfig.Get("ui", "scale", 1.0));
         rootNode?.ResetOffsets();
         AppConfig.OnConfigChanged += OnConfigChanged;
     }
@@ -32,14 +32,11 @@ public partial class TargetResolutionSetter : Node
 
     private void OnConfigChanged(string section, string key, JsonValue property)
     {
-        if (section != "ui")
+        if (section != "ui" || key != "scale")
             return;
 
-        if (key == "scale")
-        {
-            var window = GetTree().Root;
-            SetSize(window, (float)property.GetValue<double>());
-        }
+        var window = GetTree().Root;
+        SetSize(window, (float)property.GetValue<double>());
     }
 
     void SetSize(Window window, float value)

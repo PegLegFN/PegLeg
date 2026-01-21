@@ -60,6 +60,10 @@ public partial class ResponsiveButton : BaseButton
     Control target;
     [Export]
     ShaderHook outlineObject;
+    [Export]
+    Panel fallbackOutlineObject;
+    [Export]
+    ProgressBar fallbackProgressBar;
 
     [ExportGroup("Other Settings")]
     [Export]
@@ -76,21 +80,48 @@ public partial class ResponsiveButton : BaseButton
     Tween holdPressTween;
     Timer holdTimer;
 
+    bool fallback = false;
+    StyleBoxFlat fallbackOutline;
+    StyleBoxFlat fallbackProgressFill;
 
+    float lineSize = 0;
     float LineSize
     {
-        get => outlineObject?.GetShaderFloat("LineSize") ?? 0;
-        set=> outlineObject?.SetShaderFloat(value, "LineSize");
+        get => outlineObject?.GetShaderFloat("LineSize") ?? lineSize;
+        set => outlineObject?.SetShaderFloat(lineSize = value, "LineSize");
     }
+
     float FillAmount
     {
-        get => outlineObject?.GetShaderFloat("Progress") ?? 0;
-        set => outlineObject?.SetShaderFloat(value, "Progress");
+        get
+        {
+            if (fallback)
+                return (float)fallbackProgressBar.Value;
+            return outlineObject?.GetShaderFloat("Progress") ?? 0;
+        }
+        set
+        {
+            if (fallback)
+            {
+                fallbackProgressBar.Value = value;
+                return;
+            }
+            outlineObject?.SetShaderFloat(value, "Progress");
+        }
     }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
+        if (OS.HasFeature("mobile"))
+        {
+            fallback = true;
+            outlineObject.QueueFree();
+            outlineObject = null;
+            fallbackOutlineObject.Visible = true;
+            fallbackProgressBar.Visible = true;
+            fallbackProgressBar.Value = 0;
+        }
 		target ??= GetChild<Control>(0);
         holdTimer = new();
         holdTimer.Timeout += OnHoldPerformed;
@@ -109,7 +140,7 @@ public partial class ResponsiveButton : BaseButton
         target.Modulate = Colors.Transparent;
         outlineObject?.SetShaderFloat(baseLineSize, "LineSize");
         outlineObject?.SetShaderFloat(0, "Progress");
-        if(circleMode)
+        if (circleMode)
             outlineObject?.SetShaderBool(true, "Circle");
 
         if (autoAttach)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://udk47ipcpsbq"]
+[gd_scene load_steps=33 format=3 uid="uid://udk47ipcpsbq"]
 
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="1_cq0hx"]
 [ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_ix0kh"]
@@ -24,6 +24,10 @@
 [ext_resource type="Texture2D" uid="uid://cebpugdhhg4s4" path="res://Images/SDF/T_UI_Icon_UIKit_ClearBadges_SDF.png" id="16_opvrx"]
 [ext_resource type="Texture2D" uid="uid://b068tdyuivkmu" path="res://Images/ContentCreators/ArcherDanceSheet4.png" id="17_uggwr"]
 [ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="20_m3xe0"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="20_mx4ls"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="21_8o7d2"]
+[ext_resource type="Texture2D" uid="uid://dgwvyp3xkplbh" path="res://Images/InterfaceIcons/PinataStandardPack-UpgradeWhite.png" id="22_wvrrd"]
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="23_ak8r3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k64ed"]
 shader = ExtResource("16_45lr4")
@@ -65,7 +69,7 @@ shader_parameter/smoothness = 0.25
 shader_parameter/msdf = false
 shader_parameter/skipSDF = false
 
-[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel")]
+[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -75,10 +79,11 @@ script = ExtResource("1_ix0kh")
 itemList = NodePath("VBoxContainer/ScrollContainer")
 searchBox = NodePath("VBoxContainer/HBoxContainer/Search")
 targetUser = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/User")
-devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All")
-tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters")
+devAllPanel = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev")
+devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer/CheckButton")
+tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2")
 targetProfile = "campaign"
-typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "", "Schematic", "Hero", "Defender", "Worker", "AccountResource")
+typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "Schematic", "Hero", "Defender", "Worker", "AccountResource", "CardPack")
 creatorImageParent = NodePath("Creators")
 inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
 heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
@@ -305,18 +310,50 @@ theme_type_variation = &"EmptyCheckButton"
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer/CheckButton"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_incdt")
-expand_mode = 1
+expand_mode = 3
 
-[node name="TypeFilters" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" node_paths=PackedStringArray("checkButtonParent")]
+[node name="ShowDev" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_ytjya")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Include Hidden Items (Dev)"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer/CheckButton"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_6h6v6")
+expand_mode = 3
+
+[node name="TypeFilters" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("1_cq0hx")
-checkButtonParent = NodePath("MarginContainer/HBoxContainer")
 
 [node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters"]
 layout_mode = 2
@@ -372,6 +409,7 @@ layout_mode = 2
 text = "All"
 
 [node name="Dev All" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All"]
@@ -405,6 +443,7 @@ layout_mode = 2
 text = "Dev All"
 
 [node name="Tab1" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1"]
@@ -438,6 +477,7 @@ layout_mode = 2
 text = "Schematics"
 
 [node name="Tab2" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2"]
@@ -471,6 +511,7 @@ layout_mode = 2
 text = "Heroes"
 
 [node name="Tab3" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3"]
@@ -569,6 +610,46 @@ stretch_mode = 5
 layout_mode = 2
 text = "Resources"
 
+[node name="TypeFilters2" parent="VBoxContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("20_mx4ls")]
+layout_mode = 2
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="0" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+mode = -1
+text = "All"
+icon = ExtResource("5_g4jqb")
+
+[node name="Tab3" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="1" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+text = "Schematics"
+icon = ExtResource("11_k86hi")
+
+[node name="Tab4" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="2" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+text = "Heroes"
+icon = ExtResource("12_3wbpm")
+
+[node name="Tab5" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="3" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+text = "Defenders"
+icon = ExtResource("9_my6h5")
+
+[node name="Tab6" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="4" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+text = "Survivors"
+icon = ExtResource("10_17ihq")
+
+[node name="Tab7" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="5" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+text = "Resources"
+icon = ExtResource("15_opvrx")
+
+[node name="Tab8" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="6" instance=ExtResource("21_8o7d2")]
+layout_mode = 2
+mode = 1
+text = "Packs"
+icon = ExtResource("22_wvrrd")
+
 [node name="NameSort" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
 layout_mode = 2
 
@@ -585,7 +666,33 @@ theme_override_constants/margin_bottom = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer"]
 layout_mode = 2
-text = "Sort By Name"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("23_ak8r3")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Name"
 
 [node name="MarkAllSeen" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
 layout_mode = 2
@@ -634,7 +741,6 @@ offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
 elementScene = ExtResource("20_m3xe0")
-debugTarget = true
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
@@ -669,3 +775,5 @@ layout_mode = 2
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/CheckButton" to="." method="SetSortMode"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen/MarginContainer/CheckButton" to="." method="BulkMarkSeen"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Button" to="." method="BulkRecycle"]
+
+[editable path="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2"]

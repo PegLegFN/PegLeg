@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using XmppDotNet;
@@ -212,13 +214,14 @@ public partial class PartyLoadoutsInterface : Control
     {
         fromAccount ??= GameAccount.ActiveAccount;
         var partyResponse = await FnWebAddresses.EpicParty
-            .MakeRequest($"/party/api/v1/Fortnite/members/user/{fromAccount.accountId}")
+            .MakeRequest($"/party/api/v1/Fortnite/user/{fromAccount.accountId}")
             .SetAccount(GameAccount.ActiveAccount)
             .Send();
-        var partyData = await partyResponse.Content.ReadFromJsonAsync<PartyCollection>(Helpers.JsonOptions.Fields);
+        var partyJson = await partyResponse.Content.ReadFromJsonAsync<JsonObject>();
+        var partyData = partyJson.Deserialize<PartyCollection>(Helpers.JsonOptions.Fields);
         if (partyData.current.Length == 0)
             return [];
-        return partyData.current[0].members.Select(m => m.accountId);
+        return partyData.current[0].members.Select(m => m.accountId) ?? [];
     }
 
     private async void ConnectParty()

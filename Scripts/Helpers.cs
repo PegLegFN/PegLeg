@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Godot;
@@ -479,7 +476,7 @@ public static partial class Helpers
         SigShort,
     }
 
-    public static string FormatTime(this TimeSpan time, TimeFormat timeFormat = TimeFormat.Full)
+    public static string FormatTime(this TimeSpan time, TimeFormat timeFormat = TimeFormat.Full, bool useWeeks=false)
     {
         if (timeFormat == TimeFormat.Full)
         {
@@ -501,14 +498,21 @@ public static partial class Helpers
         }
 
         bool longTime = timeFormat == TimeFormat.SigLong;
-        if (time.TotalDays > 10)
+        if(useWeeks && time.TotalDays > 70)
+        {
+            return Mathf.Floor(time.TotalDays / 7) + (longTime ? " weeks" : "W");
+        }
+        else if (useWeeks && time.TotalDays > 7)
+        {
+            return $"{time.TotalDays / 7:0.0}" + (longTime ? " weeks" : "W");
+        }
+        else if (time.TotalDays > 10)
         {
             return Mathf.Floor(time.TotalDays) + (longTime ? " days" : "D");
         }
         else if (time.TotalDays > 2)
         {
-            string timerText = Mathf.FloorToInt(time.TotalDays * 10).ToString();
-            return $"{timerText[..^1]}.{timerText[^1]}{(longTime ? " days" : "D")}";
+            return $"{time.TotalDays:0.0}{(longTime ? " days" : "D")}";
         }
         else if (time.TotalHours > 10)
         {
@@ -521,7 +525,7 @@ public static partial class Helpers
         }
         else
         {
-            return Mathf.Floor(time.TotalMinutes) + (longTime ? " mins" : "m");
+            return Mathf.Floor(Mathf.Max(time.TotalMinutes, -0.1)) + (longTime ? " mins" : "m");
         }
     }
 

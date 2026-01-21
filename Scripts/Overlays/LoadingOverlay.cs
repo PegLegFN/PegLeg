@@ -21,6 +21,12 @@ public partial class LoadingOverlay : ModalWindow
         SetWindowOpen(!complete);
     }
 
+    public override void _ExitTree()
+    {
+        if (instance == this)
+            instance = null;
+    }
+
     public override void _Process(double delta)
     {
         if(loadingTokens.Any(t=>t.dirty))

@@ -119,7 +119,7 @@ public static class CalenderRequests
         await calenderCheck.WaitAsync();
         try
         {
-            if (currentCalender.cacheExpire < DateTime.UtcNow)
+            if (currentCalender.cacheExpire < DateTime.UtcNow && account.isOwned)
             {
                 var shouldNotify = await RequestCalender(account);
                 notify ??= shouldNotify;

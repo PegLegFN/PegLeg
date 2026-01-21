@@ -1,0 +1,174 @@
+[gd_scene load_steps=16 format=3 uid="uid://5unkemnryffl"]
+
+[ext_resource type="Script" uid="uid://o3tk4tcrx50j" path="res://Scripts/Timeline/Strips/TimelineEventStrip.cs" id="1_igik2"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="4_l4wml"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_v07hk"]
+[ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="5_vi2kj"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="6_fb7nn"]
+[ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="6_l4wml"]
+[ext_resource type="PackedScene" uid="uid://cg2qqkx3wm41t" path="res://Scenes/GameItemEntry/reward_entry_tiny.tscn" id="7_fb7nn"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_vi2kj"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="8_igik2"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="9_l4wml"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1nqvp"]
+resource_local_to_scene = true
+shader = ExtResource("4_l4wml")
+shader_parameter/ControlSize = Vector2(46, 45)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 8.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="Gradient" id="Gradient_ox2i8"]
+offsets = PackedFloat32Array(0.153846, 1)
+colors = PackedColorArray(0.982343, 0.982342, 0.982342, 1, 0.7, 0.7, 0.7, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_awf16"]
+gradient = SubResource("Gradient_ox2i8")
+width = 16
+height = 16
+fill_to = Vector2(0.1, 0.4)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fb7nn"]
+resource_local_to_scene = true
+shader = ExtResource("4_l4wml")
+shader_parameter/ControlSize = Vector2(46, 45)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = true
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 8.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v07hk"]
+resource_local_to_scene = true
+shader = ExtResource("8_igik2")
+shader_parameter/ControlSize = Vector2(35, 35)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("9_l4wml")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[node name="TimelineShortEvent" type="MarginContainer" node_paths=PackedStringArray("displayName", "displayItems", "freeMarker")]
+custom_minimum_size = Vector2(50, 47)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 1
+script = ExtResource("1_igik2")
+displayName = NodePath("VBoxContainer/Label")
+displayItems = [NodePath("VBoxContainer/RewardEntry")]
+freeMarker = NodePath("MarginContainer2/Label")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color(0.8083334, 0.53999996, 1, 1)
+material = SubResource("ShaderMaterial_1nqvp")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_awf16")
+expand_mode = 1
+script = ExtResource("5_v07hk")
+syncControlSize = true
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+self_modulate = Color(0.8083334, 0.53999996, 1, 1)
+texture_repeat = 2
+material = SubResource("ShaderMaterial_fb7nn")
+layout_mode = 2
+texture = ExtResource("6_fb7nn")
+expand_mode = 1
+script = ExtResource("5_v07hk")
+syncControlSize = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 10
+text = "Day 1"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="RewardEntry" parent="VBoxContainer" instance=ExtResource("7_fb7nn")]
+custom_minimum_size = Vector2(35, 35)
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+mouse_behavior_recursive = 1
+script = ExtResource("6_l4wml")
+includeAmountInName = false
+placeholderItem = "CardPack:cardpack_event_persistent_anniversary"
+
+[node name="TextureRect" parent="VBoxContainer/RewardEntry" index="0"]
+modulate = Color(1, 1, 1, 0.007843138)
+material = SubResource("ShaderMaterial_v07hk")
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/RewardEntry"]
+show_behind_parent = true
+layout_mode = 2
+texture = ExtResource("5_vi2kj")
+
+[node name="MarginContainer2" type="Control" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer2"]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(20, 18)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 12
+text = "FREE"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Responsive Button Area" parent="." instance=ExtResource("7_vi2kj")]
+layout_mode = 2
+outlinePadding = 16.0
+
+[connection signal="EventColorChanged" from="." to="TextureRect" method="set_self_modulate"]
+[connection signal="EventColorChanged" from="." to="TextureRect2" method="set_self_modulate"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="Press"]
+
+[editable path="VBoxContainer/RewardEntry"]

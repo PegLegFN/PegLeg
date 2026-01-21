@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bdpcqsytlgikh"]
+[gd_scene load_steps=5 format=3 uid="uid://bdpcqsytlgikh"]
 
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="1_bivth"]
 [ext_resource type="Shader" uid="uid://c1cu5jabwr16n" path="res://Shaders/ButtonOutlineShader.gdshader" id="2_fb0ou"]
@@ -6,12 +6,27 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yp0ak"]
 resource_local_to_scene = true
 shader = ExtResource("2_fb0ou")
-shader_parameter/ControlSize = Vector2(1290, 685)
+shader_parameter/ControlSize = Vector2(1360, 730)
 shader_parameter/TargetSize = Vector2(1200, 675)
 shader_parameter/LineSize = 3.0
-shader_parameter/ProgressFade = 0.02
 shader_parameter/Progress = 0.0
+shader_parameter/ProgressFade = 0.02
 shader_parameter/Circle = false
+shader_parameter/VerticalHold = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_excy2"]
+resource_local_to_scene = true
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 80
+corner_radius_top_right = 80
+corner_radius_bottom_right = 80
+corner_radius_bottom_left = 80
+corner_detail = 16
 
 [node name="Responsive Button Circle" instance=ExtResource("1_bivth")]
 circleMode = true
@@ -21,3 +36,6 @@ anchors_preset = -1
 
 [node name="TextureRect" parent="MarginContainer" index="0"]
 material = SubResource("ShaderMaterial_yp0ak")
+
+[node name="Panel" parent="MarginContainer" index="1"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_excy2")

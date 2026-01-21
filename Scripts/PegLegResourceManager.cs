@@ -81,8 +81,11 @@ public class PegLegResourceManager
         public override string ToString() => version.ToString();
     }
 
+    static bool hasLoadedResources = false;
     public static async Task FetchAndLoadPackages(int targetMajor, int targetMinor, Action<string, float> onProgress = null)
     {
+        if (hasLoadedResources)
+            return;
         onProgress?.Invoke("Checking for resource updates", -1);
         Dictionary<PackageVersion, GithubHelper.ReleaseAsset> releases = [];
         try
@@ -141,6 +144,7 @@ public class PegLegResourceManager
             LoadDataSources(),
             LoadNamedItems()
         );
+        hasLoadedResources = true;
     }
 
     //temporary until proper resource versioning system is ready
@@ -232,8 +236,11 @@ public class PegLegResourceManager
         GameItemTemplate.SetImportedTemplates(namedItemsCC.ToFrozenDictionary(StringComparer.InvariantCultureIgnoreCase));
     }
 
+    static bool hasPreloaded;
     public static async Task PreloadTemplateTextures(Action<string, float> onProgress = null)
     {
+        if (hasPreloaded)
+            return;
         int templatesProcessed = 0;
         int templatesPerFrame = 0;
         var templates = GameItemTemplate.GetTemplates().ToArray();
@@ -257,6 +264,7 @@ public class PegLegResourceManager
                 templatesPerFrame = OS.HasFeature("mobile") ? 40 : 60;
             }
         }
+        hasPreloaded = true;
         GD.Print($"loaded {templatesProcessed} template textures");
     }
 
@@ -307,13 +315,13 @@ public class PegLegResourceManager
         return FileAccess.Open(fallbackResourcePath + resource, FileAccess.ModeFlags.Read);
     }
 
-    public static T LoadResourceObj<T>(string resource, bool allowOverrides = true) where T : class
+    public static T LoadResourceObj<T>(string resource, bool allowOverrides = true, JsonSerializerOptions options = null) where T : class
     {
         using var standardFile = LoadResourceFile(resource, allowOverrides);
         var text = standardFile.GetAsText();
         try
         {
-            return JsonSerializer.Deserialize<T>(text);
+            return JsonSerializer.Deserialize<T>(text, options);
         }
         catch(Exception e)
         {
@@ -322,6 +330,7 @@ public class PegLegResourceManager
         }
         return null;
     }
+
     public static T[] LoadResourceArray<T>(string resource, bool allowOverrides = true)
     {
         bool exclude = externalResourceExclusions.Any(resource.StartsWith);

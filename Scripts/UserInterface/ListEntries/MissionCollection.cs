@@ -24,6 +24,10 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     bool sortByZoneCat;
     [Export]
     bool requireAnyUnlockedForVisibility;
+    [Export]
+    bool alwaysHidePlayableFilter;
+    [Export]
+    bool ignoreLargeXPSetting;
 
     List<GameMission> filteredMissions = [];
 
@@ -36,22 +40,46 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     public override void _Ready()
     {
         missionList.SetProvider(this);
-        GameAccount.ActiveAccountChanged += SetMissionsDirty;
+        GameAccount.ActiveAccountChanged += UpdateAccount;
         GameMission.OnMissionsUpdated += SetMissionsDirty;
         GameMission.OnMissionsInvalidated += ClearMissions;
+        AppConfig.OnConfigChanged += OnConfigChanged;
         CtrlParent.VisibilityChanged += FilterMissions;
-        if (playableFilter is not null)
+        if (playableFilter?.IsInsideTree() == true)
+        {
             playableFilter.Pressed += SetMissionsDirty;
+            playableFilter.Visible = GameAccount.ActiveAccount.isOwned && !alwaysHidePlayableFilter;
+        }
         EmitSignal(SignalName.NameChanged, testName);
         ClearMissions();
         UpdateFilters();
         SetMissionsDirty();
     }
 
+    private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonValue value)
+    {
+        if (section != "missions")
+            return;
+        if (key == "excludeLargeXP")
+        {
+            UpdateFilters();
+            SetMissionsDirty();
+        }
+    }
+
     public override void _ExitTree()
     {
+        GameAccount.ActiveAccountChanged -= UpdateAccount;
         GameMission.OnMissionsUpdated -= SetMissionsDirty;
         GameMission.OnMissionsInvalidated -= ClearMissions;
+        AppConfig.OnConfigChanged -= OnConfigChanged;
+    }
+
+    void UpdateAccount()
+    {
+        if (playableFilter?.IsInsideTree()==true)
+            playableFilter.Visible = GameAccount.ActiveAccount.isOwned && !alwaysHidePlayableFilter;
+        SetMissionsDirty();
     }
 
     public void GoToSearch()
@@ -72,9 +100,13 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
         missionEntry.SetHighlightProvider(this);
     }
 
+    string activeSearchText;
     public void UpdateFilters()
 	{
         var searchText = testSearch;
+        if (AppConfig.Get("missions", "excludeLargeXP", false) && !ignoreLargeXPSetting)
+            searchText = searchText.Trim() + " !XP !Gold";
+        activeSearchText = searchText;
         if (searchText.Contains("///"))
         {
             string[] splitSearchText = searchText.Split("///");

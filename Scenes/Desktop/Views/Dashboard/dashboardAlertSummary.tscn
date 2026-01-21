@@ -1,0 +1,255 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjo0qsieb4y21"]
+
+[ext_resource type="Script" uid="uid://bob0mcr4r7qyn" path="res://Scripts/UserInterface/Dashboard/AlertSummaryController.cs" id="1_vcuvx"]
+[ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="2_n1o3m"]
+[ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="3_d2rmp"]
+[ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/dashboard_alert_summary.tscn" id="4_fr4qi"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_8c0sj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
+shader = ExtResource("3_d2rmp")
+
+[node name="DashboardAlertSummary" type="PanelContainer" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
+custom_minimum_size = Vector2(474, 420)
+mouse_filter = 1
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("1_vcuvx")
+targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayllama", "AccountResource:reagent_alteration_upgrade_sr", "AccountResource:reagent_alteration_upgrade_vr", "AccountResource:reagent_alteration_upgrade_r", "AccountResource:reagent_alteration_upgrade_uc", "AccountResource:reagent_alteration_generic", "AccountResource:reagent_c_t01", "AccountResource:reagent_c_t02", "AccountResource:reagent_c_t03", "AccountResource:reagent_c_t04", "AccountResource:campaign_event_currency", "AccountResource:reagent_alteration_ele_fire", "AccountResource:reagent_alteration_ele_water", "AccountResource:reagent_alteration_ele_nature")
+rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
+loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Alert Summary"
+horizontal_alignment = 1
+
+[node name="ShareBtn" type="Button" parent="VBoxContainer/MarginContainer2"]
+visible = false
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/ShareBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_n1o3m")
+expand_mode = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Reward" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.5
+theme_type_variation = &"Outline6"
+text = "Reward"
+horizontal_alignment = 1
+
+[node name="Stone" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Stone"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Stone"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2296, 0.4264, 0.82, 1)
+
+[node name="Plank" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Plank"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Plank"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.15, 1, 0, 1)
+
+[node name="Canny" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Canny"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Canny"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.8, 0, 1)
+
+[node name="Twine" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Twine"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Twine"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.683333, 0, 1, 1)
+
+[node name="Total" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Total"
+horizontal_alignment = 1
+
+[node name="Ventures" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Outline6"
+text = "Vent's"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0.883333, 1, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="DashboardAlertSummary" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary2" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary3" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary4" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary5" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary6" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary7" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary8" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary9" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary10" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary11" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary12" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary13" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary14" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary15" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary16" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="DashboardAlertSummary17" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+visible = false
+layout_mode = 2
+
+[node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" instance=ExtResource("5_8c0sj")]
+layout_mode = 2

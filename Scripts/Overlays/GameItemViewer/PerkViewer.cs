@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Frozen;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -33,6 +34,8 @@ public partial class PerkViewer : Control
 
     [Export]
     Button perkApplyButton;
+    [Export]
+    bool previewMaxTierByDefault;
 
     public override void _Ready()
     {
@@ -136,6 +139,11 @@ public partial class PerkViewer : Control
             {
                 if (perkSlots[i].requiredLevel <= itemLevel && perkSlots[i].RequiredRarityLevel <= itemRarity)
                     unlockedPerks = i + 1;
+                var baseAlteration = activePerks[i] is not null ? GameItemTemplate.Get(activePerks[i]) : null;
+                if (perkSlots[i].OptionsForLevel(baseAlteration?.RarityLevel ?? (previewMaxTierByDefault ? 5 : 1)) is string[] options && options.Length == 1)
+                {
+                    activePerks[i] = options[0];
+                }
             }
         }
         else
@@ -196,7 +204,7 @@ public partial class PerkViewer : Control
     {
         //GD.Print("opening perk changer for index: " + index);
         var baseAlteration = activePerks[index] is not null ? GameItemTemplate.Get(activePerks[index]) : null;
-        string[] possibilities = perkSlots[index].OptionsForLevel(baseAlteration?.RarityLevel ?? (Input.IsKeyPressed(Key.Shift) ? 5 : 1));
+        string[] possibilities = perkSlots[index].OptionsForLevel(baseAlteration?.RarityLevel ?? (Input.IsKeyPressed(Key.Shift) || previewMaxTierByDefault ? 5 : 1));
 
         selectedPerk = null;
         if (baseAlteration?["RarityUpRecipe"] is null && possibilities.Length==0)

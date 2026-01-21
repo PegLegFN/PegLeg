@@ -8,13 +8,17 @@ uniform bool Fit = true;
 uniform bool IsHero;
 uniform bool IsSchematic;
 uniform bool IsFancy;
+uniform bool IsPack;
 uniform bool IsChoice;
-uniform sampler2D MainIcon;
+uniform sampler2D MainIcon: hint_default_transparent;
+uniform sampler2D MainPackIcon: hint_default_transparent;
 uniform vec4 AltRarity : source_color;
 uniform bool AltHero;
 uniform bool AltSchematic;
 uniform bool AltFancy;
-uniform sampler2D AltIcon;
+uniform bool AltPack;
+uniform sampler2D AltIcon : hint_default_transparent;
+uniform sampler2D AltPackIcon: hint_default_transparent;
 uniform bool HeroBeamsOnly;
 uniform float ChoiceShift : hint_range(0.0, 1.0);
 
@@ -34,7 +38,7 @@ float radial(vec2 uv, vec2 from)
 	return atan(src.x/src.y);
 }
 
-vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, bool fancy)
+vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, bool fancy, bool pack, sampler2D packTex)
 {
 	vec4 backgroundCol = rarity;
 	float gradient = 1.0-distance(vec2(0.5, 1.25), uv*vec2(1,1.5));
@@ -58,7 +62,7 @@ vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, 
 		float xGrid = gridFunc(ControlSize.x*uv.x-0.5, 9, 9);
 		float yGrid = gridFunc(ControlSize.y*uv.y, 9, 9);
 		float fullGrid = min(xGrid+yGrid, 1);
-		
+
 		backgroundCol = rarity * clamp((gradient*0.8)+(fullGrid*0.5*(gradient+0.4)),0.0,1.0);
 		//backgroundCol= vec4(xGrid);
 	}
@@ -72,6 +76,13 @@ vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, 
 		backgroundCol = rarity * clamp(gradient,0.0,1.0);
 	}
 	vec4 fitTex = texture(tex, uv);
+	if (pack) {
+		vec2 packUV=(uv-vec2(0.336,0.54))*7.5;
+		packUV.y+=packUV.x*-0.05;
+		packUV.y*=1.0-(packUV.x*0.1);
+		vec4 packCol=texture(packTex, packUV);
+		fitTex.rgb=mix(fitTex.rgb,vec3(0.2890625,0.2578125,0.2265625),packCol.r*packCol.a);
+	}
 	return mix(backgroundCol, fitTex, fitTex.a);
 }
 
@@ -81,14 +92,14 @@ void fragment() {
 	vec2 fitUV = adaptToAspect(ControlSize, vec2(0.5, 1), 1.0/TEXTURE_PIXEL_SIZE, UV, Fit);
 	vec2 controlSpace = UV*ControlSize;
 	vec4 barColor = modulate;
-	
+
 	if(IsChoice)
 	{
 		vec2 shiftedUV = fitUV+vec2(ChoiceShift*choiceDist,0.0);
-		
-		vec4 first = renderItem(shiftedUV, MainIcon, modulate, IsSchematic, IsHero, IsFancy);
-		vec4 second = renderItem(shiftedUV+vec2(-choiceDist,0.0), MainIcon, AltRarity, false, false, false);
-		
+
+		vec4 first = renderItem(shiftedUV, MainIcon, modulate, IsSchematic, IsHero, IsFancy, IsPack, MainPackIcon);
+		vec4 second = renderItem(shiftedUV+vec2(-choiceDist,0.0), AltIcon, AltRarity, AltSchematic, AltHero, AltFancy, AltPack, AltPackIcon);
+
 		float gradient = clamp((fitUV.x+(ChoiceShift*choiceDist)-1.0)/choiceGap, 0, 1);
 		COLOR = mix(first, second, gradient);
 		barColor = mix(modulate, AltRarity, gradient);
@@ -97,9 +108,9 @@ void fragment() {
 	}
 	else
 	{
-		COLOR = renderItem(fitUV, MainIcon, modulate, IsSchematic, IsHero, IsFancy);
+		COLOR = renderItem(fitUV, MainIcon, modulate, IsSchematic, IsHero, IsFancy, IsPack, MainPackIcon);
 	}
-	
+
 	if(controlSpace.y>(ControlSize.y-CornerRadius))
 	{
 		COLOR = mix(COLOR, barColor, modulate.a);

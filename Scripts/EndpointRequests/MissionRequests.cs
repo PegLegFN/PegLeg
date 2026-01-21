@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Amazon.S3;
+using Amazon.S3.Internal;
+using Amazon.S3.Model;
+using Godot;
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,7 +14,6 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Godot;
 
 /* Old Requests
 static class MissionRequests
@@ -162,7 +165,7 @@ static class MissionRequests
 }
 */
 
-public class GameMission
+public partial class GameMission
 {
     #region Static
 
@@ -194,10 +197,7 @@ public class GameMission
         if (!ignoreHashCheck)
             return (checkMissionsState = false, null);
 
-        var missionResponse = await FnWebAddresses.FortGame
-            .MakeRequest("fortnite/api/game/v2/world/info")
-            .SetAccount()
-            .Send();
+        var missionResponse = await RequestMissions();
 
         if (await missionResponse.CheckForError())
             return (checkMissionsState = false, null);
@@ -226,22 +226,52 @@ public class GameMission
 
     static JsonNode recentMissionData;
 
+    static async Task<HttpResponseMessage> RequestMissions()
+    {
+        if (!GameAccount.ActiveAccount.isOwned)
+        {
+            const string litePath = "user://latestLiteMissions.json";
+            if (FileAccess.FileExists(litePath) && (DateTime.UtcNow.Hour > 0 || DateTime.UtcNow.Minute > 10))
+            {
+                using var latestMissionsFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Read);
+                if (latestMissionsFile.GetError() == Error.Ok)
+                {
+                    string missionText = latestMissionsFile.GetAsText();
+                    var missionData = JsonNode.Parse(missionText);
+                    var expiryDate = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
+                    var reset = DateTime.Parse(expiryDate, CultureInfo.InvariantCulture);
+                    if (reset > DateTime.UtcNow)
+                        return new HttpResponseMessage() { Content = new StringContent(missionText) };
+                }
+            }
+            return await ApiWebAddresses.pegLegLiteBucket
+                .MakeRequest("latestMissions.json")
+                .Send();
+        }
+        return await FnWebAddresses.FortGame
+                .MakeRequest("fortnite/api/game/v2/world/info")
+                .SetAccount()
+                .Send();
+    }
+
+    static AmazonS3Client BucketClient = null;
+
     static async Task UpdateMissions(JsonNode missionData, bool ignoreExpiry = false)
     {
         using var st = await missionUpdateSemaphore.AwaitToken();
         if (!st.wasImmediate)
             return;
-        bool delayFirst = DateTime.Now.Minute == 0 && DateTime.Now.Second == 0;
+        bool delayFirst = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
 
         currentMissions = null;
-        missionReset = DateTime.Now;
+        missionReset = DateTime.UtcNow;
         OnMissionsInvalidated?.Invoke();
 
-        int retriesRemaining = 3;
+        int totalRetries = 0;
 
         while (true)
         {
-            if (DateTime.Now.Minute == 0 && DateTime.Now.Second ==0)
+            if (delayFirst)
             {
                 //if request is made exactly on the hour, its likely for daily reset.
                 //requesting missions exactly at reset can cause consistancy issues, so
@@ -252,10 +282,7 @@ public class GameMission
             GD.Print($"Requesting Missions...");
 
             FetchDailyCat();
-            var missionResponse = await FnWebAddresses.FortGame
-                .MakeRequest("fortnite/api/game/v2/world/info")
-                .SetAccount()
-                .Send();
+            var missionResponse = await RequestMissions();
 
             if (await missionResponse.CheckForError())
                 return;
@@ -280,39 +307,51 @@ public class GameMission
             catch(Exception e)
             {
                 GD.PushWarning(e);
-                missionData = null;
-                if (retriesRemaining > 0)
-                {
-                    GD.Print("retrying missions");
-                    retriesRemaining--;
-                    continue;
-                }
-                else
-                {
-                    generatedMissions = [];
-                    //throw;
-                }
+                generatedMissions = [];
             }
 
             //edge case where missions expire after being requested but before the response is returned
             if (!ignoreExpiry && missionReset < DateTime.UtcNow)
             {
-                missionData = null;
-                continue;
+                if(totalRetries < 5 && DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0)
+                {
+                    totalRetries++;
+                    missionData = null;
+                    GD.Print("pausing 2 seconds to wait for lite missions");
+                    await Helpers.WaitForTimer(2);
+                    continue;
+                }
+                else if (totalRetries >= 5)
+                {
+                    GD.Print("abandoning retries");
+                }
+                GD.Print("Warning: lite missions are out of date");
             }
 
-            using (var latestMissionsFile = FileAccess.Open("user://latestMissions.json", FileAccess.ModeFlags.Write))
+            try
             {
+                string latestOutput = AppConfig.Get("missions", "latest_output", "");
+                if (string.IsNullOrWhiteSpace(latestOutput))
+                    latestOutput = "user://latestMissions";
+                latestOutput += ".json";
+                string latestOutputParent = latestOutput[(latestOutput.LastIndexOf('/') + 1)..];
+                if (!DirAccess.DirExistsAbsolute(latestOutputParent))
+                    DirAccess.MakeDirAbsolute(latestOutputParent);
+                using var latestMissionsFile = FileAccess.Open(latestOutput, FileAccess.ModeFlags.Write);
                 latestMissionsFile.StoreString(recentMissionData.ToString());
             }
+            catch { }
+
+            SendMissionsToBucket();
 
             currentMissions =
-            [.. generatedMissions
-            .Where(m => m is not null)
-            .OrderBy(m => m.TheaterIdx)
-            .ThenBy(m => m.PowerLevel)
-            .ThenBy(m => m.IsFourPlayer)
-            .ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
+            [
+                .. generatedMissions
+                .Where(m => m is not null)
+                .OrderBy(m => m.TheaterIdx)
+                .ThenBy(m => m.PowerLevel)
+                .ThenBy(m => m.IsFourPlayer)
+                .ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
             ];
             OnMissionsUpdated?.Invoke();
 
@@ -321,6 +360,53 @@ public class GameMission
             return;
         }
     }
+
+    static DateTime lastBucketedAt;
+    static async void SendMissionsToBucket()
+    {
+        if (
+            !GameAccount.ActiveAccount.isOwned ||
+            !AppConfig.TryGet("missions", "bucketAccessID", out string bucketAccessID) ||
+            !AppConfig.TryGet("missions", "bucketAccessSecret", out string bucketAccessSecret) ||
+            !AppConfig.TryGet("missions", "bucketURL", out string bucketURL)
+        )
+            return;
+
+        if ((lastBucketedAt - DateTime.UtcNow).TotalDays < 1 && lastBucketedAt.Date == DateTime.UtcNow.Date)
+            return;
+
+        var missionData = recentMissionData.ToString();
+        const string litePath = "user://liteMissions.json";
+        if (FileAccess.FileExists(litePath))
+        {
+            using var latestMissionsFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Read);
+            if (latestMissionsFile.GetError() == Error.Ok && missionData.Hash() == latestMissionsFile.GetAsText().Hash())
+                return;
+        }
+
+        lastBucketedAt = DateTime.UtcNow;
+
+        using (var latestMissionsFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Write))
+            latestMissionsFile.StoreString(missionData);
+        var fullPath = ProjectSettings.GlobalizePath(litePath);
+
+        BucketClient ??= new(bucketAccessID, bucketAccessSecret, new AmazonS3Config()
+        {
+            ServiceURL = bucketURL
+        });
+        var response = await BucketClient.PutObjectAsync(new() {
+            BucketName = "pegleg-lite-data",
+            Key = "latestMissions.json",
+            FilePath = fullPath,
+            DisablePayloadSigning = true
+        });
+        var statusCode = (int)response.HttpStatusCode;
+        if (statusCode<200 || statusCode > 299)
+        {
+            GD.Print($"Bucket Upload Failure, status: {response.HttpStatusCode}");
+        }
+    }
+
     //https://cataas.com/cat?width=64&height=64
     static async void FetchDailyCat()
     {
@@ -333,7 +419,7 @@ public class GameMission
         var catImage = await catResponse.ReadImage();
         if (catImage is null)
             return;
-        if (DailyCat is null)
+        if (DailyCat is null || DailyCat.GetFormat() != catImage.GetFormat())
             DailyCat = ImageTexture.CreateFromImage(catImage);
         else
             DailyCat.Update(catImage);
@@ -352,6 +438,8 @@ public class GameMission
         if (!AppConfig.TryGet("advanced", "archive_missions", out bool enabled) || !enabled)
             return;
         var archiveDirPath = AppConfig.Get("mission_archive", "target_folder", "user://mission_archive/");
+        if (string.IsNullOrWhiteSpace(archiveDirPath))
+            archiveDirPath = "user://mission_archive/";
         if (!DirAccess.DirExistsAbsolute(archiveDirPath))
         {
             try
@@ -511,6 +599,8 @@ public class GameMission
 
         public bool MeetsRequirements(GameAccount account, bool ventures)
         {
+            if (!account.isOwned)
+                return true;
             var pl = ventures ? account.VentureFortStats.PowerLevel : account.FortStats.PowerLevel;
             if (pl < personalPowerRating)
                 return false;
@@ -814,7 +904,7 @@ public class GameMission
         {
             GameItem item = itemData.ToItem();
             item.GetSearchTags();
-            var match = Regex.Match(item.template.Name.ToLower(), "zcp_.*t\\d{1,2}");
+            var match = ZCPConverter().Match(item.template.Name.ToLower());
             string key = match.Success ?
                 match.Groups[0].Value :
                 item.template.Name.ToLower();
@@ -854,7 +944,8 @@ public class GameMission
         alertModifiers ??= [];
         alertRewardItems ??= [];
 
-        searchTags = missionGenerator.GenerateSearchTags().DeepClone().AsArray();
+        searchTags = [];
+        searchTags.Add(DisplayName);
         if (IsFourPlayer)
             searchTags.Add("Group");
         if(alertModifiers.Length>0)
@@ -932,4 +1023,7 @@ public class GameMission
             item.SetRewardNotification(null, force);
         }
     }
+
+    [GeneratedRegex("zcp_.*t\\d{1,2}")]
+    private static partial Regex ZCPConverter();
 }

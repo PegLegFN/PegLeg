@@ -84,7 +84,7 @@ public partial class PerkEntry : Control
         }
         else
         {
-            EmitSignal(SignalName.NameChanged, "Preview perk possibilities");
+            EmitSignal(SignalName.NameChanged, "Select perk to preview");
             EmitSignal(SignalName.RarityIconVisibilityChanged, true);
             EmitSignal(SignalName.RarityIconChanged, PegLegResourceManager.defaultIcon);
             EmitSignal(SignalName.ElementIconVisibilityChanged, false);

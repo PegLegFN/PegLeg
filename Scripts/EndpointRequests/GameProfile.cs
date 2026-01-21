@@ -271,7 +271,8 @@ public class GameProfile
     #endregion
 
 
-    DateTime lastClientQuestLoginAttempt = DateTime.MinValue;
+    DateTime lastProfileOperationTime = DateTime.MinValue;
+    DateTime lastClientQuestLoginTime = DateTime.MinValue;
     public JsonObject lastOp { get; private set; }
     async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry = false, bool silent = false, bool witholdChanges = false)
     {
@@ -314,12 +315,10 @@ public class GameProfile
             if (!hasUnseen)
                 return null;
         }
-        if(operation == "ClientQuestLogin")
-        {
-            if ((DateTime.UtcNow - lastClientQuestLoginAttempt).TotalSeconds < 10)
-                return null;
-            lastClientQuestLoginAttempt = DateTime.UtcNow;
-        }
+        if (operation == "ClientQuestLogin" && (DateTime.UtcNow - lastClientQuestLoginTime).TotalSeconds < 10)
+            return [];
+        if (operation == "QueryProfile" && (DateTime.UtcNow - lastProfileOperationTime).TotalSeconds < 1)
+            return [];
 
         var opResponse = await FnWebAddresses.FortGame
             .MakeRequest(
@@ -331,6 +330,10 @@ public class GameProfile
             .SetJsonContent(content)
             .SetAccount(actingAccount)
             .Send();
+
+        if (operation == "ClientQuestLogin")
+            lastClientQuestLoginTime = DateTime.UtcNow;
+        lastProfileOperationTime = DateTime.UtcNow;
 
         JsonObject result = null;
         try

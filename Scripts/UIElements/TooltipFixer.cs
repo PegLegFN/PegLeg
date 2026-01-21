@@ -15,12 +15,16 @@ public partial class TooltipFixer : Node
         tooltipControl.Scale = Vector2.One;
         tooltipControl.Visible = true;
         GetTree().NodeAdded += OnNodeAdded;
+        inTree = true;
     }
 
     public override void _ExitTree()
     {
         GetTree().NodeAdded -= OnNodeAdded;
+        inTree = false;
     }
+
+    bool inTree = false;
 
     private void OnNodeAdded(Node node)
     {
@@ -45,7 +49,8 @@ public partial class TooltipFixer : Node
         tooltipControl.SetTooltip(label.Text);
         pp.TreeExiting += () =>
         {
-            pp.RemoveChild(tooltipControl);
+            if (inTree)
+                pp.RemoveChild(tooltipControl);
         };
 
         ResetCSF(pp);
