@@ -3,6 +3,7 @@ using System;
 using System.Collections.Frozen;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FileAccess = Godot.FileAccess;
@@ -156,6 +157,10 @@ public partial class Bootstrap : Node
         }
 #endif
 
+#if GODOT_WINDOWS
+        if (FileAccess.FileExists("user://update.msi"))
+            DirAccess.RemoveAbsolute("user://update.msi");
+#endif
 
         try
         {
@@ -187,18 +192,6 @@ public partial class Bootstrap : Node
 
         AppConfig.PreloadConfig();
         GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
-#if GODOT_WINDOWS
-        if (FileAccess.FileExists(Helpers.GlobalisePath("res://update.exe")))
-            DirAccess.RemoveAbsolute(Helpers.GlobalisePath("res://update.exe"));
-
-        var oldPackFolder = Helpers.GlobalisePath("res://PegLegResources");
-        if (DirAccess.DirExistsAbsolute(oldPackFolder))
-            DeleteContents(oldPackFolder);
-
-        var oldExternalFolder = Helpers.GlobalisePath("res://External");
-        if (!Engine.IsEditorHint() && DirAccess.DirExistsAbsolute(oldExternalFolder))
-            DeleteContents(oldExternalFolder);
-#endif
 
         //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
         await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, (text, prog) => {

@@ -147,16 +147,18 @@ public partial class UpdateChecker : Control
                 await Helpers.WaitForTimer(1);
             }
             overlay.Dispose();
-            await GenericConfirmationWindow.ShowError(updatePath);
-            int pid = OS.CreateProcess("msiexec", [$"/i", updatePath], true);
-            GetTree().Quit();
+            int pid = OS.CreateProcess("powershell", ["Start-Process", "-FilePath", updatePath]);
+            if (pid != -1)
+                GetTree().Quit();
+            OS.ShellOpen(Helpers.GlobalisePath("user://"));
+            await GenericConfirmationWindow.ShowError("Could not run update.msi automatically.\nPlease run update.msi manually.", "Update failed");
         }
 		catch
         {
-            await GenericConfirmationWindow.ShowError("Update failed");
+            await GenericConfirmationWindow.ShowError("Uncaught Error", "Update failed");
         }
 #else
-        await GenericConfirmationWindow.ShowError("Update unavailable on this platform");
+        await GenericConfirmationWindow.ShowError("Update unavailable on this platform", "Error     ");
 #endif
     }
 }
