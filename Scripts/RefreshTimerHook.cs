@@ -165,6 +165,7 @@ public partial class RefreshTimerHook : Control
 
     public override void _ExitTree()
     {
+        RefreshTimerController.OnDayChanged -= UpdateRefreshTime;
         RefreshTimerController.OnSecondChanged -= UpdateTimeText;
     }
 }

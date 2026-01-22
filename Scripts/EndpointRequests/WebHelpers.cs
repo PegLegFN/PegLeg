@@ -265,7 +265,7 @@ public static class WebHelpers
 
     public static Task<T> ReadJson<T>(this HttpResponseMessage response)
     {
-        if (response.Content.Headers.ContentType.MediaType != "application/json")
+        if (response.Content?.Headers?.ContentType?.MediaType != "application/json")
             return Task.FromResult<T>(default);
         return response.Content.ReadFromJsonAsync<T>();
     }

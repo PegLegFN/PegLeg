@@ -212,7 +212,7 @@ public class GameItem
             templateId = newTemplate;
             zcpEquivelent = FindZcpEquivelent(templateId);
         }
-        quantity = rawData["quantity"].GetValue<int>();
+        quantity = rawData["quantity"]?.GetValue<int>() ?? 1;
         attributes = rawData["attributes"]?.AsObject();
         isSeenLocal = null;
         customData = [];

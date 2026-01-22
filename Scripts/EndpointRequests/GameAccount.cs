@@ -392,12 +392,14 @@ public partial class GameAccount
             return true;
         if (!isOwned)
             return false;
+
+        using var loadToken = LoadingOverlay.CreateToken("authentication");
+        if (!loadingOverlay)
+            loadToken.Dispose();
+
         await authSemaphore.WaitAsync();
         try
         {
-            using var loadToken = LoadingOverlay.CreateToken("authentication");
-            if (!loadingOverlay)
-                loadToken.Dispose();
 
             if (!assumeValid)
             {
@@ -418,7 +420,6 @@ public partial class GameAccount
                 {
                     GD.Print($"Token refreshed for {DisplayName}");
                     var json = await refreshRequest.ReadJson();
-                    GD.Print(json);
                     SetAuthentication(json);
                     return true;
                 }
