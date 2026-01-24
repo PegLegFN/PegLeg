@@ -1,9 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Xml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using NotifDataContainer = NotificationManager.NotificationDataContainer;
 
 public partial class NotificationInstance : Control

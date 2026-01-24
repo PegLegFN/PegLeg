@@ -4,7 +4,6 @@
 [ext_resource type="Shader" uid="uid://c1cu5jabwr16n" path="res://Shaders/ButtonOutlineShader.gdshader" id="2_gilom"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="3_8ncov"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_f4dwi"]
-[ext_resource type="StyleBox" uid="uid://vtwl7umgtbgo" path="res://GodotThemes/Styleboxes/Heavy/HeavyBox.tres" id="5_kcvs0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_133ye"]
 resource_local_to_scene = true
@@ -16,6 +15,18 @@ shader_parameter/Progress = 0.0
 shader_parameter/ProgressFade = 0.02
 shader_parameter/Circle = false
 shader_parameter/VerticalHold = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wikbw"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lbo8k"]
 
@@ -74,9 +85,10 @@ syncControlSize = true
 
 [node name="Panel" type="Panel" parent="MarginContainer"]
 visible = false
+z_index = 1
 layout_mode = 2
 mouse_filter = 1
-theme_override_styles/panel = ExtResource("5_kcvs0")
+theme_override_styles/panel = SubResource("StyleBoxFlat_wikbw")
 
 [node name="ProgressBar" type="ProgressBar" parent="MarginContainer"]
 visible = false

@@ -1,12 +1,16 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
+[Tool]
 public partial class ContextMenu : Window
 {
     static ContextMenu inst;
     [Export(PropertyHint.Dir)]
     string contextComponentFolder;
+    [Export]
+    PackedScene[] componentScenes;
     [Export]
     Control componentParent;
     [Export]
@@ -16,33 +20,63 @@ public partial class ContextMenu : Window
     [Export]
     Control scaleAnimation;
     Dictionary<string, BaseContextComponent> contextComponentDict = [];
-    static readonly Vector2[] fullPassthrough = new Vector2[2];
+    static readonly Vector2[] fullPassthrough = [new(),new()];
+    static readonly Vector2[] noPassthrough = [];
+
+#if TOOLS
+    [ExportToolButton("Update Components")]
+    Callable SceneRefreshBtn => Callable.From(LoadPackedScenes);
+    void LoadPackedScenes()
+    {
+        var compNames = DirAccess.GetFilesAt(contextComponentFolder);
+        componentScenes = new PackedScene[compNames.Length];
+        for (int i = 0; i < compNames.Length; i++)
+        {
+            string name = compNames[i];
+            if (name.EndsWith(".remap"))
+                name = name[..^6];
+            componentScenes[i] = ResourceLoader.Load<PackedScene>($"{contextComponentFolder}/{name}");
+        }
+    }
+#endif
 
     public override void _Ready()
     {
         inst = this;
         Visible = true;
         this.Win64RemoveFromTaskbar();
-        MousePassthroughPolygon = fullPassthrough;
+        SetCtxVisible(false);
 
-        var compNames = DirAccess.GetFilesAt(contextComponentFolder);
-        for (int i = 0; i < compNames.Length; i++)
+        componentScenes = [.. componentScenes.Distinct()];
+        //GD.Print($"Components: " + componentScenes.Length);
+        for (int i = 0; i < componentScenes.Length; i++)
         {
-            string name = compNames[i];
-            if (name.EndsWith(".remap"))
-                name = name[..^6];
-            var cScene = ResourceLoader.Load<PackedScene>($"{contextComponentFolder}/{name}");
+            var cScene = componentScenes[i];
             var cNode = cScene.Instantiate();
             if (cNode is not BaseContextComponent comp)
             {
                 cNode.QueueFree();
+                //GD.Print("Bad Component");
                 continue;
             }
             contextComponentDict.TryAdd(comp.Id, comp);
             comp.menu = this;
         }
+        //GD.Print($"Components: " + contextComponentDict.Count);
 
         FocusExited += CloseMenu;
+    }
+
+    public void SetCtxVisible(bool visible)
+    {
+        if (OS.HasFeature("mobile"))
+        {
+            Visible = visible;
+        }
+        else
+        {
+            MousePassthroughPolygon = visible ? noPassthrough : fullPassthrough;
+        }
     }
 
     List<HSeparator> activeSeparators = [];
@@ -56,9 +90,14 @@ public partial class ContextMenu : Window
     {
         scaleAnimation.Scale = Vector2.Zero;
         await Helpers.WaitForFrame();
-        MousePassthroughPolygon = fullPassthrough;
+        SetCtxVisible(false);
         var compList = hook.componentList.components;
         bool hasComps = false;
+
+        if (open)
+            Clear();
+
+        //GD.Print($"Listed Components: {string.Join(", ", compList)}");
         for (int i = 0; i < compList.Length; i++)
         {
             string componentId = compList[i];
@@ -82,12 +121,14 @@ public partial class ContextMenu : Window
                 activeComponents.Add(comp);
                 comp.Update(hook);
             }
+            else
+            {
+                GD.Print($"Component not found: {componentId}");
+            }
         }
         if (!hasComps)
             return;
 
-        if (open)
-            Clear();
         open = true;
         isOpening = true;
 
@@ -171,7 +212,7 @@ public partial class ContextMenu : Window
         Size = (Vector2I)scaleAnimation.Size;
 
         Position = targetPos;
-        MousePassthroughPolygon = [];
+        SetCtxVisible(true);
         GrabFocus();
         isOpening = false;
         await Helpers.WaitForFrame();
@@ -203,7 +244,7 @@ public partial class ContextMenu : Window
             return;
         scaleAnimation.Scale = Vector2.Zero;
         await Helpers.WaitForFrame();
-        MousePassthroughPolygon = fullPassthrough;
+        SetCtxVisible(false);
         open = false;
         Clear();
     }

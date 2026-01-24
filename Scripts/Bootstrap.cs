@@ -158,8 +158,41 @@ public partial class Bootstrap : Node
 #endif
 
 #if GODOT_WINDOWS
+        var updatePath = Helpers.GlobalisePath("user://updateTest.msi");
+        if (FileAccess.FileExists(updatePath))
+        {
+            //var batchPath = Helpers.GlobalisePath("user://update.bat");
+            //using (var batFile = FileAccess.Open(batchPath, FileAccess.ModeFlags.Write))
+            //{
+            //    batFile.StoreString("""
+            //    rem Batch script to elevate permissions for installing updates to work
+            //    rem checks if permissions 
+            //    %SystemRoot%\System32\net.exe file 1>NUL 2>NUL
+            //    if errorlevel 1 (
+            //        %SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe Start-Process -FilePath "%0" -ArgumentList "%cd%" -verb runas >NUL 2>&1
+            //        exit /b
+            //    )
+            //    cd /d %1
+            //    msiexec /i update.msi
+            //    pause
+            //    """);
+            //}
+            //int pid = OS.CreateProcess(batchPath, [], true);
+            Godot.Collections.Array output = [];
+            var aList = $"'/i \"{updatePath}\"'";
+            GD.Print(aList);
+            GD.Print("");
+            OS.Execute("powershell.exe", ["-Command", "Start-Process", "msiexec", "-ArgumentList", aList], output);
+            foreach (var a in output)
+            {
+                GD.Print(a.AsString());
+            }
+
+        }
         if (FileAccess.FileExists("user://update.msi"))
             DirAccess.RemoveAbsolute("user://update.msi");
+        if (FileAccess.FileExists("user://update.bat"))
+            DirAccess.RemoveAbsolute("user://update.bat");
 #endif
 
         try
@@ -191,7 +224,7 @@ public partial class Bootstrap : Node
         loadingContent.Visible = true;
 
         AppConfig.PreloadConfig();
-        GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
+        //GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
 
         //bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
         await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, (text, prog) => {

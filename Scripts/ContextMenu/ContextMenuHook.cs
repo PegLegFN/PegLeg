@@ -20,11 +20,24 @@ public partial class ContextMenuHook : Node
     [Export]
     public ContextComponentList componentList;
 
+    const float mobileHoldTime = 1.0f;
     static ContextMenuHook currentHover;
     bool hover;
+    bool mobile;
+    Timer holdTimer;
 
     public override void _Ready()
     {
+        mobile = OS.HasFeature("mobile");
+        if (mobile)
+        {
+            holdTimer = new();
+            holdTimer.Autostart = false;
+            holdTimer.WaitTime = mobileHoldTime;
+            holdTimer.OneShot = true;
+            holdTimer.Timeout += Trigger;
+            AddChild(holdTimer);
+        }
         var parent = GetParent();
         if (parent is Control ctrlParent)
         {
@@ -33,22 +46,40 @@ public partial class ContextMenuHook : Node
                 currentHover = this;
                 rClickWasPressed = false;
                 hover = true;
+
+                if (mobile && mouseLastPressed == Time.GetTicksMsec())
+                    holdTimer.Start();
             };
             ctrlParent.MouseExited += () =>
             {
                 hover = false;
                 rClickWasPressed = false;
                 halfTriggered = false;
+                if (mobile)
+                    holdTimer.Stop();
             };
         }
     }
 
     bool rClickWasPressed;
     bool halfTriggered;
+    ulong mouseLastPressed = 0;
     public override void _Input(InputEvent @event)
     {
         if(@event is InputEventMouseButton mbEvent)
         {
+            if (mobile)
+            {
+                var pressed = mbEvent.ButtonMask.HasFlag(MouseButtonMask.Left);
+                if (pressed)
+                    mouseLastPressed = Time.GetTicksMsec();
+                if (hover && pressed)
+                    holdTimer.Start();
+                else
+                    holdTimer.Stop();
+                return;
+            }
+
             bool rClickPressed = mbEvent.ButtonMask.HasFlag(MouseButtonMask.Right);
             bool rClickJustPressed = rClickPressed && !rClickWasPressed;
             bool rClickJustReleased = !rClickPressed && rClickWasPressed;
@@ -74,6 +105,8 @@ public partial class ContextMenuHook : Node
 
     void Trigger()
     {
+        if (mobile)
+            holdTimer.Stop();
         if (missionSource is not null && missionSource.currentMission is null)
             return;
         if (itemSource is not null && itemSource.currentItem is null)

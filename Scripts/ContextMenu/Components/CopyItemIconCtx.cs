@@ -1,20 +1,30 @@
 
+using Godot;
+
 public partial class CopyItemIconCtx : BaseContextComponent
 {
     public override string Id => "CopyItemIcon";
-    GameItem currentItem;
+    Image currentImage;
     public override void Update(ContextMenuHook hook)
     {
-        currentItem = hook?.itemSource?.currentItem;
-        SetDisabled(currentItem?.GetTexture(null)?.GetImage() is null || !Win64Helpers.isWindows);
+        currentImage = null;
+        if (OS.HasFeature("mobile"))
+        {
+            //this can be removed when an uncompressed version of PegLegResources is ready for mobile
+            SetDisabled(true);
+            return;
+        }
+        var currentItem = hook?.itemSource?.currentItem;
+        var tex = currentItem?.GetTexture(null, true);
+        currentImage = tex?.GetImage();
+        SetDisabled(currentImage is null || !Win64Helpers.isWindows);
     }
 
     public void Copy()
     {
-        var img = currentItem?.GetTexture(null, true)?.GetImage();
-        if (img is null)
+        if (currentImage is null)
             return;
-        Win64Helpers.ClipboardSetImage(img);
+        Win64Helpers.ClipboardSetImage(currentImage);
         menu.CloseMenu();
     }
 }

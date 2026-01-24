@@ -1,7 +1,28 @@
-[gd_scene load_steps=8 format=3 uid="uid://kgl0dydu0mtf"]
+[gd_scene load_steps=29 format=3 uid="uid://kgl0dydu0mtf"]
 
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="1_atr3d"]
 [ext_resource type="Script" uid="uid://ct11mvw5gpi7l" path="res://Scripts/ContextMenu/ContextMenu.cs" id="1_epbn8"]
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="2_s6h5w"]
+[ext_resource type="PackedScene" uid="uid://b5q5lt4tovbhd" path="res://Scenes/ContextComponents/bookmark_item_ctx.tscn" id="3_idv7x"]
+[ext_resource type="PackedScene" uid="uid://braj6068cp400" path="res://Scenes/ContextComponents/claim_quest_ctx.tscn" id="4_50qn1"]
+[ext_resource type="PackedScene" uid="uid://dlcir857s2b7u" path="res://Scenes/ContextComponents/copy_cosmetic_icon_ctx.tscn" id="5_vim7o"]
+[ext_resource type="PackedScene" uid="uid://bu6qougeyqaig" path="res://Scenes/ContextComponents/copy_item_icon_ctx.tscn" id="6_dkufx"]
+[ext_resource type="PackedScene" uid="uid://bwmeksn5ae2s4" path="res://Scenes/ContextComponents/copy_item_uuid_ctx.tscn" id="7_e1d5o"]
+[ext_resource type="PackedScene" uid="uid://8f735g4fo3wh" path="res://Scenes/ContextComponents/copy_offer_id_ctx.tscn" id="8_knltk"]
+[ext_resource type="PackedScene" uid="uid://lgsv2ucxrcu6" path="res://Scenes/ContextComponents/copy_template_id_ctx.tscn" id="9_ss504"]
+[ext_resource type="PackedScene" uid="uid://c6ip4jr8v8ku8" path="res://Scenes/ContextComponents/favourite_item_ctx.tscn" id="10_otcn7"]
+[ext_resource type="PackedScene" uid="uid://elhbgfdo2f8w" path="res://Scenes/ContextComponents/fetch_cosmetic_icon_ctx.tscn" id="11_ee3c2"]
+[ext_resource type="PackedScene" uid="uid://c8ptdx301yus7" path="res://Scenes/ContextComponents/inspect_item_ctx.tscn" id="12_o3d7y"]
+[ext_resource type="PackedScene" uid="uid://dvodww6qg44sb" path="res://Scenes/ContextComponents/inspect_offer_ctx.tscn" id="13_p7jxu"]
+[ext_resource type="PackedScene" uid="uid://blpchxjwv3gym" path="res://Scenes/ContextComponents/item_title_ctx.tscn" id="14_xtoui"]
+[ext_resource type="PackedScene" uid="uid://3d8adrab377k" path="res://Scenes/ContextComponents/move_loadout_ctx.tscn" id="15_6vh3q"]
+[ext_resource type="PackedScene" uid="uid://dv78stjulbykc" path="res://Scenes/ContextComponents/open_cosmetic_icon_ctx.tscn" id="16_2b6e5"]
+[ext_resource type="PackedScene" uid="uid://c8bhtcfsoew84" path="res://Scenes/ContextComponents/pin_quest_ctx.tscn" id="17_fonu8"]
+[ext_resource type="PackedScene" uid="uid://c5a2r24tp1bf1" path="res://Scenes/ContextComponents/recycle_item_ctx.tscn" id="18_4nlno"]
+[ext_resource type="PackedScene" uid="uid://yp3kboip6kk1" path="res://Scenes/ContextComponents/swap_loadout_ctx.tscn" id="19_nk4b1"]
+[ext_resource type="PackedScene" uid="uid://3i0b2bycn4ob" path="res://Scenes/ContextComponents/title_ctx.tscn" id="20_xejsi"]
+[ext_resource type="PackedScene" uid="uid://bk6fttr5h8nvm" path="res://Scenes/ContextComponents/toggle_ctx.tscn" id="21_ncr7q"]
+[ext_resource type="PackedScene" uid="uid://u7q0ajqtxice" path="res://Scenes/ContextComponents/transfer_item_ctx.tscn" id="22_6maoc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xuii"]
 bg_color = Color(0.101961, 0.101961, 0.101961, 1)
@@ -35,6 +56,7 @@ metadata/_snap_enabled = true
 
 [node name="DesktopContextMenu" type="Window" node_paths=PackedStringArray("componentParent", "listTarget", "listAnimation", "scaleAnimation")]
 transparent_bg = true
+oversampling_override = 1.0
 size = Vector2i(116, 105)
 wrap_controls = true
 borderless = true
@@ -42,6 +64,7 @@ always_on_top = true
 transparent = true
 script = ExtResource("1_epbn8")
 contextComponentFolder = "res://Scenes/ContextComponents"
+componentScenes = [ExtResource("2_s6h5w"), ExtResource("3_idv7x"), ExtResource("4_50qn1"), ExtResource("5_vim7o"), ExtResource("6_dkufx"), ExtResource("7_e1d5o"), ExtResource("8_knltk"), ExtResource("9_ss504"), ExtResource("10_otcn7"), ExtResource("11_ee3c2"), ExtResource("12_o3d7y"), ExtResource("13_p7jxu"), ExtResource("14_xtoui"), ExtResource("15_6vh3q"), ExtResource("16_2b6e5"), ExtResource("17_fonu8"), ExtResource("18_4nlno"), ExtResource("19_nk4b1"), ExtResource("20_xejsi"), ExtResource("21_ncr7q"), ExtResource("22_6maoc")]
 componentParent = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget/VBoxContainer")
 listTarget = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget")
 listAnimation = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim")

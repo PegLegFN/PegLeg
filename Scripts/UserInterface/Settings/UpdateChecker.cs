@@ -134,24 +134,47 @@ public partial class UpdateChecker : Control
             await GenericConfirmationWindow.ShowError("No installer file found");
             return;
         }
-		using var overlay = LoadingOverlay.CreateToken();
         try
         {
+            OS.ShellOpen(asset.browser_download_url);
+            await GenericConfirmationWindow.ShowError("The installer is being downloaded in your browser. Running it will install the update", "Download Started     ");
+            /* Disabled until I figure out how to run MSI installers from within PegLeg
             var updatePath = Helpers.GlobalisePath("user://update.msi");
-            if (!FileAccess.FileExists(updatePath))
+            var batchPath = Helpers.GlobalisePath("user://update.bat");
+            using (var overlay = LoadingOverlay.CreateToken())
             {
-                using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
+                if (!FileAccess.FileExists(updatePath))
                 {
-                    await asset.DownloadTo(fileStream, overlay);
+                    using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
+                    {
+                        await asset.DownloadTo(fileStream, overlay);
+                    }
+                    await Helpers.WaitForTimer(1);
                 }
-                await Helpers.WaitForTimer(1);
             }
-            overlay.Dispose();
-            int pid = OS.CreateProcess("powershell", ["Start-Process", "-FilePath", updatePath]);
+            using (var batFile = FileAccess.Open(batchPath, FileAccess.ModeFlags.Write))
+            {
+                batFile.StoreString("""
+                rem Batch script to elevate permissions for installing updates to work
+                rem checks if permissions 
+                %SystemRoot%\System32\net.exe file 1>NUL 2>NUL
+                if errorlevel 1 (
+                    %SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe Start-Process -FilePath "%0" -ArgumentList "%cd%" -verb runas >NUL 2>&1
+                    exit /b
+                )
+                cd /d %1
+                msiexec /i update.msi
+                """);
+            }
+            int pid = OS.CreateProcess(batchPath, []);
             if (pid != -1)
+            {
                 GetTree().Quit();
+                return;
+            }
             OS.ShellOpen(Helpers.GlobalisePath("user://"));
             await GenericConfirmationWindow.ShowError("Could not run update.msi automatically.\nPlease run update.msi manually.", "Update failed");
+            */
         }
 		catch
         {
