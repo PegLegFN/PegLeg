@@ -106,7 +106,10 @@ public partial class ContextMenuHook : Node
     void Trigger()
     {
         if (mobile)
+        {
+            Input.WarpMouse(Vector2.Zero);
             holdTimer.Stop();
+        }
         if (missionSource is not null && missionSource.currentMission is null)
             return;
         if (itemSource is not null && itemSource.currentItem is null)

@@ -13,7 +13,7 @@ public partial class Bootstrap : Node
 {
     public const string processLockPath = "user://pid";
     const string pipeName = "PegLegPipe";
-    const int majorPackageVersion = 2;
+    const int majorPackageVersion = 3;
     const int minorPackageVersion = 0;
 
     [Export]
@@ -84,6 +84,11 @@ public partial class Bootstrap : Node
         window.Unfocusable = false;
         window.MoveToCenter();
 
+#if GODOT_ANDROID
+        background.Visible = true;
+        //DisplayServer.ScreenSetOrientation(DisplayServer.ScreenOrientation.Portrait);
+#endif
+
         if (hasBooted)
         {
             Initialise();
@@ -94,11 +99,6 @@ public partial class Bootstrap : Node
         liteContent.Visible = false;
         loadingContent.Visible = true;
         progressLabel.Text = "Preparing...";
-
-#if GODOT_ANDROID
-        background.Visible = true;
-        //DisplayServer.ScreenSetOrientation(DisplayServer.ScreenOrientation.Portrait);
-#endif
 
         if (StartMinimised)
             window.Mode = Window.ModeEnum.Minimized;

@@ -42,9 +42,6 @@ shader_parameter/gradientHorizontal = false
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="Background" parent="." index="0"]
-visible = false
-
 [node name="CloseBtn" parent="." index="1"]
 visible = false
 
@@ -53,7 +50,7 @@ stream = ExtResource("2_hcda8")
 max_polyphony = 3
 bus = &"SFX"
 
-[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="1" node_paths=PackedStringArray("modalWindow", "cartScaleNode", "cartRotationNode", "itemParent", "finalText")]
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="1" node_paths=PackedStringArray("modalWindow", "cartScaleNode", "cartRotationNode", "itemParent", "finalText", "cancelButton")]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -72,6 +69,7 @@ cartScaleNode = NodePath("Control/Scale")
 cartRotationNode = NodePath("Control/Scale/Rotation")
 itemParent = NodePath("Control/Scale/Rotation/Control/HFlowContainer")
 finalText = NodePath("Control/PurchaseText")
+cancelButton = NodePath("Control/CenterContainer/Button")
 
 [node name="Control" type="Control" parent="Control/WindowContents/CenterContainer" index="0"]
 custom_minimum_size = Vector2(256, 256)
@@ -206,7 +204,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/Control" index="0"]
 custom_minimum_size = Vector2(256, 256)
-layout_mode = 2
+layout_mode = 0
 offset_left = -128.0
 offset_top = -128.0
 offset_right = 128.0
@@ -258,5 +256,21 @@ theme_override_font_sizes/font_size = 70
 text = "Complete"
 horizontal_alignment = 1
 script = ExtResource("7_gi68h")
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents/CenterContainer/Control" index="3"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+use_top_left = true
+
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/Control/CenterContainer" index="0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Stop Purchasing"
 
 [connection signal="WindowOpened" from="." to="Control/WindowContents/PurchaseSound" method="play" binds= [0.0]]

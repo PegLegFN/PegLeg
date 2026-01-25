@@ -173,6 +173,22 @@ public partial class ContextMenu : Window
                 oobPush.X += (int)scaledSize.X;
             }
         }
+        else
+        {
+            if (OS.HasFeature("mobile"))
+            {
+                var window = GetTree().Root;
+                GD.Print("winSize: " + window.Size);
+                GD.Print("contentSize: " + window.ContentScaleSize);
+                var hscale = (float)window.ContentScaleSize.X / window.Size.X;
+                var vscale = (float)window.ContentScaleSize.Y / window.Size.Y;
+                var scale = Mathf.Max(hscale, vscale);
+                GD.Print("fromPos: " + targetPos);
+                GD.Print("scale: " + scale);
+                targetPos = (Vector2I)((Vector2)targetPos * scale);
+                GD.Print("toPos: " + targetPos);
+            }
+        }
         var screen = ds.GetScreenFromRect(new(targetPos, Vector2.One));
         //var clamp = new Rect2I(ds.ScreenGetPosition(screen), ds.ScreenGetSize(screen));
         var clamp = ds.ScreenGetUsableRect(screen);

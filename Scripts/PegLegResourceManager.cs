@@ -95,7 +95,13 @@ public class PegLegResourceManager
                 .Where(r => !r.prerelease || AppConfig.Get("advanced", "prerelease_resources", false))
                 .ToDictionary(
                     r => new PackageVersion(r.TryGetVersion(out var v, VersionRegex) ? v : default), //todo: fix risk of duplicate key when failing version parse
-                    r => r.assets.Length > 0 ? r.assets[0] : default
+                    r =>
+                    {
+                        if (OS.HasFeature("mobile"))
+                            return r.assets.FirstOrDefault(a => a.name.StartsWith("PegLegResources-m-v"));
+                        else
+                            return r.assets.FirstOrDefault(a => a.name.StartsWith("PegLegResources-v"));
+                    }
                 );
         }
         catch

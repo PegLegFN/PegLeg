@@ -21,6 +21,8 @@ public partial class ShopPurchaseAnimation : Control
     Control itemParent;
     [Export]
     Control finalText;
+    [Export]
+    Button cancelButton;
 
     [Export]
     float itemFallOffset = 100;
@@ -43,13 +45,20 @@ public partial class ShopPurchaseAnimation : Control
     {
         cartScaleNode.Scale = Vector2.Zero;
         instance = this;
+        cancelButton.Pressed += () =>
+        {
+            workaroundCancelled = true;
+            cancelButton.Visible = false;
+        };
+        cancelButton.Visible = false;
     }
 
-    public static void PlayAnimation(Texture2D itemTexture, int count, Task holdUntil=null) =>
-        instance?.PlayAnimationInst(itemTexture, count, holdUntil);
+    public static void PlayAnimation(Texture2D itemTexture, int count, Func<Task> purchaseTask = null, bool workaround = false) =>
+        instance?.PlayAnimationInst(itemTexture, count, purchaseTask, workaround);
 
     bool lockAnimation = false;
-    async void PlayAnimationInst(Texture2D itemTexture, int count, Task holdUntil)
+    bool workaroundCancelled = false;
+    async void PlayAnimationInst(Texture2D itemTexture, int count, Func<Task> purchaseTaskGenerator, bool workaround)
     {
         if (lockAnimation)
             return;
@@ -57,7 +66,7 @@ public partial class ShopPurchaseAnimation : Control
         //too many items will cause issues
         count = Mathf.Min(count, 40);
         bool fastAnimations = AppConfig.Get("misc", "fast_animations", false);
-        GD.Print(fastAnimations);
+        //GD.Print(fastAnimations);
         modalWindow.SetWindowOpen(true);
         cartRotationNode.Modulate = Colors.White;
         cartRotationNode.RotationDegrees = 0;
@@ -65,6 +74,7 @@ public partial class ShopPurchaseAnimation : Control
         cartRotationNode.OffsetRight = 0;
         cartScaleNode.Scale = Vector2.Zero;
         finalText.Scale = Vector2.Zero;
+        workaroundCancelled = false;
 
         List<TextureRect> animatableItems = [];
         for (int i = itemParent.GetChildCount(); i < count; i++)
@@ -88,14 +98,41 @@ public partial class ShopPurchaseAnimation : Control
             itemParent.GetChild<Control>(i).Visible = false;
         }
 
-        if (!fastAnimations)
+        if (!fastAnimations || workaround)
         {
             var cartScaleTween = GetTree().CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
             cartScaleTween.TweenProperty(cartScaleNode, "scale", Vector2.One, cartGrowDuration);
 
             await Helpers.WaitForTimer(cartGrowDuration * 0.25);
 
-            await AnimateItems(animatableItems);
+            if (workaround)
+                cancelButton.Visible = true;
+
+            float timeBetweenItems = (itemFallDurationTotal - itemFallDurationSingle) / (animatableItems.Count + 1);
+            if (workaround)
+                timeBetweenItems *= 0.5f;
+            for (int i = 0; i < animatableItems.Count; i++)
+            {
+                if (workaround)
+                {
+                    if (purchaseTaskGenerator?.Invoke() is not Task purchaseSubtask)
+                        break;
+                    await Task.WhenAll(
+                        purchaseSubtask,
+                        Helpers.WaitForTimer(timeBetweenItems * (i == 0 ? 0.5f : 1))
+                    );
+                }
+                else
+                    await Helpers.WaitForTimer(timeBetweenItems * (i == 0 ? 0.5f : 1));
+                AnimateItem(animatableItems[^(i + 1)]);
+                if (workaround && workaroundCancelled)
+                    break;
+            }
+
+            if (workaround)
+                cancelButton.Visible = false;
+
+            await Helpers.WaitForTimer(itemFallDurationSingle + (timeBetweenItems * 0.5));
 
             var cartRotationTween = GetTree().CreateTween().SetTrans(Tween.TransitionType.Cubic).SetParallel();
             cartRotationTween.TweenProperty(cartRotationNode, "rotation_degrees", -30, cartLeaveDuration).SetEase(Tween.EaseType.Out);
@@ -111,10 +148,10 @@ public partial class ShopPurchaseAnimation : Control
 
         await Helpers.WaitForTimer(cartLeaveDuration + textStayDuration);
 
-        if(holdUntil is not null)
+        if(!workaround && purchaseTaskGenerator?.Invoke() is Task purchaseTask)
         {
             await Task.WhenAny(
-                holdUntil,
+                purchaseTask,
                 Helpers.WaitForTimer(fastAnimations ? 3 : 10)
             );
         }
@@ -128,19 +165,12 @@ public partial class ShopPurchaseAnimation : Control
         lockAnimation = false;
     }
 
-    async Task AnimateItems(List<TextureRect> animatableItems)
+    void AnimateItem(TextureRect animatableItem)
     {
-        float timeBetweenItems = (itemFallDurationTotal - itemFallDurationSingle) / (animatableItems.Count+1);
-        for (int i = 0; i < animatableItems.Count; i++)
-        {
-            await Helpers.WaitForTimer(timeBetweenItems * (i == 0 ? 0.5f : 1));
-            var texture = animatableItems[^(i + 1)];
-            var itemFallTween = GetTree().CreateTween().SetParallel();
-            itemFallTween.TweenProperty(texture, "self_modulate", Colors.White, itemFallDurationSingle * 0.75);
-            itemFallTween.TweenProperty(texture, "offset_bottom", 0, itemFallDurationSingle)
-                .SetEase(Tween.EaseType.Out)
-                .SetTrans(Tween.TransitionType.Bounce);
-        }
-        await Helpers.WaitForTimer(itemFallDurationSingle+(timeBetweenItems * 0.5));
+        var itemFallTween = GetTree().CreateTween().SetParallel();
+        itemFallTween.TweenProperty(animatableItem, "self_modulate", Colors.White, itemFallDurationSingle * 0.75);
+        itemFallTween.TweenProperty(animatableItem, "offset_bottom", 0, itemFallDurationSingle)
+            .SetEase(Tween.EaseType.Out)
+            .SetTrans(Tween.TransitionType.Bounce);
     }
 }

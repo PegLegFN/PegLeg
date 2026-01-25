@@ -447,7 +447,7 @@ public class GameProfile
             {
                 notifs.Remove(notif);
             }
-            if (notifs.Count > 0)
+            if (notifs.Count > 0 && AppConfig.Get("advanced", "logNotifs", false))
                 GD.Print("Notifications: " + notifs.ToString());
             return notifs;
         }

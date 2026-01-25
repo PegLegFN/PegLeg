@@ -391,7 +391,7 @@ public class GameItem
         {
             ["transferOperations"] = new JsonArray([transfer])
         };
-        GameProfile.printChanges = true;
+        //GameProfile.printChanges = true;
         await backpack.PerformOperation("StorageTransfer", content);
     }
 

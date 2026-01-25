@@ -401,33 +401,16 @@ public partial class GameItemViewer : ModalWindow
     {
         if (currentOffer is null)
             return;
-        var purchaseTask = PurchaseTask();
+        var template = currentOffer.itemGrants[0].templateId;
+        bool workaround = template.Equals("Token:accountinventorybonus", StringComparison.OrdinalIgnoreCase);
+        workaround |= template.StartsWith("CardPack:cardpack_schematic", StringComparison.OrdinalIgnoreCase);
         ShopPurchaseAnimation.PlayAnimation(
-            currentOffer.itemGrants[0].GetTexture(), 
+            currentOffer.itemGrants[0].GetTexture(),
             currentOfferEntry.currentPurchaseQuantity,
-            purchaseTask
+            () => GameAccount.ActiveAccount.PurchaseOffer(currentOffer, workaround ? 1 : currentOfferEntry.currentPurchaseQuantity),
+            workaround
         );
-    }
-
-    async Task PurchaseTask()
-    {
-        //var account = GameAccount.ActiveAccount;
-        //if (!await account.Authenticate())
-        //    return;
-
-        //GD.Print("attempting to purchase offer: " + currentOffer.OfferId);
-        //fake it to test purchase animation
-        //GD.Print("FAKE PURCHASE");
-        //ShopPurchaseAnimation.PlayAnimation(latestItem.GetTemplate().GetItemTexture(), (int)purchaseCountSpinner.Value);
-        //return;
-
-        var notifs = await GameAccount.ActiveAccount.PurchaseOffer(currentOffer, currentOfferEntry.currentPurchaseQuantity);
-        //GD.Print(notifs);
         SetWindowOpen(false);
-
-        var resultItemData = notifs.First(val => val["type"].ToString() == "CatalogPurchase")["lootResult"]["items"][0];
-        GameItem resultItem = new(null, null, resultItemData.AsObject());
-        //await CardPackOpener.Instance.StartOpeningShopResults(resultItems.Select(val=>val.AsObject()).ToArray());
     }
 
 
