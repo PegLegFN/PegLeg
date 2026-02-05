@@ -27,20 +27,22 @@ shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = false
 
 [node name="ShareableMissionSummary" type="SubViewportContainer"]
+offset_right = 375.0
+offset_bottom = 445.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [node name="MissionSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(375, 334)
+size = Vector2i(375, 445)
 render_target_update_mode = 4
 script = ExtResource("1_4dqrj")
 matchSize = NodePath("PegLegWatermark")
 
 [node name="PegLegWatermark" parent="MissionSummaryViewport" instance=ExtResource("2_h68g4")]
-offset_right = 64.0
-offset_bottom = 64.0
+offset_right = 350.0
+offset_bottom = 397.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark"]
 layout_mode = 2

@@ -1,68 +1,143 @@
-[gd_scene load_steps=3 format=3 uid="uid://bsmb8rbqn537o"]
+[gd_scene load_steps=9 format=3 uid="uid://bsmb8rbqn537o"]
 
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="1_sosuh"]
 [ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="2_k4iy5"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="3_1qokd"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_gj8ge"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdar6"]
+resource_local_to_scene = true
+shader = ExtResource("3_1qokd")
+shader_parameter/ControlSize = Vector2(26, 26)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_gj8ge")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_do258"]
+resource_local_to_scene = true
+shader = ExtResource("3_1qokd")
+shader_parameter/ControlSize = Vector2(26, 26)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_gj8ge")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3avkn"]
+resource_local_to_scene = true
+shader = ExtResource("3_1qokd")
+shader_parameter/ControlSize = Vector2(26, 26)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_gj8ge")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2mpk"]
+resource_local_to_scene = true
+shader = ExtResource("3_1qokd")
+shader_parameter/ControlSize = Vector2(26, 26)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_gj8ge")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
 
 [node name="MissionCollectionEntry" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent") instance=ExtResource("1_sosuh")]
-alertModifierLayout = NodePath("HBoxContainer/MarginContainer3")
-alertModifierParent = NodePath("HBoxContainer/MarginContainer3/HBoxContainer")
+offset_right = 316.0
+alertModifierLayout = NodePath("HBoxContainer/Modifiers")
+alertModifierParent = NodePath("HBoxContainer/Modifiers/HBoxContainer")
 
 [node name="MarginContainer" parent="HBoxContainer" index="0"]
 size_flags_horizontal = 1
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_bottom = 6
 
 [node name="TextureRect2" parent="HBoxContainer/MarginContainer/HBoxContainer/Icon" index="0"]
 modulate = Color(1, 1, 1, 0)
 
-[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" index="1"]
+[node name="Modifiers" type="MarginContainer" parent="HBoxContainer" index="1"]
 layout_mode = 2
-theme_override_constants/margin_left = 1
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_right = 1
-theme_override_constants/margin_bottom = 1
 
-[node name="HBoxContainer" type="HFlowContainer" parent="HBoxContainer/MarginContainer3" index="0"]
-custom_minimum_size = Vector2(170, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Modifiers" index="0"]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_constants/h_separation = 1
-theme_override_constants/v_separation = -6
+theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="0"]
-custom_minimum_size = Vector2(32, 32)
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="1"]
-custom_minimum_size = Vector2(32, 32)
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="1"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="2"]
-custom_minimum_size = Vector2(32, 32)
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="2"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="3"]
-custom_minimum_size = Vector2(32, 32)
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="3"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/MarginContainer3/HBoxContainer" index="4"]
-custom_minimum_size = Vector2(32, 32)
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="4"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -71,3 +146,38 @@ expand_mode = 3
 
 [node name="MarginContainer2" parent="HBoxContainer" index="2"]
 size_flags_horizontal = 10
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem" index="0"]
+material = SubResource("ShaderMaterial_qdar6")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem/Icon" index="0"]
+theme_override_font_sizes/font_size = 12
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2" index="0"]
+material = SubResource("ShaderMaterial_do258")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2/Icon" index="0"]
+theme_override_font_sizes/font_size = 12
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3" index="0"]
+material = SubResource("ShaderMaterial_3avkn")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3/Icon" index="0"]
+theme_override_font_sizes/font_size = 12
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4" index="0"]
+material = SubResource("ShaderMaterial_c2mpk")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4/Icon" index="0"]
+theme_override_font_sizes/font_size = 12
+
+[node name="MarginContainer3" parent="HBoxContainer" index="3"]
+visible = false
+
+[node name="Button" parent="HBoxContainer/MarginContainer3" index="0"]
+visible = false
+
+[editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem"]
+[editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2"]
+[editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3"]
+[editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4"]

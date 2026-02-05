@@ -318,7 +318,7 @@ public class GameItem
         GD.Print("Claiming "+uuid);
         string altcontent = @$"{{""questId"": ""{uuid}"", ""selectedRewardIndex"": {index}}}";
         var notifs = await profile.PerformOperation("ClaimQuestReward", altcontent);
-        var claimNotif = notifs.FirstOrDefault(n => n["type"].ToString()=="questClaim");
+        var claimNotif = notifs?.FirstOrDefault(n => n["type"]?.ToString() == "questClaim");
         if(claimNotif is not null)
         {
             GD.Print(claimNotif);
@@ -331,7 +331,8 @@ public class GameItem
                         .Clone(n["quantity"].GetValue<int>()) ??
                     GameItemTemplate.Get(n["itemType"].ToString())?.
                         CreateInstance(n["quantity"].GetValue<int>())
-                )];
+                )
+            ];
         }
         return [];
     }
@@ -470,7 +471,8 @@ public class GameItem
     }
 
     public string QuestState => attributes?["quest_state"]?.ToString();
-    public bool QuestComplete => QuestState == "unknown" || QuestState == "Claimed"; //TODO: need to check which state value refers to unclaimed complete quests
+    public bool QuestComplete => QuestState == "Completed" || QuestClaimed;
+    public bool QuestClaimed => QuestState == "Claimed";
 
     public void ClearRating() => _rating = null;
     int? _rating;

@@ -335,6 +335,13 @@ public class GameProfile
             lastClientQuestLoginTime = DateTime.UtcNow;
         lastProfileOperationTime = DateTime.UtcNow;
 
+        (var didError, var errorJson) = await opResponse.CheckForErrorJson(!silent);
+        if (didError)
+        {
+            lastOp = errorJson is JsonObject obj ? obj : [];
+            return null;
+        }
+
         JsonObject result = null;
         try
         {
@@ -342,10 +349,6 @@ public class GameProfile
         }
         catch { }
         lastOp = result;
-
-
-        if (await opResponse.CheckForError(!silent))
-            return null;
 
         if (witholdChanges)
             return [];

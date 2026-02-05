@@ -58,6 +58,18 @@ public partial class XpLimitController : Control
             brProfile = acc.GetProfile(FnProfileTypes.CosmeticInventory);
             await acc.ClientQuestLoginAthena();
 
+            //temporary addon to handle daily valentines logins
+            var questItems = brProfile.GetItems(item =>
+                item.templateId.StartsWith("Quest:quest_s39_valentines_dailylogin_p0", StringComparison.OrdinalIgnoreCase) &&
+                item.QuestComplete && 
+                !item.QuestClaimed
+            );
+            foreach (var item in questItems)
+            {
+                await item.ClaimQuest();
+            }
+
+
             await UpdateProfileTask();
         }
         finally

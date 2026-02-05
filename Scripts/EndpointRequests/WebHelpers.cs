@@ -315,13 +315,19 @@ public static class WebHelpers
                 showErrorPopup = false;
             }
         }
+        string fallbackErrorCode = null;
+        if (response.Headers.TryGetValues("x-epic-error-name", out var errName))
+            fallbackErrorCode= errName.FirstOrDefault();
 
         JsonNode errorContent = null;
         try
         {
             errorContent = await response.ReadJson();
         }
-        catch (ObjectDisposedException) { }
+        catch (ObjectDisposedException)
+        {
+            GD.Print("error response disposed");
+        }
 
         if (logError)
             GD.Print("Web Request Error: " + response);
@@ -337,6 +343,7 @@ public static class WebHelpers
                     "An uncaught web error occured",
                 warningText:
                     errorContent?["errorCode"]?.ToString() ??
+                    fallbackErrorCode ??
                     response.StatusCode.ToString(),
                 allowCancel: false
             ).StartTask();

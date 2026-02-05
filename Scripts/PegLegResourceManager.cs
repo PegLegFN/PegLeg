@@ -1056,7 +1056,7 @@ public class GameItemTemplate
         if (tags.Contains("Worker"))
             tags.Add("Survivor");
         if (rawData["RecycleRecipe"] is null)
-            tags.Add("Permenant");
+            tags.Add("Permanent");
         var searchTags = new JsonArray(tags.Where(t => !string.IsNullOrWhiteSpace(t)).Select(t => (JsonNode)t).ToArray());
         lock (rawData)
         {

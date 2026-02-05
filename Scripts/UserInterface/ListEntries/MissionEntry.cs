@@ -75,8 +75,8 @@ public partial class MissionEntry : Control, IRecyclableEntry
 
     public override void _Ready()
     {
-        if (toDoListContent is not null)
-            toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
+        //if (toDoListContent is not null)
+        //    toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
         GameAccount.ActiveAccountChanged += AccountChanged;
         MissionToDoListController.OnToDoListUpdated += ToDoListChanged;
         AppConfig.OnConfigChanged += OnConfigChanged;

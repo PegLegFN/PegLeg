@@ -24,6 +24,8 @@ public partial class ConfigToggleHook : Control
     bool tryBind = true;
     [Export]
     bool logChanges = false;
+    [Export]
+    bool disabled = false;
 
     bool valueIsChanging;
 
@@ -39,6 +41,9 @@ public partial class ConfigToggleHook : Control
 
     public override void _Ready()
     {
+        if (disabled)
+            return;
+
         if (tryBind)
         {
             if (HasSignal("toggled"))
@@ -51,7 +56,6 @@ public partial class ConfigToggleHook : Control
             }
         }
 
-        base._Ready();
         AppConfig.OnConfigChanged += UpdateValue;
         valueIsChanging = true;
         Emit(AppConfig.Get(section, key, defaultValue));

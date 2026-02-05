@@ -393,7 +393,7 @@ public partial class GameAccount
         if (!isOwned)
             return false;
 
-        using var loadToken = LoadingOverlay.CreateToken("authentication");
+        using var loadToken = LoadingOverlay.CreateToken("Authenticating...");
         if (!loadingOverlay)
             loadToken.Dispose();
 

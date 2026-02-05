@@ -1,7 +1,9 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -146,6 +148,8 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         else
             GameMission.UpdateMissions().StartTask();
         StartUpdateCheckTimer();
+
+        GetTree().Root.FilesDropped += TryArchiveFiles;
     }
 
     public override void _ExitTree()
@@ -156,6 +160,31 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         GameAccount.ActiveAccountChanged -= FilterMissions;
         GameMission.OnMissionsUpdated -= OnMissionsUpdated;
         GameMission.OnMissionsInvalidated -= OnMissionsInvalidated;
+        GetTree().Root.FilesDropped -= TryArchiveFiles;
+    }
+
+    async void TryArchiveFiles(string[] files)
+    {
+        if (!IsVisibleInTree() || !AppConfig.Get("advanced", "developer", false))
+            return;
+        using var _ = LoadingOverlay.CreateToken();
+        foreach (string file in files)
+        {
+            try
+            {
+                Stream missionFileStream = File.OpenRead(file);
+                JsonNode fileData = await JsonNode.ParseAsync(missionFileStream);
+                if (fileData is not null)
+                {
+                    GameMission.ManuallyCreateArchive(fileData);
+                }
+                await Helpers.WaitForFrame();
+            }
+            catch(Exception e)
+            {
+                GD.Print($"Exception when generating mission archive:\n{e}");
+            }
+        }
     }
 
     CancellationTokenSource updateCheckCTS = new();

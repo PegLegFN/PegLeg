@@ -14,6 +14,8 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using XmppDotNet.Xmpp.MessageArchiving;
+using static GameMission;
 
 /* Old Requests
 static class MissionRequests
@@ -263,6 +265,7 @@ public partial class GameMission
         if (!st.wasImmediate)
             return;
         bool delayFirst = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
+        bool retryLiteMissions = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second <30;;
 
         currentMissions = null;
         missionReset = DateTime.UtcNow;
@@ -277,7 +280,15 @@ public partial class GameMission
                 //if request is made exactly on the hour, its likely for daily reset.
                 //requesting missions exactly at reset can cause consistancy issues, so
                 //we add a 1 second delay before the request
-                await Helpers.WaitForTimer(1);
+                if (!GameAccount.ActiveAccount.isOwned)
+                {
+                    GD.Print("pausing 5 seconds to wait for lite missions");
+                    await Helpers.WaitForTimer(5);
+                }
+                {
+                    GD.Print("pausing 1 second to ensure missions are accurate");
+                    await Helpers.WaitForTimer(1);
+                }
                 missionData = null;
             }
             GD.Print($"Requesting Missions...");
@@ -296,8 +307,8 @@ public partial class GameMission
             GD.Print($"[{DateTime.UtcNow}] {missionHash?.ToString() ?? "{No Missions}"} >> {newHash}");
             await Helpers.WaitForFrame();
             missionHash = newHash;
-            var expiryDate = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
-            missionReset = DateTime.Parse(expiryDate, CultureInfo.InvariantCulture);
+            var resetString = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
+            missionReset = DateTime.Parse(resetString, CultureInfo.InvariantCulture);
 
             List<GameMission> generatedMissions;
             try
@@ -314,36 +325,40 @@ public partial class GameMission
             //edge case where missions expire after being requested but before the response is returned
             if (!ignoreExpiry && missionReset < DateTime.UtcNow)
             {
-                if(totalRetries < 5 && DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0)
+                if(totalRetries < 3 && retryLiteMissions)
                 {
                     totalRetries++;
                     missionData = null;
-                    GD.Print("pausing 2 seconds to wait for lite missions");
-                    await Helpers.WaitForTimer(2);
+                    GD.Print("lite missions still out of date, pausing 5 more seconds");
+                    await Helpers.WaitForTimer(5);
                     continue;
                 }
-                else if (totalRetries >= 5)
+                else if (totalRetries >= 3)
                 {
                     GD.Print("abandoning retries");
                 }
                 GD.Print("Warning: lite missions are out of date");
+                //todo: show onscreen error
             }
 
-            try
+            if (missionReset > DateTime.UtcNow)
             {
-                string latestOutput = AppConfig.Get("missions", "latest_output", "");
-                if (string.IsNullOrWhiteSpace(latestOutput))
-                    latestOutput = "user://latestMissions";
-                latestOutput += ".json";
-                string latestOutputParent = latestOutput[..(latestOutput.LastIndexOf('/') + 1)];
-                if (!DirAccess.DirExistsAbsolute(latestOutputParent))
-                    DirAccess.MakeDirAbsolute(latestOutputParent);
-                using var latestMissionsFile = FileAccess.Open(latestOutput, FileAccess.ModeFlags.Write);
-                latestMissionsFile.StoreString(recentMissionData.ToString());
-            }
-            catch { }
+                try
+                {
+                    string latestOutput = AppConfig.Get("missions", "latest_output", "");
+                    if (string.IsNullOrWhiteSpace(latestOutput))
+                        latestOutput = "user://latestMissions";
+                    latestOutput += ".json";
+                    string latestOutputParent = latestOutput[..(latestOutput.LastIndexOf('/') + 1)];
+                    if (!DirAccess.DirExistsAbsolute(latestOutputParent))
+                        DirAccess.MakeDirAbsolute(latestOutputParent);
+                    using var latestMissionsFile = FileAccess.Open(latestOutput, FileAccess.ModeFlags.Write);
+                    latestMissionsFile.StoreString(recentMissionData.ToString());
+                }
+                catch { }
 
-            SendMissionsToBucket();
+                SendMissionsToBucket();
+            }
 
             currentMissions =
             [
@@ -438,6 +453,30 @@ public partial class GameMission
     {
         if (!AppConfig.TryGet("advanced", "archive_missions", out bool enabled) || !enabled)
             return;
+        ArchiveMissions(currentMissions, missionReset, out string archiveName, out string archivePath);
+        if (archivePath is null)
+            return;
+        //optionally post a webhook message for each new file generated
+        archiveWebhook ??= new("PegLeg Mission Archive", "missionArchive");
+        archiveWebhook.Execute(
+            () => Task.FromResult(archiveName),
+            () => Task.FromResult<string[]>([archivePath])
+        ).StartTask();
+    }
+
+    public static void ManuallyCreateArchive(JsonNode missionData)
+    {
+        var resetString = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
+        var resetDateTime = DateTime.Parse(resetString, CultureInfo.InvariantCulture);
+        var missions = GenerateMissions(missionData);
+        ArchiveMissions(missions, resetDateTime, out _, out _);
+    }
+
+    static void ArchiveMissions(IEnumerable<GameMission> missions, DateTime resetTime, out string archiveName, out string archivePath)
+    {
+        archiveName = null;
+        archivePath = null;
+
         var archiveDirPath = AppConfig.Get("mission_archive", "target_folder", "user://mission_archive/");
         if (string.IsNullOrWhiteSpace(archiveDirPath))
             archiveDirPath = "user://mission_archive/";
@@ -454,14 +493,14 @@ public partial class GameMission
             }
         }
 
-        if (!currentMissions.Any(m => m.DisplayName is not null))
+        if (!missions.Any(m => m.DisplayName is not null))
         {
             GD.Print($"Archiving abandoned due to missing resources");
             return;
         }
 
         using var archiveDir = DirAccess.Open(archiveDirPath);
-        var groupedMissions = currentMissions.GroupBy(m => m.theaterInfo);
+        var groupedMissions = missions.GroupBy(m => m.theaterInfo);
         List<ArchiveData.CompactTheater> compactedTheaters = [];
         foreach (var pair in groupedMissions)
         {
@@ -493,8 +532,8 @@ public partial class GameMission
 
         ArchiveData archiveData = new()
         {
-            expiresUTC = missionReset,
-            expiresEST = missionReset.AddHours(-5),
+            expiresUTC = resetTime,
+            expiresEST = resetTime.AddHours(-5),
             theaters = [..compactedTheaters]
         };
 
@@ -516,8 +555,8 @@ public partial class GameMission
 
         string archiveDate = archiveDateSample.ToString(AppConfig.Get("mission_archive", "date_format", "yyyy-MM-dd"));
         int increment = 1;
-        string archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}.json";
-        string archiveName = $"{archiveDate}";
+        archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}.json";
+        archiveName = $"{archiveDate}";
         var prevArchivePath = archivePath;
         while (archiveDir.FileExists(archivePath))
         {
@@ -542,25 +581,46 @@ public partial class GameMission
         catch { }
         if (!writeSuccess)
         {
+            archivePath = null;
             GD.PushWarning($"Failed to archive missions as \"{archivePath}\"");
             return;
         }
         GD.Print($"Missions archived as \"{archivePath}\"");
-
-        //optionally post a webhook message for each new file generated
-        archiveWebhook ??= new("PegLeg Mission Archive", "missionArchive");
-        archiveWebhook.Execute(
-            () => Task.FromResult(archiveName), 
-            () => Task.FromResult<string[]>([archivePath])
-        ).StartTask();
     }
 
-    record struct ArchiveData()
+    public static bool TryLoadArchive(DateTime forDate, out ArchiveData data)
+    {
+        forDate = forDate.ToUniversalTime().Date;
+        data = default;
+        var archiveDirPath = AppConfig.Get("mission_archive", "target_folder", "user://mission_archive/");
+        if (string.IsNullOrWhiteSpace(archiveDirPath))
+            archiveDirPath = "user://mission_archive/";
+        if (!DirAccess.DirExistsAbsolute(archiveDirPath))
+            return false;
+        using var archiveDir = DirAccess.Open(archiveDirPath);
+        string archiveDate = forDate.ToString(AppConfig.Get("mission_archive", "date_format", "yyyy-MM-dd"));
+        string archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}.json";
+        int increment = 1;
+        while (archiveDir.FileExists($"{archiveDir.GetCurrentDir()}/{archiveDate}_{increment+1}.json"))
+        {
+            increment++;
+            archivePath = $"{archiveDir.GetCurrentDir()}/{archiveDate}_{increment}.json";
+        }
+        using var archiveFile = FileAccess.Open(archivePath, FileAccess.ModeFlags.Read);
+        if (FileAccess.GetOpenError() != Error.Ok)
+            return false;
+        data = JsonSerializer.Deserialize<ArchiveData>(archiveFile.GetAsText(), archiveSerialisation);
+        return true;
+    }
+
+    public record struct ArchiveData()
     {
         public ArchiveVersion blakebeardArchiveFormat = new(1, 0);
         public DateTime expiresUTC;
         public DateTime expiresEST;
         public CompactTheater[] theaters;
+
+        public GameMission[] CreateMissions() => [.. theaters.SelectMany(a => a.CreateMissions())];
 
         public record struct ArchiveVersion(int major, int minor);
         public record struct CompactTheater()
@@ -568,6 +628,16 @@ public partial class GameMission
             public string theaterId;
             public string theaterName;
             public CompactMission[] missions;
+
+            public IEnumerable<GameMission> CreateMissions()
+            {
+                TheaterInfo theaterInfo = new()
+                {
+                    displayName = theaterName,
+                    category = TheaterNameToCat(theaterName),
+                };
+                return missions.Select(m => new GameMission(m, theaterInfo));
+            }
         }
 
         public record struct CompactMission()
@@ -621,7 +691,7 @@ public partial class GameMission
             foreach (var questDef in activeQuestDefinitions)
             {
                 var quest = account.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem($"Quest:{ParseItemPath(questDef)}");
-                if (quest?.QuestState != "Active")
+                if (quest?.QuestComplete != true)
                     return false;
             }
             return true;
@@ -698,9 +768,11 @@ public partial class GameMission
             public string rowName;
         }
 
-        public GameItemTemplate GetMissionGenerator() => GameItemTemplate.Get($"MissionGen:{missionGenerator[(missionGenerator.LastIndexOf('.') + 1)..]}");
+        public GameItemTemplate GetMissionGenerator() => GetMissionGenerator(missionGenerator);
+        public static GameItemTemplate GetMissionGenerator(string generatorPath) => GameItemTemplate.Get($"MissionGen:{generatorPath[(generatorPath.LastIndexOf('.') + 1)..]}");
         public string DifficultyRow => missionDifficultyInfo.rowName;
-        public DifficultyInfo GetDifficultyInfo() => PegLegResourceManager.DifficultyInfo?[missionDifficultyInfo.rowName]?.Deserialize<DifficultyInfo>(Helpers.JsonOptions.Fields);
+        public DifficultyInfo GetDifficultyInfo() => GetDifficultyInfo(DifficultyRow);
+        public static DifficultyInfo GetDifficultyInfo(string row)=> PegLegResourceManager.DifficultyInfo?[row]?.Deserialize<DifficultyInfo>(Helpers.JsonOptions.Fields);
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
@@ -728,7 +800,8 @@ public partial class GameMission
     {
         public string tileType;
         public string zoneTheme;
-        public GameItemTemplate GetZoneTheme() => GameItemTemplate.Get($"ZoneTheme:{zoneTheme[(zoneTheme.IndexOf('.') + 1)..]}");
+        public GameItemTemplate GetZoneTheme() => GetZoneTheme(zoneTheme);
+        public static GameItemTemplate GetZoneTheme(string zoneThemePath) => GameItemTemplate.Get($"ZoneTheme:{zoneThemePath[(zoneThemePath.IndexOf('.') + 1)..]}");
         public Requirements requirements;
         [JsonInclude]
         int xCoordinate;
@@ -753,6 +826,15 @@ public partial class GameMission
         //display mission weights to user?
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
+
+    static string TheaterNameToCat(string name) => name switch
+    {
+        "Stonewood" => "s",
+        "Plankerton" => "p",
+        "Canny Valley" => "c",
+        "Twine Peaks" => "t",
+        _ => "v"
+    };
 
     static List<GameMission> GenerateMissions(JsonNode rootNode)
     {
@@ -784,15 +866,9 @@ public partial class GameMission
             if (theater is null)
                 continue;
 
-            string theaterName = theater["displayName"]["en"].ToString();
-            string theaterCat = theaterName switch
-            {
-                "Stonewood" => "s",
-                "Plankerton" => "p",
-                "Canny Valley" => "c",
-                "Twine Peaks" => "t",
-                _ => "v"
-            };
+            var nameNode = theater["displayName"];
+            string theaterName = nameNode.GetValueKind()==JsonValueKind.String ? nameNode.ToString() : nameNode["en"]?.ToString();
+            string theaterCat = TheaterNameToCat(theaterName);
             bool isVentures = theaterCat == "v";
             var theaterInfo = theater["runtimeInfo"].Deserialize<TheaterInfo>(Helpers.JsonOptions.Fields) with
             {
@@ -899,9 +975,41 @@ public partial class GameMission
 
         if (missionGenerator is null || zoneTheme is null)
             return;
+        GenerateItems(
+            missionData.missionRewards.items, 
+            alertData?.missionAlertModifiers.items, 
+            alertData?.missionAlertRewards.items
+        );
+        GenerateSearchTags();
+    }
 
+    GameMission(ArchiveData.CompactMission mission, TheaterInfo theaterInfo)
+    {
+        this.theaterInfo = theaterInfo;
+        regions = [];
+        //this.regions = regions;
+        //this.tile = tile;
+        //this.missionData = missionData;
+        //this.alertData = alertData;
+        difficultyInfo = MissionData.GetDifficultyInfo(mission.difficultyRow);
+        missionGenerator = MissionData.GetMissionGenerator(mission.missionGenerator);
+        zoneTheme = Tile.GetZoneTheme(mission.zoneTheme);
+
+        if (missionGenerator is null || zoneTheme is null)
+            return;
+        GenerateItems(
+            mission.rewards, 
+            mission.modifiers, 
+            mission.alertRewards
+        );
+        GenerateSearchTags();
+    }
+
+
+    void GenerateItems(ItemReward[] rewards, ItemReward[] modifiers, ItemReward[] alertRewards)
+    {
         Dictionary<string, GameItem> rewardItemList = [];
-        foreach (var itemData in missionData.missionRewards.items ?? [])
+        foreach (var itemData in rewards ?? [])
         {
             GameItem item = itemData.ToItem();
             item.GetSearchTags();
@@ -920,43 +1028,41 @@ public partial class GameMission
         }
         rewardItems = [.. rewardItemList.Values];
 
-        if (alertData is not null)
+        List<GameItem> alertModifierList = [];
+        foreach (var itemData in modifiers ?? [])
         {
-            List<GameItem> alertModifierList = [];
-            foreach (var itemData in alertData.missionAlertModifiers.items ?? [])
-            {
-                GameItem modifier = itemData.ToItem();
-                modifier.SetSeenLocal();
-                modifier.GetSearchTags();
-                alertModifierList.Add(modifier);
-            }
-            alertModifiers = [.. alertModifierList];
-
-            List<GameItem> alertRewardItemList = [];
-
-            foreach (var itemData in alertData.missionAlertRewards.items ?? [])
-            {
-                GameItem item = itemData.ToItem();
-                item.GetSearchTags();
-                alertRewardItemList.Add(item);
-            }
-            alertRewardItems = [.. alertRewardItemList];
+            GameItem modifier = itemData.ToItem();
+            modifier.SetSeenLocal();
+            modifier.GetSearchTags();
+            alertModifierList.Add(modifier);
         }
-        alertModifiers ??= [];
-        alertRewardItems ??= [];
+        alertModifiers = [.. alertModifierList];
 
+        List<GameItem> alertRewardItemList = [];
+
+        foreach (var itemData in alertRewards ?? [])
+        {
+            GameItem item = itemData.ToItem();
+            item.GetSearchTags();
+            alertRewardItemList.Add(item);
+        }
+        alertRewardItems = [.. alertRewardItemList];
+    }
+
+    void GenerateSearchTags()
+    {
         searchTags = [];
         searchTags.Add(DisplayName);
         if (IsFourPlayer)
             searchTags.Add("Group");
-        if(alertModifiers.Length>0)
+        if (alertModifiers.Length > 0)
             searchTags.Add("Alert");
-        if (TheaterCat=="v")
+        if (TheaterCat == "v")
             searchTags.Add("Ventures");
         //this is super lazy, i dont want to figure out how to query the total of specific items procedurally
         if (
             rewardItems.Where(i =>
-                i.sortingTemplate?.Name.StartsWith("Reagent_Alteration_Upgrade", StringComparison.InvariantCultureIgnoreCase)==true ||
+                i.sortingTemplate?.Name.StartsWith("Reagent_Alteration_Upgrade", StringComparison.InvariantCultureIgnoreCase) == true ||
                 i.sortingTemplate?.Name.Equals("Reagent_Alteration_Generic", StringComparison.InvariantCultureIgnoreCase) == true ||
                 i.sortingTemplate?.Name.StartsWith("Reagent_C", StringComparison.InvariantCultureIgnoreCase) == true ||
                 i.sortingTemplate?.Name.Equals("PersonnelXP", StringComparison.InvariantCultureIgnoreCase) == true ||
@@ -977,7 +1083,7 @@ public partial class GameMission
     {
         return
             theaterInfo.requirements.MeetsRequirements(account, TheaterCat == "v") &&
-            tile.requirements.MeetsRequirements(account, TheaterCat == "v") && 
+            tile?.requirements.MeetsRequirements(account, TheaterCat == "v")==true && 
             regions.All(r => r.requirements.MeetsRequirements(account, TheaterCat == "v"));
     }
 
@@ -989,32 +1095,6 @@ public partial class GameMission
         {
             item.GetTexture();
         }
-    }
-
-    //old code, use PlayableBy instead
-    async Task<bool> MissionIsPlayable(GameAccount byAccount=null)
-    {
-        //byAccount ??= GameAccount.activeAccount;
-        //if(!await byAccount.Authenticate())
-        //    return false;
-        //var powerLevel = byAccount.GetFORTStats().PowerLevel;
-        //bool isAboveMin = powerLevel >= difficultyInfo["RequiredRating"].GetValue<int>();
-        //bool isBelowMax = powerLevel <= difficultyInfo["MaximumRating"].GetValue<int>();
-        //if(!isAboveMin || (isBelowMax && TheaterCat=="v"))
-        //    return false;
-
-        //string requiredQuest = tileData["requirements"]["questDefinition"].ToString().Split(".")[^1];
-        //bool requiredQuestCheckPassed = requiredQuest == "None" ||
-        //    (
-        //        (await byAccount.GetProfile(FnProfileTypes.AccountItems).Query()).GetFirstTemplateItem("Quest") is GameItem targetQuest &&
-        //        targetQuest.QuestComplete
-        //    );
-        //if(!requiredQuestCheckPassed)
-        //    return false;
-
-        //implement more checks in future
-
-        return true;
     }
 
     public void UpdateRewardNotifications(bool force = false)

@@ -42,6 +42,11 @@ public partial class ContextMenu : Window
 
     public override void _Ready()
     {
+        if (Engine.IsEditorHint())
+        {
+            Visible = false;
+            return;
+        }
         inst = this;
         Visible = true;
         this.Win64RemoveFromTaskbar();
