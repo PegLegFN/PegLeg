@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://dljot1ntapg7q" path="res://Scenes/GameItemEntry/inventory_slot.tscn" id="2_0x38l"]
 
 [node name="SurvivorSquad" type="MarginContainer" node_paths=PackedStringArray("squadNameLabel", "squadIcon", "fortPointsLabel", "fortPointsIcon", "leadSurvivorSlot", "survivorSlots")]
+offset_right = 640.0
+offset_bottom = 179.0
 script = ExtResource("1_crhol")
 synergy = "Doctor"
 slotRequirements = PackedStringArray("", "", "", "", "", "", "", "")
@@ -20,10 +22,10 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -62,6 +64,7 @@ text = "+0"
 layout_mode = 2
 
 [node name="InventorySlot" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
@@ -71,74 +74,187 @@ isSurvivorSlot = true
 layout_mode = 2
 
 [node name="InventorySlot2" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
 [node name="InventorySlot3" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
 [node name="InventorySlot4" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
 [node name="InventorySlot5" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
 [node name="InventorySlot6" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
 [node name="InventorySlot7" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
 [node name="InventorySlot8" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="Perks" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Perks"]
+[node name="Perks" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
 modulate = Color(0.25098, 1, 0.25098, 1)
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_constants/separation = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("1_i6sy6")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer3"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer4"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer5"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer5"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer6"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer6"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer7"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer7"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "7/7"
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
+modulate = Color(0.25098, 1, 0.25098, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer8"]
+layout_mode = 2
+texture = ExtResource("1_i6sy6")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer8"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "7/7"

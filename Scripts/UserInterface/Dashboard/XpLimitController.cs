@@ -58,17 +58,6 @@ public partial class XpLimitController : Control
             brProfile = acc.GetProfile(FnProfileTypes.CosmeticInventory);
             await acc.ClientQuestLoginAthena();
 
-            //temporary addon to handle daily valentines logins
-            var questItems = brProfile.GetItems(item =>
-                item.templateId.StartsWith("Quest:quest_s39_valentines_dailylogin_p0", StringComparison.OrdinalIgnoreCase) &&
-                item.QuestComplete && 
-                !item.QuestClaimed
-            );
-            foreach (var item in questItems)
-            {
-                await item.ClaimQuest();
-            }
-
 
             await UpdateProfileTask();
         }
@@ -80,20 +69,35 @@ public partial class XpLimitController : Control
 
     private async void UpdateProfiles() => await UpdateProfileTask();
     static Task profileFetchTask = null;
+
+    private async Task FetchProfileTask()
+    {
+        //for some reason, XP stat changes don't increment the profile revision, so we need to force fetch the entire profile
+        await Task.WhenAll(
+            stwProfile.Query(forceFetch: true),
+            brProfile.Query(forceCompleteFetch: true),
+            GameCalender.Check()
+        );
+        //temporary addon to handle daily valentines logins
+        var questItems = brProfile.GetItems(item =>
+            item.templateId.StartsWith("Quest:quest_s39_valentines_dailylogin_p0", StringComparison.OrdinalIgnoreCase) &&
+            item.QuestComplete &&
+            !item.QuestClaimed
+        );
+        foreach (var item in questItems)
+        {
+            GD.Print("Claimed valentines quest");
+            await item.ClaimQuest();
+        }
+    }
+
     private async Task UpdateProfileTask()
     {
         loading.Visible = true;
         content.Visible = false;
         try
         {
-            //for some reason, XP stat changes don't increment the profile revision, so we need to completely re-fetch the BR profile
-
-            profileFetchTask ??= Task.WhenAll(
-                stwProfile.Query(true),
-                brProfile.Query(true, true),
-                CalenderRequests.CheckCalender()
-            );
-
+            profileFetchTask ??= FetchProfileTask();
             //this weird task summersault ensures that multiple XPLimitControllers refreshing simultaniously wont cause multiple profile updates
             var toAwait = profileFetchTask;
             await toAwait;
@@ -126,7 +130,7 @@ public partial class XpLimitController : Control
         var stwXpItem = stwProfile.GetFirstTemplateItem("Token:stw_accolade_tracker");
 
         bool ignoreStwXp = (stwXpItem?.attributes["last_reset"]?.Deserialize<DateTime>() ?? default) < stwReset.AddDays(-7);
-        int? brWeek = CalenderRequests.BRSeasonWeek;
+        int? brWeek = GameCalender.BRSeasonWeek;
         bool ignorePlaytimeXp = brWeek != brProfile.statAttributes["playtime_xp"]?["currentWeek"]?.GetValue<int?>();
         bool ignoreCreativeXp = brWeek != brProfile.statAttributes["creative_dynamic_xp"]?["currentWeek"]?.GetValue<int?>();
 

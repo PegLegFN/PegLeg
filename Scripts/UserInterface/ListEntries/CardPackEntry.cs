@@ -90,7 +90,7 @@ public partial class CardPackEntry : GameItemEntry
         if (item.attributes?.ContainsKey("options") ?? false)
             rarityColor = item.template.RarityColor;
 
-        llamaColorData ??= OverridableFileLoader.LoadJsonFile("llamaColors.json");
+        llamaColorData ??= PegLegResourceManager.LoadResourceObj("llamaColors.json");
         JsonArray colorData = llamaColorData?.FirstOrDefault(kvp => llamaPinataName?.StartsWith(kvp.Key) ?? false).Value?.AsArray();
 
         SetColours([

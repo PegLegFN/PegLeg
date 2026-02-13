@@ -7,7 +7,7 @@ uniform vec2 Parallax = vec2(0.0, 0.0);
 uniform float CornerRadius = 10.0;
 uniform float HeaderSpace = 250;
 uniform float SkySpace = 0.4;
-uniform float ParallaxScale = 350;
+uniform float ParallaxScale = 200;
 uniform sampler2D background : hint_default_black;
 
 varying vec4 modulate;
@@ -37,7 +37,7 @@ void fragment() {
 	//objUV.x = mod(objUV.x, 1);
 	//COLOR.rgb = texture(sky, objUV).r*modulate.rgb;
 	
-	vec2 bgUV = backgroundUV+vec2(Parallax.x/ParallaxScale, 0.0);
+	vec2 bgUV = backgroundUV+vec2(ParallaxScale>0.0 ? Parallax.x/ParallaxScale : 0.0, 0.0);
 	bgUV.x = mod(bgUV.x, 1.0);
 	vec4 bg = texture(background, bgUV);
 	COLOR.rgb = mix(COLOR.rgb,mix(modulate.rgb*0.5,mix(modulate.rgb,vec3(1),0.3),bg.r),clamp(((bg.r*15.0)-2.0)*bg.a, 0, 1));

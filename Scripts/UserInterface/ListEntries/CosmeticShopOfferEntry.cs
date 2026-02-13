@@ -71,7 +71,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
     Color fallbackOutlineColor;
     Timer resourceLoadTimer;
 
-    CosmeticShopOfferData currentOfferData;
+    GameOffer currentOffer;
     Gradient bgGradient;
     Color[] bgGradientDefaultColors;
 
@@ -92,7 +92,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 
     public override void _ExitTree()
     {
-        ClearCosmeticOfferData();
+        ClearOffer();
         RefreshTimerController.OnSecondChanged -= UpdateOutTimer;
     }
 
@@ -139,10 +139,9 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
             return;
         }
         resourceLoadStarted = true;
-        if(currentOfferData is not null)
+        if(currentOffer?.CosmeticImage is ImageTexture img)
         {
-            if (!currentOfferData.resourceLoadComplete)
-                ApplyOfferResource();
+            ApplyResource(img);
             return;
         }
 
@@ -230,62 +229,58 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
         loadingCubes.Visible = false;
     }
 
-    void ApplyOfferResource() => 
-        ApplyResource(currentOfferData.resourceTex);
-
     void ApplyOfferOwnership()
     {
-        EmitSignal(SignalName.PriceVisibility, !currentOfferData.isOwned);
-        EmitSignal(SignalName.OldPriceVisibility, !currentOfferData.isOwned && currentOfferData.isDiscountBundle);
-        EmitSignal(SignalName.OldPriceAmount, (currentOfferData.price - currentOfferData.discountAmount).ToString());
-        EmitSignal(SignalName.OwnedVisibility, currentOfferData.isOwned);
+        //EmitSignal(SignalName.PriceVisibility, !currentOfferData.isOwned);
+        //EmitSignal(SignalName.OldPriceVisibility, !currentOfferData.isOwned && currentOfferData.isDiscountBundle);
+        //EmitSignal(SignalName.OldPriceAmount, (currentOfferData.price - currentOfferData.discountAmount).ToString());
+        //EmitSignal(SignalName.OwnedVisibility, currentOfferData.isOwned);
     }
 
-    public void SetCosmeticOfferData(CosmeticShopOfferData offerData)
+    public void SetOffer(GameOffer newOffer)
     {
-        ClearCosmeticOfferData();
-        currentOfferData = offerData;
-        currentOfferData.OnResourceLoaded += ApplyOfferResource;
+        ClearOffer();
+        currentOffer = newOffer;
+        //currentOfferData.OnResourceLoaded += ApplyOfferResource;
         //currentOfferData.OnOwnershipLoaded += ApplyOfferOwnership;
 
-        outDate = offerData.outDate;
+        outDate = newOffer.OutDate;
         UpdateOutTimer();
 
-        EmitSignal(SignalName.NameChanged, offerData.displayName);
-        EmitSignal(SignalName.TypeChanged, offerData.displayType);
-        EmitSignal(SignalName.TooltipChanged, offerData.displayType);
+        //EmitSignal(SignalName.NameChanged, newOffer.displayName);
+        //EmitSignal(SignalName.TypeChanged, newOffer.displayType);
+        //EmitSignal(SignalName.TooltipChanged, newOffer.displayType);
 
-        EmitSignal(SignalName.PriceAmount, offerData.price.ToString());
-        EmitSignal(SignalName.PriceVisibility, true);
-        EmitSignal(SignalName.OldPriceAmount, (offerData.price-offerData.discountAmount).ToString());
-        EmitSignal(SignalName.OldPriceVisibility, offerData.isDiscountBundle);
-        EmitSignal(SignalName.OwnedVisibility, false);
-        //if (offerData.ownershipLoadComplete)
-        //    ApplyOfferOwnership();
+        //EmitSignal(SignalName.PriceAmount, newOffer.price.ToString());
+        //EmitSignal(SignalName.PriceVisibility, true);
+        //EmitSignal(SignalName.OldPriceAmount, (newOffer.price-newOffer.discountAmount).ToString());
+        //EmitSignal(SignalName.OldPriceVisibility, newOffer.isDiscountBundle);
+        //EmitSignal(SignalName.OwnedVisibility, false);
+        ////if (offerData.ownershipLoadComplete)
+        ////    ApplyOfferOwnership();
 
-        loadingCubes.Visible = true;
-        resourceTarget.Visible = false;
-        resourceShift = offerData.resourceShift;
-        if (offerData.resourceLoadComplete)
-            ApplyResource();
+        //loadingCubes.Visible = true;
+        //resourceTarget.Visible = false;
+        //resourceShift = newOffer.resourceShift;
+        //if (newOffer.resourceLoadComplete)
+        //    ApplyResource();
 
-        EmitSignal(SignalName.BonusTextVisibility, !string.IsNullOrWhiteSpace(offerData.bonusText));
-        EmitSignal(SignalName.BonusTextChanged, offerData.bonusText);
+        //EmitSignal(SignalName.BonusTextVisibility, !string.IsNullOrWhiteSpace(newOffer.bonusText));
+        //EmitSignal(SignalName.BonusTextChanged, newOffer.bonusText);
 
-        EmitSignal(SignalName.LastSeenVisibility, offerData.lastSeenDaysAgo > 1);
-        EmitSignal(SignalName.LastSeenText, $"{offerData.lastSeenDaysAgo}");
-        EmitSignal(SignalName.LastSeenAlertVisibility, offerData.isOld);
-        EmitSignal(SignalName.AlmostAYearVisibility, offerData.isVeryOld);
+        //EmitSignal(SignalName.LastSeenVisibility, newOffer.lastSeenDaysAgo > 1);
+        //EmitSignal(SignalName.LastSeenText, $"{newOffer.lastSeenDaysAgo}");
+        //EmitSignal(SignalName.LastSeenAlertVisibility, newOffer.isOld);
+        //EmitSignal(SignalName.AlmostAYearVisibility, newOffer.isVeryOld);
     }
 
-    void ClearCosmeticOfferData()
+    void ClearOffer()
     {
-
-        if (currentOfferData is null)
+        if (currentOffer is null)
             return;
-        currentOfferData.OnResourceLoaded -= ApplyOfferResource;
+        //currentOfferData.OnResourceLoaded -= ApplyOfferResource;
 
-        currentOfferData = null;
+        currentOffer = null;
     }
 
     string shopUrl = null;

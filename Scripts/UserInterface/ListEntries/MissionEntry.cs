@@ -33,7 +33,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
     [Signal]
     public delegate void MissionLockedEventHandler(bool locked);
     [Signal]
-    public delegate void MissionCompleteEventHandler(bool locked);
+    public delegate void MissionCompleteEventHandler(bool complete);
     [Signal]
     public delegate void IsToDoEventHandler(bool locked);
 
@@ -111,12 +111,17 @@ public partial class MissionEntry : Control, IRecyclableEntry
 
     private void AccountChanged()
     {
-        //emit false if complete
         EmitSignalMissionLocked(
             !AppConfig.Get("missions", "hide_lock", false) &&
             currentMission?.PlayableBy(GameAccount.ActiveAccount) != true &&
             !ignoreAccountStatus
         );
+
+        EmitSignalMissionComplete(
+            currentMission?.IsAlertCompleteFor(GameAccount.ActiveAccount) == true &&
+            !ignoreAccountStatus
+        );
+
         currentMission?.UpdateRewardNotifications(true);
         if (toDoListContent is not null)
             toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
@@ -149,10 +154,14 @@ public partial class MissionEntry : Control, IRecyclableEntry
         EmitSignalBackgroundChanged(currentMission.backgroundTexture ?? defaultBackground);
         EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
 
-        //emit false if complete
         EmitSignalMissionLocked(
             !AppConfig.Get("missions", "hide_lock", false) &&
             currentMission?.PlayableBy(GameAccount.ActiveAccount) != true &&
+            !ignoreAccountStatus
+        );
+
+        EmitSignalMissionComplete(
+            currentMission?.IsAlertCompleteFor(GameAccount.ActiveAccount) == true &&
             !ignoreAccountStatus
         );
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckgomc13aefaq"]
+[gd_scene load_steps=7 format=3 uid="uid://ckgomc13aefaq"]
 
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/InterfaceIcons/PegLegIcon256.png" id="1_3vg8i"]
 [ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="1_sjo8y"]
@@ -12,6 +12,14 @@ shader_parameter/ControlSizeScale = Vector2(1, 1)
 shader_parameter/Expo = true
 shader_parameter/AlphaStart = 0.0
 shader_parameter/CornerRadius = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sp15k"]
+content_margin_bottom = 4.0
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="PegLegWatermark" type="MarginContainer"]
 theme_override_constants/margin_top = 32
@@ -70,8 +78,29 @@ layout_mode = 2
 texture = ExtResource("3_sjo8y")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 10
-text = "peglegfn.com"
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+text = "Get PegLeg at"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sp15k")
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(0.33999997, 0.80199987, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 6
+theme_override_constants/shadow_outline_size = 0
+text = " PegLegFN.com "
 horizontal_alignment = 1

@@ -72,12 +72,34 @@ public partial class DynamicGridContainer : Container
         }
     }
     Vector2 spacing;
+    [Export]
+    bool UseManualColumnCounts
+    {
+        get => useManualColCounts;
+        set
+        {
+            useManualColCounts = value;
+            UpdateLayout();
+        }
+    }
+    bool useManualColCounts;
+    [Export]
+    int[] ColumnCounts
+    {
+        get => manualColumnCounts;
+        set
+        {
+            manualColumnCounts = value;
+            UpdateLayout();
+        }
+    }
+    int[] manualColumnCounts;
 
-	//get col count from col width
-	//derive rows from col count
-	//min height of each row is the largest child min height
+    //get col count from col width
+    //derive rows from col count
+    //min height of each row is the largest child min height
 
-	bool lockMinSize = false;
+    bool lockMinSize = false;
 	public override Vector2 _GetMinimumSize()
     {
 		if(lockMinSize)
@@ -92,9 +114,7 @@ public partial class DynamicGridContainer : Container
                 return Vector2.Zero;
             }
 
-            float colWidth = autoColWidth ? firstChild.GetCombinedMinimumSize().X : manualColWidth;
-
-            int colCount = Mathf.Max(Mathf.FloorToInt((Size.X + spacing.X) / (colWidth + spacing.X)), minCols);
+            int colCount = GetColCount(firstChild.GetCombinedMinimumSize().X, out var colWidth);
             int rowCount = Mathf.CeilToInt((float)children.Length / colCount);
             float totalHeight = GetRowHeights(children, colCount).Sum();
 
@@ -110,11 +130,7 @@ public partial class DynamicGridContainer : Container
         }
     }
 
-	Control[] GetControlChildren()=> 
-		GetChildren()
-            .Select(n => n is Control c ? c : null)
-            .Where(c => c is not null)
-            .ToArray();
+	Control[] GetControlChildren()=> [.. GetChildren().OfType<Control>()];
 
     (Control, Control[]) GetRelevantChildren()
     {
@@ -134,10 +150,25 @@ public partial class DynamicGridContainer : Container
         return null;
     }
 
-    public int GetColCount(float? givenChildWidth = null)
+    public int GetColCount(float? givenChildWidth = null) => GetColCount(givenChildWidth, out var _);
+    public int GetColCount(float? givenChildWidth, out float colWidth)
     {
-        float colWidth = autoColWidth ? (givenChildWidth ?? GetFirstControlChild().GetCombinedMinimumSize().X) : manualColWidth;
-        return Mathf.Max(Mathf.FloorToInt((Size.X + spacing.X) / (colWidth + spacing.X)), minCols);
+        colWidth = autoColWidth ? (givenChildWidth ?? GetFirstControlChild().GetCombinedMinimumSize().X) : manualColWidth;
+        int colCount = Mathf.Max(Mathf.FloorToInt((Size.X + spacing.X) / (colWidth + spacing.X)), minCols);
+
+        if (useManualColCounts)
+        {
+            int selectedColCount = 1;
+            for (int i = 0; i < manualColumnCounts.Length; i++)
+            {
+                if (manualColumnCounts[i] <= colCount)
+                    selectedColCount = manualColumnCounts[i];
+                else
+                    break;
+            }
+            colCount = Mathf.Max(selectedColCount, minCols);
+        }
+        return colCount;
     }
 
 
@@ -202,9 +233,7 @@ public partial class DynamicGridContainer : Container
                 return;
             }
 
-            float colWidth = autoColWidth ? children[0].GetCombinedMinimumSize().X : manualColWidth;
-
-            int colCount = Mathf.Max(Mathf.FloorToInt((Size.X + spacing.X) / (colWidth + spacing.X)), minCols);
+            int colCount = GetColCount(null, out var colWidth);
             int rowCount = Mathf.CeilToInt((float)children.Length / colCount);
 
             int compressedCols = Mathf.Min(colCount, visibleChildCount);

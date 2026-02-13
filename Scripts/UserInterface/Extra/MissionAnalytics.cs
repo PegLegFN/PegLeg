@@ -27,7 +27,6 @@ public partial class MissionAnalytics : Control
     [Export]
     Label averageLabel;
 
-    Dictionary<DateTime, GameMission[]> dataSources = [];
     List<MissionAnalyticsDataPoint> dataPointEntries = [];
 
     [GeneratedRegex("(\\d{4})-(\\d{1,2})-(\\d{1,2})")]
@@ -56,6 +55,7 @@ public partial class MissionAnalytics : Control
         missionFilter.TextChanged += _ => UpdateFilters();
         itemFilter.TextChanged += _ => UpdateFilters();
         sampleItems.Toggled += _ => UpdateAnalytics();
+        UpdateFilters();
     }
 
     DateTime fromDate;
@@ -67,7 +67,6 @@ public partial class MissionAnalytics : Control
     {
         toDate = ParseDate(toDateText.Text) ?? DateTime.UtcNow.Date;
         fromDate = ParseDate(fromDateText.Text) ?? toDate.AddDays(-28);
-        dataSources = dataSources.Where(kvp => kvp.Key >= fromDate && kvp.Key <= toDate).ToDictionary();
 
         int dayCount = (int)((toDate - fromDate).TotalDays + 1);
         using var loadToken = LoadingOverlay.CreateToken("Loading Archives", dayCount);
@@ -75,16 +74,12 @@ public partial class MissionAnalytics : Control
         {
             DateTime date = fromDate.AddDays(i);
             await Helpers.WaitForFrame();
-            if (dataSources.ContainsKey(date))
-                continue;
-            if (!GameMission.TryLoadArchive(date, out var archive))
+            loadToken.SetLoadingProgress(i + 1);
+            if (!GameMission.TryGetOrLoadArchive(date, out var archive))
             {
                 GD.Print($"archive missing for {date}");
                 //TODO: add to list of unavailable archives, prompt to download from archive server
-                continue;
             }
-            dataSources.Add(date, archive.CreateMissions());
-            loadToken.SetLoadingProgress(i + 1);
         }
         UpdateAnalytics();
     }
@@ -121,12 +116,12 @@ public partial class MissionAnalytics : Control
         for (int i = 0; i < dayCount; i++)
         {
             DateTime date = fromDate.AddDays(i);
-            if (!dataSources.TryGetValue(date, out var missions))
+            if (!GameMission.TryGetArchive(date, out var archive))
                 continue;
             int value = -1;
             if (sampleItems.ButtonPressed)
             {
-                value = missions
+                value = archive.Missions
                     .Where(MissionValidator)
                     .SelectMany(m=>m.allItems)
                     .Where(ItemValidator)
@@ -135,7 +130,7 @@ public partial class MissionAnalytics : Control
             }
             else
             {
-                value = missions.Count(MissionValidator);
+                value = archive.Missions.Count(MissionValidator);
             }
             dataResults.Add(date, value);
         }

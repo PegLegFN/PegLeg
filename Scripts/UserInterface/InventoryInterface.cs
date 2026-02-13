@@ -73,6 +73,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         tabBar.TabsChanged += SetTypeFilter;
         AppConfig.OnConfigChanged += OnConfigChanged;
         VisibilityChanged += TryFilter;
+        SetTypeFilter();
         UpdateAccount();
     }
 

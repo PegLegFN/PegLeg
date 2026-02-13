@@ -32,6 +32,8 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     [Export]
     RecycleListContainer container;
     [Export]
+    RecycleListContainer smallContainer;
+    [Export]
     Control multiselectButtons;
     [Export]
     Control confirmButton;
@@ -47,6 +49,9 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
 		base._Ready();
         RestoreDefaults();
         container.SetProvider(this);
+        smallContainer.SetProvider(this);
+        container.Visible = false;
+        smallContainer.Visible = false;
         Instance = this;
     }
 
@@ -55,8 +60,10 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     List<GameItem> items;
     List<GameItem> filteredItems;
     List<GameItem> selectedItems = [];
+    RecycleListContainer activeContainer;
 
     public bool multiselectMode;
+    public bool smallItems;
     public bool allowEmptySelection;
     public bool allowCancel;
     public string overrideSurvivorSquad;
@@ -91,6 +98,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
         overrideSurvivorSquad = null;
         selectablePredicate = null;
         autoselectPredicate = null;
+        smallItems = true;
 
         titleText = "Select an Item";
         confirmButtonText = "Confirm";
@@ -119,6 +127,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     public void SetRecycleDefaults()
     {
         RestoreDefaults();
+        smallItems = false;
         titleText = "Recycle";
         confirmButtonText = "Confirm Recycle";
         multiselectMode = true;
@@ -134,6 +143,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
     public void SetDismantleDefaults()
     {
         RestoreDefaults();
+        smallItems = false;
         titleText = "Dismantle";
         confirmButtonText = "Confirm Dismantle";
         multiselectMode = true;
@@ -153,11 +163,15 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
         EmitSignal(SignalName.SkipButtonChanged, skipButtonText);
         EmitSignal(SignalName.AutoselectChanged, autoselectButtonTex);
 
+        container.Visible = !smallItems;
+        smallContainer.Visible = smallItems;
+        activeContainer = smallItems ? smallContainer : container;
+
         multiselectButtons.Visible = multiselectMode;
         autoSelectButton.Visible = autoselectPredicate is not null;
         selectablePredicate ??= item => true;
 
-        items = profileItems.ToList();
+        items = [.. profileItems];
         if(allowEmptySelection && !multiselectMode)
             items.Insert(0, emptyItem);
 
@@ -176,17 +190,17 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
         else
             selectedItems = [];
 
-        confirmButton.Visible = selectedItems?.Any() ?? false;
+        confirmButton.Visible = selectedItems?.Count == 0;
         skipButton.Visible = !confirmButton.Visible && allowEmptySelection;
 
         SetSort(0);
         SortItems();
-        container.UpdateList(true);
+        activeContainer.UpdateList(true);
         isSelecting = true;
         isCancelling = false;
         base.SetWindowOpen(true);
         await Helpers.WaitForFrame();
-        container.UpdateList(true);
+        activeContainer.UpdateList(true);
 
         //GD.Print($"opening selector with {itemHandles.Count} items");
         while (isSelecting)
@@ -209,7 +223,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
             return;
         selectedItems = items.Where(item => selectablePredicate.Try(item) && autoselectPredicate(item)).Union(selectedItems).ToList();
         SortItems();
-        container.UpdateList(true);
+        activeContainer.UpdateList(true);
     }
 
     int currentSortingIndex = 0;
@@ -233,7 +247,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
         }
         sortingDirty = false;
         SortItems();
-        container.UpdateList(true);
+        activeContainer.UpdateList(true);
     }
 
     void SetSort(int newIndex)
@@ -283,7 +297,7 @@ public partial class GameItemSelector : ModalWindow, IRecyclableElementProvider<
         selectedItems.Clear();
         SortItems();
         if (multiselectMode)
-            container.UpdateList(true);
+            activeContainer.UpdateList(true);
     }
 
     public bool IsSelectable(GameItem item) => selectablePredicate.Try(item);

@@ -94,7 +94,7 @@ public partial class QuestInterface : Control
             return;
 
         await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
-        await GameAccount.ActiveAccount.CheckCalender();
+        await GameCalender.Check();
 
         questGroupViewer.Visible = false;
         questListLayout.Visible = false;
@@ -157,12 +157,9 @@ public partial class QuestInterface : Control
                             timer.Visible = false;
                             break;
                         case QuestTimerMode.Event:
-                            var activeFlag = collection.eventFlags.FirstOrDefault(CalenderRequests.EventFlagActive);
-                            if (activeFlag is not null)
-                                timer.SetCustomRefreshTime(
-                                    CalenderRequests.EventEnd(activeFlag),
-                                    CalenderRequests.EventStart(activeFlag)
-                                );
+                            var activeFlag = collection.eventFlags.FirstOrDefault(GameCalender.EventFlagActive);
+                            if (GameCalender.TryGetFlagRange(activeFlag, out var startDate, out var endDate))
+                                timer.SetCustomRefreshTime(startDate, endDate);
                             timer.Visible = activeFlag is not null;
                             break;
                     }

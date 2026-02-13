@@ -13,12 +13,15 @@ public partial class UpdateChecker : Control
 	Control releaseParent;
 	[Export]
 	PackedScene releaseScene;
+    [Export]
+    Label currentVersionLabel;
     List<Control> releaseEntries = [];
 
 	public override void _Ready()
 	{
         CheckForUpdates();
-	}
+        currentVersionLabel.Text = AppConfig.PegLegVersion.ToString();
+    }
 
 	bool isChecking = false;
 	GithubHelper.ReleaseData? latestRelease;

@@ -61,10 +61,7 @@ public partial class RefreshTimerController : Node
         }
     }
 
-    private async void UpdateCalender()
-    {
-        await GameAccount.ActiveAccount.CheckCalender();
-    }
+    private async void UpdateCalender() => await GameCalender.Check();
 
     DateTime lastTime;
     private void UpdateTimers()
@@ -189,6 +186,7 @@ public partial class RefreshTimerController : Node
             int reducedDayCount = dayCount - startDayOffset;
             if (reducedDayCount < seasonLengths[i] * 7)
             {
+                startDayOffset = -dayCount;
                 break;
             }
             startDayOffset += seasonLengths[i] * 7;

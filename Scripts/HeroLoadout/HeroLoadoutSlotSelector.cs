@@ -1,10 +1,10 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvider<GameItem>, ISelectableElementProvider<GameItem>
 {
@@ -14,6 +14,8 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
     HeroLoadoutEntry linkedPanel;
     [Export]
     RecycleListContainer loadoutList;
+    [Export]
+    LineEdit searchBar;
 
     public override void _Ready()
     {
@@ -23,6 +25,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
             GameAccount.ActiveAccountChanged += UpdateActive;
             SetAccount(GameAccount.ActiveAccount);
         }
+        searchBar.TextChanged += UpdateFilter;
     }
 
     public override void _ExitTree()
@@ -46,6 +49,8 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
     GameItem selectionTarget;
 
     GameItem[] loadouts = [];
+    PLSearch.Instruction[] searchFilter;
+    List<GameItem> filteredLoadouts = [];
 
     public void SetAccount(GameAccount account)
     {
@@ -54,13 +59,13 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         if (profile is null)
         {
             loadouts = [];
-            loadoutList.UpdateList(true);
+            UpdateList();
             linkedPanel?.ClearItem();
             return;
         }
         var defaultLoadoutUUID = profile?.statAttributes?["selected_hero_loadout"]?.ToString();
         loadouts = [.. profile?.GetItems("CampaignHeroLoadout").OrderBy(i => i.attributes?["loadout_index"]?.GetValue<int>() ?? 0).ToArray() ?? []];
-        loadoutList.UpdateList(true);
+        UpdateList();
         linkedPanel?.SetItem(profile?.GetItem(defaultLoadoutUUID));
     }
 
@@ -80,25 +85,69 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         }
     }
 
-    public GameItem GetRecycleElement(int index)
-    {
-        if(index < 0 || index >= loadouts.Length)
-        {
-            //GD.Print($"{index} is OOB of [0..{loadouts.Length - 1}]");
-            return null;
-        }
-        return loadouts[index];
-    }
-
-    public int GetRecycleElementCount() => 
-        loadouts.Length;
+    public GameItem GetRecycleElement(int index) => filteredLoadouts[index];
+    public int GetRecycleElementCount() =>
+        filteredLoadouts.Count;
 
     void ClearSelection() => SetSelection(SelectionMode.None, -1);
     void SetSelection(SelectionMode mode, int index)
     {
         //GD.Print($"mode : {mode}, target: {index + 1}");
-        selectionTarget = GetRecycleElement(index);
+        selectionTarget = index < 0 ? null : GetRecycleElement(index);
         selectionMode = mode;
+        UpdateFilter();
+    }
+
+    private void UpdateFilter(string _) => UpdateFilter();
+    void UpdateFilter()
+    {
+        searchBar.Editable = selectionMode == SelectionMode.None;
+        searchFilter = searchBar.Editable ? PLSearch.GenerateSearchInstructions(searchBar.Text) : [];
+        UpdateList();
+    }
+
+
+    void UpdateList()
+    {
+        filteredLoadouts.Clear();
+        if (searchFilter.Length == 0)
+        {
+            filteredLoadouts.AddRange(loadouts);
+            loadoutList.UpdateList(true);
+            return;
+        }
+
+        //if a loadout slot has a custom name, search that first
+
+        filteredLoadouts.AddRange(loadouts.Where(loadout =>
+        {
+            var commanderGuid = loadout.attributes?["crew_members"]?["commanderslot"]?.ToString();
+            if(commanderGuid is null || loadout.profile.GetItem(commanderGuid) is not GameItem commander)
+                return false;
+            return PLSearch.EvaluateInstructions(searchFilter, commander.CustomSearchObject(c => [c.template.DisplayName, .. c.template.GetHeroAbilities().Select(a => a.DisplayName)]));
+        }));
+
+        filteredLoadouts.AddRange(loadouts.Except(filteredLoadouts).Where(loadout =>
+        {
+            var teamPerkGuid = loadout.attributes?["team_perk"]?.ToString();
+            if (teamPerkGuid is null || loadout.profile.GetItem(teamPerkGuid) is not GameItem teamPerk)
+                return false;
+            return PLSearch.EvaluateInstructions(searchFilter, teamPerk.CustomSearchObject(c => [c.template.DisplayName]));
+        }));
+
+        filteredLoadouts.AddRange(loadouts.Except(filteredLoadouts).Where(loadout =>
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var supportGuid = loadout.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
+                if (supportGuid is null || loadout.profile.GetItem(supportGuid) is not GameItem support)
+                    continue;
+                if (PLSearch.EvaluateInstructions(searchFilter, support.CustomSearchObject(c => [c.template.DisplayName, c.template.GetHeroAbilities()[0].DisplayName])))
+                    return true;
+            }
+            return false;
+        }));
+
         loadoutList.UpdateList(true);
     }
 

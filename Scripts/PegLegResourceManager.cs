@@ -19,7 +19,7 @@ public class PegLegResourceManager
     public static readonly string globalPackageFolderPath = Helpers.GlobalisePath(packageFolderPath);
 
     public static readonly Texture2D defaultIcon = ResourceLoader.Load<Texture2D>("res://Images/InterfaceIcons/T-Icon-Unknown-128.png");
-    public static readonly BanjoSuppliments supplimentaryData = ResourceLoader.Load<BanjoSuppliments>("res://banjo_suppliments.tres");
+    public static readonly BanjoSuppliments supplimentaryData = ResourceLoader.Load<BanjoSuppliments>("res://DataResources/BanjoSuppliments.tres");
 
     static FrozenDictionary<string, JsonObject> dataSources;
     public static FrozenDictionary<string, JsonObject> itemSources { get; private set; }

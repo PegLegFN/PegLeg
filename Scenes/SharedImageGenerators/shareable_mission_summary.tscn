@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cyyifj2tha4ri"]
+[gd_scene load_steps=17 format=3 uid="uid://cyyifj2tha4ri"]
 
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_4dqrj"]
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_h68g4"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="5_rymeg"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="7_emma3"]
 [ext_resource type="PackedScene" uid="uid://dx5ueh2xxydys" path="res://Scenes/MissionEntry/mission_reward_entry_accountless.tscn" id="8_0ubh0"]
+[ext_resource type="Script" uid="uid://b0xkvg3grgfya" path="res://Scripts/UserInterface/Dashboard/AverageVbuckCaclulator.cs" id="8_h68g4"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="9_2noju"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="9_ay20g"]
 [ext_resource type="PackedScene" uid="uid://bsmb8rbqn537o" path="res://Scenes/MissionEntry/mission_collection_entry_accountless.tscn" id="10_4ptmh"]
@@ -28,21 +29,21 @@ shader_parameter/ClipOOB = false
 
 [node name="ShareableMissionSummary" type="SubViewportContainer"]
 offset_right = 375.0
-offset_bottom = 445.0
+offset_bottom = 471.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [node name="MissionSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(375, 445)
+size = Vector2i(375, 471)
 render_target_update_mode = 4
 script = ExtResource("1_4dqrj")
 matchSize = NodePath("PegLegWatermark")
 
 [node name="PegLegWatermark" parent="MissionSummaryViewport" instance=ExtResource("2_h68g4")]
 offset_right = 350.0
-offset_bottom = 397.0
+offset_bottom = 475.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark"]
 layout_mode = 2
@@ -72,6 +73,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Notable Rewards"
+
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "V-Bucks only available to Founders"
+horizontal_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
@@ -139,14 +146,52 @@ size_flags_horizontal = 3
 text = "No Notable Rewards
 Instead, here's a cat"
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "V-Bucks only available to Founders"
-horizontal_alignment = 1
-
 [node name="FakeLoadingIcon" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
 layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("weekAverage", "monthAverage", "seasonAverage")]
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("8_h68g4")
+weekAverage = NodePath("VBoxContainer/HBoxContainer/Label2")
+monthAverage = NodePath("VBoxContainer/HBoxContainer/Label3")
+seasonAverage = NodePath("VBoxContainer/HBoxContainer/Label")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Average V-Bucks Per Day"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = -2
+text = "Past 7 Days:
+{x}/day"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = -2
+text = "Past 30 days:
+{x}/day"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = -2
+text = "This Season:
+{x}/day"
+horizontal_alignment = 1
 
 [node name="MissionCollection" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("loadingIcon") instance=ExtResource("9_ay20g")]
 custom_minimum_size = Vector2(250, 100)

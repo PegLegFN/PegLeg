@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bxxycun2kva7"]
+[gd_scene load_steps=15 format=3 uid="uid://bxxycun2kva7"]
 
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_n2fx7"]
 [ext_resource type="Script" uid="uid://duejkncuis5w3" path="res://Scripts/UserInterface/ListEntries/MissionRewardEntry.cs" id="1_woexs"]
@@ -10,7 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_bof5f"]
 [ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="7_n4hef"]
 [ext_resource type="Texture2D" uid="uid://b3m1n41ikas8t" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_128.png" id="9_qt2jc"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="10_n4hef"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="11_40ktf"]
+[ext_resource type="Texture2D" uid="uid://0dsm5rygx6qr" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_64.png" id="11_xa8gw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("2_isv5j")
@@ -151,6 +153,15 @@ layout_mode = 2
 mouse_filter = 2
 outlinePadding = 3.0
 
+[node name="Checkmark" type="TextureRect" parent="MissionEntry/HBoxContainer"]
+self_modulate = Color(0, 1, 0.26666665, 1)
+material = ExtResource("10_n4hef")
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+tooltip_text = "You've already completed this Mission and claimed this Mission Alert Reward"
+texture = ExtResource("11_xa8gw")
+expand_mode = 3
+
 [node name="MarginContainer3" type="MarginContainer" parent="MissionEntry/HBoxContainer"]
 layout_mode = 2
 
@@ -195,6 +206,7 @@ grow_vertical = 2
 texture = ExtResource("11_40ktf")
 expand_mode = 1
 
+[connection signal="MissionCompleteIfAlert" from="." to="MissionEntry/HBoxContainer/Checkmark" method="set_visible"]
 [connection signal="pressed" from="Button" to="MissionEntry" method="InspectMission"]
 [connection signal="IconChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/Icon" method="set_texture"]
 [connection signal="IsToDo" from="MissionEntry" to="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" method="set_disabled"]

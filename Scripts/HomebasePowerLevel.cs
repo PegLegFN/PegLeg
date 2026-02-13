@@ -79,6 +79,8 @@ public partial class HomebasePowerLevel : Control
 
     private void UpdateStatsVisuals()
     {
+        if (currentProfile?.account is null)
+            return;
         FORTStats stats = ventures ? currentProfile.account.GetVentureFORTStats() : currentProfile.account.GetFORTStats();
         var powerLevel = stats.PowerLevel;
         homebaseNumberLabel.Text = Mathf.Floor(powerLevel).ToString();

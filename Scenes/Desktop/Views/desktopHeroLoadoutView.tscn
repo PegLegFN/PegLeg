@@ -19,12 +19,12 @@ grow_vertical = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" node_paths=PackedStringArray("linkedPanel", "loadoutList")]
+[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" node_paths=PackedStringArray("linkedPanel", "loadoutList", "searchBar")]
 layout_mode = 2
-size_flags_horizontal = 3
 script = ExtResource("1_kwlnb")
 linkedPanel = NodePath("../LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel")
 loadoutList = NodePath("PanelContainer/VBoxContainer/ScrollContainer2")
+searchBar = NodePath("PanelContainer/VBoxContainer/HBoxContainer/LineEdit")
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutSlots"]
 layout_mode = 2
@@ -42,8 +42,7 @@ layout_mode = 2
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Search Loadouts (unfinished)"
-editable = false
+placeholder_text = "Search Loadouts"
 
 [node name="CheckButton" type="CheckButton" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -173,6 +172,46 @@ text = "Set As Active Slot"
 
 [node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Button2"]
 script = ExtResource("8_4wsl6")
+
+[node name="OverallStats" type="MarginContainer" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/OverallStats"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel5Pad"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/OverallStats/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/OverallStats/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Overall Hero Stats"
+horizontal_alignment = 1
+
+[node name="ItemList" type="ItemList" parent="HBoxContainer/OverallStats/PanelContainer/VBoxContainer"]
+layout_mode = 2
+allow_search = false
+auto_width = true
+auto_height = true
+item_count = 12
+max_columns = 2
+fixed_column_width = 150
+item_0/text = "Health"
+item_1/text = "20000"
+item_2/text = "Shield"
+item_3/text = "20000"
+item_4/text = "Health Regen Rate"
+item_5/text = "200"
+item_6/text = "Shield Regen Rate"
+item_7/text = "800"
+item_8/text = "Ability Damage"
+item_9/text = "22.2"
+item_10/text = "Healing Modifier"
+item_11/text = "22.15"
 
 [connection signal="IsCurrent" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Button2/InvertVisible" method="EmitInverted"]
 [connection signal="LoadoutName" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/Label" method="set_text"]

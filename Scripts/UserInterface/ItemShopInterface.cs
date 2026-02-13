@@ -58,13 +58,12 @@ public partial class ItemShopInterface : Control
             var timerType = useEventShop ? RefreshTimeType.Weekly : RefreshTimeType.Event;
             if (linkedStorefront is not null)
             {
-                await linkedStorefront.Update(force);
+                await linkedStorefront.Fetch(force);
                 return;
             }
 
-            linkedStorefront = await GameStorefront.GetStorefront(useEventShop ? FnStorefrontTypes.EventShopCatalog : FnStorefrontTypes.WeeklyShopCatalog, timerType);
-            if (linkedStorefront is null)
-                return;
+            linkedStorefront = useEventShop ? GameStorefront.CampaignEvent : GameStorefront.CampaignWeekly;
+            await linkedStorefront.Fetch();
             linkedStorefront.OnOfferAdded += AddShopOffer;
             linkedStorefront.OnOfferRemoved += RemoveShopOffer;
 

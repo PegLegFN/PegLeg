@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cvc7hj4ng7c04"]
+[gd_scene load_steps=30 format=3 uid="uid://cvc7hj4ng7c04"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_bjivd"]
 [ext_resource type="Script" uid="uid://ba0x60bnrci8u" path="res://Scripts/Overlays/GameItemSelector.cs" id="2_msbn1"]
@@ -28,15 +28,17 @@
 [ext_resource type="Texture2D" uid="uid://miw1whe7y5a8" path="res://Images/BanjoSuppliments/SetBonusIcons/T-Icon-Fortitude-128.png" id="20_3lmwd"]
 [ext_resource type="Texture2D" uid="uid://bgjkyrcgq8st5" path="res://Images/BanjoSuppliments/SetBonusIcons/T-Icon-Defense-128.png" id="21_iceif"]
 [ext_resource type="Texture2D" uid="uid://ci5xktxr3q4re" path="res://Images/BanjoSuppliments/SetBonusIcons/T-Icon-HealthBattery-64.png" id="22_8tyk0"]
+[ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="26_kejyc"]
 
-[node name="GameItemSelector" node_paths=PackedStringArray("autoSelectButton", "container", "multiselectButtons", "confirmButton", "skipButton", "windowControl") instance=ExtResource("1_bjivd")]
+[node name="GameItemSelector" node_paths=PackedStringArray("autoSelectButton", "container", "smallContainer", "multiselectButtons", "confirmButton", "skipButton", "windowControl") instance=ExtResource("1_bjivd")]
 script = ExtResource("2_msbn1")
 defaultSelectionMarker = ExtResource("3_4tm4g")
 recycleIcon = ExtResource("7_j13lo")
 collectionIcon = ExtResource("5_2qrsm")
 unselectableIcon = ExtResource("6_cjboh")
 autoSelectButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/AutoSelect")
-container = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/ScrollContainer")
+container = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems")
+smallContainer = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems")
 multiselectButtons = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons")
 confirmButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm")
 skipButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip")
@@ -49,7 +51,6 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 2
 
 [node name="WindowContents" parent="Control" index="0"]
 visible = false
@@ -503,7 +504,8 @@ texture = ExtResource("15_f2ysx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="1" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+[node name="LargeItems" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="1" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -515,7 +517,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
 elementScene = ExtResource("4_7jdcp")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/ScrollContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -524,23 +526,63 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/ScrollContainer/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" index="0"]
+[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="0"]
 layout_mode = 2
 
-[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" index="1"]
+[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="1"]
 layout_mode = 2
 script = ExtResource("4_2yqeq")
-minCols = 3
-compressSpacing = true
-spacing = Vector2(10, 10)
+MinCols = 3
+CompressSpacing = true
+Spacing = Vector2(10, 10)
 
-[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" index="2"]
+[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="2"]
+layout_mode = 2
+
+[node name="SmallItems" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="2" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("3_p3a1g")
+elementSpace = 10.0
+linkedGrid = NodePath("MarginContainer/VBoxContainer/Grid")
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
+elementScene = ExtResource("26_kejyc")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+script = ExtResource("4_2yqeq")
+MinCols = 3
+CompressSpacing = true
+Spacing = Vector2(10, 10)
+
+[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="2"]
 layout_mode = 2
 
 [node name="MultiselectButtons" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="2"]
@@ -562,7 +604,7 @@ text = "Clear Selected"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/ClearSelected" index="0"]
 visible = false
-layout_mode = 2
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 37.0
@@ -578,7 +620,7 @@ text = "Auto Select"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/AutoSelect" index="0"]
 visible = false
-layout_mode = 2
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 37.0
@@ -593,7 +635,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/Sort" index="0"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 37.0
@@ -668,7 +710,7 @@ text = "Clear Selected"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/ClearSelected" index="0"]
 visible = false
-layout_mode = 2
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 37.0
@@ -685,7 +727,7 @@ text = "Auto Select"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/AutoSelect" index="0"]
 visible = false
-layout_mode = 2
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 37.0
@@ -700,7 +742,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/Sort" index="0"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 37.0

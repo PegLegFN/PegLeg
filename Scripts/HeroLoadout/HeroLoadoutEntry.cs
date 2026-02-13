@@ -71,13 +71,13 @@ public partial class HeroLoadoutEntry : GameItemEntry
         {
             if(template is null)
                 return false;
-            if(CommanderSubType is not null && template.SubType!= CommanderSubType)
+            if (CommanderSubType is not null && template.SubType != CommanderSubType)
                 return false;
             else if (CommanderTag is not null)
             {
                 var targetTags = CommanderTag.ToHashSet();
                 var commanderTags = template["HeroTags"]?.Deserialize<string[]>().ToHashSet();
-                if(targetTags.All(t=>!commanderTags.Contains(t)))
+                if (targetTags.All(t => !commanderTags.Contains(t)))
                     return false;
             }
 

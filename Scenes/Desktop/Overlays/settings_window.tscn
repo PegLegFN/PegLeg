@@ -26,7 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://dwba88ym1rkl5" path="res://Scenes/updateVersion.tscn" id="17_xu4j7"]
 [ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="18_1rpfy"]
 [ext_resource type="PackedScene" uid="uid://dojyge3yqiou" path="res://Scenes/webhookSettings.tscn" id="24_1rpfy"]
-[ext_resource type="FontFile" uid="uid://ffqya7u4tk2a" path="res://CascadiaMono.ttf" id="27_sahv1"]
+[ext_resource type="FontFile" uid="uid://ffqya7u4tk2a" path="res://Fonts/CascadiaMono.ttf" id="27_sahv1"]
 [ext_resource type="Script" uid="uid://cnduts0olijb7" path="res://Scripts/UserInterface/Settings/CoreSettings.cs" id="28_xygpw"]
 
 [sub_resource type="Gradient" id="Gradient_c1ulb"]
@@ -154,10 +154,21 @@ theme_type_variation = &"Panel5Pad"
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="0"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Settings"
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
+text = "v0.3.25"
 
 [node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="1"]
 custom_minimum_size = Vector2(0, 4)
@@ -1720,7 +1731,7 @@ section = "mission_archive"
 key = "date_format"
 defaultValue = "yyyy-MM-dd"
 
-[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
+[node name="Updates" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent", "currentVersionLabel")]
 visible = false
 layout_mode = 2
 script = ExtResource("17_e6sed")
@@ -1728,6 +1739,7 @@ failMsg = NodePath("VBoxContainer/ScrollContainer/MarginContainer/Label")
 updateBtn = NodePath("VBoxContainer/HBoxContainer/UpdateLaunchBtn")
 releaseParent = NodePath("VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
 releaseScene = ExtResource("17_xu4j7")
+currentVersionLabel = NodePath("../../../HBoxContainer/Label2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" index="0"]
 layout_mode = 2

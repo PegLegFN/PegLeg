@@ -199,7 +199,7 @@ public partial class NotificationDispatcher : Node
 
     async Task<NotificationData[]> CheckFreeLlamas(CancellationToken ct)
     {
-        var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
+        var xrayStorefront = await GameStorefront.XRayLlamas.Fetch();
         if (ct.IsCancellationRequested)
             return [];
 
@@ -232,7 +232,7 @@ public partial class NotificationDispatcher : Node
 
     async Task<NotificationData[]> CheckDailyLlamas(CancellationToken ct)
     {
-        var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
+        var xrayStorefront = await GameStorefront.XRayLlamas.Fetch();
         if (ct.IsCancellationRequested)
             return [];
 
@@ -282,7 +282,7 @@ public partial class NotificationDispatcher : Node
         if (ct.IsCancellationRequested)
             return [];
 
-        var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
+        var xrayStorefront = await GameStorefront.XRayLlamas.Fetch();
         if (ct.IsCancellationRequested)
             return [];
         if (xrayStorefront.Offers.FirstOrDefault(o => o.WeeklyLimit > 0) is GameOffer weeklyOffer)

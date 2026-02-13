@@ -350,8 +350,8 @@ public partial class LlamaInterface : Control
 
             var prevSelectedOffer = currentOfferSelection?.OfferId;
 
-            var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, force ? null : RefreshTimeType.Hourly);
-            var randomStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.RandomLlamaCatalog, force ? null : RefreshTimeType.Hourly);
+            var xrayStorefront = await GameStorefront.XRayLlamas.Fetch(force);
+            var randomStorefront = await GameStorefront.RandomLlamas.Fetch(force);
             if (ct.IsCancellationRequested)
                 return;
             await GameAccount.ActiveAccount.GenerateXRayLlamaResults();

@@ -54,6 +54,7 @@ public partial class AccountSelector : ModalWindow
                 GenerateAccountEntry();
             pooledAccounts[i].Visible = true;
             pooledAccounts[i].SetAccount(accounts[i]);
+            accounts[i].Authenticate().StartTask();
         }
         for (int i = accounts.Length; i < pooledAccounts.Count; i++)
         {

@@ -69,7 +69,7 @@ public partial class XmppBridge : Control
         var newAccount = GameAccount.GetOrCreateAccount(acc);
         listedAccounts.Add(acc);
         await account.Authenticate();
-        await newAccount.UpdateIcon(account);
+        await newAccount.UpdateIconTask();
         var newEntry = accountScene.Instantiate<GameAccountEntry>();
         accountParent.AddChild(newEntry);
         newEntry.SetAccount(newAccount);

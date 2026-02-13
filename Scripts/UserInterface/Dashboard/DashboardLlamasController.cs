@@ -65,7 +65,7 @@ public partial class DashboardLlamasController : Control
 
             await Helpers.WaitForFrame();
 
-            var xrayStorefront = await GameStorefront.GetStorefront(FnStorefrontTypes.XRayLlamaCatalog, RefreshTimeType.Hourly);
+            var xrayStorefront = await GameStorefront.XRayLlamas.Fetch();
             if (ct.IsCancellationRequested)
                 return;
 

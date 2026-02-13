@@ -173,18 +173,9 @@ public partial class QuestGroupEntry : Control
                 eventTimer.Visible = false;
                 return;
         }
-        if (CalenderRequests.EventFlagActive(questGroupData.eventFlag))
+        if (GameCalender.TryGetFlagRange(questGroupData.eventFlag, out var startDate, out var endDate))
         {
-            var endDate = CalenderRequests.EventEnd(questGroupData.eventFlag);
-            //Hunt The Titan ends in 2027
-            if ((endDate - DateTime.UtcNow).TotalDays < 100)
-            {
-                eventTimer.SetCustomRefreshTime(
-                    endDate, 
-                    CalenderRequests.EventStart(questGroupData.eventFlag)
-                );
-                return;
-            }
+            eventTimer.SetCustomRefreshTime(endDate, startDate);
         }
         eventTimer.Visible = false;
     }

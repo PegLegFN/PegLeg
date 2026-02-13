@@ -100,14 +100,13 @@ public partial class CosmeticShopInterface : Control
         //    var outFile = FileAccess.Open(regionFile, FileAccess.ModeFlags.Write);
         //    outFile.StoreString(text);
         //}
-        using (var inFile = FileAccess.Open(regionFile, FileAccess.ModeFlags.Read))
-        {
-            var inData = JsonNode.Parse(inFile.GetAsText());
-            regionNames = inData["names"].Deserialize<Dictionary<string, string>>().ToFrozenDictionary();
-            var regionWeightTotal = (decimal)inData["totalWeights"].GetValue<ulong>();
-            var regionLongWeights = inData["weights"].Deserialize<Dictionary<string, ulong>>();
-            regionWeights = regionLongWeights.ToFrozenDictionary(kvp => kvp.Key, kvp => kvp.Value / regionWeightTotal);
-        }
+
+        var inData = PegLegResourceManager.LoadResourceObj("regionWeights.json");
+        regionNames = inData["names"].Deserialize<Dictionary<string, string>>().ToFrozenDictionary();
+        var regionWeightTotal = (decimal)inData["totalWeights"].GetValue<ulong>();
+        var regionLongWeights = inData["weights"].Deserialize<Dictionary<string, ulong>>();
+        regionWeights = regionLongWeights.ToFrozenDictionary(kvp => kvp.Key, kvp => kvp.Value / regionWeightTotal);
+
         regionSelector.Clear();
         regionSelector.AddItem("All");
         regionSelector.SetItemMetadata(0, "*");
@@ -582,7 +581,10 @@ public partial class CosmeticShopInterface : Control
         "VehicleCosmetics_Booster",
         "VehicleCosmetics_Booster",
         "VehicleCosmetics_DriftTrail",
-        "CosmeticVariantToken",
+        "CosmeticMimosa",
+        "UnknownLegoType",
+        "UnknownLegoType",
+        "UnknownLegoType",
     };
 
     static bool MatchAnyFilterIndex(List<string> toCheck, int startIndex, int length = 1)
@@ -627,23 +629,29 @@ public partial class CosmeticShopInterface : Control
         var types = entry.itemTypes;
 
 
-        if (typeMasks[0] && MatchAnyFilterIndex(types, 0, 5))
+        if (typeMasks[0] && MatchAnyFilterIndex(types, 0, 4))
             return true;
-        if (typeMasks[1] && MatchAnyFilterIndex(types, 5))
+        if (typeMasks[1] && MatchAnyFilterIndex(types, 4))
             return true;
-        if (typeMasks[2] && MatchAnyFilterIndex(types, 6, 2))
+        if (typeMasks[2] && MatchAnyFilterIndex(types, 5))
             return true;
-        if (typeMasks[3] && MatchAnyFilterIndex(types, 8, 2))
+        if (typeMasks[3] && MatchAnyFilterIndex(types, 6, 2))
             return true;
-        if (typeMasks[4] && MatchAnyFilterIndex(types, 10))
+        if (typeMasks[4] && MatchAnyFilterIndex(types, 8, 2))
             return true;
-        if (typeMasks[5] && MatchAnyFilterIndex(types, 11, 2))
+        if (typeMasks[5] && MatchAnyFilterIndex(types, 10))
             return true;
-        if (typeMasks[6] && MatchAnyFilterIndex(types, 13, 5))
+        if (typeMasks[6] && MatchAnyFilterIndex(types, 11, 2))
             return true;
-        if (typeMasks[7] && MatchAnyFilterIndex(types, 18, 10))
+        if (typeMasks[7] && MatchAnyFilterIndex(types, 13, 5))
             return true;
-        if (typeMasks[8] && !MatchAnyFilter(types))
+        if (typeMasks[8] && MatchAnyFilterIndex(types, 18, 10))
+            return true;
+        if (typeMasks[9] && MatchAnyFilterIndex(types, 28))
+            return true;
+        if (typeMasks[10] && MatchAnyFilterIndex(types, 29))
+            return true;
+        if (typeMasks[11] && !MatchAnyFilter(types))
             return true;
 
         if (typeMasks.Any(m => m))
@@ -653,6 +661,8 @@ public partial class CosmeticShopInterface : Control
     }
 
 }
+
+/*
 public class CosmeticShopOfferData
 {
     JsonObject entryData;
@@ -858,3 +868,4 @@ public class CosmeticShopOfferData
         OnResourceLoaded?.Invoke();
     }
 }
+*/

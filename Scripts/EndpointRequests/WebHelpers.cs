@@ -10,6 +10,7 @@ using System.Net.Http.Json;
 using System.Net.NetworkInformation;
 using System.Security.Principal;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -263,11 +264,11 @@ public static class WebHelpers
     public static Task<JsonNode> ReadJson(this HttpResponseMessage response) => 
         response.ReadJson<JsonNode>();
 
-    public static Task<T> ReadJson<T>(this HttpResponseMessage response)
+    public static Task<T> ReadJson<T>(this HttpResponseMessage response, JsonSerializerOptions options = null)
     {
         if (response.Content?.Headers?.ContentType?.MediaType != "application/json")
             return Task.FromResult<T>(default);
-        return response.Content.ReadFromJsonAsync<T>();
+        return response.Content.ReadFromJsonAsync<T>(options);
     }
 
     public static async Task<Image> ReadImage(this HttpResponseMessage response)
@@ -299,18 +300,27 @@ public static class WebHelpers
     {
         if (response.IsSuccessStatusCode)
             return (false, null);
+        GameAccount boundAccount = null;
+        if (response.RequestMessage is BoundHttpsRequestMessage boundMsg)
+            boundAccount = boundMsg.BoundAccount;
         if (response.Headers.TryGetValues("x-epic-error-code", out var errCode))
         {
             string code = errCode.FirstOrDefault();
             if (code == "1031")
             {
                 GD.Print("token invalid, expiring token");
-                if (response.RequestMessage is BoundHttpsRequestMessage boundMsg)
-                    boundMsg.BoundAccount?.ForceExpireToken();
+                if (boundAccount is not null)
+                    boundAccount?.ForceExpireToken();
             }
             else if (code == "1012")
             {
                 //waiting for link code to complete, error should be silent
+                logError = false;
+                showErrorPopup = false;
+            }
+            else if (code == "18130" && response.RequestMessage.Method == HttpMethod.Delete)
+            {
+                //attempting to delete nonexistant device, error should be silent
                 logError = false;
                 showErrorPopup = false;
             }
@@ -330,7 +340,18 @@ public static class WebHelpers
         }
 
         if (logError)
-            GD.Print("Web Request Error: " + response);
+        {
+            string logMsg = $"Web Request Error when sending {response.RequestMessage.Method} to {response.RequestMessage.RequestUri}{(boundAccount is null ? "" : $" as {boundAccount.DisplayName}")}";
+            logMsg += $"\nStatusCode: {(int)response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}";
+            if (errorContent is not null)
+                logMsg += $"\nContent: \n{errorContent}";
+            else if (fallbackErrorCode is not null)
+                logMsg += $"\nEpic Error Name: {fallbackErrorCode}";
+            logMsg = logMsg.Replace("\r\n", "\n");
+            GD.PrintRich($"[color=orange]{logMsg}[/color]");
+            if (OS.HasFeature("editor"))
+                GD.PushWarning(logMsg);
+        }
 
         if (showErrorPopup)
         {

@@ -111,7 +111,7 @@ public partial class CodeLoginLabel : Node
 
         started = false;
 
-        GD.Print("APPROVE: " + linkCheckRequest);
+        //GD.Print("APPROVE: " + linkCheckRequest);
 
         EmitSignal(SignalName.LoginSuccess, linkData["account_id"].ToString());
 

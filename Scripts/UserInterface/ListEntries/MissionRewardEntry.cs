@@ -3,11 +3,26 @@ using System;
 
 public partial class MissionRewardEntry : Control, IRecyclableEntry
 {
+    [Signal]
+    public delegate void MissionCompleteIfAlertEventHandler(bool complete);
     [Export]
     MissionEntry missionEntry;
     [Export]
     GameItemEntry itemEntry;
     public Control node => this;
+
+    public override void _Ready()
+    {
+        missionEntry.MissionComplete += TryEmitComplete;
+    }
+
+    bool knownCompleteState = false;
+
+    private void TryEmitComplete(bool complete)
+    {
+        knownCompleteState = complete;
+        EmitSignalMissionCompleteIfAlert(complete && itemEntry.currentItem?.template.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase) == false);
+    }
 
     IRecyclableElementProvider<MissionRewardPair> provider;
     public void SetRecyclableElementProvider(IRecyclableElementProvider provider)
@@ -24,5 +39,6 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry
         missionEntry.SetMission(pair.mission);
         pair.item.SetRewardNotification();
         itemEntry.SetItem(pair.item);
+        TryEmitComplete(knownCompleteState);
     }
 }

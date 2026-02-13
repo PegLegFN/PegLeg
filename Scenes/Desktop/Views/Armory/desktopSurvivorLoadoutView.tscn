@@ -1,10 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwunyntryyu6o"]
+[gd_scene load_steps=6 format=3 uid="uid://bwunyntryyu6o"]
 
 [ext_resource type="Script" uid="uid://drjs1ftndovn5" path="res://Scripts/UserInterface/SurvivorLoadoutInterface.cs" id="1_txlwe"]
 [ext_resource type="Texture2D" uid="uid://l44adw334xao" path="res://Images/InterfaceIcons/T-SlotIcon-Recycle-128.png" id="2_8lg8b"]
 [ext_resource type="PackedScene" uid="uid://bje4f7reoc8da" path="res://Scenes/HeroLoadout/survivor_squad.tscn" id="2_faoh8"]
 [ext_resource type="Texture2D" uid="uid://ddjxkaoe8stlj" path="res://Images/InterfaceIcons/T-Icon-ST-CollectionBook-128.png" id="3_ragaq"]
-
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_nqqw7"]
 
 [node name="Survivor Squads" type="MarginContainer" node_paths=PackedStringArray("unownedAccountLayout", "loadoutOptionsLayout", "loadoutSelector", "saveLoadoutButton", "loadLoadoutButton", "renameLoadoutButton", "deleteLoadoutButton", "clearSquadButton", "survivorSquads")]
 anchors_preset = 15
@@ -14,6 +14,7 @@ offset_left = 5.0
 offset_top = 31.0
 offset_right = -5.0
 offset_bottom = -5.0
+grow_horizontal = 2
 script = ExtResource("1_txlwe")
 unownedAccountLayout = NodePath("VBoxContainer/MarginContainer/Label")
 loadoutOptionsLayout = NodePath("VBoxContainer/MarginContainer/LoadoutTools")
@@ -29,14 +30,16 @@ collectionIcon = ExtResource("3_ragaq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
+[node name="MarginContainer" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-theme_override_constants/margin_left = 5
+size_flags_horizontal = 4
+theme_type_variation = &"Panel3Pad"
 
 [node name="PanelContainer" type="Panel" parent="VBoxContainer/MarginContainer"]
+visible = false
 layout_mode = 2
 
 [node name="LoadoutTools" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
@@ -110,27 +113,33 @@ text = "Clear Squad"
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-text = "Loadout can't be edited on an unowned account"
+text = "Squads can't be edited on an unowned account "
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 size_flags_vertical = 6
-alignment = 1
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+script = ExtResource("4_nqqw7")
+ManualColWidth = 786.0
+CompressSpacing = true
+Spacing = Vector2(3, 3)
+UseManualColumnCounts = true
+ColumnCounts = PackedInt32Array(1, 2, 4, 8)
 
 [node name="SurvivorSquad" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_faoh8")]
 layout_mode = 2
