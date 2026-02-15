@@ -649,6 +649,14 @@ public static partial class Helpers
             node.Disconnect(signalName, callable);
     }
 
+    public static bool DevTextKeybindPressed(this InputEvent e) =>
+        e is InputEventKey keyEvent &&
+        keyEvent.Pressed &&
+        keyEvent.ShiftPressed &&
+        !keyEvent.CtrlPressed &&
+        keyEvent.AltPressed &&
+        keyEvent.Keycode == Key.D;
+
     public static async Task<GameAccount> EnsureProfile(this Task<GameAccount> accountTask, string profileId, bool force = false)
     {
         var account = await accountTask;

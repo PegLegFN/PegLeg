@@ -28,29 +28,21 @@ public partial class MissionViewer : ModalWindow
     {
         if (
             !IsVisibleInTree() ||
-            @event is not InputEventKey keyEvent ||
-            !keyEvent.Pressed ||
-            !keyEvent.ShiftPressed ||
-            keyEvent.CtrlPressed ||
-            !keyEvent.AltPressed ||
+            !@event.DevTextKeybindPressed() ||
+            !IsTopOfStack() ||
             missionEntry.currentMission is null
             )
             return;
         var m = missionEntry.currentMission;
-        var text = keyEvent.Keycode switch
-        {
-            Key.M => m.missionData.ToString(),
-            Key.G => m.missionGenerator.rawData.ToString(),
-            Key.Z => m.zoneTheme.rawData.ToString(),
-            Key.D => m.difficultyInfo.ToString(),
-            Key.T => m.tile.ToString(),
-            Key.A => m.alertData.ToString(),
-            Key.S => m.searchTags.ToString(),
-            Key.E => string.Join(",\n", m.regions.Select(r => r.ToString())),
-            _ => null
-        };
-
-        if(text is not null)
-            DevTextOverlay.ShowText(text);
+        DevTextOverlay.ShowTabs([
+            ["Mission", m.missionData.ToString()],
+            ["Generator", m.missionGenerator.rawData.ToString()],
+            ["Zone", m.zoneTheme.rawData.ToString()],
+            ["Difficulty", m.difficultyInfo.ToString()],
+            ["Tile", m.tile.ToString()],
+            ["Alert", m.alertData.ToString()],
+            ["Search Tags", m.searchTags.ToString()],
+            ["Regions", string.Join(",\n", m.regions.Select(r => r.ToString()))]
+        ]);
     }
 }

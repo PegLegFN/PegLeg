@@ -271,6 +271,8 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
             MatchItem(item.zcpEquivelent, itemInstructions, extraItemFilters)
         );
 
+    [GeneratedRegex("Worker:manager\\w+_sr_\\w*")]
+    private static partial Regex MythicLeadFilter();
     public static bool MatchItem(GameItem item, PLSearch.Instruction[] itemInstructions, string[] extraItemFilters = null)
     {
         extraItemFilters ??= [];
@@ -282,7 +284,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
                 matchesItemFilters = item.templateId.StartsWith(itemFilter[..^1]);
 
             if (itemFilter == "MYTHICLEAD")
-                matchesItemFilters = Regex.Match(item.templateId, "Worker:manager\\w+_sr_\\w*").Success;
+                matchesItemFilters = MythicLeadFilter().Match(item.templateId).Success;
 
             if (matchesItemFilters)
                 break;

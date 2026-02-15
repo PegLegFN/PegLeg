@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 public partial class ModalWindow : Control
 {
     protected static List<ModalWindow> windowStack = [];
+    public static bool StackEmpty() => windowStack.Count == 0;
+    protected bool IsTopOfStack() => windowStack.LastOrDefault() == this;
 
     [Signal]
     public delegate void WindowOpenedEventHandler();

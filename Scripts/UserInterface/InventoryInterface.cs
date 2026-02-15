@@ -82,12 +82,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         if
         (
             IsVisibleInTree() &&
-            @event is InputEventKey keyEvent && 
-            keyEvent.Keycode == Key.I && 
-            keyEvent.Pressed &&
-            keyEvent.ShiftPressed &&
-            !keyEvent.CtrlPressed &&
-            keyEvent.AltPressed && 
+            @event.DevTextKeybindPressed() &&
+            ModalWindow.StackEmpty() &&
             currentProfile is not null
         )
         {
