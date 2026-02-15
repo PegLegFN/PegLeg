@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -64,18 +63,31 @@ public partial class ItemShopInterface : Control
 
             linkedStorefront = useEventShop ? GameStorefront.CampaignEvent : GameStorefront.CampaignWeekly;
             await linkedStorefront.Fetch();
-            linkedStorefront.OnOfferAdded += AddShopOffer;
-            linkedStorefront.OnOfferRemoved += RemoveShopOffer;
 
-            foreach (var item in activeEntries.Values)
+            var offers = linkedStorefront.Offers;
+            if (useEventShop)
             {
-                item.Visible = false;
-                inactiveEntries.Add(item);
+                var futureItems = Timeline.GetCurrentUpcomingItems();
+                offers =
+                [
+                    ..offers,
+                    ..futureItems.Select(tuple=>
+                        GameItemTemplate
+                            .Get(tuple.templateId)
+                            .CreateOffer(rawData:new(){["releaseDate"]=tuple.releaseDate})
+                    )
+                ];
+            }
+
+            foreach (var entry in activeEntries.Values)
+            {
+                entry.Visible = false;
+                inactiveEntries.Add(entry);
             }
             activeEntries.Clear();
-            for (int i = 0; i < linkedStorefront.Offers.Length; i++)
+            for (int i = 0; i < offers.Length; i++)
             {
-                AddShopOffer(linkedStorefront.Offers[i]);
+                AddShopOffer(offers[i]);
             }
         }
         finally
@@ -105,9 +117,8 @@ public partial class ItemShopInterface : Control
 
     void RemoveShopOffer(GameOffer oldOffer)
     {
-        if (!activeEntries.ContainsKey(oldOffer.OfferId))
+        if (!activeEntries.TryGetValue(oldOffer.OfferId, out GameOfferEntry entry))
             return;
-        var entry = activeEntries[oldOffer.OfferId];
         entry.Visible = false;
         activeEntries.Remove(oldOffer.OfferId);
         inactiveEntries.Add(entry);

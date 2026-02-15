@@ -141,9 +141,9 @@ public partial class RefreshTimerController : Node
             case RefreshTimeType.Daily:
                 return today.AddDays(1);
             case RefreshTimeType.Weekly:
-                return rightNow.WeeklyRefresh(DayOfWeek.Thursday);
+                return rightNow.WeeklyRefresh();
             case RefreshTimeType.BRWeekly:
-                return rightNow.WeeklyRefresh(hour:12);
+                return rightNow.BRWeeklyRefresh();
         }
         int dayCount = (today - referenceStartDate).Days;
         dayCount %= (weeksInSeasonalYear * 7);
@@ -174,9 +174,9 @@ public partial class RefreshTimerController : Node
             case RefreshTimeType.Daily:
                 return today;
             case RefreshTimeType.Weekly:
-                return rightNow.WeeklyRefresh(DayOfWeek.Thursday).AddDays(-7);
+                return rightNow.WeeklyRefresh().AddDays(-7);
             case RefreshTimeType.BRWeekly:
-                return rightNow.WeeklyRefresh(hour: 12).AddDays(-7);
+                return rightNow.BRWeeklyRefresh().AddDays(-7);
         }
         int dayCount = (today - referenceStartDate).Days;
         dayCount %= (weeksInSeasonalYear * 7);

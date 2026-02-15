@@ -1043,7 +1043,7 @@ public class GameItemTemplate
         {
             foreach (var ability in abilities)
             {
-                if (!ability?.DisplayName?.EndsWith("+") ?? false)
+                if (!ability?.DisplayName?.EndsWith('+') ?? false)
                 {
                     tags.Add(ability.DisplayName);
                     //tags.Add(ability.Description);
@@ -1072,6 +1072,31 @@ public class GameItemTemplate
         customData["generated_by_pegleg"] = true;
         return new(this, quantity, attributes, inspectorOverride, customData);
     }
+
+    public GameItem PriceForItem()
+    {
+        int quantity = Type switch
+        {
+            "Hero" => Rarity switch
+            {
+                "Mythic" => 3200,
+                "Legendary" => 2800,
+                "Epic" => 1000,
+                _ => 100
+            },
+            "Schematic" => Rarity switch
+            {
+                "Legendary" => 1680,
+                "Epic" => 600,
+                _ => 100
+            },
+            _ => 100
+        };
+        return Get("AccountResource:eventcurrency_scaling").CreateInstance(quantity);
+    }
+
+    public GameOffer CreateOffer(GameItem price = null, int quantity = 1, int limit = 1, JsonObject rawData = null) =>
+        GameOffer.CreateFake([CreateInstance(quantity)], price ?? PriceForItem(), limit, rawData);
 }
 
 public enum FnItemTextureType

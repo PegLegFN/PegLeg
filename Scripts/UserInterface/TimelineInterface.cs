@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-public partial class TimelineController : Node
+public partial class TimelineInterface : Node
 {
-    TimelineData timelineData;
-
     int questlineLanes = 0;
     int eventLanes = 0;
     Markers markers = new();
@@ -20,14 +18,14 @@ public partial class TimelineController : Node
 
     public override void _Ready()
 	{
-        timelineData = PegLegResourceManager.LoadResourceObj<TimelineData>("timeline.json", options: Helpers.JsonOptions.Fields);
+        Timeline.LoadTimeline();
         GenerateTimelineMarkers();
-        //RefreshTimerController.OnDayChanged += GenerateTimelineMarkers;
+        RefreshTimerController.OnDayChanged += GenerateTimelineMarkers;
     }
 
     public override void _ExitTree()
     {
-        //RefreshTimerController.OnDayChanged -= GenerateTimelineMarkers;
+        RefreshTimerController.OnDayChanged -= GenerateTimelineMarkers;
     }
 
     DateTime lastStartDate;
@@ -35,40 +33,16 @@ public partial class TimelineController : Node
     {
         //TODO: if markers have been generated already, reuse existing markers instead of creating new ones
 
-        //var sampleDate = timelineData.anchor;
-        var sampleDate = new DateTime(2024, 1, 25, 0, 0, 0, DateTimeKind.Utc);
-        //start timeline at previous weekly reset
-        var newStartDate = RefreshTimerController.RightNow.WeeklyRefresh(DayOfWeek.Thursday).AddDays(-7);
+        var newStartDate = Timeline.StartOfCurrentWeek;
 
         if (lastStartDate == newStartDate)
             return;
 
         markers.startDate = newStartDate;
-
-        //increase sample date by a seasonal year until it is less than a seasonal year fom the start date
-        int weeksInYear = timelineData.seasons.Select(s => s.duration).Sum();
-        var compareDate = markers.startDate.AddDays(-weeksInYear * 7);
-        while (sampleDate <= compareDate)
-        {
-            sampleDate = sampleDate.AddDays(weeksInYear * 7);
-        }
-
-        //increase sample date until it reaches the start of the current season
-        int currentSeasonIndex = 0;
-        var currentSeason = timelineData.seasons[currentSeasonIndex];
-        compareDate = sampleDate.AddDays(currentSeason.duration * 7);
-        while (markers.startDate > compareDate)
-        {
-            sampleDate = sampleDate.AddDays(currentSeason.duration * 7);
-            currentSeasonIndex += 1;
-            currentSeason = timelineData.seasons[currentSeasonIndex];
-            compareDate = sampleDate.AddDays(currentSeason.duration * 7);
-        }
-        var seasonStartDate = sampleDate;
-
-        //get current season week, and set sample date to start date
-        int currentWeekIndex = ((int)(markers.startDate - sampleDate).TotalDays) / 7;
-        sampleDate = markers.startDate;
+        var currentSeason = Timeline.GetCurrentSeason(out var seasonStartDate, out int currentSeasonIndex);
+        var currentWeekIndex = Timeline.GetCurrentSeasonWeek(seasonStartDate);
+        int weeksInYear = Timeline.GetWeeksInYear();
+        DateTime sampleDate = newStartDate;
 
         var limitDate = sampleDate.AddDays(weeksInYear * 7);
 
@@ -187,16 +161,16 @@ public partial class TimelineController : Node
                         end = start.AddDays(1);
                         if (eData.weekOfTarget)
                         {
-                            start = start.WeeklyRefresh(DayOfWeek.Thursday).AddDays(-7);
+                            start = start.WeeklyRefresh().AddDays(-7);
                             end = start.AddDays(7);
                         }
                         else if (eData.restOfWeek)
                         {
-                            end = start.WeeklyRefresh(DayOfWeek.Thursday);
+                            end = start.WeeklyRefresh();
                         }
                         else if(eData.weekdayOfTarget is int wDay)
                         {
-                            start = start.WeeklyRefresh(DayOfWeek.Thursday).AddDays(-7+wDay);
+                            start = start.WeeklyRefresh().AddDays(-7+wDay);
                             end = start.AddDays(1);
                         }
                     }
@@ -343,8 +317,8 @@ public partial class TimelineController : Node
             {
                 currentWeekIndex = 0;
                 currentSeasonIndex++;
-                currentSeasonIndex %= timelineData.seasons.Length;
-                currentSeason = timelineData.seasons[currentSeasonIndex];
+                currentSeasonIndex %= Timeline.Seasons.Length;
+                currentSeason = Timeline.Seasons[currentSeasonIndex];
                 seasonStartDate = sampleDate;
             }
         }
@@ -442,48 +416,5 @@ public partial class TimelineController : Node
         protected override string GeneratedDisplayName => EventQuestItem?.template?.DisplayName ?? eventFlag;
         public bool free;
         public override bool Free => free;
-    }
-
-    public class TimelineData
-	{
-        public DateTime anchor;
-        public Season[] seasons;
-
-        public struct Season
-        {
-            public string displayName;
-            public int duration;
-            public string llamaType;
-            public string commonModifier;
-            public string[] venturesModifiers;
-            public string[][] eventShop;
-            public string style;
-            public string color;
-            public Event[] questlines;
-            public Event[] events;
-        }
-
-        public struct Event
-        {
-            public string eventFlag;
-            public string eventQuest;
-            public string displayName;
-            public string description;
-            public string[] keyItems;
-            public string style;
-            public string color;
-            public int priority;
-            public int? startWeek;
-            public int? endWeek;
-            public int? duringWeek;
-            public int? targetMonth;
-            public int? targetDay;
-            public bool weekOfTarget;
-            public int? weekdayOfTarget;
-            public bool restOfWeek;
-            public bool daily;
-            public bool free;
-            public JsonElement questGroup;
-        }
     }
 }

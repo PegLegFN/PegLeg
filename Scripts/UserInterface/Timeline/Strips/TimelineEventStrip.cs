@@ -19,8 +19,8 @@ public partial class TimelineEventStrip : Control
     [Export]
     RefreshTimerHook refreshTimer;
 
-    public TimelineController.BaseEventMarker current { get; private set; }
-    public void SetMarker(TimelineController.BaseEventMarker marker)
+    public TimelineInterface.BaseEventMarker current { get; private set; }
+    public void SetMarker(TimelineInterface.BaseEventMarker marker)
     {
         if (current == marker)
             return;

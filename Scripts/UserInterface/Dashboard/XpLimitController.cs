@@ -123,8 +123,8 @@ public partial class XpLimitController : Control
 
     void UpdateXP()
     {
-        stwReset = DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Tuesday, 14);
-        playtimeReset = DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Thursday, 14);
+        stwReset = DateTime.UtcNow.BRWeeklyRefresh();
+        playtimeReset = DateTime.UtcNow.BRWeeklyRefresh();
         var playtimeLimit = PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>();
 
         var stwXpItem = stwProfile.GetFirstTemplateItem("Token:stw_accolade_tracker");

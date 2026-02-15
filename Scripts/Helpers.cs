@@ -476,7 +476,7 @@ public static partial class Helpers
         SigShort,
     }
 
-    public static string FormatTime(this TimeSpan time, TimeFormat timeFormat = TimeFormat.Full, bool useWeeks=false)
+    public static string FormatTime(this TimeSpan time, TimeFormat timeFormat = TimeFormat.Full, bool useWeeks = false, bool longDecimals = true)
     {
         if (timeFormat == TimeFormat.Full)
         {
@@ -498,21 +498,21 @@ public static partial class Helpers
         }
 
         bool longTime = timeFormat == TimeFormat.SigLong;
-        if(useWeeks && time.TotalDays > 70)
+        if(useWeeks && (time.TotalDays > 70 || (!longDecimals && time.TotalDays > 7)))
         {
-            return Mathf.Floor(time.TotalDays / 7) + (longTime ? " weeks" : "W");
+            return Mathf.Floor(time.TotalDays / 7) + (longTime ? ((int)(time.TotalDays / 7) > 1 ? " weeks" : " week") : "W");
         }
         else if (useWeeks && time.TotalDays > 7)
         {
-            return $"{time.TotalDays / 7:0.0}" + (longTime ? " weeks" : "W");
+            return $"{time.TotalDays / 7:0.0}" + (longTime ? ((int)(time.TotalDays/7) > 1 ? " weeks" : " week") : "W");
         }
-        else if (time.TotalDays > 10)
+        else if (time.TotalDays > 10 || (!longDecimals && time.TotalDays > 2))
         {
-            return Mathf.Floor(time.TotalDays) + (longTime ? " days" : "D");
+            return Mathf.Floor(time.TotalDays) + (longTime ? ((int)time.TotalDays > 1 ? " days" : " day") : "D");
         }
         else if (time.TotalDays > 2)
         {
-            return $"{time.TotalDays:0.0}{(longTime ? " days" : "D")}";
+            return $"{time.TotalDays:0.0}{(longTime ? (time.TotalDays > 1 ? " days" : " day") : "D")}";
         }
         else if (time.TotalHours > 10)
         {
@@ -669,16 +669,6 @@ public static partial class Helpers
         OrderRange.Weekly => RefreshTimerController.GetLastRefreshTime(RefreshTimeType.Weekly),
         _ => default,
     };
-
-    public static DateTime WeeklyRefresh(this DateTime from, DayOfWeek day = DayOfWeek.Tuesday, int hour = 0, int minute = 0)
-    {
-        //tuesday 13:00
-        var today = from.AddHours(-hour).AddMinutes(-minute).Date; // 14:00
-        int targetDay = (int)day; //tuesday 2
-        int utcDayOfWeek = (int)today.DayOfWeek; //monday 1
-        int daysUntilTarget = ((6+targetDay) - utcDayOfWeek) % 7;
-        return today.AddDays(daysUntilTarget + 1).AddHours(hour).AddMinutes(minute);
-    }
 
     public static Func<T, bool> ToFunc<T>(this Predicate<T> predicate, bool defaultResult = true) => t => predicate.Try(t, defaultResult);
     public static bool Try<T>(this Predicate<T> predicate, T t, bool defaultResult = true) => predicate is not null ? predicate(t) : defaultResult;

@@ -8,8 +8,8 @@ public partial class TimelineShopStrip : Control
     [Export]
     Control resetIndicator;
 
-    public TimelineController.ShopMarker current { get; private set; }
-    public void SetMarker(TimelineController.ShopMarker marker)
+    public TimelineInterface.ShopMarker current { get; private set; }
+    public void SetMarker(TimelineInterface.ShopMarker marker)
     {
         if (current == marker)
             return;

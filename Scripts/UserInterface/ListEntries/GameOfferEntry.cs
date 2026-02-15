@@ -1,5 +1,8 @@
 using Godot;
+using System;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,6 +37,8 @@ public partial class GameOfferEntry : Control
     GameItemEntry priceInInventoryEntry;
     [Export]
     CheckButton selectionGraphics;
+    [Export]
+    RefreshTimerHook releaseDateTimer;
     [Export]
     bool includeAmountInName = false;
     [Export]
@@ -115,6 +120,18 @@ public partial class GameOfferEntry : Control
         //in future, add support for an item list
         grantedItem = shopOffer.itemGrants.FirstOrDefault().Clone();
         grantedItem.customData["shopQuantity"] = -1;
+
+        if(releaseDateTimer is not null)
+        {
+            if(currentOffer.rawData["releaseDate"] is JsonValue value)
+            {
+                releaseDateTimer.Visible = true;
+                Timeline.GetCurrentSeason(out var seasonStartDate);
+                releaseDateTimer.SetCustomRefreshTime(value.Deserialize<DateTime>(), seasonStartDate);
+            }
+            else
+                releaseDateTimer.Visible = false;
+        }
 
         targetPurchaseQuantity = 1;
         currentPurchaseQuantity = 1;

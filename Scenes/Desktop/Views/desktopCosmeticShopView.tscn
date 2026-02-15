@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://d6pm7vs0s7ta"]
+[gd_scene load_steps=39 format=3 uid="uid://d6pm7vs0s7ta"]
 
 [ext_resource type="Script" uid="uid://drpil4gig7wea" path="res://Scripts/UserInterface/CosmeticShopInterface.cs" id="1_cncuj"]
 [ext_resource type="PackedScene" uid="uid://3euwgkmgdey0" path="res://Scenes/OfferEntries/cosmetic_shop_header.tscn" id="2_vc6jo"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="6_ge2gw"]
 [ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="6_hnewy"]
 [ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="7_2ymbo"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="7_41884"]
 [ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="7_k8nn6"]
 [ext_resource type="StyleBox" uid="uid://cvljwgex83ynh" path="res://GodotThemes/Styleboxes/CheckButton/UnselectedCheck.tres" id="8_l3vt8"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="8_vieoo"]
@@ -125,6 +126,27 @@ theme_override_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="TimerAndSAC/MarginContainer"]
 layout_mode = 2
 
+[node name="Button" type="Button" parent="TimerAndSAC/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="TimerAndSAC/MarginContainer/HBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("23_icgpb")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Label" type="Label" parent="TimerAndSAC/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -132,6 +154,7 @@ text = "Cosmetic Shop Refreshes: "
 vertical_alignment = 1
 
 [node name="Label2" type="Label" parent="TimerAndSAC/MarginContainer/HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -139,6 +162,12 @@ text = "???"
 vertical_alignment = 1
 script = ExtResource("5_0vdo0")
 timerType = 1
+
+[node name="RefreshTimer" parent="TimerAndSAC/MarginContainer/HBoxContainer" instance=ExtResource("7_41884")]
+custom_minimum_size = Vector2(69, 0)
+layout_mode = 2
+size_flags_vertical = 4
+formatType = 0
 
 [node name="Control" type="Control" parent="TimerAndSAC/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -819,6 +848,7 @@ popup/item_3/id = 0
 popup/item_4/text = "IE  -  Ireland"
 popup/item_4/id = 1
 
+[connection signal="pressed" from="TimerAndSAC/MarginContainer/HBoxContainer/Button" to="." method="ForceReloadShop"]
 [connection signal="ConfigValueChanged" from="HSplitContainer/VBoxContainer/MarginContainer/Button" to="HSplitContainer/VBoxContainer/MarginContainer/Button/ValChanged" method="EmitValues"]
 [connection signal="InvertedValue" from="HSplitContainer/VBoxContainer/MarginContainer/Button/ValChanged" to="HSplitContainer/VBoxContainer/MarginContainer/Button/Off" method="set_visible"]
 [connection signal="Value" from="HSplitContainer/VBoxContainer/MarginContainer/Button/ValChanged" to="HSplitContainer/VBoxContainer/MarginContainer/Button/On" method="set_visible"]

@@ -300,8 +300,8 @@ public partial class GameMission
     {
         if (!AppConfig.Get("advanced", "archive_missions", false))
             return;
-        ArchiveMissions(currentMissions, missionReset, out string archiveName, out string archivePath);
-        if (archivePath is null)
+        bool didArchive = ArchiveMissions(currentMissions, missionReset, out string archiveName, out string archivePath);
+        if (!didArchive)
             return;
         //optionally post a webhook message for each new file generated
         archiveWebhook ??= new("PegLeg Mission Archive", "missionArchive");
@@ -319,7 +319,7 @@ public partial class GameMission
         ArchiveMissions(missions, resetDateTime, out _, out _);
     }
 
-    static void ArchiveMissions(IEnumerable<GameMission> missions, DateTime resetTime, out string archiveName, out string archivePath)
+    static bool ArchiveMissions(IEnumerable<GameMission> missions, DateTime resetTime, out string archiveName, out string archivePath)
     {
         archiveName = null;
         archivePath = null;
@@ -336,14 +336,14 @@ public partial class GameMission
             catch
             {
                 GD.Print($"Failed to create archive directory \"{archiveDirPath}\"");
-                return;
+                return false;
             }
         }
 
         if (!missions.Any(m => m.DisplayName is not null))
         {
             GD.Print($"Archiving abandoned due to missing resources");
-            return;
+            return false;
         }
 
         using var archiveDir = DirAccess.Open(archiveDirPath);
@@ -415,7 +415,7 @@ public partial class GameMission
         {
             using var existingArchiveFile = FileAccess.Open(prevArchivePath, FileAccess.ModeFlags.Read);
             if (existingArchiveFile.GetAsText().Hash() == archiveContent.Hash())
-                return;
+                return false;
         }
 
         loadedArchives[archiveDateTime] = archiveData;
@@ -431,9 +431,10 @@ public partial class GameMission
         {
             archivePath = null;
             GD.PushWarning($"Failed to archive missions as \"{archivePath}\"");
-            return;
+            return false;
         }
         GD.Print($"Missions archived as \"{archivePath}\"");
+        return true;
     }
 
     public static bool TryGetOrLoadArchive(DateTime date, out ArchiveData archive) =>

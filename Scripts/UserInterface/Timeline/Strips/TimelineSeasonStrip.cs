@@ -19,8 +19,8 @@ public partial class TimelineSeasonStrip : Control
     [Export]
     RefreshTimerHook refreshTimer;
 
-    public TimelineController.SeasonMarker current { get; private set; }
-    public void SetMarker(TimelineController.SeasonMarker marker)
+    public TimelineInterface.SeasonMarker current { get; private set; }
+    public void SetMarker(TimelineInterface.SeasonMarker marker)
     {
         if (current == marker)
             return;

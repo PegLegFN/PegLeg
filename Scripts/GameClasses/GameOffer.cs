@@ -32,6 +32,7 @@ public class GameOffer
         return (metadata[key] = metaInfoTarget["value"].ToString()).ToString();
     }
 
+    public bool FakeOffer { get; private set; }
     public string Title => rawData["title"]?.ToString();
     public bool IsXRayLlama => GetMeta("Preroll") == "True";
 
@@ -50,7 +51,7 @@ public class GameOffer
     public DateTime? OutDate => GetMeta("outDate") is string outDate ? DateTime.Parse(outDate) : null;
 
     Dictionary<string, int> GenerateRequirementList(string type) =>
-        rawData["requirements"].AsArray()
+        (rawData["requirements"]?.AsArray() ?? [])
         .Where(n => n["requirementType"]?.ToString() == type)
         .ToDictionary(
             n => n["requiredId"].ToString(),
@@ -84,11 +85,45 @@ public class GameOffer
         this.storefront = storefront;
         SetRawData(rawData);
     }
+    GameOffer() { }
+    public static GameOffer CreateFake(GameItem[] grants, GameItem price, int limit = 1, JsonObject rawData = null)
+    {
+        rawData ??= [];
+        rawData["itemGrants"] = new JsonArray([.. grants.Select(i => i.SimpleRawData)]);
+        if(price is not null)
+        {
+            rawData["prices"] = JsonNode.Parse(
+            $$"""
+            [
+                {
+                  "currencyType": "GameItem",
+                  "currencySubType": "{{price.templateId}}",
+                  "regularPrice": {{price.quantity}},
+                  "dynamicRegularPrice": -1,
+                  "finalPrice": {{price.quantity}},
+                  "saleExpiration": "9999-12-31T23:59:59.999Z",
+                  "basePrice": {{price.quantity}}
+                }
+            ]
+            """);
+        }
+        rawData["dailyLimit"] = limit > 0 ? limit : -1;
+        rawData["offerId"] ??= Guid.NewGuid();
+
+        return new()
+        {
+            rawData = rawData,
+            metadata = rawData["meta"]?.AsObject() ?? [],
+            itemGrants = grants,
+            basePrice = price,
+            FakeOffer = true
+        };
+    }
 
     public void SetRawData(JsonObject rawData)
     {
         this.rawData = rawData;
-        itemGrants = rawData["itemGrants"].AsArray().Select(n => new GameItem(null, null, n.AsObject())).ToArray();
+        itemGrants = [.. rawData["itemGrants"].AsArray().Select(n => new GameItem(null, null, n.AsObject()))];
         metadata = rawData["meta"]?.AsObject() ?? [];
 
         if (rawData["dynamicBundleInfo"] is JsonObject dynamicBundleInfo)
@@ -102,10 +137,13 @@ public class GameOffer
             int basePriceAmount = itemsArray.Select(n => n["regularPrice"].GetValue<int>()).Sum();
 
             conditionalDiscounts = new(
-                    itemsArray
-                        .Where(n => n["alreadyOwnedPriceReduction"].GetValue<int>() > 0)
-                        .Select(n => new KeyValuePair<string, int>(n["item"]["templateId"].ToString(), n["alreadyOwnedPriceReduction"].GetValue<int>()))
-                );
+                itemsArray
+                    .Where(n => n["alreadyOwnedPriceReduction"].GetValue<int>() > 0)
+                    .Select(n => new KeyValuePair<string, int>(
+                        n["item"]["templateId"].ToString(), 
+                        n["alreadyOwnedPriceReduction"].GetValue<int>()
+                    ))
+            );
 
             basePrice = priceTemplate?.CreateInstance(basePriceAmount);
         }

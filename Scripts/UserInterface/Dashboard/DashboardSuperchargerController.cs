@@ -32,7 +32,7 @@ public partial class DashboardSuperchargerController : Control
 
     private async void AccountChanged()
     {
-        bool isRefreshDay = (DateTime.UtcNow.WeeklyRefresh(DayOfWeek.Thursday) - DateTime.UtcNow).TotalDays > 6.1;
+        bool isRefreshDay = (Timeline.EndOfCurrentWeek - DateTime.UtcNow).TotalDays > 6.1;
         if (onlyShowOnResetDay)
         {
             Visible = false;

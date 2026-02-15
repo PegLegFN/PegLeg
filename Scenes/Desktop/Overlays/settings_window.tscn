@@ -192,7 +192,6 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Interface" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0"]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0"]
@@ -386,7 +385,16 @@ script = ExtResource("12_12lms")
 section = "item_shop"
 key = "simple_cosmetics"
 
-[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="5"]
+[node name="SimpleShopbackgrounds" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="5"]
+layout_direction = 3
+layout_mode = 2
+text = "Simple Event/Weekly shop backgrounds"
+alignment = 2
+script = ExtResource("12_12lms")
+section = "item_shop"
+key = "simple_backgrounds"
+
+[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="6"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" index="0"]
@@ -434,7 +442,7 @@ grow_vertical = 2
 texture = ExtResource("12_pwy1u")
 expand_mode = 1
 
-[node name="DisableParallax" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="6"]
+[node name="DisableParallax" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="7"]
 layout_direction = 3
 layout_mode = 2
 text = "Disable Parallax effect"
@@ -443,7 +451,7 @@ script = ExtResource("12_12lms")
 section = "ui"
 key = "disable_parallax"
 
-[node name="FastAnims" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="7"]
+[node name="FastAnims" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" index="8"]
 layout_direction = 3
 layout_mode = 2
 text = "Fast purchase animation"
@@ -1191,6 +1199,7 @@ texture = ExtResource("12_pwy1u")
 expand_mode = 1
 
 [node name="Misc" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4" node_paths=PackedStringArray("accountImportButton", "collectionBookSpinbox")]
+visible = false
 layout_mode = 2
 script = ExtResource("2_dybhj")
 loginSceneFilePath = "res://Scenes/Desktop/desktopLogin.tscn"
@@ -1817,6 +1826,7 @@ text = "Enable Lite Mode"
 [connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/Label2" method="set_text"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/NotifSection/NotifScale/HSlider" method="ApplyValue"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmetics" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" method="set_visible"]
+[connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleShopbackgrounds" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles" method="set_visible"]
 [connection signal="AppliedChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" method="SetValue"]
 [connection signal="UnappliedLabelChanged" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/HSlider" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer/SimpleCosmeticTiles/Label2" method="set_text"]

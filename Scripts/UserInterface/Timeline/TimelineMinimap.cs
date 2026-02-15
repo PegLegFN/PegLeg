@@ -60,7 +60,7 @@ public partial class TimelineMinimap : Control
         }
     }
 
-    public void SpawnMarkers(TimelineController.Markers markerCollection)
+    public void SpawnMarkers(TimelineInterface.Markers markerCollection)
     {
         scrollChild.SizeFlagsHorizontal = SizeFlags.ShrinkBegin;
         foreach (var item in markerInstances)
@@ -88,7 +88,7 @@ public partial class TimelineMinimap : Control
         scrollChild.SizeFlagsHorizontal = SizeFlags.ExpandFill;
     }
 
-    void PositionMarker(TimelineController.BaseMarker marker, DateTime startDate, int baseLane)
+    void PositionMarker(TimelineInterface.BaseMarker marker, DateTime startDate, int baseLane)
     {
         Control markerInst = null;
         if (markerPool.Count > 0)
@@ -122,11 +122,11 @@ public partial class TimelineMinimap : Control
         markerInst.ResetOffsets();
         //markerInst.OffsetLeft = startDay * (sizeOfWeek / 7);
         markerInst.OffsetBottom = (baseLane + marker.lane) * -sizeOfLane;
-        if(marker is TimelineController.EventMarker e)
+        if(marker is TimelineInterface.EventMarker e)
         {
             markerInst.TooltipText = e.displayName ?? e.eventQuest;
         }
-        else if (marker is TimelineController.QuestlineMarker q)
+        else if (marker is TimelineInterface.QuestlineMarker q)
         {
             markerInst.TooltipText = q.eventFlag;
         }

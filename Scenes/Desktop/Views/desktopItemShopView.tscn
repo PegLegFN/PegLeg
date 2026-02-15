@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://c6ftxiyts6lrg"]
+[gd_scene load_steps=9 format=3 uid="uid://c6ftxiyts6lrg"]
 
 [ext_resource type="Script" uid="uid://dl2wfd2ftyc8p" path="res://Scripts/UserInterface/ItemShopInterface.cs" id="1_kwhsc"]
 [ext_resource type="PackedScene" uid="uid://wb5ukb74fot1" path="res://Scenes/OfferEntries/game_offer_entry.tscn" id="2_g1chj"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="3_l6e2c"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="4_134v3"]
 [ext_resource type="Script" uid="uid://c265r53lioqoe" path="res://Scripts/CurrencyHighlight.cs" id="4_fespf"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_xaiqb"]
 [ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="5_korv2"]
@@ -55,12 +56,21 @@ text = "Weekly Shop Resets: "
 vertical_alignment = 1
 
 [node name="Label2" type="Label" parent="Timer/PanelContainer/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "???"
 vertical_alignment = 1
 script = ExtResource("3_l6e2c")
 timerType = 2
+
+[node name="RefreshTimer" parent="Timer/PanelContainer/MarginContainer/HBoxContainer" instance=ExtResource("4_134v3")]
+custom_minimum_size = Vector2(69, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+timerType = 2
+formatType = 0
 
 [node name="ActiveCurrency" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer"]
 layout_mode = 2

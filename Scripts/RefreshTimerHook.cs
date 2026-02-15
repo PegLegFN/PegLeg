@@ -19,6 +19,8 @@ public partial class RefreshTimerHook : Control
     [Export]
     bool useWeeks;
     [Export]
+    bool useDecimalDaysAndWeeks = true;
+    [Export]
     ProgressBar progressBar;
 
     string CustomText
@@ -145,7 +147,7 @@ public partial class RefreshTimerHook : Control
             2 => Helpers.TimeFormat.SigLong,
             1 => Helpers.TimeFormat.SigShort,
             _ => Helpers.TimeFormat.Full,
-        }, useWeeks);
+        }, useWeeks, useDecimalDaysAndWeeks);
         if(progressBar is not null)
         {
             if(lastRefreshTime is DateTime realLastRefresh)

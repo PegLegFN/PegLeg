@@ -40,7 +40,7 @@ public partial class ContextMenu : Window
     }
 #endif
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         if (Engine.IsEditorHint())
         {
@@ -49,8 +49,9 @@ public partial class ContextMenu : Window
         }
         inst = this;
         Visible = true;
-        this.Win64RemoveFromTaskbar();
         SetCtxVisible(false);
+        await Helpers.WaitForFrame();
+        this.Win64RemoveFromTaskbar();
 
         componentScenes = [.. componentScenes.Distinct()];
         //GD.Print($"Components: " + componentScenes.Length);

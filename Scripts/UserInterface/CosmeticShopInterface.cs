@@ -121,15 +121,7 @@ public partial class CosmeticShopInterface : Control
             regionSelector.SetItemMetadata(regIdx, kvp.Key);
         }
 
-        VisibilityChanged += async () =>
-        {
-            if (IsVisibleInTree())
-            {
-                //load shop
-                await LoadShop();
-                //CurrencyHighlight.Instance?.SetCurrencyTemplate(GameItemTemplate.Get("AccountResource:eventcurrency_scaling"));
-            }
-        };
+        VisibilityChanged += LoadShop;
 
         navigationPane.CellSelected += OnNavSelected;
         sacButton.Pressed += OpenSACPrompt;
@@ -157,7 +149,7 @@ public partial class CosmeticShopInterface : Control
         requireAddedToday.ButtonPressed = AppConfig.Get("item_shop", "auto_filter_new", false);
 
         AppConfig.OnConfigChanged += OnConfigChanged;
-        RefreshTimerController.OnHourChanged += OnHourChanged;
+        RefreshTimerController.OnHourChanged += LoadShop;
         GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
     }
     private async void OnActiveAccountChanged() => await UpdateSAC();
@@ -185,13 +177,12 @@ public partial class CosmeticShopInterface : Control
                 navContainer.Visible = AppConfig.Get("item_shop", "navigation_visible", true);
 
             activeOffers.Clear();
-            if (IsVisibleInTree())
-                LoadShop(true).StartTask();
+            LoadShop(true);
         }
         if (key == "simple_cosmetic_tilesize")
         {
             if (AppConfig.Get<bool>("item_shop", "simple_cosmetics") && IsVisibleInTree())
-                LoadShop(true).StartTask();
+                LoadShop(true);
         }
         if (key == "navigation_visible")
         {
@@ -209,14 +200,8 @@ public partial class CosmeticShopInterface : Control
     public override void _ExitTree()
     {
         AppConfig.OnConfigChanged -= OnConfigChanged;
-        RefreshTimerController.OnHourChanged -= OnHourChanged;
+        RefreshTimerController.OnHourChanged -= LoadShop;
         GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;
-    }
-
-    private async void OnHourChanged()
-    {
-        if (IsVisibleInTree())
-            await LoadShop();
     }
 
     async void OpenSACPrompt()
@@ -308,9 +293,12 @@ public partial class CosmeticShopInterface : Control
     List<PageGrouping> activePages = [];
     record PageGrouping(Control pageHeader, List<CosmeticShopRow> pageRows);
 
-    public async Task LoadShop(bool force = false)
+    public void LoadShop() => LoadShop(false);
+    public async void LoadShop(bool force) => await LoadShopTask(force);
+    public async void ForceReloadShop() => await LoadShopTask(true, true);
+    public async Task LoadShopTask(bool forceUIRefresh = false, bool forceFetchShop = false)
     {
-        if (isLoadingShop || !(CatalogRequests.StorefrontRequiresUpdate() || force || activeOffers.Count == 0))
+        if (!IsVisibleInTree() || isLoadingShop || !(CatalogRequests.StorefrontRequiresUpdate() || forceUIRefresh || forceFetchShop || activeOffers.Count == 0))
             return;
 
         var sacTask = UpdateSAC();
@@ -327,7 +315,7 @@ public partial class CosmeticShopInterface : Control
             activePages.Clear();
             navigationPane.Clear();
 
-            var cosmeticShop = await CatalogRequests.GetCosmeticShop();
+            var cosmeticShop = await CatalogRequests.GetCosmeticShop(forceFetchShop);
 
             foreach (var pageChild in pageParent.GetChildren())
             {

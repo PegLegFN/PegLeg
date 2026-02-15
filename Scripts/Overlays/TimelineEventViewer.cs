@@ -53,13 +53,13 @@ public partial class TimelineEventViewer : ModalWindow
         base._Ready();
     }
 
-	public static void ShowEvent(TimelineController.BaseEventMarker marker)
+	public static void ShowEvent(TimelineInterface.BaseEventMarker marker)
 	{
         QuestSlot singleQuest = null;
         instance.activeQuestGroups.Clear();
         instance.questGroupTabs.Visible = false;
 
-        if (marker is TimelineController.EventMarker eMarker)
+        if (marker is TimelineInterface.EventMarker eMarker)
         {
             if (eMarker.eventQuest is string eQuest)
             {
@@ -72,7 +72,7 @@ public partial class TimelineEventViewer : ModalWindow
             }
         }
 
-        if(marker is TimelineController.QuestlineMarker qMarker)
+        if(marker is TimelineInterface.QuestlineMarker qMarker)
         {
             if (QuestGroupCollectionData.CollectionData.TryGetValue("questlines", out var qCollection))
             {
