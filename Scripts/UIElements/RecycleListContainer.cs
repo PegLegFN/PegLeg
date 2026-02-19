@@ -43,8 +43,10 @@ public partial class RecycleListContainer : ScrollContainer
         //SetProvider(new TestRecyclableElementProvider());
     }
 
-    public void SetProvider(IRecyclableElementProvider provider)
+    public void SetProvider(IRecyclableElementProvider provider, bool force = false)
     {
+        if (provider == linkedProvider && !force)
+            return;
         linkedProvider = provider;
         for (int i = 0; i < activeEntries.Count; i++)
         {

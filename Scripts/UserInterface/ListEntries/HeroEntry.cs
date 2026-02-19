@@ -33,8 +33,7 @@ public partial class HeroEntry : GameItemEntry
     {
         string warning = null;
         EmitSignalWarningVisible(currentItem?.template.PerkCompatibleWithCommander(commanderTemplate, out warning) == false);
-        warning ??= commanderTemplate?.TemplateId;
-        EmitSignalWarningText(warning);
+        EmitSignalWarningText(warning ?? commanderTemplate?.TemplateId);
     }
 
     protected override void UpdateItem(GameItem item)

@@ -1,9 +1,6 @@
 using Godot;
-using Polly;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 public partial class HeroLoadoutEntry : GameItemEntry
 {
@@ -168,7 +165,6 @@ public partial class HeroLoadoutEntry : GameItemEntry
         teamPerk.SetItem(tpItem);
         teamPerk.SetInteractable(interactable);
 
-        bool tpIncompatible = tpTemplate?.PerkCompatibleWithCommander(commanderItem.template, out var tpWarning)==false;
         int matchCount = 0;
         int limit = tpTemplate?["ProgressiveBonus"]?.GetValue<bool>() == true ? 6 : tpTemplate?.TeamPerkMinRequirements ?? 0;
 
@@ -194,7 +190,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
         }
 
         //GD.Print($"matched: {matchCount}/{limit}");
-        teamPerk.SetTeamProgress(matchCount, tpIncompatible);
+        teamPerk.SetTeamProgress(matchCount);
+        teamPerk.SetWarningForCommander(commanderItem.template);
 
         if ((loadoutItem.attributes["gadgets"]?.AsArray().Count ?? 0) > 0)
             TrySetGadget(gadgets[0], loadoutItem.attributes["gadgets"]?[0]?["gadget"]?.ToString());
@@ -207,31 +204,12 @@ public partial class HeroLoadoutEntry : GameItemEntry
             TrySetGadget(gadgets[1], null);
     }
 
-    static Dictionary<string, GameItem> gadgetLookup = [];
-    static Dictionary<string, string> gadgetNodeMap = new()
-    {
-        ["g_airstrike"] = "skilltree_airstrike",
-        ["g_generic_adrenalinerush"] = "skilltree_adrenalinerush",
-        ["g_generic_banner"] = "skilltree_banner",
-        ["g_generic_botturret"] = "skilltree_hoverturret",
-        ["g_generic_proximitymines"] = "skilltree_proximitymine",
-        ["g_generic_slowfield"] = "skilltree_slowfield",
-        ["g_supplydrop"] = "skilltree_supplydrop",
-        ["g_teleporter"] = "skilltree_teleporter",
-    };
-
     //public Vector2 BasisSize => node.CustomMinimumSize;
 
     void TrySetGadget(GameItemEntry itemEntry, string templateId)
     {
-        GameItem gadgetItem;
-        if (templateId is null)
-            gadgetItem = null;
-        else if (gadgetLookup.TryGetValue(templateId, out var existing))
-            gadgetItem = existing;
-        else
-            gadgetItem = gadgetLookup[templateId] = GameItemTemplate.Get(templateId)?.CreateInstance();
-        itemEntry.SetItem(gadgetItem);
+        var gadgetTemplate = GameItemTemplate.Get(templateId);
+        itemEntry.SetItem(gadgetTemplate?.GadgetSingleton);
         itemEntry.SetInteractable(interactable);
 
         var stagesParent = itemEntry.GetNodeOrNull("%GadgetStages");
@@ -239,9 +217,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
             return;
 
         int progress = 0;
-        if (!string.IsNullOrWhiteSpace(templateId))
+        if (gadgetTemplate?.HomebaseNodeForGadget(out var nodeTemplateId) == true)
         {
-            var nodeTemplateId = $"HomebaseNode:{(gadgetNodeMap.TryGetValue(templateId.Split(":")[1], out var nodeName) ? nodeName : "")}";
             progress = currentItem
                 ?.profile
                 ?.GetFirstTemplateItem(nodeTemplateId)
@@ -254,6 +231,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
             gadgetStages[i].Color = progress > i ? Colors.White : Colors.Black;
         }
     }
+
     async void InteractCommander()
     {
         GD.Print("commander");
@@ -294,16 +272,16 @@ public partial class HeroLoadoutEntry : GameItemEntry
     {
         if (editable && currentItem?.profile?.account.isOwned == true)
         {
-            var newTeamPerkArray = await SimpleItemSelector.OpenSelector(currentItem.profile.GetItems("TeamPerk"), SimpleItemSelector.DefaultConfig with
+            var newTeamPerk = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("TeamPerk"), HeroItemSelector.TeamPerkConfig with
             {
-                allowEmptySelection=true
+                commanderType = commander.currentItem?.templateId,
+                lastSelectedId = teamPerk.currentItem?.uuid
             });
-            if (newTeamPerkArray is null)
+            if (newTeamPerk is null)
             {
                 GD.Print("cancelled");
                 return;
             }
-            var newTeamPerk = newTeamPerkArray.FirstOrDefault();
             //using var _ = LoadingOverlay.CreateToken();
             await currentItem.profile.PerformOperation("AssignTeamPerkToLoadout", $$"""
             {
@@ -323,7 +301,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
         if (editable && currentItem?.profile?.account.isOwned == true)
         {
             var current = support[idx].currentItem?.uuid;
-            HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current??""])];
+            HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current ?? ""])];
             var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
             {
                 if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
@@ -361,7 +339,30 @@ public partial class HeroLoadoutEntry : GameItemEntry
     {
         if (editable && currentItem?.profile?.account.isOwned == true)
         {
-            //edit
+            var options = GameItemTemplate.GetTemplatesOfType("Gadget")
+                .Where(g => currentItem?.profile.GetFirstTemplateItem(g.HomebaseNodeForGadget(out var node) ? node : null) is not null)
+                .Select(g => g.GadgetSingleton).ToArray();
+            var current = options.FirstOrDefault(g => g.templateId == gadgets[idx].currentItem?.templateId)?.uuid;
+
+            var newGadget = await HeroItemSelector.OpenSelector(options, HeroItemSelector.DefaultConfig with
+            {
+                title = "Select Gadget",
+                lastSelectedId = current,
+                allowEmptySelection = true
+            });
+            if (newGadget is null)
+            {
+                GD.Print("cancelled");
+                return;
+            }
+            //using var _ = LoadingOverlay.CreateToken();
+            await currentItem.profile.PerformOperation("AssignGadgetToLoadout", $$"""
+            {
+                "gadgetId": "{{newGadget?.templateId}}",
+                "loadoutId": "{{currentItem.uuid}}",
+                "slotIndex": {{idx}}
+            }
+            """);
         }
         else
         {

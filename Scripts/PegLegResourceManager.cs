@@ -692,15 +692,15 @@ public class GameItemTemplate
         importedTemplates?
         .Where(kvp =>
             kvp.Key.StartsWith(templateType + ":") &&
-            (filter is null || filter(kvp.Value)
+            filter.Try(kvp.Value
         ))?
         .Union(customTemplates
             .Where(kvp =>
                 kvp.Key.StartsWith(templateType + ":") &&
-                (filter is null || filter(kvp.Value)
-            ))
+                filter.Try(kvp.Value)
+            )
         )?
-        .Select(kvp => kvp.Value) ?? Array.Empty<GameItemTemplate>();
+        .Select(kvp => kvp.Value) ?? [];
 
     public static Texture2D GetSubtypeTexture(string key, Texture2D fallbackIcon = null)
     {
@@ -1018,6 +1018,37 @@ public class GameItemTemplate
             rewards.Insert(0, choiceReward);
         }
         return [.. rewards];
+    }
+
+    static Dictionary<string, GameItem> gadgetSingletonLookup = [];
+    static Dictionary<string, string> gadgetNodeMap = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["g_airstrike"] = "skilltree_airstrike",
+        ["g_generic_adrenalinerush"] = "skilltree_adrenalinerush",
+        ["g_generic_banner"] = "skilltree_banner",
+        ["g_generic_botturret"] = "skilltree_hoverturret",
+        ["g_generic_proximitymines"] = "skilltree_proximitymine",
+        ["g_generic_slowfield"] = "skilltree_slowfield",
+        ["g_supplydrop"] = "skilltree_supplydrop",
+        ["g_teleporter"] = "skilltree_teleporter",
+    };
+
+    public GameItem GadgetSingleton => 
+        gadgetSingletonLookup.TryGetValue(TemplateId, out var value) ? 
+        value : 
+        (gadgetSingletonLookup[TemplateId] = CreateInstance().SetUUID());
+
+    public bool HomebaseNodeForGadget(out string nodeTemplateId)
+    {
+        nodeTemplateId = null;
+        if(Type != "Gadget")
+            return false;
+        if (gadgetNodeMap.TryGetValue(Name, out var nodeName))
+        {
+            nodeTemplateId = $"HomebaseNode:{nodeName}";
+            return true;
+        }
+        return false;
     }
 
     CommanderRequirement? commanderReq;

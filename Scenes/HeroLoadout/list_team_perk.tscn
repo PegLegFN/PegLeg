@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://dxtm1fkjsapu2"]
+
+[ext_resource type="PackedScene" uid="uid://ewoytphqxrj1" path="res://Scenes/HeroLoadout/team_perk.tscn" id="1_q0lbw"]
+[ext_resource type="Shader" uid="uid://l02ho3o5c4rd" path="res://Shaders/HeroLoadoutBGPulse.gdshader" id="2_mnway"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="3_3yy8w"]
+[ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="4_3wil8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3yy8w"]
+resource_local_to_scene = true
+resource_name = "HeroLoadoutBGPulse"
+shader = ExtResource("2_mnway")
+shader_parameter/enabled = false
+shader_parameter/offset = 0.0
+shader_parameter/scale = 0.5
+shader_parameter/period = 1.25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l3feo"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.3111, 0.3111, 0.51, 0.4509804)
+corner_radius_top_left = 5
+corner_radius_bottom_left = 5
+
+[node name="TeamPerk" unique_id=1820453827 instance=ExtResource("1_q0lbw")]
+autoLinkToRecycleSelection = true
+
+[node name="LoadoutBG" parent="." index="0" unique_id=135201392]
+material = SubResource("ShaderMaterial_3yy8w")
+
+[node name="ClearIcon" type="PanelContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(716211953) index="1" unique_id=1642455181]
+visible = false
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_l3feo")
+script = ExtResource("3_3yy8w")
+defaultClearIconToNull = true
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/ClearIcon" index="0" unique_id=1422968507]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_3wil8")
+expand_mode = 1
+
+[node name="ClearName" type="Label" parent="HBoxContainer" parent_id_path=PackedInt32Array(716211953) index="3" unique_id=860927616]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Clear"
+text_overrun_behavior = 3
+
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/PanelContainer" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/PerkName" method="set_visible"]
+[connection signal="ItemDoesNotExist" from="." to="HBoxContainer/ClearIcon" method="set_visible"]
+[connection signal="ItemDoesNotExist" from="." to="HBoxContainer/ClearName" method="set_visible"]
+[connection signal="IconChanged" from="HBoxContainer/ClearIcon" to="HBoxContainer/ClearIcon/TextureRect" method="set_texture"]

@@ -25,24 +25,43 @@ public partial class TeamPerkEntry : GameItemEntry
     protected override void UpdateItem(GameItem updatedItem)
     {
         base.UpdateItem(updatedItem);
-        EmitSignalProgressVisible(displayItem?.templateId.StartsWith("TeamPerk:", StringComparison.OrdinalIgnoreCase) == true);
-        EmitSignalWarningVisible(false);
+        if(selector is HeroItemSelector heroSelector)
+        {
+            EmitSignalProgressVisible(false);
+            SetWarningForCommander(heroSelector.Commander);
+        }
+        else
+        {
+            EmitSignalProgressVisible(displayItem?.templateId.StartsWith("TeamPerk:", StringComparison.OrdinalIgnoreCase) == true);
+            SetTeamProgress(0);
+            SetWarningForCommander(null);
+        }
+    }
+    public void SetWarningForCommander(GameItemTemplate commanderTemplate)
+    {
+        string warning = null;
+        compatible = currentItem?.template.PerkCompatibleWithCommander(commanderTemplate, out warning) != false;
+        EmitSignalWarningVisible(!compatible);
+        EmitSignalWarningText(warning ?? commanderTemplate?.TemplateId);
+        UpdateColor();
     }
 
-    public void SetTeamProgress(int matchCount, bool isIncompatible)
+    bool compatible = false;
+    bool meetsRequirements = false;
+
+    public void SetTeamProgress(int matchCount)
     {
         var displayTemplate = displayItem?.template;
         if (displayTemplate?.Type.Equals("TeamPerk", StringComparison.OrdinalIgnoreCase) != true)
             return;
         bool progressive = displayTemplate["ProgressiveBonus"]?.GetValue<bool>() ?? false;
         int requirementAmt = displayTemplate["SupportRequirements"]?["MinimumQuantity"]?.GetValue<int>() ?? 1;
-        //GD.Print("req: "+requirementAmt);
+        meetsRequirements = matchCount >= requirementAmt;
+        UpdateColor();
         EmitSignalProgressText(progressive ? $"x{matchCount}" : $"{Mathf.Min(matchCount, requirementAmt)}/{requirementAmt}");
-        EmitSignalStateColor((matchCount >= requirementAmt && !isIncompatible) ? activeColor : inactiveColor);
-        EmitSignalWarningVisible(isIncompatible);
-        if (isIncompatible)
-            EmitSignalWarningText(displayTemplate["CommanderRequirement"]?["Description"]?.ToString());
     }
+
+    void UpdateColor() => EmitSignalStateColor(compatible ? (meetsRequirements ? activeColor : inactiveColor) : warningColor);
 
     protected override string CreateTooltip(GameItem item, string itemName, string itemAmount, List<string> tooltipDescriptions)
     {

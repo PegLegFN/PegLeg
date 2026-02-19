@@ -84,6 +84,12 @@ public class GameItem
         SetRawData(rawData);
     }
 
+    public GameItem SetUUID()
+    {
+        uuid ??= Guid.NewGuid().ToString();
+        return this;
+    }
+
     public GameItem(GameItemTemplate template, int quantity, JsonObject attributes = null, GameItem inspectorOverride = null, JsonObject customData = null, string templateId = null)
     {
         _template = template;
@@ -141,7 +147,7 @@ public class GameItem
             ["template"] = templateData,
             ["searchTags"] = GetSearchTags()?.SafeDeepClone(),
         };
-        if (profile is null)
+        if (uuid is null)
             _rawData.Remove("uuid"); //doing this backwards to make uuid the first property of rawData
         if(customData is not null)
             _rawData["custom"] = customData.SafeDeepClone();

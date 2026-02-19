@@ -11,26 +11,54 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 {
     static HeroItemSelector instance;
 
+    public enum DisplayMode
+    {
+        Standard,
+        Commander,
+        TeamPerk,
+        Support
+    }
+
     public record class Config : BaseConfig
     {
+        public string title = "Select Hero";
         public string commanderType;
         public string teamPerkType;
         public string lastSelectedId;
-        public bool useCommanderList;
+        public DisplayMode displayMode;
     }
 
-    protected override Config DefaultConfigInternal => SupportConfig;
-    public static Config SupportConfig { get; private set; } = new()
-    {
-        allowEmptySelection = true,
-    };
+    protected override Config DefaultConfigInternal => DefaultConfig;
+    public static Config DefaultConfig { get; private set; } = new();
+
     public static Config CommanderConfig { get; private set; } = new()
     {
-        useCommanderList = true,
+        displayMode = DisplayMode.Commander,
+    };
+
+    public static Config TeamPerkConfig { get; private set; } = new()
+    {
+        title = "Select Team Perk",
+        displayMode = DisplayMode.TeamPerk,
+        allowEmptySelection = true,
+    };
+
+    public static Config SupportConfig { get; private set; } = new()
+    {
+        displayMode = DisplayMode.Support,
+        allowEmptySelection = true,
     };
 
     [Export]
+    Label header;
+    [Export]
+    Control heroFiltersLayout;
+    [Export]
+    RecycleListContainer standardContainer;
+    [Export]
     RecycleListContainer commanderContainer;
+    [Export]
+    RecycleListContainer teamperkContainer;
     [Export]
     RecycleListContainer supportContainer;
     [Export]
@@ -54,10 +82,10 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
     public override void _Ready()
     {
         base._Ready();
+        standardContainer.SetProvider(this);
         commanderContainer.SetProvider(this);
+        teamperkContainer.SetProvider(this);
         supportContainer.SetProvider(this);
-        commanderContainer.Visible = false;
-        supportContainer.Visible = false;
         instance = this;
         rootPanel.OffsetLeft = -rootPanel.GetCombinedMinimumSize().X;
 
@@ -111,9 +139,9 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
         };
 
         bool wasAbilityVisible = abilityFilterLayout.Visible;
-        abilityFilterLayout.Visible = (CurrentConfig.useCommanderList && classFilter.LatestTab > 1) || perkFilter.LatestTab == perkFilter.TabCount-1;
+        abilityFilterLayout.Visible = (commanderContainer.Visible && classFilter.LatestTab > 1) || perkFilter.LatestTab == perkFilter.TabCount - 1;
 
-        if (abilityFilterLayout.Visible)
+        if (abilityFilterLayout.Visible && heroFiltersLayout.Visible)
         {
             for (int i = 0; i < abilityFilters.Length; i++)
             {
@@ -186,7 +214,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
     {
         GameItemTemplate[] abilities = item.template?.GetHeroAbilities();
         if (abilities is null)
-            return false;
+            return !supportContainer.Visible && !commanderContainer.Visible;
         if (classRequirement is not null)
         {
             if (item.template?.SubType != classRequirement)
@@ -197,7 +225,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
         if (descriptionRequirements.Length > 0)
         {
             abilities ??= item.template?.GetHeroAbilities();
-            var perk = CurrentConfig.useCommanderList ? abilities[1] : abilities[0];
+            var perk = commanderContainer.Visible ? abilities[1] : abilities[0];
             if (!descriptionRequirements.Any(r => Regex.Match(perk.Description, r, RegexOptions.IgnoreCase).Success))
                 return false;
         }
@@ -214,7 +242,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
                     return false;
             }
         }
-        var activeAbility = (CurrentConfig.useCommanderList && item.template.Tier > 1) ? abilities[1] : abilities[0];
+        var activeAbility = (commanderContainer.Visible && item.template.Tier > 1) ? abilities[1] : abilities[0];
         return PLSearch.EvaluateInstructions(searchInstructions, item.CustomSearchObject(() => [activeAbility.Description, Deacronymise(activeAbility.Description)], true));
     }
 
@@ -242,13 +270,28 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
         Commander = GameItemTemplate.Get(CurrentConfig.commanderType);
         TeamPerk = GameItemTemplate.Get(CurrentConfig.teamPerkType);
 
-        commanderContainer.Visible = CurrentConfig.useCommanderList;
-        supportContainer.Visible = !CurrentConfig.useCommanderList;
-        activeContainer = CurrentConfig.useCommanderList ? commanderContainer : supportContainer;
+        header.Text = CurrentConfig.title;
 
-        //is support mode and team perk exists
-        var hideTeamPerk = CurrentConfig.useCommanderList || TeamPerk is null;
-        classFilter.SetTabHidden(1, hideTeamPerk);
+        standardContainer.Visible = false;
+        commanderContainer.Visible = false;
+        teamperkContainer.Visible = false;
+        supportContainer.Visible = false;
+        activeContainer = CurrentConfig.displayMode switch
+        {
+            DisplayMode.Commander => commanderContainer,
+            DisplayMode.TeamPerk => teamperkContainer,
+            DisplayMode.Support => supportContainer,
+            _ => standardContainer
+        };
+        activeContainer.Visible = true;
+
+        heroFiltersLayout.Visible = commanderContainer.Visible || supportContainer.Visible;
+        if (heroFiltersLayout.Visible)
+        {
+            //is support mode and team perk exists
+            var hideTeamPerk = commanderContainer.Visible || TeamPerk is null;
+            classFilter.SetTabHidden(1, hideTeamPerk);
+        }
 
         base.InitialiseSelector(itemOptions);
     }

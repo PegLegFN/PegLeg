@@ -147,7 +147,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
     protected void SortItems()
     {
-        var presortedItems = items.OrderBy(item => item.profile is not null ? 1 : 0).ThenBy(item => selectedItems.Contains(item) ? 0 : 1);
+        var presortedItems = items.OrderBy(item => item == GameItem.Empty ? 0 : 1).ThenBy(item => selectedItems.Contains(item) ? 0 : 1);
         items = SortingFunction is null ? [..presortedItems] : [..SortingFunction(presortedItems)];
         FilterItems();
     }

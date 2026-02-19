@@ -41,17 +41,23 @@
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="36_d1v52"]
 [ext_resource type="PackedScene" uid="uid://b2yvtxwgbw1vm" path="res://Scenes/HeroLoadout/list_support_hero.tscn" id="38_e1y6d"]
 [ext_resource type="PackedScene" uid="uid://dpbrdqqxc8xeq" path="res://Scenes/HeroLoadout/list_commander.tscn" id="38_hccc8"]
+[ext_resource type="PackedScene" uid="uid://dnvstx6j6x0fp" path="res://Scenes/HeroLoadout/list_standard.tscn" id="40_hgbox"]
+[ext_resource type="PackedScene" uid="uid://dxtm1fkjsapu2" path="res://Scenes/HeroLoadout/list_team_perk.tscn" id="41_7btbo"]
 
-[node name="HeroItemSelector" unique_id=324941650 node_paths=PackedStringArray("commanderContainer", "supportContainer", "searchInput", "classFilter", "perkFilter", "abilityFilterLayout", "abilityFilters", "abilityFilterNotice", "rootPanel") instance=ExtResource("1_ov44w")]
+[node name="HeroItemSelector" unique_id=324941650 node_paths=PackedStringArray("header", "heroFiltersLayout", "standardContainer", "commanderContainer", "teamperkContainer", "supportContainer", "searchInput", "classFilter", "perkFilter", "abilityFilterLayout", "abilityFilters", "abilityFilterNotice", "rootPanel") instance=ExtResource("1_ov44w")]
 script = ExtResource("2_ky5nb")
+header = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Label")
+heroFiltersLayout = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer")
+standardContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard")
 commanderContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/CommanderHeroes")
+teamperkContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk")
 supportContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/SupportHeroes")
-searchInput = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Search")
-classFilter = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes")
-perkFilter = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes")
-abilityFilterLayout = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter")
-abilityFilters = [NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities"), NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities"), NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities"), NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities")]
-abilityFilterNotice = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NoHero")
+searchInput = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/Search")
+classFilter = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes")
+perkFilter = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes")
+abilityFilterLayout = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter")
+abilityFilters = [NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities"), NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities"), NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities"), NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities")]
+abilityFilterNotice = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NoHero")
 rootPanel = NodePath("Control/WindowContents/Control/MarginContainer")
 
 [node name="Control" parent="." index="2" unique_id=2057559241]
@@ -66,6 +72,8 @@ grow_horizontal = 1
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
 offset_bottom = 720.0
 grow_vertical = 2
 script = ExtResource("3_2pglp")
@@ -94,76 +102,79 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Select Hero"
 
-[node name="Search" type="LineEdit" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="1" unique_id=1820574257]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="1" unique_id=1891933641]
+layout_mode = 2
+
+[node name="Search" type="LineEdit" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" index="0" unique_id=1820574257]
 layout_mode = 2
 placeholder_text = "Search Heroes"
 
-[node name="HeroTypeFilter" type="HBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="2" unique_id=300216591]
+[node name="HeroTypeFilter" type="HBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" index="1" unique_id=300216591]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter" index="0" unique_id=53499053]
+[node name="Label" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter" index="0" unique_id=53499053]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Filter Heroes:"
 
-[node name="HeroTypes" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter" index="1" unique_id=2107173495 instance=ExtResource("4_j3y2f")]
+[node name="HeroTypes" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter" index="1" unique_id=2107173495 instance=ExtResource("4_j3y2f")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="0" unique_id=1452358063 instance=ExtResource("5_1rxdr")]
+[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="0" unique_id=1452358063 instance=ExtResource("5_1rxdr")]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 mode = -1
 tooltip = "All Heroes"
 icon = ExtResource("6_2qvr8")
 
-[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="1" unique_id=1025491481 instance=ExtResource("5_1rxdr")]
+[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="1" unique_id=1025491481 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Matches Team Perk"
 icon = ExtResource("6_v4ytu")
 
-[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="2" unique_id=295493130 instance=ExtResource("5_1rxdr")]
+[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="2" unique_id=295493130 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Constructor"
 icon = ExtResource("8_4yl7y")
 
-[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="3" unique_id=1550379137 instance=ExtResource("5_1rxdr")]
+[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="3" unique_id=1550379137 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Ninja"
 icon = ExtResource("9_b6uc7")
 
-[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="4" unique_id=1649498880 instance=ExtResource("5_1rxdr")]
+[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="4" unique_id=1649498880 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Outlander"
 icon = ExtResource("10_fvf2m")
 IsPressed = true
 
-[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="5" unique_id=2031921271 instance=ExtResource("5_1rxdr")]
+[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes/HBoxContainer" index="5" unique_id=2031921271 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 mode = 1
 tooltip = "Soldier"
 icon = ExtResource("7_0hvyp")
 
-[node name="HeroPerkFilter" type="HBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="3" unique_id=253497348]
+[node name="HeroPerkFilter" type="HBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" index="2" unique_id=253497348]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter" index="0" unique_id=1689356686]
+[node name="Label" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter" index="0" unique_id=1689356686]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Filter Perks:"
 
-[node name="PerkTypes" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter" index="1" unique_id=1690863125 instance=ExtResource("4_j3y2f")]
+[node name="PerkTypes" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter" index="1" unique_id=1690863125 instance=ExtResource("4_j3y2f")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="0" unique_id=130384610 instance=ExtResource("5_1rxdr")]
+[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="0" unique_id=130384610 instance=ExtResource("5_1rxdr")]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -171,7 +182,7 @@ mode = -1
 tooltip = "All Perks"
 icon = ExtResource("6_2qvr8")
 
-[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="1" unique_id=715499670 instance=ExtResource("5_1rxdr")]
+[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="1" unique_id=715499670 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing 
@@ -180,14 +191,14 @@ tooltip = "Perks containing
 - \"Reload\""
 icon = ExtResource("11_0hvyp")
 
-[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="2" unique_id=970960048 instance=ExtResource("5_1rxdr")]
+[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="2" unique_id=970960048 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing 
 - \"Melee\""
 icon = ExtResource("12_4yl7y")
 
-[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="3" unique_id=1275178784 instance=ExtResource("5_1rxdr")]
+[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="3" unique_id=1275178784 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing
@@ -195,28 +206,28 @@ tooltip = "Perks containing
 - \"B.A.S.E.\""
 icon = ExtResource("13_b6uc7")
 
-[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="4" unique_id=1966033857 instance=ExtResource("5_1rxdr")]
+[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="4" unique_id=1966033857 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing
 - \"Health\""
 icon = ExtResource("14_q7qe0")
 
-[node name="Tab7" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="5" unique_id=1324862808 instance=ExtResource("5_1rxdr")]
+[node name="Tab7" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="5" unique_id=1324862808 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing
 - \"Shield\""
 icon = ExtResource("15_dx77r")
 
-[node name="Tab8" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="6" unique_id=37386038 instance=ExtResource("5_1rxdr")]
+[node name="Tab8" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="6" unique_id=37386038 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing
 - \"Energy\" (except \"Energy Damage\")"
 icon = ExtResource("16_o7c75")
 
-[node name="Tab9" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="7" unique_id=1804096333 instance=ExtResource("5_1rxdr")]
+[node name="Tab9" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="7" unique_id=1804096333 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Perks containing
@@ -227,7 +238,7 @@ tooltip = "Perks containing
 - \"Physical Damage\""
 icon = ExtResource("17_kk4vt")
 
-[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="8" unique_id=1019332008 instance=ExtResource("5_1rxdr")]
+[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes/HBoxContainer" index="8" unique_id=1019332008 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 mode = 1
@@ -235,16 +246,16 @@ tooltip = "Ability Perks"
 icon = ExtResource("17_ct4bi")
 IsPressed = true
 
-[node name="HeroAbilityFilter" type="HBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="4" unique_id=2009906104]
+[node name="HeroAbilityFilter" type="HBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" index="3" unique_id=2009906104]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter" index="0" unique_id=41556151]
+[node name="Label" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter" index="0" unique_id=41556151]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Filter Abilities:"
 
-[node name="NoHero" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter" index="1" unique_id=555372488]
+[node name="NoHero" type="Label" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter" index="1" unique_id=555372488]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -253,12 +264,12 @@ theme_override_colors/font_color = Color(0.556953, 0.556953, 0.556953, 1)
 text = "No Hero Filter"
 horizontal_alignment = 1
 
-[node name="SoldierAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter" index="2" unique_id=2110772403 instance=ExtResource("4_j3y2f")]
+[node name="SoldierAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter" index="2" unique_id=2110772403 instance=ExtResource("4_j3y2f")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="0" unique_id=1810333725 instance=ExtResource("5_1rxdr")]
+[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="0" unique_id=1810333725 instance=ExtResource("5_1rxdr")]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 mode = -1
@@ -266,44 +277,44 @@ tooltip = "All Soldiers"
 icon = ExtResource("7_0hvyp")
 IsPressed = true
 
-[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="1" unique_id=568945143 instance=ExtResource("5_1rxdr")]
+[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="1" unique_id=568945143 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Goin Commando"
 icon = ExtResource("18_wc22q")
 
-[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="2" unique_id=1918364129 instance=ExtResource("5_1rxdr")]
+[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="2" unique_id=1918364129 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Frag Grenade"
 icon = ExtResource("19_ik8cg")
 
-[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="3" unique_id=343669924 instance=ExtResource("5_1rxdr")]
+[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="3" unique_id=343669924 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Lefty and Righty"
 icon = ExtResource("20_onm1x")
 
-[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="4" unique_id=1106307238 instance=ExtResource("5_1rxdr")]
+[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="4" unique_id=1106307238 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Shockwave"
 icon = ExtResource("21_uqsd8")
 
-[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="5" unique_id=1128288941 instance=ExtResource("5_1rxdr")]
+[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities/HBoxContainer" index="5" unique_id=1128288941 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 mode = 1
 tooltip = "War Cry"
 icon = ExtResource("22_6pnob")
 
-[node name="ConstructorAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter" index="3" unique_id=503161195 instance=ExtResource("4_j3y2f")]
+[node name="ConstructorAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter" index="3" unique_id=503161195 instance=ExtResource("4_j3y2f")]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="0" unique_id=1996861068 instance=ExtResource("5_1rxdr")]
+[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="0" unique_id=1996861068 instance=ExtResource("5_1rxdr")]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 mode = -1
@@ -311,44 +322,44 @@ tooltip = "All Constructors"
 icon = ExtResource("8_4yl7y")
 IsPressed = true
 
-[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="1" unique_id=1090740308 instance=ExtResource("5_1rxdr")]
+[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="1" unique_id=1090740308 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Bull Rush"
 icon = ExtResource("23_ik8cg")
 
-[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="2" unique_id=1557847086 instance=ExtResource("5_1rxdr")]
+[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="2" unique_id=1557847086 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "D.E.C.O.Y."
 icon = ExtResource("24_onm1x")
 
-[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="3" unique_id=347421380 instance=ExtResource("5_1rxdr")]
+[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="3" unique_id=347421380 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Goin Constructor"
 icon = ExtResource("25_uqsd8")
 
-[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="4" unique_id=1331223125 instance=ExtResource("5_1rxdr")]
+[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="4" unique_id=1331223125 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Plasma Pulse"
 icon = ExtResource("26_6pnob")
 
-[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="5" unique_id=2050699660 instance=ExtResource("5_1rxdr")]
+[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities/HBoxContainer" index="5" unique_id=2050699660 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 mode = 1
 tooltip = "R.O.S.I.E"
 icon = ExtResource("27_nyr1e")
 
-[node name="NinjaAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter" index="4" unique_id=1164816621 instance=ExtResource("4_j3y2f")]
+[node name="NinjaAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter" index="4" unique_id=1164816621 instance=ExtResource("4_j3y2f")]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="0" unique_id=160570119 instance=ExtResource("5_1rxdr")]
+[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="0" unique_id=160570119 instance=ExtResource("5_1rxdr")]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 mode = -1
@@ -356,44 +367,44 @@ tooltip = "All Ninjas"
 icon = ExtResource("9_b6uc7")
 IsPressed = true
 
-[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="1" unique_id=1717210685 instance=ExtResource("5_1rxdr")]
+[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="1" unique_id=1717210685 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Crescent Kick"
 icon = ExtResource("28_nyr1e")
 
-[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="2" unique_id=1395444004 instance=ExtResource("5_1rxdr")]
+[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="2" unique_id=1395444004 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Dragon Slash"
 icon = ExtResource("29_2asqx")
 
-[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="3" unique_id=1935600369 instance=ExtResource("5_1rxdr")]
+[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="3" unique_id=1935600369 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Smoke Bomb"
 icon = ExtResource("30_j3xh6")
 
-[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="4" unique_id=973051067 instance=ExtResource("5_1rxdr")]
+[node name="Tab5" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="4" unique_id=973051067 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Kunai Storm"
 icon = ExtResource("31_hccc8")
 
-[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="5" unique_id=1625332367 instance=ExtResource("5_1rxdr")]
+[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities/HBoxContainer" index="5" unique_id=1625332367 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 mode = 1
 tooltip = "Throwing Stars"
 icon = ExtResource("31_kvhof")
 
-[node name="OutlanderAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter" index="5" unique_id=721291071 instance=ExtResource("4_j3y2f")]
+[node name="OutlanderAbilities" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter" index="5" unique_id=721291071 instance=ExtResource("4_j3y2f")]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="0" unique_id=248218956 instance=ExtResource("5_1rxdr")]
+[node name="Tab" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="0" unique_id=248218956 instance=ExtResource("5_1rxdr")]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
 mode = -1
@@ -401,32 +412,105 @@ tooltip = "All Outlanders"
 icon = ExtResource("10_fvf2m")
 IsPressed = true
 
-[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="1" unique_id=334879577 instance=ExtResource("5_1rxdr")]
+[node name="Tab2" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="1" unique_id=334879577 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "T.E.D.D.Y"
 icon = ExtResource("32_yx3yq")
 
-[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="2" unique_id=1063895555 instance=ExtResource("5_1rxdr")]
+[node name="Tab3" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="2" unique_id=1063895555 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Phase Shift"
 icon = ExtResource("33_tuyns")
 
-[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="3" unique_id=1633505424 instance=ExtResource("5_1rxdr")]
+[node name="Tab4" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="3" unique_id=1633505424 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip = "Seismic Smash"
 icon = ExtResource("34_d1v52")
 
-[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="4" unique_id=1433517994 instance=ExtResource("5_1rxdr")]
+[node name="Tab6" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities/HBoxContainer" index="4" unique_id=1433517994 instance=ExtResource("5_1rxdr")]
 layout_mode = 2
 size_flags_horizontal = 3
 mode = 1
 tooltip = "Shock Tower"
 icon = ExtResource("35_e1y6d")
 
-[node name="CommanderHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="5" unique_id=374995708 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="Standard" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="2" unique_id=1035965592 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
+script = ExtResource("36_d1v52")
+elementSpace = 4.0
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
+elementScene = ExtResource("40_hgbox")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard" index="0" unique_id=1863747539]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard/MarginContainer" index="0" unique_id=307737700]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Offset" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard/MarginContainer/VBoxContainer" index="0" unique_id=1271384292]
+layout_mode = 2
+
+[node name="DynGridContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard/MarginContainer/VBoxContainer" index="1" unique_id=1126196684]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard/MarginContainer/VBoxContainer" index="2" unique_id=377340493]
+layout_mode = 2
+
+[node name="TeamPerk" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="3" unique_id=1391153808 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
+script = ExtResource("36_d1v52")
+elementSpace = 4.0
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
+elementScene = ExtResource("41_7btbo")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk" index="0" unique_id=1217095050]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk/MarginContainer" index="0" unique_id=1786920719]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Offset" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk/MarginContainer/VBoxContainer" index="0" unique_id=1223432205]
+layout_mode = 2
+
+[node name="DynGridContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk/MarginContainer/VBoxContainer" index="1" unique_id=198207018]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk/MarginContainer/VBoxContainer" index="2" unique_id=1107956457]
+layout_mode = 2
+
+[node name="CommanderHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="4" unique_id=374995708 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -461,7 +545,7 @@ layout_mode = 2
 [node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/CommanderHeroes/MarginContainer/VBoxContainer" index="2" unique_id=1661302222]
 layout_mode = 2
 
-[node name="SupportHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="6" unique_id=269822272 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="SupportHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="5" unique_id=269822272 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -497,9 +581,9 @@ layout_mode = 2
 [node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/SupportHeroes/MarginContainer/VBoxContainer" index="2" unique_id=346976647]
 layout_mode = 2
 
-[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroTypeFilter/HeroTypes"]
-[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroPerkFilter/PerkTypes"]
-[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities"]
-[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities"]
-[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities"]
-[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities"]
+[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes"]
+[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroPerkFilter/PerkTypes"]
+[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/SoldierAbilities"]
+[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/ConstructorAbilities"]
+[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/NinjaAbilities"]
+[editable path="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroAbilityFilter/OutlanderAbilities"]

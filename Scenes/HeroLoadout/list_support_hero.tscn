@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="5_521pf"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="6_geqp4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m55e0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_geqp4"]
 resource_local_to_scene = true
 resource_name = "HeroLoadoutBGPulse"
 shader = ExtResource("2_7jyyi")
@@ -25,7 +25,7 @@ bg_color = Color(0.3111, 0.3111, 0.51, 0.4509804)
 corner_radius_top_left = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_521pf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m55e0"]
 resource_local_to_scene = true
 shader = ExtResource("3_gc4y8")
 shader_parameter/ControlSize = Vector2(52, 27)
@@ -37,7 +37,7 @@ shader_parameter/ApplyCornersToFit = false
 shader_parameter/CornerRadius = 3.0
 shader_parameter/ClipOOB = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dosie"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_521pf"]
 resource_local_to_scene = true
 shader = ExtResource("3_gc4y8")
 shader_parameter/ControlSize = Vector2(52, 52)
@@ -53,9 +53,10 @@ shader_parameter/ClipOOB = false
 custom_minimum_size = Vector2(0, 70)
 offset_right = 295.0
 offset_bottom = 70.0
+autoLinkToRecycleSelection = true
 
 [node name="LoadoutBG" parent="." index="0" unique_id=933949742]
-material = SubResource("ShaderMaterial_m55e0")
+material = SubResource("ShaderMaterial_geqp4")
 
 [node name="HeroPerk" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="0" unique_id=2092928171]
 custom_minimum_size = Vector2(44, 0)
@@ -116,10 +117,10 @@ size_flags_vertical = 8
 size_flags_vertical = 8
 
 [node name="TextureRect" parent="HBoxContainer/MarginContainer2" index="0" unique_id=25297332]
-material = SubResource("ShaderMaterial_521pf")
+material = SubResource("ShaderMaterial_m55e0")
 
 [node name="Icon" parent="HBoxContainer/MarginContainer2/MarginContainer" parent_id_path=PackedInt32Array(935263147) index="0" unique_id=1311190522]
-material = SubResource("ShaderMaterial_dosie")
+material = SubResource("ShaderMaterial_521pf")
 
 [node name="PLIndicator" parent="." index="2" unique_id=1572938112 instance=ExtResource("6_geqp4")]
 layout_mode = 2
@@ -147,6 +148,5 @@ theme_override_font_sizes/font_size = 10
 [connection signal="RatingVisibility" from="." to="PLIndicator" method="set_visible"]
 [connection signal="DescriptionChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label2" method="set_text"]
 [connection signal="IconChanged" from="HBoxContainer/ClearIcon" to="HBoxContainer/ClearIcon/TextureRect" method="set_texture"]
-[connection signal="pressed" from="Responsive Button Area" to="." method="PerformRecycleSelection"]
 
 [editable path="PLIndicator"]
