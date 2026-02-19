@@ -116,8 +116,10 @@ public static class Timeline
 
     class TLData
     {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         public DateTime anchor;
         public Season[] seasons;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
     }
 
     public struct Season

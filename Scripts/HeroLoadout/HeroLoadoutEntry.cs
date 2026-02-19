@@ -26,6 +26,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
     [Export]
     bool interactable = true;
     [Export]
+    bool editable = false;
+    [Export]
     bool addCurrentToName = true;
 
     public override void _Ready()
@@ -35,6 +37,18 @@ public partial class HeroLoadoutEntry : GameItemEntry
         {
             GameAccount.ActiveAccountChanged += UpdateActive;
             SetAccount(GameAccount.ActiveAccount);
+        }
+        commander.Pressed += InteractCommander;
+        teamPerk.Pressed += InteractTeamPerk;
+        for (int i = 0; i < support.Length; i++)
+        {
+            int idx = i;
+            support[i].Pressed += () => InteractSupport(idx);
+        }
+        for (int i = 0; i < gadgets.Length; i++)
+        {
+            int idx = i;
+            gadgets[i].Pressed += () => InteractGadget(idx);
         }
     }
 
@@ -59,65 +73,6 @@ public partial class HeroLoadoutEntry : GameItemEntry
             loadoutItem = profile.GetFirstTemplateItem("CampaignHeroLoadout:defaultloadout");
         }
         SetItem(loadoutItem);
-    }
-
-    struct CommanderRequirement
-    {
-        public string Description;
-        public string[] CommanderTag;
-        public string CommanderSubType;
-
-        public bool IsMatch(GameItemTemplate template)
-        {
-            if(template is null)
-                return false;
-            if (CommanderSubType is not null && template.SubType != CommanderSubType)
-                return false;
-            else if (CommanderTag is not null)
-            {
-                var targetTags = CommanderTag.ToHashSet();
-                var commanderTags = template["HeroTags"]?.Deserialize<string[]>().ToHashSet();
-                if (targetTags.All(t => !commanderTags.Contains(t)))
-                    return false;
-            }
-
-            return true;
-        }
-    }
-
-    struct TeamPerkSupportRequirements()
-    {
-        public string Description;
-        public int MinimumQuantity = 1;
-        public string[] HeroTags;
-        public string HeroSubType;
-        public int? MinimumTier;
-        public string MinimumRarity;
-
-        public bool IsMatch(GameItemTemplate template)
-        {
-            if (template is null)
-                return false;
-
-            if (HeroSubType is not null && template.SubType != HeroSubType)
-                return false;
-
-            if (HeroTags is not null && HeroTags.Length > 0)
-            {
-                var targetTags = HeroTags.ToHashSet();
-                var heroTags = template["HeroTags"]?.Deserialize<string[]>().ToHashSet();
-                if (targetTags.All(t => !heroTags.Contains(t)))
-                    return false;
-            }
-
-            if (MinimumTier is int tier && template.Tier < tier)
-                return false;
-
-            if (MinimumRarity is not null && template.RarityLevel < MinimumRarity.ConvertRarityString())
-                return false;
-
-            return true;
-        }
     }
 
     public void ClearLoadout(bool animated = false)
@@ -149,7 +104,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
             support[i].SetItem(null);
             support[i].SetInteractable(false);
             support[i].SetTeamPerkContributor(false);
-            support[i].SetWarningVisibility(false);
+            support[i].SetWarningForCommander(null);
             SetBGAnim(support[i], offset += 0.05f);
         }
 
@@ -213,12 +168,9 @@ public partial class HeroLoadoutEntry : GameItemEntry
         teamPerk.SetItem(tpItem);
         teamPerk.SetInteractable(interactable);
 
-        bool tpIncompatible = false;
-        if (tpTemplate?["CommanderRequirement"]?.Deserialize<CommanderRequirement>(Helpers.JsonOptions.Fields) is CommanderRequirement tpCommanderReqs)
-            tpIncompatible = !tpCommanderReqs.IsMatch(commanderItem.template);
-        var tpSupportReqs = tpTemplate?["SupportRequirements"].Deserialize<TeamPerkSupportRequirements>(Helpers.JsonOptions.Fields) ?? default;
+        bool tpIncompatible = tpTemplate?.PerkCompatibleWithCommander(commanderItem.template, out var tpWarning)==false;
         int matchCount = 0;
-        int limit = tpTemplate?["ProgressiveBonus"]?.GetValue<bool>() == true ? 6 : tpSupportReqs.MinimumQuantity;
+        int limit = tpTemplate?["ProgressiveBonus"]?.GetValue<bool>() == true ? 6 : tpTemplate?.TeamPerkMinRequirements ?? 0;
 
         for (int i = 0; i < support.Length; i++)
         {
@@ -227,16 +179,15 @@ public partial class HeroLoadoutEntry : GameItemEntry
             support[i].SetItem(supportHero);
             support[i].SetInteractable(interactable);
             support[i].SetTeamPerkContributor(false);
-            support[i].SetWarningVisibility(false);
+            support[i].SetWarningForCommander(null);
 
             var supportTemplate = supportHero?.template;
             if (supportTemplate is null)
                 continue;
 
-            if (supportTemplate?["HeroPerkRequirement"]?.Deserialize<CommanderRequirement>(Helpers.JsonOptions.Fields) is CommanderRequirement supportCommanderReqs)
-                support[i].SetWarningVisibility(!supportCommanderReqs.IsMatch(commanderItem.template));
+            support[i].SetWarningForCommander(commanderItem.template);
 
-            if (tpTemplate is null || matchCount >= limit || !tpSupportReqs.IsMatch(supportTemplate))
+            if (tpTemplate is null || matchCount >= limit || !tpTemplate.TeamPerkBoostedByHero(supportTemplate))
                 continue;
             support[i].SetTeamPerkContributor(true);
             matchCount++;
@@ -269,7 +220,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
         ["g_teleporter"] = "skilltree_teleporter",
     };
 
-    public Vector2 BasisSize => node.CustomMinimumSize;
+    //public Vector2 BasisSize => node.CustomMinimumSize;
 
     void TrySetGadget(GameItemEntry itemEntry, string templateId)
     {
@@ -301,6 +252,120 @@ public partial class HeroLoadoutEntry : GameItemEntry
         for (int i = 0; i < gadgetStages.Length; i++)
         {
             gadgetStages[i].Color = progress > i ? Colors.White : Colors.Black;
+        }
+    }
+    async void InteractCommander()
+    {
+        GD.Print("commander");
+        if (editable && currentItem?.profile?.account.isOwned == true)
+        {
+            var current = commander.currentItem?.uuid;
+            HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current??""])];
+            var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
+            {
+                if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
+                    return false;
+                return true;
+            }), HeroItemSelector.CommanderConfig with
+            {
+                lastSelectedId = current
+            });
+            if(newHero is null)
+            {
+                GD.Print("cancelled");
+                return;
+            }
+            //using var _ = LoadingOverlay.CreateToken();
+            await currentItem.profile.PerformOperation("AssignHeroToLoadout", $$"""
+            {
+                "heroId": "{{newHero?.uuid}}",
+                "loadoutId": "{{currentItem.uuid}}",
+                "slotName": "CommanderSlot"
+            }
+            """);
+        }
+        else
+        {
+            commander.Inspect();
+        }
+    }
+
+    async void InteractTeamPerk()
+    {
+        if (editable && currentItem?.profile?.account.isOwned == true)
+        {
+            var newTeamPerkArray = await SimpleItemSelector.OpenSelector(currentItem.profile.GetItems("TeamPerk"), SimpleItemSelector.DefaultConfig with
+            {
+                allowEmptySelection=true
+            });
+            if (newTeamPerkArray is null)
+            {
+                GD.Print("cancelled");
+                return;
+            }
+            var newTeamPerk = newTeamPerkArray.FirstOrDefault();
+            //using var _ = LoadingOverlay.CreateToken();
+            await currentItem.profile.PerformOperation("AssignTeamPerkToLoadout", $$"""
+            {
+                "teamPerkId": "{{newTeamPerk?.uuid}}",
+                "loadoutId": "{{currentItem.uuid}}"
+            }
+            """);
+        }
+        else
+        {
+            teamPerk.Inspect();
+        }
+    }
+
+    async void InteractSupport(int idx)
+    {
+        if (editable && currentItem?.profile?.account.isOwned == true)
+        {
+            var current = support[idx].currentItem?.uuid;
+            HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current??""])];
+            var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
+            {
+                if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
+                    return false;
+                return true;
+            }), HeroItemSelector.SupportConfig with
+            {
+                commanderType = commander.currentItem?.templateId,
+                teamPerkType = teamPerk.currentItem?.templateId,
+                lastSelectedId = current
+            });
+            if (newHero is null)
+            {
+                GD.Print("cancelled");
+                return;
+            }
+            if (newHero == GameItem.Empty)
+                newHero = null;
+            //using var _ = LoadingOverlay.CreateToken();
+            await currentItem.profile.PerformOperation("AssignHeroToLoadout", $$"""
+            {
+                "heroId": "{{newHero?.uuid}}",
+                "loadoutId": "{{currentItem.uuid}}",
+                "slotName": "FollowerSlot{{idx+1}}"
+            }
+            """);
+        }
+        else
+        {
+            support[idx].Inspect();
+        }
+    }
+
+    async void InteractGadget(int idx)
+    {
+        if (editable && currentItem?.profile?.account.isOwned == true)
+        {
+            //edit
+        }
+        else
+        {
+            gadgets[idx].Inspect();
         }
     }
 

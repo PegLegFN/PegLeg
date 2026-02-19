@@ -327,7 +327,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         if (type == "Worker")
             type = "Survivor";
 
-        string overrideSurvivorSquad = selector is GameItemSelector gameItemSelector ? gameItemSelector.overrideSurvivorSquad : null;
+        string overrideSurvivorSquad = selector is SimpleItemSelector gameItemSelector ? gameItemSelector.OverriddeSurvivorSquad : null;
         float rating = displayItem.CalculateSurvivorRating(
             useSquadForRating || overrideSurvivorSquad is not null,
             overrideSurvivorSquad
@@ -528,6 +528,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignal(SignalName.SubtypeIconChanged, clearIcon);
         EmitSignal(SignalName.TypeChanged, "");
         EmitSignal(SignalName.AmountVisibility, false);
+        EmitSignal(SignalName.RatingVisibility, false);
         EmitSignal(SignalName.AmountChanged, "");
         EmitSignal(SignalName.RarityChanged, Colors.Transparent);
         EmitSignal(SignalName.InteractableChanged, interactableWhenEmpty);

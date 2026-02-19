@@ -1,56 +1,58 @@
-[gd_scene load_steps=9 format=3 uid="uid://dkjv8n3gxf51c"]
+[gd_scene format=3 uid="uid://dkjv8n3gxf51c"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_51cn4"]
-[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Sh_Materials/HeroLoadoutBGPulse.tres" id="2_d173n"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_d173n"]
 [ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_d173n"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_s00ns"]
 [ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="3_xis8e"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="4_6ha8o"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="4_6ha8o"]
 [ext_resource type="Texture2D" uid="uid://dllvnb5xtdqk1" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Gadget-AdrenalineRush-bg-128.png" id="6_51cn4"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_expaw"]
 
-[node name="Gadget" type="MarginContainer"]
+[node name="Gadget" type="MarginContainer" unique_id=1319989748]
 custom_minimum_size = Vector2(0, 44)
 offset_right = 126.0
 offset_bottom = 44.0
 script = ExtResource("1_51cn4")
+interactableWhenEmpty = true
+autoLinkToViewer = false
 defaultClearIconToNull = true
 
-[node name="LoadoutBG" type="Panel" parent="."]
+[node name="LoadoutBG" type="Panel" parent="." unique_id=401698222]
 unique_name_in_owner = true
 material = ExtResource("2_d173n")
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_d173n")
 script = ExtResource("3_s00ns")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1956994397]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=1767409064]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = ExtResource("3_xis8e")
 
-[node name="GadgetIcon" type="TextureRect" parent="HBoxContainer/PanelContainer"]
+[node name="GadgetIcon" type="TextureRect" parent="HBoxContainer/PanelContainer" unique_id=238807137]
 material = ExtResource("4_6ha8o")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("6_51cn4")
 expand_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=801717620]
 material = ExtResource("2_d173n")
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_right = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer" unique_id=729922913]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 1
 
-[node name="GadgetName" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="GadgetName" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=1212071842]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -58,49 +60,49 @@ size_flags_vertical = 6
 text = "Adrenaline Rush"
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=547696451]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 3
 
-[node name="GadgetStages" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="GadgetStages" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=797757991]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages"]
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages" unique_id=856503522]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect2" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages"]
+[node name="ColorRect2" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages" unique_id=729121275]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect3" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages"]
+[node name="ColorRect3" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages" unique_id=1402925893]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect4" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages"]
+[node name="ColorRect4" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages" unique_id=921008408]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorRect5" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0, 0, 0, 1)
-
-[node name="ColorRect6" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages"]
+[node name="ColorRect5" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages" unique_id=1300535895]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0, 0, 0, 1)
 
-[node name="TooltipFallback" type="Control" parent="."]
+[node name="ColorRect6" type="ColorRect" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer/GadgetStages" unique_id=591177055]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0, 0, 0, 1)
+
+[node name="TooltipFallback" type="Control" parent="." unique_id=1069744356]
 layout_mode = 2
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("6_expaw")]
+[node name="Responsive Button Area" parent="." unique_id=243374042 instance=ExtResource("6_expaw")]
 layout_mode = 2
 
 [connection signal="IconChanged" from="." to="HBoxContainer/PanelContainer/GadgetIcon" method="set_texture"]
@@ -109,3 +111,4 @@ layout_mode = 2
 [connection signal="NameChanged" from="." to="HBoxContainer/MarginContainer/VBoxContainer/GadgetName" method="set_text"]
 [connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]

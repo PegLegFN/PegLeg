@@ -32,6 +32,7 @@ public partial class PartyLoadoutsInterface : Control
         GameAccount.ActiveAccountChanged -= Clear;
     }
 
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
     struct MatchData
     {
         public MatchAttributes attributes;
@@ -56,6 +57,7 @@ public partial class PartyLoadoutsInterface : Control
             public string externalDisplayName;
         }
     }
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
 
     Dictionary<string, string> knownUsernames = [];
     bool connecting = false;
@@ -187,10 +189,12 @@ public partial class PartyLoadoutsInterface : Control
         public string accountId;
     }
 
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
     struct PartyCollection
     {
         public PartyData[] current;
     }
+
     struct PartyData
     {
         public PartyMember[] members;
@@ -201,6 +205,7 @@ public partial class PartyLoadoutsInterface : Control
             public string accountId;
         }
     }
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
 
     private async Task<IEnumerable<string>> GetTeammatesFromMatch()
     {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://3ic5fe2i0n0w"]
+[gd_scene format=3 uid="uid://3ic5fe2i0n0w"]
 
 [ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="1_2i6xj"]
 [ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_2pugj"]
@@ -8,9 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://bjis588c3qnar" path="res://Images/InterfaceIcons/T_Pattern_Triangles.png" id="3_3chwq"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_fjwg7"]
 [ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="4_s62v0"]
-[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Sh_Materials/HeroLoadoutBGPulse.tres" id="5_3chwq"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="5_3chwq"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_6kudg"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="6_2pugj"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="6_2pugj"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="6_2xts0"]
 [ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="7_a4v6l"]
 [ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="10_1eg8j"]
@@ -28,7 +28,7 @@ resource_local_to_scene = true
 shader = ExtResource("2_42vc3")
 shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/scale = 0.5
-shader_parameter/Rand = 0.79774266
+shader_parameter/Rand = 0.8273001
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1eg8j"]
 resource_local_to_scene = true
@@ -82,16 +82,18 @@ shader_parameter/inset = 0.1
 shader_parameter/shade = 0.2
 shader_parameter/shadeAlpha = 0.8
 
-[node name="Commander" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry")]
+[node name="Commander" type="MarginContainer" unique_id=2108685526 node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry")]
 offset_right = 358.0
 offset_bottom = 54.0
 script = ExtResource("1_2pugj")
 heroAbilityEntries = [NodePath("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry"), NodePath("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry2"), NodePath("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry3")]
 heroCommanderPerkEntry = NodePath("MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk")
 useCommanderPerkDescription = true
+interactableWhenEmpty = true
+autoLinkToViewer = false
 defaultClearIconToNull = true
 
-[node name="OldBG" type="TextureRect" parent="."]
+[node name="OldBG" type="TextureRect" parent="." unique_id=946298137]
 visible = false
 self_modulate = Color(0.9, 0.615, 0, 1)
 texture_repeat = 2
@@ -102,14 +104,14 @@ expand_mode = 1
 script = ExtResource("2_jv7tl")
 syncControlSize = true
 
-[node name="LoadoutBG" type="Panel" parent="."]
+[node name="LoadoutBG" type="Panel" parent="." unique_id=375279855]
 unique_name_in_owner = true
 material = ExtResource("5_3chwq")
 layout_mode = 2
 theme_override_styles/panel = ExtResource("4_s62v0")
 script = ExtResource("2_jv7tl")
 
-[node name="ItemBG" type="TextureRect" parent="."]
+[node name="ItemBG" type="TextureRect" parent="." unique_id=340982252]
 visible = false
 modulate = Color(0.980392, 0.619608, 0, 1)
 self_modulate = Color(0.96, 0.96, 0.96, 0.752941)
@@ -120,37 +122,37 @@ expand_mode = 1
 script = ExtResource("2_jv7tl")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1603641091]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1642904496]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1462925937]
 layout_mode = 2
 theme_override_constants/margin_left = 38
 theme_override_constants/margin_bottom = 0
 
-[node name="HeroName" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer3"]
+[node name="HeroName" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer3" unique_id=1966343184]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 22
 text = "Tactical Assault Sledgehammer"
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=825034447]
 layout_mode = 2
 theme_override_constants/margin_right = 80
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer" unique_id=1171660494]
 layout_mode = 2
 
-[node name="TierController" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2" node_paths=PackedStringArray("tierImages")]
+[node name="TierController" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=745707083 node_paths=PackedStringArray("tierImages")]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -161,7 +163,7 @@ script = ExtResource("1_2i6xj")
 tierImages = [NodePath("TextureRect"), NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4"), NodePath("TextureRect5")]
 superchargeColor = Color(0, 0.708333, 0.85, 1)
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=1126824355]
 self_modulate = Color(0, 0.708333, 0.85, 1)
 material = ExtResource("6_2pugj")
 layout_mode = 2
@@ -169,46 +171,46 @@ size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=160491211]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=595750641]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect4" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
+[node name="TextureRect4" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=612826311]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="TextureRect5" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController"]
+[node name="TextureRect5" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=192545565]
 material = ExtResource("6_2pugj")
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
 expand_mode = 5
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=768954362]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1015169487]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 alignment = 1
 
-[node name="AbilityEntry" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+[node name="AbilityEntry" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=1786948768 instance=ExtResource("12_73y55")]
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -218,7 +220,7 @@ defaultClearIconToNull = true
 anchor_left = 0.5
 anchor_bottom = 0.5
 
-[node name="AbilityEntry2" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+[node name="AbilityEntry2" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=61637576 instance=ExtResource("12_73y55")]
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -228,7 +230,7 @@ defaultClearIconToNull = true
 anchor_left = 0.5
 anchor_bottom = 0.5
 
-[node name="AbilityEntry3" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("12_73y55")]
+[node name="AbilityEntry3" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer" unique_id=596555655 instance=ExtResource("12_73y55")]
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -238,47 +240,47 @@ defaultClearIconToNull = true
 anchor_left = 0.5
 anchor_bottom = 0.5
 
-[node name="PanelContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1282675146]
 custom_minimum_size = Vector2(0, 41)
 layout_mode = 2
 
-[node name="PerkBG" type="Panel" parent="MarginContainer/VBoxContainer/PanelContainer"]
+[node name="PerkBG" type="Panel" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1543284523]
 unique_name_in_owner = true
 material = ExtResource("5_3chwq")
 layout_mode = 2
 theme_override_styles/panel = ExtResource("4_s62v0")
 script = ExtResource("2_jv7tl")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=983111520]
 layout_mode = 2
 
-[node name="CommanderPerk" type="PanelContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="CommanderPerk" type="PanelContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1452695665]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("10_42vc3")
 script = ExtResource("10_73y55")
 defaultClearIconToNull = true
 
-[node name="PerkIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk"]
+[node name="PerkIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk" unique_id=1892073753]
 material = ExtResource("6_2pugj")
 custom_minimum_size = Vector2(29, 29)
 layout_mode = 2
 texture = ExtResource("10_1eg8j")
 expand_mode = 3
 
-[node name="PerkName" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="PerkName" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=265556234]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Plasma Overdrive +"
 text_overrun_behavior = 3
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1709334457]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2" unique_id=1348525737]
 self_modulate = Color(1, 0.633333, 0, 1)
 material = SubResource("ShaderMaterial_qejx1")
 layout_mode = 2
@@ -287,13 +289,13 @@ expand_mode = 1
 script = ExtResource("2_jv7tl")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2" unique_id=758827059]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/margin_top = -40
 
-[node name="HeroIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/MarginContainer"]
+[node name="HeroIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/MarginContainer" unique_id=1145991571]
 material = SubResource("ShaderMaterial_qo8q0")
 layout_mode = 2
 texture = ExtResource("4_fjwg7")
@@ -301,10 +303,10 @@ expand_mode = 3
 script = ExtResource("2_jv7tl")
 syncControlSize = true
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2" unique_id=1866080931]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control" unique_id=1783759230]
 self_modulate = Color(1, 0.633333, 0, 1)
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 1
@@ -320,7 +322,7 @@ grow_vertical = 2
 texture = ExtResource("12_a4v6l")
 expand_mode = 3
 
-[node name="SubtypeIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect"]
+[node name="SubtypeIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect" unique_id=1744944965]
 material = SubResource("ShaderMaterial_5bpsy")
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 1
@@ -338,10 +340,10 @@ grow_vertical = 2
 texture = ExtResource("6_2xts0")
 expand_mode = 3
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=600189637]
 layout_mode = 2
 
-[node name="PowerLevelIndicator" parent="Control" instance=ExtResource("13_y0vih")]
+[node name="PowerLevelIndicator" parent="Control" unique_id=1813387384 instance=ExtResource("13_y0vih")]
 layout_mode = 1
 offset_top = 6.0
 offset_right = 33.0
@@ -358,18 +360,18 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 2
 theme_override_font_sizes/font_size = 16
 
-[node name="TooltipFallback" type="Control" parent="."]
+[node name="TooltipFallback" type="Control" parent="." unique_id=1003626798]
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="TooltipFallback" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1841484256 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("16_qo8q0")
 itemSource = NodePath("../..")
 componentList = ExtResource("17_5bpsy")
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("14_1eg8j")]
+[node name="Responsive Button Area" parent="." unique_id=1862708511 instance=ExtResource("14_1eg8j")]
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=1856195624 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("16_qo8q0")
 itemSource = NodePath("../..")
 componentList = ExtResource("17_5bpsy")
@@ -393,6 +395,7 @@ componentList = ExtResource("17_5bpsy")
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="IconChanged" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk" to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk/PerkIcon" method="set_texture"]
 [connection signal="NameChanged" from="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/CommanderPerk" to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/PerkName" method="set_text"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]
 
 [editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry"]
 [editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry2"]

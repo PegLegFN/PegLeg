@@ -201,7 +201,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
     public async void BulkRecycle()
     {
-        if (targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !await currentProfile.account.Authenticate())
+        if (targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
             return;
 
         if (filteredItems.Length == 0)
@@ -212,25 +212,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         //    item.GetSearchTags();
         //    item.GenerateRawData();
         //}
-        var loadoutHeroes = currentProfile
-            .GetItems("CampaignHeroLoadout")
-            .SelectMany(loadout =>
-                loadout.attributes["crew_members"]
-                .AsObject()
-                .Select(kvp => kvp.Value.ToString())
-            )
-            .Distinct()
-            .ToList();
-        GameItemSelector.Instance.SetRecycleDefaults();
-        GameItemSelector.Instance.selectablePredicate = item =>
-        {
-            if (!GameItemSelector.RecyclablePredicate(item))
-                return false;
-            if (loadoutHeroes.Contains(item.uuid))
-                return false;
-            return true;
-        };
-        var toRecycle = await GameItemSelector.Instance.OpenSelector(filteredItems, null);
+        var toRecycle = await SimpleItemSelector.OpenSelector(filteredItems, SimpleItemSelector.RecycleConfig);
         if ((toRecycle?.Length ?? 0) > 0)
         {
             JsonObject content = new()
@@ -251,6 +233,20 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             return;
         var unseenItems = filteredItems.Where(i => !i.IsSeen).ToArray();
         currentProfile.MarkItemsSeen(unseenItems);
+    }
+
+    public async void TestHeroSelector()
+    {
+        if (targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
+            return;
+        var heroes = currentItems.Where(i => i.templateId.StartsWith("Hero:")).ToArray();
+        var selected = await HeroItemSelector.OpenSelector(heroes, HeroItemSelector.SupportConfig);
+        if (selected is null)
+            GD.Print("Selection Cancelled");
+        else if (selected == GameItem.Empty)
+            GD.Print("Empty Selected");
+        else
+            GD.Print($"Selected {selected?.uuid ?? "<None>"} ({selected?.templateId ?? "<None>"})");
     }
 
     //public async void BulkDismantle()

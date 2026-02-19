@@ -503,10 +503,12 @@ static class CatalogRequests
 
     record struct BestsellerData
     {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         [JsonPropertyName("expiry_date")]
         public DateTime expiryDate;
         [JsonPropertyName("offer_list")]
         public string[] offerList;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
     }
 
     public static async Task<FrozenDictionary<string, JamTrackData>> RequestJamtrackData()
@@ -531,6 +533,7 @@ static class CatalogRequests
 
     public record struct JamTrackData
     {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         [JsonPropertyName("tt")]
         public string title;
         [JsonPropertyName("au")]
@@ -543,12 +546,15 @@ static class CatalogRequests
         public string songId;
         [JsonPropertyName("ti")]
         public string songTemplateId;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
 
         public string WebURL => $"/item-shop/jam-tracks/{title.ToLower().Replace(' ', '-')}-{songUuid.Split(' ')[^1]}";
 
         public record struct JamTrackContainer
         {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
             public JamTrackData track;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
         }
     }
 

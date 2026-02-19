@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://b2yvtxwgbw1vm"]
+
+[ext_resource type="PackedScene" uid="uid://cnerbcrevhc7w" path="res://Scenes/HeroLoadout/support_hero.tscn" id="1_434ol"]
+[ext_resource type="Shader" uid="uid://l02ho3o5c4rd" path="res://Shaders/HeroLoadoutBGPulse.gdshader" id="2_7jyyi"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="3_gc4y8"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="4_m55e0"]
+[ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="5_521pf"]
+[ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="6_geqp4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m55e0"]
+resource_local_to_scene = true
+resource_name = "HeroLoadoutBGPulse"
+shader = ExtResource("2_7jyyi")
+shader_parameter/enabled = false
+shader_parameter/offset = 0.0
+shader_parameter/scale = 0.5
+shader_parameter/period = 1.25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gc4y8"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.3111, 0.3111, 0.51, 0.4509804)
+corner_radius_top_left = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_521pf"]
+resource_local_to_scene = true
+shader = ExtResource("3_gc4y8")
+shader_parameter/ControlSize = Vector2(52, 27)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dosie"]
+resource_local_to_scene = true
+shader = ExtResource("3_gc4y8")
+shader_parameter/ControlSize = Vector2(52, 52)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[node name="SupportHero" unique_id=2066640686 instance=ExtResource("1_434ol")]
+custom_minimum_size = Vector2(0, 70)
+offset_right = 295.0
+offset_bottom = 70.0
+
+[node name="LoadoutBG" parent="." index="0" unique_id=933949742]
+material = SubResource("ShaderMaterial_m55e0")
+
+[node name="HeroPerk" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="0" unique_id=2092928171]
+custom_minimum_size = Vector2(44, 0)
+
+[node name="TextureRect" parent="HBoxContainer/HeroPerk" index="0" unique_id=1326314791]
+size_flags_vertical = 0
+expand_mode = 1
+
+[node name="ClearIcon" type="PanelContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="1" unique_id=27651595]
+visible = false
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gc4y8")
+script = ExtResource("4_m55e0")
+defaultClearIconToNull = true
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/ClearIcon" index="0" unique_id=667349834]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("5_521pf")
+expand_mode = 1
+
+[node name="Content" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="2" unique_id=1404523991]
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" parent="HBoxContainer/Content" index="0" unique_id=1150383329]
+theme_override_constants/separation = -2
+alignment = 0
+
+[node name="Label" parent="HBoxContainer/Content/VBoxContainer" index="0" unique_id=899559456]
+theme_override_font_sizes/font_size = 18
+
+[node name="Label2" type="Label" parent="HBoxContainer/Content/VBoxContainer" index="1" unique_id=939040889]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 14
+text = "Description description description description description description description description"
+autowrap_mode = 3
+text_overrun_behavior = 4
+
+[node name="Clear Label" type="Label" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="3" unique_id=1493892279]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Clear"
+text_overrun_behavior = 3
+
+[node name="MarginContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="4" unique_id=1521944353]
+custom_minimum_size = Vector2(38, 44)
+size_flags_vertical = 8
+
+[node name="MarginContainer2" parent="HBoxContainer" parent_id_path=PackedInt32Array(1295952962) index="5" unique_id=1467962194]
+size_flags_vertical = 8
+
+[node name="TextureRect" parent="HBoxContainer/MarginContainer2" index="0" unique_id=25297332]
+material = SubResource("ShaderMaterial_521pf")
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/MarginContainer" parent_id_path=PackedInt32Array(935263147) index="0" unique_id=1311190522]
+material = SubResource("ShaderMaterial_dosie")
+
+[node name="PLIndicator" parent="." index="2" unique_id=1572938112 instance=ExtResource("6_geqp4")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="MarginContainer" parent="PLIndicator" index="0"]
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="HBoxContainer" parent="PLIndicator" index="2"]
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_bottom = 1
+
+[node name="PowerLevelLabel" parent="PLIndicator/HBoxContainer" index="0"]
+theme_override_font_sizes/font_size = 10
+
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/HeroPerk" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/Content" method="set_visible"]
+[connection signal="ItemDoesNotExist" from="." to="HBoxContainer/ClearIcon" method="set_visible"]
+[connection signal="ItemDoesNotExist" from="." to="HBoxContainer/Clear Label" method="set_visible"]
+[connection signal="RatingChanged" from="." to="PLIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="RatingVisibility" from="." to="PLIndicator" method="set_visible"]
+[connection signal="DescriptionChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="HBoxContainer/ClearIcon" to="HBoxContainer/ClearIcon/TextureRect" method="set_texture"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="PerformRecycleSelection"]
+
+[editable path="PLIndicator"]

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -61,6 +62,8 @@ public class GameItem
         }
         return null;
     }
+
+    public static GameItem Empty { get; private set; } = new(null, 1, customData: new() { ["empty"] = true });
 
     #endregion
 
@@ -147,19 +150,21 @@ public class GameItem
         return _rawData;
     }
 
-    public JsonObject CustomSearchObject(Func<GameItem, string[]> searchTagGenerator)
+    public JsonObject CustomSearchObject(Func<string[]> searchTagGenerator, bool union = false)
     {
         var searchObj = RawData.SafeDeepClone();
-        searchObj["searchTags"] = new JsonArray([.. searchTagGenerator(this)]);
+        searchObj["searchTags"] = new JsonArray([.. searchTagGenerator(), ..union ? [] : searchObj["searchTags"].AsArray()]);
         return searchObj;
     }
 
-    public JsonArray Alterations => (attributes?["alterations"] ?? attributes?["alterationDefinitions"])?.AsArray();
+    string[] alterations;
+    public string[] Alterations => alterations ??= (attributes?["alterations"] ?? attributes?["alterationDefinitions"])?.Deserialize<string[]>();
 
     public string Personality => attributes?["personality"]?.ToString() is string rawPersonality ? ParseSurvivorAttribute(rawPersonality) : null;
     public string SetBonus => attributes?["set_bonus"]?.ToString() is string rawSetBonus ? ParseSurvivorAttribute(rawSetBonus) : null;
 
-    public GameItem[] CardPackChoices => attributes?["options"]?
+    GameItem[] cardPackChoices;
+    public GameItem[] CardPackChoices => cardPackChoices ??= attributes?["options"]?
                 .AsArray()
                 .Select(c =>
                 {
@@ -192,7 +197,7 @@ public class GameItem
         }
         _searchTags = template?.GenerateSearchTags(assumeUncommon)?.SafeDeepClone();
         if (_searchTags is null)
-            return [.. templateId?.Split(":")];
+            return [.. templateId?.Split(":") ?? []];
         if (attributes?["inventory_overflow_date"] is not null)
             _searchTags.Add("Overflow");
         if (attributes?["personality"]?.ToString() is string rawPersonality)
@@ -232,6 +237,8 @@ public class GameItem
         _rawData = null;
         _rating = null;
         _searchTags = null;
+        alterations = null;
+        cardPackChoices = null;
     }
 
     bool? isFavouritedLocal = null;
@@ -529,15 +536,21 @@ public class GameItem
         if (ratingCategory == "LeadSurvivor")
             ratingKey = ratingKey.Replace("UR_", "SR_");
 
-        var ratingSet = ratings[ratingCategory]["Tiers"][ratingKey];
+        var ratingSet = ratings[ratingCategory]?["Tiers"]?[ratingKey];
         if (ratingSet is null)
         {
-            GD.Print($"no rating set {ratingCategory}:{ratingKey}");
+            GD.PushWarning($"no rating set {ratingCategory}:{ratingKey}");
             return 0;
         }
+        int ratingsLength = ratingSet["Ratings"]?.AsArray().Count ?? 0;
         int subLevel = level - ratingSet["FirstLevel"].GetValue<int>();
         if (subLevel < 0)
             return 0;
+        if(subLevel>= ratingsLength)
+        {
+            GD.PushWarning($"{template.TemplateId} above range of ratings array ({subLevel}>={ratingsLength})");
+            return 0;
+        }
         return (int)ratingSet["Ratings"][subLevel].GetValue<float>();
     }
 

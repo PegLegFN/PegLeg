@@ -65,7 +65,6 @@ public partial class AccountSelector : ModalWindow
     protected override Tween BuildTween(bool openState, double duration)
     {
         var tween = CreateTween();
-        tween.Stop();
         duration *= 2;
         if (openState)
         {
@@ -94,7 +93,6 @@ public partial class AccountSelector : ModalWindow
             .SetDelay(duration * 0.5);
 
         tween.TweenInterval(0.1f);
-
         return tween;
     }
 

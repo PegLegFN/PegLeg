@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://u5ag0k8n6eqm"]
+[gd_scene format=3 uid="uid://u5ag0k8n6eqm"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_3bqtb"]
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="2_34fsc"]
@@ -52,6 +52,7 @@
 [ext_resource type="PackedScene" uid="uid://mk3nau8cj5r4" path="res://Scenes/Desktop/Views/Armory/desktopGenericProfileView.tscn" id="33_7d0l0"]
 [ext_resource type="PackedScene" uid="uid://jsu6mxwb40t6" path="res://Scenes/GameItemEntry/backpack_entry.tscn" id="34_hoc2f"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="35_ix213"]
+[ext_resource type="PackedScene" uid="uid://clie83tterye8" path="res://Scenes/Desktop/Views/desktopEventShopView.tscn" id="35_oikmq"]
 [ext_resource type="PackedScene" uid="uid://bm216dwkg2p58" path="res://Scenes/Desktop/Views/Extra/desktopVenturesView.tscn" id="35_s7yuu"]
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/InterfaceIcons/PegLegIcon256.png" id="37_5b0rm"]
 [ext_resource type="PackedScene" uid="uid://b8cv7fnnprix6" path="res://Scenes/Desktop/Views/Extra/desktopWeaponStatView.tscn" id="37_c6nfh"]
@@ -72,10 +73,11 @@
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="59_4gcek"]
 [ext_resource type="PackedScene" uid="uid://bbpdgupjy1ovb" path="res://Scenes/Desktop/Overlays/dev_text_overlay.tscn" id="60_o7hny"]
 [ext_resource type="PackedScene" uid="uid://ciamgottppk7s" path="res://Scenes/Desktop/Overlays/image_copy_window.tscn" id="62_wqw3e"]
+[ext_resource type="PackedScene" uid="uid://bxop648lmprhv" path="res://Scenes/Desktop/Overlays/hero_item_selector.tscn" id="64_buut1"]
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
 [ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="99_hfy7e"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_r4l5r"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_buut1"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7h2tb"]
@@ -98,7 +100,7 @@ shader = ExtResource("51_jeshi")
 shader_parameter/ControlSize = Vector2(1350, 720)
 shader_parameter/RevealScale = 0.0
 
-[node name="Root" type="Control"]
+[node name="Root" type="Control" unique_id=1605944334]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -107,32 +109,32 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_3bqtb")
 
-[node name="NonUI" type="Node" parent="."]
+[node name="NonUI" type="Node" parent="." unique_id=1477233975]
 
-[node name="TargetResolution" type="Node" parent="NonUI" node_paths=PackedStringArray("rootNode")]
+[node name="TargetResolution" type="Node" parent="NonUI" unique_id=246092305 node_paths=PackedStringArray("rootNode")]
 script = ExtResource("2_34fsc")
 rootNode = NodePath("../..")
 
-[node name="AutoButtonSounds" type="Node" parent="NonUI"]
+[node name="AutoButtonSounds" type="Node" parent="NonUI" unique_id=1376755451]
 script = ExtResource("2_db3cl")
 
-[node name="RefreshTimerController" type="Node" parent="NonUI"]
+[node name="RefreshTimerController" type="Node" parent="NonUI" unique_id=971556100]
 script = ExtResource("5_hp28w")
 
-[node name="ThemeController" type="Node" parent="NonUI"]
+[node name="ThemeController" type="Node" parent="NonUI" unique_id=1407120025]
 script = ExtResource("6_hvr66")
 
-[node name="TooltipFixer" type="Node" parent="NonUI" node_paths=PackedStringArray("tooltipControl")]
+[node name="TooltipFixer" type="Node" parent="NonUI" unique_id=362796827 node_paths=PackedStringArray("tooltipControl")]
 script = ExtResource("7_i8x0x")
 tooltipControl = NodePath("Tooltip")
 
-[node name="Tooltip" parent="NonUI/TooltipFixer" instance=ExtResource("8_2iux3")]
+[node name="Tooltip" parent="NonUI/TooltipFixer" unique_id=2107242626 instance=ExtResource("8_2iux3")]
 visible = false
 offset_left = -300.0
 offset_right = 14.0
 offset_bottom = 148.0
 
-[node name="StatusIndicator" type="StatusIndicator" parent="NonUI"]
+[node name="StatusIndicator" type="StatusIndicator" parent="NonUI" unique_id=1739965494]
 tooltip = "PegLeg"
 icon = ExtResource("37_5b0rm")
 menu = NodePath("PopupMenu")
@@ -140,14 +142,14 @@ script = ExtResource("10_t6a4k")
 editorIcon = ExtResource("10_m85w4")
 testBuildIcon = ExtResource("11_m0p55")
 
-[node name="PopupMenu" type="PopupMenu" parent="NonUI/StatusIndicator"]
+[node name="PopupMenu" type="PopupMenu" parent="NonUI/StatusIndicator" unique_id=273246678]
 prefer_native_menu = true
 item_count = 2
 item_0/text = "Close"
 item_0/id = 0
 item_1/id = 1
 
-[node name="NotifWindow" type="Window" parent="NonUI"]
+[node name="NotifWindow" type="Window" parent="NonUI" unique_id=397374584]
 auto_translate_mode = 1
 transparent_bg = true
 use_hdr_2d = true
@@ -162,9 +164,9 @@ transparent = true
 unfocusable = true
 theme = ExtResource("1_3bqtb")
 
-[node name="DesktopNotificationV2Window" parent="NonUI/NotifWindow" instance=ExtResource("13_6pg76")]
+[node name="DesktopNotificationV2Window" parent="NonUI/NotifWindow" unique_id=473011251 instance=ExtResource("13_6pg76")]
 
-[node name="NotifDispatcher" type="Node" parent="NonUI"]
+[node name="NotifDispatcher" type="Node" parent="NonUI" unique_id=640449106]
 script = ExtResource("14_8g5mb")
 llamaIcon = ExtResource("15_r4l5r")
 llamaSound = ExtResource("16_ayavh")
@@ -174,11 +176,11 @@ missionSound = ExtResource("17_kr8xl")
 shopIcon = ExtResource("18_s7yuu")
 shopSound = ExtResource("19_s7yuu")
 
-[node name="DesktopContextMenu" parent="NonUI" instance=ExtResource("20_ayavh")]
+[node name="DesktopContextMenu" parent="NonUI" unique_id=1833693489 instance=ExtResource("20_ayavh")]
 mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
 visible = false
 
-[node name="BGController" type="Control" parent="." node_paths=PackedStringArray("bgMain", "bgOverlay")]
+[node name="BGController" type="Control" parent="." unique_id=1916908104 node_paths=PackedStringArray("bgMain", "bgOverlay")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -190,7 +192,7 @@ script = ExtResource("3_sy4n4")
 bgMain = NodePath("BG")
 bgOverlay = NodePath("BGFade")
 
-[node name="BG" type="TextureRect" parent="BGController"]
+[node name="BG" type="TextureRect" parent="BGController" unique_id=458561875]
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 z_index = -10
 layout_mode = 1
@@ -204,7 +206,7 @@ texture = ExtResource("16_rir5i")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="BGFade" type="TextureRect" parent="BGController"]
+[node name="BGFade" type="TextureRect" parent="BGController" unique_id=458292995]
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 z_index = -10
@@ -219,7 +221,7 @@ texture = ExtResource("16_rir5i")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Content" type="MarginContainer" parent="."]
+[node name="Content" type="MarginContainer" parent="." unique_id=1307487321]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -230,72 +232,72 @@ theme_override_constants/margin_top = 4
 script = ExtResource("24_r4l5r")
 extraPaddingOnMobile = Vector4i(16, 16, 16, 16)
 
-[node name="Node" type="Node" parent="Content"]
+[node name="Node" type="Node" parent="Content" unique_id=274607504]
 
-[node name="DevParent" type="Control" parent="Content/Node"]
+[node name="DevParent" type="Control" parent="Content/Node" unique_id=255859169]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MainTabs" type="TabContainer" parent="Content"]
+[node name="MainTabs" type="TabContainer" parent="Content" unique_id=1874719767]
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 0
+current_tab = 3
 script = ExtResource("16_hsemp")
 
-[node name="Dashboard" parent="Content/MainTabs" instance=ExtResource("10_xfiw1")]
+[node name="Dashboard" parent="Content/MainTabs" unique_id=291427184 instance=ExtResource("10_xfiw1")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Llamas" parent="Content/MainTabs" instance=ExtResource("23_b4gaj")]
+[node name="Llamas" parent="Content/MainTabs" unique_id=622182493 instance=ExtResource("23_b4gaj")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Missions" parent="Content/MainTabs" instance=ExtResource("22_qlkcq")]
+[node name="Missions" parent="Content/MainTabs" unique_id=1158902261 instance=ExtResource("22_qlkcq")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Armoury" type="TabContainer" parent="Content/MainTabs"]
-visible = false
+[node name="Armoury" type="TabContainer" parent="Content/MainTabs" unique_id=1848144313]
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 3
 
-[node name="Survivor Squads" parent="Content/MainTabs/Armoury" instance=ExtResource("25_ag48h")]
+[node name="Survivor Squads" parent="Content/MainTabs/Armoury" unique_id=428991421 instance=ExtResource("25_ag48h")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Hero Loadout" parent="Content/MainTabs/Armoury" instance=ExtResource("31_i2466")]
-visible = false
+[node name="Hero Loadout" parent="Content/MainTabs/Armoury" unique_id=1372606315 instance=ExtResource("31_i2466")]
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Inventory" parent="Content/MainTabs/Armoury" instance=ExtResource("13_yfdoy")]
+[node name="Inventory" parent="Content/MainTabs/Armoury" unique_id=680848205 instance=ExtResource("13_yfdoy")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Backpack" parent="Content/MainTabs/Armoury" instance=ExtResource("15_dlrdq")]
+[node name="Backpack" parent="Content/MainTabs/Armoury" unique_id=1450260708 instance=ExtResource("15_dlrdq")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="Storage" parent="Content/MainTabs/Armoury" instance=ExtResource("32_ayavh")]
+[node name="Storage" parent="Content/MainTabs/Armoury" unique_id=1087886358 instance=ExtResource("32_ayavh")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
-[node name="Item Shop" type="TabContainer" parent="Content/MainTabs"]
+[node name="Item Shop" type="TabContainer" parent="Content/MainTabs" unique_id=197807939]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
@@ -304,41 +306,31 @@ current_tab = 0
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 4
 
-[node name="Weekly Shop" parent="Content/MainTabs/Item Shop" instance=ExtResource("26_fltvm")]
+[node name="Weekly Shop" parent="Content/MainTabs/Item Shop" unique_id=1577931813 instance=ExtResource("26_fltvm")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Event Shop" parent="Content/MainTabs/Item Shop" instance=ExtResource("26_fltvm")]
+[node name="Event Shop" parent="Content/MainTabs/Item Shop" unique_id=1641492852 instance=ExtResource("35_oikmq")]
 visible = false
 layout_mode = 2
-useEventShop = true
 metadata/_tab_index = 1
 
-[node name="Label" parent="Content/MainTabs/Item Shop/Event Shop/Timer/PanelContainer/MarginContainer/HBoxContainer" index="0"]
-text = "Event Shop Resets: "
-
-[node name="Label2" parent="Content/MainTabs/Item Shop/Event Shop/Timer/PanelContainer/MarginContainer/HBoxContainer" index="1"]
-timerType = 4
-
-[node name="RefreshTimer" parent="Content/MainTabs/Item Shop/Event Shop/Timer/PanelContainer/MarginContainer/HBoxContainer" index="2"]
-timerType = 4
-
-[node name="Cosmetic Shop" parent="Content/MainTabs/Item Shop" instance=ExtResource("27_5ey2a")]
+[node name="Cosmetic Shop" parent="Content/MainTabs/Item Shop" unique_id=1584211738 instance=ExtResource("27_5ey2a")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Quests" parent="Content/MainTabs" instance=ExtResource("28_rt2uq")]
+[node name="Quests" parent="Content/MainTabs" unique_id=528753016 instance=ExtResource("28_rt2uq")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
-[node name="Timeline" parent="Content/MainTabs" instance=ExtResource("43_4gcek")]
+[node name="Timeline" parent="Content/MainTabs" unique_id=1800145817 instance=ExtResource("43_4gcek")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 6
 
-[node name="Extra" type="TabContainer" parent="Content/MainTabs"]
+[node name="Extra" type="TabContainer" parent="Content/MainTabs" unique_id=1129433097]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
@@ -347,21 +339,21 @@ current_tab = 0
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 7
 
-[node name="Compendium" parent="Content/MainTabs/Extra" instance=ExtResource("24_sj3vv")]
+[node name="Compendium" parent="Content/MainTabs/Extra" unique_id=1376070178 instance=ExtResource("24_sj3vv")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Ventures" parent="Content/MainTabs/Extra" instance=ExtResource("35_s7yuu")]
+[node name="Ventures" parent="Content/MainTabs/Extra" unique_id=2076901842 instance=ExtResource("35_s7yuu")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Team Loadouts" parent="Content/MainTabs/Extra" instance=ExtResource("42_i2466")]
+[node name="Team Loadouts" parent="Content/MainTabs/Extra" unique_id=777247922 instance=ExtResource("42_i2466")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Dev" type="TabContainer" parent="Content/MainTabs" node_paths=PackedStringArray("altParent")]
+[node name="Dev" type="TabContainer" parent="Content/MainTabs" unique_id=1920410888 node_paths=PackedStringArray("altParent")]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
@@ -371,16 +363,16 @@ script = ExtResource("16_hsemp")
 altParent = NodePath("../../Node/DevParent")
 metadata/_tab_index = 8
 
-[node name="Mission Analytics" parent="Content/MainTabs/Dev" instance=ExtResource("44_bxc6c")]
+[node name="Mission Analytics" parent="Content/MainTabs/Dev" unique_id=1152319025 instance=ExtResource("44_bxc6c")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Balancing" parent="Content/MainTabs/Dev" instance=ExtResource("37_c6nfh")]
+[node name="Balancing" parent="Content/MainTabs/Dev" unique_id=172171629 instance=ExtResource("37_c6nfh")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Game Profiles" type="TabContainer" parent="Content/MainTabs/Dev"]
+[node name="Game Profiles" type="TabContainer" parent="Content/MainTabs/Dev" unique_id=665596232]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
@@ -389,93 +381,93 @@ current_tab = 0
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 2
 
-[node name="Athena" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="Athena" parent="Content/MainTabs/Dev/Game Profiles" unique_id=21257213 instance=ExtResource("33_7d0l0")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Creative" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="Creative" parent="Content/MainTabs/Dev/Game Profiles" unique_id=1476421939 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "creative"
 metadata/_tab_index = 1
 
-[node name="Common" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="Common" parent="Content/MainTabs/Dev/Game Profiles" unique_id=1900866837 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "common_core"
 metadata/_tab_index = 2
 
-[node name="BR Collections" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="BR Collections" parent="Content/MainTabs/Dev/Game Profiles" unique_id=188467995 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "collections"
 metadata/_tab_index = 3
 
-[node name="Shield Settings" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="Shield Settings" parent="Content/MainTabs/Dev/Game Profiles" unique_id=1061308743 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "metadata"
 metadata/_tab_index = 4
 
-[node name="CB People" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="CB People" parent="Content/MainTabs/Dev/Game Profiles" unique_id=406286730 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "collection_book_people0"
 metadata/_tab_index = 5
 
-[node name="CB Schematics" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="CB Schematics" parent="Content/MainTabs/Dev/Game Profiles" unique_id=1621080008 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "collection_book_schematics0"
 metadata/_tab_index = 6
 
-[node name="Venture Backpack" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="Venture Backpack" parent="Content/MainTabs/Dev/Game Profiles" unique_id=1508465885 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "theater2"
 metadata/_tab_index = 7
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(1508465885, 144255995) index="0" unique_id=228194712]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(1508465885, 2039985868) index="0" unique_id=1672625159]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(1508465885, 301043813) index="0" unique_id=1744959934]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1508465885, 1694755347) index="0" unique_id=669176367]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(1508465885, 426083547) index="0" unique_id=2051298463]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(1508465885, 535625123) index="0" unique_id=1931883480]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" index="0"]
-button_group = SubResource("ButtonGroup_r4l5r")
+[node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" parent_id_path=PackedInt32Array(1508465885, 248328693) index="0" unique_id=1448244160]
+button_group = SubResource("ButtonGroup_buut1")
 
-[node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" index="2"]
+[node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="2" unique_id=317467257]
 elementSpace = 10.0
 elementScene = ExtResource("34_hoc2f")
 
-[node name="MarginContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/ScrollContainer" index="0"]
+[node name="MarginContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/ScrollContainer" index="0" unique_id=1223914654]
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Grid" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" index="1"]
+[node name="Grid" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1017061478) index="1" unique_id=592302133]
 Spacing = Vector2(10, 10)
 
-[node name="Recycle Bin" parent="Content/MainTabs/Dev/Game Profiles" instance=ExtResource("33_7d0l0")]
+[node name="Recycle Bin" parent="Content/MainTabs/Dev/Game Profiles" unique_id=265409258 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
 targetProfile = "recycle_bin"
 metadata/_tab_index = 8
 
-[node name="StatusBar" type="MarginContainer" parent="Content"]
+[node name="StatusBar" type="MarginContainer" parent="Content" unique_id=2062517272]
 z_index = 5
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
@@ -485,13 +477,13 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 5
 
-[node name="Left" type="HBoxContainer" parent="Content/StatusBar"]
+[node name="Left" type="HBoxContainer" parent="Content/StatusBar" unique_id=2014413193]
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 0
 theme_override_constants/separation = 2
 
-[node name="AccountSelectorBtn" type="MarginContainer" parent="Content/StatusBar/Left"]
+[node name="AccountSelectorBtn" type="MarginContainer" parent="Content/StatusBar/Left" unique_id=689381301]
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
@@ -499,12 +491,12 @@ script = ExtResource("27_a331l")
 defaultIcon = ExtResource("28_chpxd")
 useActiveAccount = true
 
-[node name="Button" type="Button" parent="Content/StatusBar/Left/AccountSelectorBtn"]
+[node name="Button" type="Button" parent="Content/StatusBar/Left/AccountSelectorBtn" unique_id=1542407438]
 layout_mode = 2
 tooltip_text = "Switch Account"
 theme_type_variation = &"AccountButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/StatusBar/Left/AccountSelectorBtn"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/StatusBar/Left/AccountSelectorBtn" unique_id=553724303]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -512,7 +504,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer" unique_id=919241870]
 material = SubResource("ShaderMaterial_7h2tb")
 layout_mode = 2
 size_flags_horizontal = 0
@@ -520,21 +512,21 @@ mouse_filter = 2
 texture = ExtResource("26_2ue8b")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer"]
+[node name="TextureRect2" type="TextureRect" parent="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer" unique_id=648926631]
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 texture = ExtResource("29_ql5qm")
 expand_mode = 3
 
-[node name="RefreshBtn" type="Button" parent="Content/StatusBar/Left"]
+[node name="RefreshBtn" type="Button" parent="Content/StatusBar/Left" unique_id=283216786]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Refresh Account"
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Left/RefreshBtn"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Left/RefreshBtn" unique_id=1339425702]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -549,7 +541,7 @@ texture = ExtResource("35_ix213")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LaunchBtn" type="Button" parent="Content/StatusBar/Left"]
+[node name="LaunchBtn" type="Button" parent="Content/StatusBar/Left" unique_id=1071874668]
 visible = false
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -557,7 +549,7 @@ size_flags_vertical = 4
 tooltip_text = "Launch Fortnite"
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Left/LaunchBtn"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Left/LaunchBtn" unique_id=95960270]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -570,36 +562,36 @@ texture = ExtResource("31_retv3")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Right" type="HBoxContainer" parent="Content/StatusBar"]
+[node name="Right" type="HBoxContainer" parent="Content/StatusBar" unique_id=1749668514]
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 0
 theme_override_constants/separation = 2
 alignment = 2
 
-[node name="PowerLevel" type="MarginContainer" parent="Content/StatusBar/Right" node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
+[node name="PowerLevel" type="MarginContainer" parent="Content/StatusBar/Right" unique_id=1738098284 node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
 layout_mode = 2
 script = ExtResource("44_3p6h5")
 homebaseNumberLabel = NodePath("MarginContainer/HBoxContainer/PowerLevelNumber")
 homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelProgressBar")
 tooltipColor = Color(0, 0.537255, 0.729412, 1)
 
-[node name="Panel" type="Panel" parent="Content/StatusBar/Right/PowerLevel"]
+[node name="Panel" type="Panel" parent="Content/StatusBar/Right/PowerLevel" unique_id=1709425178]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_yef35")
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/StatusBar/Right/PowerLevel"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/StatusBar/Right/PowerLevel" unique_id=1761575877]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/StatusBar/Right/PowerLevel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/StatusBar/Right/PowerLevel/MarginContainer" unique_id=1956262683]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="Content/StatusBar/Right/PowerLevel/MarginContainer/HBoxContainer"]
+[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="Content/StatusBar/Right/PowerLevel/MarginContainer/HBoxContainer" unique_id=892401936]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_vertical = 4
@@ -614,7 +606,7 @@ texture_progress = ExtResource("25_jxakv")
 tint_under = Color(0.145098, 0.145098, 0.145098, 1)
 tint_progress = Color(0, 0.535333, 0.73, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar" unique_id=1283894287]
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 1
 anchors_preset = -1
@@ -631,7 +623,7 @@ grow_vertical = 2
 texture = ExtResource("3_wfagk")
 expand_mode = 1
 
-[node name="PowerLevelNumber" type="Label" parent="Content/StatusBar/Right/PowerLevel/MarginContainer/HBoxContainer"]
+[node name="PowerLevelNumber" type="Label" parent="Content/StatusBar/Right/PowerLevel/MarginContainer/HBoxContainer" unique_id=2026243433]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
@@ -639,14 +631,14 @@ theme_override_font_sizes/font_size = 20
 text = "144"
 horizontal_alignment = 1
 
-[node name="SettingsButton" type="Button" parent="Content/StatusBar/Right"]
+[node name="SettingsButton" type="Button" parent="Content/StatusBar/Right" unique_id=107790272]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Settings"
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/SettingsButton"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/SettingsButton" unique_id=774973124]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -661,7 +653,7 @@ texture = ExtResource("28_p4icb")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MuteBtn" type="Button" parent="Content/StatusBar/Right"]
+[node name="MuteBtn" type="Button" parent="Content/StatusBar/Right" unique_id=139725396]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_vertical = 4
@@ -670,7 +662,7 @@ theme_type_variation = &"LargeButton"
 script = ExtResource("58_7yvd6")
 targetBusName = "Master"
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/MuteBtn"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/MuteBtn" unique_id=1859387072]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -685,12 +677,12 @@ texture = ExtResource("47_6bd6x")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="Content/StatusBar"]
+[node name="ColorRect" type="ColorRect" parent="Content/StatusBar" unique_id=1227744299]
 visible = false
 layout_mode = 2
 color = Color(1, 1, 1, 0.188235)
 
-[node name="OverlayWindows" type="Control" parent="."]
+[node name="OverlayWindows" type="Control" parent="." unique_id=1375871405]
 z_index = 6
 layout_mode = 1
 anchors_preset = 15
@@ -700,70 +692,74 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="AccountSwitcher" parent="OverlayWindows" instance=ExtResource("26_xb41w")]
+[node name="AccountSwitcher" parent="OverlayWindows" unique_id=129336445 instance=ExtResource("26_xb41w")]
 visible = false
 layout_mode = 1
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="MissionViewer" parent="OverlayWindows" instance=ExtResource("26_fna7y")]
+[node name="MissionViewer" parent="OverlayWindows" unique_id=1619045472 instance=ExtResource("26_fna7y")]
 visible = false
 layout_mode = 1
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="TimelineEventViewer" parent="OverlayWindows" instance=ExtResource("59_4gcek")]
+[node name="TimelineEventViewer" parent="OverlayWindows" unique_id=1501647508 instance=ExtResource("59_4gcek")]
 visible = false
 layout_mode = 1
 
-[node name="CardPackOpenerWindow" parent="OverlayWindows" instance=ExtResource("41_alhak")]
+[node name="CardPackOpenerWindow" parent="OverlayWindows" unique_id=704071020 instance=ExtResource("41_alhak")]
 visible = false
 layout_mode = 1
 
-[node name="GameItemSelector" parent="OverlayWindows" instance=ExtResource("44_m211x")]
+[node name="GameItemSelector" parent="OverlayWindows" unique_id=1292242426 instance=ExtResource("44_m211x")]
 visible = false
 layout_mode = 1
 
-[node name="GameItemViewer" parent="OverlayWindows" instance=ExtResource("25_r7yrq")]
+[node name="HeroItemSelector" parent="OverlayWindows" unique_id=324941650 instance=ExtResource("64_buut1")]
+visible = false
+layout_mode = 1
+
+[node name="GameItemViewer" parent="OverlayWindows" unique_id=1064404739 instance=ExtResource("25_r7yrq")]
 visible = false
 layout_mode = 1
 anchors_preset = -1
 
-[node name="SettingsWindow" parent="OverlayWindows" instance=ExtResource("99_hfy7e")]
+[node name="SettingsWindow" parent="OverlayWindows" unique_id=1858987398 instance=ExtResource("99_hfy7e")]
 visible = false
 layout_mode = 1
 
-[node name="ShopPurchaseAnimation" parent="OverlayWindows" instance=ExtResource("96_2bhmt")]
+[node name="ShopPurchaseAnimation" parent="OverlayWindows" unique_id=217372107 instance=ExtResource("96_2bhmt")]
 visible = false
 layout_mode = 1
 
-[node name="LoginPopup" parent="OverlayWindows" instance=ExtResource("41_kf5nt")]
+[node name="LoginPopup" parent="OverlayWindows" unique_id=327623263 instance=ExtResource("41_kf5nt")]
 visible = false
 layout_mode = 1
 
-[node name="CopyImage" parent="OverlayWindows" instance=ExtResource("62_wqw3e")]
+[node name="CopyImage" parent="OverlayWindows" unique_id=1254622451 instance=ExtResource("62_wqw3e")]
 visible = false
 layout_mode = 1
 
-[node name="DevText" parent="OverlayWindows" instance=ExtResource("60_o7hny")]
+[node name="DevText" parent="OverlayWindows" unique_id=925296971 instance=ExtResource("60_o7hny")]
 visible = false
 layout_mode = 1
 
-[node name="GenericLineEditWindow" parent="OverlayWindows" instance=ExtResource("45_vujc8")]
+[node name="GenericLineEditWindow" parent="OverlayWindows" unique_id=1582895842 instance=ExtResource("45_vujc8")]
 visible = false
 layout_mode = 1
 
-[node name="GenericConfirmationWindow" parent="OverlayWindows" instance=ExtResource("46_fbpme")]
+[node name="GenericConfirmationWindow" parent="OverlayWindows" unique_id=648579163 instance=ExtResource("46_fbpme")]
 visible = false
 layout_mode = 1
 
-[node name="LoadingOverlay" parent="OverlayWindows" instance=ExtResource("31_v6low")]
+[node name="LoadingOverlay" parent="OverlayWindows" unique_id=1534828838 instance=ExtResource("31_v6low")]
 visible = false
 layout_mode = 1
 startOpen = false
 isUserClosable = true
 
-[node name="Curtain" type="ColorRect" parent="."]
+[node name="Curtain" type="ColorRect" parent="." unique_id=1225909493]
 visible = false
 z_index = 50
 texture_repeat = 2
@@ -779,7 +775,7 @@ script = ExtResource("52_pam8h")
 syncControlSize = true
 modTime = 8.0
 
-[node name="CurtainOpener" type="Node" parent="Curtain" node_paths=PackedStringArray("curtain")]
+[node name="CurtainOpener" type="Node" parent="Curtain" unique_id=1544691933 node_paths=PackedStringArray("curtain")]
 script = ExtResource("50_2a2nn")
 curtain = NodePath("..")
 
@@ -791,6 +787,5 @@ curtain = NodePath("..")
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]
 [connection signal="pressed" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="ToggleMute"]
 
-[editable path="Content/MainTabs/Item Shop/Event Shop"]
 [editable path="Content/MainTabs/Dev/Game Profiles/Venture Backpack"]
 [editable path="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2"]

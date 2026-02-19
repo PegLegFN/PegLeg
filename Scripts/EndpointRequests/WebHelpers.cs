@@ -194,8 +194,8 @@ public static class WebHelpers
 
         clone.Version = req.Version;
 
-        foreach (KeyValuePair<string, object?> option in req.Options)
-            clone.Options.Set(new HttpRequestOptionsKey<object?>(option.Key), option.Value);
+        foreach (KeyValuePair<string, object> option in req.Options)
+            clone.Options.Set(new HttpRequestOptionsKey<object>(option.Key), option.Value);
 
         foreach (KeyValuePair<string, IEnumerable<string>> header in req.Headers)
             clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
@@ -347,7 +347,7 @@ public static class WebHelpers
                 logMsg += $"\nContent: \n{errorContent}";
             else if (fallbackErrorCode is not null)
                 logMsg += $"\nEpic Error Name: {fallbackErrorCode}";
-            logMsg = logMsg.Replace("\r\n", "\n");
+            logMsg = logMsg.FixLogLines();
             GD.PrintRich($"[color=orange]{logMsg}[/color]");
             if (OS.HasFeature("editor"))
                 GD.PushWarning(logMsg);

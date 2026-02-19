@@ -16,6 +16,7 @@ using XmppDotNet.Xml;
 using XmppDotNet.Xmpp;
 using XmppDotNet.Xmpp.Client;
 
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 public class XmppManager
 {
     const string prodDomain = "prod.ol.epicgames.com";
@@ -466,3 +467,4 @@ public class XmppManager
         elementSubscription?.Dispose();
     }
 }
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.

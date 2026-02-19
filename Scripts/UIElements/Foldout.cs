@@ -87,7 +87,6 @@ public partial class Foldout : Control
         currentFoldoutState = value;
         if (foldoutTween?.IsRunning() ?? false)
             foldoutTween.Kill();
-        foldoutTween = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quint);
         var cms = foldoutTarget.CustomMinimumSize;
         cms.Y = foldoutInteractionPanel.Size.Y + (value ? extraSpace + elementContainer.Size.Y : 0);
         foldoutTarget.CustomMinimumSize = cms;

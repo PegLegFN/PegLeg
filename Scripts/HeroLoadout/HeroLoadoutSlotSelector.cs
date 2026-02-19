@@ -17,9 +17,10 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
     [Export]
     LineEdit searchBar;
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         loadoutList.SetProvider(this);
+        await Helpers.WaitForFrame();
         if (useActiveAccount)
         {
             GameAccount.ActiveAccountChanged += UpdateActive;
@@ -122,17 +123,17 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         filteredLoadouts.AddRange(loadouts.Where(loadout =>
         {
             var commanderGuid = loadout.attributes?["crew_members"]?["commanderslot"]?.ToString();
-            if(commanderGuid is null || loadout.profile.GetItem(commanderGuid) is not GameItem commander)
+            if(commanderGuid is null || loadout.profile.GetItem(commanderGuid) is not GameItem c)
                 return false;
-            return PLSearch.EvaluateInstructions(searchFilter, commander.CustomSearchObject(c => [c.template.DisplayName, .. c.template.GetHeroAbilities().Select(a => a.DisplayName)]));
+            return PLSearch.EvaluateInstructions(searchFilter, c.CustomSearchObject(() => [c.template.DisplayName, .. c.template.GetHeroAbilities().Select(a => a.DisplayName)]));
         }));
 
         filteredLoadouts.AddRange(loadouts.Except(filteredLoadouts).Where(loadout =>
         {
             var teamPerkGuid = loadout.attributes?["team_perk"]?.ToString();
-            if (teamPerkGuid is null || loadout.profile.GetItem(teamPerkGuid) is not GameItem teamPerk)
+            if (teamPerkGuid is null || loadout.profile.GetItem(teamPerkGuid) is not GameItem tp)
                 return false;
-            return PLSearch.EvaluateInstructions(searchFilter, teamPerk.CustomSearchObject(c => [c.template.DisplayName]));
+            return PLSearch.EvaluateInstructions(searchFilter, tp.CustomSearchObject(() => [tp.template.DisplayName]));
         }));
 
         filteredLoadouts.AddRange(loadouts.Except(filteredLoadouts).Where(loadout =>
@@ -140,9 +141,9 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
             for (int i = 0; i < 5; i++)
             {
                 var supportGuid = loadout.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
-                if (supportGuid is null || loadout.profile.GetItem(supportGuid) is not GameItem support)
+                if (supportGuid is null || loadout.profile.GetItem(supportGuid) is not GameItem supp)
                     continue;
-                if (PLSearch.EvaluateInstructions(searchFilter, support.CustomSearchObject(c => [c.template.DisplayName, c.template.GetHeroAbilities()[0].DisplayName])))
+                if (PLSearch.EvaluateInstructions(searchFilter, supp.CustomSearchObject(() => [supp.template.DisplayName, supp.template.GetHeroAbilities()[0].DisplayName])))
                     return true;
             }
             return false;

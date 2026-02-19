@@ -33,7 +33,7 @@ public partial class VirtualTab : Control
             SetContent(text, icon, tooltip);
         }
     }
-    [Export]
+    [Export(PropertyHint.MultilineText)]
     string tooltip
     {
         get => _tooltip;

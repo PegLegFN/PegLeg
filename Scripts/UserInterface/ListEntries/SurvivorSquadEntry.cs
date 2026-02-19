@@ -159,17 +159,18 @@ public partial class SurvivorSquadEntry : Control
         var fromItem = slot.slottedItem;
         var squadID = PegLegResourceManager.supplimentaryData.SynergyToSquadId[synergy];
 
-        GameItemSelector.Instance.RestoreDefaults();
-        GameItemSelector.Instance.titleText = "Select a Survivor";
-        GameItemSelector.Instance.overrideSurvivorSquad = squadID;
-        GameItemSelector.Instance.allowEmptySelection = true;
-        var selectedHandles = await GameItemSelector.Instance.OpenSelector(profile.GetItems("Worker", filter));
+        var selectedItems = await SimpleItemSelector.OpenSelector(profile.GetItems("Worker", filter), SimpleItemSelector.DefaultConfig with
+        {
+            titleText = "Select a Survivor",
+            overrideSurvivorSquad = squadID,
+            allowEmptySelection = true,
+        });
 
         //occurs when cancelled
-        if (selectedHandles is null)
+        if (selectedItems is null)
             return;
 
-        var toHandle = selectedHandles.FirstOrDefault();
+        var toHandle = selectedItems.FirstOrDefault();
         JsonObject body = null;
         if (toHandle?.profile is not null)
         {

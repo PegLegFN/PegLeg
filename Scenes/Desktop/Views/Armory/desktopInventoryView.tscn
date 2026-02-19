@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://udk47ipcpsbq"]
+[gd_scene format=3 uid="uid://udk47ipcpsbq"]
 
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="1_cq0hx"]
 [ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_ix0kh"]
@@ -69,7 +69,7 @@ shader_parameter/smoothness = 0.25
 shader_parameter/msdf = false
 shader_parameter/skipSDF = false
 
-[node name="Inventory" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel")]
+[node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -89,11 +89,11 @@ inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBox
 heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
 powerLevel = NodePath("VBoxContainer/HBoxContainer/PowerLevel")
 
-[node name="Creators" type="Control" parent="."]
+[node name="Creators" type="Control" parent="." unique_id=690667769]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="33449ecf412c4b6aa3ad655d1e70f7f2" type="TextureRect" parent="Creators"]
+[node name="33449ecf412c4b6aa3ad655d1e70f7f2" type="TextureRect" parent="Creators" unique_id=1642237496]
 material = SubResource("ShaderMaterial_k64ed")
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
@@ -111,29 +111,29 @@ size_flags_vertical = 8
 texture = ExtResource("17_uggwr")
 expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1504640056]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1810676757]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=1741400407]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"Panel3Pad"
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer" unique_id=1986585382]
 layout_mode = 2
 text = "Press Enter to filter longer lists"
 
-[node name="Search" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="Search" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1125003705]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 placeholder_text = "Search items"
 
-[node name="PowerLevel" type="MarginContainer" parent="VBoxContainer/HBoxContainer" node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
+[node name="PowerLevel" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=660218710 node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
 visible = false
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
@@ -142,22 +142,22 @@ homebaseNumberLabel = NodePath("MarginContainer/HBoxContainer/PowerLevelNumber")
 homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelProgressBar")
 tooltipColor = Color(0.596078, 0, 0.729412, 1)
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PowerLevel"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PowerLevel" unique_id=1934523286]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wvrrd")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PowerLevel"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PowerLevel" unique_id=544005094]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer" unique_id=994615082]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer"]
+[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer" unique_id=537601567]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 size_flags_vertical = 4
@@ -172,7 +172,7 @@ texture_progress = ExtResource("5_mx4ls")
 tint_under = Color(0.145098, 0.145098, 0.145098, 1)
 tint_progress = Color(0.596167, 0, 0.73, 1)
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar" unique_id=253877179]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 1
 anchors_preset = -1
@@ -189,7 +189,7 @@ grow_vertical = 2
 texture = ExtResource("6_8o7d2")
 expand_mode = 1
 
-[node name="PowerLevelNumber" type="Label" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer"]
+[node name="PowerLevelNumber" type="Label" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer" unique_id=1945272927]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
@@ -199,39 +199,39 @@ theme_override_font_sizes/font_size = 30
 text = "144"
 horizontal_alignment = 1
 
-[node name="HBoxContainer2" type="MarginContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=310775685]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2" unique_id=1604566211]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer" unique_id=2144496585]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2"]
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=547535601]
 visible = false
 custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
 
-[node name="User" type="LineEdit" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2"]
+[node name="User" type="LineEdit" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=1837890898]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Custom username"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=519778316]
 layout_mode = 2
 tooltip_text = "User Currently In Mission"
 texture = ExtResource("4_m3xe0")
 expand_mode = 3
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2/MarginContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2/MarginContainer" unique_id=858155731]
 visible = false
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer/Control"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer/Control" unique_id=1388833904]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 1
 anchors_preset = -1
@@ -240,33 +240,33 @@ offset_top = 5.0
 grow_horizontal = 2
 theme_type_variation = &"Panel3PadB"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2" unique_id=771268266]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 1
 
-[node name="NewFilter" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="NewFilter" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=2055423901]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter" unique_id=2078169538]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_ytjya")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter" unique_id=1453342325]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer" unique_id=1412024097]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Filter Unseen"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer/CheckButton" unique_id=718167924]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -277,7 +277,7 @@ grow_vertical = 2
 texture = ExtResource("3_l2jv4")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer/CheckButton"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer/CheckButton" unique_id=1387327773]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -288,27 +288,27 @@ theme_override_font_sizes/font_size = 20
 text = "!"
 horizontal_alignment = 1
 
-[node name="FavouriteFilter" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="FavouriteFilter" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1265530629]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter" unique_id=711256688]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_ytjya")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter" unique_id=54857469]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer" unique_id=1262150531]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Filter Favourites"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer/CheckButton" unique_id=351975254]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -319,27 +319,27 @@ grow_vertical = 2
 texture = ExtResource("4_incdt")
 expand_mode = 3
 
-[node name="ShowDev" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="ShowDev" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1728726805]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev" unique_id=1909096477]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_ytjya")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev" unique_id=1631207178]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer" unique_id=488954608]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Include Hidden Items (Dev)"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer/CheckButton" unique_id=1070949488]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -350,41 +350,41 @@ grow_vertical = 2
 texture = ExtResource("6_6h6v6")
 expand_mode = 3
 
-[node name="TypeFilters" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="TypeFilters" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1090832832]
 visible = false
 layout_mode = 2
 script = ExtResource("1_cq0hx")
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters" unique_id=753615954]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_ytjya")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters" unique_id=1322594573]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer"]
+[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer" unique_id=1651515548]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_jwnrv")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer" unique_id=1539650820]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="All" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="All" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=144255995]
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" unique_id=228194712]
 layout_mode = 2
 tooltip_text = "All Items"
 theme_type_variation = &"LeftCheckButton"
 button_pressed = true
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" unique_id=316134266]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -392,11 +392,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer" unique_id=1536120470]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer/HBoxContainer" unique_id=1375165287]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -404,21 +404,21 @@ texture = ExtResource("5_g4jqb")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer/HBoxContainer" unique_id=654925354]
 layout_mode = 2
 text = "All"
 
-[node name="Dev All" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="Dev All" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=2039985868]
 visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" unique_id=1672625159]
 layout_mode = 2
 tooltip_text = "All Items (+ Hidden Items)"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" unique_id=1133247064]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -426,11 +426,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All/MarginContainer" unique_id=1144213254]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All/MarginContainer/HBoxContainer" unique_id=265407542]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -438,21 +438,21 @@ texture = ExtResource("6_6h6v6")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All/MarginContainer/HBoxContainer" unique_id=1921749894]
 layout_mode = 2
 text = "Dev All"
 
-[node name="Tab1" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="Tab1" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=301043813]
 visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" unique_id=1744959934]
 layout_mode = 2
 tooltip_text = "Schematics"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" unique_id=1131963550]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -460,11 +460,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer" unique_id=516577698]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer/HBoxContainer" unique_id=227857451]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -472,21 +472,21 @@ texture = ExtResource("11_k86hi")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer/HBoxContainer" unique_id=2107647987]
 layout_mode = 2
 text = "Schematics"
 
-[node name="Tab2" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="Tab2" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=1694755347]
 visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" unique_id=669176367]
 layout_mode = 2
 tooltip_text = "Heroes"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" unique_id=1960009971]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -494,11 +494,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer" unique_id=1240518761]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer/HBoxContainer" unique_id=231288609]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -506,21 +506,21 @@ texture = ExtResource("12_3wbpm")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer/HBoxContainer" unique_id=116042339]
 layout_mode = 2
 text = "Heroes"
 
-[node name="Tab3" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="Tab3" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=426083547]
 visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" unique_id=2051298463]
 layout_mode = 2
 tooltip_text = "Defenders"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" unique_id=2037220874]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -528,11 +528,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer" unique_id=1361065036]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer/HBoxContainer" unique_id=92029602]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -540,20 +540,20 @@ texture = ExtResource("9_my6h5")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer/HBoxContainer" unique_id=2015152921]
 layout_mode = 2
 text = "Defenders"
 
-[node name="Tab4" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="Tab4" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=535625123]
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" unique_id=1931883480]
 layout_mode = 2
 tooltip_text = "Survivors"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" unique_id=1557929645]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -561,11 +561,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer" unique_id=925601437]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer" unique_id=916622857]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -573,20 +573,20 @@ texture = ExtResource("10_17ihq")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer" unique_id=1381709164]
 layout_mode = 2
 text = "Survivors"
 
-[node name="Tab5" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer"]
+[node name="Tab5" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer" unique_id=248328693]
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" unique_id=1448244160]
 layout_mode = 2
 tooltip_text = "Survivors"
 theme_type_variation = &"RightCheckButton"
 button_group = SubResource("ButtonGroup_xh1u0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" unique_id=297402541]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -594,11 +594,11 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer" unique_id=1411647338]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer/HBoxContainer" unique_id=1996352611]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -606,69 +606,69 @@ texture = ExtResource("15_opvrx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5/MarginContainer/HBoxContainer" unique_id=1022952815]
 layout_mode = 2
 text = "Resources"
 
-[node name="TypeFilters2" parent="VBoxContainer/HBoxContainer2/HBoxContainer" instance=ExtResource("20_mx4ls")]
+[node name="TypeFilters2" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1329790463 instance=ExtResource("20_mx4ls")]
 layout_mode = 2
 
-[node name="Tab" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="0" instance=ExtResource("21_8o7d2")]
+[node name="Tab" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="0" unique_id=1699324138 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 mode = -1
 text = "All"
 icon = ExtResource("5_g4jqb")
 
-[node name="Tab3" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="1" instance=ExtResource("21_8o7d2")]
+[node name="Tab3" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="1" unique_id=1943050198 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 text = "Schematics"
 icon = ExtResource("11_k86hi")
 
-[node name="Tab4" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="2" instance=ExtResource("21_8o7d2")]
+[node name="Tab4" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="2" unique_id=2090754285 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 text = "Heroes"
 icon = ExtResource("12_3wbpm")
 
-[node name="Tab5" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="3" instance=ExtResource("21_8o7d2")]
+[node name="Tab5" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="3" unique_id=1049979918 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 text = "Defenders"
 icon = ExtResource("9_my6h5")
 
-[node name="Tab6" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="4" instance=ExtResource("21_8o7d2")]
+[node name="Tab6" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="4" unique_id=611374292 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 text = "Survivors"
 icon = ExtResource("10_17ihq")
 
-[node name="Tab7" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="5" instance=ExtResource("21_8o7d2")]
+[node name="Tab7" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="5" unique_id=486697332 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 text = "Resources"
 icon = ExtResource("15_opvrx")
 
-[node name="Tab8" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="6" instance=ExtResource("21_8o7d2")]
+[node name="Tab8" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="6" unique_id=35503253 instance=ExtResource("21_8o7d2")]
 layout_mode = 2
 mode = 1
 text = "Packs"
 icon = ExtResource("22_wvrrd")
 
-[node name="NameSort" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="NameSort" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=162823235]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort" unique_id=1614002266]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_ytjya")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort" unique_id=1623060794]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer" unique_id=605436630]
 layout_mode = 2
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer" unique_id=643331120]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 2
@@ -676,13 +676,13 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer" unique_id=1555190869]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer/HBoxContainer" unique_id=1741713646]
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
@@ -690,31 +690,31 @@ texture = ExtResource("23_ak8r3")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/MarginContainer/HBoxContainer" unique_id=1088677249]
 layout_mode = 2
 text = "Name"
 
-[node name="MarkAllSeen" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="MarkAllSeen" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=521822127]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen" unique_id=940237311]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_ytjya")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen" unique_id=1042720488]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="CheckButton" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen/MarginContainer"]
+[node name="CheckButton" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen/MarginContainer" unique_id=1174590960]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Mark all as seen"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen/MarginContainer/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen/MarginContainer/CheckButton" unique_id=35478967]
 material = SubResource("ShaderMaterial_rf818")
 layout_mode = 1
 anchors_preset = 15
@@ -725,12 +725,22 @@ grow_vertical = 2
 texture = ExtResource("16_opvrx")
 expand_mode = 1
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2" unique_id=690022479]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer2" unique_id=846218344]
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Bulk Recycle"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer2" unique_id=998559009]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Test Hero"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=317467257 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -742,7 +752,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
 elementScene = ExtResource("20_m3xe0")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=1223914654]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -751,29 +761,30 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1017061478]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="Offset" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=49812065]
 layout_mode = 2
 
-[node name="Grid" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Grid" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=592302133]
 layout_mode = 2
 script = ExtResource("6_a3sqn")
 MinCols = 3
 CompressSpacing = true
 Spacing = Vector2(5, 5)
 
-[node name="Padding" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2070795]
 layout_mode = 2
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer/CheckButton" to="." method="SetNewFilter"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer/CheckButton" to="." method="SetFavoriteFilter"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/CheckButton" to="." method="SetSortMode"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer/MarkAllSeen/MarginContainer/CheckButton" to="." method="BulkMarkSeen"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer2/Button" to="." method="BulkRecycle"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer2/Button" to="." method="BulkRecycle"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer2/Button2" to="." method="TestHeroSelector"]
 
 [editable path="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2"]

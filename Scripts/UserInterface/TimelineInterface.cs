@@ -28,7 +28,7 @@ public partial class TimelineInterface : Node
         RefreshTimerController.OnDayChanged -= GenerateTimelineMarkers;
     }
 
-    DateTime lastStartDate;
+    DateTime lastStartDate = DateTime.MinValue;
     void GenerateTimelineMarkers()
     {
         //TODO: if markers have been generated already, reuse existing markers instead of creating new ones

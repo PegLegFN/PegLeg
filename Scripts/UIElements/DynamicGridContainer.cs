@@ -140,23 +140,13 @@ public partial class DynamicGridContainer : Container
         return (children[0], children.Where(c => c.Visible).ToArray());
     }
 
-    public Control GetFirstControlChild()
-    {
-        for (int i = 0; i < GetChildCount(); i++)
-        {
-            if (GetChild(i) is Control c)
-                return c;
-        }
-        return null;
-    }
-
     public int GetColCount(float? givenChildWidth = null) => GetColCount(givenChildWidth, out var _);
     public int GetColCount(float? givenChildWidth, out float colWidth)
     {
-        colWidth = autoColWidth ? (givenChildWidth ?? GetFirstControlChild().GetCombinedMinimumSize().X) : manualColWidth;
+        colWidth = autoColWidth ? (givenChildWidth ?? this.FirstChildOfType<Control>().GetCombinedMinimumSize().X) : manualColWidth;
         int colCount = Mathf.Max(Mathf.FloorToInt((Size.X + spacing.X) / (colWidth + spacing.X)), minCols);
 
-        if (useManualColCounts)
+        if (useManualColCounts && manualColumnCounts is not null)
         {
             int selectedColCount = 1;
             for (int i = 0; i < manualColumnCounts.Length; i++)

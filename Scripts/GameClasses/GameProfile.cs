@@ -642,6 +642,9 @@ public class GameProfile
                     break;
             }
         }
+
+        heroesInLoadouts = null;
+
         itemsToNotify.RemoveAll(i => itemsToIgnore.Contains(i));
         foreach (var item in itemsToNotify)
         {
@@ -673,5 +676,16 @@ public class GameProfile
             account.GetVentureFORTStats(true);
         }
     }
+
+    HashSet<GameItem> heroesInLoadouts;
+    public HashSet<GameItem> HeroesInLoadouts => heroesInLoadouts ??=
+    [.. GetItems("CampaignHeroLoadout")
+        .SelectMany(loadout =>
+            loadout.attributes["crew_members"]
+            .AsObject()
+            .Select(kvp => GetItem(kvp.Value.ToString()))
+        )
+        .Distinct()
+    ];
 }
 

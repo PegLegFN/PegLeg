@@ -15,7 +15,7 @@ public partial class RecycleItemCtx : BaseContextComponent
         if (currentItem?.profile is null)
             return;
 
-        if (!GameItemSelector.RecyclablePredicate(currentItem))
+        if (!SimpleItemSelector.RecyclableFilter(currentItem))
             return;
 
         bool isInHeroLoadout = currentItem.profile
@@ -39,8 +39,7 @@ public partial class RecycleItemCtx : BaseContextComponent
         if (item?.profile is null)
             return;
         menu.CloseMenu();
-        GameItemSelector.Instance.SetRecycleDefaults();
-        var toRecycle = await GameItemSelector.Instance.OpenSelector([item], [item]);
+        var toRecycle = await SimpleItemSelector.OpenSelector([item], SimpleItemSelector.RecycleConfig);
         if (toRecycle.Length == 0)
             return;
         var json = $@"{{""targetItemIds"":[{item.uuid}]}}";

@@ -211,7 +211,7 @@ public partial class GameItemViewer : ModalWindow
         else if (type == "Schematic" || type == "Weapon" || type == "Trap")
         {
             //parse schematic stuff
-            if (item.Alterations is not null || (item.template?.AlterationSlots?.Count ?? 0) > 0)
+            if (item.Alterations is not null || (item.template?.AlterationSlots?.Length ?? 0) > 0)
             {
                 perkDetailsPanel.Reparent(activeTabParent);
                 perkDetailsPanel.SetItem(item);

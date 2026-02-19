@@ -345,8 +345,7 @@ public partial class SurvivorLoadoutInterface : Node
 
         loadingToken.Dispose();
 
-        GameItemSelector.Instance.SetRecycleDefaults();
-        var recycleItems = await GameItemSelector.Instance.OpenSelector(filteredItems);
+        var recycleItems = await SimpleItemSelector.OpenSelector(filteredItems, SimpleItemSelector.RecycleConfig);
 
         GD.Print("Items: \n" + recycleItems.Select(item => item.uuid).ToArray().Join("\n"));
     }

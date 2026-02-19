@@ -148,6 +148,17 @@ public static partial class Helpers
         return true;
     }
 
+    public static T FirstChildOfType<T>(this Node parent) where T:Node
+    {
+        var childCount = parent.GetChildCount();
+        for (int i = 0; i < childCount; i++)
+        {
+            if (parent.GetChild(i) is T typedChild)
+                return typedChild;
+        }
+        return null;
+    }
+
     public static DateTime AsTime(this JsonNode value) => 
         value.Deserialize<DateTime>();
 
@@ -678,6 +689,9 @@ public static partial class Helpers
         _ => default,
     };
 
+    public static string FixLogLines(this string toPrint) => toPrint.Replace("\r\n", "\n");
+
     public static Func<T, bool> ToFunc<T>(this Predicate<T> predicate, bool defaultResult = true) => t => predicate.Try(t, defaultResult);
     public static bool Try<T>(this Predicate<T> predicate, T t, bool defaultResult = true) => predicate is not null ? predicate(t) : defaultResult;
+    public static bool Try<T>(this Func<T, bool> filter, T t, bool defaultResult = true) => filter is not null ? filter(t) : defaultResult;
 }

@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static ExternalCosmetics;
 
 public partial class GameMission
 {
@@ -468,6 +469,7 @@ public partial class GameMission
         return true;
     }
 
+    [JsonSerializable(typeof(ArchiveData))]
     public record class ArchiveData
     {
         public ArchiveVersion blakebeardArchiveFormat = new(1, 0);
@@ -583,6 +585,7 @@ public partial class GameMission
         }
     }
 
+    [JsonSerializable(typeof(TheaterInfo))]
     public record class TheaterInfo
     {
         //fill this in manually
@@ -610,20 +613,25 @@ public partial class GameMission
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
+    [JsonSerializable(typeof(MissionData))]
     public record class MissionData
     {
         public string missionGuid;
         public ItemCollection missionRewards;
         public string missionGenerator;
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         [JsonInclude]
         DataTableRowRef missionDifficultyInfo;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
         public int tileIndex;
         public DateTime availableUntil;
 
         struct DataTableRowRef
         {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
             public string dataTable;
             public string rowName;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
         }
 
         public GameItemTemplate GetMissionGenerator() => GetMissionGenerator(missionGenerator);
@@ -634,6 +642,7 @@ public partial class GameMission
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
+    [JsonSerializable(typeof(DifficultyInfo))]
     public record class DifficultyInfo
     {
         public int DifficultyLevel;
@@ -644,6 +653,7 @@ public partial class GameMission
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
+    [JsonSerializable(typeof(AlertData))]
     public record class AlertData
     {
         public string missionAlertGuid;
@@ -654,6 +664,7 @@ public partial class GameMission
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
+    [JsonSerializable(typeof(Tile))]
     public record class Tile
     {
         public string tileType;
@@ -661,19 +672,24 @@ public partial class GameMission
         public GameItemTemplate GetZoneTheme() => GetZoneTheme(zoneTheme);
         public static GameItemTemplate GetZoneTheme(string zoneThemePath) => GameItemTemplate.Get($"ZoneTheme:{zoneThemePath[(zoneThemePath.IndexOf('.') + 1)..]}");
         public Requirements requirements;
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         [JsonInclude]
         int xCoordinate;
         [JsonInclude]
         int yCoordinate;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
         [JsonIgnore]
         public Vector2I Coordinates => new(xCoordinate, yCoordinate);
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
     }
 
+    [JsonSerializable(typeof(Region))]
     public record class Region
     {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         [JsonInclude]
         int[] tileIndices;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
         FrozenSet<int> tileSet;
         public bool IncludesTile(int idx)
         {

@@ -330,7 +330,7 @@ public partial class CardPackOpener : Control
                     .Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
                     .ToArray();
 
-                GD.Print("LlamaResult: " + resultItemData.ToString());
+                GD.Print("LlamaResult: \n" + resultItemData.ToString().FixLogLines());
 
                 var exceptions = resultItemData
                     .Where(val => !val.AsObject().ContainsKey("itemGuid"))
@@ -348,11 +348,11 @@ public partial class CardPackOpener : Control
 
             //step 2.5: wait for user to proceed
             await WaitForCardPackBurst();
-            GD.Print("wait complete");
+            //GD.Print("wait complete");
 
             if (!IsInsideTree() || !isOpen)
                 return;
-            GD.Print("phew");
+            //GD.Print("phew");
 
 
             //step 3: apply sorting
@@ -1004,12 +1004,13 @@ public partial class CardPackOpener : Control
                 item.GetSearchTags();
                 item.GenerateRawData();
             }
-            GameItemSelector.Instance.SetRecycleDefaults();
-            GameItemSelector.Instance.allowCancel = false;
-            GameItemSelector.Instance.allowEmptySelection = true;
-            GameItemSelector.Instance.unselectableMarkerTex = null;
-            GameItemSelector.Instance.unselectableTintColor = Colors.Transparent;
-            var toRecycle = await GameItemSelector.Instance.OpenSelector(resultItems, null);
+            var toRecycle = await SimpleItemSelector.OpenSelector(resultItems, SimpleItemSelector.RecycleConfig with
+            {
+                allowCancel = false,
+                allowEmptySelection = true,
+                unselectableMarkerTex = null,
+                unselectableTintColor = Colors.Transparent,
+            });
             if (toRecycle.Length > 0)
             {
                 JsonObject content = new()

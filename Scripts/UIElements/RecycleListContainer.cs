@@ -17,6 +17,8 @@ public partial class RecycleListContainer : ScrollContainer
     PackedScene elementScene;
     [Export]
     bool dumbMode;
+    [Export]
+    bool debug;
 
     IRecyclableEntry basis;
     Vector2 basisSize;
@@ -68,8 +70,8 @@ public partial class RecycleListContainer : ScrollContainer
         try
         {
             var elementSize = basis.BasisSize;
-            if ((linkedGrid?.GetChildCount() ?? 0) > 0)
-                elementSize = linkedGrid.GetFirstControlChild().GetCombinedMinimumSize();
+            if (elementParent.FirstChildOfType<Control>() is Control firstControlChild)
+                elementSize = firstControlChild.GetCombinedMinimumSize();
             float elementHeight = elementSize.Y;
             int columns = linkedGrid?.GetColCount(elementSize.X) ?? 1;
 
@@ -93,6 +95,8 @@ public partial class RecycleListContainer : ScrollContainer
             int newStartingIndex = startingRow * columns;
             if (lastStartingIndex != newStartingIndex || lastOnScreenElements != newOnScreenElements || force)
             {
+                if (debug)
+                    GD.Print($"Start:{newStartingIndex:0000}, Size: {elementHeight:000.00}");
                 //GD.Print($"relinking ({lastStartingIndex}->{newStartingIndex}) ({lastOnScreenElements}->{newOnScreenElements}) (force:{force})");
                 //GD.Print($"activeEntries: {activeEntries.Count}");
                 //GD.Print($"basis size: ({elementSize.X}x{elementSize.Y}) collumns: {columns}");
@@ -254,7 +258,7 @@ public class TestRecyclableElementProvider : IRecyclableElementProvider
 public interface IRecyclableEntry
 {
     public Control node { get; }
-    public Vector2 BasisSize => node.Size;
+    public Vector2 BasisSize => node.GetCombinedMinimumSize();
 
     public void SetRecyclableElementProvider(IRecyclableElementProvider provider);
     public void SetRecycleIndex(int index);

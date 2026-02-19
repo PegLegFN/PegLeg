@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=22 format=3 uid="uid://vbwmvwysxdh2"]
+[gd_resource type="VisualShader" format=3 uid="uid://vbwmvwysxdh2"]
 
 [sub_resource type="VisualShaderNodeCompare" id="VisualShaderNodeCompare_265ei"]
 default_input_values = [0, 0.0, 1, 0.5, 2, 1e-05]
@@ -79,113 +79,6 @@ operator = 2
 [sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_8uvsb"]
 
 [resource]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-uniform bool Animation = true;
-uniform vec4 FromColor : source_color = vec4(1.000000, 1.000000, 0.000000, 1.000000);
-uniform vec4 ToColor : source_color = vec4(0.074510, 0.090196, 0.145098, 1.000000);
-uniform bool UseCompleteColor;
-uniform vec4 CompleteColor : source_color = vec4(0.215878, 0.539241, 0.218078, 1.000000);
-
-
-
-void fragment() {
-// BooleanParameter:19
-	bool n_out19p0 = Animation;
-
-
-// ColorParameter:15
-	vec4 n_out15p0 = FromColor;
-
-
-// ColorParameter:17
-	vec4 n_out17p0 = ToColor;
-
-
-	vec4 n_out3p0;
-// Texture2D:3
-	n_out3p0 = texture(TEXTURE, UV);
-	float n_out3p2 = n_out3p0.g;
-	float n_out3p4 = n_out3p0.a;
-
-
-// Input:7
-	float n_out7p0 = TIME;
-
-
-// FloatOp:8
-	float n_in8p0 = 1.00000;
-	float n_out8p0 = n_in8p0 * n_out7p0;
-
-
-// FloatOp:6
-	float n_out6p0 = n_out3p2 - n_out8p0;
-
-
-// FloatFunc:5
-	float n_out5p0 = fract(n_out6p0);
-
-
-// Compare:10
-	float n_in10p1 = 0.50000;
-	bool n_out10p0 = n_out5p0 > n_in10p1;
-
-
-// FloatFunc:11
-	float n_out11p0 = 1.0 - n_out5p0;
-
-
-	float n_out9p0;
-// Switch:9
-	n_out9p0 = mix(n_out5p0, n_out11p0, float(n_out10p0));
-
-
-// FloatOp:12
-	float n_in12p1 = 5.00000;
-	float n_out12p0 = n_out9p0 * n_in12p1;
-
-
-// Clamp:21
-	float n_in21p1 = 0.00000;
-	float n_in21p2 = 1.00000;
-	float n_out21p0 = clamp(n_out12p0, n_in21p1, n_in21p2);
-
-
-// Mix:18
-	vec4 n_out18p0 = mix(n_out15p0, n_out17p0, n_out21p0);
-
-
-// BooleanParameter:20
-	bool n_out20p0 = UseCompleteColor;
-
-
-// ColorParameter:22
-	vec4 n_out22p0 = CompleteColor;
-
-
-	vec4 n_out13p0;
-// Switch:13
-	n_out13p0 = mix(n_out17p0, n_out22p0, float(n_out20p0));
-
-
-	vec4 n_out14p0;
-// Switch:14
-	n_out14p0 = mix(n_out13p0, n_out18p0, float(n_out19p0));
-	float n_out14p4 = n_out14p0.a;
-
-
-// FloatOp:16
-	float n_out16p0 = n_out14p4 * n_out3p4;
-
-
-// Output:0
-	COLOR.rgb = vec3(n_out14p0.xyz);
-	COLOR.a = n_out16p0;
-
-
-}
-"
 mode = 1
 flags/light_only = false
 nodes/fragment/0/position = Vector2(2120, -120)

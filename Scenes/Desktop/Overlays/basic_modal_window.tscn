@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dta7ntrychbp1"]
+[gd_scene format=3 uid="uid://dta7ntrychbp1"]
 
 [ext_resource type="Script" uid="uid://iwt6ds34woiu" path="res://Scripts/Overlays/ModalWindow.cs" id="1_oupub"]
 [ext_resource type="StyleBox" uid="uid://0tj4whr53nxd" path="res://GodotThemes/Styleboxes/WindowBGTransparant.tres" id="2_ferkv"]
@@ -23,7 +23,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="BasicWindow" type="Control" node_paths=PackedStringArray("backgroundPanel", "windowCanvas")]
+[node name="BasicWindow" type="Control" unique_id=811059498 node_paths=PackedStringArray("backgroundPanel", "windowCanvas")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,23 +37,31 @@ script = ExtResource("1_oupub")
 backgroundPanel = NodePath("Background")
 windowCanvas = NodePath("Control/WindowContents")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1376150351]
 material = SubResource("ShaderMaterial_brjwd")
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25, 0.25, 0.25, 0.501961)
 script = ExtResource("3_rvmxl")
 
-[node name="CloseBtn" type="Button" parent="." groups=["ExcludeButtonSounds"]]
+[node name="CloseBtn" type="Button" parent="." unique_id=929538038 groups=["ExcludeButtonSounds"]]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = ExtResource("2_ferkv")
@@ -62,7 +70,7 @@ theme_override_styles/hover = ExtResource("2_ferkv")
 theme_override_styles/disabled = ExtResource("2_ferkv")
 theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=2057559241]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -73,6 +81,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="WindowContents" type="CanvasGroup" parent="Control"]
+[node name="WindowContents" type="CanvasGroup" parent="Control" unique_id=1567660947]
 
 [connection signal="pressed" from="CloseBtn" to="." method="CloseWindow"]

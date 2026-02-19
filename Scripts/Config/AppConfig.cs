@@ -124,15 +124,15 @@ public partial class AppConfig
     static JsonObject LoadConfig()
     {
         using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Read);
-        if (configFile is not null)
+        if (configFile?.GetError() != Error.Ok)
         {
-            //var configStructure = JsonSerializer.Deserialize<AppConfig>(configFile.GetAsText(), jsonOptions);
-            //return JsonNode.Parse(JsonSerializer.Serialize(configStructure))?.AsObject();
-            string fileContent = configFile.GetAsText();
-            return JsonNode.Parse(fileContent)?.AsObject();
+            GD.PushWarning($"config load failed: {configFile?.GetError()}");
+            return [];
         }
-
-        return [];
+        //var configStructure = JsonSerializer.Deserialize<AppConfig>(configFile.GetAsText(), jsonOptions);
+        //return JsonNode.Parse(JsonSerializer.Serialize(configStructure))?.AsObject();
+        string fileContent = configFile.GetAsText();
+        return JsonNode.Parse(fileContent)?.AsObject();
     }
 
     public readonly struct AdaptiveJsonValue

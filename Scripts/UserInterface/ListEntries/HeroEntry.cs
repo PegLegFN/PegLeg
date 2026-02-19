@@ -1,6 +1,7 @@
 using Godot;
-using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using static HeroLoadoutEntry;
 
 public partial class HeroEntry : GameItemEntry
 {
@@ -28,11 +29,12 @@ public partial class HeroEntry : GameItemEntry
     public void SetTeamPerkContributor(bool val) =>
         EmitSignalTeamPerkContributionVisible(val);
 
-    public void SetWarningVisibility(bool warningVisibility)
+    public void SetWarningForCommander(GameItemTemplate commanderTemplate)
     {
-        EmitSignalWarningVisible(warningVisibility);
-        if (warningVisibility)
-            EmitSignalWarningText(displayItem?.template?["HeroPerkRequirement"]?["Description"]?.ToString());
+        string warning = null;
+        EmitSignalWarningVisible(currentItem?.template.PerkCompatibleWithCommander(commanderTemplate, out warning) == false);
+        warning ??= commanderTemplate?.TemplateId;
+        EmitSignalWarningText(warning);
     }
 
     protected override void UpdateItem(GameItem item)
@@ -48,6 +50,11 @@ public partial class HeroEntry : GameItemEntry
                     break;
                 heroAbilityEntries[i].SetAbility(abilityTemplates[i + 2], item.template.Tier <= i);
             }
+        }
+        if (item is not null && item != GameItem.Empty && selector is HeroItemSelector heroSelector)
+        {
+            SetWarningForCommander(heroSelector.Commander);
+            SetTeamPerkContributor(heroSelector.TeamPerk?.TeamPerkBoostedByHero(item.template) ?? false); // set based on selector team perk settings
         }
     }
 
@@ -74,6 +81,6 @@ public partial class HeroEntry : GameItemEntry
             heroAbilityEntries[i].ClearAbility();
         }
         SetTeamPerkContributor(false);
-        SetWarningVisibility(false);
+        SetWarningForCommander(null);
     }
 }

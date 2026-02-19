@@ -1,0 +1,354 @@
+[gd_scene format=3 uid="uid://dpbrdqqxc8xeq"]
+
+[ext_resource type="PackedScene" uid="uid://b2yvtxwgbw1vm" path="res://Scenes/HeroLoadout/list_support_hero.tscn" id="1_yb0uk"]
+[ext_resource type="Shader" uid="uid://l02ho3o5c4rd" path="res://Shaders/HeroLoadoutBGPulse.gdshader" id="2_fbitr"]
+[ext_resource type="Texture2D" uid="uid://ygvtypu1swgx" path="res://Images/InterfaceIcons/HeroAbilities/Icon-Constructor-BullRush-128.png" id="5_076b4"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="6_lnr5c"]
+[ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="9_0ende"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="10_4p0qo"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="10_mh28j"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3gqum"]
+resource_local_to_scene = true
+resource_name = "HeroLoadoutBGPulse"
+shader = ExtResource("2_fbitr")
+shader_parameter/enabled = false
+shader_parameter/offset = 0.0
+shader_parameter/scale = 0.5
+shader_parameter/period = 1.25
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vfyqn"]
+resource_local_to_scene = true
+shader = ExtResource("10_mh28j")
+shader_parameter/ControlSize = Vector2(52, 27)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2glx2"]
+resource_local_to_scene = true
+shader = ExtResource("10_mh28j")
+shader_parameter/ControlSize = Vector2(52, 52)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h6q43"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.4, 0)
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+
+[node name="SupportHero" unique_id=2066640686 node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry") instance=ExtResource("1_yb0uk")]
+heroAbilityEntries = [NodePath("Abilities/TierController/TextureRect"), NodePath("Abilities/TierController/TextureRect2"), NodePath("Abilities/TierController/TextureRect3")]
+heroCommanderPerkEntry = NodePath("HBoxContainer/HeroPerk")
+useHeroPerkDescription = false
+useCommanderPerkDescription = true
+
+[node name="LoadoutBG" parent="." index="0" unique_id=933949742]
+material = SubResource("ShaderMaterial_3gqum")
+
+[node name="Abilities" type="MarginContainer" parent="." index="1" unique_id=1163510249]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="TierController" type="HBoxContainer" parent="Abilities" index="0" unique_id=79906637 node_paths=PackedStringArray("tierImages")]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+script = ExtResource("9_0ende")
+tierImages = [null, null, null, null, null]
+superchargeColor = Color(0, 0.708333, 0.85, 1)
+
+[node name="TextureRect" type="TextureRect" parent="Abilities/TierController" index="0" unique_id=381857361]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("5_076b4")
+expand_mode = 3
+script = ExtResource("6_lnr5c")
+defaultClearIconToNull = true
+
+[node name="TextureRect2" type="TextureRect" parent="Abilities/TierController" index="1" unique_id=661701591]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("5_076b4")
+expand_mode = 3
+script = ExtResource("6_lnr5c")
+defaultClearIconToNull = true
+
+[node name="TextureRect3" type="TextureRect" parent="Abilities/TierController" index="2" unique_id=1073228670]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("5_076b4")
+expand_mode = 3
+script = ExtResource("6_lnr5c")
+defaultClearIconToNull = true
+
+[node name="TierController" type="HFlowContainer" parent="HBoxContainer/HeroPerk" parent_id_path=PackedInt32Array(2092928171) index="1" unique_id=2033341038 node_paths=PackedStringArray("tierImages")]
+visible = false
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = -2
+alignment = 1
+last_wrap_alignment = 2
+script = ExtResource("9_0ende")
+tierImages = [NodePath("TextureRect"), NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4"), NodePath("TextureRect5")]
+superchargeColor = Color(0, 0.708333, 0.85, 1)
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk/TierController" index="0" unique_id=1792866529]
+self_modulate = Color(0, 0.708333, 0.85, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/HeroPerk/TierController" index="1" unique_id=102463160]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/HeroPerk/TierController" index="2" unique_id=1726393122]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/HeroPerk/TierController" index="3" unique_id=497890487]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/HeroPerk/TierController" index="4" unique_id=549084939]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="Abilities" type="HFlowContainer" parent="HBoxContainer/HeroPerk" parent_id_path=PackedInt32Array(2092928171) index="2" unique_id=720726969]
+visible = false
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = -2
+alignment = 1
+last_wrap_alignment = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk/Abilities" index="0" unique_id=872656598]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("5_076b4")
+expand_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/HeroPerk/Abilities" index="1" unique_id=1551832902]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("5_076b4")
+expand_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/HeroPerk/Abilities" index="2" unique_id=303043742]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("5_076b4")
+expand_mode = 5
+
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/HeroPerk/Abilities" index="3" unique_id=1091963104]
+visible = false
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/HeroPerk/Abilities" index="4" unique_id=1368235636]
+visible = false
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_4p0qo")
+expand_mode = 5
+
+[node name="TextureRect" parent="HBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(1467962194) index="0" unique_id=25297332]
+material = SubResource("ShaderMaterial_vfyqn")
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/MarginContainer" parent_id_path=PackedInt32Array(935263147) index="0" unique_id=1311190522]
+material = SubResource("ShaderMaterial_2glx2")
+
+[node name="PowerLevelIndicator" type="MarginContainer" parent="." index="3" unique_id=1782687483]
+visible = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 7
+
+[node name="MarginContainer" type="MarginContainer" parent="PowerLevelIndicator" index="0" unique_id=1087388120]
+modulate = Color(0, 0, 0, 0.596078)
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = -2
+
+[node name="MarginContainer" type="MarginContainer" parent="PowerLevelIndicator/MarginContainer" index="0" unique_id=1605995312]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = -8
+theme_override_constants/margin_right = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PowerLevelIndicator/MarginContainer/MarginContainer" index="0" unique_id=853930310]
+clip_contents = true
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = -8
+
+[node name="Panel2" type="Panel" parent="PowerLevelIndicator/MarginContainer/MarginContainer/MarginContainer" index="0" unique_id=1374984231]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_h6q43")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PowerLevelIndicator" index="1" unique_id=1614906107]
+modulate = Color(0.453125, 0.496094, 0.644531, 1)
+layout_mode = 2
+theme_override_constants/separation = -8
+
+[node name="MarginContainer" type="MarginContainer" parent="PowerLevelIndicator/HBoxContainer2" index="0" unique_id=1510919428]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = -8
+theme_override_constants/margin_right = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="PowerLevelIndicator/HBoxContainer2/MarginContainer" index="0" unique_id=1533562436]
+clip_contents = true
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = -8
+
+[node name="Panel2" type="Panel" parent="PowerLevelIndicator/HBoxContainer2/MarginContainer/MarginContainer" index="0" unique_id=734968252]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_h6q43")
+
+[node name="HBoxContainer" type="MarginContainer" parent="PowerLevelIndicator" index="2" unique_id=47902342]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = 6
+
+[node name="PowerLevelLabel" type="Label" parent="PowerLevelIndicator/HBoxContainer" index="0" unique_id=727279753]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 14
+text = "144"
+horizontal_alignment = 1
+
+[node name="Tiers" type="MarginContainer" parent="." index="4" unique_id=1663766100]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="TierController" type="HBoxContainer" parent="Tiers" index="0" unique_id=454575850 node_paths=PackedStringArray("tierImages")]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+script = ExtResource("9_0ende")
+tierImages = [null, null, null, null, null]
+superchargeColor = Color(0, 0.708333, 0.85, 1)
+
+[node name="TextureRect" type="TextureRect" parent="Tiers/TierController" index="0" unique_id=1095214034]
+self_modulate = Color(0, 0.708333, 0.85, 1)
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_4p0qo")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="Tiers/TierController" index="1" unique_id=2079341024]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_4p0qo")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="Tiers/TierController" index="2" unique_id=577832470]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_4p0qo")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="Tiers/TierController" index="3" unique_id=796003449]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_4p0qo")
+expand_mode = 3
+
+[node name="TextureRect5" type="TextureRect" parent="Tiers/TierController" index="4" unique_id=429745129]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_4p0qo")
+expand_mode = 3
+
+[node name="Overlay" parent="." index="8" unique_id=696618774]
+modulate = Color(1, 1, 1, 0)
+
+[connection signal="SuperchargeChanged" from="." to="HBoxContainer/HeroPerk/TierController" method="SetSuperchargedTier"]
+[connection signal="IconChanged" from="Abilities/TierController/TextureRect" to="Abilities/TierController/TextureRect" method="set_texture"]
+[connection signal="IconChanged" from="Abilities/TierController/TextureRect2" to="Abilities/TierController/TextureRect2" method="set_texture"]
+[connection signal="IconChanged" from="Abilities/TierController/TextureRect3" to="Abilities/TierController/TextureRect3" method="set_texture"]
+
+[editable path="PLIndicator"]

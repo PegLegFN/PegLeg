@@ -1,7 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://cnerbcrevhc7w"]
+[gd_scene format=3 uid="uid://cnerbcrevhc7w"]
 
 [ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_t6yh2"]
-[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Sh_Materials/HeroLoadoutBGPulse.tres" id="2_mxnn5"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_mxnn5"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_38f6u"]
 [ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="3_a4oe6"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_3grrh"]
@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="7_ousqk"]
 [ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="7_w14yl"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="8_h5blw"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="9_h5blw"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="9_h5blw"]
 [ext_resource type="Texture2D" uid="uid://cvsasjr5owfgm" path="res://Images/InterfaceIcons/T-Icon-TeamPerkSlot-128x.png" id="11_w14yl"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="13_1c244"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="14_mxnn5"]
@@ -67,57 +67,66 @@ shader_parameter/inset = 0.1
 shader_parameter/shade = 0.2
 shader_parameter/shadeAlpha = 0.8
 
-[node name="SupportHero" type="MarginContainer" node_paths=PackedStringArray("heroAbilityEntries", "heroPerkEntry")]
+[node name="SupportHero" type="MarginContainer" unique_id=1541840474 node_paths=PackedStringArray("heroAbilityEntries", "heroPerkEntry")]
 offset_right = 302.0
 offset_bottom = 44.0
 script = ExtResource("1_t6yh2")
 heroAbilityEntries = []
 heroPerkEntry = NodePath("HBoxContainer/HeroPerk")
 useHeroPerkDescription = true
+interactableWhenEmpty = true
 autoLinkToViewer = false
 defaultClearIconToNull = true
 
-[node name="LoadoutBG" type="Panel" parent="."]
+[node name="LoadoutBG" type="Panel" parent="." unique_id=933949742]
 unique_name_in_owner = true
 material = ExtResource("2_mxnn5")
 layout_mode = 2
 theme_override_styles/panel = ExtResource("4_qs3o8")
 script = ExtResource("3_38f6u")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1295952962]
 layout_mode = 2
 
-[node name="HeroPerk" type="PanelContainer" parent="HBoxContainer"]
+[node name="HeroPerk" type="PanelContainer" parent="HBoxContainer" unique_id=2092928171]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("3_a4oe6")
 script = ExtResource("8_h5blw")
 defaultClearIconToNull = true
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk" unique_id=1326314791]
 material = ExtResource("9_h5blw")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("7_w14yl")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Content" type="MarginContainer" parent="HBoxContainer" unique_id=1404523991]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Content" unique_id=1150383329]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer/Content/VBoxContainer" unique_id=899559456]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Plasma Overdrive"
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1521944353]
 custom_minimum_size = Vector2(38, 0)
 layout_mode = 2
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = -20
 theme_override_constants/margin_bottom = 3
 
-[node name="Control" type="Control" parent="HBoxContainer/MarginContainer"]
+[node name="Control" type="Control" parent="HBoxContainer/MarginContainer" unique_id=1669284292]
 layout_mode = 2
 
-[node name="TeamPerkIndicator" type="MarginContainer" parent="HBoxContainer/MarginContainer/Control"]
+[node name="TeamPerkIndicator" type="MarginContainer" parent="HBoxContainer/MarginContainer/Control" unique_id=1103170776]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -126,18 +135,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 10
 
-[node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator"]
+[node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator" unique_id=1668068143]
 self_modulate = Color(0.19968, 0.1196, 0.52, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_a4oe6")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator" unique_id=666757036]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator/MarginContainer" unique_id=1391080750]
 self_modulate = Color(0.23, 0.910167, 1, 1)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -145,13 +154,13 @@ texture = ExtResource("11_w14yl")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1467962194]
 layout_mode = 2
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2" unique_id=25297332]
 self_modulate = Color(1, 0.633333, 0, 1)
 material = SubResource("ShaderMaterial_ob5og")
 layout_mode = 2
@@ -160,13 +169,13 @@ expand_mode = 1
 script = ExtResource("3_38f6u")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2" unique_id=935263147]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/margin_top = -25
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer2/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer2/MarginContainer" unique_id=1311190522]
 material = SubResource("ShaderMaterial_1i3si")
 layout_mode = 2
 mouse_filter = 2
@@ -175,10 +184,10 @@ expand_mode = 3
 script = ExtResource("3_38f6u")
 syncControlSize = true
 
-[node name="Control" type="Control" parent="HBoxContainer/MarginContainer2"]
+[node name="Control" type="Control" parent="HBoxContainer/MarginContainer2" unique_id=1701768893]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control" unique_id=1115957509]
 self_modulate = Color(1, 0.633333, 0, 1)
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 1
@@ -194,7 +203,7 @@ grow_vertical = 2
 texture = ExtResource("14_mxnn5")
 expand_mode = 3
 
-[node name="Subtype" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control/TextureRect"]
+[node name="Subtype" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control/TextureRect" unique_id=1984231203]
 material = SubResource("ShaderMaterial_w14yl")
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 1
@@ -212,27 +221,27 @@ grow_vertical = 2
 texture = ExtResource("6_hrb6a")
 expand_mode = 3
 
-[node name="TooltipFallback" type="Control" parent="."]
+[node name="TooltipFallback" type="Control" parent="." unique_id=747216973]
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="TooltipFallback" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1849095451 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("15_mxnn5")
 itemSource = NodePath("../..")
 componentList = ExtResource("16_ob5og")
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("13_1c244")]
+[node name="Responsive Button Area" parent="." unique_id=663396105 instance=ExtResource("13_1c244")]
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=275445449 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("15_mxnn5")
 itemSource = NodePath("../..")
 componentList = ExtResource("16_ob5og")
 
-[node name="Overlay" type="Control" parent="."]
+[node name="Overlay" type="Control" parent="." unique_id=696618774]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="PerkWarning" type="TextureRect" parent="Overlay"]
+[node name="PerkWarning" type="TextureRect" parent="Overlay" unique_id=662372607]
 self_modulate = Color(1, 0.9, 0, 1)
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 1
@@ -242,7 +251,7 @@ offset_top = 4.0
 texture = ExtResource("14_mxnn5")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="Overlay/PerkWarning"]
+[node name="TextureRect2" type="TextureRect" parent="Overlay/PerkWarning" unique_id=598331400]
 self_modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 1
@@ -270,4 +279,5 @@ expand_mode = 1
 [connection signal="WarningText" from="." to="Overlay/PerkWarning" method="set_tooltip_text"]
 [connection signal="WarningVisible" from="." to="Overlay/PerkWarning" method="set_visible"]
 [connection signal="IconChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
-[connection signal="NameChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Label" method="set_text"]
+[connection signal="NameChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label" method="set_text"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]

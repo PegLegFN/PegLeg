@@ -69,18 +69,9 @@ public partial class PerkViewer : Control
         }
     }
 
-    struct ResolvedAlterationSlot
-    {
-        public string[] options;
-        public string[] OptionsForLevel(int level) => [.. options.Select(o => o.EndsWith("_t01") ? $"{o[..^4]}_t0{level}" : o)];
-        public int requiredLevel;
-        public string requiredRarity;
-        public int RequiredRarityLevel => requiredRarity.ConvertRarityString();
-    }
-
     bool isSchematic = true;
     bool isDefender = true;
-    ResolvedAlterationSlot[] perkSlots = [];
+    GameItemTemplate.AlterationSlot[] perkSlots = [];
     string[] activePerks = [];
     int unlockedPerks = 0;
     int visiblePerks = 0;
@@ -94,7 +85,7 @@ public partial class PerkViewer : Control
         isSchematic = currentItem.template.Type == "Schematic";
         isDefender = currentItem.template.Type == "Defender";
         unlockedPerks = 10;
-        visiblePerks = currentItem.template["AlterationSlots"]?.AsArray().Count ?? 10;
+        visiblePerks = currentItem.template.AlterationSlots?.Length ?? 10;
         if (currentItem.profile is null || (!isSchematic && !isDefender))
             visiblePerks = 10;
 
@@ -112,25 +103,11 @@ public partial class PerkViewer : Control
             optionalPerkArea.AnchorLeft = 1;
             optionalPerkArea.AnchorRight = 2;
         }
-        activePerks = currentItem.Alterations?
-            .Select(e => e.ToString())
-            .ToArray();
+        activePerks = currentItem.Alterations;
         if (isSchematic)
         {
             //set interactable and assign possibilities (if possibilities greater than one and not max level)
-            var exclusions = currentItem.template.AlterationExclusions.ToFrozenSet();
-            perkSlots = [..currentItem.template.AlterationSlots?
-                .Select(slot => new ResolvedAlterationSlot()
-                {
-                    options = [..slot["RawAlterations"]
-                        .AsArray()
-                        .Where(a => !exclusions.Overlaps(a["ExclusionNames"].Deserialize<string[]>()))
-                        .Select(a => a["AID"].ToString())
-                    ],
-                    requiredLevel = slot["RequiredLevel"].GetValue<int>(),
-                    requiredRarity = slot["RequiredRarity"].ToString(),
-                })
-            ];
+            perkSlots = currentItem.template.AlterationSlots;
             unlockedPerks = 0;
             activePerks ??= new string[perkSlots?.Length ?? 0];
             int itemLevel = currentItem.attributes?["level"]?.GetValue<int>() ?? 0;

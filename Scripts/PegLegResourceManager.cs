@@ -749,7 +749,8 @@ public class GameItemTemplate
     {
         get
         {
-            var type = rawData.TryGetPropertyValue("Type", out var typeNode) ? typeNode.ToString() : null;
+            //var type = rawData.TryGetPropertyValue("Type", out var typeNode) ? typeNode.ToString() : null;
+            var type = rawData["Type"]?.ToString();
             if (type is null)
             {
                 GD.Print("WOAH NELLY");
@@ -800,18 +801,14 @@ public class GameItemTemplate
     public bool Unrecyclable => rawData["RecycleRecipe"] is null;
     public bool Undismantlable => rawData["DismantleResults"] is null;
 
-    public JsonArray AlterationSlots
-    {
-        get
-        {
-            var row = rawData?["AlterationLoadoutRow"]?.ToString();
-            if(row is null)
-                return null;
-            return PegLegResourceManager.AlterationLoadouts[row].AsArray();
-        }
-    }
+    AlterationSlot[] alterationSlots;
+    public AlterationSlot[] AlterationSlots => alterationSlots ??= AlterationSlot.SlotsFromRow(
+        rawData["AlterationLoadoutRow"]?.ToString(), 
+        rawData["AlterationNamedExclusions"]?.Deserialize<string[]>() ?? []
+    );
 
-    public string[] AlterationExclusions => rawData["AlterationNamedExclusions"]?.Deserialize<string[]>() ?? [];
+    FrozenSet<string> heroTags = null;
+    public FrozenSet<string> HeroTags => heroTags ??= [.. rawData["HeroTags"]?.Deserialize<string[]>() ?? []];
 
     public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview, bool largePreview = false) => GetTexture(textureType, PegLegResourceManager.defaultIcon, largePreview);
     public Texture2D GetTexture(Texture2D fallbackIcon, bool largePreview = false) => GetTexture(FnItemTextureType.Preview, fallbackIcon, largePreview);
@@ -1021,6 +1018,126 @@ public class GameItemTemplate
             rewards.Insert(0, choiceReward);
         }
         return [.. rewards];
+    }
+
+    CommanderRequirement? commanderReq;
+    public bool PerkCompatibleWithCommander(GameItemTemplate commanderTemplate, out string warning)
+    {
+        warning = null;
+        if (commanderTemplate?.Type != "Hero" || (Type != "Hero" && Type != "TeamPerk"))
+            return false;
+        commanderReq ??= rawData[Type == "TeamPerk" ? "CommanderRequirement" : "HeroPerkRequirement"]?
+            .Deserialize<CommanderRequirement>(Helpers.JsonOptions.Fields);
+        if (commanderReq?.IsMatch(commanderTemplate) != false)
+            return true;
+        warning = commanderReq?.Description;
+        return false;
+    }
+
+    TeamPerkSupportRequirements? teamperkReq;
+    public bool TeamPerkBoostedByHero(GameItemTemplate heroTemplate)
+    {
+        if (heroTemplate?.Type != "Hero" || Type != "TeamPerk")
+            return false;
+        teamperkReq ??= rawData["SupportRequirements"]?
+            .Deserialize<TeamPerkSupportRequirements>(Helpers.JsonOptions.Fields);
+        if (teamperkReq?.IsMatch(heroTemplate) == true)
+            return true;
+        return false;
+    }
+
+    public int TeamPerkMinRequirements => (teamperkReq ??= rawData["SupportRequirements"]?.Deserialize<TeamPerkSupportRequirements>(Helpers.JsonOptions.Fields)).Value.MinimumQuantity;
+
+    struct CommanderRequirement
+    {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
+        public string Description;
+        public string[] CommanderTag;
+        public string CommanderSubType;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
+
+        public bool IsMatch(GameItemTemplate template)
+        {
+            if (template is null)
+                return false;
+            if (CommanderSubType is not null && template.SubType != CommanderSubType)
+                return false;
+            else if (CommanderTag is not null)
+            {
+                var targetTags = CommanderTag.ToHashSet();
+                var commanderTags = template["HeroTags"]?.Deserialize<string[]>().ToHashSet();
+                if (targetTags.All(t => !commanderTags.Contains(t)))
+                    return false;
+            }
+
+            return true;
+        }
+    }
+
+    struct TeamPerkSupportRequirements()
+    {
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
+        public string Description;
+        public int MinimumQuantity = 1;
+        public string[] HeroTags;
+        public string HeroSubType;
+        public int? MinimumTier;
+        public string MinimumRarity;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
+
+        public bool IsMatch(GameItemTemplate template)
+        {
+            if (template is null)
+                return false;
+
+            if (HeroSubType is not null && template.SubType != HeroSubType)
+                return false;
+
+            if (HeroTags is not null && HeroTags.Length > 0)
+            {
+                var targetTags = HeroTags.ToHashSet();
+                var heroTags = template.HeroTags;
+                if (targetTags.All(t => !heroTags.Contains(t)))
+                    return false;
+            }
+
+            if (MinimumTier is int tier && template.Tier < tier)
+                return false;
+
+            if (MinimumRarity is not null && template.RarityLevel < MinimumRarity.ConvertRarityString())
+                return false;
+
+            return true;
+        }
+    }
+
+    public struct AlterationSlot
+    {
+        public string[] options;
+        public string[] OptionsForLevel(int level) => [.. options.Select(o => o.EndsWith("_t01") ? $"{o[..^4]}_t0{level}" : o)];
+        public int requiredLevel;
+        public string requiredRarity;
+        public int RequiredRarityLevel => requiredRarity.ConvertRarityString();
+        
+        public static AlterationSlot[] SlotsFromRow(string alterationSlotRow, string[] exclusions = null)
+        {
+            if (alterationSlotRow is null)
+                return [];
+            var row = PegLegResourceManager.AlterationLoadouts[alterationSlotRow].AsArray();
+            var exclusionSet = (exclusions ?? []).ToHashSet();
+            return [..row?
+                .Select(slot => new AlterationSlot()
+                {
+                    options = [..slot["RawAlterations"]
+                        .AsArray()
+                        .Where(a => !exclusionSet.Overlaps(a["ExclusionNames"].Deserialize<string[]>()))
+                        .Select(a => a["AID"].ToString())
+                    ],
+                    requiredLevel = slot["RequiredLevel"].GetValue<int>(),
+                    requiredRarity = slot["RequiredRarity"].ToString(),
+                })
+            ];
+        }
     }
 
     public JsonArray GenerateSearchTags(bool assumeUncommon = true)

@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 public record class XmppPresence
 {
     public XmppPresence CreateGameStatus(GameAccount account, string? status) =>
@@ -513,3 +514,4 @@ public record class PartyPingData
     public required DateTime expires_at;
     public Dictionary<string, string>? meta;
 }
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.

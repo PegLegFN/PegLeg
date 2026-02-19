@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 public static class ExternalCosmetics
 {
     static event Action InvalidateDashOffers;
-    public static event Action OnCosmeticsChanged;
+    //public static event Action OnCosmeticsChanged;
 
     static Dictionary<string, FNDashOffer> dashOffers = [];
     static Dictionary<string, FNDotDisplayAsset> newDisplayAssets = [];
@@ -377,6 +377,7 @@ public static class ExternalCosmetics
     }
 
     #region FNDash Data Structures
+    [JsonSerializable(typeof(FNDashOffer))]
     public record FNDashOffer : IJsonOnDeserialized
     {
         public string offerId;
@@ -389,10 +390,12 @@ public static class ExternalCosmetics
         public FNDashJamTrack[] tracks;
         [JsonIgnore]
         public bool Valid { get; private set; }
+#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
         [JsonInclude]
         DateTime inDate;
         [JsonInclude]
         DateTime outDate;
+#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
 
         [JsonIgnore]
         FNDashCosmetic FirstCosmeticInternal =>
@@ -403,7 +406,7 @@ public static class ExternalCosmetics
         [JsonIgnore]
         GameOffer offer;
         [JsonIgnore]
-        GameOffer Offer
+        public GameOffer Offer
         {
             get
             {
@@ -472,9 +475,9 @@ public static class ExternalCosmetics
             if (newDisplayAsset is not null)
                 return await LoadRemoteImage(() => WebHelpers.MakeRequest(newDisplayAsset?.renderImages[0].image), newDisplayAsset?.id);
             if (FirstCosmeticInternal is FNDashCosmetic first)
-                return await LoadRemoteImage(() => WebHelpers.MakeRequest(first.images?.featured), first.Id);
+                return await LoadRemoteImage(() => WebHelpers.MakeRequest(first.Images?.featured), first.Id);
             if (tracks?.Length > 0)
-                return await LoadRemoteImage(() => WebHelpers.MakeRequest(tracks[0].albumArt), tracks[0].Id);
+                return await LoadRemoteImage(() => WebHelpers.MakeRequest(tracks[0].AlbumArt), tracks[0].Id);
             return null;
         }
 
@@ -525,11 +528,11 @@ public static class ExternalCosmetics
         public string Name { get; }
         public string Description { get; }
         public string DisplayType { get; }
-        protected DateTime[] History { get; }
+        protected DateTime[] ShopHistory { get; }
 
         public DateTime? LastSeen(DateTime inDate)
         {
-            var shopHistory = History;
+            var shopHistory = ShopHistory;
 
             for (int i = shopHistory.Length - 1; i >= 0; i--)
             {
@@ -545,7 +548,7 @@ public static class ExternalCosmetics
 
         public bool IntroducedRecently(int dayThreshold = 7)
         {
-            var shopHistory = History;
+            var shopHistory = ShopHistory;
             if (shopHistory.Length == 0)
                 return true;
             return (shopHistory[0].ToUniversalTime() - DateTime.UtcNow.Date).TotalDays < 7;
@@ -566,30 +569,26 @@ public static class ExternalCosmetics
         }
     }
 
+    [JsonSerializable(typeof(FNDashCosmetic))]
     public record FNDashCosmetic : IFNDashCosmetic
     {
-        [JsonInclude]
-        string id;
-        [JsonInclude]
-        string name;
-        [JsonInclude]
-        string description;
-        public TypeData? type;
-        public IntroductionData? introduction;
-        public ImagePathData? images;
-        [JsonInclude]
-        DateTime[] shopHistory;
+        [JsonPropertyName("id")]
+        public string Id { get; private set; }
+        [JsonPropertyName("name")]
+        public string Name { get; private set; }
+        [JsonPropertyName("description")]
+        public string Description { get; private set; }
+        [JsonPropertyName("type")]
+        public TypeData? Type { get; private set; }
+        [JsonPropertyName("introduction")]
+        public IntroductionData? Introduction { get; private set; }
+        [JsonPropertyName("images")]
+        public ImagePathData? Images { get; private set; }
+        [JsonPropertyName("shopHistory")]
+        public DateTime[] ShopHistory { get; private set; }
 
         [JsonIgnore]
-        public string Id => id;
-        [JsonIgnore]
-        public string Name => name;
-        [JsonIgnore]
-        public string Description => description;
-        [JsonIgnore]
-        public string DisplayType => type?.displayValue;
-        [JsonIgnore]
-        public DateTime[] History => shopHistory;
+        public string DisplayType => Type?.displayValue;
 
         public record struct TypeData
         {
@@ -615,34 +614,35 @@ public static class ExternalCosmetics
         }
     }
 
+    [JsonSerializable(typeof(FNDashJamTrack))]
     public record FNDashJamTrack : IFNDashCosmetic
     {
-        [JsonInclude]
-        string id;
-        [JsonInclude]
-        public string title;
-        public string artist;
-        public string album;
-        public int releaseYear;
-        public string albumArt;
-        [JsonInclude]
-        DateTime[] shopHistory;
+        [JsonPropertyName("id")]
+        public string Id { get; private set; }
+        [JsonPropertyName("title")]
+        public string Title { get; private set; }
+        [JsonPropertyName("artist")]
+        public string Artist { get; private set; }
+        [JsonPropertyName("album")]
+        public string Album { get; private set; }
+        [JsonPropertyName("releaseYear")]
+        public string ReleaseYear { get; private set; }
+        [JsonPropertyName("albumArt")]
+        public string AlbumArt { get; private set; }
+        [JsonPropertyName("shopHistory")]
+        public DateTime[] ShopHistory { get; private set; }
 
-
         [JsonIgnore]
-        public string Id => id;
+        public string Name => Title;
         [JsonIgnore]
-        public string Name => title;
-        [JsonIgnore]
-        public string Description => $"{artist}\n{releaseYear}";
+        public string Description => $"{Artist}\n{ReleaseYear}";
         [JsonIgnore]
         public string DisplayType => "Jam Track";
-        [JsonIgnore]
-        public DateTime[] History => shopHistory;
     }
     #endregion
 
     #region FNDot Data Structures
+    [JsonSerializable(typeof(FNDotDisplayAsset))]
     public record FNDotDisplayAsset
     {
         public string id;
@@ -673,6 +673,7 @@ public static class ExternalCosmetics
         }
     }
 
+    [JsonSerializable(typeof(FnDotCosmetic))]
     public record FnDotCosmetic
     {
         public string id;
@@ -742,6 +743,7 @@ public static class ExternalCosmetics
         }
     }
 
+    [JsonSerializable(typeof(RawDisplayAsset))]
     public record RawDisplayAsset : RawAsset<RawDisplayAsset.Properties>
     {
         public record Properties
@@ -750,6 +752,7 @@ public static class ExternalCosmetics
         }
     }
 
+    [JsonSerializable(typeof(RawCosmetic))]
     public record RawCosmetic : RawAsset<RawCosmetic.Properties>
     {
         public record Properties

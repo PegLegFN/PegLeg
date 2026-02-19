@@ -1,0 +1,386 @@
+[gd_scene format=3 uid="uid://u0iyac4suhhi"]
+
+[ext_resource type="Script" uid="uid://cn7n18bl0ayro" path="res://Scripts/UserInterface/ListEntries/HeroEntry.cs" id="1_ayp24"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_sxd34"]
+[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_vwb4e"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_t8ckq"]
+[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="5_2l5gb"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="6_8u3sj"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="7_ueqn5"]
+[ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="8_4ubpb"]
+[ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="9_vb2m6"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="10_g3am1"]
+[ext_resource type="Texture2D" uid="uid://cvsasjr5owfgm" path="res://Images/InterfaceIcons/T-Icon-TeamPerkSlot-128x.png" id="11_yr0cp"]
+[ext_resource type="Texture2D" uid="uid://b8u7nttnrnmta" path="res://Images/InterfaceIcons/HeroAbilities/Icon-Soldier-GoinCommando-128.png" id="12_cgm0h"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="13_lcsou"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="14_ja77y"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="15_kbs1w"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="16_g545i"]
+[ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="17_l8n2d"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="18_vbil6"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="19_ineuq"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="20_ykhgh"]
+[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="21_4j16x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a4oe6"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.35, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mnkcp"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.07160997, 0.0429, 0.33, 0.54901963)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ob5og"]
+resource_local_to_scene = true
+shader = ExtResource("13_lcsou")
+shader_parameter/ControlSize = Vector2(52, 27)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="Gradient" id="Gradient_qs3o8"]
+offsets = PackedFloat32Array(0.153846, 1)
+colors = PackedColorArray(0.982343, 0.982342, 0.982342, 1, 0.529066, 0.529067, 0.529067, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a4oe6"]
+gradient = SubResource("Gradient_qs3o8")
+height = 16
+fill_to = Vector2(0.9, 0.1)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1i3si"]
+resource_local_to_scene = true
+shader = ExtResource("13_lcsou")
+shader_parameter/ControlSize = Vector2(52, 52)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w14yl"]
+shader = ExtResource("16_g545i")
+shader_parameter/inset = 0.1
+shader_parameter/shade = 0.2
+shader_parameter/shadeAlpha = 0.8
+
+[node name="CommanderHero" type="MarginContainer" unique_id=254440710 node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry")]
+offset_right = 302.0
+offset_bottom = 44.0
+script = ExtResource("1_ayp24")
+heroAbilityEntries = []
+heroCommanderPerkEntry = NodePath("HBoxContainer/HeroPerk")
+useCommanderPerkDescription = true
+autoLinkToViewer = false
+defaultClearIconToNull = true
+
+[node name="LoadoutBG" type="Panel" parent="." unique_id=607625884]
+unique_name_in_owner = true
+material = ExtResource("2_sxd34")
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_vwb4e")
+script = ExtResource("4_t8ckq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1387158021]
+layout_mode = 2
+
+[node name="HeroPerk" type="PanelContainer" parent="HBoxContainer" unique_id=1656059039]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("5_2l5gb")
+script = ExtResource("6_8u3sj")
+defaultClearIconToNull = true
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk" unique_id=192115408]
+material = ExtResource("7_ueqn5")
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("8_4ubpb")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1575470589]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1778626266]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Plasma Overdrive"
+text_overrun_behavior = 3
+
+[node name="TierController" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1066054317 node_paths=PackedStringArray("tierImages")]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+theme_override_constants/separation = 0
+script = ExtResource("9_vb2m6")
+tierImages = [null, null, null, null, null]
+superchargeColor = Color(0, 0.708333, 0.85, 1)
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/TierController" unique_id=40473188]
+self_modulate = Color(0, 0.708333, 0.85, 1)
+layout_mode = 2
+texture = ExtResource("10_g3am1")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/VBoxContainer/TierController" unique_id=1679022013]
+layout_mode = 2
+texture = ExtResource("10_g3am1")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/VBoxContainer/TierController" unique_id=1463043316]
+layout_mode = 2
+texture = ExtResource("10_g3am1")
+expand_mode = 3
+
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/VBoxContainer/TierController" unique_id=407738570]
+layout_mode = 2
+texture = ExtResource("10_g3am1")
+expand_mode = 3
+
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/VBoxContainer/TierController" unique_id=697153351]
+layout_mode = 2
+texture = ExtResource("10_g3am1")
+expand_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1677959273]
+visible = false
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = -20
+theme_override_constants/margin_bottom = 3
+
+[node name="Control" type="Control" parent="HBoxContainer/MarginContainer" unique_id=747720288]
+layout_mode = 2
+
+[node name="TeamPerkIndicator" type="MarginContainer" parent="HBoxContainer/MarginContainer/Control" unique_id=1088610864]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Panel" type="Panel" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator" unique_id=1592828089]
+self_modulate = Color(0.19968, 0.1196, 0.52, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a4oe6")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator" unique_id=1842058653]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator/MarginContainer" unique_id=780447503]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator/MarginContainer/HBoxContainer" unique_id=725487861]
+self_modulate = Color(0.23, 0.910167, 1, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("11_yr0cp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator/MarginContainer/HBoxContainer" unique_id=812638045]
+self_modulate = Color(0.23, 0.910167, 1, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("11_yr0cp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/MarginContainer/Control/TeamPerkIndicator/MarginContainer/HBoxContainer" unique_id=288055677]
+self_modulate = Color(0.23, 0.910167, 1, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("11_yr0cp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" unique_id=944229614]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/MarginContainer3" unique_id=1309066834]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mnkcp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer3/PanelContainer" unique_id=1281155934]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer3/PanelContainer/VBoxContainer" unique_id=541400989]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 6
+texture = ExtResource("12_cgm0h")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/MarginContainer3/PanelContainer/VBoxContainer" unique_id=1361335359]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 6
+texture = ExtResource("12_cgm0h")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/MarginContainer3/PanelContainer/VBoxContainer" unique_id=1361181142]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 6
+texture = ExtResource("12_cgm0h")
+expand_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=2049528495]
+layout_mode = 2
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2" unique_id=1475218943]
+self_modulate = Color(1, 0.633333, 0, 1)
+material = SubResource("ShaderMaterial_ob5og")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_a4oe6")
+expand_mode = 1
+script = ExtResource("4_t8ckq")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2" unique_id=1281977218]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_top = -25
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer2/MarginContainer" unique_id=1826396322]
+material = SubResource("ShaderMaterial_1i3si")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("14_ja77y")
+expand_mode = 3
+script = ExtResource("4_t8ckq")
+syncControlSize = true
+
+[node name="Control" type="Control" parent="HBoxContainer/MarginContainer2" unique_id=975903357]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control" unique_id=169824773]
+self_modulate = Color(1, 0.633333, 0, 1)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_kbs1w")
+expand_mode = 3
+
+[node name="Subtype" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control/TextureRect" unique_id=1709887772]
+material = SubResource("ShaderMaterial_w14yl")
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_l8n2d")
+expand_mode = 3
+
+[node name="TooltipFallback" type="Control" parent="." unique_id=1360955456]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=852383556 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("18_vbil6")
+itemSource = NodePath("../..")
+componentList = ExtResource("19_ineuq")
+
+[node name="Responsive Button Area" parent="." unique_id=1443611721 instance=ExtResource("20_ykhgh")]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=665204838 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("18_vbil6")
+itemSource = NodePath("../..")
+componentList = ExtResource("19_ineuq")
+
+[node name="Overlay" type="Control" parent="." unique_id=616665006]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PerkWarning" type="TextureRect" parent="Overlay" unique_id=304426844]
+self_modulate = Color(1, 0.9, 0, 1)
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 4.0
+offset_top = 4.0
+texture = ExtResource("15_kbs1w")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Overlay/PerkWarning" unique_id=396744640]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("21_4j16x")
+expand_mode = 1
+
+[connection signal="IconChanged" from="." to="HBoxContainer/MarginContainer2/MarginContainer/Icon" method="set_texture"]
+[connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/MarginContainer" method="set_visible"]
+[connection signal="MaxTierChanged" from="." to="HBoxContainer/VBoxContainer/TierController" method="SetMaxTier"]
+[connection signal="RarityChanged" from="." to="HBoxContainer/MarginContainer2/TextureRect" method="set_self_modulate"]
+[connection signal="RarityChanged" from="." to="HBoxContainer/MarginContainer2/Control/TextureRect" method="set_self_modulate"]
+[connection signal="SubtypeIconChanged" from="." to="HBoxContainer/MarginContainer2/Control/TextureRect/Subtype" method="set_texture"]
+[connection signal="SuperchargeChanged" from="." to="HBoxContainer/VBoxContainer/TierController" method="SetSuperchargedTier"]
+[connection signal="TeamPerkContributionVisible" from="." to="HBoxContainer/MarginContainer/Control/TeamPerkIndicator" method="set_visible"]
+[connection signal="TierChanged" from="." to="HBoxContainer/VBoxContainer/TierController" method="SetTier"]
+[connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
+[connection signal="WarningText" from="." to="Overlay/PerkWarning" method="set_tooltip_text"]
+[connection signal="WarningVisible" from="." to="Overlay/PerkWarning" method="set_visible"]
+[connection signal="IconChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/VBoxContainer/Label" method="set_text"]

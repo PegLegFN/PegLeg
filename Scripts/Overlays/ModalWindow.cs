@@ -36,10 +36,12 @@ public partial class ModalWindow : Control
 
     public override void _Ready()
     {
+        Visible = false;
         backgroundPanel.MouseFilter = MouseFilterEnum.Ignore;
         MouseFilter = MouseFilterEnum.Ignore;
         backgroundPanel.Modulate = Colors.Transparent;
 
+        if (UseWindowAnim)
         {
             if (windowCanvas is not null)
             {
@@ -137,7 +139,6 @@ public partial class ModalWindow : Control
     protected virtual Tween BuildTween(bool openState, double duration)
     {
         var tween = CreateTween().SetParallel();
-        tween.Stop();
         if (openState)
         {
             if (useSounds)

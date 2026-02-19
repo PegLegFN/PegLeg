@@ -29,6 +29,7 @@ public partial class VirtualTabBar : Control
     List<VirtualTab> activeTabs = [];
 
     public int LatestTab { get; private set; } = -1;
+    public int TabCount => activeTabs.Count;
     public bool AnyTabsPressed => singleTabMode || activeTabs.Any(t => t.IsPressed);
 
     public override void _Ready()
@@ -122,11 +123,11 @@ public partial class VirtualTabBar : Control
             SetTabPressed(index, newVal);
     }
 
-    public void SetTabHidden(int index, bool value = true)
+    public void SetTabHidden(int index, bool hidden = true)
     {
-        activeTabs[index].Visible = value;
+        activeTabs[index].Visible = !hidden;
         //update tab modes
-        if (singleTabMode && activeTabs[index].IsPressed && !value)
+        if (singleTabMode && activeTabs[index].IsPressed && hidden)
         {
             var firstVisible = activeTabs.FirstOrDefault(t => t.Visible);
             if (firstVisible is null)

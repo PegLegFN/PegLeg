@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b4k4ku3cjmqku"]
+[gd_scene format=3 uid="uid://b4k4ku3cjmqku"]
 
 [ext_resource type="Script" uid="uid://c3p5k7vank2bh" path="res://Scripts/HeroLoadout/HeroLoadoutSlotSelector.cs" id="1_kwlnb"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_ht23k"]
@@ -9,49 +9,49 @@
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_kwlnb"]
 [ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="8_4wsl6"]
 
-[node name="Hero Loadout" type="MarginContainer"]
+[node name="Hero Loadout" type="MarginContainer" unique_id=1981917911]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=345977060]
 layout_mode = 2
 
-[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" node_paths=PackedStringArray("linkedPanel", "loadoutList", "searchBar")]
+[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" unique_id=1788846179 node_paths=PackedStringArray("linkedPanel", "loadoutList", "searchBar")]
 layout_mode = 2
 script = ExtResource("1_kwlnb")
 linkedPanel = NodePath("../LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel")
 loadoutList = NodePath("PanelContainer/VBoxContainer/ScrollContainer2")
 searchBar = NodePath("PanelContainer/VBoxContainer/HBoxContainer/LineEdit")
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutSlots"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutSlots" unique_id=1214190992]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer" unique_id=880520769]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer" unique_id=1532482864]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer" unique_id=2140409647]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search Loadouts"
 
-[node name="CheckButton" type="CheckButton" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer" unique_id=314835261]
 layout_mode = 2
 text = "Heroes"
 script = ExtResource("2_ht23k")
 section = "inventory"
 key = "loadout_list_heroes"
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer" unique_id=382277052 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_kwlnb")
@@ -61,7 +61,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/VBoxContainer")
 elementScene = ExtResource("2_kwlnb")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2" unique_id=1872653135]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -71,52 +71,52 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer" unique_id=936049867]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=1371166484]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=218494281]
 layout_mode = 2
 mouse_filter = 0
 
-[node name="Padding" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=1566163428]
 layout_mode = 2
 
-[node name="LoadoutPreview" type="MarginContainer" parent="HBoxContainer"]
+[node name="LoadoutPreview" type="MarginContainer" parent="HBoxContainer" unique_id=1999839107]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_right = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview" unique_id=2046802206]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 12
 
-[node name="Loadouts" type="HBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+[node name="Loadouts" type="HBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=1990566110]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="IncomingLodout" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts"]
+[node name="IncomingLodout" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts" unique_id=2081865286]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 alignment = 1
 
-[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" instance=ExtResource("2_kwlnb")]
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=801908463 instance=ExtResource("2_kwlnb")]
 layout_mode = 2
 
-[node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout"]
+[node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=171399611]
 layout_mode = 2
 theme_override_constants/margin_top = -30
 theme_override_constants/margin_bottom = -15
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout/OverwriteIcon"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout/OverwriteIcon" unique_id=1378841246]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -124,16 +124,16 @@ size_flags_vertical = 4
 texture = ExtResource("3_1fwhb")
 expand_mode = 3
 
-[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" instance=ExtResource("2_kwlnb")]
+[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=2056718919 instance=ExtResource("2_kwlnb")]
 layout_mode = 2
 
-[node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts"]
+[node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts" unique_id=1826548157]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = -30
 theme_override_constants/margin_right = -15
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/OverwriteIcon"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/OverwriteIcon" unique_id=66227892]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -141,28 +141,28 @@ size_flags_vertical = 4
 texture = ExtResource("2_wrnfi")
 expand_mode = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts" unique_id=702790100]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 
-[node name="CurrentLoadout" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer"]
+[node name="CurrentLoadout" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer" unique_id=1240483725]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout"]
+[node name="Label" type="Label" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout" unique_id=718879818]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Loadout Slot 20"
 horizontal_alignment = 1
 
-[node name="HeroLoadoutPanel" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout" instance=ExtResource("2_qqdfd")]
+[node name="HeroLoadoutPanel" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout" unique_id=793496851 instance=ExtResource("2_qqdfd")]
 layout_mode = 2
 size_flags_horizontal = 8
 useActiveAccount = false
-interactable = false
+editable = true
 
-[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer"]
+[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=1427241406]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -170,29 +170,29 @@ theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 24
 text = "Set As Active Slot"
 
-[node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Button2"]
+[node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Button2" unique_id=322214246]
 script = ExtResource("8_4wsl6")
 
-[node name="OverallStats" type="MarginContainer" parent="HBoxContainer"]
+[node name="OverallStats" type="MarginContainer" parent="HBoxContainer" unique_id=1464032470]
 visible = false
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/OverallStats"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/OverallStats" unique_id=555619928]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/OverallStats/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/OverallStats/PanelContainer" unique_id=262460685]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/OverallStats/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/OverallStats/PanelContainer/VBoxContainer" unique_id=422203218]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Overall Hero Stats"
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="HBoxContainer/OverallStats/PanelContainer/VBoxContainer"]
+[node name="ItemList" type="ItemList" parent="HBoxContainer/OverallStats/PanelContainer/VBoxContainer" unique_id=911725408]
 layout_mode = 2
 allow_search = false
 auto_width = true
