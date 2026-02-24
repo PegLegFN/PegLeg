@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://kgl0dydu0mtf"]
+[gd_scene format=3 uid="uid://kgl0dydu0mtf"]
 
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="1_atr3d"]
 [ext_resource type="Script" uid="uid://ct11mvw5gpi7l" path="res://Scripts/ContextMenu/ContextMenu.cs" id="1_epbn8"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://dv78stjulbykc" path="res://Scenes/ContextComponents/open_cosmetic_icon_ctx.tscn" id="16_2b6e5"]
 [ext_resource type="PackedScene" uid="uid://c8bhtcfsoew84" path="res://Scenes/ContextComponents/pin_quest_ctx.tscn" id="17_fonu8"]
 [ext_resource type="PackedScene" uid="uid://c5a2r24tp1bf1" path="res://Scenes/ContextComponents/recycle_item_ctx.tscn" id="18_4nlno"]
+[ext_resource type="PackedScene" uid="uid://o08rtq4ebbpf" path="res://Scenes/ContextComponents/rename_loadout_ctx.tscn" id="19_idv7x"]
 [ext_resource type="PackedScene" uid="uid://yp3kboip6kk1" path="res://Scenes/ContextComponents/swap_loadout_ctx.tscn" id="19_nk4b1"]
 [ext_resource type="PackedScene" uid="uid://3i0b2bycn4ob" path="res://Scenes/ContextComponents/title_ctx.tscn" id="20_xejsi"]
 [ext_resource type="PackedScene" uid="uid://bk6fttr5h8nvm" path="res://Scenes/ContextComponents/toggle_ctx.tscn" id="21_ncr7q"]
@@ -54,27 +55,28 @@ fill_from = Vector2(0, 1)
 fill_to = Vector2(0, 0)
 metadata/_snap_enabled = true
 
-[node name="DesktopContextMenu" type="Window" node_paths=PackedStringArray("componentParent", "listTarget", "listAnimation", "scaleAnimation")]
+[node name="DesktopContextMenu" type="Window" unique_id=1272345434 node_paths=PackedStringArray("componentParent", "listTarget", "listAnimation", "scaleAnimation")]
 transparent_bg = true
 oversampling_override = 1.0
 size = Vector2i(116, 105)
+visible = false
 wrap_controls = true
 borderless = true
 always_on_top = true
 transparent = true
 script = ExtResource("1_epbn8")
 contextComponentFolder = "res://Scenes/ContextComponents"
-componentScenes = [ExtResource("2_s6h5w"), ExtResource("3_idv7x"), ExtResource("4_50qn1"), ExtResource("5_vim7o"), ExtResource("6_dkufx"), ExtResource("7_e1d5o"), ExtResource("8_knltk"), ExtResource("9_ss504"), ExtResource("10_otcn7"), ExtResource("11_ee3c2"), ExtResource("12_o3d7y"), ExtResource("13_p7jxu"), ExtResource("14_xtoui"), ExtResource("15_6vh3q"), ExtResource("16_2b6e5"), ExtResource("17_fonu8"), ExtResource("18_4nlno"), ExtResource("19_nk4b1"), ExtResource("20_xejsi"), ExtResource("21_ncr7q"), ExtResource("22_6maoc")]
+componentScenes = [ExtResource("2_s6h5w"), ExtResource("3_idv7x"), ExtResource("4_50qn1"), ExtResource("5_vim7o"), ExtResource("6_dkufx"), ExtResource("7_e1d5o"), ExtResource("8_knltk"), ExtResource("9_ss504"), ExtResource("10_otcn7"), ExtResource("11_ee3c2"), ExtResource("12_o3d7y"), ExtResource("13_p7jxu"), ExtResource("14_xtoui"), ExtResource("15_6vh3q"), ExtResource("16_2b6e5"), ExtResource("17_fonu8"), ExtResource("18_4nlno"), ExtResource("19_idv7x"), ExtResource("19_nk4b1"), ExtResource("20_xejsi"), ExtResource("21_ncr7q"), ExtResource("22_6maoc")]
 componentParent = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget/VBoxContainer")
 listTarget = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget")
 listAnimation = NodePath("ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim")
 scaleAnimation = NodePath("ScaleAnim")
 
-[node name="ScaleAnim" type="MarginContainer" parent="."]
+[node name="ScaleAnim" type="MarginContainer" parent="." unique_id=270368630]
 offset_right = 71.0
 offset_bottom = 65.0
 
-[node name="NinePatchRect" type="NinePatchRect" parent="ScaleAnim"]
+[node name="NinePatchRect" type="NinePatchRect" parent="ScaleAnim" unique_id=242556733]
 layout_mode = 2
 texture = ExtResource("1_atr3d")
 patch_margin_left = 12
@@ -82,32 +84,32 @@ patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="Content" type="MarginContainer" parent="ScaleAnim"]
+[node name="Content" type="MarginContainer" parent="ScaleAnim" unique_id=1655681625]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 6
 
-[node name="PanelContainer" type="PanelContainer" parent="ScaleAnim/Content"]
+[node name="PanelContainer" type="PanelContainer" parent="ScaleAnim/Content" unique_id=885112523]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5xuii")
 
-[node name="MarginContainer" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer" unique_id=625189422]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="ListAnim" type="Control" parent="ScaleAnim/Content/PanelContainer/MarginContainer"]
+[node name="ListAnim" type="Control" parent="ScaleAnim/Content/PanelContainer/MarginContainer" unique_id=1810588959]
 clip_contents = true
 custom_minimum_size = Vector2(100, 52)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="ListTarget" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim"]
+[node name="ListTarget" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim" unique_id=1179948038]
 layout_mode = 1
 offset_right = 100.0
 offset_bottom = 28.0
@@ -116,12 +118,12 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/ListTarget" unique_id=1400923629]
 layout_mode = 2
 theme = SubResource("Theme_epbn8")
 theme_override_constants/separation = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim"]
+[node name="MarginContainer2" type="MarginContainer" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim" unique_id=1324772761]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -136,7 +138,7 @@ theme_override_constants/margin_left = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = -1
 
-[node name="TextureRect" type="TextureRect" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/MarginContainer2"]
+[node name="TextureRect" type="TextureRect" parent="ScaleAnim/Content/PanelContainer/MarginContainer/ListAnim/MarginContainer2" unique_id=64976182]
 self_modulate = Color(0.101961, 0.101961, 0.101961, 1)
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2

@@ -19,7 +19,7 @@ public partial class ContextMenu : Window
     Control listAnimation;
     [Export]
     Control scaleAnimation;
-    Dictionary<string, BaseContextComponent> contextComponentDict = [];
+    Dictionary<string, AbstractContextComponent> contextComponentDict = [];
     static readonly Vector2[] fullPassthrough = [new(),new()];
     static readonly Vector2[] noPassthrough = [];
 
@@ -59,7 +59,7 @@ public partial class ContextMenu : Window
         {
             var cScene = componentScenes[i];
             var cNode = cScene.Instantiate();
-            if (cNode is not BaseContextComponent comp)
+            if (cNode is not AbstractContextComponent comp)
             {
                 cNode.QueueFree();
                 //GD.Print("Bad Component");
@@ -86,10 +86,11 @@ public partial class ContextMenu : Window
     }
 
     List<HSeparator> activeSeparators = [];
-    List<BaseContextComponent> activeComponents = [];
+    List<AbstractContextComponent> activeComponents = [];
     Tween animTween;
     bool open;
-    bool isOpening = false;
+    bool blockClosing = false;
+    ulong openedAt = 0;
 
     public static void ShowMenu(ContextMenuHook hook) => inst?.ShowMenuInst(hook);
     async void ShowMenuInst(ContextMenuHook hook)
@@ -99,6 +100,7 @@ public partial class ContextMenu : Window
         SetCtxVisible(false);
         var compList = hook.componentList.components;
         bool hasComps = false;
+        openedAt = Time.GetTicksMsec();
 
         if (open)
             Clear();
@@ -136,7 +138,7 @@ public partial class ContextMenu : Window
             return;
 
         open = true;
-        isOpening = true;
+        blockClosing = true;
 
         if (animTween?.IsRunning() == true)
             animTween.Stop();
@@ -236,7 +238,7 @@ public partial class ContextMenu : Window
         Position = targetPos;
         SetCtxVisible(true);
         GrabFocus();
-        isOpening = false;
+        EnableMenuClosureAfter(0.1f);
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
 
@@ -257,13 +259,23 @@ public partial class ContextMenu : Window
         };
     }
 
+    async void EnableMenuClosureAfter(float time)
+    {
+        await Helpers.WaitForTimer(time);
+        blockClosing = false;
+    }
+
     public async void CloseMenu()
     {
         if (!open)
             return;
         await Helpers.WaitForFrame();
-        if (isOpening)
+        if (blockClosing)
+        {
+            GrabFocus();
             return;
+        }
+        GetTree().Root.GrabFocus();
         scaleAnimation.Scale = Vector2.Zero;
         await Helpers.WaitForFrame();
         SetCtxVisible(false);

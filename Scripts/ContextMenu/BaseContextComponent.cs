@@ -1,7 +1,7 @@
 ﻿using Godot;
 using System;
 
-public abstract partial class BaseContextComponent : Node
+public partial class BaseContextComponent : Node
 {
     [Export]
     Control disabledPanel;
@@ -11,6 +11,6 @@ public abstract partial class BaseContextComponent : Node
         if (disabledPanel is not null)
             disabledPanel.Visible = val;
     }
-    public abstract string Id { get; }
-    public abstract void Update(ContextMenuHook hook);
+    public virtual string Id { get; }
+    public virtual void Update(ContextMenuHook hook) { }
 }

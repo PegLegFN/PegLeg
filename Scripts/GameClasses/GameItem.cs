@@ -75,18 +75,34 @@ public class GameItem
     {
         this.uuid = uuid;
         this.profile = profile;
-        SetRawData(rawData);
+        SetItemOrRewardData(rawData);
     }
 
     public void Reassociate(string newUUID, JsonObject rawData)
     {
         uuid = newUUID;
-        SetRawData(rawData);
+        SetItemOrRewardData(rawData);
     }
 
-    public GameItem SetUUID()
+    public record struct ItemData()
     {
-        uuid ??= Guid.NewGuid().ToString();
+        public string templateId { get; init; }
+        public JsonObject attributes { get; init; }
+        public int quantity = 1;
+        public GameItem ToItem() => new(GameItemTemplate.Get(templateId), quantity, attributes.SafeDeepClone());
+    }
+
+    public record struct ItemReward()
+    {
+        public string name;
+        public string itemType;
+        public int quantity = 1;
+        public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity);
+    }
+
+    public GameItem SetUUID(string customUUID = null)
+    {
+        uuid ??= customUUID ?? Guid.NewGuid().ToString();
         return this;
     }
 
@@ -130,6 +146,29 @@ public class GameItem
         }
     }
 
+    public ItemData GameItemData => new()
+    {
+        templateId = templateId,
+        attributes = attributes?.SafeDeepClone() ?? [],
+        quantity = quantity,
+    };
+
+    public void SetItemOrRewardData(JsonObject rawData)
+    {
+        var newTemplate = rawData["templateId"]?.ToString() ?? rawData["itemType"]?.ToString();
+        if (templateId != newTemplate)
+        {
+            _template = null;
+            templateId = newTemplate;
+            zcpEquivelent = FindZcpEquivelent(templateId);
+        }
+        quantity = rawData["quantity"]?.GetValue<int>() ?? 1;
+        attributes = rawData["attributes"]?.AsObject().SafeDeepClone();
+        isSeenLocal = null;
+        customData = [];
+        ResetCachedData();
+    }
+
     JsonObject _rawData;
     public JsonObject RawData => _rawData ?? GenerateRawData();
     public JsonObject GenerateRawData()
@@ -156,10 +195,10 @@ public class GameItem
         return _rawData;
     }
 
-    public JsonObject CustomSearchObject(Func<string[]> searchTagGenerator, bool union = false)
+    public JsonObject CustomSearchObject(string[] searchTags, bool union = false)
     {
         var searchObj = RawData.SafeDeepClone();
-        searchObj["searchTags"] = new JsonArray([.. searchTagGenerator(), ..union ? [] : searchObj["searchTags"].AsArray()]);
+        searchObj["searchTags"] = new JsonArray([.. searchTags, .. union ? RawData["searchTags"].Deserialize<string[]>() : []]);
         return searchObj;
     }
 
@@ -213,29 +252,6 @@ public class GameItem
         if (attributes?["quest_state"]?.ToString() is string questState)
             _searchTags.Add(questState);
         return _searchTags;
-    }
-
-    public JsonObject SimpleRawData => new()
-    {
-        ["templateId"] = templateId,
-        ["attributes"] = attributes?.SafeDeepClone(),
-        ["quantity"] = quantity,
-    };
-
-    public void SetRawData(JsonObject rawData)
-    {
-        var newTemplate = rawData["templateId"]?.ToString() ?? rawData["itemType"]?.ToString();
-        if (templateId != newTemplate)
-        {
-            _template = null;
-            templateId = newTemplate;
-            zcpEquivelent = FindZcpEquivelent(templateId);
-        }
-        quantity = rawData["quantity"]?.GetValue<int>() ?? 1;
-        attributes = rawData["attributes"]?.AsObject();
-        isSeenLocal = null;
-        customData = [];
-        ResetCachedData();
     }
 
     void ResetCachedData()
@@ -629,7 +645,7 @@ public class GameItem
             return GetSetBonusTexture(fallbackIcon);
 
         if (textureType == FnItemTextureType.Preview && GameItemTemplate.Get(attributes?["portrait"]?.ToString()) is GameItemTemplate portraitTemplate)
-            return portraitTemplate.GetTexture(fallbackIcon, largePreview);
+            return portraitTemplate.GetTexture(fallbackIcon: fallbackIcon, largePreview: largePreview);
         if (template?.Type == "CardPack")
         {
             if (attributes?.ContainsKey("options") ?? false)

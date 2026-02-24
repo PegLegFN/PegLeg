@@ -40,19 +40,25 @@ public partial class ThemeController : Node
     ];
 
     static string seasonTheme;
+    bool seasonCheckAttached = false;
 
     public override void _Ready()
 	{
         seasonTheme = GetSeasonThemeName();
         ImportThemes();
-        SetActiveTheme(AppConfig.Get("theme", "current", ""));
-        RefreshTimerController.OnDayChanged += CheckForNewSeason;
-        MusicController.ResumeMusic();
+        Helpers.Defer(() =>
+        {
+            seasonCheckAttached = true;
+            RefreshTimerController.OnDayChanged += CheckForNewSeason;
+            SetActiveTheme(AppConfig.Get("theme", "current", ""));
+            MusicController.ResumeMusic();
+        }, 10);
     }
 
     public override void _ExitTree()
     {
-        RefreshTimerController.OnDayChanged -= CheckForNewSeason;
+        if (seasonCheckAttached)
+            RefreshTimerController.OnDayChanged -= CheckForNewSeason;
     }
 
     void CheckForNewSeason()

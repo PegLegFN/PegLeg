@@ -1,11 +1,15 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 public partial class HeroLoadoutEntry : GameItemEntry
 {
     [Signal]
     public delegate void LoadoutNameEventHandler(string name);
+    [Signal]
+    public delegate void LoadoutNumberEventHandler(string name);
     [Signal]
     public delegate void IsCurrentEventHandler(bool value);
     [Export]
@@ -19,6 +23,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
     [Export]
     Control selectionFX;
     [Export]
+    Control altSelectionFX;
+    [Export]
     bool useActiveAccount = true;
     [Export]
     bool interactable = true;
@@ -26,6 +32,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
     bool editable = false;
     [Export]
     bool addCurrentToName = true;
+    [Export]
+    bool addNumberToName = false;
 
     public override void _Ready()
     {
@@ -128,39 +136,114 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
     protected override void UpdateItem(GameItem loadoutItem)
     {
-        if (loadoutItem?.profile is null)
+        currentItem = loadoutItem;
+        if (currentItem is null)
         {
             ClearLoadout();
             return;
         }
-        if (loadoutItem.customData?["displayName"]?.ToString() is string customName)
+        if (loadoutItem.templateId.StartsWith("CampaignHeroLoadout:"))
+            SetAsLoadoutSlot();
+        if (loadoutItem.templateId == GameAccount.HeroLoadoutBlueprintTID)
+            SetAsLoadoutBlueprint();
+        UpdateSelectionVisuals();
+    }
+
+    void SetAsLoadoutBlueprint()
+    {
+        EmitSignalLoadoutNumber("");
+        if (currentItem.attributes["displayName"]?.ToString() is string displayName && !string.IsNullOrWhiteSpace(displayName))
         {
-            EmitSignalLoadoutName(customName);
-            EmitSignalIsCurrent(false);
+            EmitSignalLoadoutName(displayName);
         }
         else
         {
-            bool isCurrent = loadoutItem.profile?.statAttributes?["selected_hero_loadout"]?.ToString() == loadoutItem.uuid && !string.IsNullOrWhiteSpace(loadoutItem.uuid);
-            var idx = loadoutItem.attributes["loadout_index"]?.GetValue<int>();
-            EmitSignalLoadoutName($"Loadout Slot {idx + 1}{((isCurrent && addCurrentToName) ? " (Current)" : null)}");
-            EmitSignalIsCurrent(isCurrent);
+            EmitSignalLoadoutName("Loadout Blueprint");
         }
 
-        var commanderUUID = loadoutItem.attributes?["crew_members"]?["commanderslot"]?.ToString();
+        var commanderNode = currentItem.attributes?["crew_members"]?["commanderslot"];
+        var commanderTemplate = commanderNode?.Deserialize<GameAccount.LoadoutBlueprintHero?>(Helpers.JsonOptions.Fields)?.displayTemplate;
+        GameItem commanderItem = GameItemTemplate.Get(commanderTemplate)?.CreateInstance();
+        commander.SetItem(commanderItem);
+        commander.SetInteractable(interactable);
+
+        var tpTemplate = GameItemTemplate.Get(currentItem.attributes?["team_perk"]?.ToString());
+        teamPerk.SetItem(tpTemplate?.CreateInstance());
+        teamPerk.SetInteractable(interactable);
+
+        int matchCount = 0;
+        int limit = tpTemplate?["ProgressiveBonus"]?.GetValue<bool>() == true ? 6 : tpTemplate?.TeamPerkMinRequirements ?? 0;
+
+        for (int i = 0; i < support.Length; i++)
+        {
+            var supportNode = currentItem.attributes["crew_members"][$"followerslot{i + 1}"];
+            var supportTemplate = supportNode?.Deserialize<GameAccount.LoadoutBlueprintHero?>(Helpers.JsonOptions.Fields)?.displayTemplate;
+            var supportHero = GameItemTemplate.Get(supportTemplate)?.CreateInstance();
+            support[i].SetItem(supportHero);
+            support[i].SetInteractable(interactable);
+            support[i].SetTeamPerkContributor(false);
+            support[i].SetWarningForCommander(null);
+
+            if (supportHero is null)
+                continue;
+
+            support[i].SetWarningForCommander(commanderItem.template);
+
+            if (tpTemplate is null || matchCount >= limit || !tpTemplate.TeamPerkBoostedByHero(supportHero.template))
+                continue;
+            support[i].SetTeamPerkContributor(true);
+            matchCount++;
+        }
+
+        teamPerk.SetTeamProgress(matchCount);
+        teamPerk.SetWarningForCommander(commanderItem.template);
+
+        var gadgetTemplates = currentItem.attributes["gadgets"]?.Deserialize<string[]>();
+        TrySetGadget(gadgets[0], gadgetTemplates.Length > 0 ? gadgetTemplates[0] : null);
+        TrySetGadget(gadgets[1], gadgetTemplates.Length > 1 ? gadgetTemplates[1] : null);
+    }
+
+    void SetAsLoadoutSlot()
+    {
+        if (currentItem.profile is null)
+        {
+            ClearLoadout();
+            return;
+        }
+        bool isCurrent = currentItem.profile?.statAttributes?["selected_hero_loadout"]?.ToString() == currentItem.uuid && !string.IsNullOrWhiteSpace(currentItem.uuid);
+        EmitSignalIsCurrent(isCurrent);
+        var idx = currentItem.attributes["loadout_index"]?.GetValue<int>() ?? 0;
+        if (currentItem.customData?["displayName"]?.ToString() is string customName)
+        {
+            EmitSignalLoadoutName(customName);
+            EmitSignalLoadoutNumber(currentItem.profile is null ? "" : $"#{idx + 1:00}");
+        }
+        else if (currentItem.profile?.account.GetCustomNameForLoadoutSlot(currentItem) is string customSlotName)
+        {
+            EmitSignalLoadoutName(customSlotName);
+            EmitSignalLoadoutNumber($"#{idx + 1:00}");
+        }
+        else
+        {
+            EmitSignalLoadoutName($"Loadout Slot{(addNumberToName ? $" #{idx + 1:00}" : "")}");
+            EmitSignalLoadoutNumber($"#{idx + 1:00}");
+        }
+
+        var commanderUUID = currentItem.attributes?["crew_members"]?["commanderslot"]?.ToString();
         if (commanderUUID is null)
         {
-            GD.Print("Missing Commander in " + loadoutItem.uuid);
-            GD.PushWarning("Missing Commander in " + loadoutItem.uuid);
+            GD.Print("Missing Commander in " + currentItem.uuid);
+            GD.PushWarning("Missing Commander in " + currentItem.uuid);
             ClearLoadout();
             return;
         }
 
-        var commanderItem = loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString());
+        var commanderItem = currentItem.profile.GetItem(currentItem.attributes["crew_members"]["commanderslot"].ToString());
         commander.SetItem(commanderItem);
         commander.SetInteractable(interactable);
 
-        var tpGuid = loadoutItem.attributes["team_perk"]?.ToString();
-        var tpItem = tpGuid is not null ? loadoutItem.profile.GetItem(tpGuid) : null;
+        var tpGuid = currentItem.attributes["team_perk"]?.ToString();
+        var tpItem = tpGuid is not null ? currentItem.profile.GetItem(tpGuid) : null;
         var tpTemplate = tpItem?.template;
         teamPerk.SetItem(tpItem);
         teamPerk.SetInteractable(interactable);
@@ -170,8 +253,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
         for (int i = 0; i < support.Length; i++)
         {
-            var supportGuid = loadoutItem.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
-            var supportHero = supportGuid is not null ? loadoutItem.profile.GetItem(supportGuid) : null;
+            var supportGuid = currentItem.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
+            var supportHero = supportGuid is not null ? currentItem.profile.GetItem(supportGuid) : null;
             support[i].SetItem(supportHero);
             support[i].SetInteractable(interactable);
             support[i].SetTeamPerkContributor(false);
@@ -193,15 +276,9 @@ public partial class HeroLoadoutEntry : GameItemEntry
         teamPerk.SetTeamProgress(matchCount);
         teamPerk.SetWarningForCommander(commanderItem.template);
 
-        if ((loadoutItem.attributes["gadgets"]?.AsArray().Count ?? 0) > 0)
-            TrySetGadget(gadgets[0], loadoutItem.attributes["gadgets"]?[0]?["gadget"]?.ToString());
-        else
-            TrySetGadget(gadgets[0], null);
-
-        if ((loadoutItem.attributes["gadgets"]?.AsArray().Count ?? 0) > 1)
-            TrySetGadget(gadgets[1], loadoutItem.attributes["gadgets"]?[1]?["gadget"]?.ToString());
-        else
-            TrySetGadget(gadgets[1], null);
+        var gadgetTemplates = currentItem.attributes["gadgets"]?.AsArray().OrderBy(g => (int)g["slot_index"]).Select(g => g["gadget"].ToString()).ToArray() ?? [];
+        TrySetGadget(gadgets[0], gadgetTemplates.Length > 0 ? gadgetTemplates[0] : null);
+        TrySetGadget(gadgets[1], gadgetTemplates.Length > 1 ? gadgetTemplates[1] : null);
     }
 
     //public Vector2 BasisSize => node.CustomMinimumSize;
@@ -372,9 +449,22 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
     protected override void UpdateSelectionVisuals()
     {
-        if (selector is null || selectionFX is null)
+        if (selector is null || selectionFX is null || altSelectionFX is null)
             return;
-        selectionFX.Visible = selector.IsSelected(currentItem);
+        var color = selector.GetSelectableColor(currentItem);
+        bool useAlt = color == HeroLoadoutSlotSelector.transparantWhite;
+        bool selected = selector.IsSelected(currentItem);
+
+        altSelectionFX.Visible = useAlt && selected;
+        selectionFX.Visible = !useAlt && selected;
         selectionFX.SelfModulate = selector.GetSelectableColor(currentItem);
+    }
+
+    public void ForceSelectionVisuals(bool selected, Color? selectableColor = null)
+    {
+        if (selectionFX is null)
+            return;
+        selectionFX.Visible = selected;
+        selectionFX.SelfModulate = selectableColor ?? Colors.White;
     }
 }

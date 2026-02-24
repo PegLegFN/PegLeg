@@ -248,9 +248,10 @@ public class PegLegResourceManager
         if (hasPreloaded)
             return;
         int templatesProcessed = 0;
-        int templatesPerFrame = 0;
+        //int concurrentTemplates = 0;
         var templates = GameItemTemplate.GetTemplates().ToArray();
         int templatesTotal = templates.Length;
+        float templateIncrement = 1f / templatesTotal;
 
         if (templatesTotal == 0)
         {
@@ -258,18 +259,34 @@ public class PegLegResourceManager
             return;
         }
         GD.Print("begin loading template textures");
+        void PrintProgress(float assetProgress) => onProgress?.Invoke("Caching Textures", ((float)templatesProcessed / templatesTotal));
+
+        List<Task> concurrentTemplateTasks = [];
+
+        PrintProgress(0); 
         foreach (var template in templates)
         {
-            template.GetTexture();
-            templatesPerFrame--;
+            //await template.GetTextureAsync(onProgress: PrintProgress);
+            concurrentTemplateTasks.Add(template.GetTextureAsync());
+            //template.GetTexture();
+            //concurrentTemplates--;
             templatesProcessed++;
-            onProgress?.Invoke("Caching Textures", (float)templatesProcessed / templatesTotal);
-            if (templatesPerFrame < 0)
+            //if (concurrentTemplates < 0)
+            //{
+            //    await Helpers.WaitForFrame();
+            //    concurrentTemplates = OS.HasFeature("mobile") ? 40 : 60;
+            //    PrintProgress(0);
+            //}
+            if (concurrentTemplateTasks.Count >= (OS.HasFeature("mobile") ? 500 : 500))
             {
-                await Helpers.WaitForFrame();
-                templatesPerFrame = OS.HasFeature("mobile") ? 40 : 60;
+                await Task.WhenAll(concurrentTemplateTasks);
+                concurrentTemplateTasks.Clear();
+                PrintProgress(0);
             }
         }
+
+        await Task.WhenAll(concurrentTemplateTasks);
+
         hasPreloaded = true;
         GD.Print($"loaded {templatesProcessed} template textures");
     }
@@ -436,6 +453,7 @@ public class PegLegResourceManager
         }
         return jObj;
     }
+
     public static JsonArray LoadResourceArray(string resource, bool allowOverrides = true)
     {
         bool exclude = externalResourceExclusions.Any(resource.StartsWith);
@@ -488,6 +506,57 @@ public class PegLegResourceManager
             GD.PushWarning($"Asset not found: \"{resource}\"");
         }
         return null;
+    }
+
+    public static async Task<T> LoadResourceAssetAsync<T>(string resource, Action<float> onProgress = null, bool cache = false) where T : Resource
+    {
+        bool exclude = externalResourceExclusions.Any(resource.StartsWith);
+        //if (allowOverrides && !exclude && FileAccess.FileExists(overrideResourcePath + resource))
+        //{
+        //    //todo: handle importing external resources and caching with weakrefs
+        //    //return null;
+        //}
+        if (!exclude && ResourceLoader.Exists(resourcePath + resource))
+        {
+            return await LoadResourceAsyncFromPath<T>(resourcePath + resource, onProgress);
+        }
+        if (ResourceLoader.Exists(fallbackResourcePath + resource))
+        {
+            return await LoadResourceAsyncFromPath<T>(fallbackResourcePath + resource, onProgress);
+        }
+        //missing game asset textures are expected when using fallback resources
+        if (!typeof(T).IsSubclassOf(typeof(Texture)) || !resource.StartsWith("GameAssets/"))
+        {
+            GD.PushWarning($"Asset not found: \"{resource}\"");
+        }
+        return null;
+    }
+
+    static async Task<T> LoadResourceAsyncFromPath<T>(string fullPath, Action<float> onProgress) where T : Resource
+    {
+        var reqErr = ResourceLoader.LoadThreadedRequest(fullPath, useSubThreads: true);
+        if (reqErr != Error.Ok)
+        {
+            GD.PushWarning($"Async asset request failure: {reqErr} (\"{fullPath}\")");
+            return null;
+        }
+
+        Godot.Collections.Array progress = [];
+        var stage = ResourceLoader.LoadThreadedGetStatus(fullPath, progress);
+        while (stage == ResourceLoader.ThreadLoadStatus.InProgress)
+        {
+            onProgress?.Invoke((float)progress[0]);
+            await Helpers.WaitForFrame();
+            stage = ResourceLoader.LoadThreadedGetStatus(fullPath);
+        }
+
+        if (stage != ResourceLoader.ThreadLoadStatus.Loaded)
+        {
+            GD.PushWarning($"Async asset load failure: {stage} (\"{fullPath}\")");
+            return null;
+        }
+        onProgress?.Invoke(1);
+        return (T)ResourceLoader.LoadThreadedGet(fullPath);
     }
 
     public static JsonObject AlterationLoadouts => dataSources?["AlterationLoadouts"];
@@ -560,703 +629,6 @@ public class PegLegResourceManager
     //}
 }
 
-public static class HeroStats
-{
-    public const string MaxHealth = "FortHealthSet.MaxHealth";
-    public const string MaxShields = "FortHealthSet.Shield";
-    public const string HealthRegenRate = "FortRegenHealthSet.HealthRegenRate";
-    public const string ShieldRegenRate = "FortRegenHealthSet.ShieldRegenRate";
-    public const string AbilityDamage = "FortDamageSet.OutgoingBaseAbilityDamageMultiplier";
-    public const string HealingModifier = "FortHealthSet.HealingSourceBaseMultiplier";
-}
-
-public static class SurvivorBonus
-{
-    public const string MaxHealth = "IsFortitudeLow";
-    public const string MaxShields = "IsResistanceLow";
-    public const string ShieldRegenRate = "IsShieldRegenLow";
-
-    public const string RangedDamage = "IsRangedDamageLow";
-    public const string MeleeDamage = "IsMeleeDamageLow";
-    public const string AbilityDamage = "IsAbilityDamageLow";
-    public const string TrapDamage = "IsTrapDamageLow";
-
-    public const string TrapDurability = "IsTrapDurabilityHigh";
-}
-
-public class GameItemTemplate
-{
-    #region Static Values
-
-    static Texture2D goldLlama = ResourceLoader.Load<Texture2D>("res://Images/Llamas/PinataGold.png", "Texture2D");
-
-    public static string[] rarityIds = new string[]
-    {
-        null,
-        "C",
-        "UC",
-        "R",
-        "VR",
-        "SR",
-        "UR"
-    };
-
-    public static string[] tierIds = new string[]
-    {
-        "T00",
-        "T01",
-        "T02",
-        "T03",
-        "T04",
-        "T05",
-    };
-
-    public static readonly Color[] rarityColours = new Color[]
-    {
-        Colors.Transparent,
-        Color.FromString("#bfbfbf", Colors.White),
-        Color.FromString("#83db00", Colors.White),
-        Color.FromString("#008bf1", Colors.White),
-        Color.FromString("#a952ff", Colors.White),
-        Color.FromString("#ff7b3d", Colors.White),
-        Color.FromString("#ffff40", Colors.White),
-    };
-
-    static readonly string[] cardPackFromRarity = new string[]
-    {
-        "CardPack:cardpack_choice_all_r",
-        "CardPack:cardpack_choice_all_r",
-        "CardPack:cardpack_choice_all_r",
-        "CardPack:cardpack_choice_all_r",
-        "CardPack:cardpack_choice_all_vr",
-        "CardPack:cardpack_choice_all_sr",
-    };
-
-    #endregion
-
-    #region Static Methods
-
-    static FrozenDictionary<string, GameItemTemplate> importedTemplates = null;
-    public static void SetImportedTemplates(FrozenDictionary<string, GameItemTemplate> newImportedTemplates) =>
-        importedTemplates = newImportedTemplates;
-
-    static ConcurrentDictionary<string, GameItemTemplate> customTemplates = [];
-
-    public static GameItemTemplate Get(string templateId)
-    {
-        if (templateId is null || templateId.Count(c => c == ':') != 1)
-            return null;
-
-        if (templateId.StartsWith("STWAccoladeReward"))
-            templateId = templateId.Replace("STWAccoladeReward:stwaccolade_", "Accolades:accoladeid_stw_");
-
-        if (templateId == "AccountResource:currency_mtxswap")
-            templateId = "AccountResource:currency_hybrid_mtx_xrayllama";
-
-        if (customTemplates.TryGetValue(templateId, out var custom))
-            return custom;
-
-        if (importedTemplates?.TryGetValue(templateId, out var imported) ?? false)
-            return imported;
-
-        return null;
-    }
-
-    public static GameItemTemplate GetOrCreate(string templateId, Func<GameItemTemplate> constructor)
-    {
-        if (templateId is null || templateId.Count(c => c == ':') != 1)
-            return null;
-
-        if (Get(templateId) is GameItemTemplate foundTemplate)
-            return foundTemplate;
-
-        GameItemTemplate newTemplate = constructor();
-
-        if (newTemplate is not null)
-            lock (customTemplates)
-            {
-                bool exists = customTemplates.TryAdd(newTemplate.TemplateId, newTemplate);
-                return exists ? customTemplates[newTemplate.TemplateId] : newTemplate;
-            }
-
-        return null;
-    }
-
-    public static IEnumerable<GameItemTemplate> GetTemplates()
-    {
-        return importedTemplates?.Union(customTemplates)?.Select(kvp => kvp.Value);
-    }
-
-    //probably pretty performance heavy, use sparingly
-    public static IEnumerable<GameItemTemplate> GetTemplatesOfType(string templateType, Func<GameItemTemplate, bool> filter = null) =>
-        importedTemplates?
-        .Where(kvp =>
-            kvp.Key.StartsWith(templateType + ":") &&
-            filter.Try(kvp.Value
-        ))?
-        .Union(customTemplates
-            .Where(kvp =>
-                kvp.Key.StartsWith(templateType + ":") &&
-                filter.Try(kvp.Value)
-            )
-        )?
-        .Select(kvp => kvp.Value) ?? [];
-
-    public static Texture2D GetSubtypeTexture(string key, Texture2D fallbackIcon = null)
-    {
-        key ??= "";
-        var dict = PegLegResourceManager.supplimentaryData.ItemTypeAndSubtypeIcons;
-        if (dict.TryGetValue(key, out Texture2D value))
-            return value;
-        return fallbackIcon;
-    }
-
-    #endregion
-
-    public GameItemTemplate(JsonObject rawData)
-    {
-        isReal = true;
-        this.rawData = rawData;
-    }
-
-    public GameItemTemplate(string templateId = "Custom:item", string displayName = "Custom Item", string description = null, string iconPath = null, JsonObject extraData = null)
-    {
-        extraData ??= [];
-        var splitTemplateId = templateId.Split(":");
-        extraData["Type"] = splitTemplateId[0];
-        extraData["Name"] = splitTemplateId[1];
-        if (displayName is not null)
-            extraData["DisplayName"] = displayName;
-        if (description is not null)
-            extraData["Description"] = description;
-        if (iconPath is not null)
-            extraData["ImagePaths"] = new JsonObject() { ["LargePreview"] = iconPath };
-        rawData = extraData;
-    }
-
-    public bool isReal { get; private set; }
-    public JsonObject rawData { get; private set; }
-    public JsonNode this[string propertyName] => rawData[propertyName];
-    public bool ContainsKey(string propertyName) => rawData.ContainsKey(propertyName);
-    public string TemplateId => $"{Type}:{Name.ToLower()}";
-    public bool VBucksOrXRayTickets => Type == "AccountResource" && Name.ToLower() is string lowername && (
-            lowername == "currency_hybrid_mtx_xrayllama" ||
-            lowername == "currency_mtxswap" ||
-            lowername == "currency_xrayllama"
-        );
-
-    public string Type
-    {
-        get
-        {
-            //var type = rawData.TryGetPropertyValue("Type", out var typeNode) ? typeNode.ToString() : null;
-            var type = rawData["Type"]?.ToString();
-            if (type is null)
-            {
-                GD.Print("WOAH NELLY");
-                return "";
-            }
-            return type;
-        }
-    }
-
-    public bool IsCollectable => Type switch
-    {
-        "Hero" or "Worker" or "Defender" or "Schematic" => true,
-        _ => false
-    };
-    public bool CanBeLeveled => Tier > 0 && Type switch
-    {
-        "Hero" or "Worker" or "Weapon" or "Trap" => true,
-        "Schematic" => !Unrecyclable || Category != "Trap",
-        "Defender" => !Unrecyclable || RarityLevel > 1,
-        _ => false
-    };
-    public bool CanBeUnseen=> Type switch
-    {
-        "Hero" or "Worker" or "Defender" or "Schematic" or "Quest" or "AccountResource" or "ConsumableAccountItem" or "CardPack" => true,
-        _ => false
-    };
-    public bool CanBeFavourited => Type switch
-    {
-        "Hero" or "Worker" or "Defender" or "Schematic" or "AccountResource"=> true,
-        _ => false
-    };
-
-    public string CollectionProfile => Type == "Schematic" ? FnProfileTypes.SchematicCollection : FnProfileTypes.PeopleCollection;
-    public string Name => rawData["Name"].ToString();
-    public string DisplayName => rawData["DisplayName"]?.ToString();
-    public string SortingDisplayName => DisplayName.StartsWith("The ") ? DisplayName[4..] : DisplayName;
-    public string Description => rawData["Description"]?.ToString();
-    public string Category => rawData["Category"]?.ToString();
-    public string SubType => rawData["SubType"]?.ToString();
-    public string Rarity => rawData["Rarity"]?.ToString();
-    public int RarityLevel => (Rarity ?? "").ConvertRarityString();
-    public Color RarityColor => Name.StartsWith("ZCP_") ? Colors.Transparent : rarityColours[RarityLevel];
-
-    public int Tier => rawData["Tier"]?.GetValue<int>() ?? 0;
-    //public int Tier => rawData["Tier"] is JsonValue tierVal ? (tierVal.TryGetValue<int>(out var tier) ? tier : 0) : 0;
-    public string Personality => rawData["Personality"]?.ToString();
-
-    public bool Unrecyclable => rawData["RecycleRecipe"] is null;
-    public bool Undismantlable => rawData["DismantleResults"] is null;
-
-    AlterationSlot[] alterationSlots;
-    public AlterationSlot[] AlterationSlots => alterationSlots ??= AlterationSlot.SlotsFromRow(
-        rawData["AlterationLoadoutRow"]?.ToString(), 
-        rawData["AlterationNamedExclusions"]?.Deserialize<string[]>() ?? []
-    );
-
-    FrozenSet<string> heroTags = null;
-    public FrozenSet<string> HeroTags => heroTags ??= [.. rawData["HeroTags"]?.Deserialize<string[]>() ?? []];
-
-    public Texture2D GetTexture(FnItemTextureType textureType = FnItemTextureType.Preview, bool largePreview = false) => GetTexture(textureType, PegLegResourceManager.defaultIcon, largePreview);
-    public Texture2D GetTexture(Texture2D fallbackIcon, bool largePreview = false) => GetTexture(FnItemTextureType.Preview, fallbackIcon, largePreview);
-
-    Dictionary<FnItemTextureType, Texture2D> persistantTextureCache = [];
-    public Texture2D GetTexture(FnItemTextureType textureType, Texture2D fallbackIcon, bool largePreview = false)
-    {
-        if (persistantTextureCache.TryGetValue(textureType, out var cachedTex) && (!largePreview || textureType != FnItemTextureType.Preview))
-            return cachedTex;
-
-        if ((Type == "TeamPerk" ||  Type == "Ability") && textureType == FnItemTextureType.Preview)
-            textureType = FnItemTextureType.Icon;
-
-        if(Type == "Worker" &&
-            (
-                rawData["ImagePaths"]?
-                ["SmallPreview"]?
-                .ToString()
-                .Contains("GenericWorker") ?? false
-            ))
-            return GetSubtypeTexture(SubType ?? "Survivor", fallbackIcon);
-
-        if 
-        (
-            Type == "CardPack" && 
-            textureType == FnItemTextureType.Preview && 
-            DisplayName.Contains("Legendary") && 
-            DisplayName.Contains("Llama") && 
-            !Name.StartsWith("ZCP_")
-        )
-            return goldLlama;
-
-        if (!TryGetTexturePath(out var texturePath, out var wasLargePreview, textureType, largePreview))
-            return fallbackIcon;
-        var loadedTex = PegLegResourceManager.LoadResourceAsset<Texture2D>("GameAssets/" + texturePath);
-        if (loadedTex is not null && !wasLargePreview)
-            persistantTextureCache[textureType] = loadedTex;
-        return loadedTex ?? fallbackIcon;
-    }
-
-    public bool TryGetTexturePath(out string foundPath, FnItemTextureType textureType = FnItemTextureType.Preview) =>
-        TryGetTexturePath(out foundPath, out _, textureType, false);
-    
-
-    public bool TryGetTexturePath(out string foundPath, out bool wasLargePreview, FnItemTextureType textureType, bool preferLargePreview)
-    {
-        foundPath = null;
-        wasLargePreview = false;
-        JsonObject imagePaths = rawData["ImagePaths"]?.AsObject();
-        if (imagePaths is null)
-            return false;
-
-        if (textureType == FnItemTextureType.Preview)
-        {
-            if (preferLargePreview)
-            {
-                wasLargePreview = imagePaths["LargePreview"] is not null;
-                foundPath = (imagePaths["LargePreview"] ?? imagePaths["SmallPreview"])?.ToString();
-            }
-            else
-                foundPath = (imagePaths["SmallPreview"] ?? imagePaths["LargePreview"])?.ToString();
-        }
-        else
-            foundPath = imagePaths[textureType.ToString()]?.ToString();
-
-        if (string.IsNullOrWhiteSpace(foundPath) || !foundPath.StartsWith("ExportedImages"))
-            return false;
-        return true;
-    }
-
-    public Texture2D GetSubtypeTexture(Texture2D fallbackIcon = null)
-    {
-        switch (Type)
-        {
-            case "Schematic":
-                if (Category == "Trap")
-                    return GetSubtypeTexture("Trap", fallbackIcon);
-                else
-                    return GetSubtypeTexture(SubType, fallbackIcon);
-            case "Worker":
-                if (rawData["ImagePaths"]?["SmallPreview"]?.ToString().Contains("GenericWorker") ?? false)
-                    return null;
-                else
-                    return GetSubtypeTexture(SubType ?? "Survivor", fallbackIcon);
-            case "Trap":
-                return GetSubtypeTexture("Trap", fallbackIcon);
-            default:
-                return GetSubtypeTexture(SubType, fallbackIcon);
-        }
-    }
-
-    public GameItemTemplate TryGetNextRarity()
-    {
-        if (rawData["RarityUpRecipe"]?["Result"]?.ToString() is string rarityUpResult)
-            return Get(rarityUpResult);
-        return null;
-    }
-
-    public GameItemTemplate TryGetNextTier()
-    {
-        if (rawData["TierUpRecipe"]?["Result"]?.ToString() is string tierUpResult)
-            return Get(tierUpResult);
-        return null;
-    }
-
-    public Texture2D GetAmmoTexture(Texture2D fallbackIcon = null)
-    {
-        if (Type != "Schematic" && Type != "Weapon" && Type != "Trap")
-            return fallbackIcon;
-
-        if (Category == "Trap" || Type == "Trap")
-            return GetSubtypeTexture(SubType, fallbackIcon);
-
-        if (
-            rawData["RangedWeaponStats"]?["AmmoType"]?.ToString() is string ammoType && 
-            PegLegResourceManager.supplimentaryData.AmmoIcons.TryGetValue(ammoType.Split(" ")[0], out Texture2D value)
-            )
-            return value;
-
-        return fallbackIcon;
-    }
-
-    public string GetCompactRarityAndTier(int givenTier = 0)
-    {
-        var rarityId = rarityIds[RarityLevel];
-        var tierId = givenTier <= 0 ? tierIds[Tier] : tierIds[givenTier];
-        return rarityId + "_" + tierId;
-    }
-
-    GameItemTemplate[] heroAbilities;
-    public GameItemTemplate[] GetHeroAbilities()
-    {
-        if (Type != "Hero")
-            return null;
-        return heroAbilities ??=
-        [
-            Get(rawData["HeroPerkTemplate"]?.ToString()),
-            Get(rawData["CommanderPerkTemplate"]?.ToString()),
-            Get(rawData["HeroAbilities"]?[0].ToString()),
-            Get(rawData["HeroAbilities"]?[1].ToString()),
-            Get(rawData["HeroAbilities"]?[2].ToString()),
-        ];
-    }
-
-    GameItemTemplate teamPerk;
-    public GameItemTemplate GetTeamPerk()
-    {
-        if (Type != "Hero")
-            return null;
-        return teamPerk ??= Get(rawData["UnlocksTeamPerk"]?.ToString());
-    }
-
-    GameItem[] questRewards;
-    GameItem[] visibleQuestRewards;
-    GameItem[] hiddenQuestRewards;
-    public GameItem[] GetQuestRewards()
-    {
-        if (Type != "Quest")
-            return null;
-        return questRewards ??= [.. GetVisibleQuestRewards().Union(GetHiddenQuestRewards())];
-    }
-
-    public GameItem[] GetVisibleQuestRewards()
-    {
-        if (Type != "Quest")
-            return null;
-        return visibleQuestRewards ??= GenerateQuestRewards(false);
-    }
-
-    public GameItem[] GetHiddenQuestRewards()
-    {
-        if (Type != "Quest")
-            return null;
-        return hiddenQuestRewards ??= GenerateQuestRewards(true);
-    }
-
-    GameItem[] GenerateQuestRewards(bool hidden)
-    {
-        var allRewards = rawData["Rewards"]
-            .AsArray()
-            .Where(r => r["Hidden"].GetValue<bool>() == hidden);
-
-        var rewards = allRewards
-            .Where(r => !r["Selectable"].GetValue<bool>())
-            .Select(r => Get(r["Item"].ToString())?.CreateInstance(r["Quantity"].GetValue<int>()))
-            .Where(r => r is not null)
-            .ToList();
-
-        var dynamicRewards = allRewards
-            .Where(r => r["Selectable"].GetValue<bool>());
-
-        if (dynamicRewards.Any())
-        {
-            //fake a cardpack to show a choice reward
-            var cardpackID = cardPackFromRarity[dynamicRewards.Select(q => Get(q["Item"]?.ToString())?.RarityLevel ?? 0).Max()];
-            JsonObject attributes = new()
-            {
-                ["options"] = new JsonArray([.. dynamicRewards.Select(r => new JsonObject()
-                {
-                    ["itemType"] = r["Item"].ToString(),
-                    ["attributes"] = new JsonObject(),
-                    ["quantity"] = r["Quantity"].GetValue<int>()
-                })]),
-                ["quest_selectable"] = true
-            };
-            var choiceReward = Get(cardpackID).CreateInstance(1, attributes);
-            rewards.Insert(0, choiceReward);
-        }
-        return [.. rewards];
-    }
-
-    static Dictionary<string, GameItem> gadgetSingletonLookup = [];
-    static Dictionary<string, string> gadgetNodeMap = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["g_airstrike"] = "skilltree_airstrike",
-        ["g_generic_adrenalinerush"] = "skilltree_adrenalinerush",
-        ["g_generic_banner"] = "skilltree_banner",
-        ["g_generic_botturret"] = "skilltree_hoverturret",
-        ["g_generic_proximitymines"] = "skilltree_proximitymine",
-        ["g_generic_slowfield"] = "skilltree_slowfield",
-        ["g_supplydrop"] = "skilltree_supplydrop",
-        ["g_teleporter"] = "skilltree_teleporter",
-    };
-
-    public GameItem GadgetSingleton => 
-        gadgetSingletonLookup.TryGetValue(TemplateId, out var value) ? 
-        value : 
-        (gadgetSingletonLookup[TemplateId] = CreateInstance().SetUUID());
-
-    public bool HomebaseNodeForGadget(out string nodeTemplateId)
-    {
-        nodeTemplateId = null;
-        if(Type != "Gadget")
-            return false;
-        if (gadgetNodeMap.TryGetValue(Name, out var nodeName))
-        {
-            nodeTemplateId = $"HomebaseNode:{nodeName}";
-            return true;
-        }
-        return false;
-    }
-
-    CommanderRequirement? commanderReq;
-    public bool PerkCompatibleWithCommander(GameItemTemplate commanderTemplate, out string warning)
-    {
-        warning = null;
-        if (commanderTemplate?.Type != "Hero" || (Type != "Hero" && Type != "TeamPerk"))
-            return false;
-        commanderReq ??= rawData[Type == "TeamPerk" ? "CommanderRequirement" : "HeroPerkRequirement"]?
-            .Deserialize<CommanderRequirement>(Helpers.JsonOptions.Fields);
-        if (commanderReq?.IsMatch(commanderTemplate) != false)
-            return true;
-        warning = commanderReq?.Description;
-        return false;
-    }
-
-    TeamPerkSupportRequirements? teamperkReq;
-    public bool TeamPerkBoostedByHero(GameItemTemplate heroTemplate)
-    {
-        if (heroTemplate?.Type != "Hero" || Type != "TeamPerk")
-            return false;
-        teamperkReq ??= rawData["SupportRequirements"]?
-            .Deserialize<TeamPerkSupportRequirements>(Helpers.JsonOptions.Fields);
-        if (teamperkReq?.IsMatch(heroTemplate) == true)
-            return true;
-        return false;
-    }
-
-    public int TeamPerkMinRequirements => (teamperkReq ??= rawData["SupportRequirements"]?.Deserialize<TeamPerkSupportRequirements>(Helpers.JsonOptions.Fields)).Value.MinimumQuantity;
-
-    struct CommanderRequirement
-    {
-#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
-        public string Description;
-        public string[] CommanderTag;
-        public string CommanderSubType;
-#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
-
-        public bool IsMatch(GameItemTemplate template)
-        {
-            if (template is null)
-                return false;
-            if (CommanderSubType is not null && template.SubType != CommanderSubType)
-                return false;
-            else if (CommanderTag is not null)
-            {
-                var targetTags = CommanderTag.ToHashSet();
-                var commanderTags = template["HeroTags"]?.Deserialize<string[]>().ToHashSet();
-                if (targetTags.All(t => !commanderTags.Contains(t)))
-                    return false;
-            }
-
-            return true;
-        }
-    }
-
-    struct TeamPerkSupportRequirements()
-    {
-#pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
-        public string Description;
-        public int MinimumQuantity = 1;
-        public string[] HeroTags;
-        public string HeroSubType;
-        public int? MinimumTier;
-        public string MinimumRarity;
-#pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
-
-        public bool IsMatch(GameItemTemplate template)
-        {
-            if (template is null)
-                return false;
-
-            if (HeroSubType is not null && template.SubType != HeroSubType)
-                return false;
-
-            if (HeroTags is not null && HeroTags.Length > 0)
-            {
-                var targetTags = HeroTags.ToHashSet();
-                var heroTags = template.HeroTags;
-                if (targetTags.All(t => !heroTags.Contains(t)))
-                    return false;
-            }
-
-            if (MinimumTier is int tier && template.Tier < tier)
-                return false;
-
-            if (MinimumRarity is not null && template.RarityLevel < MinimumRarity.ConvertRarityString())
-                return false;
-
-            return true;
-        }
-    }
-
-    public struct AlterationSlot
-    {
-        public string[] options;
-        public string[] OptionsForLevel(int level) => [.. options.Select(o => o.EndsWith("_t01") ? $"{o[..^4]}_t0{level}" : o)];
-        public int requiredLevel;
-        public string requiredRarity;
-        public int RequiredRarityLevel => requiredRarity.ConvertRarityString();
-        
-        public static AlterationSlot[] SlotsFromRow(string alterationSlotRow, string[] exclusions = null)
-        {
-            if (alterationSlotRow is null)
-                return [];
-            var row = PegLegResourceManager.AlterationLoadouts[alterationSlotRow].AsArray();
-            var exclusionSet = (exclusions ?? []).ToHashSet();
-            return [..row?
-                .Select(slot => new AlterationSlot()
-                {
-                    options = [..slot["RawAlterations"]
-                        .AsArray()
-                        .Where(a => !exclusionSet.Overlaps(a["ExclusionNames"].Deserialize<string[]>()))
-                        .Select(a => a["AID"].ToString())
-                    ],
-                    requiredLevel = slot["RequiredLevel"].GetValue<int>(),
-                    requiredRarity = slot["RequiredRarity"].ToString(),
-                })
-            ];
-        }
-    }
-
-    public JsonArray GenerateSearchTags(bool assumeUncommon = true)
-    {
-        if(rawData["searchTags"] is JsonArray existingSearchTags)
-            return existingSearchTags;
-
-        List<string> tags =
-        [
-            DisplayName,
-            //Description,
-            Rarity ?? (assumeUncommon ? "Uncommon" : null),
-            Type,
-            SubType,
-            Category,
-            Personality?[2..]
-        ];
-
-        if(GetHeroAbilities() is GameItemTemplate[] abilities)
-        {
-            foreach (var ability in abilities)
-            {
-                if (!ability?.DisplayName?.EndsWith('+') ?? false)
-                {
-                    tags.Add(ability.DisplayName);
-                    //tags.Add(ability.Description);
-                }
-            }
-        }
-        if(GetTeamPerk() is GameItemTemplate teamPerk)
-            tags.Add(teamPerk.DisplayName);
-
-        if (tags.Contains("Worker"))
-            tags.Add("Survivor");
-        if (rawData["RecycleRecipe"] is null)
-            tags.Add("Permanent");
-        var searchTags = new JsonArray(tags.Where(t => !string.IsNullOrWhiteSpace(t)).Select(t => (JsonNode)t).ToArray());
-        lock (rawData)
-        {
-            rawData["RarityLv"] = RarityLevel;
-            rawData["searchTags"] = searchTags;
-        }
-        return searchTags;
-    }
-
-    public GameItem CreateInstance(int quantity = 1, JsonObject attributes = null, GameItem inspectorOverride = null, JsonObject customData = null)
-    {
-        customData ??= [];
-        customData["generated_by_pegleg"] = true;
-        return new(this, quantity, attributes, inspectorOverride, customData);
-    }
-
-    public GameItem PriceForItem()
-    {
-        int quantity = Type switch
-        {
-            "Hero" => Rarity switch
-            {
-                "Mythic" => 3200,
-                "Legendary" => 2800,
-                "Epic" => 1000,
-                _ => 100
-            },
-            "Schematic" => Rarity switch
-            {
-                "Legendary" => 1680,
-                "Epic" => 600,
-                _ => 100
-            },
-            _ => 100
-        };
-        return Get("AccountResource:eventcurrency_scaling").CreateInstance(quantity);
-    }
-
-    public GameOffer CreateOffer(GameItem price = null, int quantity = 1, int limit = 1, JsonObject rawData = null) =>
-        GameOffer.CreateFake([CreateInstance(quantity)], price ?? PriceForItem(), limit, rawData);
-}
-
-public enum FnItemTextureType
-{
-    Preview,
-    Icon,
-    LoadingScreen,
-    PackImage,
-
-    Personality,
-    SetBonus
-}
 
 class DataTable
 {

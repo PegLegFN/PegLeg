@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class PinQuestCtx : BaseContextComponent
+public partial class PinQuestCtx : AbstractContextComponent
 {
     public override string Id => "PinQuest";
     GameItem currentItem;

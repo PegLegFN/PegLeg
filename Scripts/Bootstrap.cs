@@ -35,16 +35,26 @@ public partial class Bootstrap : Node
     [Export]
     GpuParticles2D downloadParticles;
     [ExportGroup("Scenes")]
+    [Export(PropertyHint.File, "*.tscn")]
+    string testingSceneUid;
     [Export]
     PackedScene testingScene;
     [Export]
     bool testingRequiresAccount = true;
+    [Export(PropertyHint.File, "*.tscn")]
+    string desktopOnboardingUid;
     [Export]
 	PackedScene desktopOnboarding;
+    [Export(PropertyHint.File, "*.tscn")]
+    string desktopInterfaceUid;
     [Export]
     PackedScene desktopInterface;
+    [Export(PropertyHint.File, "*.tscn")]
+    string liteInterfaceUid;
     [Export]
     PackedScene liteInterface;
+    [Export(PropertyHint.File, "*.tscn")]
+    string shareMenuUid;
     [Export]
     PackedScene shareMenu;
     [ExportGroup("UserPrefs")]
@@ -370,19 +380,40 @@ public partial class Bootstrap : Node
         //todo: autoselect desktop/mobile scenes here
         GetWindow().ContentScaleFactor = 1;
 
+        
+        PackedScene targetScene = null;
+
         if (lite)
-            GetTree().ChangeSceneToPacked(liteInterface);
-        else if (GameAccount.ActiveAccount.isOwned)
-        {
-            if (OS.HasFeature("editor") && testingScene is not null)
-                GetTree().ChangeSceneToPacked(testingScene);
-            else if (UseShareMenu)
-                GetTree().ChangeSceneToPacked(shareMenu);
-            else
-                GetTree().ChangeSceneToPacked(desktopInterface);
-        }
+            targetScene = liteInterface;
+        else if (!GameAccount.ActiveAccount.isOwned)
+            targetScene = desktopOnboarding;
+        else if (OS.HasFeature("editor") && testingScene is not null)
+            targetScene = testingScene;
+        else if (UseShareMenu)
+            targetScene = shareMenu;
         else
-            GetTree().ChangeSceneToPacked(desktopOnboarding);
+            targetScene = desktopInterface;
+
+        if(targetScene is not null)
+            GetTree().ChangeSceneToPacked(targetScene);
+        
+        /*
+        string targetUID = null;
+
+        if (lite)
+            targetUID = liteInterfaceUid;
+        else if (!GameAccount.ActiveAccount.isOwned)
+            targetUID = desktopOnboardingUid;
+        else if (OS.HasFeature("editor") && testingScene is not null)
+            targetUID = testingSceneUid;
+        else if (UseShareMenu)
+            targetUID = shareMenuUid;
+        else
+            targetUID = desktopInterfaceUid;
+
+        if (targetUID is not null)
+            await GetTree().ChangeSceneAsync(targetUID);
+        */
     }
 
     static class NamedPipeContainer

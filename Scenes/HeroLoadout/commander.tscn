@@ -28,7 +28,7 @@ resource_local_to_scene = true
 shader = ExtResource("2_42vc3")
 shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/scale = 0.5
-shader_parameter/Rand = 0.8273001
+shader_parameter/Rand = 0.33255148
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1eg8j"]
 resource_local_to_scene = true
@@ -135,10 +135,17 @@ theme_override_constants/separation = 2
 
 [node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1462925937]
 layout_mode = 2
-theme_override_constants/margin_left = 38
 theme_override_constants/margin_bottom = 0
 
-[node name="HeroName" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer3" unique_id=1966343184]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer3" unique_id=2019241520]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PLSpace" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer" unique_id=912900122]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="HeroName" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer" unique_id=1966343184]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 22
@@ -340,10 +347,10 @@ grow_vertical = 2
 texture = ExtResource("6_2xts0")
 expand_mode = 3
 
-[node name="Control" type="Control" parent="." unique_id=600189637]
+[node name="Overlay" type="Control" parent="." unique_id=600189637]
 layout_mode = 2
 
-[node name="PowerLevelIndicator" parent="Control" unique_id=1813387384 instance=ExtResource("13_y0vih")]
+[node name="PowerLevelIndicator" parent="Overlay" unique_id=1813387384 instance=ExtResource("13_y0vih")]
 layout_mode = 1
 offset_top = 6.0
 offset_right = 33.0
@@ -351,10 +358,10 @@ offset_bottom = 26.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="HBoxContainer" parent="Control/PowerLevelIndicator" index="2"]
+[node name="HBoxContainer" parent="Overlay/PowerLevelIndicator" index="2"]
 theme_override_constants/margin_bottom = 2
 
-[node name="PowerLevelLabel" parent="Control/PowerLevelIndicator/HBoxContainer" index="0"]
+[node name="PowerLevelLabel" parent="Overlay/PowerLevelIndicator/HBoxContainer" index="0"]
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 2
@@ -380,14 +387,16 @@ componentList = ExtResource("17_5bpsy")
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
 [connection signal="ItemDoesExist" from="." to="ItemBG" method="set_visible"]
 [connection signal="ItemDoesExist" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="set_visible"]
-[connection signal="ItemDoesExist" from="." to="Control/PowerLevelIndicator" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="Overlay/PowerLevelIndicator" method="set_visible"]
 [connection signal="ItemDoesNotExist" from="." to="LoadoutBG" method="set_visible"]
 [connection signal="MaxTierChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetMaxTier"]
-[connection signal="NameChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer3/HeroName" method="set_text"]
+[connection signal="NameChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer/HeroName" method="set_text"]
 [connection signal="RarityChanged" from="." to="ItemBG" method="set_modulate"]
 [connection signal="RarityChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/TextureRect" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect" method="set_self_modulate"]
-[connection signal="RatingChanged" from="." to="Control/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="RatingChanged" from="." to="Overlay/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="RatingVisibility" from="." to="Overlay/PowerLevelIndicator" method="set_visible"]
+[connection signal="RatingVisibility" from="." to="MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer/PLSpace" method="set_visible"]
 [connection signal="SubtypeIconChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect/SubtypeIcon" method="set_texture"]
 [connection signal="SuperchargeChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetSuperchargedTier"]
 [connection signal="TierChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetTier"]
@@ -400,4 +409,4 @@ componentList = ExtResource("17_5bpsy")
 [editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry"]
 [editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry2"]
 [editable path="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/HBoxContainer/AbilityEntry3"]
-[editable path="Control/PowerLevelIndicator"]
+[editable path="Overlay/PowerLevelIndicator"]

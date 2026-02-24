@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Reflection;
 
-public partial class FavouriteItemCtx : BaseContextComponent
+public partial class FavouriteItemCtx : AbstractContextComponent
 {
     public override string Id => "FavouriteItem";
     GameItem currentItem;

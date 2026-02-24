@@ -205,7 +205,7 @@ public class GameStorefront
             section => section.GroupBy(o => o.CosmeticLayoutId)
             .ToDictionary(
                 group => group.Key,
-                group => group.OrderBy(o => -o.CosmeticSortPriority).ToArray()
+                group => group.OrderBy(o => -o.SortPriority).ToArray()
             )
         );
 }

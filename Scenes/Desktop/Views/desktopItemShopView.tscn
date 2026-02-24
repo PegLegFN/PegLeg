@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c6ftxiyts6lrg"]
+[gd_scene format=3 uid="uid://c6ftxiyts6lrg"]
 
 [ext_resource type="Script" uid="uid://dl2wfd2ftyc8p" path="res://Scripts/UserInterface/ItemShopInterface.cs" id="1_kwhsc"]
 [ext_resource type="PackedScene" uid="uid://wb5ukb74fot1" path="res://Scenes/OfferEntries/game_offer_entry.tscn" id="2_g1chj"]
@@ -20,7 +20,7 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="Item Shop" type="VBoxContainer" node_paths=PackedStringArray("shopOfferEntryParent")]
+[node name="Item Shop" type="VBoxContainer" unique_id=1050483917 node_paths=PackedStringArray("shopOfferEntryParent")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -32,30 +32,30 @@ script = ExtResource("1_kwhsc")
 shopOfferEntryScene = ExtResource("2_g1chj")
 shopOfferEntryParent = NodePath("ScrollContainer/MarginContainer/HBoxContainer/ShopItems")
 
-[node name="Timer" type="MarginContainer" parent="."]
+[node name="Timer" type="MarginContainer" parent="." unique_id=1637252609]
 layout_mode = 2
 theme_override_constants/margin_top = 5
 
-[node name="PanelContainer" type="PanelContainer" parent="Timer"]
+[node name="PanelContainer" type="PanelContainer" parent="Timer" unique_id=641728485]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Timer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Timer/PanelContainer" unique_id=2009049691]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Timer/PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Timer/PanelContainer/MarginContainer" unique_id=1555725117]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Timer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Timer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1765342152]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Weekly Shop Resets: "
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="Timer/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="Timer/PanelContainer/MarginContainer/HBoxContainer" unique_id=1310181985]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -64,15 +64,15 @@ vertical_alignment = 1
 script = ExtResource("3_l6e2c")
 timerType = 2
 
-[node name="RefreshTimer" parent="Timer/PanelContainer/MarginContainer/HBoxContainer" instance=ExtResource("4_134v3")]
-custom_minimum_size = Vector2(69, 0)
+[node name="RefreshTimer" parent="Timer/PanelContainer/MarginContainer/HBoxContainer" unique_id=285855155 instance=ExtResource("4_134v3")]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 timerType = 2
 formatType = 0
 
-[node name="ActiveCurrency" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer"]
+[node name="ActiveCurrency" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer" unique_id=2048334251]
 layout_mode = 2
 size_flags_horizontal = 8
 script = ExtResource("4_fespf")
@@ -80,42 +80,42 @@ fixedCurrencyType = "AccountResource:eventcurrency_scaling"
 compactifyAmount = true
 showSingleItemAmount = true
 
-[node name="Panel" type="Panel" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency"]
+[node name="Panel" type="Panel" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency" unique_id=799236177]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_igy33")
 
-[node name="MarginContainer" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency"]
+[node name="MarginContainer" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency" unique_id=1457789906]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer" unique_id=1904795782]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer/HBoxContainer" unique_id=349842818]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Icon" type="TextureRect" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer/HBoxContainer/MarginContainer" unique_id=1402913761]
 layout_mode = 2
 texture = ExtResource("5_korv2")
 expand_mode = 3
 
-[node name="AmountText" type="Label" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer/HBoxContainer"]
+[node name="AmountText" type="Label" parent="Timer/PanelContainer/MarginContainer/ActiveCurrency/MarginContainer/HBoxContainer" unique_id=882118316]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1964960889]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=1149437211]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -124,13 +124,13 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer" unique_id=28611810]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="ShopItems" type="Container" parent="ScrollContainer/MarginContainer/HBoxContainer"]
+[node name="ShopItems" type="Container" parent="ScrollContainer/MarginContainer/HBoxContainer" unique_id=796723464]
 layout_mode = 2
 script = ExtResource("4_xaiqb")
 MinCols = 2

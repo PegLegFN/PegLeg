@@ -1,7 +1,7 @@
 using Godot;
 using System.Linq;
 
-public partial class ClaimQuestCtx : BaseContextComponent
+public partial class ClaimQuestCtx : AbstractContextComponent
 {
     public override string Id => "ClaimQuest";
     GameItem currentItem;

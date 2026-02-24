@@ -183,7 +183,7 @@ public partial class GameItemViewer : ModalWindow
         devTextContainer.Reparent(inactiveTabParent);
 
         var type = item.template?.Type;
-        if (type == "Hero" && !OS.HasFeature("lite"))
+        if (type == "Hero")
         {
             //parse hero stuff
             heroDetailsPanel.Reparent(activeTabParent);

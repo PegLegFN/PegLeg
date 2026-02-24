@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class BookmarkItemCtx : BaseContextComponent
+public partial class BookmarkItemCtx : AbstractContextComponent
 {
     public override string Id => "BookmarkItem";
     GameItem currentItem;

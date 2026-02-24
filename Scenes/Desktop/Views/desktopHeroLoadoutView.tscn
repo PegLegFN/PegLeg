@@ -1,13 +1,46 @@
 [gd_scene format=3 uid="uid://b4k4ku3cjmqku"]
 
 [ext_resource type="Script" uid="uid://c3p5k7vank2bh" path="res://Scripts/HeroLoadout/HeroLoadoutSlotSelector.cs" id="1_kwlnb"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="2_35tk7"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_ht23k"]
 [ext_resource type="PackedScene" uid="uid://fdp52f4byq7k" path="res://Scenes/HeroLoadout/loadout_slot_list.tscn" id="2_kwlnb"]
 [ext_resource type="PackedScene" uid="uid://cbwhly7mce0o5" path="res://Scenes/HeroLoadout/heroLoadoutPanel.tscn" id="2_qqdfd"]
 [ext_resource type="Texture2D" uid="uid://tpjage78y2k4" path="res://Images/InterfaceIcons/OrArrowHDRight.png" id="2_wrnfi"]
 [ext_resource type="Texture2D" uid="uid://b14huoyr6f3me" path="res://Images/InterfaceIcons/OrArrowHDDown.png" id="3_1fwhb"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_kwlnb"]
-[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="8_4wsl6"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="3_ne8ju"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="6_ne8ju"]
+[ext_resource type="Shader" uid="uid://eoimu7fwf1u6" path="res://Shaders/RoundSelectableHighlight.gdshader" id="7_q1qkr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ne8ju"]
+resource_local_to_scene = true
+shader = ExtResource("6_ne8ju")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ShiftDirection = Vector2(0, 0.5)
+shader_parameter/Fit = true
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 7.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q1qkr"]
+resource_local_to_scene = true
+shader = ExtResource("6_ne8ju")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ShiftDirection = Vector2(0, 0.5)
+shader_parameter/Fit = true
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 7.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lytjq"]
+resource_local_to_scene = true
+shader = ExtResource("7_q1qkr")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/Radius = 7.0
 
 [node name="Hero Loadout" type="MarginContainer" unique_id=1981917911]
 anchors_preset = 15
@@ -19,70 +52,118 @@ grow_vertical = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=345977060]
 layout_mode = 2
 
-[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" unique_id=1788846179 node_paths=PackedStringArray("linkedPanel", "loadoutList", "searchBar")]
+[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" unique_id=1788846179 node_paths=PackedStringArray("linkedPanel", "blueprintPreview", "loadoutList", "searchBar", "setAsActiveButton", "createBlueprintButton", "loadBlueprintButton", "cancelLoadBlueprintButton", "listMode")]
 layout_mode = 2
 script = ExtResource("1_kwlnb")
 linkedPanel = NodePath("../LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel")
-loadoutList = NodePath("PanelContainer/VBoxContainer/ScrollContainer2")
-searchBar = NodePath("PanelContainer/VBoxContainer/HBoxContainer/LineEdit")
+blueprintPreview = NodePath("VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry")
+loadoutList = NodePath("VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2")
+searchBar = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit")
+setAsActiveButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/Button2")
+createBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/CreateBlueprint")
+loadBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/LoadBlueprint")
+cancelLoadBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/CancelBlueprint")
+listMode = NodePath("VBoxContainer/VirtualTabBar")
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutSlots" unique_id=1214190992]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots" unique_id=1698158027]
+layout_mode = 2
+
+[node name="VirtualTabBar" parent="HBoxContainer/LoadoutSlots/VBoxContainer" unique_id=1575623756 instance=ExtResource("2_35tk7")]
+layout_mode = 2
+
+[node name="Tab" parent="HBoxContainer/LoadoutSlots/VBoxContainer/VirtualTabBar/HBoxContainer" index="0" unique_id=833771641 instance=ExtResource("3_ne8ju")]
+layout_mode = 2
+size_flags_horizontal = 3
+mode = -1
+text = "Loadout Slots"
+IsPressed = true
+
+[node name="Tab2" parent="HBoxContainer/LoadoutSlots/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=1166828539 instance=ExtResource("3_ne8ju")]
+layout_mode = 2
+size_flags_horizontal = 3
+mode = 1
+text = "Loadout Blueprints"
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer" unique_id=1214190992]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 3
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer" unique_id=880520769]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer" unique_id=880520769]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer" unique_id=1532482864]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1532482864]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer" unique_id=2140409647]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=2140409647]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search Loadouts"
 
-[node name="CheckButton" type="CheckButton" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/HBoxContainer" unique_id=314835261]
+[node name="CheckButton" type="CheckButton" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=314835261]
 layout_mode = 2
 text = "Heroes"
 script = ExtResource("2_ht23k")
 section = "inventory"
 key = "loadout_list_heroes"
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer" unique_id=382277052 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer" unique_id=676573375 instance=ExtResource("2_kwlnb")]
+visible = false
+layout_mode = 2
+
+[node name="PlainBG" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry" index="0" unique_id=1870629595]
+material = SubResource("ShaderMaterial_ne8ju")
+
+[node name="ColorBG" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry" index="1" unique_id=1574324179]
+material = SubResource("ShaderMaterial_q1qkr")
+
+[node name="SelectionFX" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry" index="3" unique_id=826352696]
+material = SubResource("ShaderMaterial_lytjq")
+
+[node name="Responsive Button Area" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry" index="4" unique_id=652071058]
+disabled = true
+
+[node name="Ctx" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry/Responsive Button Area" index="1" unique_id=245604059]
+componentList = null
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer" unique_id=382277052 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/scroll_hint_vertical_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
 script = ExtResource("3_kwlnb")
-elementSpace = 4.0
+elementSpace = 2.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/VBoxContainer")
 elementScene = ExtResource("2_kwlnb")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2" unique_id=1872653135]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2" unique_id=1872653135]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 0
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
+theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer" unique_id=936049867]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer" unique_id=936049867]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=1371166484]
+[node name="Offset" type="Control" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=1371166484]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=218494281]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=218494281]
 layout_mode = 2
-mouse_filter = 0
+theme_override_constants/separation = 2
 
-[node name="Padding" type="Control" parent="HBoxContainer/LoadoutSlots/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=1566163428]
+[node name="Padding" type="Control" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2/MarginContainer/VBoxContainer" unique_id=1566163428]
 layout_mode = 2
 
 [node name="LoadoutPreview" type="MarginContainer" parent="HBoxContainer" unique_id=1999839107]
@@ -162,16 +243,36 @@ size_flags_horizontal = 8
 useActiveAccount = false
 editable = true
 
-[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=1427241406]
-custom_minimum_size = Vector2(300, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=367031590]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=1427241406]
+layout_mode = 2
 theme_type_variation = &"ActionButton"
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "Set As Active Slot"
 
-[node name="InvertVisible" type="Node" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Button2" unique_id=322214246]
-script = ExtResource("8_4wsl6")
+[node name="CreateBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=1070068777]
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+theme_override_font_sizes/font_size = 20
+text = "Create Blueprint"
+
+[node name="LoadBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=607715024]
+visible = false
+layout_mode = 2
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 20
+text = "Load Blueprint"
+
+[node name="CancelBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=388695608]
+visible = false
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+theme_override_font_sizes/font_size = 20
+text = "Cancel"
 
 [node name="OverallStats" type="MarginContainer" parent="HBoxContainer" unique_id=1464032470]
 visible = false
@@ -213,7 +314,11 @@ item_9/text = "22.2"
 item_10/text = "Healing Modifier"
 item_11/text = "22.15"
 
-[connection signal="IsCurrent" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Button2/InvertVisible" method="EmitInverted"]
 [connection signal="LoadoutName" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/Label" method="set_text"]
-[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
-[connection signal="InvertedValue" from="HBoxContainer/LoadoutPreview/VBoxContainer/Button2/InvertVisible" to="HBoxContainer/LoadoutPreview/VBoxContainer/Button2" method="set_visible"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/CreateBlueprint" to="HBoxContainer/LoadoutSlots" method="CreateBlueprintFromSelected"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/LoadBlueprint" to="HBoxContainer/LoadoutSlots" method="LoadSelectedBlueprint"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/CancelBlueprint" to="HBoxContainer/LoadoutSlots" method="CompleteSelectedBlueprintLoading"]
+
+[editable path="HBoxContainer/LoadoutSlots/VBoxContainer/VirtualTabBar"]
+[editable path="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry"]

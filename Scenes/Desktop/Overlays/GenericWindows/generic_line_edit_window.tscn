@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://outqvmv6p0pm"]
+[gd_scene format=3 uid="uid://outqvmv6p0pm"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_m5vxe"]
 [ext_resource type="Script" uid="uid://i5bv75up23c3" path="res://Scripts/Overlays/GenericWindows/GenericLineEditWindow.cs" id="2_v5dtr"]
@@ -11,7 +11,7 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="GenericLineEditWindow" node_paths=PackedStringArray("header", "content", "textBox", "cancelButton", "confirmButton", "warningLabel") instance=ExtResource("1_m5vxe")]
+[node name="GenericLineEditWindow" unique_id=1321945043 node_paths=PackedStringArray("header", "content", "textBox", "cancelButton", "confirmButton", "warningLabel") instance=ExtResource("1_m5vxe")]
 script = ExtResource("2_v5dtr")
 header = NodePath("Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Header")
 content = NodePath("Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Context")
@@ -21,10 +21,10 @@ confirmButton = NodePath("Control/WindowContents/CenterContainer/PanelContainer/
 warningLabel = NodePath("Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Warning")
 isUserClosable = true
 
-[node name="CloseBtn" parent="." index="1"]
+[node name="CloseBtn" parent="." index="1" unique_id=929538038]
 visible = false
 
-[node name="CloseBtn2" type="Button" parent="." index="2" groups=["ExcludeButtonSounds"]]
+[node name="CloseBtn2" type="Button" parent="." index="2" unique_id=362702710 groups=["ExcludeButtonSounds"]]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -32,63 +32,63 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
-theme_override_styles/disabled = ExtResource("3_qifvb")
-theme_override_styles/hover = ExtResource("3_qifvb")
-theme_override_styles/pressed = ExtResource("3_qifvb")
 theme_override_styles/normal = ExtResource("3_qifvb")
+theme_override_styles/pressed = ExtResource("3_qifvb")
+theme_override_styles/hover = ExtResource("3_qifvb")
+theme_override_styles/disabled = ExtResource("3_qifvb")
+theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
 
-[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="0"]
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=1562959922]
 use_top_left = true
 
-[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer" index="0"]
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer" index="0" unique_id=2066037159]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/PanelContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/PanelContainer" index="0" unique_id=2023030748]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer" index="0" unique_id=1877271232]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Header" type="Label" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="0"]
+[node name="Header" type="Label" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="0" unique_id=1075759347]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Title Goes Here"
 
-[node name="Context" type="Label" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="1"]
+[node name="Context" type="Label" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="1" unique_id=1656105699]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Extra context goes here"
 autowrap_mode = 3
 
-[node name="LineEdit" type="LineEdit" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="2"]
+[node name="LineEdit" type="LineEdit" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="2" unique_id=2026994915]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 placeholder_text = "Placeholder text here"
 
-[node name="Warning" type="Label" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="3"]
+[node name="Warning" type="Label" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="3" unique_id=395123633]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.501961, 0, 1)
 text = "Warning: Goes here"
 autowrap_mode = 3
 
-[node name="Buttons" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="4"]
+[node name="Buttons" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" index="4" unique_id=203377659]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="CancelBtn" type="Button" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" index="0"]
+[node name="CancelBtn" type="Button" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" index="0" unique_id=936809877]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
-[node name="ConfirmBtn" type="Button" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" index="1"]
+[node name="ConfirmBtn" type="Button" parent="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons" index="1" unique_id=1353133516]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"ActionButton"
@@ -97,5 +97,6 @@ text = "Confirm"
 
 [connection signal="pressed" from="CloseBtn2" to="." method="Cancel"]
 [connection signal="text_changed" from="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LineEdit" to="." method="OnTextChanged"]
+[connection signal="text_submitted" from="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LineEdit" to="." method="Confirm" unbinds=1]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/CancelBtn" to="." method="Cancel"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/Buttons/ConfirmBtn" to="." method="Confirm"]

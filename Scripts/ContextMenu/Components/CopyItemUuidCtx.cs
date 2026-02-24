@@ -1,6 +1,7 @@
 using Godot;
+using System.Text.Json;
 
-public partial class CopyItemUuidCtx : BaseContextComponent
+public partial class CopyItemUuidCtx : AbstractContextComponent
 {
     public override string Id => "CopyItemUuid";
     GameItem currentItem;
@@ -14,7 +15,7 @@ public partial class CopyItemUuidCtx : BaseContextComponent
     {
         if (currentItem?.profile is null)
             return;
-        DisplayServer.ClipboardSet(Input.IsKeyPressed(Key.Shift) ? currentItem.SimpleRawData.ToString() : currentItem.uuid);
+        DisplayServer.ClipboardSet(Input.IsKeyPressed(Key.Shift) ? JsonSerializer.Serialize(currentItem.GameItemData) : currentItem.uuid);
         menu.CloseMenu();
     }
 }

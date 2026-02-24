@@ -55,12 +55,12 @@ public partial class DiscordWebhookProxy
             }
             """)
             .Send();
-        if (!executionResponse.IsSuccessStatusCode)
+        if (await executionResponse.CheckForError())
         {
-            GD.Print($"WH execution response failed: {executionResponse.ReasonPhrase}");
+            GD.Print($"WH execution response failed");
             return;
         }
-        var executionJson = await executionResponse.Content.ReadFromJsonAsync<JsonObject>();
+        var executionJson = await executionResponse.ReadJson();
         if (executionJson?["id"]?.ToString() is not string syncId)
         {
             GD.Print($"WH message id does not exist (how did this happen?): \n{executionJson}");
@@ -113,21 +113,21 @@ public partial class DiscordWebhookProxy
                 }
                 """)
                 .Send();
-            if (!editResponse.IsSuccessStatusCode)
+            if (await editResponse.CheckForError())
             {
-                GD.Print($"WH: edit response failed: {editResponse.ReasonPhrase}");
+                GD.Print($"WH: edit response failed");
                 return;
             }
             await Task.Delay(1000);
             var winnerResponse = await discordAddress
                 .MakeRequest($"/api/webhooks/{urlEnding}/messages/{syncId}?thread_id={syncThreadId}", HttpMethod.Get)
                 .Send();
-            if (!winnerResponse.IsSuccessStatusCode)
+            if (await winnerResponse.CheckForError())
             {
-                GD.Print($"WH: winner response failed: {winnerResponse.ReasonPhrase}");
+                GD.Print($"WH: winner response failed");
                 return;
             }
-            var winnerJson = await winnerResponse.Content.ReadFromJsonAsync<JsonObject>();
+            var winnerJson = await winnerResponse.ReadJson();
             if (winnerJson["content"]?.ToString() != uuid)
             {
                 GD.Print($"WH: did not win (\"{winnerJson["content"]?.ToString()}\" != \"{uuid}\")");
@@ -195,9 +195,9 @@ public partial class DiscordWebhookProxy
             .MakeRequest($"/api/webhooks/{urlEnding}", HttpMethod.Post)
             .SetContent(formContent)
             .Send();
-        if(!executionResponse.IsSuccessStatusCode)
+        if(await executionResponse.CheckForError())
         {
-            GD.Print($"WH: execution response failed: {executionResponse.ReasonPhrase}");
+            GD.Print($"WH: execution response failed");
             return;
         }
         GD.Print($"WH: executed successfully");

@@ -92,6 +92,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
         classFilter.SetTabPressed(0);
         perkFilter.SetTabPressed(0);
         searchInput.TextChanged += UpdateSearchFilters;
+        searchInput.TextSubmitted += ConfirmFirstSelection;
         classFilter.TabsChanged += UpdateTabFilters;
         perkFilter.TabsChanged += UpdateTabFilters;
         foreach (var filter in abilityFilters)
@@ -243,7 +244,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
             }
         }
         var activeAbility = (commanderContainer.Visible && item.template.Tier > 1) ? abilities[1] : abilities[0];
-        return PLSearch.EvaluateInstructions(searchInstructions, item.CustomSearchObject(() => [activeAbility.Description, Deacronymise(activeAbility.Description)], true));
+        return PLSearch.EvaluateInstructions(searchInstructions, item.CustomSearchObject([activeAbility.Description, Deacronymise(activeAbility.Description)], true));
     }
 
     private IOrderedEnumerable<GameItem> ItemSorter(IOrderedEnumerable<GameItem> items) => items
@@ -291,6 +292,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
             //is support mode and team perk exists
             var hideTeamPerk = commanderContainer.Visible || TeamPerk is null;
             classFilter.SetTabHidden(1, hideTeamPerk);
+            Helpers.Defer(searchInput.GrabFocus);
         }
 
         base.InitialiseSelector(itemOptions);
@@ -301,6 +303,19 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
         UpdateTabFilters(false);
         UpdateSearchFilters(false);
         //sorting
+    }
+
+    void ConfirmFirstSelection(string _)
+    {
+        if (string.IsNullOrWhiteSpace(searchInput.Text))
+            return;
+        var first = filteredItems.FirstOrDefault(i => i != GameItem.Empty);
+        if(first is null && CurrentConfig.allowEmptySelection)
+            first = GameItem.Empty;
+        if (first is null)
+            return;
+        selectedItems = [first];
+        ConfirmSelection();
     }
 
     //override buildtween

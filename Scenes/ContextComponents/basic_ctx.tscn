@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://crl5su2stqsku"]
+[gd_scene format=3 uid="uid://crl5su2stqsku"]
 
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="1_1dj2q"]
+[ext_resource type="Script" uid="uid://c0yp5y6f44hma" path="res://Scripts/ContextMenu/BaseContextComponent.cs" id="1_oboch"]
 [ext_resource type="Script" uid="uid://b7pscn4x4hphs" path="res://Scripts/UIElements/ContextButtonPanel.cs" id="1_wddg3"]
 [ext_resource type="Texture2D" uid="uid://csbd78stcd271" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Magnifier_128.png" id="2_al0wg"]
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="4_1dj2q"]
@@ -30,7 +31,7 @@ shader_parameter/UseShadow = true
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[node name="BasicCtx" type="MarginContainer"]
+[node name="BasicCtx" type="MarginContainer" unique_id=816652717 node_paths=PackedStringArray("disabledPanel")]
 custom_minimum_size = Vector2(0, 24)
 anchors_preset = 8
 anchor_left = 0.5
@@ -43,11 +44,13 @@ offset_right = 60.0
 offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_oboch")
+disabledPanel = NodePath("Disabled")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1242538359]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="Control" node_paths=PackedStringArray("button")]
+[node name="Panel" type="Panel" parent="Control" unique_id=735933404 node_paths=PackedStringArray("button")]
 modulate = Color(0.194349, 0.194349, 0.194349, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -62,24 +65,24 @@ baseMargin = 3.0
 pressMargin = 1.0
 duration = 0.05
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=175890321]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=650842185]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="IconArea" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="IconArea" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=16911845]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("1_1dj2q")
 expand_mode = 3
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/IconArea"]
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/IconArea" unique_id=1417089072]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -89,7 +92,7 @@ grow_vertical = 2
 texture = ExtResource("2_al0wg")
 expand_mode = 3
 
-[node name="Loading" type="TextureRect" parent="MarginContainer/HBoxContainer/IconArea"]
+[node name="Loading" type="TextureRect" parent="MarginContainer/HBoxContainer/IconArea" unique_id=1125778323]
 visible = false
 material = SubResource("ShaderMaterial_naf1d")
 layout_mode = 1
@@ -102,15 +105,15 @@ pivot_offset = Vector2(9, 9)
 texture = ExtResource("5_8fq2v")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1106396072]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Label"
 
-[node name="TextureButton" type="TextureButton" parent="." groups=["ExcludeButtonSounds"]]
+[node name="TextureButton" type="TextureButton" parent="." unique_id=1732343776 groups=["ExcludeButtonSounds"]]
 layout_mode = 2
 
-[node name="Disabled" type="Panel" parent="."]
+[node name="Disabled" type="Panel" parent="." unique_id=465195196]
 self_modulate = Color(0, 0, 0, 0.588235)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_al0wg")

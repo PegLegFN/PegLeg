@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class InspectItemCtx : BaseContextComponent
+public partial class InspectItemCtx : AbstractContextComponent
 {
     public override string Id => "InspectItem";
     GameItem currentItem;

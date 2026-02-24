@@ -219,7 +219,9 @@ public static class ExternalCosmetics
         try
         {
             var rawResponse = await ApiWebAddresses.fnDotApi.MakeRequest($"v1/export?Path={itemPath}").Send();
-            var rawObjArray = (await rawResponse.Content.ReadFromJsonAsync<JsonNode>())?["jsonOutput"]?.AsArray();
+            if (await rawResponse.CheckForError())
+                return null;
+            var rawObjArray = (await rawResponse.ReadJson())?["jsonOutput"]?.AsArray();
             var rawCosmeticNode = rawObjArray.FirstOrDefault(n => n["Name"].ToString().Equals(itemId, StringComparison.InvariantCultureIgnoreCase));
             var rawCosmetic = rawCosmeticNode.Deserialize<RawCosmetic>(Helpers.JsonOptions.Fields) with
             {

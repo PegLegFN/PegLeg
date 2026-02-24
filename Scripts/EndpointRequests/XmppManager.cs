@@ -75,7 +75,9 @@ public class XmppManager
                 .MakeRequest($"/party/api/v1/Fortnite/user/{account.accountId}")
                 .SetAccount(account)
                 .Send();
-            var partyContainer = await partyReq.Content.ReadFromJsonAsync<PartyContainer>(Helpers.JsonOptions.CamelCase);
+            if (await partyReq.CheckForError())
+                return;
+            var partyContainer = await partyReq.ReadJson<PartyContainer>(Helpers.JsonOptions.CamelCase);
             party = partyContainer.current.Length > 0 ? partyContainer.current[0] : null;
             if (party is not null)
             {
@@ -396,7 +398,7 @@ public class XmppManager
             .SetJsonContent(JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields))
             .Send();
 
-        if (!patchReq.IsSuccessStatusCode)
+        if (await patchReq.CheckForError())
         {
             //fetch party?
             return;
@@ -418,7 +420,7 @@ public class XmppManager
             .SetJsonContent(JsonSerializer.Serialize(patch, Helpers.JsonOptions.Fields))
             .Send();
 
-        if (!patchReq.IsSuccessStatusCode)
+        if (await patchReq.CheckForError())
         {
             //fetch party?
             return;

@@ -124,7 +124,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
         SelectionChanged();
     }
     
-    protected async Task WaitForSelection()
+    protected virtual async Task WaitForSelection()
     {
         while (isSelecting)
             await Helpers.WaitForFrame();

@@ -143,9 +143,9 @@ public partial class PartyLoadoutsInterface : Control
                     .MakeRequest($"/account/api/public/account?{string.Join("&", unknownUsers.Select(id => $"accountId={id}"))}")
                     .SetAccount(GameAccount.ActiveAccount)
                     .Send();
-                if (displayNameResponse.IsSuccessStatusCode)
+                if (!await displayNameResponse.CheckForError())
                 {
-                    var newDisplayNames = await displayNameResponse.Content.ReadFromJsonAsync<DisplayNameData[]>(Helpers.JsonOptions.Fields);
+                    var newDisplayNames = await displayNameResponse.ReadJson<DisplayNameData[]>(Helpers.JsonOptions.Fields);
                     foreach (var nameData in newDisplayNames)
                     {
                         var username = nameData.externalAuths.Select(e => e.Value.externalDisplayName).FirstOrDefault(e => e is not null) ?? nameData.displayName;
@@ -213,7 +213,9 @@ public partial class PartyLoadoutsInterface : Control
             .MakeRequest($"/fortnite/api/matchmaking/session/findPlayer/{GameAccount.ActiveAccount.accountId}")
             .SetAccount(GameAccount.ActiveAccount)
             .Send();
-        var matchData = ((await matchResponse.Content.ReadFromJsonAsync<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault()).Value;
+        if (await matchResponse.CheckForError())
+            return [];
+        var matchData = ((await matchResponse.ReadJson<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault()).Value;
         if (matchData.attributes.Gamemode != "FORTPVE")
             return [];
         matchData.publicPlayers ??= matchData.privatePlayers;
@@ -227,8 +229,9 @@ public partial class PartyLoadoutsInterface : Control
             .MakeRequest($"/party/api/v1/Fortnite/user/{fromAccount.accountId}")
             .SetAccount(GameAccount.ActiveAccount)
             .Send();
-        var partyJson = await partyResponse.Content.ReadFromJsonAsync<JsonObject>();
-        var partyData = partyJson.Deserialize<PartyCollection>(Helpers.JsonOptions.Fields);
+        if (await partyResponse.CheckForError())
+            return [];
+        var partyData = await partyResponse.ReadJson<PartyCollection>();
         if (partyData.current.Length == 0)
             return [];
         return partyData.current[0].members.Select(m => m.accountId) ?? [];
@@ -286,9 +289,9 @@ public partial class PartyLoadoutsInterface : Control
                     .MakeRequest($"/account/api/public/account?{string.Join("&", unknownUsers.Select(id => $"accountId={id}"))}")
                     .SetAccount(GameAccount.ActiveAccount)
                     .Send();
-                if (displayNameResponse.IsSuccessStatusCode)
+                if (!await displayNameResponse.CheckForError())
                 {
-                    var newDisplayNames = await displayNameResponse.Content.ReadFromJsonAsync<DisplayNameData[]>(Helpers.JsonOptions.Fields);
+                    var newDisplayNames = await displayNameResponse.ReadJson<DisplayNameData[]>(Helpers.JsonOptions.Fields);
                     foreach (var nameData in newDisplayNames)
                     {
                         var username = nameData.externalAuths.Select(e => e.Value.externalDisplayName).FirstOrDefault(e => e is not null) ?? nameData.displayName;

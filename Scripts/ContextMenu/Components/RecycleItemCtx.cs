@@ -1,7 +1,7 @@
 using Godot;
 using System.Linq;
 
-public partial class RecycleItemCtx : BaseContextComponent
+public partial class RecycleItemCtx : AbstractContextComponent
 {
     public override string Id => "RecycleItem";
     GameItem currentItem;

@@ -70,12 +70,20 @@ public partial class ItemShopInterface : Control
                 var futureItems = Timeline.GetCurrentUpcomingItems();
                 offers =
                 [
-                    ..offers,
+                    ..offers.OrderBy(o => -o.SortPriority),
                     ..futureItems.Select(tuple=>
                         GameItemTemplate
                             .Get(tuple.templateId)
                             .CreateOffer(rawData:new(){["releaseDate"]=tuple.releaseDate})
                     )
+                ];
+            }
+            else
+            {
+                offers = [..offers
+                    .OrderBy(o => -o.itemGrants?.FirstOrDefault()?.template?.RarityLevel ?? 999)
+                    .ThenBy(o => -o.BasePrice.quantity)
+                    .ThenBy(o => -o.WeeklyLimit)
                 ];
             }
 

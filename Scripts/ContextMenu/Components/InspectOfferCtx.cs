@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class InspectOfferCtx : BaseContextComponent
+public partial class InspectOfferCtx : AbstractContextComponent
 {
     public override string Id => "InspectOffer";
     GameOfferEntry entry;

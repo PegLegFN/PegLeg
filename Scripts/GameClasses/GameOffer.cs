@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static ExternalCosmetics;
@@ -35,6 +36,7 @@ public class GameOffer
     public bool FakeOffer { get; private set; }
     public string Title => rawData["title"]?.ToString();
     public bool IsXRayLlama => GetMeta("Preroll") == "True";
+    public int SortPriority => rawData["sortPriority"]?.GetValue<int>() ?? 0;
 
     public int SimultaniousLimit => GetMetaInt("MaxConcurrentPurchases") ?? -1;
     public int DailyLimit => rawData["dailyLimit"]?.GetValue<int>() ?? -1;
@@ -89,7 +91,7 @@ public class GameOffer
     public static GameOffer CreateFake(GameItem[] grants, GameItem price, int limit = 1, JsonObject rawData = null)
     {
         rawData ??= [];
-        rawData["itemGrants"] = new JsonArray([.. grants.Select(i => i.SimpleRawData)]);
+        rawData["itemGrants"] = JsonSerializer.SerializeToNode(grants.Select(g => g.GameItemData).ToArray());
         if(price is not null)
         {
             rawData["prices"] = JsonNode.Parse(
@@ -262,7 +264,6 @@ public class GameOffer
             return layout.Split('.')[1];
         }
     }
-    public int CosmeticSortPriority => rawData["sortPriority"]?.GetValue<int>() ?? 0;
 
     public FNDashOffer FNDashOffer => fnDashOffer?.Valid == true ? FNDashOffer : (fnDashOffer = GetFNDashOffer(OfferId));
     FNDashOffer fnDashOffer;

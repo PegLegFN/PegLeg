@@ -506,9 +506,9 @@ public partial class GameMission
             public string zoneName;
             public int powerLevel;
             public bool fourPlayer;
-            public ItemReward[] rewards;
-            public ItemReward[] modifiers;
-            public ItemReward[] alertRewards;
+            public GameItem.ItemReward[] rewards;
+            public GameItem.ItemReward[] modifiers;
+            public GameItem.ItemReward[] alertRewards;
 
             public int tileIndex;
             public string missionGuid;
@@ -558,20 +558,13 @@ public partial class GameMission
         }
     }
 
-    public record struct ItemReward()
-    {
-        public string name;
-        public string itemType;
-        public int quantity = 1;
-        public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity);
-    }
 
     public record struct ItemCollection
     {
         public string tierGroupName;
-        public ItemReward[] items;
+        public GameItem.ItemReward[] items;
         [JsonIgnore]
-        public ItemReward[] NamedItems
+        public GameItem.ItemReward[] NamedItems
         {
             get
             {
@@ -880,7 +873,7 @@ public partial class GameMission
     }
 
 
-    void GenerateItems(ItemReward[] rewards, ItemReward[] modifiers, ItemReward[] alertRewards)
+    void GenerateItems(GameItem.ItemReward[] rewards, GameItem.ItemReward[] modifiers, GameItem.ItemReward[] alertRewards)
     {
         Dictionary<string, GameItem> rewardItemList = [];
         foreach (var itemData in rewards ?? [])

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Reflection;
 
-public partial class TransferItemCtx : BaseContextComponent
+public partial class TransferItemCtx : AbstractContextComponent
 {
     public override string Id => "TransferItem";
     GameItem currentItem;

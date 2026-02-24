@@ -22,9 +22,9 @@ public partial class VirtualPartyInterface: Control
             .MakeRequest($"/party/api/v1/Fortnite/user/{acc.accountId}")
             .SetAccount(acc)
             .Send();
-        if (!req.IsSuccessStatusCode)
+        if (await req.CheckForError())
             return;
-        var party = (await req.Content.ReadFromJsonAsync<JsonObject>())["current"].AsArray().FirstOrDefault()?.AsObject();
+        var party = (await req.ReadJson())["current"].AsArray().FirstOrDefault()?.AsObject();
         if(party is not null)
         {
             currentParty = party;

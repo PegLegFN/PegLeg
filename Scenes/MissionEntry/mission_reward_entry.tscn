@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bxxycun2kva7"]
+[gd_scene format=3 uid="uid://bxxycun2kva7"]
 
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_n2fx7"]
 [ext_resource type="Script" uid="uid://duejkncuis5w3" path="res://Scripts/UserInterface/ListEntries/MissionRewardEntry.cs" id="1_woexs"]
@@ -10,14 +10,14 @@
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_bof5f"]
 [ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="7_n4hef"]
 [ext_resource type="Texture2D" uid="uid://b3m1n41ikas8t" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_128.png" id="9_qt2jc"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="10_n4hef"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="10_n4hef"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="11_40ktf"]
 [ext_resource type="Texture2D" uid="uid://0dsm5rygx6qr" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_64.png" id="11_xa8gw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("2_isv5j")
 
-[node name="MissionRewardEntry" type="MarginContainer" node_paths=PackedStringArray("missionEntry", "itemEntry")]
+[node name="MissionRewardEntry" type="MarginContainer" unique_id=512148745 node_paths=PackedStringArray("missionEntry", "itemEntry")]
 custom_minimum_size = Vector2(260, 30)
 offset_right = 556.0
 offset_bottom = 30.0
@@ -25,20 +25,20 @@ script = ExtResource("1_woexs")
 missionEntry = NodePath("MissionEntry")
 itemEntry = NodePath("MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem")
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" type="Button" parent="." unique_id=2035664014]
 show_behind_parent = true
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="Ctx" type="Node" parent="Button" node_paths=PackedStringArray("missionSource", "itemSource")]
+[node name="Ctx" type="Node" parent="Button" unique_id=950363944 node_paths=PackedStringArray("missionSource", "itemSource")]
 script = ExtResource("2_lyutd")
 missionSource = NodePath("../../MissionEntry")
 itemSource = NodePath("../../MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem")
 componentList = ExtResource("3_b0eut")
 
-[node name="MissionEntry" type="MarginContainer" parent="." node_paths=PackedStringArray("toDoListContent")]
+[node name="MissionEntry" type="MarginContainer" parent="." unique_id=519956700 node_paths=PackedStringArray("toDoListContent")]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -48,17 +48,17 @@ theme_override_constants/margin_bottom = 3
 script = ExtResource("1_n2fx7")
 toDoListContent = NodePath("HBoxContainer/MarginContainer2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry" unique_id=1267303960]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry/HBoxContainer" unique_id=142706386]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="TheaterCat" type="Label" parent="MissionEntry/HBoxContainer/HBoxContainer"]
+[node name="TheaterCat" type="Label" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=723104068]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 theme_override_constants/outline_size = 4
@@ -67,7 +67,7 @@ text = "T"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat"]
+[node name="TextureRect" type="ColorRect" parent="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat" unique_id=30750271]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -78,13 +78,13 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.688, 0.28, 1, 1)
 
-[node name="Icon" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=189692744]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("3_vd1o8")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer/Icon"]
+[node name="TextureRect2" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer/Icon" unique_id=1911805740]
 self_modulate = Color(1, 0.37, 0.37, 1)
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 1
@@ -101,7 +101,7 @@ tooltip_text = "This mission can't be accessed with this account alone "
 texture = ExtResource("7_n4hef")
 expand_mode = 1
 
-[node name="PowerLevel" type="Label" parent="MissionEntry/HBoxContainer/HBoxContainer"]
+[node name="PowerLevel" type="Label" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=295920822]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -109,51 +109,49 @@ text = "144"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="MissionEntry/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MissionEntry/HBoxContainer" unique_id=633279153]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry/HBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry/HBoxContainer/MarginContainer" unique_id=1467368915]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1983976403]
 layout_mode = 2
-mouse_filter = 0
 theme_override_constants/margin_left = -2
 theme_override_constants/margin_top = -3
 theme_override_constants/margin_right = -2
 theme_override_constants/margin_bottom = -3
 
-[node name="MissionCollectionHighlightItem" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer" instance=ExtResource("4_lffv6")]
+[node name="MissionCollectionHighlightItem" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=357313288 instance=ExtResource("4_lffv6")]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-mouse_filter = 0
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 compactifyAmount = true
 
-[node name="Label" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1772908320]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Shadowshard Shadowshard Shadowshard "
 text_overrun_behavior = 3
 
-[node name="Control" type="Control" parent="MissionEntry/HBoxContainer/MarginContainer"]
+[node name="Control" type="Control" parent="MissionEntry/HBoxContainer/MarginContainer" unique_id=1100358709]
 visible = false
 layout_mode = 2
 
-[node name="Responsive Button Area2" parent="MissionEntry/HBoxContainer/MarginContainer" instance=ExtResource("6_bof5f")]
+[node name="Responsive Button Area2" parent="MissionEntry/HBoxContainer/MarginContainer" unique_id=444833818 instance=ExtResource("6_bof5f")]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 outlinePadding = 3.0
 
-[node name="Checkmark" type="TextureRect" parent="MissionEntry/HBoxContainer"]
+[node name="Checkmark" type="TextureRect" parent="MissionEntry/HBoxContainer" unique_id=453039118]
 self_modulate = Color(0, 1, 0.26666665, 1)
 material = ExtResource("10_n4hef")
 custom_minimum_size = Vector2(12, 12)
@@ -162,37 +160,37 @@ tooltip_text = "You've already completed this Mission and claimed this Mission A
 texture = ExtResource("11_xa8gw")
 expand_mode = 3
 
-[node name="MarginContainer3" type="MarginContainer" parent="MissionEntry/HBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="MissionEntry/HBoxContainer" unique_id=1703440662]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer3"]
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer3" unique_id=1373976760]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 texture = ExtResource("9_qt2jc")
 expand_mode = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="MissionEntry/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="MissionEntry/HBoxContainer" unique_id=327077591]
 layout_mode = 2
 theme_override_constants/margin_left = -3
 theme_override_constants/margin_top = -3
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -3
 
-[node name="MarginContainer3" type="MarginContainer" parent="MissionEntry/HBoxContainer/MarginContainer2"]
+[node name="MarginContainer3" type="MarginContainer" parent="MissionEntry/HBoxContainer/MarginContainer2" unique_id=2059577110]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="Button" type="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3"]
+[node name="Button" type="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" unique_id=148889520]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Add to To-Do List"
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button"]
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" unique_id=267304898]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0

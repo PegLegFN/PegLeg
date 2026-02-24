@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class CopyOfferIdCtx : BaseContextComponent
+public partial class CopyOfferIdCtx : AbstractContextComponent
 {
     public override string Id => "CopyOfferId";
     GameOffer currentOffer;

@@ -12,6 +12,7 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static HeroLoadoutEntry;
 
 public partial class AppData
 {
@@ -303,7 +304,7 @@ public partial class GameAccount
         if (await res.CheckForError())
             return;
         //GD.Print(await res.Content.ReadAsStringAsync());
-        var displayNames = await res.Content.ReadFromJsonAsync<AccountDisplayNames[]>(Helpers.JsonOptions.Fields);
+        var displayNames = await res.ReadJson<AccountDisplayNames[]>(Helpers.JsonOptions.Fields);
         var displayNameDict = displayNames.ToDictionary(d => d.id);
         foreach (var acc in accounts)
         {
@@ -330,7 +331,7 @@ public partial class GameAccount
             .Send();
         if (await res.CheckForError())
             return;
-        var friendData = await res.Content.ReadFromJsonAsync<FriendSummary>(Helpers.JsonOptions.Fields);
+        var friendData = await res.ReadJson<FriendSummary>(Helpers.JsonOptions.Fields);
         //GD.Print(await res.Content.ReadAsStringAsync());
         friends = friendData.friends.ToDictionary(f => f.accountId ?? "");
         var userIds =
@@ -1142,12 +1143,133 @@ public partial class GameAccount
     {
         if (templateId is null)
             return false;
-        reminderItems ??=
-            GetLocalData("reminderItems")?.Deserialize<HashSet<string>>() ??
-            GetLocalData("bookmarkedItems")?.Deserialize<HashSet<string>>() ?? [];
-        ClearLocalData("bookmarkedItems");
+        reminderItems ??= GetLocalData("reminderItems")?.Deserialize<HashSet<string>>() ?? [];
         var result = reminderItems.Contains(TierSubstitute().Replace(templateId, "_t01").ToLower());
         return result;
+    }
+
+    Dictionary<string, string> loadoutCustomNames;
+    public string GetCustomNameForLoadoutSlot(GameItem loadout)
+    {
+        loadoutCustomNames ??= GetLocalData("heroLoadoutSlotNames")?.Deserialize<Dictionary<string, string>>() ?? [];
+        return loadoutCustomNames.TryGetValue(loadout?.uuid, out var name) ? name : null;
+    }
+
+    public void SetCustomNameForLoadoutSlot(GameItem loadout, string newName)
+    {
+        if (loadout?.uuid is null)
+            return;
+        loadoutCustomNames ??= GetLocalData("heroLoadoutSlotNames")?.Deserialize<Dictionary<string, string>>() ?? [];
+        if (string.IsNullOrWhiteSpace(newName))
+            loadoutCustomNames.Remove(loadout.uuid);
+        else
+            loadoutCustomNames[loadout.uuid] = newName;
+        loadout.NotifyChanged();
+        SetLocalData("heroLoadoutSlotNames", JsonSerializer.SerializeToNode(loadoutCustomNames));
+    }
+
+    public const string HeroLoadoutBlueprintTID = "PLHeroLoadoutBlueprint:blueprint";
+    Dictionary<string, GameItem> heroLoadoutBlueprintDict;
+    Dictionary<string, GameItem> HeroLoadoutBlueprintDict => heroLoadoutBlueprintDict ??= GetLocalData("heroLoadoutBlueprints")?.Deserialize<Dictionary<string, JsonNode>>(Helpers.JsonOptions.Fields).ToDictionary(kvp=>kvp.Key, kvp => new GameItem(null, 1, kvp.Value.AsObject().SafeDeepClone(), templateId: HeroLoadoutBlueprintTID).SetUUID(kvp.Key)) ?? [];
+    public GameItem[] HeroLoadoutBlueprints => [..HeroLoadoutBlueprintDict.Values];
+    public void CreateHeroLoadoutBlueprint(GameItem loadoutSlot)
+    {
+        if (loadoutSlot?.profile?.account != this)
+            return;
+
+        var displayName = GetCustomNameForLoadoutSlot(loadoutSlot);
+
+        JsonObject crewMembers = [];
+        var commanderGuid = loadoutSlot.attributes["crew_members"][$"commanderslot"]?.ToString();
+        var commanderHero = commanderGuid is not null ? loadoutSlot.profile.GetItem(commanderGuid) : null;
+        crewMembers[$"commanderslot"] = JsonSerializer.SerializeToNode(LoadoutBlueprintHero.FromHero(commanderHero.template), Helpers.JsonOptions.Fields);
+
+        var teamPerkGuid = loadoutSlot.attributes["team_perk"]?.ToString();
+        var teamPerk = teamPerkGuid is not null ? loadoutSlot.profile.GetItem(teamPerkGuid) : null;
+
+        for (int i = 0; i < 5; i++)
+        {
+            var supportGuid = loadoutSlot.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
+            var supportHero = supportGuid is not null ? loadoutSlot.profile.GetItem(supportGuid) : null;
+            crewMembers[$"followerslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintHero.FromHero(supportHero.template), Helpers.JsonOptions.Fields);
+        }
+
+        var gadgetTemplates = loadoutSlot.attributes["gadgets"]?.AsArray().OrderBy(g => (int)g["slot_index"]).Select(g => g["gadget"].ToString()).ToArray() ?? [];
+
+        GameItem newLoadoutBlueprint = new GameItem(null, 1, new()
+        {
+            ["displayName"] = displayName,
+            ["crew_members"] = crewMembers,
+            ["team_perk"] = teamPerk?.templateId,
+            ["gadgets"] = JsonSerializer.SerializeToNode(gadgetTemplates)
+        }, templateId: HeroLoadoutBlueprintTID).SetUUID();
+        HeroLoadoutBlueprintDict.Add(newLoadoutBlueprint.uuid, newLoadoutBlueprint);
+        SaveHeroLoadoutBlueprints();
+    }
+
+    public partial struct LoadoutBlueprintHero
+    {
+        public string displayTemplate;
+        public string heroTemplatePrefix;
+        public string heroPerkFallback;
+
+        public static LoadoutBlueprintHero FromHero(GameItemTemplate heroTemplate)
+        {
+            var abilities = heroTemplate.GetHeroAbilities();
+            if (abilities is null)
+                return default;
+            return new()
+            {
+                displayTemplate = heroTemplate.TemplateId,
+                heroTemplatePrefix = TierSuffix().Replace(RaritySuffix().Replace(heroTemplate.TemplateId, "_"), "_"),
+                heroPerkFallback = abilities[0].TemplateId
+            };
+        }
+
+        public string ResolveHeroUUID(GameProfile profile)
+        {
+            var prefix = heroTemplatePrefix;
+            var perk = heroPerkFallback;
+            var candidates = profile.GetItems("Hero", i => i.template?.GetHeroAbilities()[0]?.TemplateId.Equals(perk, StringComparison.OrdinalIgnoreCase) == true)
+                .OrderBy(i => -i.template.RarityLevel)
+                .ThenBy(i => -i.CalculateRating())
+                .ThenBy(i => !i.templateId.StartsWith(prefix));
+            return candidates.FirstOrDefault()?.uuid;
+        }
+
+        [GeneratedRegex("_(?:c|uc|r|vr|sr|ur)_")]
+        private static partial Regex RaritySuffix();
+
+        [GeneratedRegex("_t0\\d")]
+        private static partial Regex TierSuffix();
+    }
+
+    public void RenameHeroLoadoutBlueprint(GameItem loadoutBlueprint, string newName)
+    {
+        if (!HeroLoadoutBlueprintDict.ContainsKey(loadoutBlueprint.uuid))
+        {
+            GD.Print($"Loadout Blueprint not found: {loadoutBlueprint.uuid}");
+            return;
+        }
+        loadoutBlueprint.attributes["displayName"] = newName;
+        SaveHeroLoadoutBlueprints();
+        loadoutBlueprint.NotifyChanged();
+    }
+
+    public void RemoveHeroLoadoutBlueprint(GameItem loadoutBlueprint) =>
+        RemoveHeroLoadoutBlueprint(loadoutBlueprint.uuid);
+    public void RemoveHeroLoadoutBlueprint(string uuid)
+    {
+        if (!HeroLoadoutBlueprintDict.Remove(uuid))
+            return;
+        SaveHeroLoadoutBlueprints();
+    }
+
+    void SaveHeroLoadoutBlueprints()
+    {
+        var itemDataDict = HeroLoadoutBlueprintDict.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.attributes);
+        SetLocalData("heroLoadoutBlueprints", JsonSerializer.SerializeToNode(itemDataDict));
+        OnAccountUpdated?.Invoke();
     }
 
     [GeneratedRegex("_(?:(?:c)|(?:uc)|(?:r)|(?:vr)|(?:sr)|(?:ur))_")]

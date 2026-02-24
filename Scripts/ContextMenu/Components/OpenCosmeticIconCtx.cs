@@ -1,7 +1,7 @@
 
 using Godot;
 
-public partial class OpenCosmeticIconCtx : BaseContextComponent
+public partial class OpenCosmeticIconCtx : AbstractContextComponent
 {
     //todo: make this a setting
     const string exportPath = "user://cosmetic_exports";

@@ -1,7 +1,7 @@
 
 using Godot;
 
-public partial class CopyItemIconCtx : BaseContextComponent
+public partial class CopyItemIconCtx : AbstractContextComponent
 {
     public override string Id => "CopyItemIcon";
     Image currentImage;

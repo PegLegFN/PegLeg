@@ -1,7 +1,7 @@
 
 using Godot;
 
-public partial class FetchCosmeticIconCtx : BaseContextComponent
+public partial class FetchCosmeticIconCtx : AbstractContextComponent
 {
     public override string Id => "FetchCosmeticIcon";
     CosmeticShopOfferEntry currentCosmetic;

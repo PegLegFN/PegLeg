@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bcllm2n3omok8"]
+[gd_scene format=3 uid="uid://bcllm2n3omok8"]
 
 [ext_resource type="Script" uid="uid://b0j1smbi1nuqg" path="res://Scripts/Bootstrap.cs" id="1_6qsod"]
 [ext_resource type="PackedScene" uid="uid://ysh5ajklts1q" path="res://Scenes/Desktop/desktopOnboarding.tscn" id="2_frb0b"]
@@ -9,6 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="5_efo63"]
 [ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="5_g0s4o"]
 [ext_resource type="Texture2D" uid="uid://qfp8atpjqj8m" path="res://Images/Flipbook/LoadingIconV2/BlugloLoadSheet.png" id="8_se0d1"]
+[ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="10_i47mm"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="10_rxgfw"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="11_i47mm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g0s4o"]
 shader = ExtResource("4_p8jt0")
@@ -83,7 +86,17 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[node name="BootScene" type="MarginContainer" node_paths=PackedStringArray("background", "curtain", "loadingContent", "progressLabel", "progressBar", "downloadParticles", "liteContent")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q4hqm"]
+shader = ExtResource("10_i47mm")
+shader_parameter/ControlSize = Vector2(1350, 720)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = true
+shader_parameter/Scale = 2.0
+shader_parameter/Speed = 0.05
+shader_parameter/Progress = 0.0
+shader_parameter/ClipOOB = false
+
+[node name="BootScene" type="MarginContainer" unique_id=214749137 node_paths=PackedStringArray("background", "curtain", "loadingContent", "progressLabel", "progressBar", "downloadParticles", "liteContent")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -103,34 +116,34 @@ liteInterface = ExtResource("4_1cfp7")
 shareMenu = ExtResource("4_efo63")
 liteContent = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/LiteMode")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1523481312]
 visible = false
 layout_mode = 2
 texture = ExtResource("5_g0s4o")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1634911026]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+[node name="ColorRect" type="ColorRect" parent="MarginContainer" unique_id=1602156422]
 material = SubResource("ShaderMaterial_g0s4o")
 layout_mode = 2
 color = Color(0, 0, 0, 0.784314)
 
-[node name="LoadingIcon" parent="MarginContainer" instance=ExtResource("5_efo63")]
+[node name="LoadingIcon" parent="MarginContainer" unique_id=1045362064 instance=ExtResource("5_efo63")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Control2" type="Control" parent="MarginContainer"]
+[node name="Control2" type="Control" parent="MarginContainer" unique_id=973132552]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="MarginContainer/Control2"]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="MarginContainer/Control2" unique_id=1871918395]
 self_modulate = Color(0.72, 0.986, 1, 1)
 material = SubResource("CanvasItemMaterial_1cfp7")
 emitting = false
@@ -139,7 +152,7 @@ texture = ExtResource("8_se0d1")
 lifetime = 1.5
 process_material = SubResource("ParticleProcessMaterial_i47mm")
 
-[node name="Label" type="Label" parent="MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer" unique_id=63305824]
 visible = false
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
@@ -149,10 +162,10 @@ theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Control" type="Control" parent="MarginContainer"]
+[node name="Control" type="Control" parent="MarginContainer" unique_id=111295642]
 layout_mode = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/Control"]
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/Control" unique_id=135733530]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -166,31 +179,31 @@ offset_bottom = 42.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Control/CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/Control/CenterContainer" unique_id=1249936434]
 self_modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"Panel5Pad"
 
-[node name="Loading" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer"]
+[node name="Loading" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer" unique_id=1717482608]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading"]
+[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading" unique_id=1712332747]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = " Starting PegLeg... "
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading"]
+[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading" unique_id=296320759]
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 text = "Loading status with feedback
 plus another line"
 horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading"]
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/Control/CenterContainer/PanelContainer/Loading" unique_id=689789370]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_g0s4o")
@@ -200,17 +213,17 @@ show_percentage = false
 indeterminate = true
 editor_preview_indeterminate = true
 
-[node name="LiteMode" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer"]
+[node name="LiteMode" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer" unique_id=1060040342]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode"]
+[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode" unique_id=1865343649]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Use Lite Mode?"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode"]
+[node name="Label2" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode" unique_id=1077099585]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = -2
@@ -218,25 +231,53 @@ text = "Lite mode uses a subset of features that don't require a Login. Lite mod
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode" unique_id=149607571]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer"]
+[node name="Button" type="Button" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer" unique_id=1805665937]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Use Lite mode"
 
-[node name="Button2" type="Button" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer"]
+[node name="Button2" type="Button" parent="MarginContainer/Control/CenterContainer/PanelContainer/LiteMode/HBoxContainer" unique_id=528708558]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Use Regular mode"
 
-[node name="Curtain" type="ColorRect" parent="."]
+[node name="Curtain" type="TextureRect" parent="." unique_id=1128957712]
 visible = false
+self_modulate = Color(0.25, 0.25, 0.25, 1)
+texture_repeat = 2
+material = SubResource("ShaderMaterial_q4hqm")
 layout_mode = 2
-color = Color(0, 0, 0, 1)
+texture = ExtResource("11_i47mm")
+script = ExtResource("10_rxgfw")
+syncControlSize = true
 
-[node name="Control" type="Control" parent="."]
+[node name="Label" type="Label" parent="Curtain" unique_id=973567202]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.5
+offset_top = -9.0
+offset_right = 25.5
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_constants/line_spacing = -4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "Loading..."
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="." unique_id=217974945]
 layout_mode = 2
 mouse_filter = 2
 

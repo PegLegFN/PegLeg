@@ -1,7 +1,7 @@
 
 using Godot;
 
-public partial class CopyCosmeticIconCtx : BaseContextComponent
+public partial class CopyCosmeticIconCtx : AbstractContextComponent
 {
     public override string Id => "CopyCosmeticIcon";
     CosmeticShopOfferEntry currentCosmetic;

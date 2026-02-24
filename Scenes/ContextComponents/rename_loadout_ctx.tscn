@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://o08rtq4ebbpf"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_08rnk"]
+[ext_resource type="Script" uid="uid://bx60u1llmpp48" path="res://Scripts/ContextMenu/Components/RenameLoadoutCtx.cs" id="2_08rnk"]
+[ext_resource type="Texture2D" uid="uid://dj7i2q6htu5st" path="res://Images/InterfaceIcons/T_UI_IconLibrary_Pencil_128.png" id="3_08rnk"]
+
+[node name="RenameLoadoutCtx" unique_id=1740770311 node_paths=PackedStringArray("disabledPanel") instance=ExtResource("1_08rnk")]
+script = ExtResource("2_08rnk")
+disabledPanel = NodePath("Disabled")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" index="0"]
+texture = ExtResource("3_08rnk")
+stretch_mode = 5
+
+[node name="Label" parent="MarginContainer/HBoxContainer" index="1"]
+text = "Rename Loadout"
+
+[connection signal="pressed" from="TextureButton" to="." method="Inspect"]

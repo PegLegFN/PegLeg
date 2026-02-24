@@ -1,8 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://fdp52f4byq7k"]
+[gd_scene format=3 uid="uid://fdp52f4byq7k"]
 
 [ext_resource type="Script" uid="uid://b1oq60dmtd83s" path="res://Scripts/HeroLoadout/HeroLoadoutEntry.cs" id="1_chyo7"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="1_mdh0j"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="2_1stvd"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="2_1stvd"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_c8drq"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_bjjvx"]
 [ext_resource type="Texture2D" uid="uid://dddk02ksaa86x" path="res://Images/InterfaceIcons/BanjoPlaceholders/Perk-TeamPerk-BlastFromThePast-128.png" id="4_usyyx"]
@@ -59,20 +59,21 @@ shader = ExtResource("19_41jx6")
 shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/Radius = 7.0
 
-[node name="LoadoutSlotEntry" type="MarginContainer" node_paths=PackedStringArray("commander", "teamPerk", "support", "gadgets", "selectionFX")]
+[node name="LoadoutSlotEntry" type="MarginContainer" unique_id=676573375 node_paths=PackedStringArray("commander", "teamPerk", "support", "gadgets", "selectionFX", "altSelectionFX")]
 custom_minimum_size = Vector2(0, 72)
 size_flags_horizontal = 4
 script = ExtResource("1_chyo7")
-commander = NodePath("MarginContainer/HBoxContainer/MarginContainer4/LoadoutSlotCommander")
+commander = NodePath("MarginContainer/HBoxContainer/PanelContainer/LoadoutSlotCommander")
 teamPerk = NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer/TextureRect6")
 support = [NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/LoadoutSlotHero"), NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/LoadoutSlotHero2"), NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/LoadoutSlotHero3"), NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/LoadoutSlotHero4"), NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer/LoadoutSlotHero5")]
 gadgets = [NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer/TextureRect5"), NodePath("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2/TextureRect6")]
 selectionFX = NodePath("SelectionFX")
+altSelectionFX = NodePath("Overlay/TextureRect")
 useActiveAccount = false
 interactable = false
 addCurrentToName = false
 
-[node name="PlainBG" type="TextureRect" parent="."]
+[node name="PlainBG" type="TextureRect" parent="." unique_id=1870629595]
 visible = false
 self_modulate = Color(0.0455, 0.15715, 0.35, 0.501961)
 material = SubResource("ShaderMaterial_y5n5v")
@@ -82,7 +83,7 @@ expand_mode = 1
 script = ExtResource("3_bjjvx")
 syncControlSize = true
 
-[node name="ColorBG" type="TextureRect" parent="."]
+[node name="ColorBG" type="TextureRect" parent="." unique_id=1574324179]
 modulate = Color(0.980392, 0.619608, 0, 1)
 self_modulate = Color(0.96, 0.96, 0.96, 0.752941)
 material = SubResource("ShaderMaterial_mdh0j")
@@ -92,56 +93,81 @@ expand_mode = 1
 script = ExtResource("3_bjjvx")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2060096175]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1441505075]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="MarginContainer4" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=1510918213]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = ExtResource("5_pjkyl")
 
-[node name="LoadoutSlotCommander" parent="MarginContainer/HBoxContainer/MarginContainer4" instance=ExtResource("6_y5n5v")]
+[node name="LoadoutSlotCommander" parent="MarginContainer/HBoxContainer/PanelContainer" unique_id=813947215 instance=ExtResource("6_y5n5v")]
 layout_mode = 2
 defaultClearIconToNull = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PanelContainer" unique_id=673162314]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+text = "Active"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1727882011]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=185950999]
+layout_mode = 2
+theme_override_constants/margin_right = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=1719758566]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer"]
+[node name="Name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1969495277]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 24
 text = "Loadout Name Here"
+text_overrun_behavior = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Number" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2043489002]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "#00"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=398472362]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=701010388]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("5_pjkyl")
 
-[node name="Aspect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer"]
+[node name="Aspect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer" unique_id=1236388516]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("2_c8drq")
 expand_mode = 3
 
-[node name="TextureRect6" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer"]
+[node name="TextureRect6" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer" unique_id=1975622468]
 material = ExtResource("2_1stvd")
 layout_mode = 2
 texture = ExtResource("4_usyyx")
@@ -149,46 +175,46 @@ expand_mode = 3
 script = ExtResource("11_530ix")
 defaultClearIconToNull = true
 
-[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1988427705]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("5_pjkyl")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2" unique_id=547243200]
 layout_mode = 2
 
-[node name="LoadoutSlotHero" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" instance=ExtResource("6_pjkyl")]
+[node name="LoadoutSlotHero" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=1814388242 instance=ExtResource("6_pjkyl")]
 layout_mode = 2
 
-[node name="LoadoutSlotHero2" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" instance=ExtResource("6_pjkyl")]
+[node name="LoadoutSlotHero2" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=1714810414 instance=ExtResource("6_pjkyl")]
 layout_mode = 2
 
-[node name="LoadoutSlotHero3" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" instance=ExtResource("6_pjkyl")]
+[node name="LoadoutSlotHero3" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=1143232967 instance=ExtResource("6_pjkyl")]
 layout_mode = 2
 
-[node name="LoadoutSlotHero4" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" instance=ExtResource("6_pjkyl")]
+[node name="LoadoutSlotHero4" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=664660904 instance=ExtResource("6_pjkyl")]
 layout_mode = 2
 
-[node name="LoadoutSlotHero5" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" instance=ExtResource("6_pjkyl")]
+[node name="LoadoutSlotHero5" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer2/HBoxContainer" unique_id=517317700 instance=ExtResource("6_pjkyl")]
 layout_mode = 2
 
-[node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="PanelContainer3" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=127633070]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("5_pjkyl")
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3" unique_id=1572158313]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2" unique_id=1986520638]
 layout_mode = 2
 
-[node name="Aspect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer"]
+[node name="Aspect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer" unique_id=229886733]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("2_c8drq")
 expand_mode = 3
 
-[node name="TextureRect5" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer"]
+[node name="TextureRect5" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer" unique_id=958690957]
 material = ExtResource("2_1stvd")
 layout_mode = 2
 texture = ExtResource("5_usyyx")
@@ -196,16 +222,16 @@ expand_mode = 3
 script = ExtResource("14_74u6m")
 defaultClearIconToNull = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2"]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2" unique_id=142129478]
 layout_mode = 2
 
-[node name="Aspect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2"]
+[node name="Aspect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2" unique_id=232017743]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("2_c8drq")
 expand_mode = 3
 
-[node name="TextureRect6" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2"]
+[node name="TextureRect6" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2" unique_id=78226944]
 material = ExtResource("2_1stvd")
 layout_mode = 2
 texture = ExtResource("16_n56jr")
@@ -213,7 +239,7 @@ expand_mode = 3
 script = ExtResource("14_74u6m")
 defaultClearIconToNull = true
 
-[node name="SelectionFX" type="ColorRect" parent="."]
+[node name="SelectionFX" type="ColorRect" parent="." unique_id=826352696]
 visible = false
 material = SubResource("ShaderMaterial_36m6f")
 layout_mode = 2
@@ -221,19 +247,20 @@ mouse_filter = 2
 script = ExtResource("3_bjjvx")
 syncControlSize = true
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("15_cvke4")]
+[node name="Responsive Button Area" parent="." unique_id=652071058 instance=ExtResource("15_cvke4")]
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=245604059 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("16_pjkyl")
 itemSource = NodePath("../..")
 componentList = ExtResource("17_41jx6")
 
-[node name="Overlay" type="Control" parent="."]
+[node name="Overlay" type="Control" parent="." unique_id=888099331]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="Overlay"]
+[node name="TextureRect" type="TextureRect" parent="Overlay" unique_id=461454180]
+visible = false
 modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
@@ -250,9 +277,10 @@ mouse_filter = 2
 texture = ExtResource("15_pjkyl")
 expand_mode = 1
 
-[connection signal="IsCurrent" from="." to="Overlay/TextureRect" method="set_visible"]
-[connection signal="LoadoutName" from="." to="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/Label2" method="set_text"]
-[connection signal="RarityChanged" from="MarginContainer/HBoxContainer/MarginContainer4/LoadoutSlotCommander" to="ColorBG" method="set_modulate"]
+[connection signal="IsCurrent" from="." to="MarginContainer/HBoxContainer/PanelContainer/Label" method="set_visible"]
+[connection signal="LoadoutName" from="." to="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/Name" method="set_text"]
+[connection signal="LoadoutNumber" from="." to="MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/Number" method="set_text"]
+[connection signal="RarityChanged" from="MarginContainer/HBoxContainer/PanelContainer/LoadoutSlotCommander" to="ColorBG" method="set_modulate"]
 [connection signal="IconChanged" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer/TextureRect6" to="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer/TextureRect6" method="set_texture"]
 [connection signal="IconChanged" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer/TextureRect5" to="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer/TextureRect5" method="set_texture"]
 [connection signal="IconChanged" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2/TextureRect6" to="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PanelContainer3/HBoxContainer2/MarginContainer2/TextureRect6" method="set_texture"]

@@ -204,6 +204,8 @@ static class CatalogRequests
         //shopOfferList.AddRange(storefrontCache[FnStorefrontTypes.DailyCosmeticShopCatalog].AsArray());
         var shopOfferDict = shopOfferList.ToDictionary(n => n["offerId"].ToString());
 
+        var globalBestSellers = bestsellingCosmetics.TryGetValue("bestsellers_list", out var globBSList) ? globBSList : [];
+
         Parallel.ForEach(shopOfferDict, offer =>
         {
             bool needsFallback = false;
@@ -211,7 +213,6 @@ static class CatalogRequests
             {
                 needsFallback = !cosmeticDisplayData.ContainsKey(offer.Key);
             }
-            var globalBestSellers = bestsellingCosmetics["bestsellers_list"];
             bool isBestseller = globalBestSellers.Contains(offer.Key);
             if (isBestseller)
                 GD.Print("BESTSELLER: " + offer.Value["devName"]?.ToString());
@@ -495,9 +496,9 @@ static class CatalogRequests
         var res = await FnWebAddresses.UnrealCDN
             .MakeRequest("/fn_bsdata/ebb74910-dd35-44b8-b826-d58dc16c6456.json")
             .Send();
-        if (!res.IsSuccessStatusCode)
+        if (await res.CheckForError())
             return null;
-        var responseDict = await res.Content.ReadFromJsonAsync<Dictionary<string, BestsellerData>>(Helpers.JsonOptions.CamelCase);
+        var responseDict = (await res.ReadJson<Dictionary<string, BestsellerData>>(Helpers.JsonOptions.CamelCase)) ?? [];
         return responseDict.ToFrozenDictionary(kvp => kvp.Key, kvp => kvp.Value.offerList ?? []);
     }
 
@@ -517,9 +518,9 @@ static class CatalogRequests
         var res = await FnWebAddresses.FortContent
             .MakeRequest("/content/api/pages/fortnite-game/spark-tracks")
             .Send();
-        if (!res.IsSuccessStatusCode)
+        if (await res.CheckForError())
             return null;
-        var responseObj = await res.Content.ReadFromJsonAsync<JsonObject>(Helpers.JsonOptions.CamelCase);
+        var responseObj = await res.ReadJson<JsonObject>(Helpers.JsonOptions.CamelCase);
         responseObj.Remove("_title");
         responseObj.Remove("_noIndex");
         responseObj.Remove("_activeDate");

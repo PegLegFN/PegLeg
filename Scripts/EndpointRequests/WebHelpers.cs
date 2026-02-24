@@ -344,7 +344,7 @@ public static class WebHelpers
             string logMsg = $"Web Request Error when sending {response.RequestMessage.Method} to {response.RequestMessage.RequestUri}{(boundAccount is null ? "" : $" as {boundAccount.DisplayName}")}";
             logMsg += $"\nStatusCode: {(int)response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}";
             if (errorContent is not null)
-                logMsg += $"\nContent: \n{errorContent}";
+                logMsg += $"\nContent: \n{errorContent.ToJsonString()}";
             else if (fallbackErrorCode is not null)
                 logMsg += $"\nEpic Error Name: {fallbackErrorCode}";
             logMsg = logMsg.FixLogLines();

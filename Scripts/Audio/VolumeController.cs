@@ -73,7 +73,9 @@ public partial class VolumeController : Node
         musicMuted = newState;
         if (musicMuteTween?.IsRunning() ?? false)
             musicMuteTween.Kill();
-        musicMuteTween = GetTree().CreateTween();
+        if (GetTree() is not SceneTree tree)
+            return;
+        musicMuteTween = tree.CreateTween();
         musicMuteTween.TweenProperty(this, "MusicVolumeScalar", musicMuted ? 0 : 1, 0.5f);
         musicMuteTween.Play();
     }

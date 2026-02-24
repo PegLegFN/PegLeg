@@ -226,6 +226,43 @@ public static partial class Helpers
         }
     }
 
+    public static async void Defer(Action action, int frames=1, CancellationToken ct = default)
+    {
+        await WaitForFrames(frames);
+        if (ct.IsCancellationRequested)
+            return;
+        action?.Invoke();
+    }
+
+    public static async Task ChangeSceneAsync(this SceneTree tree, string path, Action<float> onProgress = null)
+    {
+        var reqErr = ResourceLoader.LoadThreadedRequest(path, useSubThreads: true);
+        if (reqErr != Error.Ok)
+        {
+            GD.PushWarning($"Async scene change request failure: {reqErr} (\"{path}\")");
+            return;
+        }
+
+        Godot.Collections.Array progress = [];
+        var stage = ResourceLoader.LoadThreadedGetStatus(path, progress);
+        while (stage == ResourceLoader.ThreadLoadStatus.InProgress)
+        {
+            onProgress?.Invoke((float)progress[0]);
+            await WaitForFrame();
+            stage = ResourceLoader.LoadThreadedGetStatus(path);
+        }
+
+        if (stage != ResourceLoader.ThreadLoadStatus.Loaded)
+        {
+            GD.PushWarning($"Async scene load failure: {stage} (\"{path}\")");
+            return;
+        }
+        onProgress?.Invoke(1);
+        await WaitForFrame();
+        var scene = (PackedScene)ResourceLoader.LoadThreadedGet(path);
+        tree.ChangeSceneToPacked(scene);
+    }
+
     public static KeyValuePair<string, JsonNode> CreateKVP(this JsonObject from, string keyTerm)
     {
         return KeyValuePair.Create<string, JsonNode>(from[keyTerm]?.ToString() ?? from.ToString(), from.SafeDeepClone());

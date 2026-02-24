@@ -1,6 +1,6 @@
 using Godot;
 
-public abstract partial class BaseTitleCtx : BaseContextComponent
+public abstract partial class BaseTitleCtx : AbstractContextComponent
 {
     [Export]
     ShaderHook bg;

@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bqsjh027im66f"]
+[gd_scene format=3 uid="uid://bqsjh027im66f"]
 
 [ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="1_3xb32"]
 [ext_resource type="Script" uid="uid://dvt4k5o8may3h" path="res://Scripts/Audio/AutoButtonSounds.cs" id="2_dvlk7"]
@@ -34,11 +34,25 @@
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="32_aqo04"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="33_llww6"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="33_xs1ek"]
+[ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="38_psdk2"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="39_y37er"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="40_ioawx"]
+[ext_resource type="Script" uid="uid://dbi4mg37e4bvq" path="res://Scripts/CurtainOpener.cs" id="41_vp0cx"]
 [ext_resource type="Texture2D" uid="uid://cjtv2aa84wwwr" path="res://Images/InterfaceIcons/T_Icon_Spray_Adjustments_Tab_128.png" id="44_6q5er"]
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="45_pbdue"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="46_hiis4"]
 
-[node name="DesktopInterfaceLite" type="Control"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ilmvy"]
+shader = ExtResource("38_psdk2")
+shader_parameter/ControlSize = Vector2(1350, 720)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = true
+shader_parameter/Scale = 2.0
+shader_parameter/Speed = 0.05
+shader_parameter/Progress = 0.0
+shader_parameter/ClipOOB = false
+
+[node name="DesktopInterfaceLite" type="Control" unique_id=1619626686]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,28 +60,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NonUI" type="Node" parent="."]
+[node name="NonUI" type="Node" parent="." unique_id=364067355]
 
-[node name="TargetResolution" type="Node" parent="NonUI"]
+[node name="TargetResolution" type="Node" parent="NonUI" unique_id=2081468221]
 script = ExtResource("1_3xb32")
 
-[node name="AutoButtonSounds" type="Node" parent="NonUI"]
+[node name="AutoButtonSounds" type="Node" parent="NonUI" unique_id=1783553984]
 script = ExtResource("2_dvlk7")
 
-[node name="RefreshTimerController" type="Node" parent="NonUI"]
+[node name="RefreshTimerController" type="Node" parent="NonUI" unique_id=952084147]
 script = ExtResource("3_46a0c")
 
-[node name="ThemeController" type="Node" parent="NonUI"]
+[node name="ThemeController" type="Node" parent="NonUI" unique_id=312363081]
 script = ExtResource("4_8rh3e")
 
-[node name="TooltipFixer" type="Node" parent="NonUI" node_paths=PackedStringArray("tooltipControl")]
+[node name="TooltipFixer" type="Node" parent="NonUI" unique_id=1853138298 node_paths=PackedStringArray("tooltipControl")]
 script = ExtResource("5_88t62")
 tooltipControl = NodePath("Tooltip")
 
-[node name="Tooltip" parent="NonUI/TooltipFixer" instance=ExtResource("6_yoojj")]
+[node name="Tooltip" parent="NonUI/TooltipFixer" unique_id=1142394104 instance=ExtResource("6_yoojj")]
 visible = false
 
-[node name="NotifWindow" type="Window" parent="NonUI"]
+[node name="NotifWindow" type="Window" parent="NonUI" unique_id=944566620]
 auto_translate_mode = 1
 transparent_bg = true
 use_hdr_2d = true
@@ -82,9 +96,9 @@ transparent = true
 unfocusable = true
 theme = ExtResource("11_gwx6v")
 
-[node name="DesktopNotificationV2Window" parent="NonUI/NotifWindow" instance=ExtResource("12_0jcd2")]
+[node name="DesktopNotificationV2Window" parent="NonUI/NotifWindow" unique_id=992121078 instance=ExtResource("12_0jcd2")]
 
-[node name="NotifDispatcher" type="Node" parent="NonUI"]
+[node name="NotifDispatcher" type="Node" parent="NonUI" unique_id=903832455]
 script = ExtResource("13_4kahm")
 llamaIcon = ExtResource("14_v726o")
 llamaSound = ExtResource("15_x4ly8")
@@ -94,11 +108,10 @@ missionSound = ExtResource("18_fu1xu")
 shopIcon = ExtResource("19_xmpkd")
 shopSound = ExtResource("20_j5m3u")
 
-[node name="DesktopContextMenu" parent="NonUI" instance=ExtResource("21_psdk2")]
+[node name="DesktopContextMenu" parent="NonUI" unique_id=2132509342 instance=ExtResource("21_psdk2")]
 mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
-visible = false
 
-[node name="BGController" type="Control" parent="." node_paths=PackedStringArray("bgMain", "bgOverlay")]
+[node name="BGController" type="Control" parent="." unique_id=1913076825 node_paths=PackedStringArray("bgMain", "bgOverlay")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,7 +123,7 @@ script = ExtResource("30_gwx6v")
 bgMain = NodePath("BG")
 bgOverlay = NodePath("BGFade")
 
-[node name="BG" type="TextureRect" parent="BGController"]
+[node name="BG" type="TextureRect" parent="BGController" unique_id=1064178268]
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 z_index = -10
 layout_mode = 1
@@ -124,7 +137,7 @@ texture = ExtResource("31_0jcd2")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="BGFade" type="TextureRect" parent="BGController"]
+[node name="BGFade" type="TextureRect" parent="BGController" unique_id=1869324722]
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 z_index = -10
@@ -139,7 +152,7 @@ texture = ExtResource("31_0jcd2")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Content" type="MarginContainer" parent="."]
+[node name="Content" type="MarginContainer" parent="." unique_id=1357641784]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,7 +163,7 @@ theme_override_constants/margin_top = 4
 script = ExtResource("30_pkwxh")
 extraPaddingOnMobile = Vector4i(4, 4, 4, 4)
 
-[node name="MainTabs" type="TabContainer" parent="Content"]
+[node name="MainTabs" type="TabContainer" parent="Content" unique_id=503290116]
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -159,35 +172,35 @@ tab_alignment = 1
 current_tab = 0
 script = ExtResource("31_082wr")
 
-[node name="Dashboard" parent="Content/MainTabs" instance=ExtResource("22_x4ly8")]
+[node name="Dashboard" parent="Content/MainTabs" unique_id=345537585 instance=ExtResource("22_x4ly8")]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Timeline" parent="Content/MainTabs" instance=ExtResource("32_aqo04")]
+[node name="Timeline" parent="Content/MainTabs" unique_id=692063504 instance=ExtResource("32_aqo04")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Compendium" parent="Content/MainTabs" instance=ExtResource("33_xs1ek")]
+[node name="Compendium" parent="Content/MainTabs" unique_id=483324952 instance=ExtResource("33_xs1ek")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Ventures" parent="Content/MainTabs" instance=ExtResource("25_i1xpj")]
+[node name="Ventures" parent="Content/MainTabs" unique_id=1941486358 instance=ExtResource("25_i1xpj")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="Node" type="Node" parent="Content/MainTabs"]
+[node name="Node" type="Node" parent="Content/MainTabs" unique_id=1006831519]
 
-[node name="DevParent" type="Control" parent="Content/MainTabs/Node"]
+[node name="DevParent" type="Control" parent="Content/MainTabs/Node" unique_id=945127980]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="StatusBar" type="MarginContainer" parent="Content"]
+[node name="StatusBar" type="MarginContainer" parent="Content" unique_id=952232048]
 z_index = 5
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
@@ -197,27 +210,27 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 5
 
-[node name="Left" type="HBoxContainer" parent="Content/StatusBar"]
+[node name="Left" type="HBoxContainer" parent="Content/StatusBar" unique_id=2012021711]
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 0
 theme_override_constants/separation = 2
 
-[node name="Right" type="HBoxContainer" parent="Content/StatusBar"]
+[node name="Right" type="HBoxContainer" parent="Content/StatusBar" unique_id=49544499]
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 0
 theme_override_constants/separation = 2
 alignment = 2
 
-[node name="SettingsButton" type="Button" parent="Content/StatusBar/Right"]
+[node name="SettingsButton" type="Button" parent="Content/StatusBar/Right" unique_id=741385333]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Settings"
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/SettingsButton"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/SettingsButton" unique_id=123155406]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -232,7 +245,7 @@ texture = ExtResource("44_6q5er")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MuteBtn" type="Button" parent="Content/StatusBar/Right"]
+[node name="MuteBtn" type="Button" parent="Content/StatusBar/Right" unique_id=1757728599]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_vertical = 4
@@ -241,7 +254,7 @@ theme_type_variation = &"LargeButton"
 script = ExtResource("45_pbdue")
 targetBusName = "Master"
 
-[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/MuteBtn"]
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/MuteBtn" unique_id=1586832999]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -256,12 +269,12 @@ texture = ExtResource("46_hiis4")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ColorRect" type="ColorRect" parent="Content/StatusBar"]
+[node name="ColorRect" type="ColorRect" parent="Content/StatusBar" unique_id=347412090]
 visible = false
 layout_mode = 2
 color = Color(1, 1, 1, 0.188235)
 
-[node name="OverlayWindows" type="Control" parent="."]
+[node name="OverlayWindows" type="Control" parent="." unique_id=1742492926]
 z_index = 6
 layout_mode = 1
 anchors_preset = 15
@@ -271,46 +284,68 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MissionViewer" parent="OverlayWindows" instance=ExtResource("22_u6s0m")]
+[node name="MissionViewer" parent="OverlayWindows" unique_id=15342702 instance=ExtResource("22_u6s0m")]
 visible = false
 layout_mode = 1
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="TimelineEventViewer" parent="OverlayWindows" instance=ExtResource("33_llww6")]
+[node name="TimelineEventViewer" parent="OverlayWindows" unique_id=1040351159 instance=ExtResource("33_llww6")]
 visible = false
 layout_mode = 1
 
-[node name="GameItemViewer" parent="OverlayWindows" instance=ExtResource("23_87p11")]
+[node name="GameItemViewer" parent="OverlayWindows" unique_id=417937003 instance=ExtResource("23_87p11")]
 visible = false
 layout_mode = 1
 anchors_preset = -1
 
-[node name="SettingsWindowLite" parent="OverlayWindows" instance=ExtResource("31_fu1xu")]
+[node name="SettingsWindowLite" parent="OverlayWindows" unique_id=734997373 instance=ExtResource("31_fu1xu")]
 visible = false
 layout_mode = 1
 
-[node name="CopyImage" parent="OverlayWindows" instance=ExtResource("25_0jcd2")]
+[node name="CopyImage" parent="OverlayWindows" unique_id=131068907 instance=ExtResource("25_0jcd2")]
 visible = false
 layout_mode = 1
 
-[node name="DevText" parent="OverlayWindows" instance=ExtResource("26_4kahm")]
+[node name="DevText" parent="OverlayWindows" unique_id=473573085 instance=ExtResource("26_4kahm")]
 visible = false
 layout_mode = 1
 
-[node name="GenericLineEditWindow" parent="OverlayWindows" instance=ExtResource("27_v726o")]
+[node name="GenericLineEditWindow" parent="OverlayWindows" unique_id=1961757709 instance=ExtResource("27_v726o")]
 visible = false
 layout_mode = 1
 
-[node name="GenericConfirmationWindow" parent="OverlayWindows" instance=ExtResource("28_x4ly8")]
+[node name="GenericConfirmationWindow" parent="OverlayWindows" unique_id=733773290 instance=ExtResource("28_x4ly8")]
 visible = false
 layout_mode = 1
 
-[node name="LoadingOverlay" parent="OverlayWindows" instance=ExtResource("29_llww6")]
+[node name="LoadingOverlay" parent="OverlayWindows" unique_id=731920387 instance=ExtResource("29_llww6")]
 visible = false
 layout_mode = 1
 startOpen = false
 isUserClosable = true
+
+[node name="Curtain" type="TextureRect" parent="." unique_id=837192717]
+visible = false
+self_modulate = Color(0.25, 0.25, 0.25, 1)
+z_index = 50
+texture_repeat = 2
+material = SubResource("ShaderMaterial_ilmvy")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("39_y37er")
+script = ExtResource("40_ioawx")
+syncControlSize = true
+modTime = 8.0
+
+[node name="CurtainOpener" type="Node" parent="Curtain" unique_id=1686679063 node_paths=PackedStringArray("curtain")]
+script = ExtResource("41_vp0cx")
+curtain = NodePath("..")
+curtainOpenDuration = 0.15
 
 [connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindowLite" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Text.Json;
 
-public partial class CopyMissionTileCtx : BaseContextComponent
+public partial class CopyMissionTileCtx : AbstractContextComponent
 {
     public override string Id => "CopyMissionTile";
     GameMission currentMission;

@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class CopyTemplateIdCtx : BaseContextComponent
+public partial class CopyTemplateIdCtx : AbstractContextComponent
 {
     public override string Id => "CopyTemplateId";
     GameItem currentItem;

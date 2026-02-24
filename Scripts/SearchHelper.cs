@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 public static partial class PLSearch
 {
@@ -57,6 +58,7 @@ public static partial class PLSearch
     }
     public record Instruction(int index, InstructionOperation operation, JsonNode meta = null, int endIndex = -1, bool inverted = false);
 
+    public static JsonObject CreateSearchObject(string[] searchTags) => new JsonObject() { ["searchTags"] = new JsonArray([.. searchTags]) };
     public static Instruction[] GenerateSearchInstructions(string fromText) =>
         GenerateSearchInstructions(fromText, out var _);
     public static Instruction[] GenerateSearchInstructions(string fromText, out string failureText)
@@ -206,6 +208,8 @@ public static partial class PLSearch
         return instructions.ToArray();
     }
 
+    public static bool EvaluateInstructions(Instruction[] instructions, string[] searchTags) =>
+        EvaluateInstructions(instructions, CreateSearchObject(searchTags), out var _, false);
     public static bool EvaluateInstructions(Instruction[] instructions, JsonObject target) =>
         EvaluateInstructions(instructions, target, out var _, false);
 

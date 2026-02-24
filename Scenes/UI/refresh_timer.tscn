@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c5j52ymk713sh"]
+[gd_scene format=3 uid="uid://c5j52ymk713sh"]
 
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="1_fgkoy"]
 [ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="2_os1vn"]
@@ -39,7 +39,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="RefreshTimer" type="VBoxContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+[node name="RefreshTimer" type="VBoxContainer" unique_id=112616027 node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
 offset_right = 47.0
 offset_bottom = 19.0
 size_flags_horizontal = 10
@@ -57,13 +57,13 @@ customWarningTime = 10080
 customCritTime = 4320
 progressBar = NodePath("TimerProgress")
 
-[node name="TimerPanel" type="PanelContainer" parent="."]
+[node name="TimerPanel" type="PanelContainer" parent="." unique_id=366586063]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4n3dc")
 
-[node name="LeavingSoonAlert" type="MarginContainer" parent="TimerPanel"]
+[node name="LeavingSoonAlert" type="MarginContainer" parent="TimerPanel" unique_id=363537763]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -72,31 +72,32 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="TimerPanel/LeavingSoonAlert"]
+[node name="Panel" type="Panel" parent="TimerPanel/LeavingSoonAlert" unique_id=1014784354]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2fwwi")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TimerPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TimerPanel" unique_id=1512608218]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="TimerPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="TimerPanel/HBoxContainer" unique_id=129485578]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("2_os1vn")
 expand_mode = 3
 
-[node name="TimerLabel" type="Label" parent="TimerPanel/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="TimerPanel/HBoxContainer" unique_id=1335689661]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "99h"
+horizontal_alignment = 1
 
-[node name="TimerProgress" type="ProgressBar" parent="."]
+[node name="TimerProgress" type="ProgressBar" parent="." unique_id=2008692652]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
