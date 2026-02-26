@@ -25,7 +25,7 @@ PegLeg currently suppoorts the following features:
 - Customizable Themes that can auto-update to reflect the current Ventures Season
 
 ## Usage
-- Download and unzip PegLeg-Win64 from the [Latest Release](https://github.com/TomatechGames/PegLeg/releases/latest)
+- Download and unzip PegLeg-Win64 from the [Latest Release](https://github.com/TomatechGames/PegLeg/releases)
 - Open PegLeg and use a link code to sign in to your Epic account (PegLeg stores login data locally, and only uses it to authenticate directly with Epic)
 - Optionally, add any alt accounts you own from the drop-down menu in the top left corner
 
