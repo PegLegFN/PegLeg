@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 public partial class VirtualTabBar : Control
 {
@@ -10,6 +11,7 @@ public partial class VirtualTabBar : Control
         public string text;
         public string tooltip;
         public bool hidden;
+        public bool disabled;
         public Texture2D icon;
     }
 
@@ -23,6 +25,8 @@ public partial class VirtualTabBar : Control
     [Export]
 	Control virtualTabParent;
     [Export]
+    Control useAsTabContainer;
+    [Export]
     bool singleTabMode = true;
 
     List<VirtualTab> allTabs;
@@ -35,6 +39,17 @@ public partial class VirtualTabBar : Control
     public override void _Ready()
     {
         PreloadTabs();
+        if (useAsTabContainer is not null && singleTabMode)
+        {
+            var children = useAsTabContainer.GetChildren().OfType<Control>().ToArray();
+            for (int i = 0; i < children.Length; i++)
+            {
+                int childIndex = i;
+                var child = children[i];
+                LatestTabChanged += tabIndex => child.Visible = childIndex == tabIndex;
+                child.Visible = childIndex == LatestTab;
+            }
+        }
     }
 
     void PreloadTabs()
@@ -84,29 +99,32 @@ public partial class VirtualTabBar : Control
             }
             var tab = allTabs[i];
             activeTabs.Add(tab);
-            tab.SetContent(tabDatas[i].text, tabDatas[i].icon, tabDatas[i].tooltip);
-            tab.Visible = !tabDatas[i].hidden;
+            tab.SetFromTabData(tabDatas[i]);
         }
         for (int i = tabDatas.Length; i < allTabs.Count; i++)
         {
             allTabs[i].Visible = false;
         }
         UpdateTabModes();
-        SetTabPressed(0);
+        SetFirstValidTabPressed();
     }
 
     public void UpdateTabModes()
     {
-        if (activeTabs.Count == 1)
+        var visibleTabs = activeTabs.Where(t => t.Visible).ToArray();
+        if (visibleTabs.Length == 0)
+            return;
+        if (visibleTabs.Length == 1)
         {
-            activeTabs[0].SetMode(2);
+            visibleTabs[0].SetMode(2);
+            return;
         }
-        for (int i = 0; i < activeTabs.Count; i++)
+        for (int i = 1; i < visibleTabs.Length-1; i++)
         {
-            activeTabs[i].SetMode(0);
+            visibleTabs[i].SetMode(0);
         }
-        activeTabs.FirstOrDefault(t => t.Visible)?.SetMode(-1);
-        activeTabs.LastOrDefault(t => t.Visible)?.SetMode(1);
+        visibleTabs[0].SetMode(-1);
+        visibleTabs[^1].SetMode(1);
     }
 
     public void PressTab(VirtualTab tab, bool newVal)
@@ -123,23 +141,52 @@ public partial class VirtualTabBar : Control
             SetTabPressed(index, newVal);
     }
 
+    public void SetTabHidden(VirtualTab tab, bool hidden = true)
+    {
+        var idx = activeTabs.IndexOf(tab);
+        if(idx>=0)
+            SetTabHidden(idx, hidden);
+    }
+
     public void SetTabHidden(int index, bool hidden = true)
     {
         activeTabs[index].Visible = !hidden;
         //update tab modes
-        if (singleTabMode && activeTabs[index].IsPressed && hidden)
+        if (singleTabMode && activeTabs[index].IsPressed && !TabPressable(activeTabs[index]))
         {
-            var firstVisible = activeTabs.FirstOrDefault(t => t.Visible);
-            if (firstVisible is null)
-            {
-                activeTabs[index].Visible = true;
-                return;
-            }
-            var firstIdx = activeTabs.IndexOf(firstVisible);
-            SetTabPressed(firstIdx);
+            SetFirstValidTabPressed();
         }
         else
             activeTabs[index].IsPressed = false;
+    }
+
+    public void SetTabDisabled(VirtualTab tab, bool disabled = true)
+    {
+        var idx = activeTabs.IndexOf(tab);
+        if (idx >= 0)
+            SetTabDisabled(idx, disabled);
+    }
+
+    public void SetTabDisabled(int index, bool disabled = true)
+    {
+        activeTabs[index].Disabled = disabled;
+        //update tab modes
+        if (singleTabMode && activeTabs[index].IsPressed && !TabPressable(activeTabs[index]))
+        {
+            SetFirstValidTabPressed();
+        }
+        else
+            activeTabs[index].IsPressed = false;
+    }
+
+    static bool TabPressable(VirtualTab tab) => !tab.Disabled && tab.Visible;
+
+    public void SetFirstValidTabPressed()
+    {
+        var firstPressable = activeTabs.FirstOrDefault(TabPressable);
+        if (firstPressable is null)
+            return;
+        SetTabPressed(activeTabs.IndexOf(firstPressable));
     }
 
     bool lockTabPresses = false;

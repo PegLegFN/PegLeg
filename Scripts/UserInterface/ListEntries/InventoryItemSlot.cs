@@ -220,7 +220,9 @@ public partial class InventoryItemSlot : Node
 
     public void RequestChange()
     {
-        if (overrideAccount is null)
+        if (Input.IsKeyPressed(Key.Shift))
+            Inspect();
+        else if (overrideAccount is null)
             OnItemChangeRequested?.Invoke(this);
     }
 

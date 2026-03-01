@@ -104,7 +104,8 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         if (listMode.LatestTab != 0 || linkedPanel.currentItem is not GameItem visibleLoadout)
             return;
         var currentSelected = loadouts.FirstOrDefault(l => l.uuid == visibleLoadout.profile?.statAttributes?["selected_hero_loadout"]?.ToString());
-        using var _ = LoadingOverlay.CreateToken();
+        //using var _ = LoadingOverlay.CreateToken();
+        setAsActiveButton.Visible = false;
         await visibleLoadout.profile.PerformOperation("SetActiveHeroLoadout", $$"""
             {
                 "selectedLoadout": "{{visibleLoadout.uuid}}"
@@ -112,7 +113,6 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
             """);
         currentSelected?.NotifyChanged();
         visibleLoadout?.NotifyChanged();
-        setAsActiveButton.Visible = false;
     }
 
     public async void CreateBlueprintFromSelected()
@@ -183,7 +183,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         listMode.Visible = true;
         if (blueprintPreview is not null)
             blueprintPreview.Visible = false;
-
+        selectionMode = SelectionMode.None;
         UpdateMode();
         cancelLoadBlueprintButton.Visible = false;
     }

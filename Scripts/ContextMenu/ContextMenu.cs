@@ -50,6 +50,7 @@ public partial class ContextMenu : Window
         inst = this;
         Visible = true;
         SetCtxVisible(false);
+        //Unfocusable = true;
         await Helpers.WaitForFrame();
         this.Win64RemoveFromTaskbar();
 
@@ -96,8 +97,6 @@ public partial class ContextMenu : Window
     async void ShowMenuInst(ContextMenuHook hook)
     {
         scaleAnimation.Scale = Vector2.Zero;
-        await Helpers.WaitForFrame();
-        SetCtxVisible(false);
         var compList = hook.componentList.components;
         bool hasComps = false;
         openedAt = Time.GetTicksMsec();
@@ -139,6 +138,15 @@ public partial class ContextMenu : Window
 
         open = true;
         blockClosing = true;
+
+        //weird workaround
+        Visible = false;
+        Unfocusable = false;
+        Visible = true;
+
+        await Helpers.WaitForFrame();
+        this.Win64RemoveFromTaskbar();
+        SetCtxVisible(false);
 
         if (animTween?.IsRunning() == true)
             animTween.Stop();
@@ -279,6 +287,7 @@ public partial class ContextMenu : Window
         scaleAnimation.Scale = Vector2.Zero;
         await Helpers.WaitForFrame();
         SetCtxVisible(false);
+        Unfocusable = true;
         open = false;
         Clear();
     }

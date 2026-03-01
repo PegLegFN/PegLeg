@@ -42,7 +42,11 @@ public partial class RecycleItemCtx : AbstractContextComponent
         var toRecycle = await SimpleItemSelector.OpenSelector([item], SimpleItemSelector.RecycleConfig);
         if (toRecycle.Length == 0)
             return;
-        var json = $@"{{""targetItemIds"":[{item.uuid}]}}";
+        var json = $$"""
+        {
+            "targetItemIds":["{{item.uuid}}"]
+        }
+        """;
         await item?.profile.PerformOperation("RecycleItemBatch", json);
     }
 }

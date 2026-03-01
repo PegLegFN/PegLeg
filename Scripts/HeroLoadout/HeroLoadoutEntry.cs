@@ -60,6 +60,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
     public override void _ExitTree()
     {
         GameAccount.ActiveAccountChanged -= UpdateActive;
+        ClearItem();
     }
 
     void UpdateActive()
@@ -276,7 +277,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
         teamPerk.SetTeamProgress(matchCount);
         teamPerk.SetWarningForCommander(commanderItem.template);
 
-        var gadgetTemplates = currentItem.attributes["gadgets"]?.AsArray().OrderBy(g => (int)g["slot_index"]).Select(g => g["gadget"].ToString()).ToArray() ?? [];
+        var gadgetTemplates = currentItem.attributes["gadgets"]?.AsArray().OrderBy(g => g?["slot_index"]?.GetValue<int>()).Select(g => g?["gadget"]?.ToString()).ToArray() ?? [];
         TrySetGadget(gadgets[0], gadgetTemplates.Length > 0 ? gadgetTemplates[0] : null);
         TrySetGadget(gadgets[1], gadgetTemplates.Length > 1 ? gadgetTemplates[1] : null);
     }
@@ -311,140 +312,131 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
     async void InteractCommander()
     {
-        GD.Print("commander");
-        if (editable && currentItem?.profile?.account.isOwned == true)
-        {
-            var current = commander.currentItem?.uuid;
-            HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current??""])];
-            var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
-            {
-                if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
-                    return false;
-                return true;
-            }), HeroItemSelector.CommanderConfig with
-            {
-                lastSelectedId = current
-            });
-            if(newHero is null)
-            {
-                GD.Print("cancelled");
-                return;
-            }
-            //using var _ = LoadingOverlay.CreateToken();
-            await currentItem.profile.PerformOperation("AssignHeroToLoadout", $$"""
-            {
-                "heroId": "{{newHero?.uuid}}",
-                "loadoutId": "{{currentItem.uuid}}",
-                "slotName": "CommanderSlot"
-            }
-            """);
-        }
-        else
+        if(Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
         {
             commander.Inspect();
+            return;
         }
+        var current = commander.currentItem?.uuid;
+        HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current ?? ""])];
+        var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
+        {
+            if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
+                return false;
+            return true;
+        }), HeroItemSelector.CommanderConfig with
+        {
+            lastSelectedId = current
+        });
+        if (newHero is null)
+        {
+            //GD.Print("cancelled");
+            return;
+        }
+        //using var _ = LoadingOverlay.CreateToken();
+        await currentItem.profile.PerformOperation("AssignHeroToLoadout", $$"""
+        {
+            "heroId": "{{newHero?.uuid}}",
+            "loadoutId": "{{currentItem.uuid}}",
+            "slotName": "CommanderSlot"
+        }
+        """);
     }
 
     async void InteractTeamPerk()
     {
-        if (editable && currentItem?.profile?.account.isOwned == true)
-        {
-            var newTeamPerk = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("TeamPerk"), HeroItemSelector.TeamPerkConfig with
-            {
-                commanderType = commander.currentItem?.templateId,
-                lastSelectedId = teamPerk.currentItem?.uuid
-            });
-            if (newTeamPerk is null)
-            {
-                GD.Print("cancelled");
-                return;
-            }
-            //using var _ = LoadingOverlay.CreateToken();
-            await currentItem.profile.PerformOperation("AssignTeamPerkToLoadout", $$"""
-            {
-                "teamPerkId": "{{newTeamPerk?.uuid}}",
-                "loadoutId": "{{currentItem.uuid}}"
-            }
-            """);
-        }
-        else
+        if (Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
         {
             teamPerk.Inspect();
+            return;
         }
+        var newTeamPerk = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("TeamPerk"), HeroItemSelector.TeamPerkConfig with
+        {
+            commanderType = commander.currentItem?.templateId,
+            lastSelectedId = teamPerk.currentItem?.uuid
+        });
+        if (newTeamPerk is null)
+        {
+            //GD.Print("cancelled");
+            return;
+        }
+        //using var _ = LoadingOverlay.CreateToken();
+        await currentItem.profile.PerformOperation("AssignTeamPerkToLoadout", $$"""
+        {
+            "teamPerkId": "{{newTeamPerk?.uuid}}",
+            "loadoutId": "{{currentItem.uuid}}"
+        }
+        """);
     }
 
     async void InteractSupport(int idx)
     {
-        if (editable && currentItem?.profile?.account.isOwned == true)
-        {
-            var current = support[idx].currentItem?.uuid;
-            HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current ?? ""])];
-            var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
-            {
-                if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
-                    return false;
-                return true;
-            }), HeroItemSelector.SupportConfig with
-            {
-                commanderType = commander.currentItem?.templateId,
-                teamPerkType = teamPerk.currentItem?.templateId,
-                lastSelectedId = current
-            });
-            if (newHero is null)
-            {
-                GD.Print("cancelled");
-                return;
-            }
-            if (newHero == GameItem.Empty)
-                newHero = null;
-            //using var _ = LoadingOverlay.CreateToken();
-            await currentItem.profile.PerformOperation("AssignHeroToLoadout", $$"""
-            {
-                "heroId": "{{newHero?.uuid}}",
-                "loadoutId": "{{currentItem.uuid}}",
-                "slotName": "FollowerSlot{{idx+1}}"
-            }
-            """);
-        }
-        else
+        if (Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
         {
             support[idx].Inspect();
+            return;
         }
+        var current = support[idx].currentItem?.uuid;
+        HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current ?? ""])];
+        var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
+        {
+            if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
+                return false;
+            return true;
+        }), HeroItemSelector.SupportConfig with
+        {
+            commanderType = commander.currentItem?.templateId,
+            teamPerkType = teamPerk.currentItem?.templateId,
+            lastSelectedId = current
+        });
+        if (newHero is null)
+        {
+            //GD.Print("cancelled");
+            return;
+        }
+        if (newHero == GameItem.Empty)
+            newHero = null;
+        //using var _ = LoadingOverlay.CreateToken();
+        await currentItem.profile.PerformOperation("AssignHeroToLoadout", $$"""
+        {
+            "heroId": "{{newHero?.uuid}}",
+            "loadoutId": "{{currentItem.uuid}}",
+            "slotName": "FollowerSlot{{idx + 1}}"
+        }
+        """);
     }
 
     async void InteractGadget(int idx)
     {
-        if (editable && currentItem?.profile?.account.isOwned == true)
-        {
-            var options = GameItemTemplate.GetTemplatesOfType("Gadget")
-                .Where(g => currentItem?.profile.GetFirstTemplateItem(g.HomebaseNodeForGadget(out var node) ? node : null) is not null)
-                .Select(g => g.GadgetSingleton).ToArray();
-            var current = options.FirstOrDefault(g => g.templateId == gadgets[idx].currentItem?.templateId)?.uuid;
-
-            var newGadget = await HeroItemSelector.OpenSelector(options, HeroItemSelector.DefaultConfig with
-            {
-                title = "Select Gadget",
-                lastSelectedId = current,
-                allowEmptySelection = true
-            });
-            if (newGadget is null)
-            {
-                GD.Print("cancelled");
-                return;
-            }
-            //using var _ = LoadingOverlay.CreateToken();
-            await currentItem.profile.PerformOperation("AssignGadgetToLoadout", $$"""
-            {
-                "gadgetId": "{{newGadget?.templateId}}",
-                "loadoutId": "{{currentItem.uuid}}",
-                "slotIndex": {{idx}}
-            }
-            """);
-        }
-        else
+        if (Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
         {
             gadgets[idx].Inspect();
+            return;
         }
+        var options = GameItemTemplate.GetTemplatesOfType("Gadget")
+            .Where(g => currentItem?.profile.GetFirstTemplateItem(g.HomebaseNodeForGadget(out var node) ? node : null) is not null)
+            .Select(g => g.GadgetSingleton).ToArray();
+        var current = options.FirstOrDefault(g => g.templateId == gadgets[idx].currentItem?.templateId)?.uuid;
+
+        var newGadget = await HeroItemSelector.OpenSelector(options, HeroItemSelector.DefaultConfig with
+        {
+            title = "Select Gadget",
+            lastSelectedId = current,
+            allowEmptySelection = true
+        });
+        if (newGadget is null)
+        {
+            GD.Print("cancelled");
+            return;
+        }
+        //using var _ = LoadingOverlay.CreateToken();
+        await currentItem.profile.PerformOperation("AssignGadgetToLoadout", $$"""
+        {
+            "gadgetId": "{{newGadget?.templateId}}",
+            "loadoutId": "{{currentItem.uuid}}",
+            "slotIndex": {{idx}}
+        }
+        """);
     }
 
     protected override void UpdateSelectionVisuals()

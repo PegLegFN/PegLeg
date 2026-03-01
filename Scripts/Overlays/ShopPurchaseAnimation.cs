@@ -53,18 +53,18 @@ public partial class ShopPurchaseAnimation : Control
         cancelButton.Visible = false;
     }
 
-    public static void PlayAnimation(Texture2D itemTexture, int count, Func<Task> purchaseTask = null, bool workaround = false) =>
+    public static void PlayAnimation(Texture2D itemTexture, int count, Func<Task<JsonArray>> purchaseTask = null, bool workaround = false) =>
         instance?.PlayAnimationInst(itemTexture, count, purchaseTask, workaround);
 
     bool lockAnimation = false;
     bool workaroundCancelled = false;
-    async void PlayAnimationInst(Texture2D itemTexture, int count, Func<Task> purchaseTaskGenerator, bool workaround)
+    async void PlayAnimationInst(Texture2D itemTexture, int count, Func<Task<JsonArray>> purchaseTaskGenerator, bool workaround)
     {
         if (lockAnimation)
             return;
         lockAnimation = true;
         //too many items will cause issues
-        count = Mathf.Min(count, 40);
+        //count = Mathf.Min(count, 40);
         bool fastAnimations = AppConfig.Get("misc", "fast_animations", false);
         //GD.Print(fastAnimations);
         modalWindow.SetWindowOpen(true);
@@ -97,7 +97,7 @@ public partial class ShopPurchaseAnimation : Control
         {
             itemParent.GetChild<Control>(i).Visible = false;
         }
-
+        int workaroundSuccess = 0;
         if (!fastAnimations || workaround)
         {
             var cartScaleTween = GetTree().CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
@@ -115,22 +115,28 @@ public partial class ShopPurchaseAnimation : Control
             {
                 if (workaround)
                 {
-                    if (purchaseTaskGenerator?.Invoke() is not Task purchaseSubtask)
+                    if (purchaseTaskGenerator?.Invoke() is not Task<JsonArray> purchaseSubtask)
                         break;
                     await Task.WhenAll(
                         purchaseSubtask,
                         Helpers.WaitForTimer(timeBetweenItems * (i == 0 ? 0.5f : 1))
                     );
+                    if (purchaseSubtask.Result is not null)
+                        workaroundSuccess++;
                 }
                 else
                     await Helpers.WaitForTimer(timeBetweenItems * (i == 0 ? 0.5f : 1));
+                int targetAnimatableIndex = i > 30 ? (30 + (i % 10)) : i;
                 AnimateItem(animatableItems[^(i + 1)]);
                 if (workaround && workaroundCancelled)
                     break;
             }
 
             if (workaround)
+            {
+                GD.Print($"Purchased {workaroundSuccess} items (workaround)");
                 cancelButton.Visible = false;
+            }
 
             await Helpers.WaitForTimer(itemFallDurationSingle + (timeBetweenItems * 0.5));
 

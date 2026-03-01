@@ -43,6 +43,8 @@ public static partial class Helpers
         return construct;
     }
 
+    public static bool EvalMetaBool(this Node node, string metaKey) => node.GetMeta(metaKey).AsBool();
+
     public static void Unpress(this ButtonGroup group)
     {
         bool allowUnpress = group.AllowUnpress;
@@ -697,13 +699,13 @@ public static partial class Helpers
             node.Disconnect(signalName, callable);
     }
 
-    public static bool DevTextKeybindPressed(this InputEvent e) =>
+    public static bool DevTextKeybindPressed(this InputEvent e, Key customKey = Key.D) =>
         e is InputEventKey keyEvent &&
         keyEvent.Pressed &&
         keyEvent.ShiftPressed &&
         !keyEvent.CtrlPressed &&
         keyEvent.AltPressed &&
-        keyEvent.Keycode == Key.D;
+        keyEvent.Keycode == customKey;
 
     public static async Task<GameAccount> EnsureProfile(this Task<GameAccount> accountTask, string profileId, bool force = false)
     {

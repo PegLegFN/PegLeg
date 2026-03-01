@@ -512,9 +512,11 @@ public partial class GameAccount
 
     public SemaphoreSlim profileOperationSemaphore { get; private set; } = new(1);
 
-    public async Task<JsonArray> PurchaseOffer(GameOffer offer, int purchaseQuantity = 1)
+    public async Task<JsonArray> PurchaseOffer(GameOffer offer, int purchaseQuantity = 1, bool hideCompleteMsg = false)
     {
-        var result = await GetProfile(FnProfileTypes.Common)
+        var profile = GetProfile(FnProfileTypes.Common);
+        GameProfile.silenceOperationLog = hideCompleteMsg;
+        var result = await profile
             .PerformOperation("PurchaseCatalogEntry", $$"""
             {
                 "offerId": "{{offer.OfferId}}",
@@ -1221,7 +1223,7 @@ public partial class GameAccount
             return new()
             {
                 displayTemplate = heroTemplate.TemplateId,
-                heroTemplatePrefix = TierSuffix().Replace(RaritySuffix().Replace(heroTemplate.TemplateId, "_"), "_"),
+                heroTemplatePrefix = GameItemTemplate.TierSuffix().Replace(GameItemTemplate.RaritySuffix().Replace(heroTemplate.TemplateId, "_"), "_"),
                 heroPerkFallback = abilities[0].TemplateId
             };
         }
@@ -1236,12 +1238,6 @@ public partial class GameAccount
                 .ThenBy(i => !i.templateId.StartsWith(prefix));
             return candidates.FirstOrDefault()?.uuid;
         }
-
-        [GeneratedRegex("_(?:c|uc|r|vr|sr|ur)_")]
-        private static partial Regex RaritySuffix();
-
-        [GeneratedRegex("_t0\\d")]
-        private static partial Regex TierSuffix();
     }
 
     public void RenameHeroLoadoutBlueprint(GameItem loadoutBlueprint, string newName)
@@ -1287,7 +1283,7 @@ public partial class GameAccount
         if (localPinnedQuests != null && !outOfDate)
             return accountItems;
 
-        await accountItems.Query(forceFetch: true);
+        await accountItems.Query(ignoreCache: true);
         questsLastRefreshedAt = DateTime.UtcNow;
         localPinnedQuests = accountItems.statAttributes["client_settings"]?["pinnedQuestInstances"]?.Deserialize<HashSet<string>>() ?? [];
         return accountItems;

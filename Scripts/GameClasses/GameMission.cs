@@ -811,6 +811,7 @@ public partial class GameMission
     public bool IsFourPlayer => difficultyInfo?.DisplayName?.EndsWith("4 Players") == true;
     public bool IsStoryMission => (tile?.requirements.activeQuestDefinitions?.Length ?? 0) > 0;
     public bool HasLargeReward { get; private set; }
+    public bool HasDoubleLegendary { get; private set; }
 
     JsonObject searchObject;
     public JsonObject SearchObject => searchTags is null ? [] : (searchObject ??= new() { ["searchTags"] = searchTags });
@@ -939,7 +940,17 @@ public partial class GameMission
         )
         {
             HasLargeReward = true;
-            searchTags.Add("LargeReward");
+            searchTags.Add("Large Reward");
+        }
+        if (
+            alertRewardItems.Where(i =>
+                i.template?.Rarity == "Legendary" &&
+                !i.templateId.StartsWith("AccountResource:")
+            ).Count() >= 2
+        )
+        {
+            HasDoubleLegendary = true;
+            searchTags.Add("Double Legendary");
         }
         searchTags.Add(PowerLevel);
         searchTags.Add(Location);

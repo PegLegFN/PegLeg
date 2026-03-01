@@ -15,6 +15,13 @@ public partial class ItemTierDisplay : Node
     [Export]
     Color superchargeColor = Colors.Cyan;
 
+    public void SetFromItem(GameItem item)
+    {
+        SetMaxTier(item.template?.MaxTier ?? 1);
+        SetTier(item.template?.Tier ?? 0);
+        SetSuperchargedTier((item.attributes?["max_level_bonus"]?.GetValue<int>() ?? 0) / 2);
+    }
+
     public void SetMaxTier(int maxTier)
     {
         maxTier = Mathf.Min(maxTier, tierImages.Length);

@@ -36,7 +36,7 @@ void fragment()
 	vec2 clockwiseUV = rotateUV(shrunkUV, vec2(0.5), rotateAmount);
 	vec4 clockwiseGlow = texture(TEXTURE, clockwiseUV) * maskUV(clockwiseUV);
 	shrunkUV.x = 1.0-shrunkUV.x;
-	vec2 anticlockwiseUV=rotateUV(shrunkUV, vec2(0.5), rotateAmount*0.75);
+	vec2 anticlockwiseUV=rotateUV(vec2(1,0)+(shrunkUV*vec2(-1,1)), vec2(0.5), -rotateAmount*0.75);
 	vec4 anticlockwiseGlow = texture(TEXTURE, anticlockwiseUV)*maskUV(anticlockwiseUV);
 	
 	vec4 result = mix(clockwiseGlow, anticlockwiseGlow, 0.5);

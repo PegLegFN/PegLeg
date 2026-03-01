@@ -63,6 +63,26 @@ public partial class VirtualTab : Control
                 button.ButtonPressed = value;
         }
     }
+    [Export]
+    public bool Disabled
+    {
+        get => button?.Disabled ?? false;
+        set
+        {
+            if (button is not null)
+                button.Disabled = value;
+        }
+    }
+    [Export]
+    public Color Tint
+    {
+        get => iconRect?.SelfModulate ?? Colors.White;
+        set
+        {
+            if (iconRect is not null)
+                iconRect.SelfModulate = value;
+        }
+    }
 
     [ExportGroup("Nodes")]
     [Export]
@@ -87,12 +107,12 @@ public partial class VirtualTab : Control
         SetContent(text, icon, tooltip);
     }
 
-
     public VirtualTabBar.TabData TabData => new()
     {
         text = label.Text,
         tooltip = button.TooltipText,
         hidden = !Visible,
+        disabled = Disabled,
         icon = iconRect.Texture
     };
 
@@ -119,6 +139,13 @@ public partial class VirtualTab : Control
             1 => "RightCheckButton",
             _ => "EmptyCheckButton"
         };
+    }
+
+    public void SetFromTabData(VirtualTabBar.TabData tabData)
+    {
+        SetContent(tabData.text, tabData.icon, tabData.tooltip);
+        Visible = !tabData.hidden;
+        Disabled = tabData.disabled;
     }
 
     public void SetContent(string text, Texture2D icon = null, string tooltip = null)

@@ -1,11 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://dpd06j33s360w"]
+[gd_scene format=3 uid="uid://dpd06j33s360w"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_f51aj"]
 [ext_resource type="AudioStream" uid="uid://db1iimlt7vmi7" path="res://Audio/SFX/Shop/store_purchaseitem_athena_01.ogg" id="2_hcda8"]
 [ext_resource type="Script" uid="uid://skbbrcg3v4d4" path="res://Scripts/Overlays/ShopPurchaseAnimation.cs" id="2_jxg4g"]
-[ext_resource type="Texture2D" uid="uid://by27usoarfre0" path="res://Images/InterfaceIcons/PegLegShoppingCartInside.png" id="2_x56qt"]
+[ext_resource type="Texture2D" uid="uid://by27usoarfre0" path="res://Images/AnimationProps/PegLegShoppingCartInside.png" id="2_x56qt"]
 [ext_resource type="PackedScene" uid="uid://x00u75ii63ly" path="res://Scenes/GameItemEntry/shop_purchase_anim_item_element.tscn" id="3_h11w1"]
-[ext_resource type="Texture2D" uid="uid://dgyw7mbhfodhy" path="res://Images/InterfaceIcons/PegLegShoppingCart.png" id="4_0gyrh"]
+[ext_resource type="Texture2D" uid="uid://dgyw7mbhfodhy" path="res://Images/AnimationProps/PegLegShoppingCart.png" id="4_0gyrh"]
 [ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="5_8k3hh"]
 [ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="6_1aa5w"]
 [ext_resource type="Shader" uid="uid://d1sgo64plh75x" path="res://Shaders/AdvancedLabel.gdshader" id="6_abafb"]
@@ -34,23 +34,24 @@ shader_parameter/fillColor = Color(1, 1, 1, 1)
 shader_parameter/shadowColor = Color(0, 0, 0, 0.501961)
 shader_parameter/outlineColor = Color(0.3, 0.3, 0, 1)
 shader_parameter/gradientMask = Vector3(1, 0, 0)
-shader_parameter/gradientFrom = Color(1, 1, 1, 1)
-shader_parameter/gradientTo = Color(1, 1, 0.588235, 1)
+shader_parameter/gradientFrom = Color(1, 1, 0.588235, 1)
+shader_parameter/gradientTo = Color(1, 1, 0.26999998, 1)
+shader_parameter/gradientOffset = -0.13
 shader_parameter/gradientHorizontal = false
 
-[node name="ShopPurchaseAnimation" instance=ExtResource("1_f51aj")]
+[node name="ShopPurchaseAnimation" unique_id=1575789765 instance=ExtResource("1_f51aj")]
 offset_left = 0.0
 offset_right = 0.0
 
-[node name="CloseBtn" parent="." index="1"]
+[node name="CloseBtn" parent="." index="1" unique_id=929538038]
 visible = false
 
-[node name="PurchaseSound" type="AudioStreamPlayer" parent="Control/WindowContents" index="0"]
+[node name="PurchaseSound" type="AudioStreamPlayer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=1746111282]
 stream = ExtResource("2_hcda8")
 max_polyphony = 3
 bus = &"SFX"
 
-[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="1" node_paths=PackedStringArray("modalWindow", "cartScaleNode", "cartRotationNode", "itemParent", "finalText", "cancelButton")]
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="1" unique_id=1545245704 node_paths=PackedStringArray("modalWindow", "cartScaleNode", "cartRotationNode", "itemParent", "finalText", "cancelButton")]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -71,11 +72,11 @@ itemParent = NodePath("Control/Scale/Rotation/Control/HFlowContainer")
 finalText = NodePath("Control/PurchaseText")
 cancelButton = NodePath("Control/CenterContainer/Button")
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer" index="0"]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer" index="0" unique_id=243735995]
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
 
-[node name="Glow" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control" index="0"]
+[node name="Glow" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control" index="0" unique_id=1287464080]
 self_modulate = Color(1, 0.7, 0, 1)
 material = SubResource("ShaderMaterial_v25rf")
 custom_minimum_size = Vector2(1024, 1024)
@@ -91,12 +92,13 @@ offset_right = 256.0
 offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(384, 384)
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
 mouse_filter = 2
 texture = ExtResource("6_1aa5w")
 expand_mode = 1
 
-[node name="Scale" type="Control" parent="Control/WindowContents/CenterContainer/Control" index="1"]
+[node name="Scale" type="Control" parent="Control/WindowContents/CenterContainer/Control" index="1" unique_id=1192931341]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,7 +107,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(128, 256)
 
-[node name="Rotation" type="Control" parent="Control/WindowContents/CenterContainer/Control/Scale" index="0"]
+[node name="Rotation" type="Control" parent="Control/WindowContents/CenterContainer/Control/Scale" index="0" unique_id=616331935]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -114,7 +116,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(82, 214)
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation" index="0" unique_id=1774381057]
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 1
 anchors_preset = 15
@@ -125,7 +127,7 @@ grow_vertical = 2
 texture = ExtResource("2_x56qt")
 expand_mode = 1
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation" index="1"]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation" index="1" unique_id=1003206837]
 layout_mode = 1
 anchor_left = 0.85
 anchor_top = 0.6
@@ -134,7 +136,7 @@ anchor_bottom = 0.6
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HFlowContainer" type="HFlowContainer" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control" index="0"]
+[node name="HFlowContainer" type="HFlowContainer" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control" index="0" unique_id=1455972487]
 custom_minimum_size = Vector2(75, 0)
 layout_direction = 3
 layout_mode = 1
@@ -146,37 +148,37 @@ theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 alignment = 1
 
-[node name="ShopPurchaseItemElement" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="0" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="0" unique_id=1623402163 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement2" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="1" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement2" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="1" unique_id=1473675177 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement3" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="2" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement3" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="2" unique_id=1592393651 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement4" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="3" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement4" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="3" unique_id=1862815230 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement5" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="4" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement5" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="4" unique_id=2022311300 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement6" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="5" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement6" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="5" unique_id=1053609934 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement7" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="6" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement7" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="6" unique_id=1814801220 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement8" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="7" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement8" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="7" unique_id=1846274213 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement9" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="8" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement9" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="8" unique_id=736861002 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="ShopPurchaseItemElement10" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="9" instance=ExtResource("3_h11w1")]
+[node name="ShopPurchaseItemElement10" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation/Control/HFlowContainer" index="9" unique_id=1332989547 instance=ExtResource("3_h11w1")]
 layout_mode = 2
 
-[node name="TextureRect2" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation" index="2"]
+[node name="TextureRect2" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale/Rotation" index="2" unique_id=1266842173]
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 1
 anchors_preset = 15
@@ -187,7 +189,7 @@ grow_vertical = 2
 texture = ExtResource("4_0gyrh")
 expand_mode = 1
 
-[node name="PurchaseText" type="CenterContainer" parent="Control/WindowContents/CenterContainer/Control" index="2"]
+[node name="PurchaseText" type="CenterContainer" parent="Control/WindowContents/CenterContainer/Control" index="2" unique_id=155341870]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -198,11 +200,11 @@ grow_horizontal = 2
 grow_vertical = 2
 use_top_left = true
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/Control/PurchaseText" index="0"]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/Control/PurchaseText" index="0" unique_id=1638050555]
 visible = false
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/Control" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/Control" index="0" unique_id=148716388]
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 0
 offset_left = -128.0
@@ -212,10 +214,11 @@ offset_bottom = 128.0
 pivot_offset = Vector2(128, 128)
 texture = ExtResource("6_g43va")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/Control/PurchaseText" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/Control/PurchaseText" index="1" unique_id=616606326]
 layout_mode = 2
+theme_override_constants/margin_top = -28
 
-[node name="TextureRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer" index="0"]
+[node name="TextureRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer" index="0" unique_id=1206793431]
 visible = false
 material = SubResource("ShaderMaterial_8on64")
 layout_mode = 2
@@ -223,41 +226,43 @@ color = Color(1, 1, 0.686275, 1)
 script = ExtResource("7_gi68h")
 syncControlSize = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer" index="1" unique_id=622056396]
 layout_mode = 2
-theme_override_constants/separation = -16
+theme_override_constants/separation = -40
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer/VBoxContainer" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer/VBoxContainer" index="0" unique_id=67284957]
 material = SubResource("ShaderMaterial_u3030")
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 1, 1)
-theme_override_constants/line_spacing = 12
+theme_override_constants/line_spacing = -45
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 70
-text = "Purchase"
+text = "
+Purchase"
 horizontal_alignment = 1
 script = ExtResource("7_gi68h")
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer/VBoxContainer" index="1"]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/Control/PurchaseText/MarginContainer/VBoxContainer" index="1" unique_id=1526848455]
 material = SubResource("ShaderMaterial_u3030")
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 1, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 1, 1)
-theme_override_constants/line_spacing = 12
+theme_override_constants/line_spacing = -43
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 70
-text = "Complete"
+text = "
+Complete"
 horizontal_alignment = 1
 script = ExtResource("7_gi68h")
 
-[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents/CenterContainer/Control" index="3"]
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents/CenterContainer/Control" index="3" unique_id=1504128297]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -268,7 +273,7 @@ grow_horizontal = 2
 grow_vertical = 0
 use_top_left = true
 
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/Control/CenterContainer" index="0"]
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/Control/CenterContainer" index="0" unique_id=1810339055]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Stop Purchasing"

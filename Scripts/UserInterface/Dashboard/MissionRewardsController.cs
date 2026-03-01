@@ -367,7 +367,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                 .ThenBy(r => !GameAccount.ActiveAccount.HasReminder(r.item.templateId))
                 .ThenBy(r => !(
                     r.item.template.VBucksOrXRayTickets ||
-                    r.item.sortingTemplate.CanBeLeveled ||
+                    r.item.sortingTemplate.HasLevel ||
                     r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
                 ))
                 .ThenBy(r => -r.item.sortingTemplate.RarityLevel)

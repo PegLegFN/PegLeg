@@ -340,7 +340,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         int bonusMaxLevel = displayItem.attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;
         int maxLevel = Mathf.Max(tier * 10, 1) + bonusMaxLevel;
         int minLevel = Mathf.Max(maxLevel - 10, 1);
-        levelProgress = minLevel == maxLevel ? 1 : (level - minLevel) / (maxLevel - minLevel);
+        levelProgress = minLevel == maxLevel ? 1 : ((float)level - minLevel) / (maxLevel - minLevel);
 
         if (type == "AccountResource" || type == "ConsumableAccountItem")
         {
@@ -424,12 +424,12 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         }
 
         EmitSignalIsCollectable(!(displayItem.isCollectedCache ?? true));
-        EmitSignalCanBeLeveledChanged(displayItem.template?.CanBeLeveled == true);
+        EmitSignalCanBeLeveledChanged(displayItem.template?.HasLevel == true);
         EmitSignalLevelChanged(level);
         EmitSignalLevelMaxChanged(maxLevel);
         EmitSignalLevelProgressChanged(levelProgress);
 
-        SetInteractable(autoInteractableTypes.Contains(displayItem.template?.Type.ToLower()) || displayItem.CardPackChoices is not null);
+        SetInteractable(DefaultInteractable(displayItem));
 
         //if survivor, set personality icons
 
@@ -448,7 +448,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignalNotificationChanged(!displayItem.IsSeen);
         EmitSignalBookmarkChanged(GameAccount.ActiveAccount.HasReminder(displayItem.template));
         EmitSignalFavoriteChanged(displayItem.IsFavourited);
-        EmitSignalMaxTierChanged(Mathf.Min((displayItem.template?.RarityLevel ?? 0) + 1, 5));
+        EmitSignalMaxTierChanged(displayItem.template.MaxTier);
         EmitSignalTierChanged(tier);
         EmitSignalSuperchargeChanged(bonusMaxLevel / 2);
     }
@@ -471,14 +471,13 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
     public Vector2 GetBasisSize() => CustomMinimumSize;
 
-    static readonly string[] autoInteractableTypes =
-    [
-        "schematic",
-        "weapon",
-        "trap",
-        "hero",
-        "defender"
-    ];
+    static bool DefaultInteractable(GameItem item) => item?.template?.Type switch
+    {
+        "Schematic" or "Weapon" or "Trap" or "Hero" or "Defender" => true,
+        "Worker" when item.profile?.account?.isOwned == true => true,
+        _ when item.CardPackChoices is not null => true,
+        _ => false
+    };
 
     bool interactableState;
     public void SetInteractable() => SetInteractable(interactableState);

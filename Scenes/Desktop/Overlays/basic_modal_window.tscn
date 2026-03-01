@@ -2,19 +2,6 @@
 
 [ext_resource type="Script" uid="uid://iwt6ds34woiu" path="res://Scripts/Overlays/ModalWindow.cs" id="1_oupub"]
 [ext_resource type="StyleBox" uid="uid://0tj4whr53nxd" path="res://GodotThemes/Styleboxes/WindowBGTransparant.tres" id="2_ferkv"]
-[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="2_jlkoy"]
-[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_rvmxl"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_brjwd"]
-shader = ExtResource("2_jlkoy")
-shader_parameter/ControlSize = Vector2(1350, 720)
-shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
-shader_parameter/Fit = false
-shader_parameter/UseCorners = false
-shader_parameter/UseGlobalCorners = true
-shader_parameter/ApplyCornersToFit = false
-shader_parameter/CornerRadius = 10.0
-shader_parameter/ClipOOB = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6l75"]
 bg_color = Color(0.301961, 0.301961, 0.301961, 0)
@@ -38,7 +25,6 @@ backgroundPanel = NodePath("Background")
 windowCanvas = NodePath("Control/WindowContents")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1376150351]
-material = SubResource("ShaderMaterial_brjwd")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -50,7 +36,6 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25, 0.25, 0.25, 0.501961)
-script = ExtResource("3_rvmxl")
 
 [node name="CloseBtn" type="Button" parent="." unique_id=929538038 groups=["ExcludeButtonSounds"]]
 self_modulate = Color(1, 1, 1, 0)

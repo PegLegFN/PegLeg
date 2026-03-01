@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -12,23 +13,29 @@ public partial class GameItemViewer : ModalWindow
 
     [Export]
     GameItemEntry displayItemEntry;
-    [Export]
-    TabContainer activeTabParent;
-    [Export]
-    Control inactiveTabParent;
 
-    [ExportGroup("Item Upgrader")]
+    [Export]
+    Control inventoryItemPanel;
+
     [Export]
     GameItemUpgrader upgrader;
 
+    [Export]
+    Control tabRoot;
+
+    [Export]
+    VirtualTabBar tabBar;
 
     [ExportGroup("Perk Details")]
+    [Export]
+    VirtualTab perkTab;
+
     [Export]
     PerkViewer perkDetailsPanel;
 
     [ExportGroup("Hero Details")]
     [Export]
-    Control heroDetailsPanel;
+    VirtualTab heroTab;
 
     [Export(PropertyHint.ArrayType)]
     HeroAbilityEntry[] heroAbilityEntries;
@@ -44,18 +51,19 @@ public partial class GameItemViewer : ModalWindow
 
     [Export]
     Slider tierSlider;
+
     [Export]
     Slider levelSlider;
 
     [ExportGroup("Stats")]
     [Export]
-    Control statsTreeContainer;
+    VirtualTab statsTab;
     [Export]
     Tree statsTree;
 
     [ExportGroup("Data")]
     [Export]
-    Control devTextContainer;
+    VirtualTab devTab;
     [Export]
     CodeEdit devText;
     [Export]
@@ -101,6 +109,73 @@ public partial class GameItemViewer : ModalWindow
             itemChoiceEntries[i].Pressed += () => SetChoiceIndex(val);
         }
         purchaseSpinner.ValueChanged += SpinnerChanged;
+        tabRoot ??= tabBar.GetParentControl();
+    }
+
+    public override void _ShortcutInput(InputEvent @event)
+    {
+        if (
+            !IsVisibleInTree() ||
+            !IsTopOfStack() ||
+            currentItem is null
+            )
+            return;
+        if (@event.DevTextKeybindPressed(Key.S))
+        {
+            tabRoot.Visible = true;
+            tabBar.SetTabHidden(devTab, false);
+            tabBar.UpdateTabModes();
+            tabBar.SetFirstValidTabPressed();
+            return;
+        }
+        if (!@event.DevTextKeybindPressed())
+            return;
+        List<string[]> contents = [];
+        if (displayedItem != currentItem)
+        {
+            contents.InsertRange(0, [
+                ["Item", displayedItem.GameItemData.ToString()],
+                ["Template", displayedItem.template?.rawData.ToString()],
+                ["Source Item", currentItem.GameItemData.ToString()],
+                ["Source Template", currentItem.template?.rawData.ToString()],
+            ]);
+        }
+        else
+        {
+            contents.InsertRange(0, [
+                ["Item", displayedItem.GameItemData.ToString()],
+                ["Template", displayedItem.template?.rawData.ToString()],
+            ]);
+        }
+
+
+        if (displayedItem.customData.Count > 0)
+        {
+            contents.Insert(2,
+                ["Custom", displayedItem.customData.ToString()]
+            );
+        }
+
+        if (!JsonNode.DeepEquals(displayedItem.GetSearchTags(), displayedItem.template.GenerateSearchTags()))
+        {
+            contents.Insert(2,
+                ["Search Tags", displayedItem.GetSearchTags().ToString()]
+            );
+        }
+
+        if (currentOffer is not null)
+        {
+            contents.Insert(0, 
+                ["Offer", currentOffer.rawData.ToString()]
+            );
+            if (currentOffer.IsXRayLlama)
+            {
+                contents.Insert(1,
+                    ["XRay", currentOffer.GetLocalXRayLlamaData().GameItemData.ToString()]
+                );
+            }
+        }
+        DevTextOverlay.ShowTabs([..contents]);
     }
 
     GameItem currentItem;
@@ -172,21 +247,25 @@ public partial class GameItemViewer : ModalWindow
         Visible = true;
         displayItemEntry.SetItem(item);
         item.SetRewardNotification();
+        inventoryItemPanel.Visible = item.profile is not null;
         displayedItem = item;
-        
-        //TODO: add extra icons for survivors, and fix descriptions
 
-        statsTreeContainer.Reparent(inactiveTabParent);
+        tabRoot.Visible = false;
+        tabBar.SetTabHidden(devTab, false);
+        tabBar.SetTabHidden(heroTab);
+        tabBar.SetTabHidden(perkTab);
+        tabBar.SetTabHidden(statsTab);
+
         statsTree.HideFolding = true;
-        perkDetailsPanel.Reparent(inactiveTabParent);
-        heroDetailsPanel.Reparent(inactiveTabParent);
-        devTextContainer.Reparent(inactiveTabParent);
 
         var type = item.template?.Type;
         if (type == "Hero")
         {
             //parse hero stuff
-            heroDetailsPanel.Reparent(activeTabParent);
+            tabRoot.Visible = true;
+            
+            tabBar.SetTabHidden(heroTab, false);
+
             int tier = item.template.Tier;
             var heroItems = item.template.GetHeroAbilities();
             heroPerkEntry.SetAbility(heroItems[0], false);
@@ -205,15 +284,15 @@ public partial class GameItemViewer : ModalWindow
 
             RefreshHeroStats();
 
-            statsTreeContainer.Reparent(activeTabParent);
-            //statsTree.CustomMinimumSize = statsTree.GetMinimumSize() + new Vector2(10, 0);
+            tabBar.SetTabHidden(statsTab, false);
         }
         else if (type == "Schematic" || type == "Weapon" || type == "Trap")
         {
             //parse schematic stuff
             if (item.Alterations is not null || (item.template?.AlterationSlots?.Length ?? 0) > 0)
             {
-                perkDetailsPanel.Reparent(activeTabParent);
+                tabRoot.Visible = true;
+                tabBar.SetTabHidden(perkTab, false);
                 perkDetailsPanel.SetItem(item);
             }
 
@@ -233,7 +312,9 @@ public partial class GameItemViewer : ModalWindow
 
             if (statsJson is not null)
             {
-                statsTreeContainer.Reparent(activeTabParent);
+                tabRoot.Visible = true;
+                tabBar.SetTabHidden(statsTab, false);
+
                 statsTree.Clear();
                 var root = statsTree.CreateItem();
                 statsTree.Columns = 2;
@@ -250,28 +331,18 @@ public partial class GameItemViewer : ModalWindow
         else if (type == "Defender")
         {
             //parse defender stuff
-            if (item.attributes?.ContainsKey("alterations") ?? false)
+            if (item.attributes?.ContainsKey("alterations") == true)
             {
-                perkDetailsPanel.Reparent(activeTabParent);
+                tabRoot.Visible = true;
+                tabBar.SetTabHidden(perkTab, false);
                 perkDetailsPanel.SetItem(item);
             }
         }
 
-        if (AppConfig.Get("advanced", "developer", false))
-        {
-            var rawData = item.RawData.ToJsonString(new() { WriteIndented = true });
-            devText.Text = rawData;
-            devText.FoldLine(1);
-            var lines = rawData.Split("\n").ToList();
-            var templateIndex = lines.FindIndex(l => l.Trim().StartsWith("\"template\": {"));
-            if (templateIndex >= 0)
-                devText.FoldLine(templateIndex);
-            devTextContainer.Reparent(activeTabParent);
-        }
+        tabBar.SetTabHidden(devTab);
 
-        activeTabParent.Visible = activeTabParent.GetChildCount() > 0;
-        if (activeTabParent.Visible)
-            activeTabParent.CurrentTab = 0;
+        tabBar.UpdateTabModes();
+        tabBar.SetFirstValidTabPressed();
     }
 
     public void SetSearchText()
@@ -402,11 +473,11 @@ public partial class GameItemViewer : ModalWindow
             return;
         var template = currentOffer.itemGrants[0].templateId;
         bool workaround = template.Equals("Token:accountinventorybonus", StringComparison.OrdinalIgnoreCase);
-        workaround |= template.StartsWith("CardPack:cardpack_schematic", StringComparison.OrdinalIgnoreCase);
+        //workaround |= template.StartsWith("CardPack:cardpack_schematic", StringComparison.OrdinalIgnoreCase);
         ShopPurchaseAnimation.PlayAnimation(
             currentOffer.itemGrants[0].GetTexture(),
             currentOfferEntry.currentPurchaseQuantity,
-            () => GameAccount.ActiveAccount.PurchaseOffer(currentOffer, workaround ? 1 : currentOfferEntry.currentPurchaseQuantity),
+            () => GameAccount.ActiveAccount.PurchaseOffer(currentOffer, workaround ? 1 : currentOfferEntry.currentPurchaseQuantity, workaround),
             workaround
         );
         SetWindowOpen(false);

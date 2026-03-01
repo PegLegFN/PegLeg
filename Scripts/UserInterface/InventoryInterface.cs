@@ -371,7 +371,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         var resultItems = filteredItems
             .OrderBy(i => i.template is null)
             .ThenBy(i => !(i.attributes?["favorite"]?.GetValue<bool>() ?? false))
-            .ThenBy(i => !i.template?.CanBeLeveled)
+            .ThenBy(i => !i.template?.HasLevel)
             .ThenBy(i => i.template?.Type);
 
         if (sortByName)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bqp7ax1fjc306"]
+[gd_scene format=3 uid="uid://bqp7ax1fjc306"]
 
 [ext_resource type="PackedScene" uid="uid://bqa4bddqjpu7q" path="res://Scenes/Desktop/Views/Dashboard/dashboardMissionRewardsPanel.tscn" id="1_1vtlv"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cschg8vgh0q5i" path="res://Scenes/SharedImageGenerators/shareable_llama_summary.tscn" id="53_pll84"]
 [ext_resource type="PackedScene" uid="uid://co461hhd3r2sk" path="res://Scenes/SharedImageGenerators/shareable_xp_summary.tscn" id="54_6ftts"]
 
-[node name="Dashboard" type="MarginContainer"]
+[node name="Dashboard" type="MarginContainer" unique_id=823506496]
 custom_minimum_size = Vector2(720, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,12 +23,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BeastDashboard" type="HBoxContainer" parent="."]
+[node name="BeastDashboard" type="HBoxContainer" parent="." unique_id=1647811516]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MissionRewards" parent="BeastDashboard" instance=ExtResource("1_1vtlv")]
+[node name="MissionRewards" parent="BeastDashboard" unique_id=1977093584 instance=ExtResource("1_1vtlv")]
 layout_mode = 2
 
 [node name="Button" parent="BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" index="2"]
@@ -40,28 +40,28 @@ visible = true
 [node name="TabContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3" index="1"]
 current_tab = 1
 
-[node name="Notable" parent="BeastDashboard/MissionRewards/VBoxContainer3/TabContainer" index="1" instance=ExtResource("6_6qpji")]
+[node name="Notable" parent="BeastDashboard/MissionRewards/VBoxContainer3/TabContainer" index="1" unique_id=1099693610 instance=ExtResource("6_6qpji")]
 visible = false
 layout_mode = 2
 
-[node name="All" parent="BeastDashboard/MissionRewards/VBoxContainer3/TabContainer" index="2" instance=ExtResource("7_7he0n")]
+[node name="All" parent="BeastDashboard/MissionRewards/VBoxContainer3/TabContainer" index="2" unique_id=1850280008 instance=ExtResource("7_7he0n")]
 layout_mode = 2
 
-[node name="To-Do List (0)" parent="BeastDashboard/MissionRewards/VBoxContainer3/TabContainer" index="3" instance=ExtResource("8_xcujg")]
+[node name="To-Do List (0)" parent="BeastDashboard/MissionRewards/VBoxContainer3/TabContainer" index="3" unique_id=1588741757 instance=ExtResource("8_xcujg")]
 visible = false
 layout_mode = 2
 
-[node name="VBoxContainer" type="VSplitContainer" parent="BeastDashboard"]
+[node name="VBoxContainer" type="VSplitContainer" parent="BeastDashboard" unique_id=696033806]
 visible = false
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard"]
+[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard" unique_id=1107341100]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="Container" parent="BeastDashboard/ScrollContainer"]
+[node name="MarginContainer" type="Container" parent="BeastDashboard/ScrollContainer" unique_id=627290535]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -71,18 +71,18 @@ minColumns = 1
 maxColumns = 4
 spacing = Vector2i(4, 4)
 
-[node name="DashboardAlertSummary" parent="BeastDashboard/ScrollContainer/MarginContainer" instance=ExtResource("6_xee71")]
+[node name="DashboardAlertSummary" parent="BeastDashboard/ScrollContainer/MarginContainer" unique_id=836124398 instance=ExtResource("6_xee71")]
 custom_minimum_size = Vector2(478, 420)
 layout_mode = 2
 
 [node name="ShareBtn" parent="BeastDashboard/ScrollContainer/MarginContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2" index="1"]
 visible = true
 
-[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer" unique_id=193945165]
 custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 
-[node name="Container" type="Container" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer"]
+[node name="Container" type="Container" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer" unique_id=50340338]
 layout_mode = 2
 script = ExtResource("1_ac3k7")
 columnMinWidth = 227
@@ -90,7 +90,7 @@ minColumns = 1
 maxColumns = 2
 spacing = Vector2i(4, 4)
 
-[node name="MissionCollection" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" instance=ExtResource("1_a6luq")]
+[node name="MissionCollection" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" unique_id=613485994 instance=ExtResource("1_a6luq")]
 visible = false
 custom_minimum_size = Vector2(474, 310)
 layout_mode = 2
@@ -104,36 +104,36 @@ sortByZoneCat = true
 text = "x4-5 Missions"
 horizontal_alignment = 1
 
-[node name="DashboardSupercharger" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" instance=ExtResource("8_b8wcl")]
+[node name="DashboardSupercharger" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" unique_id=2060206443 instance=ExtResource("8_b8wcl")]
 custom_minimum_size = Vector2(237, 0)
 layout_mode = 2
 
-[node name="DashboardLlamaShop" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" instance=ExtResource("9_db4i7")]
+[node name="DashboardLlamaShop" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container" unique_id=1829206076 instance=ExtResource("9_db4i7")]
 custom_minimum_size = Vector2(237, 0)
 layout_mode = 2
 
 [node name="ShareBtn" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer/Container/DashboardLlamaShop/VBoxContainer/HBoxContainer" index="2"]
 visible = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/ScrollContainer/MarginContainer" unique_id=656860096]
 custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 
-[node name="Container" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2"]
+[node name="Container" type="HBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2" unique_id=1157462116]
 layout_mode = 2
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container" unique_id=1150744987]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Stone" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" instance=ExtResource("1_a6luq")]
+[node name="Stone" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" unique_id=2105498697 instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(0, 65)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 testName = "x4 Stonewood"
-testSearch = "Stonewood LargeReward///bundle"
+testSearch = "Stonewood \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
@@ -146,13 +146,13 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 dumbMode = true
 
-[node name="Plank" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" instance=ExtResource("1_a6luq")]
+[node name="Plank" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" unique_id=2054073002 instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(0, 65)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 testName = "x4 Plankerton"
-testSearch = "Plankerton LargeReward///bundle"
+testSearch = "Plankerton \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
@@ -165,13 +165,13 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 dumbMode = true
 
-[node name="Canny" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" instance=ExtResource("1_a6luq")]
+[node name="Canny" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" unique_id=247074074 instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(0, 65)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 testName = "x4 Canny Valley"
-testSearch = "Canny LargeReward///bundle"
+testSearch = "Canny \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
@@ -184,13 +184,13 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 dumbMode = true
 
-[node name="Vents" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" instance=ExtResource("1_a6luq")]
+[node name="Vents" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" unique_id=954000474 instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(0, 65)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 testName = "x4 Ventures"
-testSearch = "Ventures LargeReward///bundle"
+testSearch = "Ventures \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
@@ -203,17 +203,36 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 dumbMode = true
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container"]
+[node name="DoubleLegendary" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer" unique_id=2035199868 instance=ExtResource("1_a6luq")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x2 Legendary"
+testSearch = "\"Double Legendary\"///!bundle Legendary !AccountResource"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" index="0"]
+text = "x2 Legendary"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Body" index="1"]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+dumbMode = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container" unique_id=1743428097]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Twine" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer2" instance=ExtResource("1_a6luq")]
+[node name="Twine" parent="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer2" unique_id=1374644487 instance=ExtResource("1_a6luq")]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 testName = "x4-5 Twine Peaks"
-testSearch = "Twine LargeReward///bundle"
+testSearch = "Twine \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
@@ -226,14 +245,14 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 dumbMode = true
 
-[node name="DashboardXPProgress" parent="BeastDashboard/ScrollContainer/MarginContainer" instance=ExtResource("10_gx2q3")]
+[node name="DashboardXPProgress" parent="BeastDashboard/ScrollContainer/MarginContainer" unique_id=1187567345 instance=ExtResource("10_gx2q3")]
 custom_minimum_size = Vector2(478, 0)
 layout_mode = 2
 
 [node name="ShareBtn" parent="BeastDashboard/ScrollContainer/MarginContainer/DashboardXPProgress/VBoxContainer/HBoxContainer/HBoxContainer" index="0"]
 visible = true
 
-[node name="ShareableMissionSummary" parent="." instance=ExtResource("51_0op8k")]
+[node name="ShareableMissionSummary" parent="." unique_id=594364409 instance=ExtResource("51_0op8k")]
 visible = false
 layout_mode = 2
 
@@ -243,21 +262,21 @@ render_target_update_mode = 0
 [node name="CheckButton" parent="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer/CheckButton" index="1"]
 tryBind = false
 
-[node name="ShareableAlertSummary" parent="." instance=ExtResource("52_q8xc3")]
+[node name="ShareableAlertSummary" parent="." unique_id=683641621 instance=ExtResource("52_q8xc3")]
 visible = false
 layout_mode = 2
 
 [node name="AlertSummaryViewport" parent="ShareableAlertSummary" index="0"]
 render_target_update_mode = 0
 
-[node name="ShareableLlamaSummary" parent="." instance=ExtResource("53_pll84")]
+[node name="ShareableLlamaSummary" parent="." unique_id=1235900724 instance=ExtResource("53_pll84")]
 visible = false
 layout_mode = 2
 
 [node name="LlamaSummaryViewport" parent="ShareableLlamaSummary" index="0"]
 render_target_update_mode = 0
 
-[node name="ShareableXpSummary" parent="." instance=ExtResource("54_6ftts")]
+[node name="ShareableXpSummary" parent="." unique_id=1518912809 instance=ExtResource("54_6ftts")]
 visible = false
 layout_mode = 2
 
@@ -278,6 +297,7 @@ render_target_update_mode = 0
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer/Plank"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer/Canny"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer/Vents"]
+[editable path="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer/DoubleLegendary"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/MarginContainer2/Container/VBoxContainer2/Twine"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/DashboardXPProgress"]
 [editable path="ShareableMissionSummary"]

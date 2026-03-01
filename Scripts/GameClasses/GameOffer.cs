@@ -196,7 +196,7 @@ public class GameOffer
         account ??= GameAccount.ActiveAccount;
         if (IsDiscountBundle && await account.Authenticate())
         {
-            var cosmeticItems = await account.GetProfile(FnProfileTypes.CosmeticInventory).Query(forceFetch: forceCosmetics);
+            var cosmeticItems = await account.GetProfile(FnProfileTypes.CosmeticInventory).Query(ignoreCache: forceCosmetics);
             foreach (var kvp in conditionalDiscounts)
             {
                 if (cosmeticItems.GetFirstTemplateItem(kvp.Key) is not null)

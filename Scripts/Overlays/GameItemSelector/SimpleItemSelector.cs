@@ -11,6 +11,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
     public record Config : MultiselectableConfig
     {
         public string overrideSurvivorSquad;
+        public bool showSurvivorFilters = false;
         public bool smallItems = true;
 
         public string titleText = "Select an Item";
@@ -62,6 +63,10 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
     LineEdit searchInput;
     [Export]
     Control survivorFilters;
+    [Export]
+    VirtualTabBar personalityFilter;
+    [Export]
+    Button trapDuraFilter;
 
     public override void _Ready()
 	{
@@ -70,6 +75,9 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
         smallContainer.SetProvider(this);
         container.Visible = false;
         smallContainer.Visible = false;
+        searchInput.TextChanged += UpdateSearchFilters;
+        personalityFilter.LatestTabChanged += UpdateFilters;
+        trapDuraFilter.Pressed += () => UpdateFilters();
         instance = this;
     }
 
@@ -137,6 +145,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
         container.Visible = !CurrentConfig.smallItems;
         smallContainer.Visible = CurrentConfig.smallItems;
         activeContainer = CurrentConfig.smallItems ? smallContainer : container;
+        survivorFilters.Visible = CurrentConfig.showSurvivorFilters;
 
         multiselectButtons.Visible = CurrentConfig.multiselectMode;
         autoSelectButton.Visible = CurrentConfig.autoselectFilter is not null;
@@ -144,7 +153,17 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
         base.InitialiseSelector(itemOptions);
     }
 
-    protected override void SetDefaultSortingAndFilter() => SetSort(0);
+    protected override void SetDefaultSortingAndFilter()
+    {
+        SetSort(0);
+        lockFilters = true;
+        personalityFilter.SetTabPressed(0);
+        trapDuraFilter.ButtonPressed = false;
+        searchInput.Text = "";
+        lockFilters = false;
+        UpdateFilters(false);
+        UpdateSearchFilters(false);
+    }
 
     int currentSortingIndex = 0;
     bool sortingDirty = false;
@@ -156,6 +175,47 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
         "By Power (rev)",
         "By Name"
     ];
+
+    bool lockFilters = false;
+    PLSearch.Instruction[] searchInstructions;
+    string personalityRequirement = null;
+    string setBonusRequirement = null;
+
+    void UpdateFilters(int _) => UpdateFilters();
+    void UpdateFilters(bool filterAfter = true)
+    {
+        personalityRequirement = personalityFilter.LatestTab switch
+        {
+            1 => "Adventurous",
+            2 => "Analytical",
+            3 => "Competitive",
+            4 => "Cooperative",
+            5 => "Curious",
+            6 => "Dependable",
+            7 => "Dreamer",
+            8 => "Pragmatic",
+            _ => null
+        };
+        setBonusRequirement = trapDuraFilter.ButtonPressed ? "Trap Durability" : null;
+        if (filterAfter)
+            FilterItems();
+    }
+    void UpdateSearchFilters(string _) => UpdateSearchFilters();
+    void UpdateSearchFilters(bool filterAfter = true)
+    {
+        searchInstructions = PLSearch.GenerateSearchInstructions(searchInput.Text);
+        if (filterAfter)
+            FilterItems();
+    }
+    protected override Func<GameItem, bool> FilterFunction => ItemFilter;
+    private bool ItemFilter(GameItem item)
+    {
+        if (personalityRequirement is not null && item.Personality?.EndsWith(personalityRequirement) != true)
+            return false;
+        if (setBonusRequirement is not null && item.SetBonus?.EndsWith(setBonusRequirement) != true)
+            return false;
+        return PLSearch.EvaluateInstructions(searchInstructions, item.RawData);
+    }
 
     void CycleSort()
     {

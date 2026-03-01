@@ -86,7 +86,7 @@ public partial class PerkViewer : Control
         isDefender = currentItem.template.Type == "Defender";
         unlockedPerks = 10;
         visiblePerks = currentItem.template.AlterationSlots?.Length ?? 10;
-        if (currentItem.profile is null || (!isSchematic && !isDefender))
+        if (currentItem.profile is null || !isSchematic)
             visiblePerks = 10;
 
 

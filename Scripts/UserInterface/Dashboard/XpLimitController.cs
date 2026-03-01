@@ -74,8 +74,8 @@ public partial class XpLimitController : Control
     {
         //for some reason, XP stat changes don't increment the profile revision, so we need to force fetch the entire profile
         await Task.WhenAll(
-            stwProfile.Query(forceFetch: true),
-            brProfile.Query(forceCompleteFetch: true),
+            stwProfile.Query(ignoreCache: true),
+            brProfile.Query(ignoreRevision: true),
             GameCalender.Check()
         );
         //temporary addon to handle daily valentines logins

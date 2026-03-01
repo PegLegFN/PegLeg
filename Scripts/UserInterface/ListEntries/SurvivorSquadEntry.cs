@@ -164,6 +164,7 @@ public partial class SurvivorSquadEntry : Control
             titleText = "Select a Survivor",
             overrideSurvivorSquad = squadID,
             allowEmptySelection = true,
+            showSurvivorFilters = true,
         });
 
         //occurs when cancelled

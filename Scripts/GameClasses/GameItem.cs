@@ -90,6 +90,34 @@ public class GameItem
         public JsonObject attributes { get; init; }
         public int quantity = 1;
         public GameItem ToItem() => new(GameItemTemplate.Get(templateId), quantity, attributes.SafeDeepClone());
+
+        public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
+
+        //assumes that item types are distinct
+        public static ItemData[] Add(ItemData[] first, ItemData[] second)
+        {
+            var secondDict = second.ToDictionary(i => i.templateId, i => i.quantity);
+            for (int i = 0; i < first.Length; i++)
+            {
+                if (!secondDict.TryGetValue(first[i].templateId, out int amount))
+                    continue;
+                first[i].quantity += amount;
+                secondDict.Remove(first[i].templateId);
+            }
+            return [.. first.Where(i => i.quantity >= 1), ..second.Where(i => secondDict.ContainsKey(i.templateId))];
+        }
+
+        public static ItemData[] Subtract(ItemData[] first, ItemData[] second)
+        {
+            var secondDict = second.ToDictionary(i => i.templateId, i => i.quantity);
+            for (int i = 0; i < first.Length; i++)
+            {
+                if (!secondDict.TryGetValue(first[i].templateId, out int amount))
+                    continue;
+                first[i].quantity -= amount;
+            }
+            return [.. first.Where(i => i.quantity >= 1)];
+        }
     }
 
     public record struct ItemReward()
@@ -547,7 +575,7 @@ public class GameItem
             return 0;
 
         var bonusMax = attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;
-        if (!template.CanBeLeveled && tier == 5) //crafted weapons and traps dont have max_level_bonus attribute
+        if (!template.HasLevel && tier == 5) //crafted weapons and traps dont have max_level_bonus attribute
             bonusMax = 10;
         if (template.Type == "Weapon" || template.Type == "Trap")
             bonusMax = Mathf.Max(0, level - (tier * 10));

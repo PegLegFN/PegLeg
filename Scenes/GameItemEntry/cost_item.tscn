@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://dtvu4sfallrd4"]
+
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_npnca"]
+[ext_resource type="Script" uid="uid://dc81nfmigioyb" path="res://Scripts/UserInterface/ListEntries/GameItemCost.cs" id="1_sdncd"]
+[ext_resource type="Material" uid="uid://3nw1g0lbs4qq" path="res://Shaders/Materials/ItemRewardMatSmall.tres" id="2_sdncd"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="3_dqxyh"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_tkwm6"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="5_3q1kw"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="6_cqb7o"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_a4kty"]
+
+[node name="CostItem" type="HBoxContainer" unique_id=11357012 node_paths=PackedStringArray("currentLabel", "itemEntry")]
+offset_right = 34.0
+offset_bottom = 34.0
+theme_override_constants/separation = 0
+script = ExtResource("1_sdncd")
+currentLabel = NodePath("Label")
+itemEntry = NodePath("MarginContainer")
+
+[node name="Label" type="Label" parent="." unique_id=764560328]
+z_index = 1
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 12
+text = "2.56k/"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=902337588]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+script = ExtResource("1_npnca")
+compactifyAmount = true
+preventInteractability = true
+showSingleItemAmount = true
+
+[node name="Icon" type="TextureRect" parent="MarginContainer" unique_id=68041144]
+material = ExtResource("2_sdncd")
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("3_dqxyh")
+expand_mode = 3
+script = ExtResource("4_tkwm6")
+syncControlSize = true
+
+[node name="Label" type="Label" parent="MarginContainer/Icon" unique_id=2062077297]
+z_index = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -29.0
+offset_top = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_type_variation = &"Outline10"
+theme_override_font_sizes/font_size = 12
+text = "2.56k"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="NotificationLabel" type="Label" parent="MarginContainer/Icon" unique_id=1997996294]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 29.0
+rotation = -0.1309
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 8
+text = " ! "
+
+[node name="CtxNoInteract" type="Node" parent="MarginContainer/Icon" unique_id=147036838 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("5_3q1kw")
+itemSource = NodePath("../..")
+
+[node name="Responsive Button Area" parent="MarginContainer/Icon" unique_id=1415142387 instance=ExtResource("7_a4kty")]
+visible = false
+layout_mode = 1
+outlinePadding = 3.0
+
+[node name="Ctx" type="Node" parent="MarginContainer/Icon/Responsive Button Area" unique_id=1678116123 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("5_3q1kw")
+itemSource = NodePath("../../..")
+componentList = ExtResource("6_cqb7o")
+
+[connection signal="AmountChanged" from="MarginContainer" to="MarginContainer/Icon/Label" method="set_text"]
+[connection signal="AmountVisibility" from="MarginContainer" to="MarginContainer/Icon/Label" method="set_visible"]
+[connection signal="IconChanged" from="MarginContainer" to="MarginContainer/Icon" method="SetShaderTexture" binds= ["MainIcon"]]
+[connection signal="InteractableChanged" from="MarginContainer" to="MarginContainer/Icon/Responsive Button Area" method="set_visible"]
+[connection signal="IsHero" from="MarginContainer" to="MarginContainer/Icon" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsSchematic" from="MarginContainer" to="MarginContainer/Icon" method="SetShaderBool" binds= ["IsSchematic"]]
+[connection signal="NotificationChanged" from="MarginContainer" to="MarginContainer/Icon/NotificationLabel" method="set_visible"]
+[connection signal="RarityChanged" from="MarginContainer" to="MarginContainer/Icon" method="set_self_modulate"]
+[connection signal="TooltipChanged" from="MarginContainer" to="MarginContainer/Icon" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="MarginContainer" to="MarginContainer/Icon/Responsive Button Area" method="set_tooltip_text"]
+[connection signal="pressed" from="MarginContainer/Icon/Responsive Button Area" to="MarginContainer" method="Inspect"]

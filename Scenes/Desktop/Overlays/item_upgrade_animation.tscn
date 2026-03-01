@@ -1,0 +1,378 @@
+[gd_scene format=3 uid="uid://cddyd14hf7dey"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_8l4h5"]
+[ext_resource type="AudioStream" uid="uid://w4wlihi0mnew" path="res://Audio/SFX/Crafting/Fort_UI_Crafting_Start.wav" id="2_efi2h"]
+[ext_resource type="AudioStream" uid="uid://c6h74kp3cntns" path="res://Audio/SFX/UI/Disappear/UI_LeftScreen_Text_Return_01.ogg" id="3_st2hn"]
+[ext_resource type="Script" uid="uid://cg2th42kflnas" path="res://Scripts/Overlays/ItemUpgradeAnimation.cs" id="3_yxglu"]
+[ext_resource type="AudioStream" uid="uid://chylasuhc03dm" path="res://Audio/SFX/Crafting/WeaponCrafting_Hit_04.wav" id="4_0f6nu"]
+[ext_resource type="AudioStream" uid="uid://k345mx6rp0f0" path="res://Audio/SFX/Crafting/Fort_UI_Crafting_End.wav" id="5_amwqq"]
+[ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="5_efi2h"]
+[ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="6_st2hn"]
+[ext_resource type="Texture2D" uid="uid://c656w41oitwtx" path="res://Images/AnimationProps/Anvil.png" id="7_8l4h5"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="7_yxglu"]
+[ext_resource type="Texture2D" uid="uid://t07lyd3wy3gb" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-Crusader-L.png" id="8_rj3pf"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="9_6d645"]
+[ext_resource type="Texture2D" uid="uid://dscv63yvcswow" path="res://Images/AnimationProps/Hammer.png" id="9_fogo1"]
+[ext_resource type="Shader" uid="uid://d3ugejtc242bp" path="res://Shaders/AdaptiveShadow.gdshader" id="10_ll1nl"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="11_xd6we"]
+[ext_resource type="Shader" uid="uid://d1sgo64plh75x" path="res://Shaders/AdvancedLabel.gdshader" id="12_cu3r2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v25rf"]
+shader = ExtResource("5_efi2h")
+shader_parameter/rotationSpeed = 0.5
+
+[sub_resource type="Gradient" id="Gradient_yxglu"]
+offsets = PackedFloat32Array(0.40490797, 0.4601227)
+colors = PackedColorArray(1, 0.92216134, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rj3pf"]
+gradient = SubResource("Gradient_yxglu")
+
+[sub_resource type="Curve" id="Curve_yxglu"]
+_data = [Vector2(0, 0.01836729), 0.0, 86.491455, 0, 0, Vector2(0.032327585, 1), 0.0, 0.0, 0, 0, Vector2(0.49431816, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.0786433, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_st2hn"]
+curve = SubResource("Curve_yxglu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fogo1"]
+lifetime_randomness = 0.9
+particle_flag_disable_z = true
+angle_min = -29.99999
+angle_max = -29.99999
+direction = Vector3(-30, -30, 0)
+spread = 11.551
+initial_velocity_min = 300.0
+initial_velocity_max = 700.0
+angular_velocity_min = 59.99998
+angular_velocity_max = 59.99998
+gravity = Vector3(0, 1000, 0)
+damping_min = 0.1
+damping_max = 0.3
+scale_min = 0.099999994
+scale_max = 0.19999999
+scale_curve = SubResource("CurveTexture_st2hn")
+color_initial_ramp = SubResource("GradientTexture1D_rj3pf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rj3pf"]
+lifetime_randomness = 0.9
+particle_flag_disable_z = true
+angle_min = 30.000011
+angle_max = 30.000011
+direction = Vector3(-30, -30, 0)
+spread = 11.551
+initial_velocity_min = 300.0
+initial_velocity_max = 700.0
+angular_velocity_min = -60.000015
+angular_velocity_max = -60.000015
+gravity = Vector3(0, 1000, 0)
+damping_min = 0.1
+damping_max = 0.3
+scale_min = 0.099999994
+scale_max = 0.19999999
+scale_curve = SubResource("CurveTexture_st2hn")
+color_initial_ramp = SubResource("GradientTexture1D_rj3pf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8on64"]
+shader = ExtResource("10_ll1nl")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSizeScale = Vector2(0.66, 1)
+shader_parameter/Expo = true
+shader_parameter/AlphaStart = 0.0
+shader_parameter/CornerRadius = 100.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3030"]
+shader = ExtResource("12_cu3r2")
+shader_parameter/ControlSize = Vector2(284, 72)
+shader_parameter/PixelsPerLine = 200.0
+shader_parameter/debug = false
+shader_parameter/fillColor = Color(1, 1, 1, 1)
+shader_parameter/shadowColor = Color(0, 0, 0, 0.501961)
+shader_parameter/outlineColor = Color(0.09611412, 0.04608067, 0.3019608, 1)
+shader_parameter/gradientMask = Vector3(1, 0, 0)
+shader_parameter/gradientFrom = Color(0.5058824, 0.7411765, 0.92156863, 1)
+shader_parameter/gradientTo = Color(0, 0.40784314, 1, 1)
+shader_parameter/gradientOffset = -0.16
+shader_parameter/gradientHorizontal = false
+
+[node name="ItemUpgradeAnimation" unique_id=1631981925 instance=ExtResource("1_8l4h5")]
+offset_left = 0.0
+offset_right = 0.0
+
+[node name="CloseBtn" parent="." index="1" unique_id=929538038]
+visible = false
+
+[node name="StartSound" type="AudioStreamPlayer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=1159696232]
+stream = ExtResource("2_efi2h")
+volume_db = -5.0
+max_polyphony = 3
+bus = &"SFX"
+
+[node name="Whoosh" type="AudioStreamPlayer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="1" unique_id=56806999]
+stream = ExtResource("3_st2hn")
+volume_db = 10.0
+pitch_scale = 1.5
+max_polyphony = 3
+bus = &"SFX"
+
+[node name="HitSound" type="AudioStreamPlayer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="2" unique_id=1309430603]
+stream = ExtResource("4_0f6nu")
+volume_db = 5.0
+max_polyphony = 3
+bus = &"SFX"
+
+[node name="CompleteSound" type="AudioStreamPlayer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="3" unique_id=978103223]
+stream = ExtResource("5_amwqq")
+volume_db = -5.0
+max_polyphony = 3
+bus = &"SFX"
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="4" unique_id=169129452 node_paths=PackedStringArray("_modalWindow", "upgradeStart", "whoosh", "hit", "upgradeEnd", "anvilScaleNode", "itemNode", "hammerPosition", "hammerPivot", "finalText")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_yxglu")
+_modalWindow = NodePath("../../..")
+upgradeStart = NodePath("../StartSound")
+whoosh = NodePath("../Whoosh")
+hit = NodePath("../HitSound")
+upgradeEnd = NodePath("../CompleteSound")
+anvilScaleNode = NodePath("Control/Scale")
+itemNode = NodePath("Control/Scale/Item")
+hammerPosition = NodePath("Control/Scale/HammerPos")
+hammerPivot = NodePath("Control/Scale/HammerPos/Hammer")
+finalText = NodePath("Control/UpgradeText")
+anvilGrowDuration = 0.4
+anvilShrinkDuration = 0.4
+hammerSize = 0.4
+hammerStartOffset = 0.45
+hammerHoldOffset = 0.1
+hammerEndOffset = 0.25
+hammerStartRot = -160.0
+hammerHoldRot = 130.0
+hammerRaiseDuration = 0.6
+hammerWaitDuration = 0.0
+hammerFallDuration = 0.3
+itemSize = 0.3
+itemStartOffset = 0.15
+itemEndOffset = 0.35
+itemStartRot = 30.0
+textEnterDelay = 0.0
+textStayDuration = 1.0
+textLeaveDuration = 0.5
+HammerOffset = 0.25
+ItemOffset = 0.15
+
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer" index="0" unique_id=1818451735]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 2
+
+[node name="Glow" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control" index="0" unique_id=1185314551]
+self_modulate = Color(0, 0.5885472, 1, 1)
+material = SubResource("ShaderMaterial_v25rf")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("6_st2hn")
+expand_mode = 1
+
+[node name="Scale" type="Control" parent="Control/WindowContents/CenterContainer/Control" index="1" unique_id=677519495]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.75)
+
+[node name="Anvil" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale" index="0" unique_id=56464775]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_right = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_8l4h5")
+expand_mode = 5
+
+[node name="Item" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale" index="1" unique_id=1115446388]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.15
+anchor_right = 0.65
+anchor_bottom = 0.45000002
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.5235988
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("8_rj3pf")
+expand_mode = 1
+
+[node name="HammerPos" type="Control" parent="Control/WindowContents/CenterContainer/Control/Scale" index="2" unique_id=265131785]
+layout_mode = 1
+anchor_left = 1.05
+anchor_top = 0.25
+anchor_right = 1.05
+anchor_bottom = 0.65
+offset_bottom = 6.1035156e-05
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Hammer" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/Scale/HammerPos" index="0" unique_id=1035444808]
+custom_minimum_size = Vector2(410, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+rotation = 2.268928
+pivot_offset_ratio = Vector2(0.8, 0.63)
+texture = ExtResource("9_fogo1")
+expand_mode = 1
+
+[node name="ParticleParent" type="Control" parent="Control/WindowContents/CenterContainer/Control" index="2" unique_id=2104967141]
+layout_mode = 1
+anchor_left = 0.407
+anchor_top = 0.63
+anchor_right = 0.553
+anchor_bottom = 0.63
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Left" type="Control" parent="Control/WindowContents/CenterContainer/Control/ParticleParent" index="0" unique_id=1123326231]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Control/WindowContents/CenterContainer/Control/ParticleParent/Left" index="0" unique_id=1495827012]
+z_index = 5
+emitting = false
+amount = 40
+texture = ExtResource("7_yxglu")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_fogo1")
+
+[node name="Right" type="Control" parent="Control/WindowContents/CenterContainer/Control/ParticleParent" index="1" unique_id=547562498]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="Control/WindowContents/CenterContainer/Control/ParticleParent/Right" index="0" unique_id=1048426846]
+z_index = 5
+rotation = 3.1415927
+scale = Vector2(1, -1)
+emitting = false
+amount = 40
+texture = ExtResource("7_yxglu")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_rj3pf")
+
+[node name="UpgradeText" type="CenterContainer" parent="Control/WindowContents/CenterContainer/Control" index="3" unique_id=1866604395]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1e-05, 1e-05)
+use_top_left = true
+
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/Control/UpgradeText" index="0" unique_id=372819566]
+visible = false
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/Control/UpgradeText/Control" index="0" unique_id=870172466]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 0
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+pivot_offset = Vector2(128, 128)
+texture = ExtResource("9_6d645")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/Control/UpgradeText" index="1" unique_id=747419169]
+layout_mode = 2
+theme_override_constants/margin_top = -25
+
+[node name="TextureRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/Control/UpgradeText/MarginContainer" index="0" unique_id=1110123616]
+visible = false
+material = SubResource("ShaderMaterial_8on64")
+layout_mode = 2
+color = Color(1, 1, 0.686275, 1)
+script = ExtResource("11_xd6we")
+syncControlSize = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/Control/UpgradeText/MarginContainer" index="1" unique_id=2069620959]
+layout_mode = 2
+theme_override_constants/separation = -44
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/Control/UpgradeText/MarginContainer/VBoxContainer" index="0" unique_id=322498821]
+material = SubResource("ShaderMaterial_u3030")
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 1, 1)
+theme_override_constants/line_spacing = -43
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 70
+text = "
+Upgrade"
+horizontal_alignment = 1
+script = ExtResource("11_xd6we")
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/Control/UpgradeText/MarginContainer/VBoxContainer" index="1" unique_id=962225634]
+material = SubResource("ShaderMaterial_u3030")
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 1, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 1, 1)
+theme_override_constants/line_spacing = -36
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 70
+text = "
+Complete"
+horizontal_alignment = 1
+script = ExtResource("11_xd6we")
+
+[connection signal="WindowOpened" from="." to="Control/WindowContents/StartSound" method="play" binds= [0.0]]
+[connection signal="PlayParticles" from="Control/WindowContents/CenterContainer" to="Control/WindowContents/CenterContainer/Control/ParticleParent/Left/GPUParticles2D" method="set_emitting" binds= [true]]
+[connection signal="PlayParticles" from="Control/WindowContents/CenterContainer" to="Control/WindowContents/CenterContainer/Control/ParticleParent/Right/GPUParticles2D2" method="set_emitting" binds= [true]]

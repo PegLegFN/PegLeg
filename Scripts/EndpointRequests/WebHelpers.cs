@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -146,14 +147,18 @@ public static class WebHelpers
 
     public static async Task<HttpResponseMessage> Send(this BoundHttpsRequestMessage msg, bool disposeMsg = true)
     {
-        BoundHttpsRequestMessage secondMsg = null;
         if (msg.BoundAccount is not null)
         {
             await msg.BoundAccount.Authenticate();
             msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
-            secondMsg = await msg.CloneMessageAsync();
         }
-        var response = await msg.SendTo(msg.BoundClient, disposeMsg);
+        var response = await CloneAndSend(msg, disposeMsg);
+
+        if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+        {
+            await Task.Delay(100);
+            response = await CloneAndSend(msg, disposeMsg);
+        }
 
         if (
             msg.BoundAccount is not null &&
@@ -165,11 +170,15 @@ public static class WebHelpers
             GD.Print("token invalid, exiring token and retrying with new token...");
             msg.BoundAccount.ForceExpireToken();
             await msg.BoundAccount.Authenticate();
-            secondMsg.Headers.Authorization = msg.BoundAccount.AuthHeader;
-            response = await secondMsg.SendTo(msg.BoundClient, disposeMsg);
+            msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
+            response = await CloneAndSend(msg, disposeMsg);
         }
+        msg.Dispose();
         return response;
     }
+
+    static async Task<HttpResponseMessage> CloneAndSend(BoundHttpsRequestMessage msg, bool disposeMsg) =>
+        await (await msg.CloneMessageAsync()).SendTo(msg.BoundClient, disposeMsg);
 
     public static async Task<T> CloneMessageAsync<T>(this T req) where T : HttpRequestMessage, new()
     {

@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using Amazon.Runtime.Internal.Transform;
+using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,8 @@ public class GameProfile
         return [.. typedItems.Where(predicate.ToFunc())];
     }
 
+    public int SumTemplateItems(string templateId = null, Predicate<GameItem> predicate = null) =>
+        GetTemplateItems(templateId, predicate).Sum(i => i.quantity);
     public GameItem[] GetTemplateItems(string templateId = null, Predicate<GameItem> predicate = null)
     {
         string type = templateId.Split(":")[0];
@@ -111,22 +114,24 @@ public class GameProfile
         }
     }
 
-    public async Task<GameProfile> Query(bool forceFetch = false, bool forceCompleteFetch = false, bool silent = false)
+    public async Task<GameProfile> Query(bool ignoreCache = false, bool ignoreRevision = false, bool silent = false) =>
+        (await TryQuery(ignoreCache, ignoreRevision, silent)) ? this : null;
+    public async Task<bool> TryQuery(bool ignoreCache = false, bool ignoreRevision = false, bool silent = false)
     {
-        forceFetch |= forceCompleteFetch;
+        ignoreCache |= ignoreRevision;
         if (account is null)
-            return this;
+            return false;
 
         await account.profileOperationSemaphore.WaitAsync();
         try
         {
-            if (!hasProfile || forceFetch)
-            {
-                if (forceCompleteFetch)
-                    rvn = -1;
-                await PerformOperationUnsafe("QueryProfile", silent: silent);
-            }
-            return this;
+
+            if (hasProfile && !ignoreCache)
+                return true;
+            if (ignoreRevision)
+                rvn = -1;
+            var res = await PerformOperationUnsafe("QueryProfile", silent: silent);
+            return res is not null;
         }
         finally
         {
@@ -278,187 +283,200 @@ public class GameProfile
     public JsonObject lastOp { get; private set; }
     async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry = false, bool silent = false, bool witholdChanges = false)
     {
-        if (!account.isOwned)
-        {
-            if (operation == "QueryProfile")
-                operation = "QueryPublicProfile";
-
-            if (operation != "QueryPublicProfile")
-            {
-                GD.Print($"cannot perform \"{operation}\" on unowned profile");
-                return null;
-            }
-
-            if (profileId != FnProfileTypes.AccountItems && profileId != FnProfileTypes.Common)
-            {
-                GD.Print($"cannot access unowned profile of type \"{profileId}\"");
-                return null;
-            }
-        }
-
-        var actingAccount = account.isOwned ? account : GameAccount.ActiveAccount;
-        if (!actingAccount.isOwned)
-            return null;
-        //if (!await actingAccount.Authenticate())
-        //    return null;
-
-        if (operation == "MarkItemSeen")
-        {
-            var targetItemIDs = JsonNode.Parse(content)["itemIds"].AsArray().Select(n => n.ToString());
-            var targetItems = targetItemIDs.Select(uuid => items.TryGetValue(uuid, out var item) ? item : null).Where(x => x != null);
-            bool hasUnseen = false;
-            foreach (var item in targetItems)
-            {
-                if (item.attributes["item_seen"] is null)
-                {
-                    item.SetSeenLocal();
-                    OnItemUpdated?.Invoke(item);
-                    hasUnseen = true;
-                }
-            }
-            if (!hasUnseen)
-                return null;
-        }
-        if (operation == "ClientQuestLogin" && (DateTime.UtcNow - lastClientQuestLoginTime).TotalSeconds < 10)
-            return [];
-        if (operation == "QueryProfile" && (DateTime.UtcNow - lastProfileOperationTime).TotalSeconds < 1)
-            return [];
-
-        var opResponse = await FnWebAddresses.FortGame
-            .MakeRequest(
-                "fortnite/api/game/v2/profile/" +
-                $"{account.accountId}/{(account.isOwned ? "client" : "public")}/" +
-                $"{operation}?profileId={profileId}&rvn={rvn}",
-                HttpMethod.Post
-            )
-            .SetJsonContent(content)
-            .SetAccount(actingAccount)
-            .Send();
-
-        if (operation == "ClientQuestLogin")
-            lastClientQuestLoginTime = DateTime.UtcNow;
-        lastProfileOperationTime = DateTime.UtcNow;
-
-        (var didError, var errorJson) = await opResponse.CheckForErrorJson(!silent);
-        if (didError)
-        {
-            lastOp = errorJson is JsonObject obj ? obj : [];
-            return null;
-        }
-
-        JsonObject result = null;
         try
         {
-            result = await opResponse.ReadJson<JsonObject>();
-        }
-        catch { }
-        lastOp = result;
+            if (!account.isOwned)
+            {
+                if (operation == "QueryProfile")
+                    operation = "QueryPublicProfile";
 
-        if (witholdChanges)
-            return [];
+                if (operation != "QueryPublicProfile")
+                {
+                    GD.Print($"cannot perform \"{operation}\" on unowned profile");
+                    return null;
+                }
 
-        var changes = result["profileChanges"]?.AsArray();
+                if (profileId != FnProfileTypes.AccountItems && profileId != FnProfileTypes.Common)
+                {
+                    GD.Print($"cannot access unowned profile of type \"{profileId}\"");
+                    return null;
+                }
+            }
 
-        bool fullUpdate = false;
-        if (changes is null)
-        {
-            GD.Print($"unknown profile op result: {result}");
-            return null;
-        }
-        if (changes.Count == 0) { }
-        else if (changes[0]["changeType"].ToString() == "fullProfileUpdate")
-        {
-            //GD.Print("FULLUPDATE: " + profileId);
-            fullUpdate = true;
-            var resultItems = result["profileChanges"][0]["profile"]["items"].AsObject();
-            var resultStats = result["profileChanges"][0]["profile"]["stats"]["attributes"].AsObject();
-            if (hasProfile)
-                ApplyProfileChanges(GenerateChanges(resultItems, resultStats));
+            var actingAccount = account.isOwned ? account : GameAccount.ActiveAccount;
+            if (!actingAccount.isOwned)
+                return null;
+            //if (!await actingAccount.Authenticate())
+            //    return null;
+
+            if (operation == "MarkItemSeen")
+            {
+                var targetItemIDs = JsonNode.Parse(content)["itemIds"].AsArray().Select(n => n.ToString());
+                var targetItems = targetItemIDs.Select(uuid => items.TryGetValue(uuid, out var item) ? item : null).Where(x => x != null);
+                bool hasUnseen = false;
+                foreach (var item in targetItems)
+                {
+                    if (item.attributes["item_seen"] is null)
+                    {
+                        item.SetSeenLocal();
+                        OnItemUpdated?.Invoke(item);
+                        hasUnseen = true;
+                    }
+                }
+                if (!hasUnseen)
+                    return null;
+            }
+            if (operation == "ClientQuestLogin" && (DateTime.UtcNow - lastClientQuestLoginTime).TotalSeconds < 10)
+                return [];
+            if (operation == "QueryProfile" && (DateTime.UtcNow - lastProfileOperationTime).TotalSeconds < 1)
+                return [];
+
+            var opResponse = await FnWebAddresses.FortGame
+                .MakeRequest(
+                    "fortnite/api/game/v2/profile/" +
+                    $"{account.accountId}/{(account.isOwned ? "client" : "public")}/" +
+                    $"{operation}?profileId={profileId}&rvn={rvn}",
+                    HttpMethod.Post
+                )
+                .SetJsonContent(content)
+                .SetAccount(actingAccount)
+                .Send();
+
+            if (operation == "ClientQuestLogin")
+                lastClientQuestLoginTime = DateTime.UtcNow;
+            lastProfileOperationTime = DateTime.UtcNow;
+
+            (var didError, var errorJson) = await opResponse.CheckForErrorJson(!silent);
+            if (didError)
+            {
+                lastOp = errorJson is JsonObject obj ? obj : [];
+                return null;
+            }
+
+            JsonObject result = null;
+            try
+            {
+                result = await opResponse.ReadJson<JsonObject>();
+            }
+            catch { }
+            lastOp = result;
+
+            if (witholdChanges)
+                return [];
+
+            var changes = result["profileChanges"]?.AsArray();
+
+            bool fullUpdate = false;
+            if (changes is null)
+            {
+                GD.Print($"unknown profile op result: {result}");
+                return null;
+            }
+            if (changes.Count == 0) { }
+            else if (changes[0]["changeType"].ToString() == "fullProfileUpdate")
+            {
+                //GD.Print("FULLUPDATE: " + profileId);
+                fullUpdate = true;
+                var resultItems = result["profileChanges"][0]["profile"]["items"].AsObject();
+                var resultStats = result["profileChanges"][0]["profile"]["stats"]["attributes"].AsObject();
+                if (hasProfile)
+                    ApplyProfileChanges(GenerateChanges(resultItems, resultStats));
+                else
+                {
+                    items = resultItems.Select(kvp => new GameItem(this, kvp.Key, kvp.Value.AsObject())).ToDictionary(item => item.uuid);
+                    groupedItems = new(
+                        items.GroupBy(kvp => kvp.Value.templateId.Split(":")[0].ToLower())
+                        .Select(grouping => KeyValuePair.Create(grouping.Key, grouping.Select(kvp => kvp.Value).ToList())),
+                        StringComparer.OrdinalIgnoreCase
+                    );
+                    statAttributes = resultStats;
+                }
+            }
             else
             {
-                items = resultItems.Select(kvp => new GameItem(this, kvp.Key, kvp.Value.AsObject())).ToDictionary(item => item.uuid);
-                groupedItems = new(
-                    items.GroupBy(kvp => kvp.Value.templateId.Split(":")[0].ToLower())
-                    .Select(grouping => KeyValuePair.Create(grouping.Key, grouping.Select(kvp => kvp.Value).ToList())),
-                    StringComparer.OrdinalIgnoreCase
-                );
-                statAttributes = resultStats;
-            }
-        }
-        else
-        {
-            if (operation == "UpgradeItemBulk" || operation == "UpgradeItemRarity")
-            {
-                JsonNode additionChange = changes.FirstOrDefault(n => n["changeType"].ToString() == "itemAdded");
-                JsonNode removalChange = changes.FirstOrDefault(n => n["changeType"].ToString() == "itemRemoved");
-                if (additionChange is not null && removalChange is not null)
+                if (operation == "UpgradeItemBulk" || operation == "UpgradeItemRarity")
                 {
-                    var additionIndex = changes.IndexOf(additionChange);
-                    var removingId = removalChange["itemId"].ToString();
-                    List<JsonNode> irrelevantChanges = [];
-                    for (int i = additionIndex; i < changes.Count; i++)
+                    string targetId = JsonNode.Parse(content)["targetItemId"].ToString();
+                    JsonNode additionChange = changes.FirstOrDefault(n => n["changeType"].ToString() == "itemAdded" && !n["item"]["templateId"].ToString().StartsWith("AccountResource:"));
+                    JsonNode removalChange = changes.FirstOrDefault(n => n["changeType"].ToString() == "itemRemoved" && n["itemId"].ToString() == targetId);
+
+                    if (additionChange is not null && removalChange is not null)
                     {
-                        var change = changes[i];
-                        if (change["itemId"].ToString() == removingId)
-                            irrelevantChanges.Add(change);
+                        var additionIndex = changes.IndexOf(additionChange);
+                        var removingId = removalChange["itemId"].ToString();
+                        List<JsonNode> irrelevantChanges = [];
+                        for (int i = 0; i < changes.Count; i++)
+                        {
+                            if (changes[i]["itemId"].ToString() == removingId)
+                                irrelevantChanges.Add(changes[i]);
+                        }
+                        if (!irrelevantChanges.Contains(removalChange))
+                            irrelevantChanges.Add(removalChange);
+                        foreach (var change in irrelevantChanges)
+                        {
+                            changes.Remove(change);
+                        }
+                        additionChange["newItemId"] = additionChange["itemId"].ToString();
+                        additionChange["itemId"] = removingId;
+                        additionChange["changeType"] = "itemUpgraded";
                     }
-                    foreach (var change in irrelevantChanges)
-                    {
-                        changes.Remove(change);
-                    }
-                    additionChange["newItemId"] = additionChange["itemId"].ToString();
-                    additionChange["itemId"] = removingId;
-                    additionChange["changeType"] = "itemUpgraded";
                 }
-            }
-            else if (operation == "")
-            {
+                else if (operation == "")
+                {
 
+                }
+                ApplyProfileChanges(changes);
             }
-            ApplyProfileChanges(changes);
-        }
-        rvn = result["profileRevision"].GetValue<int>();
+            rvn = result["profileRevision"].GetValue<int>();
 
-        if (result.ContainsKey("multiUpdate"))
-        {
-            if (printChanges)
-                GD.Print("multiupdate");
-            foreach (var profileUpdate in result["multiUpdate"].AsArray())
+            if (result.ContainsKey("multiUpdate"))
             {
-                string profileId = profileUpdate["profileId"].ToString();
                 if (printChanges)
-                    GD.Print("multiupdating: " + profileId);
-                if (account.HasProfile(profileId))
+                    GD.Print("multiupdate");
+                foreach (var profileUpdate in result["multiUpdate"].AsArray())
                 {
+                    string profileId = profileUpdate["profileId"].ToString();
                     if (printChanges)
-                        GD.Print("has profile");
-                    var profile = account.GetProfile(profileId);
-                    profile.ApplyProfileChanges(profileUpdate["profileChanges"].AsArray());
-                    profile.rvn = profileUpdate["profileRevision"].GetValue<int>();
+                        GD.Print("multiupdating: " + profileId);
+                    if (account.HasProfile(profileId))
+                    {
+                        if (printChanges)
+                            GD.Print("has profile");
+                        var profile = account.GetProfile(profileId);
+                        profile.ApplyProfileChanges(profileUpdate["profileChanges"].AsArray());
+                        profile.rvn = profileUpdate["profileRevision"].GetValue<int>();
+                    }
                 }
             }
-        }
-        printChanges = false;
 
-        string fullText = fullUpdate ? " (Full Update)" : "";
-        if (actingAccount != account)
-            GD.Print($"operation complete ({operation} in {profileId} of {account.DisplayName} as {actingAccount.DisplayName}){fullText}");
-        else
-            GD.Print($"operation complete ({operation} in {profileId} as {account.DisplayName}){fullText}");
-
-        if (result.ContainsKey("notifications"))
-        {
-            var notifs = result["notifications"].AsArray();
-            var toRemove = notifs.Where(n => n["type"].ToString() == "redeemStwTokensNotification").ToArray();
-            foreach (var notif in toRemove)
+            string fullText = fullUpdate ? " (Full Update)" : "";
+            if (silenceOperationLog)
             {
-                notifs.Remove(notif);
+                if (actingAccount != account)
+                    GD.Print($"operation complete ({operation} in {profileId} of {account.DisplayName} as {actingAccount.DisplayName}){fullText}");
+                else
+                    GD.Print($"operation complete ({operation} in {profileId} as {account.DisplayName}){fullText}");
             }
-            if (notifs.Count > 0 && AppConfig.Get("advanced", "logNotifs", false))
-                GD.Print("Notifications: " + notifs.ToString());
-            return notifs;
+
+            if (result.ContainsKey("notifications"))
+            {
+                var notifs = result["notifications"].AsArray();
+                var toRemove = notifs.Where(n => n["type"].ToString() == "redeemStwTokensNotification").ToArray();
+                foreach (var notif in toRemove)
+                {
+                    notifs.Remove(notif);
+                }
+                if (notifs.Count > 0 && AppConfig.Get("advanced", "logNotifs", false))
+                    GD.Print("Notifications: " + notifs.ToString());
+                return notifs;
+            }
+            return [];
         }
-        return [];
+        finally
+        {
+            printChanges = false;
+            silenceOperationLog = false;
+        }
     }
 
     JsonArray GenerateChanges(JsonObject newItems, JsonObject newStats = null)
@@ -555,6 +573,7 @@ public class GameProfile
         return profileChanges;
     }
 
+    public static bool silenceOperationLog = false;
     public static bool printChanges = false;
 
     public void ApplyProfileChanges(JsonArray profileChanges)
@@ -573,8 +592,8 @@ public class GameProfile
                 GD.PushWarning("skipping null profile item change");
                 continue;
             }
-            if (printChanges)
-                GD.Print($"Applying \"{changeType}\"");
+            //if (printChanges)
+            //    GD.Print($"Applying \"{changeType}\"");
             //ProfileItemId profileItemId = new(profileId, uuid);
             GameItem targetItem;
             switch (changeType)
@@ -652,7 +671,7 @@ public class GameProfile
                     var oldQuantity = targetItem.quantity;
                     targetItem.SetLocalQuantity(change["quantity"].GetValue<int>());
                     if (printChanges)
-                        GD.Print($"CHANGED (quantity): {uuid} ({oldQuantity} => {targetItem.quantity})");
+                        GD.Print($"QUANT CHANGED: {uuid} ({oldQuantity} => {targetItem.quantity})");
                     itemsToNotify.Add(targetItem);
                     break;
                 case "itemAttrChanged":
@@ -660,15 +679,17 @@ public class GameProfile
                     var oldValue = targetItem.attributes[change["attributeName"].ToString()]?.ToString();
                     targetItem.attributes[change["attributeName"].ToString()] = change["attributeValue"].SafeDeepClone();
                     if (printChanges)
-                        GD.Print($"CHANGED (attribute): {uuid}[{change["attributeName"]}] \n{oldValue}\n=>\n{change["attributeValue"]}");
+                        GD.Print($"ATTR CHANGED: {uuid}[{change["attributeName"]}] \n{oldValue}\n=>\n{change["attributeValue"]}");
                     itemsToNotify.Add(targetItem);
                     break;
                 case "itemUpgraded":
                     //reassociates an item that was removed and readded as part of an upgrade
                     targetItem = items[uuid];
                     targetItem.Reassociate(change["newItemId"]?.ToString(), change["item"].AsObject());
+                    items.Remove(uuid);
+                    items.Add(targetItem.uuid, targetItem);
                     if (printChanges)
-                        GD.Print($"UPGRADED: {items[uuid]}");
+                        GD.Print($"UPGRADED: {uuid} => {targetItem.uuid}");
                     itemsToNotify.Add(targetItem);
                     reassociations.Add(uuid, targetItem);
                     break;
@@ -677,7 +698,7 @@ public class GameProfile
                     targetItem = items[uuid];
                     targetItem.SetItemOrRewardData(change["item"].AsObject());
                     if (printChanges)
-                        GD.Print($"CHANGED (full): {targetItem}");
+                        GD.Print($"ITEM FULL CHANGED: {targetItem}");
                     itemsToNotify.Add(targetItem);
                     break;
             }

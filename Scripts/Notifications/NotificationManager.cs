@@ -29,7 +29,6 @@ public partial class NotificationManager : Control
 
     static Queue<NotificationData> notificationQueue = new();
     static NotificationManager instance;
-    static readonly Vector2[] fullPassthrough = new Vector2[2];
 
     public static void Push(IEnumerable<NotificationData> data)
     {
@@ -52,7 +51,7 @@ public partial class NotificationManager : Control
 	public override void _Ready()
 	{
         window = GetWindow();
-        window.MousePassthroughPolygon = fullPassthrough;
+        UpdateWindowTangibility();
         baseSize = window.Size;
         window.Visible = AppConfig.Get("experimental", "notifications", false);
         SetScale((float)AppConfig.Get("notification", "scale", 1.0));
@@ -69,7 +68,8 @@ public partial class NotificationManager : Control
         queueTimer.Timeout += AppendFromQueue;
         ListProgress = _listProgress;
         AppConfig.OnConfigChanged += OnConfigChanged;
-        MouseEntered += CheckPassthrough;
+        MouseEntered += CheckTangibility;
+        window.FocusEntered += CheckTangibility;
         RefreshTimerController.OnSecondChanged += ClearExpired;
     }
 
@@ -85,12 +85,21 @@ public partial class NotificationManager : Control
         // window to the bottom center, out of the way of the HUD
     }
 
+    static readonly Vector2[] fullPassthrough = new Vector2[2];
+    bool IsWindowVisible => window.Visible && window.MousePassthroughPolygon.Length == 0;
+    void UpdateWindowTangibility()
+    {
+        window.Unfocusable = activeNotifications.Count == 0;
+        window.MousePassthroughPolygon = activeNotifications.Count == 0 ? fullPassthrough : [];
+        window.Unfocusable = activeNotifications.Count == 0;
+    }
 
-    private void CheckPassthrough()
+
+    private void CheckTangibility()
     {
         if ((window.MousePassthroughPolygon.Length == 0) == (activeNotifications.Count == 0))
             GD.Print("Mismatching notification window state. Correcting...");
-        window.MousePassthroughPolygon = activeNotifications.Count == 0 ? fullPassthrough : [];
+        UpdateWindowTangibility();
     }
 
     private void OnConfigChanged(string section, string key, JsonValue value)
@@ -116,7 +125,7 @@ public partial class NotificationManager : Control
         for (int i = 0; i < 15; i++)
         {
             window.Size = newSize;
-            var safeRect = DisplayServer.GetDisplaySafeArea();
+            var safeRect = DisplayServer.ScreenGetUsableRect();
             window.Position = safeRect.Position + safeRect.Size - (newSize + new Vector2I(5, 5 - (int)(9 * scaleAmt)));
             //await Helpers.WaitForFrame();
         }
@@ -337,7 +346,7 @@ public partial class NotificationManager : Control
             //manually dismiss animation, hide window
             notificationInstances[1].AnimateStage(-1, 0.15, 0, 0);
             await Helpers.WaitForTimer(0.15);
-            window.MousePassthroughPolygon = fullPassthrough;
+            UpdateWindowTangibility();
             TrayIcon.UnregisterResponsiveWindow(notificationWindowTag);
             activeNotifications.Clear();
             currentListIdx = 0;

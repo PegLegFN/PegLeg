@@ -1,7 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://cvc7hj4ng7c04"]
+[gd_scene format=3 uid="uid://cvc7hj4ng7c04"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_bjivd"]
-[ext_resource type="Script" uid="uid://ba0x60bnrci8u" path="res://Scripts/Overlays/GameItemSelector.cs" id="2_msbn1"]
+[ext_resource type="Script" uid="uid://ba0x60bnrci8u" path="res://Scripts/Overlays/GameItemSelector/SimpleItemSelector.cs" id="2_msbn1"]
 [ext_resource type="Texture2D" uid="uid://c220ltun2a5lc" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_128.png" id="3_4tm4g"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_p3a1g"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_2yqeq"]
@@ -9,10 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://ddjxkaoe8stlj" path="res://Images/InterfaceIcons/T-Icon-ST-CollectionBook-128.png" id="5_2qrsm"]
 [ext_resource type="Texture2D" uid="uid://dhakmuvj28f2w" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Paintbrush_128.png" id="6_bnyal"]
 [ext_resource type="Texture2D" uid="uid://ck2mb3fyp73sd" path="res://Images/InterfaceIcons/T-SlotIcon-NotRecyclable-64.png" id="6_cjboh"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="7_6tduj"]
 [ext_resource type="Texture2D" uid="uid://c14xo8fbe7lbf" path="res://Images/BanjoSuppliments/PersonalityIcons/T-Icon-Adventurer-64.png" id="7_715da"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_aw7nf"]
 [ext_resource type="Texture2D" uid="uid://l44adw334xao" path="res://Images/InterfaceIcons/T-SlotIcon-Recycle-128.png" id="7_j13lo"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="8_3lmwd"]
 [ext_resource type="Texture2D" uid="uid://773xh3crsgff" path="res://Images/BanjoSuppliments/PersonalityIcons/T-Icon-Analytical-64.png" id="8_f2ysx"]
+[ext_resource type="Texture2D" uid="uid://dc6umid5fw8b3" path="res://Images/InterfaceIcons/T-Icon-Manage-All-512.png" id="9_3lmwd"]
 [ext_resource type="Texture2D" uid="uid://drdfqwfg3d6jn" path="res://Images/BanjoSuppliments/PersonalityIcons/T-Icon-Competitive-64.png" id="9_nfj2x"]
 [ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="9_yrbk2"]
 [ext_resource type="Texture2D" uid="uid://bdgy576jvmfi2" path="res://Images/BanjoSuppliments/PersonalityIcons/T-Icon-Cooperative-64.png" id="10_rnqg5"]
@@ -30,7 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://ci5xktxr3q4re" path="res://Images/BanjoSuppliments/SetBonusIcons/T-Icon-HealthBattery-64.png" id="22_8tyk0"]
 [ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="26_kejyc"]
 
-[node name="GameItemSelector" node_paths=PackedStringArray("autoSelectButton", "container", "smallContainer", "multiselectButtons", "confirmButton", "skipButton", "windowControl") instance=ExtResource("1_bjivd")]
+[node name="GameItemSelector" unique_id=809701910 node_paths=PackedStringArray("autoSelectButton", "container", "smallContainer", "multiselectButtons", "confirmButton", "skipButton", "searchInput", "survivorFilters", "personalityFilter", "trapDuraFilter", "windowControl") instance=ExtResource("1_bjivd")]
 script = ExtResource("2_msbn1")
 defaultSelectionMarker = ExtResource("3_4tm4g")
 recycleIcon = ExtResource("7_j13lo")
@@ -42,20 +45,24 @@ smallContainer = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxConta
 multiselectButtons = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons")
 confirmButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm")
 skipButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip")
+searchInput = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SearchBox")
+survivorFilters = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters")
+personalityFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities")
+trapDuraFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura")
 windowControl = NodePath("Control")
 isUserClosable = true
 
-[node name="Control" parent="." index="2"]
+[node name="Control" parent="." index="2" unique_id=2057559241]
 anchors_preset = 15
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="WindowContents" parent="Control" index="0"]
+[node name="WindowContents" parent="Control" index="0" unique_id=1567660947]
 visible = false
 
-[node name="MarginContainer" type="MarginContainer" parent="Control" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control" index="1" unique_id=1056251637]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,244 +75,124 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" index="0" unique_id=1185638334]
 layout_mode = 2
 
-[node name="Header" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="0"]
+[node name="Header" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="0" unique_id=680858866]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/margin_bottom = -10
 
-[node name="Panel" type="Panel" parent="Control/MarginContainer/VBoxContainer/Header" index="0"]
+[node name="Panel" type="Panel" parent="Control/MarginContainer/VBoxContainer/Header" index="0" unique_id=1024523015]
 layout_mode = 2
 theme_type_variation = &"SecondaryPanel"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Header" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Header" index="1" unique_id=732525186]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 8
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/Header/MarginContainer" index="0"]
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/Header/MarginContainer" index="0" unique_id=1831640349]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "Select an Item"
 horizontal_alignment = 1
 
-[node name="Items" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer" index="1"]
+[node name="Items" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer" index="1" unique_id=1373637336]
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items" index="0" unique_id=1586420421]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="0"]
-visible = false
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="0" unique_id=281258672]
 layout_mode = 2
 
-[node name="SearchBox" type="LineEdit" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="0"]
+[node name="SearchBox" type="LineEdit" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="0" unique_id=1730238994]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search items"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="SurvivorFilters" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="1"]
+[node name="SurvivorFilters" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="1" unique_id=1783568109]
 layout_mode = 2
 
-[node name="PersonalityFilters" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="0"]
+[node name="Personalities" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="0" unique_id=73696586 instance=ExtResource("7_6tduj")]
 layout_mode = 2
-theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters" index="0"]
+[node name="Tab9" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="0" unique_id=1301912128 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-theme_override_constants/separation = 0
+mode = -1
+tooltip = "Adventurer"
+icon = ExtResource("9_3lmwd")
+IsPressed = true
+Tint = Color(1, 1, 1, 1)
 
-[node name="Adventurer" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="0"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="1" unique_id=163658665 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Survivors"
-theme_type_variation = &"LeftCheckButton"
-button_pressed = true
-text = " "
-metadata/type = "Worker"
+tooltip = "Adventurer"
+icon = ExtResource("7_715da")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Adventurer" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("7_715da")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Analytical" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="1"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab2" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="2" unique_id=1874336363 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Lead Survivors"
-theme_type_variation = &"MiddleCheckButton"
-button_pressed = true
-text = " "
-metadata/type = "Worker:manager"
+tooltip = "Analytical"
+icon = ExtResource("8_f2ysx")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Analytical" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_f2ysx")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Competitive" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="2"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab3" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="3" unique_id=970259427 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Heroes"
-theme_type_variation = &"MiddleCheckButton"
-text = " "
-metadata/type = "Hero"
+tooltip = "Competitive"
+icon = ExtResource("9_nfj2x")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Competitive" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_nfj2x")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Cooperative" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="3"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab4" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="4" unique_id=1601878135 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Upgrade Llamas"
-theme_type_variation = &"MiddleCheckButton"
-button_pressed = true
-text = " "
-metadata/type = "AccountResource:voucher_cardpack_bronze"
+tooltip = "Cooperative"
+icon = ExtResource("10_rnqg5")
+IsPressed = true
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Cooperative" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("10_rnqg5")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Curious" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="4"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab5" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="5" unique_id=654325147 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Mini Llamas"
-theme_type_variation = &"MiddleCheckButton"
-text = " "
-metadata/type = "AccountResource:voucher_basicpack"
+tooltip = "Curious"
+icon = ExtResource("11_15uha")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Curious" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("11_15uha")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Dependable" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="5"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab6" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="6" unique_id=948462429 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Schematics"
-theme_type_variation = &"MiddleCheckButton"
-text = " "
-metadata/type = "Schematic"
+tooltip = "Dependable"
+icon = ExtResource("12_ji0gj")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Dependable" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("12_ji0gj")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Dreamer" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="6"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab7" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="7" unique_id=704154658 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Ranged Weapons"
-theme_type_variation = &"MiddleCheckButton"
-text = " "
-metadata/type = "Schematic>Ranged"
+tooltip = "Dreamer"
+icon = ExtResource("13_kogrg")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Dreamer" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("13_kogrg")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Pragmatic" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer" index="7"]
-custom_minimum_size = Vector2(24, 0)
+[node name="Tab8" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="8" unique_id=1374190574 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
-tooltip_text = "Traps"
-theme_type_variation = &"RightCheckButton"
-button_pressed = true
-text = " "
-metadata/type = "Schematic>Trap"
+mode = 1
+tooltip = "Pragmatic"
+icon = ExtResource("14_38aec")
+Tint = Color(1, 1, 1, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/PersonalityFilters/HBoxContainer/Pragmatic" index="0"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_right = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("14_38aec")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SetBonusFilters" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="1"]
+[node name="SetBonusFilters" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="1" unique_id=1340840120]
 visible = false
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters" index="0" unique_id=670223077]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="WeaponDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="0"]
+[node name="WeaponDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="0" unique_id=1641197968]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Survivors"
@@ -313,7 +200,7 @@ theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/WeaponDamage" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/WeaponDamage" index="0" unique_id=1347611008]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -326,7 +213,7 @@ texture = ExtResource("15_qneur")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MeleeDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="1"]
+[node name="MeleeDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="1" unique_id=1023355089]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Lead Survivors"
@@ -334,7 +221,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Worker:manager"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/MeleeDamage" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/MeleeDamage" index="0" unique_id=1368212930]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -347,7 +234,7 @@ texture = ExtResource("16_kejyc")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrapDamge" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="2"]
+[node name="TrapDamge" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="2" unique_id=1140574480]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Upgrade Llamas"
@@ -355,7 +242,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "AccountResource:voucher_cardpack_bronze"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDamge" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDamge" index="0" unique_id=1678068943]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -368,7 +255,7 @@ texture = ExtResource("17_n7h2h")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AbilityDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="3"]
+[node name="AbilityDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="3" unique_id=1860438710]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Heroes"
@@ -376,7 +263,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Hero"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/AbilityDamage" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/AbilityDamage" index="0" unique_id=1774855588]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -389,7 +276,7 @@ texture = ExtResource("18_6tduj")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="4"]
+[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="4" unique_id=2124036104]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Mini Llamas"
@@ -398,7 +285,7 @@ button_pressed = true
 text = " "
 metadata/type = "AccountResource:voucher_basicpack"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDura" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDura" index="0" unique_id=1596850604]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -411,7 +298,7 @@ texture = ExtResource("15_f2ysx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HealthBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="5"]
+[node name="HealthBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="5" unique_id=1803100850]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Schematics"
@@ -419,7 +306,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/HealthBoost" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/HealthBoost" index="0" unique_id=1316186046]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -432,7 +319,7 @@ texture = ExtResource("20_3lmwd")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ShieldBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="6"]
+[node name="ShieldBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="6" unique_id=1096398967]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Ranged Weapons"
@@ -440,7 +327,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic>Ranged"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/ShieldBoost" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/ShieldBoost" index="0" unique_id=893084897]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -453,7 +340,7 @@ texture = ExtResource("21_iceif")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EnergyBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="7"]
+[node name="EnergyBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="7" unique_id=567345725]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Traps"
@@ -461,7 +348,7 @@ theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/type = "Schematic>Trap"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/EnergyBoost" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/EnergyBoost" index="0" unique_id=491168956]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -474,15 +361,15 @@ texture = ExtResource("22_8tyk0")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrapBonusFilter" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="2"]
+[node name="TrapBonusFilter" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="2" unique_id=1407038649]
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter" index="0" unique_id=1496378201]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer" index="0"]
+[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer" index="0" unique_id=1705200572]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Survivors"
@@ -491,7 +378,7 @@ button_pressed = true
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura" index="0" unique_id=420919908]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -504,7 +391,7 @@ texture = ExtResource("15_f2ysx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LargeItems" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="1" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+[node name="LargeItems" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="1" unique_id=1459183174 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -517,7 +404,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
 elementScene = ExtResource("4_7jdcp")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems" index="0" unique_id=2026138476]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -526,26 +413,26 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer" index="0" unique_id=103954723]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="0"]
+[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="0" unique_id=794249657]
 layout_mode = 2
 
-[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="1"]
+[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="1" unique_id=335317539]
 layout_mode = 2
 script = ExtResource("4_2yqeq")
 MinCols = 3
 CompressSpacing = true
 Spacing = Vector2(10, 10)
 
-[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="2"]
+[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer/VBoxContainer" index="2" unique_id=1328722265]
 layout_mode = 2
 
-[node name="SmallItems" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="2" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+[node name="SmallItems" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="2" unique_id=470367125 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -557,7 +444,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
 elementScene = ExtResource("26_kejyc")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems" index="0" unique_id=304366784]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -566,43 +453,43 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer" index="0" unique_id=1343126879]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="0"]
+[node name="Offset" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="0" unique_id=172246446]
 layout_mode = 2
 
-[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="1"]
+[node name="Grid" type="Container" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="1" unique_id=1657450886]
 layout_mode = 2
 script = ExtResource("4_2yqeq")
 MinCols = 3
 CompressSpacing = true
 Spacing = Vector2(10, 10)
 
-[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="2"]
+[node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="2" unique_id=1022516821]
 layout_mode = 2
 
-[node name="MultiselectButtons" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="2"]
+[node name="MultiselectButtons" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="2" unique_id=1799159483]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="0" unique_id=1497196998]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="ClearSelected" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="0"]
+[node name="ClearSelected" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="0" unique_id=2106194831]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Clear Selected"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/ClearSelected" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/ClearSelected" index="0" unique_id=213354014]
 visible = false
 layout_mode = 0
 offset_left = 3.0
@@ -612,13 +499,13 @@ offset_bottom = 37.0
 texture = ExtResource("6_bnyal")
 expand_mode = 3
 
-[node name="AutoSelect" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="1"]
+[node name="AutoSelect" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="1" unique_id=1820602365]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Auto Select"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/AutoSelect" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/AutoSelect" index="0" unique_id=818886907]
 visible = false
 layout_mode = 0
 offset_left = 3.0
@@ -628,13 +515,13 @@ offset_bottom = 37.0
 texture = ExtResource("7_j13lo")
 expand_mode = 3
 
-[node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="2"]
+[node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="2" unique_id=1923112185]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/Sort" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer/Sort" index="0" unique_id=1819781393]
 layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
@@ -643,72 +530,72 @@ offset_bottom = 37.0
 texture = ExtResource("9_yrbk2")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="3"]
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer" index="3" unique_id=1901490935]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 
-[node name="Confirm" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="1"]
+[node name="Confirm" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="1" unique_id=1676563507]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Panel" type="Panel" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm" index="0"]
+[node name="Panel" type="Panel" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm" index="0" unique_id=1594928949]
 layout_mode = 2
 theme_type_variation = &"PanelButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm" index="1" unique_id=1059880280]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm/MarginContainer" index="0"]
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm/MarginContainer" index="0" unique_id=575363978]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Confirm Recycle"
 
-[node name="Responsive Button Area" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm" index="2" instance=ExtResource("7_aw7nf")]
+[node name="Responsive Button Area" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm" index="2" unique_id=544484366 instance=ExtResource("7_aw7nf")]
 layout_mode = 2
 useHold = true
 
-[node name="Skip" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="2"]
+[node name="Skip" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="2" unique_id=1105889885]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Panel" type="Panel" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip" index="0"]
+[node name="Panel" type="Panel" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip" index="0" unique_id=588830735]
 layout_mode = 2
 theme_type_variation = &"PanelButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip" index="1" unique_id=1621133820]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip/MarginContainer" index="0"]
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip/MarginContainer" index="0" unique_id=1983477393]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Continue"
 
-[node name="Responsive Button Area" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip" index="2" instance=ExtResource("7_aw7nf")]
+[node name="Responsive Button Area" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip" index="2" unique_id=1959869864 instance=ExtResource("7_aw7nf")]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="3"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons" index="3" unique_id=260433129]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
-[node name="ClearSelected" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="0"]
+[node name="ClearSelected" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="0" unique_id=510538168]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Clear Selected"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/ClearSelected" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/ClearSelected" index="0" unique_id=1482777655]
 visible = false
 layout_mode = 0
 offset_left = 3.0
@@ -718,14 +605,14 @@ offset_bottom = 37.0
 texture = ExtResource("6_bnyal")
 expand_mode = 3
 
-[node name="AutoSelect" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="1"]
+[node name="AutoSelect" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="1" unique_id=1453620101]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Auto Select"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/AutoSelect" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/AutoSelect" index="0" unique_id=554408300]
 visible = false
 layout_mode = 0
 offset_left = 3.0
@@ -735,13 +622,13 @@ offset_bottom = 37.0
 texture = ExtResource("7_j13lo")
 expand_mode = 3
 
-[node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="2"]
+[node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="2" unique_id=436462815]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/Sort" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/Sort" index="0" unique_id=1786946490]
 layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
@@ -750,7 +637,7 @@ offset_bottom = 37.0
 texture = ExtResource("9_yrbk2")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="3"]
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2" index="3" unique_id=2143701942]
 layout_mode = 2
 text = "Hidden Items Selected: ??"
 
@@ -767,3 +654,5 @@ text = "Hidden Items Selected: ??"
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/ClearSelected" to="." method="ClearSelection"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/AutoSelect" to="." method="AutoMarkSelection"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/Sort" to="." method="CycleSort"]
+
+[editable path="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities"]

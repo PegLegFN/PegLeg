@@ -73,12 +73,13 @@
 [ext_resource type="PackedScene" uid="uid://bbpdgupjy1ovb" path="res://Scenes/Desktop/Overlays/dev_text_overlay.tscn" id="60_o7hny"]
 [ext_resource type="PackedScene" uid="uid://ciamgottppk7s" path="res://Scenes/Desktop/Overlays/image_copy_window.tscn" id="62_wqw3e"]
 [ext_resource type="PackedScene" uid="uid://bxop648lmprhv" path="res://Scenes/Desktop/Overlays/hero_item_selector.tscn" id="64_buut1"]
+[ext_resource type="PackedScene" uid="uid://cddyd14hf7dey" path="res://Scenes/Desktop/Overlays/item_upgrade_animation.tscn" id="73_jacmh"]
 [ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="74_qm6e2"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="75_jacmh"]
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
 [ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="99_hfy7e"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_qm6e2"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_jacmh"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7h2tb"]
@@ -274,7 +275,7 @@ metadata/_tab_index = 2
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 1
+current_tab = 2
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 3
 
@@ -284,11 +285,11 @@ layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="Hero Loadout" parent="Content/MainTabs/Armoury" unique_id=1372606315 instance=ExtResource("31_i2466")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="Inventory" parent="Content/MainTabs/Armoury" unique_id=680848205 instance=ExtResource("13_yfdoy")]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -433,25 +434,46 @@ targetProfile = "theater2"
 metadata/_tab_index = 7
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(1508465885, 144255995) index="0" unique_id=228194712]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(1508465885, 2039985868) index="0" unique_id=1672625159]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(1508465885, 301043813) index="0" unique_id=1744959934]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1508465885, 1694755347) index="0" unique_id=669176367]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(1508465885, 426083547) index="0" unique_id=2051298463]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(1508465885, 535625123) index="0" unique_id=1931883480]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" parent_id_path=PackedInt32Array(1508465885, 248328693) index="0" unique_id=1448244160]
-button_group = SubResource("ButtonGroup_qm6e2")
+button_group = SubResource("ButtonGroup_jacmh")
+
+[node name="Tab" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="0" unique_id=1699324138]
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab3" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="1" unique_id=1943050198]
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab4" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="2" unique_id=2090754285]
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab5" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="3" unique_id=1049979918]
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab6" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="4" unique_id=611374292]
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab7" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="5" unique_id=486697332]
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab8" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="6" unique_id=35503253]
+Tint = Color(1, 1, 1, 1)
 
 [node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="2" unique_id=317467257]
 elementSpace = 10.0
@@ -688,7 +710,7 @@ layout_mode = 2
 color = Color(1, 1, 1, 0.188235)
 
 [node name="OverlayWindows" type="Control" parent="." unique_id=1375871405]
-z_index = 6
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -711,6 +733,7 @@ offset_right = 0.0
 
 [node name="TimelineEventViewer" parent="OverlayWindows" unique_id=1501647508 instance=ExtResource("59_4gcek")]
 visible = false
+z_index = -3
 layout_mode = 1
 
 [node name="CardPackOpenerWindow" parent="OverlayWindows" unique_id=704071020 instance=ExtResource("41_alhak")]
@@ -734,10 +757,6 @@ anchors_preset = -1
 visible = false
 layout_mode = 1
 
-[node name="ShopPurchaseAnimation" parent="OverlayWindows" unique_id=217372107 instance=ExtResource("96_2bhmt")]
-visible = false
-layout_mode = 1
-
 [node name="LoginPopup" parent="OverlayWindows" unique_id=327623263 instance=ExtResource("41_kf5nt")]
 visible = false
 layout_mode = 1
@@ -758,8 +777,19 @@ layout_mode = 1
 visible = false
 layout_mode = 1
 
+[node name="ShopPurchaseAnimation" parent="OverlayWindows" unique_id=217372107 instance=ExtResource("96_2bhmt")]
+visible = false
+z_index = 2
+layout_mode = 1
+
+[node name="ItemUpgradeAnimation" parent="OverlayWindows" unique_id=1631981925 instance=ExtResource("73_jacmh")]
+visible = false
+z_index = 2
+layout_mode = 1
+
 [node name="LoadingOverlay" parent="OverlayWindows" unique_id=1534828838 instance=ExtResource("31_v6low")]
 visible = false
+z_index = 3
 layout_mode = 1
 startOpen = false
 isUserClosable = true

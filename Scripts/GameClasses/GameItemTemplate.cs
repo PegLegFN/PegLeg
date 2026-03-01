@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 public enum FnItemTextureType
@@ -43,7 +44,7 @@ public static class SurvivorBonus
     public const string TrapDurability = "IsTrapDurabilityHigh";
 }
 
-public class GameItemTemplate
+public partial class GameItemTemplate
 {
     #region Static Values
 
@@ -224,13 +225,19 @@ public class GameItemTemplate
         "Hero" or "Worker" or "Defender" or "Schematic" => true,
         _ => false
     };
-    public bool CanBeLeveled => Tier > 0 && Type switch
+
+    public bool HasLevel => Tier > 0 && Type switch
     {
         "Hero" or "Worker" or "Weapon" or "Trap" => true,
         "Schematic" => !Unrecyclable || Category != "Trap",
         "Defender" => !Unrecyclable || RarityLevel > 1,
         _ => false
     };
+
+    public bool CanBeLeveled => HasLevel && Type != "Weapon" && Type != "Trap";
+
+    public bool CanBeSupercharged => CanBeLeveled && Type != "Defender" && RarityLevel >= 4;
+
     public bool CanBeUnseen => Type switch
     {
         "Hero" or "Worker" or "Defender" or "Schematic" or "Quest" or "AccountResource" or "ConsumableAccountItem" or "CardPack" => true,
@@ -254,7 +261,8 @@ public class GameItemTemplate
     public Color RarityColor => Name.StartsWith("ZCP_") ? Colors.Transparent : rarityColours[RarityLevel];
 
     public int Tier => rawData["Tier"]?.GetValue<int>() ?? 0;
-    //public int Tier => rawData["Tier"] is JsonValue tierVal ? (tierVal.TryGetValue<int>(out var tier) ? tier : 0) : 0;
+    public int MaxTier => Mathf.Min(RarityLevel + 1, 5);
+
     public string Personality => rawData["Personality"]?.ToString();
 
     public bool Unrecyclable => rawData["RecycleRecipe"] is null;
@@ -399,6 +407,109 @@ public class GameItemTemplate
         if (rawData["TierUpRecipe"]?["Result"]?.ToString() is string tierUpResult)
             return Get(tierUpResult);
         return null;
+    }
+
+    public GameItem.ItemData[] GetCombinedUpgradeValue(int ofLevel)
+    {
+        if (Tier <= 1)
+        {
+            if (TryGetCombinedLevelUpCost(ofLevel, out var levelUpCostOnly))
+                return [levelUpCostOnly];
+            return [];
+        }
+
+        Dictionary<string, int> totalCosts = [];
+        var currentTemplate = Get(TierSuffix().Replace(TemplateId, "_t01"));
+        while (currentTemplate != null && currentTemplate != this)
+        {
+            var toAdd = currentTemplate["TierUpRecipe"]?["Cost"].Deserialize<Dictionary<string, int>>() ?? [];
+            foreach (var item in toAdd)
+            {
+                if (totalCosts.ContainsKey(item.Key))
+                    totalCosts[item.Key] += item.Value;
+                else
+                    totalCosts[item.Key] = item.Value;
+            }
+            currentTemplate = currentTemplate.TryGetNextTier();
+        }
+
+        if(TryGetCombinedLevelUpCost(ofLevel, out var levelUpCost))
+        {
+            if (totalCosts.ContainsKey(levelUpCost.templateId))
+                totalCosts[levelUpCost.templateId] += levelUpCost.quantity;
+            else
+                totalCosts[levelUpCost.templateId] = levelUpCost.quantity;
+        }
+
+        return [.. totalCosts.Select(kvp => new GameItem.ItemData() { templateId = kvp.Key, quantity = kvp.Value })];
+    }
+
+    public bool TryGetRarityUpCost(out GameItem.ItemData[] cost)
+    {
+        cost = [];
+        var costDict = rawData["RarityUpRecipe"]?["Cost"].Deserialize<Dictionary<string, int>>();
+        if(costDict is null)
+            return false;
+        Dictionary<string, int> totalCosts = [];
+        foreach (var item in costDict)
+        {
+            if (totalCosts.ContainsKey(item.Key))
+                totalCosts[item.Key] += item.Value;
+            else
+                totalCosts[item.Key] = item.Value;
+        }
+        cost = [.. totalCosts.Select(kvp => new GameItem.ItemData() { templateId = kvp.Key, quantity = kvp.Value })];
+        return true;
+    }
+
+    //ignores upgrades
+    public bool TryGetCombinedLevelUpCost(int ofLevel, out GameItem.ItemData cost)
+    {
+        cost = default;
+        if (ofLevel < 1)
+            return false;
+        int rarityLv = RarityLevel;
+        if (Type == "Worker" && SubType is not null)
+            rarityLv -= 1;//for some reason Lead Survivors are treated as one rarity lower
+
+        string category = RarityLevel switch
+        {
+            1 => "Common",
+            2 => "Uncommon",
+            3 => "Rare",
+            4 => "VeryRare",
+            5 => "SuperRare",
+            6 => "UltraRare",
+            _ =>null
+        };
+        if (Type == "Worker" && SubType is not null)
+            category = $"Manager_{category}";
+        else if (Type == "Defender")
+            category = $"Defender_{category}";
+
+        var levels = PegLegResourceManager.ItemLevelsToXP[category]?.Deserialize<int[]>() ?? [];
+        if (levels.Length == 0)
+            return false;
+
+        int resolvedLevel = 0;
+        if (ofLevel >= levels.Length - 1)
+            resolvedLevel = levels[^1];
+        else if (ofLevel > 0)
+            resolvedLevel = levels[ofLevel - 1];
+
+        var xpType = "AccountResource:heroxp";
+        if (Type == "Schematic")
+            xpType = "AccountResource:schematicxp";
+        else if (Type == "Worker")
+            xpType = "AccountResource:personnelxp";
+
+        cost = new()
+        {
+            templateId = xpType,
+            quantity = resolvedLevel,
+        };
+
+        return true;
     }
 
     public Texture2D GetAmmoTexture(Texture2D fallbackIcon = null)
@@ -690,7 +801,7 @@ public class GameItemTemplate
 
         if (tags.Contains("Worker"))
             tags.Add("Survivor");
-        if (rawData["RecycleRecipe"] is null)
+        if (Unrecyclable && Undismantlable && Type != "AccountResource" && Type != "CardPack") //"Permanent" is misleading for Account Resources and Card Packs, since they can be spent and opened respectively
             tags.Add("Permanent");
         var searchTags = new JsonArray(tags.Where(t => !string.IsNullOrWhiteSpace(t)).Select(t => (JsonNode)t).ToArray());
         lock (rawData)
@@ -732,5 +843,11 @@ public class GameItemTemplate
 
     public GameOffer CreateOffer(GameItem price = null, int quantity = 1, int limit = 1, JsonObject rawData = null) =>
         GameOffer.CreateFake([CreateInstance(quantity)], price ?? PriceForItem(), limit, rawData);
+
+    [GeneratedRegex("_(?:c|uc|r|vr|sr|ur)_")]
+    public static partial Regex RaritySuffix();
+
+    [GeneratedRegex("_t0\\d")]
+    public static partial Regex TierSuffix();
 }
 

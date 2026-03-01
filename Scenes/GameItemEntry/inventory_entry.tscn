@@ -52,24 +52,6 @@ fill = 1
 fill_from = Vector2(0.1, 0.9)
 metadata/_snap_enabled = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0iaq"]
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wraxx"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt785"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 3
@@ -86,7 +68,7 @@ border_width_bottom = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yfccu"]
 shader = ExtResource("10_acofu")
-shader_parameter/time = 0.666
+shader_parameter/time = 0.935
 
 [node name="InventoryEntry" type="MarginContainer" unique_id=262566370 node_paths=PackedStringArray("selectionGraphics")]
 custom_minimum_size = Vector2(90, 135)
@@ -280,8 +262,7 @@ theme_override_constants/separation = 2
 [node name="ProgressBar" type="ProgressBar" parent="ItemContent/EdgePadding/GameItem/TierAndXp/MarginContainer/VBoxContainer" unique_id=99975215]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_d0iaq")
-theme_override_styles/fill = SubResource("StyleBoxFlat_wraxx")
+theme_type_variation = &"ItemLevelProgress"
 min_value = -0.07
 max_value = 1.0
 show_percentage = false
