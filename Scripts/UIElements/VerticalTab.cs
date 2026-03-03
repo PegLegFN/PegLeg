@@ -23,6 +23,8 @@ public partial class VerticalTab : Control
 
     public override void _EnterTree()
     {
+        //if (triggerButton is not null)
+        //    triggerButton.Pressed += PressResponse;
         triggerButton?.SafeConnect(Button.SignalName.Pressed, Callable.From(PressResponse));
     }
 
@@ -33,6 +35,7 @@ public partial class VerticalTab : Control
 		tabContainer = newTabContainer;
 		tabIndex = newIndex;
 	}
+
     bool visibilityLocked = false;
     private void PressResponse()
     {
@@ -46,6 +49,8 @@ public partial class VerticalTab : Control
 	{
         if (OS.HasFeature("editor_hint") && pageNode is not null)
         {
+            //Renamed -= UpdatePageName;
+            //VisibilityChanged -= PressResponse;
             pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
             pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
         }
@@ -54,6 +59,8 @@ public partial class VerticalTab : Control
         SetState(triggerButton?.ButtonPressed ?? false);
         if (OS.HasFeature("editor_hint") && pageNode is not null)
         {
+            //Renamed += UpdatePageName;
+            //VisibilityChanged += PressResponse;
             pageNode.SafeConnect(SignalName.Renamed, Callable.From(UpdatePageName));
             pageNode.SafeConnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
         }
@@ -88,9 +95,14 @@ public partial class VerticalTab : Control
     {
         if (OS.HasFeature("editor_hint") && pageNode is not null && pageNode.IsInsideTree())
         {
+            //Renamed -= UpdatePageName;
+            //VisibilityChanged -= PressResponse;
             pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
             pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
         }
-        triggerButton?.SafeDisconnect(Button.SignalName.Pressed, Callable.From(PressResponse));
+        //if (triggerButton is not null)
+        //    triggerButton.Pressed -= PressResponse;
+        if (triggerButton?.IsInsideTree() == true)
+            triggerButton.SafeDisconnect(Button.SignalName.Pressed, Callable.From(PressResponse));
     }
 }

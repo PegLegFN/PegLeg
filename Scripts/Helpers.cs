@@ -687,15 +687,19 @@ public static partial class Helpers
     }
     public static void SafeConnect(this Node node, StringName signalName, Callable callable)
     {
-        var connections = node.GetSignalConnectionList(signalName);
-        if (!connections?.Any(c => c["callable"].AsCallable().Equals(callable)) ?? false)
+        //var connections = node.GetSignalConnectionList(signalName);
+        //if (!connections?.Any(c => c["callable"].AsCallable().Equals(callable)) ?? false)
+        //    node.Connect(signalName, callable);
+        if (!node.IsConnected(signalName, callable))
             node.Connect(signalName, callable);
     }
 
     public static void SafeDisconnect(this Node node, StringName signalName, Callable callable)
     {
-        var connections = node.GetSignalConnectionList(signalName);
-        if (connections?.Any(c => c["callable"].AsCallable().Equals(callable)) ?? false)
+        //var connections = node.GetSignalConnectionList(signalName);
+        //if (connections?.Any(c => c["callable"].AsCallable().Equals(callable)) ?? false)
+        //    node.Disconnect(signalName, callable);
+        if (node.IsConnected(signalName, callable))
             node.Disconnect(signalName, callable);
     }
 

@@ -119,6 +119,19 @@ public partial class AppConfig
         configFile.StoreString(ConfigData.ToString());
     }
 
+    public static void Clear(string section, string key, bool print = true)
+    {
+        var data = (ConfigData[section] ??= new JsonObject()).AsObject();
+        if (!data.ContainsKey(key))
+            return;
+        data.Remove(key);
+        OnConfigChanged?.Invoke(section, key, null);
+        if (print)
+            GD.Print($"Cleared Config ({section}:{key}");
+        using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Write);
+        configFile.StoreString(ConfigData.ToString());
+    }
+
     public static void PreloadConfig() => _configData ??= LoadConfig();
 
     static JsonObject LoadConfig()

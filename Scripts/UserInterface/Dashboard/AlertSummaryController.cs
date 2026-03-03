@@ -45,7 +45,7 @@ public partial class AlertSummaryController : Control
     async void CountRewards()
     {
         ClearRewards();
-        var missions = GameMission.currentMissions;
+        var missions = GameMission.MissionList;
         if (missions is null)
         {
             loadingIcon.Visible = false;

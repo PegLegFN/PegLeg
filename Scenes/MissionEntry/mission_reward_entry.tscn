@@ -204,10 +204,10 @@ grow_vertical = 2
 texture = ExtResource("11_40ktf")
 expand_mode = 1
 
+[connection signal="IsToDo" from="." to="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" method="set_disabled"]
 [connection signal="MissionCompleteIfAlert" from="." to="MissionEntry/HBoxContainer/Checkmark" method="set_visible"]
 [connection signal="pressed" from="Button" to="MissionEntry" method="InspectMission"]
 [connection signal="IconChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/Icon" method="set_texture"]
-[connection signal="IsToDo" from="MissionEntry" to="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" method="set_disabled"]
 [connection signal="MissionLocked" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
 [connection signal="PowerLevelChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/PowerLevel" method="set_text"]
 [connection signal="TheaterCategoryChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat" method="set_text"]
@@ -218,4 +218,4 @@ expand_mode = 1
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Control" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_tooltip_text"]
 [connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" to="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" method="Inspect"]
-[connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" to="MissionEntry" method="AddToList"]
+[connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" to="." method="AddToList"]

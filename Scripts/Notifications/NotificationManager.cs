@@ -89,9 +89,9 @@ public partial class NotificationManager : Control
     bool IsWindowVisible => window.Visible && window.MousePassthroughPolygon.Length == 0;
     void UpdateWindowTangibility()
     {
-        window.Unfocusable = activeNotifications.Count == 0;
+        //window.Unfocusable = activeNotifications.Count == 0;
         window.MousePassthroughPolygon = activeNotifications.Count == 0 ? fullPassthrough : [];
-        window.Unfocusable = activeNotifications.Count == 0;
+        //window.Unfocusable = activeNotifications.Count == 0;
     }
 
 

@@ -20,18 +20,17 @@ public partial class ConfigTextHook : Control
     bool tryBind = true;
 
     [Export]
+    bool accountMode = false;
+
+    [Export]
     double cooldown = 1;
 
-    bool valueIsChanging;
 
     public void UpdateTargetSetting(string section, string key)
     {
         this.section = section ?? this.section;
         this.key = key ?? this.key;
-
-        valueIsChanging = true;
-        EmitSignal(SignalName.ConfigValueChanged, AppConfig.Get(this.section, this.key, defaultValue));
-        valueIsChanging = false;
+        EmitSignal(SignalName.ConfigValueChanged, GetCurrentValue());
     }
 
     public override void _Ready()
@@ -41,7 +40,7 @@ public partial class ConfigTextHook : Control
             if ((string)Get("text") is not null)
             {
                 ConfigValueChanged += SetText;
-                SetText(AppConfig.Get(section, key, defaultValue));
+                SetText(GetCurrentValue());
             }
             if (HasSignal("text_changed"))
             {
@@ -53,33 +52,52 @@ public partial class ConfigTextHook : Control
         }
 
         base._Ready();
-        AppConfig.OnConfigChanged += UpdateValue;
-        valueIsChanging = true;
-        EmitSignal(SignalName.ConfigValueChanged, AppConfig.Get(section, key, defaultValue));
-        valueIsChanging = false;
+        if (accountMode)
+            GameAccount.LocalDataChanged += UpdateAccountValue;
+        else
+            AppConfig.OnConfigChanged += UpdateConfigValue;
+        EmitSignal(SignalName.ConfigValueChanged, GetCurrentValue());
+    }
+
+    public override void _ExitTree()
+    {
+        if (accountMode)
+            GameAccount.LocalDataChanged -= UpdateAccountValue;
+        else
+            AppConfig.OnConfigChanged -= UpdateConfigValue;
     }
 
     private void SetText(string newVal)
     {
-        if (!valueIsChanging)
-            Set("text", newVal);
+        //if (!valueIsChanging)
+        Set("text", newVal);
     }
 
-    private void UpdateValue(string section, string key, JsonValue val)
+    private void UpdateConfigValue(string section, string key, JsonValue val)
     {
-        if (section != this.section || key != this.key)
+        if (section != this.section || key != this.key || editingValue)
             return;
-        valueIsChanging = true;
+        //valueIsChanging = true;
         EmitSignal(SignalName.ConfigValueChanged, val.GetValue<string>());
-        valueIsChanging = false;
+        //valueIsChanging = false;
+    }
+
+    private void UpdateAccountValue(string key)
+    {
+        if (key != this.key || editingValue)
+            return;
+        EmitSignal(SignalName.ConfigValueChanged, GetCurrentValue());
     }
 
     string nextValue;
     double currentCooldown = 0;
+    bool editingValue = false;
     public void TrySetValue(string newValue)
     {
         if (currentCooldown <= 0)
+        {
             SetValue(newValue);
+        }
         else
         {
             currentCooldown = cooldown;
@@ -87,10 +105,21 @@ public partial class ConfigTextHook : Control
         }
     }
 
+    string GetCurrentValue()
+    {
+        if (accountMode)
+            return GameAccount.ActiveAccount.GetLocalData(key)?.ToString() ?? defaultValue;
+        return AppConfig.Get(section, key, defaultValue);
+    }
+
     void SetValue(string newValue)
     {
-        if (!valueIsChanging)
+        editingValue = true;
+        if (accountMode)
+            GameAccount.ActiveAccount.SetLocalData(key, newValue);
+        else
             AppConfig.Set(section, key, newValue);
+        editingValue = false;
     }
 
     public override void _Process(double delta)

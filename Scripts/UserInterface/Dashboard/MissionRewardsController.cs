@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using XmppDotNet.Xmpp.XHtmlIM;
 
 public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>
@@ -93,9 +94,26 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         GameMission.OnMissionsInvalidated += ClearMissions;
         GameAccount.ActiveAccountChanged += OnAccountChanged;
         GameAccount.RemindersChanged += FilterMissions;
+        GameAccount.LocalDataChanged += OnAccountDataChanged;
         AppConfig.OnConfigChanged += OnConfigChanged;
         VisibilityChanged += TryRefresh;
         FilterMissions();
+    }
+
+    public override void _ExitTree()
+    {
+        GameMission.OnMissionsUpdated -= FilterMissions;
+        GameMission.OnMissionsInvalidated -= ClearMissions;
+        GameAccount.ActiveAccountChanged -= OnAccountChanged;
+        GameAccount.RemindersChanged -= FilterMissions;
+        GameAccount.LocalDataChanged -= OnAccountDataChanged;
+        AppConfig.OnConfigChanged -= OnConfigChanged;
+    }
+
+    private void OnAccountDataChanged(string key)
+    {
+        if (key == "notable_mission_filter" && notableMode)
+            FilterMissions();
     }
 
     private void OnAccountChanged()
@@ -105,11 +123,11 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         FilterMissions();
     }
 
-    private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonValue value)
+    private void OnConfigChanged(string section, string key, JsonValue value)
     {
         if (section != "missions")
             return;
-        if (key == "notable_filter" && notableMode)
+        if (key == "lite_notable_filter" && notableMode)
             FilterMissions();
         if (key == "notable_count" && notableMode)
             FilterMissions();
@@ -141,14 +159,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         }
     }
 
-    public override void _ExitTree()
-    {
-        GameMission.OnMissionsUpdated -= FilterMissions;
-        GameMission.OnMissionsInvalidated -= ClearMissions;
-        GameAccount.ActiveAccountChanged -= OnAccountChanged;
-        GameAccount.RemindersChanged -= FilterMissions;
-        AppConfig.OnConfigChanged -= OnConfigChanged;
-    }
 
     public void TurnOffFilters()
     {
@@ -215,7 +225,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
     public static Func<GameItem, bool> CreateNotableFilter()
     {
-        var notableFilterText = AppConfig.Get("missions", "notable_filter", "");
+        var notableFilterText = GameAccount.ActiveAccount.isOwned ?
+            GameAccount.ActiveAccount.GetLocalData("notable_mission_filter")?.ToString() ?? "" :
+            AppConfig.Get("missions", "lite_notable_filter", "");
         if (string.IsNullOrWhiteSpace(notableFilterText))
         {
             notableFilterText = """
@@ -234,7 +246,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     bool needsRefresh = false;
     void FilterMissions()
     {
-        var missions = GameMission.currentMissions;
+        var missions = GameMission.MissionList;
         if (lockFilter || missions is null)
             return;
         if (emptyIcon is not null)
@@ -327,7 +339,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                     continue;
                 if(itemPredicate is not null && !itemPredicate(item))
                     continue;
-                filteredRewards.Add(new() { mission = mission, item = item });
+                filteredRewards.Add(new(mission, item));
             }
         }
 
@@ -398,8 +410,4 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     }
 }
 
-public struct MissionRewardPair
-{
-    public GameMission mission;
-    public GameItem item;
-}
+public record struct MissionRewardPair(GameMission mission, GameItem item);

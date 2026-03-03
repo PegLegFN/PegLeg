@@ -131,7 +131,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
         return mission.allItems.Any(item => MissionInterface.MatchItemOrEquivelent(item, itemSearchInstructions));
     }
 
-    public Predicate<GameItem> HighlightedItemFilter => ItemFilter;
+    public Func<GameItem, bool> HighlightedItemFilter => ItemFilter;
     bool ItemFilter(GameItem item) => itemSearchInstructions.Length > 0 && MissionInterface.MatchItemOrEquivelent(item, itemSearchInstructions);
     public void ClearMissions()
     {
@@ -162,7 +162,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
         missionList.Visible = true;
 
         var sortedMissions =
-            (GameMission.currentMissions?
+            (GameMission.MissionList?
             .Where(MissionFilter) ?? []).OrderBy(m=>1);
 
         if(requireAnyUnlockedForVisibility)

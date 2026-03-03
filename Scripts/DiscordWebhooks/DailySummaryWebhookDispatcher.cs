@@ -38,14 +38,14 @@ public partial class DailySummaryWebhookDispatcher : Node
             await Helpers.WaitForFrames(3);
         }
 
-        if (GameMission.currentMissions is null)
+        if (GameMission.MissionList is null)
             return;
         await webhook.Execute();
     }
 
     public async void ForceExecuteWebhook()
     {
-        if (GameMission.currentMissions is null)
+        if (GameMission.MissionList is null)
             await GameMission.UpdateMissions();
         await Helpers.WaitForFrames(3);
         await webhook.Execute(true);

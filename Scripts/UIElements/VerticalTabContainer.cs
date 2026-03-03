@@ -26,10 +26,12 @@ public partial class VerticalTabContainer : Node
         GenerateTabs();
         if (OS.HasFeature("editor_hint"))
         {
+            //ChildEnteredTree += PageAdded;
+            //ChildOrderChanged += RefreshTabs;
+            //ChildExitingTree += PageRemoved;
             pageParent.SafeConnect(SignalName.ChildEnteredTree, Callable.From<Node>(PageAdded));
             pageParent.SafeConnect(SignalName.ChildOrderChanged, Callable.From(RefreshTabs));
             pageParent.SafeConnect(SignalName.ChildExitingTree, Callable.From<Node>(PageRemoved));
-
         }
     }
 
@@ -91,6 +93,9 @@ public partial class VerticalTabContainer : Node
         lockTabs = true;
         if (OS.HasFeature("editor_hint") && pageParent?.IsInsideTree() == true)
         {
+            //ChildEnteredTree -= PageAdded;
+            //ChildOrderChanged -= RefreshTabs;
+            //ChildExitingTree -= PageRemoved;
             pageParent.SafeDisconnect(SignalName.ChildEnteredTree, Callable.From<Node>(PageAdded));
             pageParent.SafeDisconnect(SignalName.ChildOrderChanged, Callable.From(RefreshTabs));
             pageParent.SafeDisconnect(SignalName.ChildExitingTree, Callable.From<Node>(PageRemoved));

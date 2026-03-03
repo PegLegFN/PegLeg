@@ -35,7 +35,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
     [Signal]
     public delegate void MissionCompleteEventHandler(bool complete);
     [Signal]
-    public delegate void IsToDoEventHandler(bool locked);
+    public delegate void IsToDoEventHandler(bool todo);
 
     [Export]
     bool controlModifierParentLayoutProps = true;
@@ -78,7 +78,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
         //if (toDoListContent is not null)
         //    toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
         GameAccount.ActiveAccountChanged += AccountChanged;
-        MissionToDoListController.OnToDoListUpdated += ToDoListChanged;
+        MissionToDoListController.OnToDoListChanged += ToDoListChanged;
         AppConfig.OnConfigChanged += OnConfigChanged;
         EmitSignalBackgroundVisible(AppConfig.Get("missions", "show_background", true));
     }
@@ -100,13 +100,13 @@ public partial class MissionEntry : Control, IRecyclableEntry
     public override void _ExitTree()
     {
         GameAccount.ActiveAccountChanged -= AccountChanged;
-        MissionToDoListController.OnToDoListUpdated -= ToDoListChanged;
+        MissionToDoListController.OnToDoListChanged -= ToDoListChanged;
         AppConfig.OnConfigChanged -= OnConfigChanged;
     }
 
     private void ToDoListChanged()
     {
-        EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
+        EmitSignalIsToDo(IsFullyOnToDo());
     }
 
     private void AccountChanged()
@@ -118,7 +118,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
         );
 
         EmitSignalMissionComplete(
-            currentMission?.IsAlertCompleteFor(GameAccount.ActiveAccount) == true &&
+            currentMission?.AlertIsCompleteFor(GameAccount.ActiveAccount) == true &&
             !ignoreAccountStatus
         );
 
@@ -152,7 +152,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
         EmitSignalIconChanged(currentMission.missionGenerator.GetTexture(FnItemTextureType.Icon));
         EmitSignalPowerLevelChanged(currentMission.PowerLevel.ToString());
         EmitSignalBackgroundChanged(currentMission.backgroundTexture ?? defaultBackground);
-        EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(currentMission));
+        EmitSignalIsToDo(IsFullyOnToDo());
 
         EmitSignalMissionLocked(
             !AppConfig.Get("missions", "hide_lock", false) &&
@@ -161,7 +161,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
         );
 
         EmitSignalMissionComplete(
-            currentMission?.IsAlertCompleteFor(GameAccount.ActiveAccount) == true &&
+            currentMission?.AlertIsCompleteFor(GameAccount.ActiveAccount) == true &&
             !ignoreAccountStatus
         );
 
@@ -306,26 +306,31 @@ public partial class MissionEntry : Control, IRecyclableEntry
         UpdateHighlightedItems();
     }
 
-    void UpdateHighlightedItems()
+    IEnumerable<GameItem> HighlightItems
     {
-        if (highlightedRewardParent is null || currentMission is null)
-            return;
-        if (highlightedItemProvider?.HighlightedItemFilter is Predicate<GameItem> predicate)
+        get
         {
+            if (highlightedItemProvider?.HighlightedItemFilter is not Func<GameItem, bool> predicate)
+                return [];
             var rewards = fullItems ?
                 currentMission.allItems :
                 [.. currentMission.allItems
-                    .Where(r => 
-                        r.template.DisplayName != "Gold" && 
+                    .Where(r =>
+                        r.template.DisplayName != "Gold" &&
                         r.template.DisplayName != "Venture XP"
                     )
                     .OrderBy(r => -r.sortingTemplate.RarityLevel)
                     .ThenBy(r => -r.quantity)
                 ];
-            ApplyItems([.. rewards.Where(item => predicate(item))], highlightedRewardParent);
-            return;
+            return rewards.Where(predicate);
         }
-        ApplyItems([], highlightedRewardParent);
+    }
+
+    void UpdateHighlightedItems()
+    {
+        if (highlightedRewardParent is null || currentMission is null)
+            return;
+        ApplyItems([.. HighlightItems], highlightedRewardParent);
     }
 
     static void ApplyItems(GameItem[] itemArray, Control parent)
@@ -352,12 +357,35 @@ public partial class MissionEntry : Control, IRecyclableEntry
 
     public void InspectMission() => MissionViewer.ShowMission(currentMission);
 
-    public void AddToList() => MissionToDoListController.AddToList(currentMission);
-    public void RemoveFromList() => MissionToDoListController.RemoveFromList(currentMission);
+    public void AddToList()
+    {
+        foreach (var item in HighlightItems)
+        {
+            MissionToDoListController.AddToList(currentMission, item);
+        }
+    }
+
+    bool IsFullyOnToDo()
+    {
+        foreach (var item in HighlightItems)
+        {
+            if (!MissionToDoListController.IsOnToDoList(item))
+                return false;
+        }
+        return true;
+    }
+
+    public void RemoveFromList()
+    {
+        foreach (var item in HighlightItems)
+        {
+            MissionToDoListController.RemoveFromList(item);
+        }
+    }
 }
 
 public interface IMissionHighlightProvider
 {
     public event Action OnHighlightedItemFilterChanged;
-    public Predicate<GameItem> HighlightedItemFilter { get; }
+    public Func<GameItem, bool> HighlightedItemFilter { get; }
 }

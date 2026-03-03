@@ -143,7 +143,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 
         //GameAccount.ActiveAccountChanged += ForceReloadMissions;
 
-        if (GameMission.currentMissions is not null)
+        if (GameMission.MissionList is not null)
             OnMissionsUpdated();
         else
             GameMission.UpdateMissions().StartTask();
@@ -211,7 +211,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
                     return;
                 duration--;
             }
-            if (await GameMission.MissionsNeedUpdate() && GameMission.currentMissions is not null)
+            if (await GameMission.MissionsNeedUpdate() && GameMission.MissionList is not null)
             {
                 GD.Print("Unexpected reset detected");
                 NotificationManager.Push([UnexpectedResetNotif]);
@@ -324,7 +324,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         if (!IsVisibleInTree())
             return;
         needsFilter = false;
-        filteredMissions = GameMission.currentMissions?
+        filteredMissions = GameMission.MissionList?
             .Where(MissionFilter)
             .ToList() ?? [];
         missionList.UpdateList(true);

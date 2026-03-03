@@ -27,7 +27,7 @@ public static class WebHelpers
             if (plClient is not null)
                 return plClient;
             plClient = new HttpClient();
-            plClient.DefaultRequestHeaders.Add("User-Agent", "PegLeg"); //add pegleg version number?
+            plClient.DefaultRequestHeaders.Add("User-Agent", $"PegLeg/PegLeg-{AppConfig.PegLegVersion}");
             return plClient;
         }
     }

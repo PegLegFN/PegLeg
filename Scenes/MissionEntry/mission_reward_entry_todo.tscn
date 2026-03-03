@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://bo5ikr32xssoo"]
+
+[ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="1_f6754"]
+[ext_resource type="Texture2D" uid="uid://dffqg6jtdu38u" path="res://Images/InterfaceIcons/Icon_Seach_Close.png" id="2_q7arp"]
+[ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="3_jeodl"]
+
+[node name="MissionRewardEntry" unique_id=512148745 instance=ExtResource("1_f6754")]
+
+[node name="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" parent_id_path=PackedInt32Array(2059577110) index="0" unique_id=148889520]
+visible = false
+
+[node name="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" index="0" unique_id=267304898]
+texture = ExtResource("2_q7arp")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" parent_id_path=PackedInt32Array(2059577110) index="1" unique_id=1019756305]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Button2" type="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer" index="0" unique_id=39124377]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Move to top of To-Do List"
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer/Button2" index="0" unique_id=99216607]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_jeodl")
+expand_mode = 1
+
+[node name="Button3" type="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer" index="1" unique_id=920465741]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Move to bottom of To-Do List"
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer/Button3" index="0" unique_id=700571423]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_jeodl")
+expand_mode = 1
+flip_v = true
+
+[node name="Button4" type="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer" index="2" unique_id=536279400]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Remove from To-Do List"
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer/Button4" index="0" unique_id=464635305]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_q7arp")
+expand_mode = 1
+
+[connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer/Button2" to="." method="MoveToTop"]
+[connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer/Button3" to="." method="MoveToBottom"]
+[connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer/Button4" to="." method="RemoveFromList"]

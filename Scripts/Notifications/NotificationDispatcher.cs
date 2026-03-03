@@ -324,7 +324,7 @@ public partial class NotificationDispatcher : Node
     async Task<NotificationData[]> CheckMissions(CancellationToken ct)
     {
         await GameMission.CheckMissions();
-        if (GameMission.currentMissions is not GameMission[] missions || ct.IsCancellationRequested)
+        if (GameMission.MissionList is not GameMission[] missions || ct.IsCancellationRequested)
             return [];
 
         /* old text-based system

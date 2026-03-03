@@ -11,12 +11,14 @@ public partial class ControlMirror : Control
         await Helpers.WaitForFrame();
         if (basis is null)
             return;
+        //ItemRectChanged += UpdatePosAndSize;
         basis.SafeConnect(SignalName.ItemRectChanged, Callable.From(UpdatePosAndSize));
         UpdatePosAndSize();
     }
 
     public override void _ExitTree()
     {
+        //ItemRectChanged -= UpdatePosAndSize;
         basis.SafeDisconnect(SignalName.ItemRectChanged, Callable.From(UpdatePosAndSize));
     }
 

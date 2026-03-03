@@ -20,7 +20,7 @@ public partial class PerkViewer : Control
     [Export]
     Control interactionBlocker;
 
-    [Export(PropertyHint.ArrayType)]
+    [Export]
     PerkEntry[] currentPerkEntries;
 
     [Export]
@@ -29,8 +29,14 @@ public partial class PerkViewer : Control
     [Export]
     PerkEntry perkUpEntry;
 
-    [Export(PropertyHint.ArrayType)]
+    [Export]
     PerkEntry[] reperkEntries;
+
+    [Export]
+    Control costArea;
+
+    [Export]
+    GameItemCost[] costEntries;
 
     [Export]
     Button perkApplyButton;
@@ -277,28 +283,26 @@ public partial class PerkViewer : Control
 
         }
         costs ??= [];
+        var costItems = costs.Select(kvp => GameItemTemplate.Get(kvp.Key).CreateInstance(kvp.Value.GetValue<int>())).ToArray();
         bool allCostsMet = false;
-        for (int i = 0; i < costs.Count; i++)
+        for (int i = 0; i < costItems.Length; i++)
         {
-            var costItemEntry = costs.ElementAt(i);
-            var costItem = GameItemTemplate.Get(costItemEntry.Key);
-            int requiredAmount = costItemEntry.Value.GetValue<int>();
             //can safely assume that this is the AccountItem profile, and that it has been queried
-            var existingItem = currentItem.profile.GetTemplateItems(costItemEntry.Key).FirstOrDefault();
+            var existingItem = currentItem.profile.GetTemplateItems(costItems[i].templateId).FirstOrDefault();
             int existingAmount = existingItem?.quantity ?? 0;
-            if (existingAmount < requiredAmount)
+            if (existingAmount < costItems[i].quantity)
                 allCostsMet = false;
-            //reperkCostEntries[i].SetItem(existingItem ?? costItem.CreateInstance(0));
-            //reperkCostEntries[i].Visible = true;
+            costEntries[i].SetItem(existingItem ?? costItems[i]);
+            costEntries[i].Visible = true;
         }
-        GD.Print(allCostsMet);
-        //for (int i = costs.Count; i < reperkCostEntries.Length; i++)
-        //{
-        //    reperkCostEntries[i].Visible = false;
-        //}
+        GD.Print($"Perk affordable: {allCostsMet}");
+        for (int i = costItems.Length; i < costEntries.Length; i++)
+        {
+            costEntries[i].Visible = false;
+        }
         perkApplyButton.Visible = !selectedPerkLocked;
         // perma disable for now
-        perkApplyButton.Disabled = true;
+        //perkApplyButton.Disabled = true;
     }
 
     public void ApplyReplacementPerk()

@@ -203,6 +203,8 @@ public partial class GameAccount
     public static event Action ActiveAccountChanged;
     public static event Action RemindersChanged;
 
+    public static event Action<string> LocalDataChanged;
+
     public static async Task<bool> SetActiveAccount(string accountId, Action<string> progress = null)
     {
         if (!gameAccountCache.TryGetValue(accountId, out GameAccount account))
@@ -221,8 +223,13 @@ public partial class GameAccount
         progress?.Invoke("");
         _activeAccount = account;
         ActiveAccountChangedEarly?.Invoke();
-        ActiveAccountChanged?.Invoke();
         RemindersChanged?.Invoke();
+        var keys = account.localData.Select(x => x.Key).ToArray();
+        foreach (var key in keys)
+        {
+            LocalDataChanged?.Invoke(key);
+        }
+        ActiveAccountChanged?.Invoke();
         AppConfig.Set("account", "lastUsed", accountId);
         return true;
     }
@@ -632,9 +639,16 @@ public partial class GameAccount
 
     public async Task SaveDeviceDetails()
     {
-        //generate device details
         var deviceResponse = await FnWebAddresses.EpicAccount
             .MakeRequest($"account/api/public/account/{accountId}/deviceAuth", HttpMethod.Post)
+            .AddHeader("X-Epic-Device-Inf", 
+                new JsonObject()
+                {
+                    ["type"] = OS.GetName(),
+                    ["model"] = OS.GetModelName(),
+                    ["os"] = OS.GetVersion()
+                }.ToString()
+            )
             .SetAccount(this)
             .Send();
 
@@ -755,6 +769,9 @@ public partial class GameAccount
         }
         else
             localData[key] = value.SafeDeepClone();
+
+        if (this == GameAccount.ActiveAccount)
+            LocalDataChanged?.Invoke(key);
 
         if (!isValid || !localData.ContainsKey("DeviceDetails"))
             return;

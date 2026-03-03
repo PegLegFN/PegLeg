@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dahqdua15k62v"]
+[gd_scene format=3 uid="uid://dahqdua15k62v"]
 
 [ext_resource type="Script" uid="uid://ce73kldw4p5yw" path="res://Scripts/UserInterface/Dashboard/MissionRewardsController.cs" id="1_5wvbh"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="2_x6uk2"]
@@ -40,7 +40,7 @@ shader_parameter/UseShadow = true
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[node name="Notable" type="MarginContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="Notable" type="MarginContainer" unique_id=650228639 node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
@@ -57,32 +57,32 @@ typeFilters = []
 repeatabilityFilters = []
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1661216227]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1355230024]
 visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer" unique_id=835829657]
 layout_mode = 2
 button_pressed = true
 
-[node name="Node" type="Node" parent="VBoxContainer/HBoxContainer/CheckButton"]
+[node name="Node" type="Node" parent="VBoxContainer/HBoxContainer/CheckButton" unique_id=1689787148]
 script = ExtResource("2_x6uk2")
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1696919446]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Notable Rewards"
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=530096324]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer" unique_id=263457377 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_hph4w")
@@ -92,7 +92,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("4_hai2m")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/ScrollContainer" unique_id=33525325]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -101,31 +101,31 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer" unique_id=1801430277]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1984662401]
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=887429013]
 layout_mode = 2
 
-[node name="Padding" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=561523468]
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" instance=ExtResource("5_3tmod")]
+[node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" unique_id=532557855 instance=ExtResource("5_3tmod")]
 layout_mode = 2
 
-[node name="EmptyContent" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
+[node name="EmptyContent" type="MarginContainer" parent="VBoxContainer/MarginContainer" unique_id=113352342]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/EmptyContent"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/EmptyContent" unique_id=731122456]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/EmptyContent/HBoxContainer" unique_id=754544141]
 material = SubResource("ShaderMaterial_8h2ix")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -133,19 +133,19 @@ size_flags_horizontal = 0
 texture = ExtResource("7_tk817")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/EmptyContent/HBoxContainer" unique_id=288832284]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "No Notable Rewards 
 Instead, here's a cat"
 
-[node name="MissionCollection" parent="VBoxContainer" instance=ExtResource("8_kojpx")]
+[node name="MissionCollection" parent="VBoxContainer" unique_id=1123076066 instance=ExtResource("8_kojpx")]
 custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"Panel3PadB"
 testName = "PL160 Repeatable Rewards"
-testSearch = "LargeReward 160///bundle"
+testSearch = "\"Large Reward\" 160///bundle"
 sortByPower = true
 sortByZoneCat = true
 requireAnyUnlockedForVisibility = true

@@ -12,7 +12,6 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static ExternalCosmetics;
 
 public partial class GameMission
 {
@@ -20,7 +19,8 @@ public partial class GameMission
 
     public static event Action OnMissionsUpdated;
     public static event Action OnMissionsInvalidated;
-    public static GameMission[] currentMissions { get; private set; }
+    public static Dictionary<string, GameMission> MissionDict { get; private set; }
+    public static GameMission[] MissionList { get; private set; }
     public static DateTime missionReset { get; private set; }
     public static ImageTexture DailyCat {  get; private set; }
 
@@ -115,7 +115,8 @@ public partial class GameMission
         bool delayFirst = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
         bool retryLiteMissions = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second <30;;
 
-        currentMissions = null;
+        MissionDict = null;
+        MissionList = null;
         missionReset = DateTime.UtcNow;
         OnMissionsInvalidated?.Invoke();
 
@@ -208,7 +209,8 @@ public partial class GameMission
                 SendMissionsToBucket();
             }
 
-            currentMissions =
+            MissionDict = generatedMissions.ToDictionary(m => m.Guid);
+            MissionList =
             [
                 .. generatedMissions
                 .Where(m => m is not null)
@@ -301,7 +303,7 @@ public partial class GameMission
     {
         if (!AppConfig.Get("advanced", "archive_missions", false))
             return;
-        bool didArchive = ArchiveMissions(currentMissions, missionReset, out string archiveName, out string archivePath);
+        bool didArchive = ArchiveMissions(MissionList, missionReset, out string archiveName, out string archivePath);
         if (!didArchive)
             return;
         //optionally post a webhook message for each new file generated
@@ -787,6 +789,7 @@ public partial class GameMission
     public Tile tile { get; private set; }
     public Region[] regions { get; private set; }
 
+    public string Guid => missionData.missionGuid;
     public string DisplayName => missionGenerator?.DisplayName;
     public string Description => missionGenerator?.Description;
     public string Location => zoneTheme?.DisplayName;
@@ -827,7 +830,7 @@ public partial class GameMission
     public GameItem[] alertModifiers { get; private set; }
     public GameItem[] alertRewardItems { get; private set; }
 
-    public IEnumerable<GameItem> allItems => alertRewardItems?.Union(rewardItems) ?? rewardItems;
+    public GameItem[] allItems { get; private set; }
 
     GameMission(TheaterInfo theaterInfo, Region[] regions, Tile tile, MissionData missionData, AlertData alertData)
     {
@@ -915,6 +918,7 @@ public partial class GameMission
             alertRewardItemList.Add(item);
         }
         alertRewardItems = [.. alertRewardItemList];
+        allItems = [.. alertRewardItems ?? [], .. rewardItems];
     }
 
     void GenerateSearchTags()
@@ -964,7 +968,8 @@ public partial class GameMission
             tile?.requirements.MeetsRequirements(account, TheaterCat == "v")==true && 
             regions.All(r => r.requirements.MeetsRequirements(account, TheaterCat == "v"));
     }
-    public bool IsAlertCompleteFor(GameAccount account)
+
+    public bool AlertIsCompleteFor(GameAccount account)
     {
         if(alertData is null)
             return false;

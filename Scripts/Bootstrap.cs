@@ -276,6 +276,17 @@ public partial class Bootstrap : Node
             return;
         }
 
+        //migrate notable filter to accounts
+        if (AppConfig.TryGet<string>("missions", "notable_filter", out var filter))
+        {
+            foreach (var a in GameAccount.OwnedAccounts)
+            {
+                a.SetLocalData("notable_mission_filter", filter);
+            }
+            AppConfig.Set("missions", "lite_notable_filter", filter);
+            AppConfig.Clear("missions", "notable_filter");
+        }
+
         progressBar.Indeterminate = true;
         progressBar.Visible = true;
         progressBar.Value = 0;
