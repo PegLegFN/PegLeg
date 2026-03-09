@@ -34,7 +34,9 @@ public partial class Bootstrap : Node
     bool shareInEditor;
     [Export]
     GpuParticles2D downloadParticles;
+
     [ExportGroup("Scenes")]
+    [ExportSubgroup("Desktop")]
     [Export(PropertyHint.File, "*.tscn")]
     string testingSceneUid;
     [Export]
@@ -57,6 +59,16 @@ public partial class Bootstrap : Node
     string shareMenuUid;
     [Export]
     PackedScene shareMenu;
+    [ExportSubgroup("Mobile")]
+    [Export(PropertyHint.File, "*.tscn")]
+    string mobileInterfaceUid;
+    [Export]
+    PackedScene mobileInterface;
+    [Export(PropertyHint.File, "*.tscn")]
+    string mobileLiteInterfaceUid;
+    [Export]
+    PackedScene mobileLiteInterface;
+
     [ExportGroup("UserPrefs")]
     [Export]
     Control liteContent;
@@ -393,17 +405,28 @@ public partial class Bootstrap : Node
 
         
         PackedScene targetScene = null;
-
-        if (lite)
-            targetScene = liteInterface;
-        else if (!GameAccount.ActiveAccount.isOwned)
-            targetScene = desktopOnboarding;
-        else if (OS.HasFeature("editor") && testingScene is not null)
-            targetScene = testingScene;
-        else if (UseShareMenu)
-            targetScene = shareMenu;
+        if (OS.HasFeature("mobile"))// add config option to force desktop UI
+        {
+            if (lite)
+                targetScene = mobileLiteInterface;
+            else if (!GameAccount.ActiveAccount.isOwned)
+                targetScene = desktopOnboarding;
+            else
+                targetScene = mobileInterface;
+        }
         else
-            targetScene = desktopInterface;
+        {
+            if (lite)
+                targetScene = liteInterface;
+            else if (!GameAccount.ActiveAccount.isOwned)
+                targetScene = desktopOnboarding;
+            else if (OS.HasFeature("editor") && testingScene is not null)
+                targetScene = testingScene;
+            else if (UseShareMenu)
+                targetScene = shareMenu;
+            else
+                targetScene = desktopInterface;
+        }
 
         if(targetScene is not null)
             GetTree().ChangeSceneToPacked(targetScene);

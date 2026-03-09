@@ -678,6 +678,7 @@ public static partial class Helpers
         control.OffsetLeft = control.OffsetLeft;
         control.OffsetRight = control.OffsetRight;
     }
+
     public static void ResetOffsets(this Control control)
     {
         control.OffsetTop = 0;
@@ -685,6 +686,15 @@ public static partial class Helpers
         control.OffsetLeft = 0;
         control.OffsetRight = 0;
     }
+
+    public static void ResetAnchors(this Control control)
+    {
+        control.AnchorTop = 0;
+        control.AnchorBottom = 1;
+        control.AnchorLeft = 0;
+        control.AnchorRight = 1;
+    }
+
     public static void SafeConnect(this Node node, StringName signalName, Callable callable)
     {
         //var connections = node.GetSignalConnectionList(signalName);

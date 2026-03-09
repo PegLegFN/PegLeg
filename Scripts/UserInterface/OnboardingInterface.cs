@@ -2,8 +2,6 @@ using Godot;
 
 public partial class OnboardingInterface : Control
 {
-    [Export(PropertyHint.File, "*.tscn")]
-    string mainInterfacePath;
     [Export]
     float curtainOpenDuration = 0.25f;
     [Export]
@@ -71,37 +69,31 @@ public partial class OnboardingInterface : Control
         bool isBeta = AppConfig.PegLegVersion.IsBeta;
         string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
 
-        try
+        foreach (var file in DirAccess.GetFilesAt(fromPath))
         {
-            foreach (var file in DirAccess.GetFilesAt(fromPath))
-            {
-                DirAccess.CopyAbsolute($"{fromPath}/{file}", $"user://accounts/{file}");
-            }
-            GameAccount.UpdateAccountCache();
+            DirAccess.CopyAbsolute($"{fromPath}/{file}", $"user://accounts/{file}");
+        }
+        GameAccount.UpdateAccountCache();
 
-            if (!hasAccount)
+        if (!hasAccount)
+        {
+            foreach (var a in GameAccount.OwnedAccounts)
             {
-                foreach (var a in GameAccount.OwnedAccounts)
-                {
-                    if (!await a.SetAsActiveAccount())
-                        continue;
-                    hasAccount = true;
-                    break;
-                }
-            }
-            if (hasAccount)
-            {
-                ContinueToMainScene();
+                if (!await a.SetAsActiveAccount())
+                    continue;
+                hasAccount = true;
+                break;
             }
         }
-        finally
+        if (hasAccount)
         {
-            if (!hasAccount)
-            {
-                loginCodeContent.Visible = true;
-                loadingWheel.Visible = false;
-                importButton.Disabled = true;
-            }
+            GetTree().ChangeSceneToFile(bootScenePath);
+        }
+        else
+        {
+            loginCodeContent.Visible = true;
+            loadingWheel.Visible = false;
+            importButton.Disabled = true;
         }
     }
 
@@ -164,7 +156,6 @@ public partial class OnboardingInterface : Control
 
     void LoadMainScene()
     {
-        GetTree().ChangeSceneToFile(mainInterfacePath);
-        MusicController.ResumeMusic();
+        GetTree().ChangeSceneToFile(bootScenePath);
     }
 }

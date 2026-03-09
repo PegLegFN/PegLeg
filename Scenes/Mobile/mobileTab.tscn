@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://blolmuuxowxag"]
+
+[ext_resource type="Script" uid="uid://j3y0qknppuhg" path="res://Scripts/UIElements/VirtualTab.cs" id="1_hmc3c"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="1_krd23"]
+
+[node name="MobileTab" type="MarginContainer" unique_id=551792587 node_paths=PackedStringArray("button", "label", "labelPadding", "iconRect")]
+custom_minimum_size = Vector2(110, 60)
+offset_right = 100.0
+offset_bottom = 50.0
+script = ExtResource("1_hmc3c")
+ignoreMode = true
+Text = "Compendium"
+Icon = ExtResource("1_krd23")
+Tint = Color(1, 1, 1, 1)
+button = NodePath("Button")
+label = NodePath("MarginContainer/VBoxContainer/Label")
+labelPadding = NodePath("MarginContainer/VBoxContainer/Control")
+iconRect = NodePath("MarginContainer/VBoxContainer/TextureRect")
+
+[node name="Button" type="CheckButton" parent="." unique_id=934327706]
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"EmptySquareCheckButton"
+expand_icon = true
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1309277025]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1117229339]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=136501689]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("1_krd23")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1760736104]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 12
+text = "Compendium"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer" unique_id=330815358]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+mouse_filter = 2

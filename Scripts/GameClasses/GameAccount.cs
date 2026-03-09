@@ -449,26 +449,36 @@ public partial class GameAccount
                 GD.Print($"Refresh token error for {DisplayName}");
             }
             var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
-            var deviceRequest = await TargetClient.LoginWithDeviceAuth(DecryptDeviceDetails(dd));
-
-            (var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
-            if (!didError)
+            var ddJson = DecryptDeviceDetails(dd);
+            string failMsg = "";
+            bool offline = false;
+            if (ddJson is null)
             {
-                GD.Print($"Token created for {DisplayName}");
-                SetAuthentication(await deviceRequest.ReadJson());
-                return true;
+                failMsg = "Failed to decrypt auth data\n(You may have changed the name of your device)";
             }
+            else
+            {
+                var deviceRequest = await TargetClient.LoginWithDeviceAuth(ddJson);
 
-            //check if offline by pinging googles dns
-            bool offline = !await WebHelpers.Ping("8.8.8.8");
+                (var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
+                if (!didError)
+                {
+                    GD.Print($"Token created for {DisplayName}");
+                    SetAuthentication(await deviceRequest.ReadJson());
+                    return true;
+                }
 
-            string failMsg = offline ?
-                "Offline" :
-                (
-                    errorContent?["errorMessage"].ToString() ??
-                    deviceRequest.ReasonPhrase ??
-                    "Unknown error"
-                );
+                //check if offline by pinging googles dns
+                offline = !await WebHelpers.Ping("8.8.8.8");
+
+                failMsg = offline ?
+                    "Offline" :
+                    (
+                        errorContent?["errorMessage"].ToString() ??
+                        deviceRequest.ReasonPhrase ??
+                        "Unknown error"
+                    );
+            }
             GD.Print("Login failure: " + failMsg);
             if (!loginFailure)
             {
@@ -647,7 +657,7 @@ public partial class GameAccount
                     ["type"] = OS.GetName(),
                     ["model"] = OS.GetModelName(),
                     ["os"] = OS.GetVersion()
-                }.ToString()
+                }.ToJsonString()
             )
             .SetAccount(this)
             .Send();

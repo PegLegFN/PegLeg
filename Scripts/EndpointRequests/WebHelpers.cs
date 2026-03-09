@@ -350,8 +350,8 @@ public static class WebHelpers
 
         if (logError)
         {
-            string logMsg = $"Web Request Error when sending {response.RequestMessage.Method} to {response.RequestMessage.RequestUri}{(boundAccount is null ? "" : $" as {boundAccount.DisplayName}")}";
-            logMsg += $"\nStatusCode: {(int)response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}";
+            string logMsg = $"Web Request Error when sending {response?.RequestMessage?.Method} to {response?.RequestMessage?.RequestUri}{(boundAccount is null ? "" : $" as {boundAccount.DisplayName}")}";
+            logMsg += $"\nStatusCode: {(int)(response?.StatusCode ?? HttpStatusCode.Gone)}, ReasonPhrase: {response?.ReasonPhrase}";
             if (errorContent is not null)
                 logMsg += $"\nContent: \n{errorContent.ToJsonString()}";
             else if (fallbackErrorCode is not null)

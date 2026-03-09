@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://c78gt6b2m1utg"]
+[gd_scene format=3 uid="uid://c78gt6b2m1utg"]
 
 [ext_resource type="Script" uid="uid://c6amov6qaydfm" path="res://Scripts/UserInterface/MissionInterface.cs" id="1_474w2"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="2_88mxw"]
@@ -32,7 +32,7 @@
 [sub_resource type="ButtonGroup" id="ButtonGroup_fb3nj"]
 resource_name = "MissionZoneFilter"
 
-[node name="Missions" type="MarginContainer" node_paths=PackedStringArray("zoneFilterTabBar", "searchBar", "itemSearchBar", "playableFilter", "storyFilter", "missionList", "loadingIcon")]
+[node name="Missions" type="MarginContainer" unique_id=385091843 node_paths=PackedStringArray("zoneFilterTabBar", "searchBar", "itemSearchBar", "playableFilter", "storyFilter", "missionList", "loadingIcon")]
 self_modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,20 +50,20 @@ storyFilter = NodePath("VBoxContainer/HBoxContainer/Filters/StoryFilter/CheckBut
 missionList = NodePath("VBoxContainer/Control/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/Control/SmallLoadingIcon")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2037903816]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=745726291]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 
-[node name="ForceRefresh" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ForceRefresh" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=940053033]
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 tooltip_text = "Force Reload"
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ForceRefresh"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ForceRefresh" unique_id=1813565692]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -77,26 +77,26 @@ grow_vertical = 2
 texture = ExtResource("2_88mxw")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=2015091050]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_right = 10
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer" unique_id=507836529]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/MarginContainer" unique_id=1683513020]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1848130622]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = " Missions Reset: "
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=582851312]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "99:99:99"
@@ -104,25 +104,25 @@ vertical_alignment = 1
 script = ExtResource("2_rrtg2")
 timerType = 1
 
-[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" instance=ExtResource("6_xqcf1")]
+[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=942572656 instance=ExtResource("6_xqcf1")]
 custom_minimum_size = Vector2(69, 0)
 layout_mode = 2
 size_flags_vertical = 4
 formatType = 0
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer" unique_id=1204831389]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SearchBox" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="SearchBox" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=88616438]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search missions"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="SearchBox2" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="SearchBox2" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1429959454]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
@@ -130,7 +130,7 @@ placeholder_text = "Search items"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer" unique_id=915777175]
 visible = false
 layout_mode = 2
 selected = 0
@@ -140,21 +140,21 @@ popup/item_0/id = 0
 popup/item_1/text = "List View"
 popup/item_1/id = 1
 
-[node name="Filters" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="Filters" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=28244938]
 layout_mode = 2
 
-[node name="StoryFilter" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+[node name="StoryFilter" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters" unique_id=65889424]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/StoryFilter"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/StoryFilter" unique_id=1202760369]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 tooltip_text = "Only show Missions that accessible with your current Power Level"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/StoryFilter/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/StoryFilter/CheckButton" unique_id=901277349]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 1.0
@@ -165,19 +165,19 @@ grow_vertical = 2
 texture = ExtResource("6_jmsy3")
 expand_mode = 3
 
-[node name="PowerLevel" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+[node name="PowerLevel" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters" unique_id=1728286359]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel" unique_id=818433006]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 tooltip_text = "Only show Missions that can be accessed on this account"
 theme_type_variation = &"EmptyCheckButton"
 button_pressed = true
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton" unique_id=1422450998]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 1.0
@@ -188,7 +188,7 @@ grow_vertical = 2
 texture = ExtResource("7_0gdkn")
 expand_mode = 3
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/PowerLevel/CheckButton" unique_id=844993512]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 40.0
@@ -199,22 +199,22 @@ section = "missions"
 key = "filter_power_default"
 defaultValue = true
 
-[node name="ItemFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+[node name="ItemFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters" unique_id=1193044558]
 visible = false
 layout_mode = 2
 theme_type_variation = &"CheckGroupContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters" unique_id=2020436083]
 layout_mode = 2
 
-[node name="Survivors" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
+[node name="Survivors" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer" unique_id=1674559304]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Legendary Survivors
 Mythic Lead Survivors"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Survivors"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Survivors" unique_id=1665004449]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -228,13 +228,13 @@ texture = ExtResource("7_lvf0s")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Schematics" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
+[node name="Schematics" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer" unique_id=862620000]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Schematics"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Schematics"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Schematics" unique_id=1955687063]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -248,14 +248,14 @@ texture = ExtResource("7_nyegd")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Heroes" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
+[node name="Heroes" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer" unique_id=767307764]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Heros
 Defenders"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Heroes"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Heroes" unique_id=1829111277]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -269,13 +269,13 @@ texture = ExtResource("8_0gdkn")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="UpgradeMats" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
+[node name="UpgradeMats" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer" unique_id=2007574310]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Upgrade Materials"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/UpgradeMats"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/UpgradeMats" unique_id=2132977160]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -289,7 +289,7 @@ texture = ExtResource("10_5ywbn")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/UpgradeMats"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/UpgradeMats" unique_id=2041048101]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -303,13 +303,13 @@ texture = ExtResource("11_3yuk1")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PerkUps" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
+[node name="PerkUps" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer" unique_id=1380720212]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Perk-Up"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/PerkUps"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/PerkUps" unique_id=3499542]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -323,7 +323,7 @@ texture = ExtResource("12_jljfs")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/PerkUps"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/PerkUps" unique_id=187083340]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -337,13 +337,13 @@ texture = ExtResource("13_0u7ma")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Tickets" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer"]
+[node name="Tickets" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer" unique_id=1354553058]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Crafting Resources"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets" unique_id=1328989156]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -358,7 +358,7 @@ texture = ExtResource("15_618bo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets" unique_id=526249147]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -375,7 +375,7 @@ expand_mode = 1
 stretch_mode = 5
 flip_h = true
 
-[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect4" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets" unique_id=265450705]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -392,7 +392,7 @@ texture = ExtResource("17_n40x5")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets"]
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer/HBoxContainer/Filters/ItemFilters/HBoxContainer/Tickets" unique_id=515549693]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -407,24 +407,24 @@ texture = ExtResource("14_fvpat")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters"]
+[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/HBoxContainer/Filters" unique_id=1928769537]
 visible = false
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 script = ExtResource("4_ebt37")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters" unique_id=145120194]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Main" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="Main" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=316754428]
 layout_mode = 2
 tooltip_text = "Main Regions"
 theme_type_variation = &"LeftCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " M"
 
-[node name="All" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="All" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=1712635113]
 layout_mode = 2
 tooltip_text = "All Regions"
 theme_type_variation = &"MiddleCheckButton"
@@ -432,83 +432,83 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_fb3nj")
 text = "  All"
 
-[node name="Stonewood" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="Stonewood" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=1842362578]
 layout_mode = 2
 tooltip_text = "Stonewood"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = "  S"
 
-[node name="Plankerton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="Plankerton" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=645944568]
 layout_mode = 2
 tooltip_text = "Plankerton"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " P"
 
-[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=1634794194]
 layout_mode = 2
 tooltip_text = "Canney Valley"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " CV"
 
-[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=472138893]
 layout_mode = 2
 tooltip_text = "Twine Peaks"
 theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " TP"
 
-[node name="Ventures" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer"]
+[node name="Ventures" type="CheckButton" parent="VBoxContainer/HBoxContainer/Filters/ZoneFilters/HBoxContainer" unique_id=479850968]
 layout_mode = 2
 tooltip_text = "Ventures"
 theme_type_variation = &"RightCheckButton"
 button_group = SubResource("ButtonGroup_fb3nj")
 text = " V"
 
-[node name="VirtualTabBar" parent="VBoxContainer/HBoxContainer/Filters" instance=ExtResource("21_nyegd")]
+[node name="VirtualTabBar" parent="VBoxContainer/HBoxContainer/Filters" unique_id=368885773 instance=ExtResource("21_nyegd")]
 layout_mode = 2
 
-[node name="Tab6" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="0" instance=ExtResource("22_0gdkn")]
+[node name="Tab6" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="0" unique_id=1180699464 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-mode = -1
-text = "Main"
+Mode = -1
+Text = "All"
 IsPressed = true
 
-[node name="Tab7" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="1" instance=ExtResource("22_0gdkn")]
+[node name="Tab7" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="1" unique_id=1212275786 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-text = "All"
+Text = "Main"
 
-[node name="Tab" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="2" instance=ExtResource("22_0gdkn")]
+[node name="Tab" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="2" unique_id=2021996067 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-text = "Sw"
+Text = "Sw"
 
-[node name="Tab2" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="3" instance=ExtResource("22_0gdkn")]
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="3" unique_id=97528879 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-text = "Pl"
+Text = "Pl"
 
-[node name="Tab3" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="4" instance=ExtResource("22_0gdkn")]
+[node name="Tab3" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="4" unique_id=758409156 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-text = "CV"
+Text = "CV"
 
-[node name="Tab4" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="5" instance=ExtResource("22_0gdkn")]
+[node name="Tab4" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="5" unique_id=84126390 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-text = "TP"
+Text = "TP"
 
-[node name="Tab5" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="6" instance=ExtResource("22_0gdkn")]
+[node name="Tab5" parent="VBoxContainer/HBoxContainer/Filters/VirtualTabBar/HBoxContainer" index="6" unique_id=505715097 instance=ExtResource("22_0gdkn")]
 layout_mode = 2
-mode = 1
-text = "Ve"
+Mode = 1
+Text = "V"
 
-[node name="TestNotif" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="TestNotif" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1194298874]
 visible = false
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 tooltip_text = "Debug Notification"
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/TestNotif"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/TestNotif" unique_id=2085814533]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -522,7 +522,7 @@ grow_vertical = 2
 texture = ExtResource("5_6m3c7")
 expand_mode = 1
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/TestNotif"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/TestNotif" unique_id=1444637022]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 mouse_filter = 2
@@ -530,16 +530,16 @@ script = ExtResource("6_p6lk0")
 section = "advanced"
 key = "developer"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1140168866]
 visible = false
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 
-[node name="Control" type="MarginContainer" parent="VBoxContainer"]
+[node name="Control" type="MarginContainer" parent="VBoxContainer" unique_id=1634828159]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Control" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Control" unique_id=686139532 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
 script = ExtResource("16_egkbm")
@@ -550,7 +550,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("17_eyhau")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Control/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Control/ScrollContainer" unique_id=722007243]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 10
@@ -558,24 +558,24 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control/ScrollContainer/MarginContainer" unique_id=756244964]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1715227374]
 layout_mode = 2
 
-[node name="DynGridContainer" type="Container" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="Container" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer" unique_id=927960065]
 layout_mode = 2
 script = ExtResource("18_phyx5")
 MinCols = 3
 CompressSpacing = true
 Spacing = Vector2(5, 5)
 
-[node name="Padding" type="Control" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="VBoxContainer/Control/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1747068160]
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/Control" instance=ExtResource("26_nyegd")]
+[node name="SmallLoadingIcon" parent="VBoxContainer/Control" unique_id=418455841 instance=ExtResource("26_nyegd")]
 layout_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ForceRefresh" to="." method="ForceReloadMissions"]

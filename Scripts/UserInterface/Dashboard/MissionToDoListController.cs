@@ -13,6 +13,9 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
     [Export]
 	RecycleListContainer missionList;
 
+    [Export]
+    VirtualTab tab;
+
     DateTime lastKnownReset;
     List<MissionRewardDataPair> targetMissionRewardData = [];
     List<MissionRewardPair> targetMissionRewards = [];
@@ -116,7 +119,8 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	void UpdateList()
     {
         CheckForNewDay();
-        Name = $"To-Do List ({targetMissionRewards.Count})";
+        if (tab is not null)
+            tab.Text = $"To-Do List ({targetMissionRewards.Count})";
         missionList.UpdateList(true);
     }
 

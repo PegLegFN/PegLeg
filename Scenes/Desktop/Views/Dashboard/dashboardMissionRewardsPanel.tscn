@@ -1,40 +1,45 @@
-[gd_scene load_steps=6 format=3 uid="uid://bqa4bddqjpu7q"]
+[gd_scene format=3 uid="uid://bqa4bddqjpu7q"]
 
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="1_03c78"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="2_tjeuk"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_381en"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_koprm"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="5_tfkul"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="6_47w4d"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="7_03c78"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="8_381en"]
+[ext_resource type="Texture2D" uid="uid://dc6umid5fw8b3" path="res://Images/InterfaceIcons/T-Icon-Manage-All-512.png" id="9_koprm"]
+[ext_resource type="Texture2D" uid="uid://bashr5wthp5vk" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_List_128.png" id="10_tfkul"]
 
-[node name="MissionRewards" type="PanelContainer"]
+[node name="MissionRewards" type="PanelContainer" unique_id=1036371064]
 theme_type_variation = &"Panel3PadB"
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="."]
+[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1412053505]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer3" unique_id=1168126100]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer3/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer3/HBoxContainer" unique_id=1757746236]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Mission Rewards"
 
-[node name="Label2" type="Label" parent="VBoxContainer3/HBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer3/HBoxContainer" unique_id=1784471489]
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("1_03c78")
 timerType = 1
 
-[node name="Button" type="Button" parent="VBoxContainer3/HBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=1771145246]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button" unique_id=1379644798]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -49,14 +54,14 @@ texture = ExtResource("2_tjeuk")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Button2" type="Button" parent="VBoxContainer3/HBoxContainer"]
+[node name="Button2" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=316163759]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button2"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button2" unique_id=896569767]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -71,14 +76,14 @@ texture = ExtResource("3_381en")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Button3" type="Button" parent="VBoxContainer3/HBoxContainer"]
+[node name="Button3" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=798965087]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/Button3"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/Button3" unique_id=622625741]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 40.0
@@ -88,7 +93,7 @@ script = ExtResource("4_koprm")
 section = "webhooks"
 key = "dailySummary_enabled"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button3"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button3" unique_id=2049114806]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -103,9 +108,44 @@ texture = ExtResource("5_tfkul")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer3"]
+[node name="VirtualTabBar" parent="VBoxContainer3" unique_id=1243899430 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("6_47w4d")]
+layout_mode = 2
+useAsTabContainer = NodePath("../Tabs")
+
+[node name="Tab" parent="VBoxContainer3/VirtualTabBar/HBoxContainer" index="0" unique_id=1466007698 instance=ExtResource("7_03c78")]
+layout_mode = 2
+size_flags_horizontal = 3
+mode = -1
+text = "Notable"
+icon = ExtResource("8_381en")
+IsPressed = true
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab2" parent="VBoxContainer3/VirtualTabBar/HBoxContainer" index="1" unique_id=759243380 instance=ExtResource("7_03c78")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "All"
+icon = ExtResource("9_koprm")
+Tint = Color(1, 1, 1, 1)
+
+[node name="Tab3" parent="VBoxContainer3/VirtualTabBar/HBoxContainer" index="2" unique_id=27329300 instance=ExtResource("7_03c78")]
+layout_mode = 2
+size_flags_horizontal = 3
+mode = 1
+text = "To-Do List"
+icon = ExtResource("10_tfkul")
+Tint = Color(1, 1, 1, 1)
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer3" unique_id=1431888005]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tabs" type="MarginContainer" parent="VBoxContainer3" unique_id=798859068]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
 [connection signal="ConfigValueChanged" from="VBoxContainer3/HBoxContainer/Button3/CheckButton" to="VBoxContainer3/HBoxContainer/Button3" method="set_visible"]
+
+[editable path="VBoxContainer3/VirtualTabBar"]

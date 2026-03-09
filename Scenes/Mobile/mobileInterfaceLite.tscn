@@ -1,0 +1,567 @@
+[gd_scene format=3 uid="uid://paxd1k7qkjb0"]
+
+[ext_resource type="Script" uid="uid://b6cj12kg8rwbh" path="res://Scripts/TargetResolutionSetter.cs" id="1_42clp"]
+[ext_resource type="Script" uid="uid://dvt4k5o8may3h" path="res://Scripts/Audio/AutoButtonSounds.cs" id="2_be644"]
+[ext_resource type="Script" uid="uid://b3iwjw1wn5hoe" path="res://Scripts/RefreshTimerController.cs" id="3_yt4hl"]
+[ext_resource type="Script" uid="uid://dibhuhscalt6l" path="res://Scripts/ThemeController.cs" id="4_5f78e"]
+[ext_resource type="Script" uid="uid://c2hxn6v6r3mvf" path="res://Scripts/BackgroundController.cs" id="5_fmmwm"]
+[ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="6_6fyfh"]
+[ext_resource type="PackedScene" uid="uid://fxae8lbjmmsd" path="res://Scenes/Mobile/Views/Lite/mobileLiteDashboardView.tscn" id="7_42clp"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="8_13d46"]
+[ext_resource type="PackedScene" uid="uid://cl6kj5e8gsgda" path="res://Scenes/Desktop/Views/Dashboard/dashboardAllRewards.tscn" id="8_ykl6f"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="9_18o2w"]
+[ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/VirtualTabBar.cs" id="10_0ew5y"]
+[ext_resource type="PackedScene" uid="uid://blolmuuxowxag" path="res://Scenes/Mobile/mobileTab.tscn" id="11_ykl6f"]
+[ext_resource type="Texture2D" uid="uid://keamxifwlhd1" path="res://Images/InterfaceIcons/MainTabs/DashboardTab.png" id="12_gm8sj"]
+[ext_resource type="Texture2D" uid="uid://3f5guoaak2tu" path="res://Images/InterfaceIcons/MainTabs/MissionsTab.png" id="13_gn42i"]
+[ext_resource type="Texture2D" uid="uid://cq3wa75psivkx" path="res://Images/InterfaceIcons/MainTabs/TimelineTab.png" id="14_av06x"]
+[ext_resource type="Texture2D" uid="uid://dgli85avjiv43" path="res://Images/InterfaceIcons/MainTabs/CompendiumTab.png" id="15_yp65m"]
+[ext_resource type="Texture2D" uid="uid://cfx4knco7h1e0" path="res://Images/InterfaceIcons/MainTabs/VenturesTab.png" id="16_p7ni3"]
+[ext_resource type="PackedScene" uid="uid://53fn442ut5dy" path="res://Scenes/Desktop/Overlays/mission_viewer.tscn" id="17_by55c"]
+[ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="17_fmmwm"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="18_6fyfh"]
+[ext_resource type="PackedScene" uid="uid://buf6p8qyydofm" path="res://Scenes/Desktop/Overlays/game_item_viewer.tscn" id="18_13d46"]
+[ext_resource type="Texture2D" uid="uid://boywmwfvrbmwp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Cogs_128.png" id="18_gm8sj"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="19_0ew5y"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="19_by55c"]
+[ext_resource type="Script" uid="uid://dbi4mg37e4bvq" path="res://Scripts/CurtainOpener.cs" id="20_13d46"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="20_ykl6f"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="21_gm8sj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gm8sj"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = true
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gn42i"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_av06x"]
+resource_name = "ItemViewerChoices"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yp65m"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7ni3"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7wl8t"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3livd"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_goc6n"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("20_ykl6f")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gaaam"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s52dk"]
+resource_local_to_scene = true
+shader = ExtResource("19_0ew5y")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("21_gm8sj")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_18o2w"]
+shader = ExtResource("17_fmmwm")
+shader_parameter/ControlSize = Vector2(512, 960)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = true
+shader_parameter/Scale = 2.0
+shader_parameter/Speed = 0.05
+shader_parameter/Progress = 0.0
+shader_parameter/ClipOOB = false
+
+[node name="Root" type="Control" unique_id=820721531]
+custom_minimum_size = Vector2(480, 960)
+layout_mode = 3
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NonUI" type="Node" parent="." unique_id=157346374]
+
+[node name="TargetResolution" type="Node" parent="NonUI" unique_id=1857801484 node_paths=PackedStringArray("rootNode")]
+script = ExtResource("1_42clp")
+rootNode = NodePath("../..")
+TargetResolution = Vector2i(480, 960)
+
+[node name="AutoButtonSounds" type="Node" parent="NonUI" unique_id=52738007]
+script = ExtResource("2_be644")
+
+[node name="RefreshTimerController" type="Node" parent="NonUI" unique_id=1578217017]
+script = ExtResource("3_yt4hl")
+
+[node name="ThemeController" type="Node" parent="NonUI" unique_id=1289370866]
+script = ExtResource("4_5f78e")
+
+[node name="BGController" type="Control" parent="." unique_id=1636264713 node_paths=PackedStringArray("bgMain", "bgOverlay")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_fmmwm")
+bgMain = NodePath("BG")
+bgOverlay = NodePath("BGFade")
+
+[node name="BG" type="TextureRect" parent="BGController" unique_id=779733665]
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_6fyfh")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BGFade" type="TextureRect" parent="BGController" unique_id=602532029]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_6fyfh")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Content" type="MarginContainer" parent="." unique_id=966273300]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content" unique_id=13439998]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Content/VBoxContainer" unique_id=752554821]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/scroll_hint_vertical_color = Color(0.05, 0.05, 0.05, 1)
+vertical_scroll_mode = 4
+
+[node name="TabPages" type="MarginContainer" parent="Content/VBoxContainer/ScrollContainer" unique_id=928596017]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 2
+
+[node name="MobileDashboardView" parent="Content/VBoxContainer/ScrollContainer/TabPages" unique_id=1679969338 instance=ExtResource("7_42clp")]
+visible = false
+layout_mode = 2
+
+[node name="Missions" type="MarginContainer" parent="Content/VBoxContainer/ScrollContainer/TabPages" unique_id=1287373218]
+layout_mode = 2
+theme_override_constants/margin_bottom = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="Content/VBoxContainer/ScrollContainer/TabPages/Missions" unique_id=686594244]
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/VBoxContainer/ScrollContainer/TabPages/Missions/PanelContainer" unique_id=1048681450]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/VBoxContainer/ScrollContainer/TabPages/Missions/PanelContainer/VBoxContainer" unique_id=1381640052]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Mission Rewards"
+
+[node name="All" parent="Content/VBoxContainer/ScrollContainer/TabPages/Missions/PanelContainer/VBoxContainer" unique_id=887790858 instance=ExtResource("8_ykl6f")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Content/VBoxContainer" unique_id=1033264984]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="SubTabs" parent="Content/VBoxContainer/MarginContainer" unique_id=83260719 instance=ExtResource("8_13d46")]
+layout_mode = 2
+
+[node name="Tab" parent="Content/VBoxContainer/MarginContainer/SubTabs/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("9_18o2w")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = "Notable"
+
+[node name="Tab2" parent="Content/VBoxContainer/MarginContainer/SubTabs/HBoxContainer" index="1" unique_id=260372451 instance=ExtResource("9_18o2w")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "All"
+
+[node name="Tab3" parent="Content/VBoxContainer/MarginContainer/SubTabs/HBoxContainer" index="2" unique_id=196392655 instance=ExtResource("9_18o2w")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "To-Do List"
+
+[node name="Tab4" parent="Content/VBoxContainer/MarginContainer/SubTabs/HBoxContainer" index="3" unique_id=1289353664 instance=ExtResource("9_18o2w")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = "Summary"
+IsPressed = true
+
+[node name="TabButtons" type="PanelContainer" parent="Content/VBoxContainer" unique_id=1631730921 node_paths=PackedStringArray("virtualTabParent", "useAsTabContainer")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_type_variation = &"Panel3Pad"
+script = ExtResource("10_0ew5y")
+virtualTabScene = ExtResource("11_ykl6f")
+virtualTabParent = NodePath("ScrollContainer/MarginContainer/HBoxContainer")
+useAsTabContainer = NodePath("../ScrollContainer/TabPages")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Content/VBoxContainer/TabButtons" unique_id=496799824]
+layout_mode = 2
+theme_override_colors/scroll_hint_horizontal_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+scroll_hint_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Content/VBoxContainer/TabButtons/ScrollContainer" unique_id=2124378808]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer" unique_id=501107374]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="MobileTab8" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1181839167 instance=ExtResource("11_ykl6f")]
+layout_mode = 2
+Text = "Daily Summary"
+Icon = ExtResource("12_gm8sj")
+
+[node name="MobileTab" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=551792587 instance=ExtResource("11_ykl6f")]
+layout_mode = 2
+Text = "Missions"
+Icon = ExtResource("13_gn42i")
+
+[node name="MobileTab2" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1331393051 instance=ExtResource("11_ykl6f")]
+visible = false
+layout_mode = 2
+Text = "Timeline"
+Icon = ExtResource("14_av06x")
+
+[node name="MobileTab3" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=617466781 instance=ExtResource("11_ykl6f")]
+layout_mode = 2
+Icon = ExtResource("15_yp65m")
+
+[node name="MobileTab4" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1501118905 instance=ExtResource("11_ykl6f")]
+layout_mode = 2
+Text = "Ventures"
+Icon = ExtResource("16_p7ni3")
+
+[node name="MobileTab5" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1806290702 instance=ExtResource("11_ykl6f")]
+layout_mode = 2
+Text = "Settings"
+Icon = ExtResource("18_gm8sj")
+
+[node name="MobileTab6" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=744745049 instance=ExtResource("11_ykl6f")]
+visible = false
+layout_mode = 2
+
+[node name="MobileTab7" parent="Content/VBoxContainer/TabButtons/ScrollContainer/MarginContainer/HBoxContainer" unique_id=259564635 instance=ExtResource("11_ykl6f")]
+visible = false
+layout_mode = 2
+
+[node name="OverlayWindows" type="Control" parent="." unique_id=1010812761]
+z_index = 15
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MissionViewer" parent="OverlayWindows" unique_id=355445015 instance=ExtResource("17_by55c")]
+visible = false
+z_index = -3
+layout_mode = 1
+offset_left = 0.0
+offset_right = 0.0
+
+[node name="CenterContainer" parent="OverlayWindows/MissionViewer/Control/WindowContents" parent_id_path=PackedInt32Array(355445015, 1567660947) index="0" unique_id=2108655950]
+scale = Vector2(0.75, 0.75)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="GameItemViewer" parent="OverlayWindows" unique_id=1687330932 instance=ExtResource("18_13d46")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="CenterContainer" parent="OverlayWindows/GameItemViewer/Control/WindowContents" parent_id_path=PackedInt32Array(1687330932, 1567660947) index="0" unique_id=655177042]
+scale = Vector2(0.91, 0.91)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="MainContent" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window" parent_id_path=PackedInt32Array(1687330932, 130040293) index="0" unique_id=32777660]
+columns = 1
+
+[node name="CommonItemDetails" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent" index="0" unique_id=546236768]
+size_flags_horizontal = 3
+
+[node name="GridContainer" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails" index="0" unique_id=1301900661]
+columns = 2
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/RewardEntry" parent_id_path=PackedInt32Array(1687330932, 1774023433) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_gm8sj")
+
+[node name="DescriptionAndUpgradeCosts" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer" index="1" unique_id=1619689312]
+size_flags_horizontal = 3
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 249909613) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_gn42i")
+
+[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control" parent_id_path=PackedInt32Array(1687330932, 228332598) index="1" unique_id=895210744]
+button_group = SubResource("ButtonGroup_av06x")
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 1929620437) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_yp65m")
+
+[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2" parent_id_path=PackedInt32Array(1687330932, 1678473235) index="1" unique_id=1897317201]
+button_group = SubResource("ButtonGroup_av06x")
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 120210783) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_p7ni3")
+
+[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3" parent_id_path=PackedInt32Array(1687330932, 1406663981) index="1" unique_id=1007817772]
+button_group = SubResource("ButtonGroup_av06x")
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 1483141880) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_7wl8t")
+
+[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4" parent_id_path=PackedInt32Array(1687330932, 1108073031) index="1" unique_id=571658869]
+button_group = SubResource("ButtonGroup_av06x")
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 1103500248) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_3livd")
+
+[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2" parent_id_path=PackedInt32Array(1687330932, 459272833) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_goc6n")
+
+[node name="Icon" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1687330932, 1246146297) index="0" unique_id=1191338159]
+material = SubResource("ShaderMaterial_gaaam")
+
+[node name="Icon" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(1687330932, 527594733) index="0" unique_id=452191492]
+material = SubResource("ShaderMaterial_s52dk")
+
+[node name="GridContainer" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer3" parent_id_path=PackedInt32Array(1687330932, 1225585210) index="1" unique_id=1350815583]
+columns = 4
+
+[node name="Curtain" type="TextureRect" parent="." unique_id=1969003210]
+visible = false
+self_modulate = Color(0.25, 0.25, 0.25, 1)
+z_index = 50
+texture_repeat = 2
+material = SubResource("ShaderMaterial_18o2w")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_6fyfh")
+script = ExtResource("19_by55c")
+syncControlSize = true
+modTime = 8.0
+
+[node name="CurtainOpener" type="Node" parent="Curtain" unique_id=336674561 node_paths=PackedStringArray("curtain")]
+script = ExtResource("20_13d46")
+curtain = NodePath("..")
+
+[editable path="Content/VBoxContainer/MarginContainer/SubTabs"]
+[editable path="OverlayWindows/MissionViewer"]
+[editable path="OverlayWindows/MissionViewer/Control/WindowContents/CenterContainer/MissionEntry/PowerLevel/PowerLevelIndicator"]
+[editable path="OverlayWindows/MissionViewer/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel/PowerLevelIndicator"]
+[editable path="OverlayWindows/GameItemViewer"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/RewardEntry"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/Control/PowerLevelIndicator"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/ModeSelector"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/LevelUpOrEvolve/CoreSelector"]
+[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer2/VirtualTabBar"]

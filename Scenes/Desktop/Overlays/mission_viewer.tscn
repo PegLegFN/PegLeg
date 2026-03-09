@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://53fn442ut5dy"]
+[gd_scene format=3 uid="uid://53fn442ut5dy"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_8m0vl"]
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="2_shdc5"]
@@ -46,14 +46,14 @@ shader_parameter/Expo = false
 shader_parameter/AlphaStart = 0.8
 shader_parameter/CornerRadius = 48.0
 
-[node name="MissionViewer" node_paths=PackedStringArray("missionEntry", "secondMissionEntry") instance=ExtResource("1_8m0vl")]
+[node name="MissionViewer" unique_id=682005821 node_paths=PackedStringArray("missionEntry", "secondMissionEntry") instance=ExtResource("1_8m0vl")]
 theme = ExtResource("2_shdc5")
 script = ExtResource("3_nhmtr")
 missionEntry = NodePath("Control/WindowContents/CenterContainer/MissionEntry")
 secondMissionEntry = NodePath("SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry")
 isUserClosable = true
 
-[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" index="0"]
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=2108655950]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -67,7 +67,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MissionEntry" type="MarginContainer" parent="Control/WindowContents/CenterContainer" index="0" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
+[node name="MissionEntry" type="MarginContainer" parent="Control/WindowContents/CenterContainer" index="0" unique_id=1410541284 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
 layout_mode = 2
 script = ExtResource("3_tqai8")
 fullItems = true
@@ -79,11 +79,11 @@ alertRewardLayout = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewar
 alertRewardParent = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer")
 defaultBackground = ExtResource("4_n2q53")
 
-[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/MissionEntry" index="0"]
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/MissionEntry" index="0" unique_id=283438742]
 layout_mode = 2
 theme_type_variation = &"SecondaryPanel"
 
-[node name="MissionBackground" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry" index="1"]
+[node name="MissionBackground" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry" index="1" unique_id=1569721292]
 material = SubResource("ShaderMaterial_8qkd3")
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
@@ -93,7 +93,7 @@ expand_mode = 1
 script = ExtResource("26_klq7w")
 syncControlSize = true
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MissionBackground" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MissionBackground" index="0" unique_id=2066079708]
 self_modulate = Color(0.145098, 0.145098, 0.145098, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -103,28 +103,28 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_kn5b0")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry" index="2"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry" index="2" unique_id=1771359698]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer" index="0" unique_id=60623229]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer" index="0" unique_id=1244004769]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="0" unique_id=733008137]
 layout_mode = 2
 theme_override_constants/margin_left = -24
 theme_override_constants/margin_top = -8
 theme_override_constants/margin_right = -8
 theme_override_constants/margin_bottom = -8
 
-[node name="ColorRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/MarginContainer" index="0"]
+[node name="ColorRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/MarginContainer" index="0" unique_id=1260520212]
 material = SubResource("ShaderMaterial_c25kl")
 layout_mode = 2
 mouse_filter = 2
@@ -132,24 +132,24 @@ color = Color(0, 0, 0, 0.501961)
 script = ExtResource("26_klq7w")
 syncControlSize = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="1" unique_id=1053974576]
 layout_mode = 2
 
-[node name="MissionIcon" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0"]
+[node name="MissionIcon" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0" unique_id=205249468]
 layout_mode = 2
 texture = ExtResource("3_vntdm")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1" unique_id=2125764966]
 custom_minimum_size = Vector2(225, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = -4
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0" unique_id=1518777854]
 layout_mode = 2
 
-[node name="Mission Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+[node name="Mission Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0" unique_id=364745085]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -4
@@ -157,14 +157,14 @@ theme_override_font_sizes/font_size = 32
 text = "Mission name"
 vertical_alignment = 1
 
-[node name="ShareBtn" type="Button" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="1"]
+[node name="ShareBtn" type="Button" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="1" unique_id=685787341]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShareBtn" index="0"]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ShareBtn" index="0" unique_id=483474041]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -178,188 +178,188 @@ grow_vertical = 2
 texture = ExtResource("11_8mrrf")
 expand_mode = 1
 
-[node name="Zone Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
+[node name="Zone Name" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1" unique_id=1346086123]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 16
 text = "Zone name"
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="2"]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="2" unique_id=2045577691]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="3"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="3" unique_id=1153829301]
 layout_mode = 2
 size_flags_vertical = 3
 text = "This description is a placeholder description. This description is a placeholder description. This description is a placeholder description. "
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer" index="1"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer" index="1" unique_id=1986625350]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Modifiers" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="0"]
+[node name="Modifiers" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="0" unique_id=520092536]
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="MissionAlertItemEntry" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="0"]
+[node name="MissionAlertItemEntry" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="0" unique_id=1755487431]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="0" unique_id=884786177]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="1" unique_id=887820332]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="1"]
+[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="1" unique_id=1380903279]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="0" unique_id=1616963819]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="1" unique_id=1202449875]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="2"]
+[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="2" unique_id=1875091438]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="0" unique_id=1370379992]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="1" unique_id=1409338962]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="3"]
+[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="3" unique_id=83224139]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="0" unique_id=816483345]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="1" unique_id=268985027]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry5" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="4"]
+[node name="MissionAlertItemEntry5" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="4" unique_id=612567645]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="0" unique_id=67682153]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="1"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="1" unique_id=1085400142]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="Rewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="1"]
+[node name="Rewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="1" unique_id=231420253]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MissionRewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="0"]
+[node name="MissionRewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="0" unique_id=2032120874]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="0" unique_id=1338438196]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Mission Rewards"
 
-[node name="HBoxContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1"]
+[node name="HBoxContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1" unique_id=1428183989]
 layout_mode = 2
 columns = 4
 
-[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="0" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="0" unique_id=1187341120 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal2" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="1" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal2" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="1" unique_id=1419821756 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal3" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="2" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal3" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="2" unique_id=106126041 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="3" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="3" unique_id=796855625 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="4" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="4" unique_id=1636248304 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal6" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="5" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal6" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="5" unique_id=400899440 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="AlertRewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="1"]
+[node name="AlertRewards" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="1" unique_id=1932469142]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="0"]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="0" unique_id=106092827]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Alert Rewards"
 
-[node name="HBoxContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="1"]
+[node name="HBoxContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="1" unique_id=1992641781]
 layout_mode = 2
 size_flags_horizontal = 0
 columns = 3
 
-[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="0" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="0" unique_id=641066278 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal2" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="1" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal2" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="1" unique_id=999582461 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal3" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal3" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" unique_id=263424090 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal4" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" unique_id=671186588 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal5" parent="Control/WindowContents/CenterContainer/MissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" unique_id=1098153503 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="PowerLevel" type="Control" parent="Control/WindowContents/CenterContainer/MissionEntry" index="3"]
+[node name="PowerLevel" type="Control" parent="Control/WindowContents/CenterContainer/MissionEntry" index="3" unique_id=162621412]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="PowerLevelIndicator" parent="Control/WindowContents/CenterContainer/MissionEntry/PowerLevel" index="0" instance=ExtResource("13_ffxkp")]
+[node name="PowerLevelIndicator" parent="Control/WindowContents/CenterContainer/MissionEntry/PowerLevel" index="0" unique_id=59798989 instance=ExtResource("13_ffxkp")]
 layout_mode = 0
 offset_top = 17.0
 offset_bottom = 41.0
 
-[node name="SubViewportContainer4" type="SubViewportContainer" parent="." index="3"]
+[node name="SubViewportContainer4" type="SubViewportContainer" parent="." index="3" unique_id=326921117]
 visible = false
 layout_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="XpSummaryViewport" type="SubViewport" parent="SubViewportContainer4" index="0" node_paths=PackedStringArray("matchSize")]
+[node name="XpSummaryViewport" type="SubViewport" parent="SubViewportContainer4" index="0" unique_id=1979386500 node_paths=PackedStringArray("matchSize")]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
@@ -367,9 +367,9 @@ render_target_update_mode = 0
 script = ExtResource("16_qw5ag")
 matchSize = NodePath("PegLegWatermark")
 
-[node name="PegLegWatermark" parent="SubViewportContainer4/XpSummaryViewport" index="0" instance=ExtResource("17_8mrrf")]
+[node name="PegLegWatermark" parent="SubViewportContainer4/XpSummaryViewport" index="0" unique_id=288917221 instance=ExtResource("17_8mrrf")]
 
-[node name="SharedMissionEntry" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark" index="1" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
+[node name="SharedMissionEntry" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark" index="1" unique_id=165340269 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
 layout_mode = 2
 script = ExtResource("3_tqai8")
 fullItems = true
@@ -381,11 +381,11 @@ alertRewardLayout = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewar
 alertRewardParent = NodePath("MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer")
 defaultBackground = ExtResource("4_n2q53")
 
-[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="0"]
+[node name="Panel" type="Panel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="0" unique_id=1523485168]
 layout_mode = 2
 theme_type_variation = &"SecondaryPanel"
 
-[node name="MissionBackground" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="1"]
+[node name="MissionBackground" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="1" unique_id=222895014]
 material = SubResource("ShaderMaterial_8qkd3")
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
@@ -395,7 +395,7 @@ expand_mode = 1
 script = ExtResource("26_klq7w")
 syncControlSize = true
 
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MissionBackground" index="0"]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MissionBackground" index="0" unique_id=892394057]
 self_modulate = Color(0.145098, 0.145098, 0.145098, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -405,28 +405,28 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_kn5b0")
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="2"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="2" unique_id=130535015]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer" index="0" unique_id=1549318381]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer" index="0" unique_id=249352223]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="0" unique_id=1032769349]
 layout_mode = 2
 theme_override_constants/margin_left = -24
 theme_override_constants/margin_top = -8
 theme_override_constants/margin_right = -8
 theme_override_constants/margin_bottom = -8
 
-[node name="ColorRect" type="ColorRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/MarginContainer" index="0"]
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/MarginContainer" index="0" unique_id=1001500077]
 material = SubResource("ShaderMaterial_c25kl")
 layout_mode = 2
 mouse_filter = 2
@@ -434,191 +434,191 @@ color = Color(0, 0, 0, 0.501961)
 script = ExtResource("26_klq7w")
 syncControlSize = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer" index="1" unique_id=1748396388]
 layout_mode = 2
 
-[node name="MissionIcon" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0"]
+[node name="MissionIcon" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0" unique_id=1564338019]
 layout_mode = 2
 texture = ExtResource("3_vntdm")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1" unique_id=85215427]
 custom_minimum_size = Vector2(225, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = -4
 alignment = 1
 
-[node name="Mission Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
+[node name="Mission Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0" unique_id=1883892270]
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 32
 text = "Mission name"
 vertical_alignment = 1
 
-[node name="Zone Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
+[node name="Zone Name" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1" unique_id=1335477573]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 16
 text = "Zone name"
 
-[node name="Control" type="Control" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="2"]
+[node name="Control" type="Control" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="2" unique_id=333269490]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="3"]
+[node name="RichTextLabel" type="RichTextLabel" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="3" unique_id=1565340848]
 layout_mode = 2
 size_flags_vertical = 3
 text = "This description is a placeholder description. This description is a placeholder description. This description is a placeholder description. "
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer" index="1"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer" index="1" unique_id=874091735]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Modifiers" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="0"]
+[node name="Modifiers" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="0" unique_id=2031668034]
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="MissionAlertItemEntry" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="0"]
+[node name="MissionAlertItemEntry" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="0" unique_id=981070126]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="0" unique_id=343177272]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="1"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry" index="1" unique_id=905277870]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="1"]
+[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="1" unique_id=872358374]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="0" unique_id=1950498938]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="1"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry2" index="1" unique_id=924885537]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="2"]
+[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="2" unique_id=2001919830]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="0" unique_id=336948898]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="1"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry3" index="1" unique_id=547724536]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="3"]
+[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="3" unique_id=2113401711]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="0" unique_id=1863544037]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="1"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry4" index="1" unique_id=1388411439]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="MissionAlertItemEntry5" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="4"]
+[node name="MissionAlertItemEntry5" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers" index="4" unique_id=177818882]
 layout_mode = 2
 script = ExtResource("12_nfbfc")
 
-[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="0"]
+[node name="TextureRect6" type="TextureRect" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="0" unique_id=113448734]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 texture = ExtResource("4_8tulo")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="1"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Modifiers/MissionAlertItemEntry5" index="1" unique_id=60599152]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
-[node name="Rewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="1"]
+[node name="Rewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2" index="1" unique_id=131677801]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="MissionRewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="0"]
+[node name="MissionRewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="0" unique_id=1342632255]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="0"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="0" unique_id=2110469903]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Mission Rewards"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards" index="1" unique_id=479964824]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="0" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="0" unique_id=1079561233 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal2" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="1" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal2" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="1" unique_id=1340021563 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal3" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="2" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal3" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="2" unique_id=1602122669 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal4" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="3" instance=ExtResource("6_cam1p")]
+[node name="RewardEntryHorizontal4" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/MissionRewards/HBoxContainer" index="3" unique_id=1739787961 instance=ExtResource("6_cam1p")]
 layout_mode = 2
 
-[node name="AlertRewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="1"]
+[node name="AlertRewards" type="VBoxContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards" index="1" unique_id=1297519970]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="0"]
+[node name="Label" type="Label" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="0" unique_id=1641884979]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Alert Rewards"
 
-[node name="HBoxContainer" type="GridContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="1"]
+[node name="HBoxContainer" type="GridContainer" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards" index="1" unique_id=844541715]
 layout_mode = 2
 size_flags_horizontal = 0
 columns = 3
 
-[node name="RewardEntryHorizontal" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="0" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="0" unique_id=351700437 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal2" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="1" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal2" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="1" unique_id=1503705805 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal4" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal4" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="2" unique_id=1645450189 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal5" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal5" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="3" unique_id=77790431 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontal6" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" instance=ExtResource("12_u3sfv")]
+[node name="RewardEntryHorizontal6" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/MarginContainer/VBoxContainer/HBoxContainer2/Rewards/AlertRewards/HBoxContainer" index="4" unique_id=1641839888 instance=ExtResource("12_u3sfv")]
 layout_mode = 2
 
-[node name="PowerLevel" type="Control" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="3"]
+[node name="PowerLevel" type="Control" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry" index="3" unique_id=268816054]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="PowerLevelIndicator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel" index="0" instance=ExtResource("13_ffxkp")]
+[node name="PowerLevelIndicator" parent="SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel" index="0" unique_id=1266995888 instance=ExtResource("13_ffxkp")]
 layout_mode = 0
 offset_top = 17.0
 offset_bottom = 41.0

@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://ckofose8g22n1"]
+
+[ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="1_l1jdo"]
+[ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/Dashboard/dashboardNotableRewards.tscn" id="1_r8nc6"]
+[ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="2_8cocd"]
+[ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="3_557kp"]
+[ext_resource type="PackedScene" uid="uid://bi6d0s5f2iadi" path="res://Scenes/Desktop/Views/Dashboard/dashboardSupercharger.tscn" id="4_pdh4o"]
+[ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/dashboardLlamaShop.tscn" id="5_r8nc6"]
+[ext_resource type="PackedScene" uid="uid://ito2u56pohnm" path="res://Scenes/Desktop/Views/Dashboard/dashboardXPProgress.tscn" id="6_8cocd"]
+
+[node name="MobileDashboardView" type="MarginContainer" unique_id=1679969338]
+custom_minimum_size = Vector2(454, 881)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -227.0
+offset_right = 227.0
+offset_bottom = 1102.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=78900829]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="Notable" type="PanelContainer" parent="VBoxContainer" unique_id=1527317360]
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Notable" unique_id=15812426]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Notable/VBoxContainer" unique_id=1579025501]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Notable Mission Rewards"
+
+[node name="Notable" parent="VBoxContainer/Notable/VBoxContainer" unique_id=650228639 instance=ExtResource("1_r8nc6")]
+layout_mode = 2
+
+[node name="ScrollContainer" parent="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(650228639, 530096324) index="0" unique_id=263457377]
+dumbMode = true
+
+[node name="DashboardAlertSummary" parent="VBoxContainer" unique_id=1516572395 instance=ExtResource("1_l1jdo")]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+
+[node name="ShareBtn" parent="VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2" index="1"]
+visible = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=131415897]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+
+[node name="Container" type="Container" parent="VBoxContainer/MarginContainer" unique_id=340251157]
+layout_mode = 2
+script = ExtResource("2_8cocd")
+columnMinWidth = 227
+minColumns = 1
+maxColumns = 2
+spacing = Vector2i(4, 4)
+
+[node name="MissionCollection" parent="VBoxContainer/MarginContainer/Container" unique_id=1352265404 instance=ExtResource("3_557kp")]
+visible = false
+custom_minimum_size = Vector2(474, 310)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+testName = "x4-5 Missions"
+testSearch = "LargeReward///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/MarginContainer/Container/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
+text = "x4-5 Missions"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=784544626]
+layout_mode = 2
+
+[node name="DashboardSupercharger" parent="VBoxContainer/HBoxContainer" unique_id=1275727250 instance=ExtResource("4_pdh4o")]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Label" parent="VBoxContainer/HBoxContainer/DashboardSupercharger/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1275727250, 78573322) index="0" unique_id=471168352]
+theme_override_font_sizes/font_size = 22
+
+[node name="PanelContainer" parent="VBoxContainer/HBoxContainer/DashboardSupercharger/VBoxContainer" parent_id_path=PackedInt32Array(1275727250, 255699193) index="1" unique_id=103279688]
+custom_minimum_size = Vector2(210, 70)
+
+[node name="DashboardLlamaShop" parent="VBoxContainer/HBoxContainer" unique_id=1496984376 instance=ExtResource("5_r8nc6")]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Label" parent="VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer/HBoxContainer" index="0"]
+theme_override_font_sizes/font_size = 22
+
+[node name="ShareBtn" parent="VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer/HBoxContainer" index="2"]
+visible = true
+
+[node name="PanelContainer" parent="VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(210, 150)
+
+[node name="DashboardXPProgress" parent="VBoxContainer" unique_id=1433313793 instance=ExtResource("6_8cocd")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+
+[editable path="VBoxContainer/Notable/VBoxContainer/Notable"]
+[editable path="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MissionCollection"]
+[editable path="VBoxContainer/DashboardAlertSummary"]
+[editable path="VBoxContainer/MarginContainer/Container/MissionCollection"]
+[editable path="VBoxContainer/HBoxContainer/DashboardSupercharger"]
+[editable path="VBoxContainer/HBoxContainer/DashboardLlamaShop"]

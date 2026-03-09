@@ -150,6 +150,7 @@ public class GameStorefront
 
     void CheckForChanges(JsonArray catalogEntries)
     {
+        offers ??= [];
         var catalogEntriesDict = catalogEntries.Select(n => n.AsObject()).ToDictionary(n => n["offerId"].ToString());
         var oldOfferIds = offers.Keys.ToArray();
         var newOfferIds = catalogEntries.Select(n => n["offerId"].ToString()).ToArray();

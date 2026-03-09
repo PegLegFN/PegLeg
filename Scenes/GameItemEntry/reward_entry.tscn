@@ -1,18 +1,18 @@
-[gd_scene load_steps=12 format=3 uid="uid://byv58kd1qnkw5"]
+[gd_scene format=3 uid="uid://byv58kd1qnkw5"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_ww2ku"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="2_jy1bu"]
-[ext_resource type="Material" uid="uid://fu23qg1axsrm" path="res://Sh_Materials/ItemRewardMat.tres" id="3_tj077"]
+[ext_resource type="Material" uid="uid://fu23qg1axsrm" path="res://Shaders/Materials/ItemRewardMat.tres" id="3_tj077"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_tj077"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_oo5m0"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="7_qcb58"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="9_4i2dj"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="9_4i2dj"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="10_1eq7g"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="11_tkmrp"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="12_tj077"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="13_4i2dj"]
 
-[node name="RewardEntry" type="MarginContainer"]
+[node name="RewardEntry" type="MarginContainer" unique_id=1336454575]
 custom_minimum_size = Vector2(64, 64)
 offset_right = 64.0
 offset_bottom = 64.0
@@ -24,7 +24,7 @@ compactifyAmount = true
 hideMythicLeadSquad = true
 packImageAsSubtype = false
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1323663121]
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 material = ExtResource("3_tj077")
 layout_mode = 2
@@ -33,10 +33,11 @@ expand_mode = 1
 script = ExtResource("5_oo5m0")
 syncControlSize = true
 
-[node name="Overlays" type="Control" parent="."]
+[node name="Overlays" type="Control" parent="." unique_id=894561848]
 layout_mode = 2
+mouse_filter = 1
 
-[node name="AmountContainer" type="HBoxContainer" parent="Overlays"]
+[node name="AmountContainer" type="HBoxContainer" parent="Overlays" unique_id=814566120]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -50,7 +51,7 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 2
 
-[node name="RightIcon" type="TextureRect" parent="Overlays/AmountContainer"]
+[node name="RightIcon" type="TextureRect" parent="Overlays/AmountContainer" unique_id=2033524404]
 material = ExtResource("9_4i2dj")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
@@ -59,12 +60,12 @@ mouse_filter = 2
 texture = ExtResource("10_1eq7g")
 expand_mode = 1
 
-[node name="Control" type="Control" parent="Overlays/AmountContainer"]
+[node name="Control" type="Control" parent="Overlays/AmountContainer" unique_id=1209516326]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="LeftIcon" type="TextureRect" parent="Overlays/AmountContainer"]
+[node name="LeftIcon" type="TextureRect" parent="Overlays/AmountContainer" unique_id=1152878404]
 material = ExtResource("9_4i2dj")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
@@ -73,13 +74,13 @@ mouse_filter = 2
 texture = ExtResource("10_1eq7g")
 expand_mode = 1
 
-[node name="Control2" type="Control" parent="Overlays/AmountContainer"]
+[node name="Control2" type="Control" parent="Overlays/AmountContainer" unique_id=1053544463]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="AmountLabel" type="Label" parent="Overlays/AmountContainer"]
+[node name="AmountLabel" type="Label" parent="Overlays/AmountContainer" unique_id=476859936]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 8
@@ -92,7 +93,7 @@ text = "2.56K"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="NotificationLabel" type="Label" parent="Overlays"]
+[node name="NotificationLabel" type="Label" parent="Overlays" unique_id=1542411967]
 visible = false
 layout_mode = 0
 offset_right = 16.0
@@ -105,7 +106,7 @@ text = " ! "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InteractableIcon" type="TextureRect" parent="Overlays"]
+[node name="InteractableIcon" type="TextureRect" parent="Overlays" unique_id=51579903]
 material = ExtResource("9_4i2dj")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 1
@@ -119,16 +120,16 @@ mouse_filter = 2
 texture = ExtResource("7_qcb58")
 expand_mode = 1
 
-[node name="CtxNoInteract" type="Node" parent="Overlays" node_paths=PackedStringArray("itemSource")]
+[node name="CtxNoInteract" type="Node" parent="Overlays" unique_id=436060735 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("12_tj077")
 itemSource = NodePath("../..")
 componentList = ExtResource("13_4i2dj")
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("11_tkmrp")]
+[node name="Responsive Button Area" parent="." unique_id=58375908 instance=ExtResource("11_tkmrp")]
 visible = false
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=1878635780 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("12_tj077")
 itemSource = NodePath("../..")
 componentList = ExtResource("13_4i2dj")

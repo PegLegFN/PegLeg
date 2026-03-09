@@ -136,6 +136,7 @@ public partial class DiscordWebhookProxy
             //GD.Print("WH: winner");
         }
 
+        currentContentProvider ??= contentProvider;
         currentFilepathProvider ??= filepathProvider;
         currentImageProvider ??= imageProvider;
 
@@ -183,7 +184,7 @@ public partial class DiscordWebhookProxy
             fileIdx++;
         }
 
-        if (fileIdx==0 && content == null)
+        if (fileIdx == 0 && content == null)
         {
             GD.Print($"WH: no valid content");
             return;

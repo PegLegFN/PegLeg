@@ -448,7 +448,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignalNotificationChanged(!displayItem.IsSeen);
         EmitSignalBookmarkChanged(GameAccount.ActiveAccount.HasReminder(displayItem.template));
         EmitSignalFavoriteChanged(displayItem.IsFavourited);
-        EmitSignalMaxTierChanged(displayItem.template.MaxTier);
+        EmitSignalMaxTierChanged(displayItem.template?.MaxTier ?? 0);
         EmitSignalTierChanged(tier);
         EmitSignalSuperchargeChanged(bonusMaxLevel / 2);
     }

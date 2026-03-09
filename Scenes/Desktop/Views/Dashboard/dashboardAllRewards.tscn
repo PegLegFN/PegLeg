@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cl6kj5e8gsgda"]
+[gd_scene format=3 uid="uid://cl6kj5e8gsgda"]
 
 [ext_resource type="Script" uid="uid://ce73kldw4p5yw" path="res://Scripts/UserInterface/Dashboard/MissionRewardsController.cs" id="1_3jaku"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="2_5wxrf"]
@@ -31,7 +31,7 @@ resource_local_to_scene = false
 resource_name = "RewardType"
 allow_unpress = true
 
-[node name="All" type="MarginContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "itemSearchBar", "sortByPower", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="All" type="MarginContainer" unique_id=887790858 node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "itemSearchBar", "sortByPower", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(370, 0)
 size_flags_vertical = 3
@@ -40,48 +40,56 @@ theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_3jaku")
 missionList = NodePath("VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/VBoxContainer/MarginContainer/SmallLoadingIcon")
-searchBar = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/SearchBox")
-itemSearchBar = NodePath("VBoxContainer/VBoxContainer/HBoxContainer/SearchBox2")
-sortByPower = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton")
-filterPower = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton")
-filterPowerContainer = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel")
-filterStory = NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton")
-rarityFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common")]
-zoneFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures")]
-typeFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps")]
-repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x")]
+searchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox")
+itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox2")
+sortByPower = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton")
+filterPower = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton")
+filterPowerContainer = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel")
+filterStory = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton")
+rarityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common")]
+zoneFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures")]
+typeFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps")]
+repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x")]
 metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2044151659]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=797083087]
 visible = false
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer" unique_id=1619997948]
 layout_mode = 2
 button_pressed = true
 
-[node name="Node" type="Node" parent="VBoxContainer/HBoxContainer/CheckButton"]
+[node name="Node" type="Node" parent="VBoxContainer/HBoxContainer/CheckButton" unique_id=1855030127]
 script = ExtResource("2_5wxrf")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1364284326]
 custom_minimum_size = Vector2(0, 210)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/VBoxContainer" unique_id=1657085929]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2" unique_id=1164165274]
 layout_mode = 2
 
-[node name="SearchBox" type="LineEdit" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=2007388593]
+layout_mode = 2
+
+[node name="SearchBox" type="LineEdit" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=88566526]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search missions"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="SearchBox2" type="LineEdit" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="SearchBox2" type="LineEdit" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1531152992]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
@@ -89,28 +97,29 @@ placeholder_text = "Search items"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="HBoxContainer2" type="HFlowContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HFlowContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=145397223]
 layout_mode = 2
 alignment = 1
 
-[node name="RarityFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="RarityFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=1442786464]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters" unique_id=1530477692]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Mythic" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+[node name="Mythic" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=154354491]
 custom_minimum_size = Vector2(53, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Mythic"
 theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/rarity = "Mythic"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic" unique_id=1069451816]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -121,7 +130,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 0.28, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic" unique_id=1315154307]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -133,15 +142,16 @@ text = "Mythic"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Legendary" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+[node name="Legendary" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=142085291]
 custom_minimum_size = Vector2(76, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Legendary"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Legendary"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary" unique_id=729467587]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -152,7 +162,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.683333, 0, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary" unique_id=2141807625]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -164,15 +174,16 @@ text = "Legendary"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Epic" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+[node name="Epic" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=1999994621]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Epic"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Epic"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic" unique_id=87704649]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -183,7 +194,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.816667, 0, 1, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic" unique_id=711900581]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -195,15 +206,16 @@ text = "Epic"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Rare" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+[node name="Rare" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=1227604692]
 custom_minimum_size = Vector2(37, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Rare"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Rare"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare" unique_id=335386923]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -214,7 +226,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.366667, 1, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare" unique_id=226933082]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -226,15 +238,16 @@ text = "Rare"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Uncommon" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+[node name="Uncommon" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=86269458]
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Uncommon"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/rarity = "Uncommon"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon" unique_id=2096658024]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -245,7 +258,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0166667, 1, 0, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon" unique_id=1505761652]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -257,15 +270,16 @@ text = "Uncommon"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Common" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer"]
+[node name="Common" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=1682730759]
 custom_minimum_size = Vector2(68, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Common"
 theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/rarity = "Common"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common" unique_id=61119608]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -275,7 +289,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common" unique_id=1334374334]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -287,24 +301,25 @@ text = "Common"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=1084519212]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters" unique_id=57700396]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Stonewood" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Stonewood" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=2064830287]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Stonewood"
 theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/zone = "s"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood" unique_id=1426895859]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -315,7 +330,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2296, 0.4264, 0.82, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood" unique_id=359549788]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -327,15 +342,16 @@ text = "Stone"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Plankerton" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Plankerton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=422720111]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Plankerton"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/zone = "p"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton" unique_id=1770621954]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -346,7 +362,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.15, 1, 0, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton" unique_id=273357412]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -358,15 +374,16 @@ text = "Plank"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=1977715316]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Canny Valley"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/zone = "c"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley" unique_id=890119470]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -377,7 +394,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.8, 0, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley" unique_id=140062798]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -389,15 +406,16 @@ text = "Canny"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=1131557196]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Twine Peaks"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/zone = "t"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks" unique_id=1401781463]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -408,7 +426,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.683333, 0, 1, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks" unique_id=1297550183]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -420,15 +438,16 @@ text = "Twine"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Ventures" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer"]
+[node name="Ventures" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=793749072]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Ventures"
 theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/zone = "v"
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures" unique_id=1546142640]
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
@@ -439,7 +458,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.883333, 1, 1)
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures" unique_id=874977190]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -451,16 +470,16 @@ text = "Ventures"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RewardTypeFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="RewardTypeFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=1228440926]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter" unique_id=1179755440]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Alert" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
+[node name="Alert" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer" unique_id=939802002]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Alert Rewards"
@@ -468,7 +487,7 @@ theme_type_variation = &"LeftCheckButton"
 button_group = SubResource("ButtonGroup_asvga")
 text = " "
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert" unique_id=1428468965]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -479,7 +498,7 @@ texture = ExtResource("4_yip6p")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Repeatable" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
+[node name="Repeatable" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer" unique_id=1795322515]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Repeatable Rewards"
@@ -487,7 +506,7 @@ theme_type_variation = &"MiddleCheckButton"
 button_group = SubResource("ButtonGroup_asvga")
 text = " "
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable" unique_id=362793876]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -498,14 +517,14 @@ texture = ExtResource("5_1dkya")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="4x" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer"]
+[node name="4x" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer" unique_id=1182313242]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "x4 Alert Rewards"
 theme_type_variation = &"RightCheckButton"
 button_group = SubResource("ButtonGroup_asvga")
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x" unique_id=712735251]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -516,21 +535,22 @@ text = "x4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=60944725]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="StoryFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="StoryFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=208328889]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter" unique_id=2115246747]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 tooltip_text = "Include Story Missions"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton" unique_id=1660566728]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 1.0
@@ -541,18 +561,18 @@ grow_vertical = 2
 texture = ExtResource("6_i7g1k")
 expand_mode = 3
 
-[node name="PLSort" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="PLSort" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1993752179]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort" unique_id=128584210]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 tooltip_text = "Sort items by Mission Power"
 theme_type_variation = &"EmptyCheckButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton" unique_id=1736943395]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 1.0
@@ -563,19 +583,19 @@ grow_vertical = 2
 texture = ExtResource("7_h4lof")
 expand_mode = 3
 
-[node name="PowerLevel" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="PowerLevel" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1064630199]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"CheckContainer"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel" unique_id=305862933]
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 tooltip_text = "Only show Missions that can be accessed on this account"
 theme_type_variation = &"EmptyCheckButton"
 button_pressed = true
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" unique_id=1156115000]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 1.0
@@ -586,7 +606,7 @@ grow_vertical = 2
 texture = ExtResource("8_7ldir")
 expand_mode = 3
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" unique_id=539614101]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 40.0
@@ -597,24 +617,25 @@ section = "missions"
 key = "filter_power_default"
 defaultValue = true
 
-[node name="TypeFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="TypeFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1653661881]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters" unique_id=390892881]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Survivors" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Survivors" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=134987812]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Survivors"
 theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors" unique_id=945831150]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -625,15 +646,16 @@ texture = ExtResource("10_caexb")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Lead Survivors" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Lead Survivors" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=1924008920]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Lead Survivors"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Worker:manager"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors" unique_id=352732417]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -644,15 +666,16 @@ texture = ExtResource("11_hbp54")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Heroes" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Heroes" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=2013352012]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Heroes"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Hero"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes" unique_id=2766829]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -663,15 +686,16 @@ texture = ExtResource("12_qtkbc")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Upgrade Llamas" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Upgrade Llamas" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=173202480]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Upgrade Llamas"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "AccountResource:voucher_cardpack_bronze"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Upgrade Llamas" unique_id=1016880518]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -682,15 +706,16 @@ texture = ExtResource("13_k4kcf")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Mini Llamas" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Mini Llamas" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=1666668143]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Mini Llamas"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "AccountResource:voucher_basicpack"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Mini Llamas" unique_id=1977898767]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -704,15 +729,16 @@ texture = ExtResource("14_dwoy7")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Schematics" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Schematics" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=1641706549]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Schematics"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Schematics" unique_id=1730554580]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -723,15 +749,16 @@ texture = ExtResource("15_2ekf4")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Ranged Weapons" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Ranged Weapons" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=129996040]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Ranged Weapons"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic>Ranged"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons" unique_id=599347871]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -742,15 +769,16 @@ texture = ExtResource("16_tnc3o")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Melee Weapons" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Melee Weapons" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=1266272647]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Melee Weapons"
 theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic>Melee"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons" unique_id=1345655170]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -761,15 +789,16 @@ texture = ExtResource("17_er62f")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Traps" type="CheckButton" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer"]
+[node name="Traps" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer" unique_id=657277536]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Traps"
 theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/type = "Schematic>Trap"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps" unique_id=380678178]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -780,14 +809,14 @@ texture = ExtResource("18_vbf3x")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Reset" type="Button" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Reset" type="Button" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=2048246065]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Reset Filters
 (Shift to invert)"
 theme_type_variation = &"SlantedButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" unique_id=758152649]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -798,19 +827,20 @@ mouse_filter = 2
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset/MarginContainer" unique_id=533019747]
 layout_mode = 2
 texture = ExtResource("19_s5xqb")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer" unique_id=1513377394]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1982009328 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
+scroll_hint_mode = 1
 script = ExtResource("20_t0hu3")
 elementSpace = 4.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
@@ -818,7 +848,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("21_myk2v")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer" unique_id=2045216625]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -827,25 +857,26 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer" unique_id=804878826]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 0
 
-[node name="Offset" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1911427063]
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1493096660]
 layout_mode = 2
 
-[node name="Padding" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1436640475]
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/VBoxContainer/MarginContainer" instance=ExtResource("22_1fh4v")]
+[node name="SmallLoadingIcon" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1686755788 instance=ExtResource("22_1fh4v")]
 layout_mode = 2
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/VBoxContainer" method="set_visible"]
 [connection signal="OnFalse" from="VBoxContainer/HBoxContainer/CheckButton/Node" to="." method="set_stretch_ratio"]
 [connection signal="OnTrue" from="VBoxContainer/HBoxContainer/CheckButton/Node" to="." method="set_stretch_ratio"]
-[connection signal="toggled" from="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton/CheckButton" to="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" method="set_pressed"]
-[connection signal="pressed" from="VBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" to="." method="TurnOffFilters"]
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton/CheckButton" to="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" method="set_pressed"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" to="." method="TurnOffFilters"]

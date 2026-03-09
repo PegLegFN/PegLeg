@@ -12,9 +12,15 @@ public partial class DailySummaryWebhookDispatcher : Node
 	{
 		inst = this;
 		if(!DiscordWebhookProxy.TryGetProxy("dailySummary", out webhook))
-			webhook = new("PegLeg Daily Summary", "dailySummary", imageProvider: GenerateImage);
+			webhook = new("PegLeg Daily Summary", "dailySummary", contentProvider: Content, imageProvider: GenerateImage);
 		RefreshTimerController.OnDayChanged += ExecuteWebhookDelayed;
 	}
+
+    static Task<string> Content()
+    {
+        //TODO: add option to ping roles based on presence of certain rewards
+        return Task.FromResult("-# Get [PegLeg](<https://peglegfn.com/releases>) for customisation and notifications.\n-# Follow the `daily-reset` channel in [Archers STW Dump](<https://peglegfn.com/archerdump>) to get these images in your own server.");
+    }
 
     public override void _ExitTree()
     {

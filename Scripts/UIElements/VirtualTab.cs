@@ -8,49 +8,65 @@ public partial class VirtualTab : Control
     [Signal]
     public delegate void ToggledEventHandler(bool newVal);
 
+    [Export]
+    bool ignoreMode;
+
     int _mode;
     string _text;
     string _tooltip;
     Texture2D _icon;
 
     [Export(PropertyHint.Enum, "Left:-1,Middle:0,Right:1")]
-    int mode
+    public int Mode
     {
         get => _mode;
         set
         {
             _mode=value;
-            SetMode(mode);
+            SetMode(Mode);
         }
     }
     [Export]
-    string text
+    public string Text
     {
         get => _text;
         set
         {
             _text = value;
-            SetContent(text, icon, tooltip);
+            if (label is null)
+                return;
+            label.Text = Text;
+            label.Visible = (iconRect?.Visible ?? false) || !string.IsNullOrWhiteSpace(Text);
+            if (labelPadding is not null)
+                labelPadding.Visible = label.Visible;
         }
     }
     [Export(PropertyHint.MultilineText)]
-    string tooltip
+    public string Tooltip
     {
         get => _tooltip;
         set
         {
             _tooltip = value;
-            SetContent(text, icon, tooltip);
+            if (button is not null)
+                button.TooltipText = Tooltip;
         }
     }
     [Export]
-    Texture2D icon
+    public Texture2D Icon
     {
         get => _icon;
         set
         {
             _icon = value;
-            SetContent(text, icon, tooltip);
+            if (iconRect is null)
+                return;
+            iconRect.Visible = Icon is not null;
+            iconRect.Texture = Icon;
+            if (label is not null)
+                label.Visible = !iconRect.Visible || !string.IsNullOrWhiteSpace(Text);
+            if (labelPadding is not null)
+                labelPadding.Visible = label.Visible;
         }
     }
     [Export]
@@ -86,7 +102,7 @@ public partial class VirtualTab : Control
 
     [ExportGroup("Nodes")]
     [Export]
-    CheckButton button;
+    Button button;
     [Export]
     Label label;
     [Export]
@@ -103,8 +119,8 @@ public partial class VirtualTab : Control
         iconRect ??= (TextureRect)FindChildren("*", "TextureRect", true).FirstOrDefault();
         if (button is not null || Engine.IsEditorHint())
             button.Toggled += TryPressTab;
-        SetMode(mode);
-        SetContent(text, icon, tooltip);
+        SetMode(Mode);
+        SetContent(Text, Icon, Tooltip);
     }
 
     public VirtualTabBar.TabData TabData => new()
@@ -130,7 +146,7 @@ public partial class VirtualTab : Control
 
     public void SetMode(int mode)
     {
-        if (button is null)
+        if (button is null || ignoreMode)
             return;
         button.ThemeTypeVariation = mode switch
         {
@@ -148,16 +164,11 @@ public partial class VirtualTab : Control
         Disabled = tabData.disabled;
     }
 
+
     public void SetContent(string text, Texture2D icon = null, string tooltip = null)
     {
-        if (button is null || label is null || iconRect is null)
-            return;
-        label.Text = text;
-        iconRect.Visible = icon is not null;
-        iconRect.Texture = icon;
-        label.Visible = !iconRect.Visible || !string.IsNullOrWhiteSpace(text);
-        if (labelPadding is not null)
-            labelPadding.Visible = label.Visible;
-        button.TooltipText = tooltip;
+        this.Text = text;
+        this.Icon = icon;
+        this.Tooltip = tooltip;
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cyyifj2tha4ri"]
+[gd_scene format=3 uid="uid://cyyifj2tha4ri"]
 
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_4dqrj"]
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_h68g4"]
@@ -27,13 +27,13 @@ shader_parameter/ApplyCornersToFit = false
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = false
 
-[node name="ShareableMissionSummary" type="SubViewportContainer"]
+[node name="ShareableMissionSummary" type="SubViewportContainer" unique_id=1004627350]
 offset_right = 375.0
 offset_bottom = 471.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="MissionSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
+[node name="MissionSummaryViewport" type="SubViewport" parent="." unique_id=424942682 node_paths=PackedStringArray("matchSize")]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(375, 471)
@@ -41,14 +41,14 @@ render_target_update_mode = 4
 script = ExtResource("1_4dqrj")
 matchSize = NodePath("PegLegWatermark")
 
-[node name="PegLegWatermark" parent="MissionSummaryViewport" instance=ExtResource("2_h68g4")]
+[node name="PegLegWatermark" parent="MissionSummaryViewport" unique_id=1716002338 instance=ExtResource("2_h68g4")]
 offset_right = 350.0
 offset_bottom = 475.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark" unique_id=929203418]
 layout_mode = 2
 
-[node name="NotableRewards" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="NotableRewards" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" unique_id=146581107 node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -65,27 +65,27 @@ zoneFilters = []
 typeFilters = []
 repeatabilityFilters = []
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" unique_id=1006602438]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer" unique_id=1798815499]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Notable Rewards"
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer" unique_id=689023998]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "V-Bucks only available to Founders"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer" unique_id=425515632]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" unique_id=1755275806 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -98,7 +98,7 @@ elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("8_0ubh0")
 dumbMode = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer" unique_id=865252369]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -108,31 +108,31 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer" unique_id=1529532130]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=507859779]
 visible = false
 layout_mode = 2
 
-[node name="DynGridContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=556956680]
 layout_mode = 2
 mouse_filter = 0
 
-[node name="Padding" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1046602607]
 visible = false
 layout_mode = 2
 
-[node name="EmptyContent" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer"]
+[node name="EmptyContent" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer" unique_id=1575176455]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent" unique_id=1626793629]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer" unique_id=1645136087]
 material = SubResource("ShaderMaterial_rymeg")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -140,16 +140,16 @@ size_flags_horizontal = 0
 texture = ExtResource("10_6jjmv")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer" unique_id=432736894]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "No Notable Rewards
 Instead, here's a cat"
 
-[node name="FakeLoadingIcon" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards"]
+[node name="FakeLoadingIcon" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/NotableRewards" unique_id=1656896179]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("weekAverage", "monthAverage", "seasonAverage")]
+[node name="PanelContainer" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" unique_id=526927600 node_paths=PackedStringArray("weekAverage", "monthAverage", "seasonAverage")]
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("8_h68g4")
@@ -157,19 +157,19 @@ weekAverage = NodePath("VBoxContainer/HBoxContainer/Label2")
 monthAverage = NodePath("VBoxContainer/HBoxContainer/Label3")
 seasonAverage = NodePath("VBoxContainer/HBoxContainer/Label")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer" unique_id=1011996821]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer" unique_id=555606690]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Average V-Bucks Per Day"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer" unique_id=537651976]
 layout_mode = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1671587366]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -2
@@ -177,7 +177,7 @@ text = "Past 7 Days:
 {x}/day"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Label3" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=174935146]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -2
@@ -185,7 +185,7 @@ text = "Past 30 days:
 {x}/day"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=957537528]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -2
@@ -193,13 +193,13 @@ text = "This Season:
 {x}/day"
 horizontal_alignment = 1
 
-[node name="MissionCollection" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("loadingIcon") instance=ExtResource("9_ay20g")]
+[node name="MissionCollection" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" unique_id=370873070 node_paths=PackedStringArray("loadingIcon") instance=ExtResource("9_ay20g")]
 custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"Panel3PadB"
 testName = "PL160 Repeatable Rewards"
-testSearch = "LargeReward 160///bundle"
+testSearch = "\"Large Reward\" 160///bundle"
 loadingIcon = NodePath("VBoxContainer/Body/Control")
 sortByPower = true
 sortByZoneCat = true
@@ -213,7 +213,7 @@ text = "PL160 Repeatable Rewards"
 visible = false
 button_pressed = false
 
-[node name="Control" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="0"]
+[node name="Control" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="0" unique_id=1862687171]
 layout_mode = 2
 
 [node name="SmallLoadingIcon" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body" index="1"]
@@ -231,7 +231,7 @@ visible = false
 [node name="Padding" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" index="2"]
 visible = false
 
-[node name="Supercharger" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" node_paths=PackedStringArray("entry", "noSuperchargerMessage", "checkmark", "loading")]
+[node name="Supercharger" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" unique_id=1734822233 node_paths=PackedStringArray("entry", "noSuperchargerMessage", "checkmark", "loading")]
 custom_minimum_size = Vector2(239.5, 0)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
@@ -242,62 +242,62 @@ checkmark = NodePath("VBoxContainer/PanelContainer/Control2")
 loading = NodePath("VBoxContainer/PanelContainer/Control")
 onlyShowOnResetDay = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger" unique_id=2028183602]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer" unique_id=1899739874]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/HBoxContainer" unique_id=10825800]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Weekly 160 Alert Reward"
 
-[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/HBoxContainer" unique_id=604336257]
 visible = false
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("5_rymeg")
 timerType = 2
 
-[node name="PanelContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer"]
+[node name="PanelContainer" type="MarginContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer" unique_id=1997749150]
 custom_minimum_size = Vector2(230, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"Panel3Pad"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer" unique_id=450926578]
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 script = ExtResource("12_qu71t")
 
-[node name="TextureRect" type="TextureRect" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" unique_id=2102191199]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = ExtResource("13_cvjj8")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" unique_id=2076012197]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Hero Superharger"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer" unique_id=561162558]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/VBoxContainer" unique_id=21568191]
 layout_mode = 2
 text = "No Supercharger Quest"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer/VBoxContainer" unique_id=325730004]
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 theme_override_font_sizes/font_size = 12
@@ -305,13 +305,13 @@ text = "Complete the Twine Peaks SSD 10
 to unlock Weekly Supercharger Quests"
 horizontal_alignment = 1
 
-[node name="Control" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+[node name="Control" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer" unique_id=1819313374]
 layout_mode = 2
 
-[node name="Control2" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer"]
+[node name="Control2" type="Control" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer/Supercharger/VBoxContainer/PanelContainer" unique_id=1879156519]
 layout_mode = 2
 
-[node name="SummaryDispatcher" type="Node" parent="." node_paths=PackedStringArray("screenshotter")]
+[node name="SummaryDispatcher" type="Node" parent="." unique_id=1977899336 node_paths=PackedStringArray("screenshotter")]
 script = ExtResource("14_d41r0")
 screenshotter = NodePath("../MissionSummaryViewport")
 

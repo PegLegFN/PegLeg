@@ -21,7 +21,11 @@ public partial class TargetResolutionSetter : Node
         var window = GetTree().Root;
         window.MinSize = MinResolution;
         SetSize(window, (float)AppConfig.Get("ui", "scale", 1.0));
-        rootNode?.ResetOffsets();
+        if(rootNode is not null)
+        {
+            rootNode.ResetOffsets();
+            rootNode.ResetAnchors();
+        }
         AppConfig.OnConfigChanged += OnConfigChanged;
     }
 

@@ -123,7 +123,7 @@ public partial class XpLimitController : Control
 
     void UpdateXP()
     {
-        stwReset = DateTime.UtcNow.BRWeeklyRefresh();
+        stwReset = DateTime.UtcNow.WeeklyRefresh();
         playtimeReset = DateTime.UtcNow.BRWeeklyRefresh();
         var playtimeLimit = PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>();
 
