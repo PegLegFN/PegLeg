@@ -405,7 +405,7 @@ public partial class Bootstrap : Node
 
         
         PackedScene targetScene = null;
-        if (OS.HasFeature("mobile"))// add config option to force desktop UI
+        if (OS.HasFeature("mobile") && !AppConfig.Get("core", "disable_mobile", false))
         {
             if (lite)
                 targetScene = mobileLiteInterface;

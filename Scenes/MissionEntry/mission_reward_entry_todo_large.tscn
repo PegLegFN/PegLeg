@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://c177xe08uufqj"]
+
+[ext_resource type="PackedScene" uid="uid://bo5ikr32xssoo" path="res://Scenes/MissionEntry/mission_reward_entry_todo.tscn" id="1_0cwgv"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_bja7u"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_sea20"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bja7u"]
+resource_local_to_scene = true
+shader = ExtResource("2_bja7u")
+shader_parameter/ControlSize = Vector2(41, 41)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("3_sea20")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[node name="MissionRewardEntry" unique_id=512148745 instance=ExtResource("1_0cwgv")]
+custom_minimum_size = Vector2(260, 45)
+
+[node name="TheaterCat" parent="MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="0" unique_id=723104068]
+custom_minimum_size = Vector2(25, 0)
+theme_override_font_sizes/font_size = 28
+
+[node name="TextureRect2" parent="MissionEntry/HBoxContainer/HBoxContainer/Icon" parent_id_path=PackedInt32Array(189692744) index="0" unique_id=1911805740]
+custom_minimum_size = Vector2(0, 20)
+
+[node name="PowerLevel" parent="MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="2" unique_id=295920822]
+custom_minimum_size = Vector2(42, 0)
+theme_override_font_sizes/font_size = 28
+
+[node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" parent_id_path=PackedInt32Array(357313288) index="0" unique_id=68041144]
+material = SubResource("ShaderMaterial_bja7u")
+
+[node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="0" unique_id=2062077297]
+theme_override_font_sizes/font_size = 14
+
+[node name="NotificationLabel" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="1" unique_id=1997996294]
+theme_override_font_sizes/font_size = 16
+
+[node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1467368915) index="1" unique_id=1772908320]
+theme_override_font_sizes/font_size = 28
+
+[node name="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" parent_id_path=PackedInt32Array(2059577110) index="0" unique_id=259613485]
+visible = false
+
+[node name="Button2" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1019756305) index="0" unique_id=39124377]
+custom_minimum_size = Vector2(39, 0)
+
+[node name="Button3" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1019756305) index="1" unique_id=920465741]
+custom_minimum_size = Vector2(39, 0)
+
+[node name="Button4" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1019756305) index="2" unique_id=536279400]
+custom_minimum_size = Vector2(39, 0)
+
+[editable path="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem"]

@@ -26,31 +26,37 @@ public enum OrderRange
     Monthly
 }
 
-public readonly record struct FORTStats(float fortitude, float offense, float resistance, float technology, double loadoutRating, double backpackRating)
+public readonly record struct FORTStats(float fortitude, float offense, float resistance, float technology, double loadoutRating = 0, double backpackRating = 0, bool legacy = false)
 {
     //todo: export this via BanjoBotAssets
     static DataTableCurve homebaseRatingCurve;
     public static DataTableCurve HomebaseRatingCurve => homebaseRatingCurve ??= DataTableCurve.LoadHomebaseRatingMap();
 
-    double FORTRating => HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology));
+    double SampleHomebaseRating() => HomebaseRatingCurve.Sample(4 * (fortitude + offense + resistance + technology));
 
-    double Harmonic(double fortRating)
-    {
-        double a = fortRating == 0 ? 0 : 1 / fortRating;
-        double b = loadoutRating == 0 ? 0 : 1 / loadoutRating;
-        double c = backpackRating == 0 ? 0 : 1 / backpackRating;
-
-        return 1.44 / (a + b + c);
-    }
+    const double HomebaseRatingWeight = 0.58;
+    const double CommanderLoadoutWeight = 0.21;
+    const double BackpackLoadoutWeight = 0.21;
+    const double RatingDeltaWeight = 0.24;
 
     public float PowerLevel
     {
         get
         {
-            var fortRating = FORTRating;
+            var homebaseRating = SampleHomebaseRating();
+            if (legacy)
+                return (float)homebaseRating;
+            //shoutout Krowe moh!
+            var averageGearRating = (loadoutRating + backpackRating) / 2;
+            var ratingDelta = Mathf.Abs(homebaseRating - averageGearRating);
 
-            return (float)((fortRating + Mathf.Sqrt((fortRating*0.9) * (loadoutRating*1.1)) + Mathf.Sqrt((fortRating * 0.9) * (backpackRating * 1.1))) / 3);
-            //return (float)((fortRating * 0.35) + ((loadoutRating + backpackRating) * 0.09) + Harmonic(fortRating));
+            return (float)
+                (
+                    (homebaseRating * HomebaseRatingWeight) +
+                    (backpackRating * BackpackLoadoutWeight) +
+                    (loadoutRating * CommanderLoadoutWeight) -
+                    (ratingDelta * RatingDeltaWeight)
+                );
         }
     }
 
@@ -60,12 +66,13 @@ public readonly record struct FORTStats(float fortitude, float offense, float re
         {
             prefix = prefix.Trim() + " ";
         }
-        var fortRating = FORTRating;
-        //GD.Print($"FlatFort: {fortRating * 0.35}");
-        //GD.Print($"FlatLoadout: {loadoutRating * 0.09}");
-        //GD.Print($"FlatBackpack: {backpackRating * 0.09}");
-        //GD.Print($"Harmonic: {Harmonic(fortRating)}");
-        GD.Print($"{prefix}PL Estimate: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (FORT Rating: {fortRating:0.##}) (Loadout: {loadoutRating:0.##}) (Backpack: {backpackRating:0.##})");
+        if(legacy)
+            GD.Print($"{prefix}PL: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology})");
+        else
+        {
+            var fortRating = SampleHomebaseRating();
+            GD.Print($"{prefix}PL: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (FORT Rating: {fortRating:0.##}) (Loadout: {loadoutRating:0.##}) (Backpack: {backpackRating:0.##})");
+        }
     }
 }
 
@@ -870,7 +877,8 @@ public partial class GameAccount
         {
             var matchingWorkers = equippedWorkerItems
                 .Where(item => item.attributes["squad_id"].ToString() == squadId);
-            var stat = matchingWorkers.Select(item => item.CalculateSurvivorRating()).Sum();
+            var stats = matchingWorkers.Select(item => item.CalculateSurvivorRating()).ToArray();
+            var stat = stats.Sum();
             //GD.Print($"Squad:{squadId}:{stat}");
             return stat;
         }
@@ -917,7 +925,7 @@ public partial class GameAccount
         float resistance = LookupStatItem("Stat:resistance_phoenix");
         float technology = LookupStatItem("Stat:technology_phoenix");
 
-        FORTStats newVentureFortStats = new(fortitude, offense, resistance, technology, 0, 0);
+        FORTStats newVentureFortStats = new(fortitude, offense, resistance, technology, legacy: true);
         if (ventureFortStats != newVentureFortStats)
         {
             newVentureFortStats.Print("Venture");

@@ -57,6 +57,12 @@ public partial class ModalWindow : Control
 
         if (startOpen)
             SetWindowOpen(true);
+
+        GetWindow().GoBackRequested += TryCloseWindowViaInput;
+    }
+    public override void _ExitTree()
+    {
+        GetWindow().GoBackRequested -= TryCloseWindowViaInput;
     }
 
     public override void _Process(double delta)
@@ -70,14 +76,24 @@ public partial class ModalWindow : Control
 
     public override void _UnhandledKeyInput(InputEvent @event)
     {
-        if (!isUserClosable || !IsOpen || windowStack.LastOrDefault() != this)
-            return;
         if (@event is InputEventKey keyEvent && keyEvent.Pressed && keyEvent.Keycode == Key.Escape)
         {
-            GetViewport().SetInputAsHandled();
-            CloseWindowViaInput();
+            TryCloseWindowViaInput(out var result);
+            if (result)
+                GetViewport().SetInputAsHandled();
         }
     }
+
+    void TryCloseWindowViaInput() => TryCloseWindowViaInput(out _);
+    void TryCloseWindowViaInput(out bool result)
+    {
+        result = false;
+        if (!isUserClosable || !IsOpen || windowStack.LastOrDefault() != this)
+            return;
+        result = true;
+        CloseWindowViaInput();
+    }
+
     protected virtual void CloseWindowViaInput() => SetWindowOpen(false);
 
     public bool IsOpen { get; private set; }

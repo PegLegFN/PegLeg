@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/Dashboard/dashboardNotableRewards.tscn" id="1_gxuuy"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="2_nbel3"]
-[ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="3_w5qrr"]
+[ext_resource type="PackedScene" uid="uid://dh6eujun4cbty" path="res://Scenes/MissionEntry/mission_reward_entry_large.tscn" id="2_tc88d"]
+[ext_resource type="PackedScene" uid="uid://bvwsqi0jrxlg6" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers_large.tscn" id="3_x306q"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="4_o2hky"]
+[ext_resource type="PackedScene" uid="uid://bcndr63noahkr" path="res://Scenes/MissionEntry/mission_collection_entry_large.tscn" id="5_hdipl"]
 
 [node name="MobileDashboardView" type="MarginContainer" unique_id=1679969338]
 custom_minimum_size = Vector2(454, 881)
@@ -12,7 +14,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -227.0
 offset_right = 227.0
-offset_bottom = 1102.0
+offset_bottom = 881.0
 grow_horizontal = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=78900829]
@@ -37,42 +39,175 @@ text = "Notable Mission Rewards"
 layout_mode = 2
 
 [node name="ScrollContainer" parent="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(650228639, 530096324) index="0" unique_id=263457377]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("2_tc88d")
 dumbMode = true
+
+[node name="ScrollContainer" parent="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(650228639, 1123076066, 1401981871) index="1" unique_id=1876069311]
+elementScene = ExtResource("3_x306q")
+
+[node name="Container" type="HBoxContainer" parent="VBoxContainer" unique_id=2088072512]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Container" unique_id=1525714886]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DoubleLegendary" parent="VBoxContainer/Container/VBoxContainer" unique_id=367729193 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x2 Legendary"
+testSearch = "\"Double Legendary\"///!bundle Legendary"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(367729193, 1750868079) index="0" unique_id=796681065]
+text = "x2 Legendary"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(367729193, 1750868079) index="3" unique_id=1160045743]
+visible = false
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Body" parent_id_path=PackedInt32Array(367729193, 1401981871) index="1" unique_id=1876069311]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("5_hdipl")
+dumbMode = true
+
+[node name="Twine" parent="VBoxContainer/Container/VBoxContainer" unique_id=2051907470 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x4-5 Twine Peaks"
+testSearch = "Twine \"Large Reward\"///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Twine/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(2051907470, 1750868079) index="0" unique_id=796681065]
+text = "x4-5 Twine Peaks"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Twine/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(2051907470, 1750868079) index="3" unique_id=1160045743]
+visible = false
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Twine/VBoxContainer/Body" parent_id_path=PackedInt32Array(2051907470, 1401981871) index="1" unique_id=1876069311]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("5_hdipl")
+dumbMode = true
+
+[node name="Canny" parent="VBoxContainer/Container/VBoxContainer" unique_id=697853580 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x4 Canny Valley"
+testSearch = "Canny \"Large Reward\"///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Canny/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(697853580, 1750868079) index="0" unique_id=796681065]
+text = "x4 Canny Valley"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Canny/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(697853580, 1750868079) index="3" unique_id=1160045743]
+visible = false
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Canny/VBoxContainer/Body" parent_id_path=PackedInt32Array(697853580, 1401981871) index="1" unique_id=1876069311]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("5_hdipl")
+dumbMode = true
+
+[node name="Plank" parent="VBoxContainer/Container/VBoxContainer" unique_id=601643465 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x4 Plankerton"
+testSearch = "Plankerton \"Large Reward\"///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Plank/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(601643465, 1750868079) index="0" unique_id=796681065]
+text = "x4 Plankerton"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Plank/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(601643465, 1750868079) index="3" unique_id=1160045743]
+visible = false
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Plank/VBoxContainer/Body" parent_id_path=PackedInt32Array(601643465, 1401981871) index="1" unique_id=1876069311]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("5_hdipl")
+dumbMode = true
+
+[node name="Stone" parent="VBoxContainer/Container/VBoxContainer" unique_id=1352265404 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x4 Stonewood"
+testSearch = "Stonewood \"Large Reward\"///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
+text = "x4 Stonewood"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="3" unique_id=1160045743]
+visible = false
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="1" unique_id=1876069311]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("5_hdipl")
+dumbMode = true
+
+[node name="Vents" parent="VBoxContainer/Container/VBoxContainer" unique_id=432664401 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+testName = "x4 Ventures"
+testSearch = "Ventures \"Large Reward\"///bundle"
+sortByPower = true
+sortByZoneCat = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Vents/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(432664401, 1750868079) index="0" unique_id=796681065]
+text = "x4 Ventures"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Vents/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(432664401, 1750868079) index="3" unique_id=1160045743]
+visible = false
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Vents/VBoxContainer/Body" parent_id_path=PackedInt32Array(432664401, 1401981871) index="1" unique_id=1876069311]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+elementScene = ExtResource("5_hdipl")
+dumbMode = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Container" unique_id=1215617561]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="DashboardAlertSummary" parent="VBoxContainer" unique_id=1516572395 instance=ExtResource("2_nbel3")]
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
 
-[node name="ShareBtn" parent="VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2" index="1"]
-visible = true
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=131415897]
-custom_minimum_size = Vector2(450, 0)
-layout_mode = 2
-
-[node name="Container" type="Container" parent="VBoxContainer/MarginContainer" unique_id=340251157]
-layout_mode = 2
-script = ExtResource("3_w5qrr")
-columnMinWidth = 227
-minColumns = 1
-maxColumns = 2
-spacing = Vector2i(4, 4)
-
-[node name="MissionCollection" parent="VBoxContainer/MarginContainer/Container" unique_id=1352265404 instance=ExtResource("4_o2hky")]
-visible = false
-custom_minimum_size = Vector2(474, 310)
-layout_mode = 2
-theme_type_variation = &"Panel3PadB"
-testName = "x4-5 Missions"
-testSearch = "LargeReward///bundle"
-sortByPower = true
-sortByZoneCat = true
-
-[node name="Name" parent="VBoxContainer/MarginContainer/Container/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
-text = "x4-5 Missions"
-horizontal_alignment = 1
-
 [editable path="VBoxContainer/Notable/VBoxContainer/Notable"]
 [editable path="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MissionCollection"]
+[editable path="VBoxContainer/Container/VBoxContainer/DoubleLegendary"]
+[editable path="VBoxContainer/Container/VBoxContainer/Twine"]
+[editable path="VBoxContainer/Container/VBoxContainer/Canny"]
+[editable path="VBoxContainer/Container/VBoxContainer/Plank"]
+[editable path="VBoxContainer/Container/VBoxContainer/Stone"]
+[editable path="VBoxContainer/Container/VBoxContainer/Vents"]
 [editable path="VBoxContainer/DashboardAlertSummary"]
-[editable path="VBoxContainer/MarginContainer/Container/MissionCollection"]

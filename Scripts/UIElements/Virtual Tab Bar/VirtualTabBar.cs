@@ -41,13 +41,16 @@ public partial class VirtualTabBar : Control
         PreloadTabs();
         if (useAsTabContainer is not null && singleTabMode)
         {
-            var children = useAsTabContainer.GetChildren().OfType<Control>().ToArray();
+            var children = useAsTabContainer.GetChildren().ToArray();
             for (int i = 0; i < children.Length; i++)
             {
                 int childIndex = i;
                 var child = children[i];
-                LatestTabChanged += tabIndex => child.Visible = childIndex == tabIndex;
-                child.Visible = childIndex == LatestTab;
+                if(child is Control ctrlChild)
+                {
+                    LatestTabChanged += tabIndex => ctrlChild.Visible = childIndex == tabIndex;
+                    ctrlChild.Visible = childIndex == LatestTab;
+                }
             }
         }
     }

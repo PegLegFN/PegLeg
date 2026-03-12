@@ -529,10 +529,10 @@ public partial class GameItemTemplate
         return fallbackIcon;
     }
 
-    public string GetCompactRarityAndTier(int givenTier = 0)
+    public string GetCompactRarityAndTier(int givenTier = 0, int givenRarity = 0)
     {
-        var rarityId = rarityIds[RarityLevel];
-        var tierId = givenTier <= 0 ? tierIds[Tier] : tierIds[givenTier];
+        var rarityId = rarityIds[givenRarity <= 0 ? RarityLevel : givenRarity];
+        var tierId = tierIds[givenTier <= 0 ? Tier : givenTier];
         return rarityId + "_" + tierId;
     }
 
@@ -742,10 +742,11 @@ public partial class GameItemTemplate
 
     public struct AlterationSlot
     {
-        public string[] options;
+        public GameItem.ItemData[] respecCost { get; private set; }
+        public string[] options { get; private set; }
         public string[] OptionsForLevel(int level) => [.. options.Select(o => o.EndsWith("_t01") ? $"{o[..^4]}_t0{level}" : o)];
-        public int requiredLevel;
-        public string requiredRarity;
+        public int requiredLevel { get; private set; }
+        public string requiredRarity { get; private set; }
         public int RequiredRarityLevel => requiredRarity.ConvertRarityString();
 
         public static AlterationSlot[] SlotsFromRow(string alterationSlotRow, string[] exclusions = null)
@@ -764,6 +765,9 @@ public partial class GameItemTemplate
                     ],
                     requiredLevel = slot["RequiredLevel"].GetValue<int>(),
                     requiredRarity = slot["RequiredRarity"].ToString(),
+                    respecCost = [..(slot["BaseRespecCost"]?.Deserialize<Dictionary<string, int>>()??[])
+                        .Select(kvp=>new GameItem.ItemData(kvp.Key, kvp.Value))
+                    ],
                 })
             ];
         }

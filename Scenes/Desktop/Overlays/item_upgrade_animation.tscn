@@ -9,7 +9,6 @@
 [ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="5_efi2h"]
 [ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="6_st2hn"]
 [ext_resource type="Texture2D" uid="uid://c656w41oitwtx" path="res://Images/AnimationProps/Anvil.png" id="7_8l4h5"]
-[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="7_yxglu"]
 [ext_resource type="Texture2D" uid="uid://t07lyd3wy3gb" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-Crusader-L.png" id="8_rj3pf"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="9_6d645"]
 [ext_resource type="Texture2D" uid="uid://dscv63yvcswow" path="res://Images/AnimationProps/Hammer.png" id="9_fogo1"]
@@ -20,6 +19,17 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v25rf"]
 shader = ExtResource("5_efi2h")
 shader_parameter/rotationSpeed = 0.5
+
+[sub_resource type="Gradient" id="Gradient_i5if5"]
+offsets = PackedFloat32Array(0.955128, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fogo1"]
+gradient = SubResource("Gradient_i5if5")
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="Gradient" id="Gradient_yxglu"]
 offsets = PackedFloat32Array(0.40490797, 0.4601227)
@@ -271,7 +281,7 @@ grow_vertical = 2
 z_index = 5
 emitting = false
 amount = 40
-texture = ExtResource("7_yxglu")
+texture = SubResource("GradientTexture2D_fogo1")
 lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
@@ -293,7 +303,7 @@ rotation = 3.1415927
 scale = Vector2(1, -1)
 emitting = false
 amount = 40
-texture = ExtResource("7_yxglu")
+texture = SubResource("GradientTexture2D_fogo1")
 lifetime = 0.5
 one_shot = true
 explosiveness = 1.0

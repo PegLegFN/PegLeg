@@ -13,6 +13,7 @@
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="10_n4hef"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="11_40ktf"]
 [ext_resource type="Texture2D" uid="uid://0dsm5rygx6qr" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_64.png" id="11_xa8gw"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="13_xa8gw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("2_isv5j")
@@ -86,7 +87,7 @@ expand_mode = 3
 
 [node name="TextureRect2" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer/Icon" unique_id=1911805740]
 self_modulate = Color(1, 0.37, 0.37, 1)
-custom_minimum_size = Vector2(12, 12)
+custom_minimum_size = Vector2(0, 12)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -99,7 +100,7 @@ grow_horizontal = 0
 grow_vertical = 0
 tooltip_text = "This mission can't be accessed with this account alone "
 texture = ExtResource("7_n4hef")
-expand_mode = 1
+expand_mode = 3
 
 [node name="PowerLevel" type="Label" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=295920822]
 custom_minimum_size = Vector2(30, 0)
@@ -164,10 +165,9 @@ expand_mode = 3
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer3" unique_id=1373976760]
-custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 texture = ExtResource("9_qt2jc")
-expand_mode = 1
+expand_mode = 3
 
 [node name="MarginContainer2" type="MarginContainer" parent="MissionEntry/HBoxContainer" unique_id=327077591]
 layout_mode = 2
@@ -183,8 +183,13 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
+[node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" unique_id=259613485]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+texture = ExtResource("13_xa8gw")
+expand_mode = 3
+
 [node name="Button" type="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" unique_id=148889520]
-custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Add to To-Do List"
 mouse_filter = 1

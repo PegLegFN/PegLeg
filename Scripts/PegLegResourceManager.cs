@@ -718,7 +718,7 @@ public class DataTableCurve
         return toReturn;
     }
 
-    DataTableCurve(){}
+    DataTableCurve() { }
 
     public double Sample(double time)
     {
@@ -739,7 +739,7 @@ public class DataTableCurve
             if (toIndex - fromIndex < 3)
             {
                 toIndex = Mathf.Clamp(toIndex, 0, times.Count);
-                while (time <= times[toIndex] && toIndex>0)
+                while (time <= times[toIndex] && toIndex > 0)
                     toIndex--;
                 return toIndex;
             }
@@ -766,6 +766,7 @@ public class DataTableCurve
 
         return lowerValue + ((upperValue - lowerValue) * betweenTimeBlend);
     }
+
     public double SampleInverse(double value)
     {
         if (value < values[0])

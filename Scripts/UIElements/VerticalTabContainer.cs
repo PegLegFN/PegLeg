@@ -24,7 +24,7 @@ public partial class VerticalTabContainer : Node
     {
         lockTabs = false;
         GenerateTabs();
-        if (OS.HasFeature("editor_hint"))
+        if (Engine.IsEditorHint())
         {
             //ChildEnteredTree += PageAdded;
             //ChildOrderChanged += RefreshTabs;
@@ -91,7 +91,7 @@ public partial class VerticalTabContainer : Node
     public override void _ExitTree()
     {
         lockTabs = true;
-        if (OS.HasFeature("editor_hint") && pageParent?.IsInsideTree() == true)
+        if (Engine.IsEditorHint() && pageParent?.IsInsideTree() == true)
         {
             //ChildEnteredTree -= PageAdded;
             //ChildOrderChanged -= RefreshTabs;

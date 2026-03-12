@@ -30,6 +30,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
     [Export]
     TextureRect emptyIcon;
     [Export]
+    CheckBox multiFilterToggle;
+    [Export]
     bool notableMode;
 
     [Export]
@@ -152,7 +154,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                 }
                 if (Input.IsKeyPressed(Key.Alt) && newVal)
                     TurnOnSelectedFilters(filters, current);
-                else if (!Input.IsKeyPressed(Key.Shift) && newVal)
+                else if (!Input.IsKeyPressed(Key.Shift) && newVal && !(multiFilterToggle?.ButtonPressed ?? false))
                     TurnOffSelectedFilters(filters, current);
                 FilterMissions();
             };

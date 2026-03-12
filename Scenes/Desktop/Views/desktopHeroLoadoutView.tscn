@@ -52,17 +52,18 @@ grow_vertical = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=345977060]
 layout_mode = 2
 
-[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" unique_id=1788846179 node_paths=PackedStringArray("linkedPanel", "blueprintPreview", "loadoutList", "searchBar", "setAsActiveButton", "createBlueprintButton", "loadBlueprintButton", "cancelLoadBlueprintButton", "listMode")]
+[node name="LoadoutSlots" type="MarginContainer" parent="HBoxContainer" unique_id=1788846179 node_paths=PackedStringArray("linkedPanel", "blueprintPreview", "loadoutList", "searchBar", "setAsActiveButton", "createBlueprintButton", "loadBlueprintButton", "deleteBlueprintButton", "cancelLoadBlueprintButton", "listMode")]
 layout_mode = 2
 script = ExtResource("1_kwlnb")
 linkedPanel = NodePath("../LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel")
 blueprintPreview = NodePath("VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry")
 loadoutList = NodePath("VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer2")
 searchBar = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit")
-setAsActiveButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/Button2")
-createBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/CreateBlueprint")
-loadBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/LoadBlueprint")
-cancelLoadBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/VBoxContainer/CancelBlueprint")
+setAsActiveButton = NodePath("../LoadoutPreview/VBoxContainer/Control/VBoxContainer/Button2")
+createBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/Control/VBoxContainer/CreateBlueprint")
+loadBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/Control/VBoxContainer/LoadBlueprint")
+deleteBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/Control/VBoxContainer/DeleteBlueprint")
+cancelLoadBlueprintButton = NodePath("../LoadoutPreview/VBoxContainer/Control/VBoxContainer/CancelBlueprint")
 listMode = NodePath("VBoxContainer/VirtualTabBar")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutSlots" unique_id=1698158027]
@@ -241,31 +242,53 @@ size_flags_horizontal = 8
 useActiveAccount = false
 editable = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=367031590]
-custom_minimum_size = Vector2(250, 0)
+[node name="Control" type="Control" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=652491440]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control" unique_id=367031590]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -30.0
+offset_right = 125.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 
-[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=1427241406]
+[node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=1427241406]
 layout_mode = 2
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 20
 text = "Set As Active Slot"
 
-[node name="CreateBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=1070068777]
+[node name="CreateBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=1070068777]
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 20
 text = "Create Blueprint"
 
-[node name="LoadBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=607715024]
+[node name="LoadBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=607715024]
 visible = false
 layout_mode = 2
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 20
 text = "Load Blueprint"
 
-[node name="CancelBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer" unique_id=388695608]
+[node name="DeleteBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=497449298]
+visible = false
+layout_mode = 2
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 20
+text = "Delete Blueprint"
+
+[node name="CancelBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=388695608]
 visible = false
 layout_mode = 2
 theme_type_variation = &"LargeButton"
@@ -313,10 +336,11 @@ item_10/text = "Healing Modifier"
 item_11/text = "22.15"
 
 [connection signal="LoadoutName" from="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/HeroLoadoutPanel" to="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout/Label" method="set_text"]
-[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
-[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/CreateBlueprint" to="HBoxContainer/LoadoutSlots" method="CreateBlueprintFromSelected"]
-[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/LoadBlueprint" to="HBoxContainer/LoadoutSlots" method="LoadSelectedBlueprint"]
-[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/VBoxContainer/CancelBlueprint" to="HBoxContainer/LoadoutSlots" method="CompleteSelectedBlueprintLoading"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer/Button2" to="HBoxContainer/LoadoutSlots" method="SetSelectedAsActive"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer/CreateBlueprint" to="HBoxContainer/LoadoutSlots" method="CreateBlueprintFromSelected"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer/LoadBlueprint" to="HBoxContainer/LoadoutSlots" method="LoadSelectedBlueprint"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer/DeleteBlueprint" to="HBoxContainer/LoadoutSlots" method="DeleteSelectedBlueprint"]
+[connection signal="pressed" from="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer/CancelBlueprint" to="HBoxContainer/LoadoutSlots" method="CompleteSelectedBlueprintLoading"]
 
 [editable path="HBoxContainer/LoadoutSlots/VBoxContainer/VirtualTabBar"]
 [editable path="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry"]

@@ -99,6 +99,11 @@ public partial class DynamicGridContainer : Container
     //derive rows from col count
     //min height of each row is the largest child min height
 
+    //public override void _Ready()
+    //{
+    //    SortChildren += UpdateLayout;
+    //}
+
     bool lockMinSize = false;
 	public override Vector2 _GetMinimumSize()
     {
@@ -167,7 +172,7 @@ public partial class DynamicGridContainer : Container
 	{
         disableSort = value;
 		if (!disableSort)
-			_Notification((int)NotificationSortChildren);
+            UpdateLayout();
     }
 
 	public float[] GetRowHeights(Control[] children, int colCount)
@@ -197,16 +202,16 @@ public partial class DynamicGridContainer : Container
     }
 
 	bool lockLayout = false;
-	public override void _Notification(int what)
-	{
-		if (disableSort || lockLayout)
-			return;
+    public override void _Notification(int what)
+    {
         if (what == NotificationSortChildren)
             UpdateLayout();
-	}
+    }
 
     void UpdateLayout()
     {
+        if (disableSort || lockLayout)
+            return;
         try
         {
             lockLayout = true;
@@ -251,7 +256,12 @@ public partial class DynamicGridContainer : Container
                 int row = validIndex / colCount;
                 int col = validIndex % colCount;
                 float rowOffset = rowHeights[..row].Sum();
-                FitChildInRect(c, new Rect2(gridOrigin + new Vector2((colWidth + gridSpacing.X) * col, rowOffset), new Vector2(colWidth, c.GetCombinedMinimumSize().Y)));
+                FitChildInRect(c, 
+                    new Rect2(
+                        gridOrigin + new Vector2((colWidth + gridSpacing.X) * col, rowOffset), 
+                        new Vector2(colWidth, c.GetCombinedMinimumSize().Y)
+                    )
+                );
                 validIndex++;
             }
         }

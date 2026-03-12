@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvider<GameItem>, ISelectableElementProvider<GameItem>
 {
@@ -26,6 +25,8 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
     [Export]
     Button loadBlueprintButton;
     [Export]
+    Button deleteBlueprintButton;
+    [Export]
     Button cancelLoadBlueprintButton;
     [Export]
     VirtualTabBar listMode;
@@ -37,6 +38,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         setAsActiveButton.Visible = false;
         createBlueprintButton.Visible = false;
         loadBlueprintButton.Visible = false;
+        deleteBlueprintButton.Visible = false;
         cancelLoadBlueprintButton.Visible = false;
 
         searchBar.TextChanged += UpdateFilter;
@@ -125,6 +127,17 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         visibleLoadout.profile.account.CreateHeroLoadoutBlueprint(visibleLoadout);
     }
 
+    public async void DeleteSelectedBlueprint()
+    {
+        if (listMode.LatestTab != 1 || linkedPanel.currentItem is not GameItem visibleLoadout)
+            return;
+        var confirm = await GenericConfirmationWindow.ShowConfirmation("Delete Blueprint?");
+        if (confirm != true)
+            return;
+        visibleLoadout.profile.account.RemoveHeroLoadoutBlueprint(visibleLoadout);
+        UpdateMode();
+    }
+
     public void LoadSelectedBlueprint()
     {
         if (listMode.LatestTab != 1)
@@ -175,6 +188,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 
         UpdateFilter();
         loadBlueprintButton.Visible = false;
+        deleteBlueprintButton.Visible = false;
         cancelLoadBlueprintButton.Visible = true;
     }
 
@@ -229,6 +243,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
             setAsActiveButton.Visible = selectionTarget?.profile is not null && (selectedUUID != selectionTarget?.uuid || selectedUUID is null);
             createBlueprintButton.Visible = selectionTarget is not null && selectionTarget?.templateId != GameAccount.HeroLoadoutBlueprintTID;
             loadBlueprintButton.Visible = selectionTarget?.templateId == GameAccount.HeroLoadoutBlueprintTID;
+            deleteBlueprintButton.Visible = loadBlueprintButton.Visible;
         }
     }
 

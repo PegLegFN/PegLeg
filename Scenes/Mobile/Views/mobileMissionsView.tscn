@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://bqaf4782i1jnq"]
+
+[ext_resource type="PackedScene" uid="uid://cl6kj5e8gsgda" path="res://Scenes/Desktop/Views/Dashboard/dashboardAllRewards.tscn" id="1_vmt3o"]
+[ext_resource type="PackedScene" uid="uid://dh6eujun4cbty" path="res://Scenes/MissionEntry/mission_reward_entry_large.tscn" id="2_jiu2a"]
+
+[node name="Missions" type="MarginContainer" unique_id=1973681251]
+custom_minimum_size = Vector2(454, 881)
+theme_override_constants/margin_bottom = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=705898864]
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=870305572]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1821273587]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=124815210]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Mission Rewards"
+
+[node name="CheckButton" type="CheckButton" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=594898678]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 20
+text = "Multi-Filter"
+
+[node name="All" parent="PanelContainer/VBoxContainer" unique_id=887790858 node_paths=PackedStringArray("itemSearchBar") instance=ExtResource("1_vmt3o")]
+layout_mode = 2
+itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/SearchBox3")
+
+[node name="SearchBox" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 2007388593) index="0" unique_id=88566526]
+theme_override_font_sizes/font_size = 24
+
+[node name="SearchBox2" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 2007388593) index="1" unique_id=1531152992]
+visible = false
+
+[node name="SearchBox3" type="LineEdit" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" parent_id_path=PackedInt32Array(887790858, 1164165274) index="1" unique_id=1139515615]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Search items"
+context_menu_enabled = false
+clear_button_enabled = true
+
+[node name="RarityFilters" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" parent_id_path=PackedInt32Array(887790858, 145397223) index="0" unique_id=1442786464]
+custom_minimum_size = Vector2(0, 32)
+
+[node name="Mythic" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 1530477692) index="0" unique_id=154354491]
+custom_minimum_size = Vector2(63, 0)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic" index="1" unique_id=1315154307]
+theme_override_font_sizes/font_size = 20
+
+[node name="Legendary" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 1530477692) index="1" unique_id=142085291]
+custom_minimum_size = Vector2(90, 0)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary" index="1" unique_id=2141807625]
+theme_override_font_sizes/font_size = 20
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic" parent_id_path=PackedInt32Array(887790858, 1999994621) index="1" unique_id=711900581]
+theme_override_font_sizes/font_size = 20
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare" parent_id_path=PackedInt32Array(887790858, 1227604692) index="1" unique_id=226933082]
+theme_override_font_sizes/font_size = 20
+
+[node name="Uncommon" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 1530477692) index="4" unique_id=86269458]
+custom_minimum_size = Vector2(100, 0)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon" index="1" unique_id=1505761652]
+theme_override_font_sizes/font_size = 20
+
+[node name="Common" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 1530477692) index="5" unique_id=1682730759]
+custom_minimum_size = Vector2(80, 0)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common" index="1" unique_id=1334374334]
+theme_override_font_sizes/font_size = 20
+
+[node name="ZoneFilters" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" parent_id_path=PackedInt32Array(887790858, 145397223) index="1" unique_id=1084519212]
+custom_minimum_size = Vector2(0, 32)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood" parent_id_path=PackedInt32Array(887790858, 2064830287) index="1" unique_id=359549788]
+theme_override_font_sizes/font_size = 20
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton" parent_id_path=PackedInt32Array(887790858, 422720111) index="1" unique_id=273357412]
+theme_override_font_sizes/font_size = 20
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley" parent_id_path=PackedInt32Array(887790858, 1977715316) index="1" unique_id=140062798]
+theme_override_font_sizes/font_size = 20
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks" parent_id_path=PackedInt32Array(887790858, 1131557196) index="1" unique_id=1297550183]
+theme_override_font_sizes/font_size = 20
+
+[node name="Ventures" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 57700396) index="4" unique_id=793749072]
+custom_minimum_size = Vector2(85, 0)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures" index="1" unique_id=874977190]
+theme_override_font_sizes/font_size = 20
+
+[node name="RewardTypeFilter" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" parent_id_path=PackedInt32Array(887790858, 145397223) index="2" unique_id=1228440926]
+custom_minimum_size = Vector2(0, 32)
+
+[node name="4x" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 1179755440) index="2" unique_id=1182313242]
+custom_minimum_size = Vector2(28, 0)
+
+[node name="Label" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x" index="0" unique_id=712735251]
+theme_override_font_sizes/font_size = 20
+
+[node name="HBoxContainer" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" parent_id_path=PackedInt32Array(887790858, 145397223) index="3" unique_id=60944725]
+custom_minimum_size = Vector2(0, 32)
+theme_override_constants/separation = 2
+
+[node name="CheckButton" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter" parent_id_path=PackedInt32Array(887790858, 208328889) index="0" unique_id=2115246747]
+custom_minimum_size = Vector2(28, 0)
+
+[node name="CheckButton" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort" parent_id_path=PackedInt32Array(887790858, 1993752179) index="0" unique_id=128584210]
+custom_minimum_size = Vector2(28, 0)
+
+[node name="CheckButton" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel" parent_id_path=PackedInt32Array(887790858, 1064630199) index="0" unique_id=305862933]
+custom_minimum_size = Vector2(28, 0)
+
+[node name="Reset" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" index="4" unique_id=2048246065]
+custom_minimum_size = Vector2(32, 32)
+
+[node name="MarginContainer" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" index="0" unique_id=758152649]
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ScrollContainer" parent="PanelContainer/VBoxContainer/All/VBoxContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(887790858, 1513377394) index="0" unique_id=1982009328]
+elementScene = ExtResource("2_jiu2a")
+
+[editable path="PanelContainer/VBoxContainer/All"]

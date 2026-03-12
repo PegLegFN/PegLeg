@@ -15,6 +15,8 @@ public partial class TargetResolutionSetter : Node
 	Vector2I TargetResolution = new(950, 720);
     [Export]
     Vector2I MinResolution = new(360, 360);
+    [Export]
+    bool forceVertical;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -26,6 +28,8 @@ public partial class TargetResolutionSetter : Node
             rootNode.ResetOffsets();
             rootNode.ResetAnchors();
         }
+        if (OS.HasFeature("mobile"))
+            DisplayServer.ScreenSetOrientation(forceVertical ? DisplayServer.ScreenOrientation.SensorPortrait : DisplayServer.ScreenOrientation.Sensor);
         AppConfig.OnConfigChanged += OnConfigChanged;
     }
 

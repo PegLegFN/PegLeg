@@ -84,11 +84,8 @@ public class GameItem
         SetItemOrRewardData(rawData);
     }
 
-    public record struct ItemData()
+    public record struct ItemData(string templateId, int quantity = 1, JsonObject attributes = null)
     {
-        public string templateId { get; init; }
-        public JsonObject attributes { get; init; }
-        public int quantity = 1;
         public GameItem ToItem() => new(GameItemTemplate.Get(templateId), quantity, attributes.SafeDeepClone());
 
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
@@ -582,9 +579,13 @@ public class GameItem
         level = Mathf.Clamp(level, Mathf.Max(1, (tier * 10) - 10), (tier * 10) + bonusMax);
         string ratingCategory = template.Type == "Worker" ? (template.SubType is null ? "Survivor" : "LeadSurvivor") : "Default";
 
-        string ratingKey = template.GetCompactRarityAndTier(tier);
+        int rarityLevel = template.RarityLevel;
         if (ratingCategory == "LeadSurvivor")
-            ratingKey = ratingKey.Replace("UR_", "SR_");
+            rarityLevel -= 1;
+
+        string ratingKey = template.GetCompactRarityAndTier(tier, rarityLevel);
+        //if (ratingCategory == "LeadSurvivor")
+        //    ratingKey = ratingKey.Replace("UR_", "SR_");
 
         var ratingSet = ratings[ratingCategory]?["Tiers"]?[ratingKey];
         if (ratingSet is null)
@@ -601,7 +602,8 @@ public class GameItem
             GD.PushWarning($"{template.TemplateId} above range of ratings array ({subLevel}>={ratingsLength})");
             return 0;
         }
-        return (int)ratingSet["Ratings"][subLevel].GetValue<float>();
+        var resultRating = (int)ratingSet["Ratings"][subLevel].GetValue<float>();
+        return resultRating;
     }
 
     public int CalculateSurvivorRating(bool useSquad = true, string survivorSquad = null)
@@ -629,12 +631,12 @@ public class GameItem
             int rarityBoost = leaderRarity switch
             {
                 "Mythic" => 8,
-                "Legendary" => 8,
-                "Epic" => 5,
-                "Rare" => 4,
-                "Uncommon" => 3,
-                "Common" => 2,
-                _ => 3
+                "Legendary" => 5,
+                "Epic" => 4,
+                "Rare" => 3,
+                "Uncommon" => 2,
+                "Common" => 1,
+                _ => 2
             };
 
             int rarityPenalty = (leaderRarity == "Mythic") ? 2 : 0;

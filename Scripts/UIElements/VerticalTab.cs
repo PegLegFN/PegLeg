@@ -14,7 +14,7 @@ public partial class VerticalTab : Control
 
 	public override void _Ready()
     {
-        if (!OS.HasFeature("editor_hint"))
+        if (!Engine.IsEditorHint())
         {
             triggerButton ??= FindChildren("*", "Button").FirstOrDefault() is Button b ? b : null;
             marginContainer ??= FindChildren("*", "MarginContainer").FirstOrDefault() is MarginContainer m ? m : null;
@@ -47,7 +47,7 @@ public partial class VerticalTab : Control
     public Control Page => pageNode;
     public void SetPage(Control newPageNode)
 	{
-        if (OS.HasFeature("editor_hint") && pageNode is not null)
+        if (Engine.IsEditorHint() && pageNode is not null)
         {
             //Renamed -= UpdatePageName;
             //VisibilityChanged -= PressResponse;
@@ -57,7 +57,7 @@ public partial class VerticalTab : Control
         pageNode = newPageNode;
         UpdatePageName();
         SetState(triggerButton?.ButtonPressed ?? false);
-        if (OS.HasFeature("editor_hint") && pageNode is not null)
+        if (Engine.IsEditorHint() && pageNode is not null)
         {
             //Renamed += UpdatePageName;
             //VisibilityChanged += PressResponse;
@@ -93,7 +93,7 @@ public partial class VerticalTab : Control
 
     public override void _ExitTree()
     {
-        if (OS.HasFeature("editor_hint") && pageNode is not null && pageNode.IsInsideTree())
+        if (Engine.IsEditorHint() && pageNode is not null && pageNode.IsInsideTree())
         {
             //Renamed -= UpdatePageName;
             //VisibilityChanged -= PressResponse;

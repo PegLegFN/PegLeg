@@ -232,7 +232,7 @@ public partial class PartyLoadoutsInterface : Control
         if (await partyResponse.CheckForError())
             return [];
         var partyData = await partyResponse.ReadJson<PartyCollection>();
-        if (partyData.current.Length == 0)
+        if ((partyData.current?.Length ?? 0) == 0)
             return [];
         return partyData.current[0].members.Select(m => m.accountId) ?? [];
     }

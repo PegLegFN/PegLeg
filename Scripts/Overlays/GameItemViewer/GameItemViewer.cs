@@ -247,7 +247,6 @@ public partial class GameItemViewer : ModalWindow
         Visible = true;
         displayItemEntry.SetItem(item);
         item.SetRewardNotification();
-        inventoryItemPanel.Visible = item.profile is not null;
         displayedItem = item;
 
         tabRoot.Visible = false;

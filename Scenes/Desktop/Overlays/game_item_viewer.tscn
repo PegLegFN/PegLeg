@@ -543,7 +543,7 @@ Text = "Dev"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Perks" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="0" unique_id=1053041289 node_paths=PackedStringArray("realPerkArea", "optionalPerkArea", "interactionBlocker", "currentPerkEntries", "perkUpArea", "perkUpEntry", "reperkEntries", "costEntries", "perkApplyButton")]
+[node name="Perks" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="0" unique_id=1053041289 node_paths=PackedStringArray("realPerkArea", "optionalPerkArea", "interactionBlocker", "currentPerkEntries", "perkUpArea", "perkUpEntry", "reperkEntries", "costArea", "costEntries", "perkApplyButton")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 script = ExtResource("7_14t7q")
@@ -554,7 +554,8 @@ currentPerkEntries = [NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entr
 perkUpArea = NodePath("Perks/Perk Option Selector/VBoxContainer/UpgradePerkLayout")
 perkUpEntry = NodePath("Perks/Perk Option Selector/VBoxContainer/UpgradePerkLayout/MarginContainer/UpgradePerk")
 reperkEntries = [NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk1"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk2"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk3"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk4"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk5"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk6")]
-costEntries = []
+costArea = NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer")
+costEntries = [NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3/CostItem"), NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3/CostItem2"), NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3/CostItem3"), NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3/CostItem4"), NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3/CostItem5")]
 perkApplyButton = NodePath("Perks/Perk Option Selector/VBoxContainer/HBoxContainer/ApplyButton")
 previewMaxTierByDefault = true
 
@@ -604,7 +605,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector" index="0" unique_id=1737839540]
 layout_mode = 2
@@ -668,38 +671,41 @@ layout_mode = 2
 [node name="Reperk6" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" index="5" unique_id=1461530747 instance=ExtResource("2_t0h0p")]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer" index="2" unique_id=1065912052]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer" index="2" unique_id=1103086047]
+layout_mode = 2
+theme_override_constants/margin_top = -8
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer" index="0" unique_id=1065912052]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"Panel3PadB"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer" index="0" unique_id=1432491305]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer" index="0" unique_id=1432491305]
 layout_mode = 2
 alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3" index="0" unique_id=844428229]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3" index="0" unique_id=844428229]
 layout_mode = 2
 theme_override_constants/margin_right = -20
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3/MarginContainer" index="0" unique_id=1390736825]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3/MarginContainer" index="0" unique_id=1390736825]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Cost:"
 
-[node name="CostItem" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3" index="1" unique_id=11357012 instance=ExtResource("41_1kdmv")]
+[node name="CostItem" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3" index="1" unique_id=11357012 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
-[node name="CostItem2" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3" index="2" unique_id=1281945540 instance=ExtResource("41_1kdmv")]
+[node name="CostItem2" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3" index="2" unique_id=1281945540 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
-[node name="CostItem3" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3" index="3" unique_id=1848197311 instance=ExtResource("41_1kdmv")]
+[node name="CostItem3" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3" index="3" unique_id=1848197311 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
-[node name="CostItem4" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3" index="4" unique_id=1640007488 instance=ExtResource("41_1kdmv")]
+[node name="CostItem4" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3" index="4" unique_id=1640007488 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
-[node name="CostItem5" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/PanelContainer/HBoxContainer3" index="5" unique_id=1793402521 instance=ExtResource("41_1kdmv")]
+[node name="CostItem5" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/MarginContainer/PanelContainer/HBoxContainer3" index="5" unique_id=1793402521 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer" index="3" unique_id=1127983657]

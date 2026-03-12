@@ -154,9 +154,13 @@ public static class WebHelpers
         }
         var response = await CloneAndSend(msg, disposeMsg);
 
-        if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+        //TODO: configurable retry attempt count
+        for (int i = 0; i < 2; i++)
         {
-            await Task.Delay(100);
+            if (response.StatusCode != HttpStatusCode.ServiceUnavailable)
+                break;
+            //TODO: configurable retry delay
+            await Task.Delay(1000);
             response = await CloneAndSend(msg, disposeMsg);
         }
 

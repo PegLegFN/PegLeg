@@ -1,8 +1,6 @@
 using Godot;
-using System;
-using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -207,7 +205,10 @@ public partial class PerkViewer : Control
         {
             string perkUpAlteration = rarityUpRecipe["Result"].ToString();
             perkUpEntry.SetPerkAlteration(perkUpAlteration, true);
-            perkUpEntry.SetInteractable(currentItem?.profile?.account == GameAccount.ActiveAccount || currentItem?.profile?.account == null);
+            perkUpEntry.SetInteractable(
+                (currentItem?.profile?.account == GameAccount.ActiveAccount && !isLocked) ||
+                currentItem?.profile?.account == null
+            );
             perkUpArea.Visible = true;
         }
         else
@@ -224,7 +225,10 @@ public partial class PerkViewer : Control
             }
 
             reperkEntries[i].SetPerkAlteration(perk, true, i + 1);
-            reperkEntries[i].SetInteractable(currentItem?.profile?.account == GameAccount.ActiveAccount || currentItem?.profile?.account == null);
+            reperkEntries[i].SetInteractable(
+                (currentItem?.profile?.account == GameAccount.ActiveAccount && !isLocked) || 
+                currentItem?.profile?.account == null
+            );
             reperkEntries[i].Visible = true;
         }
         //if(index == 5 && !isTrap)
@@ -236,10 +240,11 @@ public partial class PerkViewer : Control
 
         //reset cost visuals
         selectedReplacementPerk = null;
-        //for (int i = 0; i < reperkCostEntries.Length; i++)
-        //{
-        //    reperkCostEntries[i].Visible = false;
-        //}
+        costArea.Visible = false;
+        for (int i = 0; i < costEntries.Length; i++)
+        {
+            costEntries[i].Visible = false;
+        }
         perkApplyButton.Visible = false;
 
         if (wasOpen)
@@ -259,6 +264,7 @@ public partial class PerkViewer : Control
     }
 
     string selectedReplacementPerk;
+    bool replacementIsUpgrade;
     public void SelectReplacementPerk(string replacementId, int replacementIndex)
     {
         if (currentItem.profile is null)
@@ -272,27 +278,37 @@ public partial class PerkViewer : Control
         GD.Print("selecting perk: " + replacementId);
 
         selectedReplacementPerk = replacementId;
+        GameItemTemplate replacementPerkItem = GameItemTemplate.Get(replacementId);
+        replacementIsUpgrade = replacementIndex == 0;
 
-        JsonObject costs = null;
-        if (replacementIndex == 0)
+        GameItem[] costItems = null;
+        if (replacementIsUpgrade)
         {
-
+            //upgrade
+            costItems = [..
+                (selectedPerk["RarityUpRecipe"]?["Cost"]?.Deserialize<Dictionary<string, int>>() ?? [])
+                .Select(kvp => GameItemTemplate.Get(kvp.Key).CreateInstance(kvp.Value))
+            ];
         }
         else
         {
-
+            //respec
+            var slot = perkSlots[selectedPerkIndex];
+            var baseCost = slot.respecCost;
+            var extraCost = (replacementPerkItem["AdditionalRespecCost"]?.Deserialize<Dictionary<string, int>>() ?? [])
+                        .Select(kvp => new GameItem.ItemData(kvp.Key, kvp.Value))
+                        .ToArray();
+            costItems = [..GameItem.ItemData.Add(baseCost, extraCost).Select(i=>i.ToItem())];
         }
-        costs ??= [];
-        var costItems = costs.Select(kvp => GameItemTemplate.Get(kvp.Key).CreateInstance(kvp.Value.GetValue<int>())).ToArray();
-        bool allCostsMet = false;
+        costItems ??= [];
+        //var costItems = costs.Select(kvp => GameItemTemplate.Get(kvp.Key).CreateInstance(kvp.Value.GetValue<int>())).ToArray();
+        bool allCostsMet = costItems.Length > 0;
+        costArea.Visible = costItems.Length > 0;
         for (int i = 0; i < costItems.Length; i++)
         {
-            //can safely assume that this is the AccountItem profile, and that it has been queried
-            var existingItem = currentItem.profile.GetTemplateItems(costItems[i].templateId).FirstOrDefault();
-            int existingAmount = existingItem?.quantity ?? 0;
-            if (existingAmount < costItems[i].quantity)
+            costEntries[i].SetItem(costItems[i]);
+            if (!costEntries[i].CanAfford)
                 allCostsMet = false;
-            costEntries[i].SetItem(existingItem ?? costItems[i]);
             costEntries[i].Visible = true;
         }
         GD.Print($"Perk affordable: {allCostsMet}");
@@ -305,14 +321,34 @@ public partial class PerkViewer : Control
         //perkApplyButton.Disabled = true;
     }
 
-    public void ApplyReplacementPerk()
+    public async void ApplyReplacementPerk()
     {
+        if (currentItem.profile is null || selectedReplacementPerk == null)
+            return;
         GD.Print("applying perk: " + selectedReplacementPerk);
-        if (currentItem.profile is not null && selectedReplacementPerk != null)
+
+        Task upgradeTask = null;
+        if (replacementIsUpgrade)
         {
-            //await profile request
+            upgradeTask = currentItem.profile.PerformOperation("UpgradeAlteration", new JsonObject()
+            {
+                ["targetItemId"] = currentItem.uuid,
+                ["alterationSlot"] = selectedPerkIndex
+            });
         }
-        ClosePerkChanger();
+        else
+        {
+            upgradeTask = currentItem.profile.PerformOperation("RespecAlteration", new JsonObject()
+            {
+                ["targetItemId"] = currentItem.uuid,
+                ["alterationSlot"] = selectedPerkIndex,
+                ["alterationId"] = selectedReplacementPerk
+            });
+        }
+        //await profile request
+        ItemUpgradeAnimation.PlayAnimation(currentItem.GetTexture(), () => upgradeTask, true);
+        await upgradeTask;
+        OpenPerkChanger(selectedPerkIndex, selectedPerkLocked);
     }
 
     public void ClosePerkChanger()

@@ -98,8 +98,8 @@ public partial class ItemUpgradeAnimation : Control
         instance = this;
     }
 
-    public static void PlayAnimation(Texture2D itemTexture, Func<Task> upgradeTask = null) =>
-        instance?.PlayAnimationInst(itemTexture, upgradeTask);
+    public static void PlayAnimation(Texture2D itemTexture, Func<Task> upgradeTask = null, bool forceFast = false) =>
+        instance?.PlayAnimationInst(itemTexture, upgradeTask, forceFast);
     [ExportGroup("Custom Attributes")]
     [Export(PropertyHint.Range, "0,1")]
     float HammerOffset
@@ -128,12 +128,12 @@ public partial class ItemUpgradeAnimation : Control
     }
 
     bool lockAnimation = false;
-    async void PlayAnimationInst(Texture2D itemTexture, Func<Task> upgradeTask)
+    async void PlayAnimationInst(Texture2D itemTexture, Func<Task> upgradeTask, bool forceFast)
     {
         if (lockAnimation)
             return;
         lockAnimation = true;
-        bool fastAnimations = AppConfig.Get("misc", "fast_animations", false);
+        bool fastAnimations = AppConfig.Get("misc", "fast_animations", false) || forceFast;
         //GD.Print(fastAnimations);
         modalWindow.SetWindowOpen(true);
 
@@ -192,7 +192,7 @@ public partial class ItemUpgradeAnimation : Control
         textAppearTween.TweenProperty(finalText, "rotation_degrees", 0, textEnterDuration);
         textAppearTween.TweenProperty(finalText, "scale", Vector2.One, textEnterDuration);
 
-        await Helpers.WaitForTimer(anvilShrinkDuration + textStayDuration);
+        await Helpers.WaitForTimer(fastAnimations ? textEnterDuration + textStayDuration*0.5f : anvilShrinkDuration + textStayDuration);
 
         if(fastAnimations && upgradeOperation is not null)
             await upgradeOperation;

@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://ql3qdwhqjhqh"]
+
+[ext_resource type="Script" uid="uid://uktyloc0k82e" path="res://Scripts/UIElements/SubmenuController.cs" id="1_3gb8i"]
+[ext_resource type="PackedScene" uid="uid://cp30vi7ltw113" path="res://Scenes/UI/submenuButton.tscn" id="2_xje3y"]
+
+[node name="SubmenuContainer" type="Container" unique_id=570908151 node_paths=PackedStringArray("buttonListControl", "buttonParent", "pageContainer", "pageParent")]
+clip_contents = true
+custom_minimum_size = Vector2(200, 300)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -150.0
+offset_right = 100.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3gb8i")
+buttonScene = ExtResource("2_xje3y")
+buttonListControl = NodePath("ButtonContainer")
+buttonParent = NodePath("ButtonContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
+pageContainer = NodePath("PageContainer")
+pageParent = NodePath("PageContainer/PageParent")
+
+[node name="ButtonContainer" type="MarginContainer" parent="." unique_id=253512966]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="ButtonContainer" unique_id=579634199]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ButtonContainer/PanelContainer" unique_id=840187339]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ButtonContainer/PanelContainer/VBoxContainer" unique_id=532975075]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="ButtonContainer/PanelContainer/VBoxContainer/ScrollContainer" unique_id=1790069485]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ButtonContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1105843596]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Button" parent="ButtonContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=662049389 instance=ExtResource("2_xje3y")]
+layout_mode = 2
+text = "Page 1"
+
+[node name="Button2" parent="ButtonContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1455898939 instance=ExtResource("2_xje3y")]
+layout_mode = 2
+text = "Page 2"
+
+[node name="Button3" parent="ButtonContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=647418469 instance=ExtResource("2_xje3y")]
+layout_mode = 2
+text = "Page 3"
+
+[node name="PageContainer" type="MarginContainer" parent="." unique_id=933658718]
+layout_mode = 2
+
+[node name="PageParent" type="MarginContainer" parent="PageContainer" unique_id=1962361108]
+layout_mode = 2
