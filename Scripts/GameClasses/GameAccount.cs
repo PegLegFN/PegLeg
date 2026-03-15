@@ -113,16 +113,18 @@ public readonly record struct RatingData(float fortitude, float offense, float r
         var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
         double heroPower = 0;
         var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
-        var crewMembers = loadoutItem.attributes["crew_members"].Deserialize<Dictionary<string, string>>();
+        var crewMembers = loadoutItem?.attributes["crew_members"]?.Deserialize<Dictionary<string, string>>() ?? [];
+        if (crewMembers.Count == 0)
+            return 0;
         if (loadoutItem is not null)
         {
-            heroPower += (70 * accountItems.GetItem(crewMembers["commanderslot"]).CalculateRating()) / 100d;
+            heroPower += accountItems.GetItem(crewMembers["commanderslot"]).CalculateRating() * CommanderWeight;
 
-            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot1"))?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot2"))?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot3"))?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot4"))?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot5"))?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot1"))?.CalculateRating() ?? 0) * SupportHeroWeight;
+            heroPower += (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot2"))?.CalculateRating() ?? 0) * SupportHeroWeight;
+            heroPower += (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot3"))?.CalculateRating() ?? 0) * SupportHeroWeight;
+            heroPower += (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot4"))?.CalculateRating() ?? 0) * SupportHeroWeight;
+            heroPower += (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot5"))?.CalculateRating() ?? 0) * SupportHeroWeight;
         }
         return heroPower;
     }

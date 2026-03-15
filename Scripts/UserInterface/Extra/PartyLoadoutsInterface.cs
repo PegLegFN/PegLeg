@@ -92,10 +92,12 @@ public partial class PartyLoadoutsInterface : Control
             //}
 
             string[] teammateIds = [];
-            if (targetUser != GameAccount.ActiveAccount)
-                teammateIds = [.. await GetTeammatesFromParty(targetUser)];
-            if (teammateIds.Length == 0)
-                teammateIds = [.. await GetTeammatesFromMatch()];
+            //if (targetUser != GameAccount.ActiveAccount)
+            //    teammateIds = [.. await GetTeammatesFromParty(targetUser)];
+
+            // Epic disabled findPlayer functionality :pensive:
+            //if (teammateIds.Length == 0)
+            //    teammateIds = [.. await GetTeammatesFromMatch()];
             if (teammateIds.Length == 0)
                 teammateIds = [.. await GetTeammatesFromParty()];
             if (teammateIds.Length == 0)
@@ -215,7 +217,8 @@ public partial class PartyLoadoutsInterface : Control
             .Send();
         if (await matchResponse.CheckForError())
             return [];
-        var matchData = ((await matchResponse.ReadJson<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault()).Value;
+        var matchJson = await matchResponse.ReadJson();
+        var matchData = ((matchJson.Deserialize<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault()).Value;
         if (matchData.attributes.Gamemode != "FORTPVE")
             return [];
         matchData.publicPlayers ??= matchData.privatePlayers;
@@ -231,7 +234,8 @@ public partial class PartyLoadoutsInterface : Control
             .Send();
         if (await partyResponse.CheckForError())
             return [];
-        var partyData = await partyResponse.ReadJson<PartyCollection>();
+        var partyJson = await partyResponse.ReadJson();
+        var partyData = partyJson.Deserialize<PartyCollection>();
         if ((partyData.current?.Length ?? 0) == 0)
             return [];
         return partyData.current[0].members.Select(m => m.accountId) ?? [];
