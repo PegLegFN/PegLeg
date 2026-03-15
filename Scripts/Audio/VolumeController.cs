@@ -83,7 +83,7 @@ public partial class VolumeController : Node
     static void RefreshMusicVolume()
     {
         var idx = AudioServer.GetBusIndex("Music");
-        AudioServer.SetBusVolumeDb(idx, GetBusMuted("Music") ? -80 : GetBusVolume("Music", true));
+        AudioServer.SetBusVolumeDb(idx, GetBusMuted("Music") ? -100 : GetBusVolume("Music", true));
     }
 
     public static void RefreshVolumeLevels()
@@ -91,7 +91,7 @@ public partial class VolumeController : Node
         for (int i = 0; i < AudioServer.BusCount; i++)
         {
             string busName = AudioServer.GetBusName(i);
-            AudioServer.SetBusVolumeDb(i, GetBusMuted(busName) ? -80 : GetBusVolume(busName, true));
+            AudioServer.SetBusVolumeDb(i, GetBusMuted(busName) ? -100 : GetBusVolume(busName, true));
         }
     }
 
@@ -116,7 +116,7 @@ public partial class VolumeController : Node
     public static void SetBusMuted(string busName, bool newValue)
     {
         int busIdx = AudioServer.GetBusIndex(busName);
-        AudioServer.SetBusVolumeDb(busIdx, newValue ? -80 : GetBusVolume(busName, true));
+        AudioServer.SetBusVolumeDb(busIdx, newValue ? -100 : GetBusVolume(busName, true));
         AppConfig.Set("audio", $"{busName}_muted", newValue);
     }
 

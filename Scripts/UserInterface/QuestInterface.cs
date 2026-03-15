@@ -159,7 +159,7 @@ public partial class QuestInterface : Control
                         case QuestTimerMode.Event:
                             var activeFlag = collection.eventFlags.FirstOrDefault(GameCalender.EventFlagActive);
                             if (GameCalender.TryGetFlagRange(activeFlag, out var startDate, out var endDate))
-                                timer.SetCustomRefreshTime(startDate, endDate);
+                                timer.SetCustomRefreshTime(endDate, startDate);
                             timer.Visible = activeFlag is not null;
                             break;
                     }
