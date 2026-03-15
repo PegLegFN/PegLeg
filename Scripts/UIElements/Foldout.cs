@@ -10,7 +10,7 @@ public partial class Foldout : Control
     public delegate void NotificationVisibleEventHandler(bool visible);
 
     [Export]
-	public Container elementContainer { get; private set; }
+	public Control elementContainer { get; private set; }
 	[Export]
 	Control foldoutInteractionPanel;
 	[Export]
@@ -98,6 +98,6 @@ public partial class Foldout : Control
     public void SetNotification(bool visible) => EmitSignal(SignalName.NotificationVisible, visible);
 
 	public void AddFoldoutChild(Node node) => foldoutChildParent.AddChild(node);
-    public Node[] GetFoldoutChildren() => foldoutChildParent.GetChildren().ToArray();
+    public Node[] GetFoldoutChildren() => [.. foldoutChildParent.GetChildren()];
     public void RemoveFoldoutChild(Node node) => foldoutChildParent.RemoveChild(node);
 }

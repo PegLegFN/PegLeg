@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://i65ndlvcjb3f"]
+
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="1_xt8ns"]
+[ext_resource type="Texture2D" uid="uid://b068tdyuivkmu" path="res://Images/ContentCreators/ArcherDanceSheet4.png" id="2_dgu2k"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="3_8k60v"]
+
+[sub_resource type="Animation" id="Animation_novys"]
+resource_name = "archer_dance"
+length = 0.65
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:offset_bottom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.33333334, 0.5),
+"transitions": PackedFloat32Array(0.32987708, 2.2973971, 0.329877, 2.8284252),
+"update": 0,
+"values": [0.0, -35.0, 0.0, -35.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.33333334, 0.5),
+"transitions": PackedFloat32Array(0.37892905, 2.8284273, 0.37892905, 2.8284273),
+"update": 0,
+"values": [0.0, -0.1308997, 0.0, 0.1308996938995747]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.16666667, 0.26666668, 0.33333334, 0.43333337, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0.8), Vector2(0.8, 1.1), Vector2(1, 1), Vector2(1, 1), Vector2(1, 0.8), Vector2(0.8, 1.1), Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_teqqu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:offset_bottom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0.8)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pi3j5"]
+_data = {
+&"33449ecf412c4b6aa3ad655d1e70f7f2": SubResource("Animation_novys"),
+&"RESET": SubResource("Animation_teqqu")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k64ed"]
+shader = ExtResource("1_xt8ns")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/SliceAmount = Vector2(4, 4)
+shader_parameter/FPS = 25.0
+shader_parameter/CellCount = 0
+shader_parameter/Fit = false
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
+
+[node name="CreatorEasterEggs" type="Control" unique_id=100444052]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1077845815]
+root_node = NodePath("../33449ecf412c4b6aa3ad655d1e70f7f2")
+libraries/ = SubResource("AnimationLibrary_pi3j5")
+playback_auto_capture = false
+
+[node name="old" type="Control" parent="." unique_id=249866602]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[node name="33449ecf412c4b6aa3ad655d1e70f7f2" type="TextureRect" parent="old" unique_id=1293619779]
+material = SubResource("ShaderMaterial_k64ed")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+texture = ExtResource("2_dgu2k")
+expand_mode = 1
+
+[node name="33449ecf412c4b6aa3ad655d1e70f7f2" type="TextureRect" parent="." unique_id=1447531064]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 0.8)
+pivot_offset_ratio = Vector2(0.5, 1)
+size_flags_horizontal = 0
+size_flags_vertical = 8
+texture = ExtResource("3_8k60v")
+expand_mode = 1

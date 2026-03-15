@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b8hsqxu7wjoo2"]
+
+[ext_resource type="Script" uid="uid://cnduts0olijb7" path="res://Scripts/UserInterface/Settings/CoreSettings.cs" id="1_mbu52"]
+
+[node name="CorePage" type="VBoxContainer" unique_id=596819378 node_paths=PackedStringArray("liteLabel", "liteButton", "mobileLabel", "mobileButton")]
+theme_override_constants/separation = 12
+script = ExtResource("1_mbu52")
+liteActiveText = "Lite mode uses a subset of features that don't require a Login. Lite mode can be re-enabled from here at any time."
+liteInactiveText = "Lite mode uses a subset of features that don't require a Login. Lite mode can be disabled from here at any time."
+liteActiveButtonText = "Disable Lite Mode"
+liteInactiveButtonText = "Enable Lite Mode"
+mobileActiveText = "The Mobile UI does not support all of PegLegs features. Switching to the Desktop UI allows you to use all of PegLegs features, albiet in a less conventient layout."
+mobileInactiveText = "Mobile UI:"
+mobileActiveButtonText = "Switch to Desktop UI"
+mobileInactiveButtonText = "Return to Mobile UI"
+liteLabel = NodePath("Lite/Label")
+liteButton = NodePath("Lite/Button")
+mobileLabel = NodePath("Mobile/Label")
+mobileButton = NodePath("Mobile/Button")
+
+[node name="Lite" type="VBoxContainer" parent="." unique_id=286795501]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Lite" unique_id=1226444205]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+text = "Lite mode uses a subset of features that don't require a Login. Lite mode can be disabled from here at any time."
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Lite" unique_id=366798131]
+layout_mode = 2
+text = "Enable Lite Mode"
+
+[node name="Mobile" type="VBoxContainer" parent="." unique_id=21357924]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Mobile" unique_id=955497188]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+text = "Mobile UI:"
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Mobile" unique_id=631049511]
+layout_mode = 2
+text = "Switch to Mobile UI"
+
+[connection signal="pressed" from="Lite/Button" to="." method="ToggleLiteMode"]
+[connection signal="pressed" from="Mobile/Button" to="." method="ToggleMobileMode"]

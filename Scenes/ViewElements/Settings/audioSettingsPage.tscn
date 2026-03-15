@@ -1,0 +1,370 @@
+[gd_scene format=3 uid="uid://4y0pw4m6tes2"]
+
+[ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="1_5i0b7"]
+[ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="2_245r8"]
+
+[node name="AudioPage" type="VBoxContainer" unique_id=548623827]
+size_flags_horizontal = 3
+
+[node name="Master" type="MarginContainer" parent="." unique_id=143172027 node_paths=PackedStringArray("volSlider")]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Master" unique_id=458696093]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Master/HBoxContainer" unique_id=358927393]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Master"
+
+[node name="HSlider" type="HSlider" parent="Master/HBoxContainer" unique_id=253118127]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+min_value = -80.0
+max_value = -20.0
+value = -20.0
+rounded = true
+scrollable = false
+tick_count = 7
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="Master/HBoxContainer" unique_id=1591436265]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="Master/HBoxContainer/MuteBtn" unique_id=607274219]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Music" type="MarginContainer" parent="." unique_id=973689255 node_paths=PackedStringArray("volSlider")]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Music" unique_id=412801899]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Music/HBoxContainer" unique_id=491025009]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Music"
+
+[node name="HSlider" type="HSlider" parent="Music/HBoxContainer" unique_id=1302478059]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+min_value = -80.0
+max_value = 0.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="Music/HBoxContainer" unique_id=208380176]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="Music/HBoxContainer/MuteBtn" unique_id=1335317544]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SFX" type="MarginContainer" parent="." unique_id=939836358 node_paths=PackedStringArray("volSlider")]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SFX" unique_id=1404745167]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SFX/HBoxContainer" unique_id=267583647]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound FX"
+
+[node name="HSlider" type="HSlider" parent="SFX/HBoxContainer" unique_id=866339703]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+min_value = -80.0
+max_value = 0.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="SFX/HBoxContainer" unique_id=1629567763]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="SFX/HBoxContainer/MuteBtn" unique_id=308058727]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hover" type="MarginContainer" parent="." unique_id=1557945107 node_paths=PackedStringArray("volSlider")]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 30
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Hover" unique_id=1145452527]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Hover/HBoxContainer" unique_id=1396031353]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "UI Hover"
+
+[node name="HSlider" type="HSlider" parent="Hover/HBoxContainer" unique_id=413051856]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+min_value = -80.0
+max_value = 0.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="Hover/HBoxContainer" unique_id=1220203040]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="Hover/HBoxContainer/MuteBtn" unique_id=1024021977]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Press" type="MarginContainer" parent="." unique_id=320931226 node_paths=PackedStringArray("volSlider")]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 30
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Press" unique_id=308786966]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Press/HBoxContainer" unique_id=955038915]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "UI Press"
+
+[node name="HSlider" type="HSlider" parent="Press/HBoxContainer" unique_id=337171113]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+min_value = -80.0
+max_value = 0.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="Press/HBoxContainer" unique_id=1398410543]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="Press/HBoxContainer/MuteBtn" unique_id=946762901]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Voices" type="MarginContainer" parent="." unique_id=233803315 node_paths=PackedStringArray("volSlider")]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 30
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Voices" unique_id=1877850908]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Voices/HBoxContainer" unique_id=300492824]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Voices"
+
+[node name="HSlider" type="HSlider" parent="Voices/HBoxContainer" unique_id=1612348839]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+theme_override_constants/grabber_offset = 0
+min_value = -80.0
+max_value = 0.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="Voices/HBoxContainer" unique_id=1195615894]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="Voices/HBoxContainer/MuteBtn" unique_id=2072034101]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Notifications" type="MarginContainer" parent="." unique_id=757808848 node_paths=PackedStringArray("volSlider")]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+script = ExtResource("1_5i0b7")
+volSlider = NodePath("HBoxContainer/HSlider")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Notifications" unique_id=579469210]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Notifications/HBoxContainer" unique_id=1755029295]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Notifications"
+
+[node name="HSlider" type="HSlider" parent="Notifications/HBoxContainer" unique_id=654968752]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 1
+size_flags_stretch_ratio = 2.0
+min_value = -80.0
+max_value = 0.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+
+[node name="MuteBtn" type="Button" parent="Notifications/HBoxContainer" unique_id=1267941065]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Mute/Unmute"
+theme_type_variation = &"TinyButton"
+
+[node name="TextureRect" type="TextureRect" parent="Notifications/HBoxContainer/MuteBtn" unique_id=1945009413]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_245r8")
+expand_mode = 1
+stretch_mode = 5
+
+[connection signal="UpdateMuteIcon" from="Master" to="Master/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Master" to="Master/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Master/HBoxContainer/MuteBtn" to="Master" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Music" to="Music/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Music" to="Music/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Music/HBoxContainer/MuteBtn" to="Music" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="SFX" to="SFX/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="SFX" to="SFX/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="SFX/HBoxContainer/MuteBtn" to="SFX" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Hover" to="Hover/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Hover" to="Hover/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Hover/HBoxContainer/MuteBtn" to="Hover" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Press" to="Press/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Press" to="Press/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Press/HBoxContainer/MuteBtn" to="Press" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Voices" to="Voices/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Voices" to="Voices/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Voices/HBoxContainer/MuteBtn" to="Voices" method="ToggleMute"]
+[connection signal="UpdateMuteIcon" from="Notifications" to="Notifications/HBoxContainer/MuteBtn/TextureRect" method="set_texture"]
+[connection signal="UpdateVolumeState" from="Notifications" to="Notifications/HBoxContainer/HSlider" method="set_value_no_signal"]
+[connection signal="pressed" from="Notifications/HBoxContainer/MuteBtn" to="Notifications" method="ToggleMute"]

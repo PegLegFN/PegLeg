@@ -18,10 +18,12 @@ public partial class InversePL : Node
 
     public override void _Ready()
     {
+        RatingData max = new(90720/4, 0, 0, 0, 144, 144);
+        max.Print("Max");
         if (editor is null)
             return;
-        var keys = FORTStats.HomebaseRatingCurve.times.ToArray();
-        var values = FORTStats.HomebaseRatingCurve.values.ToArray();
+        var keys = RatingData.HomebaseRatingCurve.times.ToArray();
+        var values = RatingData.HomebaseRatingCurve.values.ToArray();
 
         Vector2 lastPos = new();
         for (int i = 0; i < keys.Length; i++)
@@ -49,11 +51,13 @@ public partial class InversePL : Node
 
     public void SetValue(float inputValue)
     {
-        EmitSignalOnInverse((float?)FORTStats.HomebaseRatingCurve?.SampleInverse(inputValue) ?? 0);
+        EmitSignalOnInverse((float?)RatingData.HomebaseRatingCurve?.SampleInverse(inputValue) ?? 0);
     }
 
     public void SampleValue(float inputValue)
     {
-        EmitSignalOnInverse((float?)FORTStats.HomebaseRatingCurve?.Sample(inputValue) ?? 0);
+        var sample = (float?)RatingData.HomebaseRatingCurve?.Sample(inputValue) ?? 0;
+        GD.Print(sample);
+        EmitSignalOnInverse(sample);
     }
 }

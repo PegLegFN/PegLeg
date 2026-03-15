@@ -1,0 +1,329 @@
+[gd_scene format=3 uid="uid://ciepy6jqqfr58"]
+
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="1_ncurv"]
+[ext_resource type="Script" uid="uid://bpj23p4ewlb5r" path="res://Scripts/UserInterface/Settings/ThemeSettings.cs" id="1_xgdyr"]
+[ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="2_lwc5a"]
+[ext_resource type="Texture2D" uid="uid://bolcgvghoolg2" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Pause_128.png" id="3_52s7r"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_m7qic"]
+[ext_resource type="Texture2D" uid="uid://uip5g34801wx" path="res://Images/Wallpapers/Fortnite_-_Unknown_Location.png" id="4_15de0"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="5_qyhu8"]
+[ext_resource type="Texture2D" uid="uid://bmye5mskqg8ib" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Shuffle_128.png" id="6_1p3vh"]
+[ext_resource type="Texture2D" uid="uid://wlgvx7s0uplf" path="res://Images/InterfaceIcons/T-Icon-Sound-On-L.png" id="7_o7uk7"]
+[ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="8_slm82"]
+[ext_resource type="StyleBox" uid="uid://cam4t61h3jmpx" path="res://GodotThemes/Styleboxes/ActionButton/ActionButton.tres" id="9_u5sfe"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="10_x7ge6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mjqpy"]
+shader = ExtResource("1_ncurv")
+shader_parameter/ControlSize = Vector2(232, 150)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 5.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sahv1"]
+shader = ExtResource("5_qyhu8")
+shader_parameter/inset = 0.0
+shader_parameter/shade = 0.0
+shader_parameter/shadeAlpha = 0.8
+
+[sub_resource type="Gradient" id="Gradient_ew55o"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_eiysq"]
+gradient = SubResource("Gradient_ew55o")
+fill = 1
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(1, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omoh7"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7rbbf"]
+bg_color = Color(9.2411e-06, 0.66226, 0.833269, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="ThemePage" type="VBoxContainer" unique_id=641150163 node_paths=PackedStringArray("themeOptions", "backgroundPreview", "backgroundOptions", "musicOptions", "musicPreviewButton", "musicPreviewProgress", "applyBtnSection")]
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+script = ExtResource("1_xgdyr")
+themeOptions = NodePath("VBoxContainer/OptionButton")
+backgroundPreview = NodePath("VBoxContainer/BGSelector/VBoxContainer/Aspect/CurBG")
+backgroundOptions = NodePath("VBoxContainer/BGSelector/VBoxContainer/OptionButton")
+musicOptions = NodePath("VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer/OptionButton")
+musicPreviewButton = NodePath("VBoxContainer/MusicSelector/HBoxContainer/Button")
+musicPreviewProgress = NodePath("VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer/ProgressBar")
+applyBtnSection = NodePath("VBoxContainer2")
+playIcon = ExtResource("8_slm82")
+pauseIcon = ExtResource("3_52s7r")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1246286346]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer" unique_id=1811698250]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "Default (Current Seasonal Zone)"
+popup/item_0/id = 0
+popup/item_1/text = "Themes"
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "some theme here"
+popup/item_2/id = 2
+popup/item_3/text = "another theme here"
+popup/item_3/id = 3
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=733006055]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=2074351304]
+visible = false
+layout_mode = 2
+
+[node name="Left" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1687951438]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+text = "<"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=2128132302]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer" unique_id=389911906]
+layout_mode = 2
+theme_type_variation = &"PanelButtonSlanted"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/MarginContainer" unique_id=197913399]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" unique_id=139231705]
+layout_mode = 2
+text = "testing"
+horizontal_alignment = 1
+
+[node name="Right" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=831988647]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+text = ">"
+
+[node name="BGSelector" type="PanelContainer" parent="VBoxContainer" unique_id=158472335]
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/BGSelector" unique_id=154771575]
+layout_mode = 2
+
+[node name="Aspect" type="TextureRect" parent="VBoxContainer/BGSelector/VBoxContainer" unique_id=42305058]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+expand_mode = 5
+
+[node name="CurBG" type="TextureRect" parent="VBoxContainer/BGSelector/VBoxContainer/Aspect" unique_id=979541972]
+material = SubResource("ShaderMaterial_mjqpy")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_lwc5a")
+expand_mode = 1
+script = ExtResource("3_m7qic")
+syncControlSize = true
+
+[node name="NextBG" type="TextureRect" parent="VBoxContainer/BGSelector/VBoxContainer/Aspect" unique_id=2054050673]
+visible = false
+material = SubResource("ShaderMaterial_mjqpy")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_15de0")
+expand_mode = 1
+script = ExtResource("3_m7qic")
+syncControlSize = true
+
+[node name="Shuffle" type="TextureRect" parent="VBoxContainer/BGSelector/VBoxContainer/Aspect" unique_id=1437075413]
+visible = false
+material = SubResource("ShaderMaterial_sahv1")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_1p3vh")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/BGSelector/VBoxContainer/Aspect" unique_id=561299851]
+visible = false
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 1.0
+anchor_right = 0.75
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/BGSelector/VBoxContainer/Aspect/MarginContainer" unique_id=629428616]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_eiysq")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/BGSelector/VBoxContainer/Aspect/MarginContainer" unique_id=233084457]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_vertical = 8
+text = "Shuffle Backgrounds"
+horizontal_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/BGSelector/VBoxContainer" unique_id=250109630]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+clip_text = true
+selected = 0
+fit_to_longest_item = false
+item_count = 5
+popup/item_0/text = "Shuffle Backgrounds"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "BG 1"
+popup/item_2/id = 2
+popup/item_3/text = "BG 2"
+popup/item_3/id = 3
+popup/item_4/text = "BG 3"
+popup/item_4/id = 4
+
+[node name="MusicSelector" type="PanelContainer" parent="VBoxContainer" unique_id=1116689206]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MusicSelector" unique_id=2011813473]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MusicSelector/HBoxContainer" unique_id=152713778]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+texture = ExtResource("7_o7uk7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Shuffle" type="TextureRect" parent="VBoxContainer/MusicSelector/HBoxContainer/TextureRect" unique_id=89753361]
+visible = false
+material = SubResource("ShaderMaterial_sahv1")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_right = 16.0
+grow_vertical = 0
+texture = ExtResource("6_1p3vh")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MusicSelector/HBoxContainer" unique_id=733695633]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer" unique_id=1799562400]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+clip_text = true
+selected = 0
+fit_to_longest_item = false
+item_count = 5
+popup/item_0/text = "Shuffle Music"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Mus 1"
+popup/item_2/id = 2
+popup/item_3/text = "Mus 2"
+popup/item_3/id = 3
+popup/item_4/text = "Mus 3"
+popup/item_4/id = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MusicSelector/HBoxContainer/VBoxContainer" unique_id=826278382]
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_omoh7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7rbbf")
+max_value = 1.0
+value = 0.3
+show_percentage = false
+
+[node name="Button" type="Button" parent="VBoxContainer/MusicSelector/HBoxContainer" unique_id=1430012103]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+icon = ExtResource("8_slm82")
+expand_icon = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1635798512]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer2" unique_id=1689160344]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer2" unique_id=1039772224]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer2/MarginContainer" unique_id=745666141]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("9_u5sfe")
+
+[node name="Label" type="Label" parent="VBoxContainer2/MarginContainer/PanelContainer" unique_id=1046351121]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0.25098, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "Apply Changes"
+horizontal_alignment = 1
+
+[node name="Responsive Button Area" parent="VBoxContainer2/MarginContainer" unique_id=1073538857 instance=ExtResource("10_x7ge6")]
+layout_mode = 2
+useHold = true
+holdTime = 0.75
+holdRecoverTime = 0.5
+
+[connection signal="HoldPressed" from="VBoxContainer2/MarginContainer/Responsive Button Area" to="." method="ApplyTheme"]

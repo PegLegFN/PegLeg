@@ -10,6 +10,8 @@ public partial class ProcessSwitchingTabContainer : TabContainer
     Node defaultParent;
     [Export]
     bool hideInDevMode;
+    [Export]
+    int defaultTab;
 
     public override void _Ready()
     {
@@ -24,6 +26,8 @@ public partial class ProcessSwitchingTabContainer : TabContainer
             defaultParent = GetParent();
             UpdateDevState();
         }
+        if (!OS.HasFeature("editor") && defaultTab >= 0)
+            CurrentTab = defaultTab;
     }
 
     private void ConfigChange(string section, string key, JsonValue value)

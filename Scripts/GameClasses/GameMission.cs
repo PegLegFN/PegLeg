@@ -534,7 +534,7 @@ public partial class GameMission
         {
             if (!account.isOwned)
                 return true;
-            var pl = ventures ? account.VentureFortStats.PowerLevel : account.FortStats.PowerLevel;
+            var pl = ventures ? account.VentureFortStats.PowerLevel : account.RatingData.PowerLevel;
             if (pl < personalPowerRating)
                 return false;
             if (maxPersonalPowerRating > 0 && pl > maxPersonalPowerRating)

@@ -261,7 +261,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
             return;
         }
         needsRefresh = false;
-        int curPL = (int)GameAccount.ActiveAccount.FortStats.PowerLevel;
+        int curPL = (int)GameAccount.ActiveAccount.RatingData.PowerLevel;
         int ventPL = (int)GameAccount.ActiveAccount.VentureFortStats.PowerLevel;
 
         Func<GameMission, bool> missionPredicate = null;

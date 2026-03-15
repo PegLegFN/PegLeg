@@ -1,0 +1,281 @@
+[gd_scene format=3 uid="uid://b55c5fvpjgjs2"]
+
+[ext_resource type="Script" uid="uid://yme0qwqj3yob" path="res://Scripts/Config/ConfigFloatSwitchHook.cs" id="1_comot"]
+[ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="2_v5lx2"]
+[ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="3_e7whk"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_dnpv7"]
+
+[node name="InterfacePage" type="VBoxContainer" unique_id=342944049]
+theme_override_constants/separation = 6
+
+[node name="FPS" type="HBoxContainer" parent="." unique_id=121239265]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="FPS" unique_id=1520971815]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Target FPS"
+
+[node name="FPSSwitch" type="PanelContainer" parent="FPS" unique_id=747369982 node_paths=PackedStringArray("switchButtons")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CheckContainer"
+script = ExtResource("1_comot")
+section = "ui"
+key = "fps"
+values = PackedFloat32Array(30, 60, 144, -1)
+requirePressed = true
+switchButtons = [NodePath("HBoxContainer/30FPS"), NodePath("HBoxContainer/60FPS"), NodePath("HBoxContainer/144FPS"), NodePath("HBoxContainer/InfFPS")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FPS/FPSSwitch" unique_id=2145831627]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="30FPS" type="CheckButton" parent="FPS/FPSSwitch/HBoxContainer" unique_id=581365829]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "30fps"
+theme_type_variation = &"LeftCheckButton"
+text = " 30"
+alignment = 1
+metadata/zone = "s"
+
+[node name="60FPS" type="CheckButton" parent="FPS/FPSSwitch/HBoxContainer" unique_id=1538880280]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "60fps"
+theme_type_variation = &"MiddleCheckButton"
+button_pressed = true
+text = " 60"
+alignment = 1
+metadata/zone = "p"
+
+[node name="144FPS" type="CheckButton" parent="FPS/FPSSwitch/HBoxContainer" unique_id=1223146026]
+visible = false
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "144fps"
+theme_type_variation = &"MiddleCheckButton"
+text = " 144"
+alignment = 1
+metadata/zone = "c"
+
+[node name="InfFPS" type="CheckButton" parent="FPS/FPSSwitch/HBoxContainer" unique_id=936531076]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Unlimited (capped at refresh rate)"
+theme_type_variation = &"RightCheckButton"
+text = " Unlimited"
+alignment = 1
+metadata/zone = "c"
+
+[node name="UIScale" type="HBoxContainer" parent="." unique_id=230136301]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UIScale" unique_id=231194337]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "UI Scale  "
+
+[node name="HSlider" type="HSlider" parent="UIScale" unique_id=1692812975]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.5
+max_value = 1.0
+step = 0.05
+value = 0.85
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+script = ExtResource("2_v5lx2")
+section = "ui"
+key = "scale"
+defaultValue = 1.0
+
+[node name="Label2" type="Label" parent="UIScale" unique_id=1418924959]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "0.85"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="UIScale" unique_id=193221495]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Apply"
+
+[node name="TextureRect" type="TextureRect" parent="UIScale/Button" unique_id=1157938445]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_e7whk")
+expand_mode = 1
+
+[node name="NotifSection" type="VBoxContainer" parent="." unique_id=9431474]
+layout_mode = 2
+
+[node name="NotifScale" type="HBoxContainer" parent="NotifSection" unique_id=140174969]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NotifSection/NotifScale" unique_id=1945868416]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Notification Scale"
+
+[node name="HSlider" type="HSlider" parent="NotifSection/NotifScale" unique_id=785561207]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 2.5
+step = 0.25
+value = 1.0
+scrollable = false
+tick_count = 7
+ticks_on_borders = true
+script = ExtResource("2_v5lx2")
+section = "notification"
+key = "scale"
+defaultValue = 1.0
+
+[node name="Label2" type="Label" parent="NotifSection/NotifScale" unique_id=1136011196]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="NotifSection/NotifScale" unique_id=591140613]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Apply"
+
+[node name="TextureRect" type="TextureRect" parent="NotifSection/NotifScale/Button" unique_id=1316240807]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_e7whk")
+expand_mode = 1
+
+[node name="MinimiseNotif" type="CheckBox" parent="NotifSection" unique_id=1751452698]
+layout_direction = 3
+layout_mode = 2
+button_pressed = true
+text = "Notify when Minimised to Tray"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "notification"
+key = "on_minimised"
+defaultValue = true
+
+[node name="SimpleCosmetics" type="CheckBox" parent="." unique_id=1797446040]
+layout_direction = 3
+layout_mode = 2
+text = "Compact cosmetic shop"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "item_shop"
+key = "simple_cosmetics"
+
+[node name="SimpleShopbackgrounds" type="CheckBox" parent="." unique_id=176070206]
+layout_direction = 3
+layout_mode = 2
+text = "Simple Event/Weekly shop backgrounds"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "item_shop"
+key = "simple_backgrounds"
+
+[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="." unique_id=1088053044]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SimpleCosmeticTiles" unique_id=882460342]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Compact Tiles "
+
+[node name="HSlider" type="HSlider" parent="SimpleCosmeticTiles" unique_id=1209372572]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 100.0
+max_value = 250.0
+step = 25.0
+value = 150.0
+scrollable = false
+tick_count = 7
+ticks_on_borders = true
+script = ExtResource("2_v5lx2")
+section = "item_shop"
+key = "simple_cosmetic_tilesize"
+asInt = true
+defaultValue = 150.0
+
+[node name="Label2" type="Label" parent="SimpleCosmeticTiles" unique_id=2010866883]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "150"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="SimpleCosmeticTiles" unique_id=1517180975]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Apply"
+
+[node name="TextureRect" type="TextureRect" parent="SimpleCosmeticTiles/Button" unique_id=430715876]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_e7whk")
+expand_mode = 1
+
+[node name="DisableParallax" type="CheckBox" parent="." unique_id=957876785]
+layout_direction = 3
+layout_mode = 2
+text = "Disable Parallax effect"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "ui"
+key = "disable_parallax"
+
+[node name="FastAnims" type="CheckBox" parent="." unique_id=37953238]
+layout_direction = 3
+layout_mode = 2
+text = "Fast purchase animation"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "misc"
+key = "fast_animations"
+
+[connection signal="AppliedChanged" from="UIScale/HSlider" to="UIScale/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="UIScale/HSlider" to="UIScale/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="UIScale/HSlider" to="UIScale/Label2" method="set_text"]
+[connection signal="pressed" from="UIScale/Button" to="UIScale/HSlider" method="ApplyValue"]
+[connection signal="AppliedChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/Label2" method="set_text"]
+[connection signal="pressed" from="NotifSection/NotifScale/Button" to="NotifSection/NotifScale/HSlider" method="ApplyValue"]
+[connection signal="ConfigValueChanged" from="SimpleCosmetics" to="SimpleCosmeticTiles" method="set_visible"]
+[connection signal="ConfigValueChanged" from="SimpleShopbackgrounds" to="SimpleCosmeticTiles" method="set_visible"]
+[connection signal="AppliedChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/Label2" method="set_text"]
+[connection signal="pressed" from="SimpleCosmeticTiles/Button" to="SimpleCosmeticTiles/HSlider" method="ApplyValue"]

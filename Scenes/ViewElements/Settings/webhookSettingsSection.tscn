@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://dojyge3yqiou"]
+
+[ext_resource type="Script" uid="uid://cddr668av6e55" path="res://Scripts/DiscordWebhooks/DiscordWebhookSettings.cs" id="1_bvxkq"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_0je5u"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="3_1gxeh"]
+
+[node name="DailySummary" type="VBoxContainer" unique_id=533445945 node_paths=PackedStringArray("toggleEditor", "urlEditor", "syncToggleEditor", "syncEditor", "threadEditor")]
+theme_override_constants/separation = 3
+script = ExtResource("1_bvxkq")
+toggleEditor = NodePath("CheckButton")
+urlEditor = NodePath("MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/WH-URL")
+syncToggleEditor = NodePath("MarginContainer/PanelContainer/VBoxContainer/WH-UseSync")
+syncEditor = NodePath("MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer/WH-Sync")
+threadEditor = NodePath("MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer/WH-SyncThread")
+
+[node name="CheckButton" type="CheckButton" parent="." unique_id=790854862]
+layout_mode = 2
+button_pressed = true
+text = "Display Name"
+script = ExtResource("2_0je5u")
+section = "webhooks"
+key = "summary_enabled"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1132935368]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1075218155]
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=1885079189]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=1827423396]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=912241085]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "URL:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1707985907]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1657682836]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = ".../webhooks/"
+
+[node name="WH-URL" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=227784454]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "webhookId/webhookToken"
+secret = true
+script = ExtResource("3_1gxeh")
+section = "webhooks"
+key = "summary_url"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=255910787]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 3
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/MarginContainer" unique_id=822103937]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+alignment = 1
+autowrap_trim_flags = 192
+icon_alignment = 1
+expand_icon = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=584423152]
+visible = false
+layout_mode = 2
+
+[node name="WH-Role" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=1718444673]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "vBuckRole"
+script = ExtResource("3_1gxeh")
+section = "webhooks"
+key = "summary_vb"
+
+[node name="WH-Role2" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=2140306283]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "legSurvRole"
+script = ExtResource("3_1gxeh")
+section = "webhooks"
+key = "summary_ls"
+
+[node name="WH-Role3" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=1171986116]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "mythLeadRole"
+script = ExtResource("3_1gxeh")
+section = "webhooks"
+key = "summary_ml"
+
+[node name="WH-UseSync" type="CheckButton" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=171931772]
+layout_mode = 2
+text = "Use Sync Message
+"
+script = ExtResource("2_0je5u")
+section = "webhooks"
+key = "summary_useSync"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=2113402067]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" unique_id=1685870579]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=1643188014]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer" unique_id=1266107829]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3" unique_id=508210242]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Sync Thread:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3" unique_id=1452161147]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=1758531398]
+visible = false
+custom_minimum_size = Vector2(73, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "...?threadId="
+horizontal_alignment = 2
+
+[node name="WH-SyncThread" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=484253117]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "threadId"
+script = ExtResource("3_1gxeh")
+section = "webhooks"
+key = "summary_syncThread"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer" unique_id=151684638]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2" unique_id=2058011537]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Sync Msg:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2" unique_id=334810784]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=428483987]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = ".../messages/"
+
+[node name="WH-Sync" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1012849373]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "messageId"
+script = ExtResource("3_1gxeh")
+section = "webhooks"
+key = "summary_sync"
+
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4" unique_id=1119882750]
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Create 
+Sync Msg"
+
+[connection signal="toggled" from="CheckButton" to="MarginContainer" method="set_visible"]
+[connection signal="toggled" from="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/MarginContainer/CheckButton" to="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer/HBoxContainer/WH-URL" method="set_secret"]
+[connection signal="ConfigValueChanged" from="MarginContainer/PanelContainer/VBoxContainer/WH-UseSync" to="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer" method="set_visible"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HBoxContainer4/Button" to="." method="TryCreateSyncMsg"]

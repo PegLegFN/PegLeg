@@ -1,0 +1,175 @@
+[gd_scene format=3 uid="uid://b4aq3gm8ok7ta"]
+
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="1_32dbh"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_ktmhl"]
+[ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="3_em5vg"]
+[ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="4_gewxr"]
+
+[node name="AdvancedPage" type="VBoxContainer" unique_id=172606478]
+theme_override_constants/separation = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1616947118]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="AutoRecycleParamsLabel" type="Label" parent="VBoxContainer" unique_id=410167744]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Auto-Recycle Parameters"
+
+[node name="AutoRecycleParams" type="TextEdit" parent="VBoxContainer" unique_id=2132595796]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Common | Uncommon | Rare | 
+(Defender !Legendary | !\"Sniper') "
+placeholder_text = "eg: Common | Uncommon | Rare"
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("1_32dbh")
+section = "automation"
+key = "recycle_filter"
+defaultValue = "Common | Uncommon | Rare"
+
+[node name="Offset" type="CheckBox" parent="." unique_id=942822940]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Delays daily quest resets to prevent Epics quest system from resetting with quests from the previous day/week"
+button_pressed = true
+text = "Mitigate Quest reset errors"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "offset_refresh"
+defaultValue = true
+
+[node name="SuspendQuests" type="CheckBox" parent="." unique_id=1924265873]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
+text = "Suspend Quests"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "suspend_quests"
+
+[node name="BulkRefreshQuests" type="CheckBox" parent="." unique_id=1412551357]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Refreshes quests in all accounts whenever they're fetched in the current account"
+text = "Bulk refresh Quests"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "bulk_quest_refresh"
+
+[node name="AutoRestartToggle" type="CheckBox" parent="." unique_id=539829293]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
+text = "Auto Restart"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "auto_restart"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1165654172]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1277002958]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Auto Restart Hour"
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer" unique_id=408378265]
+layout_mode = 2
+max_value = 23.0
+alignment = 1
+update_on_text_changed = true
+suffix = ": 00"
+script = ExtResource("3_em5vg")
+section = "advanced"
+key = "auto_restart_hour"
+asInt = true
+defaultValue = 7.0
+requireApply = false
+
+[node name="TimeTravel" type="HBoxContainer" parent="." unique_id=2140122038]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TimeTravel" unique_id=1427111652]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Time Travel"
+
+[node name="HSlider" type="HSlider" parent="TimeTravel" unique_id=1500158272]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 7.0
+rounded = true
+scrollable = false
+tick_count = 8
+ticks_on_borders = true
+script = ExtResource("3_em5vg")
+section = "advanced"
+key = "time_travel"
+asInt = true
+
+[node name="Label2" type="Label" parent="TimeTravel" unique_id=584508257]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="TimeTravel" unique_id=891034378]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Apply"
+
+[node name="TextureRect" type="TextureRect" parent="TimeTravel/Button" unique_id=1067253554]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_gewxr")
+expand_mode = 1
+
+[node name="ExperimentalNotifs" type="CheckBox" parent="." unique_id=338767119]
+layout_direction = 3
+layout_mode = 2
+text = "Enable Notifications"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "experimental"
+key = "notifications"
+
+[node name="DeveloperDetails" type="CheckBox" parent="." unique_id=1802459522]
+layout_direction = 3
+layout_mode = 2
+text = "Enable developer features"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "developer"
+
+[node name="BeastMode" type="CheckBox" parent="." unique_id=135193457]
+layout_direction = 3
+layout_mode = 2
+text = "Beast Mode"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "beastmode"
+
+[connection signal="ConfigValueChanged" from="AutoRestartToggle" to="HBoxContainer" method="set_visible"]
+[connection signal="AppliedChanged" from="TimeTravel/HSlider" to="TimeTravel/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="TimeTravel/HSlider" to="TimeTravel/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="TimeTravel/HSlider" to="TimeTravel/Label2" method="set_text"]
+[connection signal="pressed" from="TimeTravel/Button" to="TimeTravel/HSlider" method="ApplyValue"]

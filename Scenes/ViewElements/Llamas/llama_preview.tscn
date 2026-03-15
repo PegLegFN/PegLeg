@@ -1,0 +1,583 @@
+[gd_scene format=3 uid="uid://bgljw01ejeesa"]
+
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="1_nclqr"]
+[ext_resource type="Script" uid="uid://bqv4gh8tj3lm0" path="res://Scripts/Llamas/LlamaPreview.cs" id="1_p4d66"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="2_p4d66"]
+[ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="2_whe6w"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_whe6w"]
+[ext_resource type="Shader" uid="uid://dmt1xhf6kra1d" path="res://Shaders/LlamaPinata.gdshader" id="4_f2kye"]
+[ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="5_wj5i8"]
+[ext_resource type="Texture2D" uid="uid://dufn5f0er7tu7" path="res://Images/Llamas/PinataStandardPack.png" id="6_a18ys"]
+[ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="7_v4kfe"]
+[ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="8_biuhq"]
+[ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="9_4oeg7"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="10_oiegs"]
+[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="11_jp4cn"]
+[ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="12_dgltu"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="13_a5bbv"]
+[ext_resource type="PackedScene" uid="uid://bgr0eeg3fek2e" path="res://Scenes/GameItemEntry/reward_entry_xl.tscn" id="14_2sn7c"]
+[ext_resource type="Texture2D" uid="uid://oo036o6whl2w" path="res://Images/InterfaceIcons/OrArrowHD.png" id="15_fus83"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="16_xstle"]
+[ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="17_gxh0d"]
+[ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="18_bwxlf"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="19_fqv1c"]
+[ext_resource type="Texture2D" uid="uid://c4ixuk0fofeej" path="res://Images/InterfaceIcons/PinataStandardPack-Upgrade.png" id="20_nst4b"]
+[ext_resource type="Theme" uid="uid://bc1c4l6rjxof5" path="res://GodotThemes/LineEditLargeTheme.tres" id="21_f0fuo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_108qr"]
+shader = ExtResource("1_nclqr")
+shader_parameter/ControlSize = Vector2(440, 532)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dquff"]
+resource_local_to_scene = true
+shader = ExtResource("4_f2kye")
+shader_parameter/packIcon = ExtResource("5_wj5i8")
+shader_parameter/useMask = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gbqne"]
+bg_color = Color(0.184314, 0.184314, 0.184314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="Llama Contents" type="MarginContainer" unique_id=831886700 node_paths=PackedStringArray("llamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
+custom_minimum_size = Vector2(430, 0)
+offset_right = 430.0
+offset_bottom = 532.0
+script = ExtResource("1_p4d66")
+itemEntryScene = ExtResource("2_whe6w")
+llamaPanel = NodePath("MarginContainer")
+currentOfferEntry = NodePath("MarginContainer/OfferEntry")
+currentCardpackEntry = NodePath("MarginContainer/CardPackEntry")
+purchaseButton = NodePath("MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton")
+openButton = NodePath("MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton")
+quantitySpinner = NodePath("MarginContainer/CardPackEntry/VBoxContainer/QuantitySpinBox")
+resultEntriesParent = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContainer")
+surpriseResultPanel = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer")
+soldOutResultPanel = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer")
+choicePanel = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer")
+firstChoice = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry2")
+secondChoice = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=111009675]
+material = SubResource("ShaderMaterial_108qr")
+layout_mode = 2
+texture = ExtResource("2_p4d66")
+expand_mode = 1
+script = ExtResource("3_whe6w")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1168303491]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Pinata" type="TextureRect" parent="MarginContainer" unique_id=208809737]
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+material = SubResource("ShaderMaterial_dquff")
+custom_minimum_size = Vector2(0, 512)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("6_a18ys")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("3_whe6w")
+
+[node name="OfferEntry" type="Control" parent="MarginContainer" unique_id=1207248379 node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "priceInInventoryEntry")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_v4kfe")
+grantedItemEntry = NodePath("../CardPackEntry")
+priceEntry = NodePath("../CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price")
+priceInInventoryEntry = NodePath("../CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory")
+includeAmountInName = true
+showSingleStockAmount = true
+
+[node name="AltOfferEntry" type="Control" parent="MarginContainer" unique_id=707513199 node_paths=PackedStringArray("priceInInventoryEntry")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("7_v4kfe")
+priceInInventoryEntry = NodePath("../CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory")
+includeAmountInName = true
+showSingleStockAmount = true
+
+[node name="CardPackEntry" type="VBoxContainer" parent="MarginContainer" unique_id=367128623]
+layout_mode = 2
+script = ExtResource("8_biuhq")
+includeAmountInName = true
+useLargePreview = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CardPackEntry" unique_id=1016864363]
+layout_mode = 2
+
+[node name="LlamaName" type="Label" parent="MarginContainer/CardPackEntry/HBoxContainer" unique_id=2077733678]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Select a Llama"
+text_overrun_behavior = 3
+
+[node name="ShareButton" type="Button" parent="MarginContainer/CardPackEntry/HBoxContainer" unique_id=1634306431]
+visible = false
+custom_minimum_size = Vector2(34, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/CardPackEntry/HBoxContainer/ShareButton" unique_id=1236506743]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_4oeg7")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry" unique_id=660517761]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Items" type="ScrollContainer" parent="MarginContainer/CardPackEntry/MarginContainer" unique_id=1715806242]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items" unique_id=1848558636]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RewardsContainer" type="Container" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=1088193766]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+script = ExtResource("10_oiegs")
+CompressSpacing = true
+Spacing = Vector2(5, 0)
+
+[node name="SurpriseContainer" type="VBoxContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=574243503]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer" unique_id=44983166]
+layout_mode = 2
+texture = ExtResource("11_jp4cn")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer" unique_id=1163898295]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "It's a surprise..."
+horizontal_alignment = 1
+
+[node name="SoldOutContainer" type="VBoxContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=1031969475]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer" unique_id=2079428431]
+layout_mode = 2
+texture = ExtResource("12_dgltu")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer" unique_id=695400973]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Sold Out"
+horizontal_alignment = 1
+
+[node name="ChoiceContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=348352731]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 60
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer" unique_id=38822092]
+layout_mode = 2
+ratio = 2.75
+
+[node name="Control" type="MarginContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer" unique_id=1518953974]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=372056322]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("13_a5bbv")
+expand_mode = 3
+
+[node name="RewardEntry2" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" unique_id=1204450176 instance=ExtResource("14_2sn7c")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+autoLinkToViewer = false
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=707684761]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("13_a5bbv")
+expand_mode = 3
+
+[node name="RewardEntry2" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" unique_id=888721533 instance=ExtResource("14_2sn7c")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+autoLinkToViewer = false
+
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=750831355]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("15_fus83")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3" unique_id=33025793]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 48
+text = "OR"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/CardPackEntry" unique_id=1663342961]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer" unique_id=524941687]
+custom_minimum_size = Vector2(285, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PurchaseButton" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons" unique_id=22006732]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton" unique_id=1116011173]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="InInventory" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control" unique_id=1554718732]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_bottom = -5.0
+grow_vertical = 0
+script = ExtResource("16_xstle")
+compactifyAmount = true
+showSingleItemAmount = true
+
+[node name="Panel" type="Panel" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" unique_id=704160795]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gbqne")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" unique_id=2102197522]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer" unique_id=335344300]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer" unique_id=375588323]
+layout_mode = 2
+text = " You have: "
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer" unique_id=1010434627]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/MarginContainer" unique_id=1806282304]
+layout_mode = 2
+texture = ExtResource("17_gxh0d")
+expand_mode = 3
+
+[node name="AmountText" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer" unique_id=799665093]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton" unique_id=956171968]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButton"
+
+[node name="AffordableToggle" type="Node" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer" unique_id=823910831]
+script = ExtResource("18_bwxlf")
+
+[node name="CantAffordLabel" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer" unique_id=360056970]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Can't Afford"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AffordableContent" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer" unique_id=1332765758]
+layout_mode = 2
+
+[node name="FreeToggle" type="Node" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent" unique_id=2069346838]
+script = ExtResource("18_bwxlf")
+
+[node name="NotFreeContent" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent" unique_id=1431796986]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent" unique_id=600379988]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer" unique_id=1983455912]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Purchase"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Price" type="HBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer" unique_id=1194917222]
+layout_mode = 2
+alignment = 1
+script = ExtResource("16_xstle")
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price" unique_id=403869959]
+layout_mode = 2
+texture = ExtResource("17_gxh0d")
+expand_mode = 3
+
+[node name="PriceText" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price" unique_id=1605670647]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "2500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FreeLabel" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent" unique_id=1096912473]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 56
+text = "Claim"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent" unique_id=702653380]
+layout_mode = 2
+theme_override_constants/margin_left = -3
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -3
+
+[node name="Responsive Button Area" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/MarginContainer" unique_id=1155313392 instance=ExtResource("19_fqv1c")]
+layout_mode = 2
+useHold = true
+
+[node name="OpenButton" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons" unique_id=2117998787]
+visible = false
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton" unique_id=706463978]
+layout_mode = 2
+theme_type_variation = &"PanelButton"
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/PanelContainer" unique_id=1160190780]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Open"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Responsive Button Area" parent="MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton" unique_id=810542343 instance=ExtResource("19_fqv1c")]
+layout_mode = 2
+useHold = true
+holdTime = 1.0
+usePressSound = false
+
+[node name="AltPurchaseButton" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer" unique_id=7175006]
+visible = false
+custom_minimum_size = Vector2(285, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="Control" type="Control" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton" unique_id=673725312]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control" unique_id=1383790452]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -5.0
+grow_vertical = 0
+
+[node name="AltInInventory" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer" unique_id=1774577880]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+script = ExtResource("16_xstle")
+compactifyAmount = true
+showSingleItemAmount = true
+
+[node name="Panel" type="Panel" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" unique_id=218469056]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gbqne")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" unique_id=1559545748]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer" unique_id=1690727144]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer" unique_id=1138673148]
+layout_mode = 2
+text = " You have: "
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer" unique_id=117969155]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer/MarginContainer" unique_id=1404360898]
+layout_mode = 2
+texture = ExtResource("20_nst4b")
+expand_mode = 3
+
+[node name="AmountText" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer" unique_id=1609702451]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "???"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer" unique_id=1101572275]
+visible = false
+layout_mode = 2
+text = "(No Daily Limit)"
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton" unique_id=1178437336]
+layout_mode = 2
+theme_type_variation = &"PanelContainerButton"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/PanelContainer" unique_id=1424513558]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/PanelContainer/VBoxContainer" unique_id=1759988323]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Purchase"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/PanelContainer/VBoxContainer" unique_id=407479933]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+texture = ExtResource("20_nst4b")
+expand_mode = 3
+
+[node name="Responsive Button Area" parent="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton" unique_id=2103396401 instance=ExtResource("19_fqv1c")]
+layout_mode = 2
+useHold = true
+
+[node name="QuantitySpinBox" type="SpinBox" parent="MarginContainer/CardPackEntry/VBoxContainer" unique_id=383007928]
+visible = false
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("21_f0fuo")
+theme_type_variation = &"LineEditLarge"
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[connection signal="IsAffordableChanged" from="MarginContainer/OfferEntry" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableToggle" method="EmitValues"]
+[connection signal="IsFreeChanged" from="MarginContainer/OfferEntry" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/FreeToggle" method="EmitValues"]
+[connection signal="NameChanged" from="MarginContainer/OfferEntry" to="MarginContainer/CardPackEntry/HBoxContainer/LlamaName" method="set_text"]
+[connection signal="IconChanged" from="MarginContainer/CardPackEntry" to="MarginContainer/Pinata" method="set_texture"]
+[connection signal="NameChanged" from="MarginContainer/CardPackEntry" to="MarginContainer/CardPackEntry/HBoxContainer/LlamaName" method="set_text"]
+[connection signal="SubtypeIconChanged" from="MarginContainer/CardPackEntry" to="MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="Pressed" from="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry2" to="." method="InspectChoiceLlama" binds= [0]]
+[connection signal="Pressed" from="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2" to="." method="InspectChoiceLlama" binds= [1]]
+[connection signal="AmountChanged" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
+[connection signal="IconChanged" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="TooltipChanged" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" method="set_tooltip_text"]
+[connection signal="InvertedValue" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableToggle" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/CantAffordLabel" method="set_visible"]
+[connection signal="Value" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableToggle" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent" method="set_visible"]
+[connection signal="InvertedValue" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/FreeToggle" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent" method="set_visible"]
+[connection signal="Value" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/FreeToggle" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/FreeLabel" method="set_visible"]
+[connection signal="AmountChanged" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price/PriceText" method="set_text"]
+[connection signal="IconChanged" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price" to="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/NotFreeContent/VBoxContainer/Price/Icon" method="set_texture"]
+[connection signal="HoldPressed" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/PanelContainer/AffordableContent/MarginContainer/Responsive Button Area" to="." method="PurchaseLlamaOffer"]
+[connection signal="HoldPressed" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/Responsive Button Area" to="." method="OpenSelectedCardpack"]
+[connection signal="AmountChanged" from="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" to="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
+[connection signal="TooltipChanged" from="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" to="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" method="set_tooltip_text"]

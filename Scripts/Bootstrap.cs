@@ -21,6 +21,8 @@ public partial class Bootstrap : Node
     [Export]
     Vector2I windowSize = new(1350, 720);
     [Export]
+    Vector2I mobileSize = new(1350, 720);
+    [Export]
     Control background;
     [Export]
     Control curtain;
@@ -386,8 +388,38 @@ public partial class Bootstrap : Node
         Window window = GetWindow();
         curtain.Visible = true;
         await Helpers.WaitForFrame();
-        window.Size = windowSize;
-        window.ContentScaleSize = windowSize;
+
+        bool mobileMode = OS.HasFeature("editor") || OS.HasFeature("mobile");
+
+        Vector2I targetSize = mobileMode ? mobileSize : windowSize;
+        PackedScene targetScene = null;
+        if (mobileMode && !AppConfig.Get("core", "disable_mobile", false))
+        {
+            if (lite)
+                targetScene = mobileLiteInterface;
+            else if (!GameAccount.ActiveAccount.isOwned)
+                targetScene = desktopOnboarding;
+            else
+                targetScene = mobileInterface;
+        }
+        else
+        {
+            if (!OS.HasFeature("mobile"))
+                targetSize = windowSize;
+            if (lite)
+                targetScene = liteInterface;
+            else if (!GameAccount.ActiveAccount.isOwned)
+                targetScene = desktopOnboarding;
+            else if (OS.HasFeature("editor") && testingScene is not null)
+                targetScene = testingScene;
+            else if (UseShareMenu)
+                targetScene = shareMenu;
+            else
+                targetScene = desktopInterface;
+        }
+
+        window.Size = targetSize;
+        window.ContentScaleSize = targetSize;
         window.MoveToCenter();
         window.Transparent = false;
         window.TransparentBg = true;
@@ -400,33 +432,7 @@ public partial class Bootstrap : Node
         await Helpers.WaitForFrame();
         await Helpers.WaitForFrame();
 
-        //todo: autoselect desktop/mobile scenes here
         GetWindow().ContentScaleFactor = 1;
-
-        
-        PackedScene targetScene = null;
-        if (OS.HasFeature("mobile") && !AppConfig.Get("core", "disable_mobile", false))
-        {
-            if (lite)
-                targetScene = mobileLiteInterface;
-            else if (!GameAccount.ActiveAccount.isOwned)
-                targetScene = desktopOnboarding;
-            else
-                targetScene = mobileInterface;
-        }
-        else
-        {
-            if (lite)
-                targetScene = liteInterface;
-            else if (!GameAccount.ActiveAccount.isOwned)
-                targetScene = desktopOnboarding;
-            else if (OS.HasFeature("editor") && testingScene is not null)
-                targetScene = testingScene;
-            else if (UseShareMenu)
-                targetScene = shareMenu;
-            else
-                targetScene = desktopInterface;
-        }
 
         if(targetScene is not null)
             GetTree().ChangeSceneToPacked(targetScene);

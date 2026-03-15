@@ -1,0 +1,497 @@
+[gd_scene format=3 uid="uid://bll4pqljsuwh"]
+
+[ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_qvefu"]
+[ext_resource type="PackedScene" uid="uid://i65ndlvcjb3f" path="res://Scenes/creator_easter_eggs.tscn" id="2_6sox8"]
+[ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="4_sblkw"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="5_o05nc"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="6_j1cpg"]
+[ext_resource type="Texture2D" uid="uid://bo36hhtrb2njg" path="res://Images/InterfaceIcons/T-Icon-Manage-New-32.png" id="7_eg888"]
+[ext_resource type="StyleBox" uid="uid://cg5f2hwe5io65" path="res://GodotThemes/Styleboxes/CheckButton/CheckContainer.tres" id="8_atmmk"]
+[ext_resource type="Texture2D" uid="uid://cir0axuy4xjte" path="res://Images/InterfaceIcons/T_OpenGlow.png" id="9_xbmib"]
+[ext_resource type="Texture2D" uid="uid://frsfbmj2qyxu" path="res://Images/InterfaceIcons/T_Icon_FavoriteTab_64.png" id="10_7bcpy"]
+[ext_resource type="Texture2D" uid="uid://boywmwfvrbmwp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Cogs_128.png" id="11_dcdr8"]
+[ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="16_y77mj"]
+[ext_resource type="Texture2D" uid="uid://bufu4bggy6lrs" path="res://Images/InterfaceIcons/T-Icon-Defenders_-CARD.png" id="17_n4wmg"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="20_ckac4"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="21_xuepi"]
+[ext_resource type="Texture2D" uid="uid://dc6umid5fw8b3" path="res://Images/InterfaceIcons/T-Icon-Manage-All-512.png" id="22_3ncvj"]
+[ext_resource type="Texture2D" uid="uid://dulj7swgucc3q" path="res://Images/InterfaceIcons/SchematicIcon32.png" id="23_cf3id"]
+[ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="24_c53ek"]
+[ext_resource type="Texture2D" uid="uid://df1h55n2choqy" path="res://Images/InterfaceIcons/LockerIcons/T_UI_Empty_Pickaxe.png" id="25_h1u85"]
+[ext_resource type="Texture2D" uid="uid://dgwvyp3xkplbh" path="res://Images/InterfaceIcons/PinataStandardPack-UpgradeWhite.png" id="26_dji7j"]
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="27_4pukx"]
+[ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="28_yknpk"]
+[ext_resource type="Texture2D" uid="uid://cebpugdhhg4s4" path="res://Images/SDF/T_UI_Icon_UIKit_ClearBadges_SDF.png" id="29_7y7je"]
+[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="30_o23b6"]
+[ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="31_r8akl"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="32_h1q56"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvrrd"]
+bg_color = Color(0.184314, 0.184314, 0.184314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rf818"]
+shader = ExtResource("28_yknpk")
+shader_parameter/blendAmount = 1.0
+shader_parameter/threshold = 0.5
+shader_parameter/smoothness = 0.25
+shader_parameter/msdf = false
+shader_parameter/skipSDF = false
+
+[node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("itemList", "searchBox", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel")]
+custom_minimum_size = Vector2(454, 837)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -227.0
+offset_right = 227.0
+offset_bottom = 837.0
+grow_horizontal = 2
+script = ExtResource("1_qvefu")
+itemList = NodePath("VBoxContainer/ScrollContainer")
+searchBox = NodePath("VBoxContainer/HBoxContainer/Search")
+devAllPanel = NodePath("VBoxContainer/HBoxContainer4/ShowDev")
+devAllButton = NodePath("VBoxContainer/HBoxContainer4/ShowDev/MarginContainer/CheckButton")
+tabBar = NodePath("VBoxContainer/HBoxContainer4/TypeFilters2")
+targetProfile = "campaign"
+typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "Schematic", "Hero", "Defender", "Worker", "AccountResource", "CardPack")
+creatorImageParent = NodePath("CreatorEasterEggs")
+inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
+heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
+powerLevel = NodePath("VBoxContainer/HBoxContainer/PowerLevel")
+
+[node name="CreatorEasterEggs" parent="." unique_id=100444052 instance=ExtResource("2_6sox8")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1504640056]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1810676757]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=1741400407]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"Panel3Pad"
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer" unique_id=1986585382]
+layout_mode = 2
+text = "Press Enter to filter longer lists"
+
+[node name="Search" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1125003705]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Search items"
+
+[node name="PowerLevel" type="MarginContainer" parent="VBoxContainer/HBoxContainer" unique_id=660218710 node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+script = ExtResource("4_sblkw")
+homebaseNumberLabel = NodePath("MarginContainer/HBoxContainer/PowerLevelNumber")
+homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelProgressBar")
+tooltipColor = Color(0.596078, 0, 0.729412, 1)
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer/PowerLevel" unique_id=1934523286]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wvrrd")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer/PowerLevel" unique_id=544005094]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer" unique_id=994615082]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer" unique_id=537601567]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+max_value = 1.0
+step = 0.0
+value = 0.35
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("5_o05nc")
+texture_progress = ExtResource("5_o05nc")
+tint_under = Color(0.145098, 0.145098, 0.145098, 1)
+tint_progress = Color(0.596167, 0, 0.73, 1)
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar" unique_id=253877179]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_j1cpg")
+expand_mode = 1
+
+[node name="PowerLevelNumber" type="Label" parent="VBoxContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer" unique_id=1945272927]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
+text = "144"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=310775685]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2" unique_id=1604566211]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer" unique_id=2144496585]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=547535601]
+visible = false
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+
+[node name="User" type="LineEdit" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=1837890898]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Custom username"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=519778316]
+layout_mode = 2
+tooltip_text = "User Currently In Mission"
+texture = ExtResource("7_eg888")
+expand_mode = 3
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2/MarginContainer" unique_id=858155731]
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer/Control" unique_id=1388833904]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_top = 5.0
+grow_horizontal = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2" unique_id=690022479]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer2" unique_id=846218344]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Bulk Recycle"
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer2" unique_id=998559009]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Test Hero"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=317467257 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("30_o23b6")
+elementSpace = 5.0
+linkedGrid = NodePath("MarginContainer/VBoxContainer/Grid")
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/Grid")
+elementScene = ExtResource("31_r8akl")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=1223914654]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1017061478]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Offset" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=49812065]
+layout_mode = 2
+
+[node name="Grid" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=592302133]
+layout_mode = 2
+script = ExtResource("32_h1q56")
+MinCols = 3
+CompressSpacing = true
+Spacing = Vector2(5, 5)
+
+[node name="Padding" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2070795]
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer" unique_id=771268266]
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="NewFilter" type="MarginContainer" parent="VBoxContainer/HBoxContainer4" unique_id=2055423901]
+visible = false
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer4/NewFilter" unique_id=2078169538]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("8_atmmk")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer4/NewFilter" unique_id=1453342325]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer4/NewFilter/MarginContainer" unique_id=1412024097]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Filter Unseen"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer4/NewFilter/MarginContainer/CheckButton" unique_id=718167924]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_xbmib")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer4/NewFilter/MarginContainer/CheckButton" unique_id=1387327773]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "!"
+horizontal_alignment = 1
+
+[node name="FavouriteFilter" type="MarginContainer" parent="VBoxContainer/HBoxContainer4" unique_id=1265530629]
+visible = false
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer4/FavouriteFilter" unique_id=711256688]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("8_atmmk")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer4/FavouriteFilter" unique_id=54857469]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer4/FavouriteFilter/MarginContainer" unique_id=1262150531]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Filter Favourites"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer4/FavouriteFilter/MarginContainer/CheckButton" unique_id=351975254]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_7bcpy")
+expand_mode = 3
+
+[node name="ShowDev" type="MarginContainer" parent="VBoxContainer/HBoxContainer4" unique_id=1728726805]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer4/ShowDev" unique_id=1909096477]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("8_atmmk")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer4/ShowDev" unique_id=1631207178]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer4/ShowDev/MarginContainer" unique_id=488954608]
+layout_mode = 2
+tooltip_text = "Include Hidden Items (Dev)"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer4/ShowDev/MarginContainer/CheckButton" unique_id=1070949488]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_dcdr8")
+expand_mode = 3
+
+[node name="TypeFilters2" parent="VBoxContainer/HBoxContainer4" unique_id=1329790463 instance=ExtResource("20_ckac4")]
+custom_minimum_size = Vector2(14, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="0" unique_id=1699324138 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Icon = ExtResource("22_3ncvj")
+
+[node name="Tab3" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="1" unique_id=1943050198 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Icon = ExtResource("23_cf3id")
+
+[node name="Tab4" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="2" unique_id=2090754285 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Icon = ExtResource("16_y77mj")
+
+[node name="Tab5" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="3" unique_id=1049979918 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Icon = ExtResource("17_n4wmg")
+
+[node name="Tab6" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="4" unique_id=611374292 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Icon = ExtResource("24_c53ek")
+
+[node name="Tab7" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="5" unique_id=486697332 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Icon = ExtResource("25_h1u85")
+
+[node name="Tab8" parent="VBoxContainer/HBoxContainer4/TypeFilters2/HBoxContainer" index="6" unique_id=35503253 instance=ExtResource("21_xuepi")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Icon = ExtResource("26_dji7j")
+
+[node name="NameSort" type="MarginContainer" parent="VBoxContainer/HBoxContainer4" unique_id=162823235]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer4/NameSort" unique_id=1614002266]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("8_atmmk")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer4/NameSort" unique_id=1623060794]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer4/NameSort/MarginContainer" unique_id=605436630]
+layout_mode = 2
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer4/NameSort/MarginContainer" unique_id=643331120]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer4/NameSort/MarginContainer/MarginContainer" unique_id=1555190869]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/HBoxContainer4/NameSort/MarginContainer/MarginContainer/HBoxContainer" unique_id=1741713646]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("27_4pukx")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer4/NameSort/MarginContainer/MarginContainer/HBoxContainer" unique_id=1088677249]
+layout_mode = 2
+text = "A-Z"
+
+[node name="MarkAllSeen" type="MarginContainer" parent="VBoxContainer/HBoxContainer4" unique_id=521822127]
+visible = false
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer4/MarkAllSeen" unique_id=940237311]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("8_atmmk")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer4/MarkAllSeen" unique_id=1042720488]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="CheckButton" type="Button" parent="VBoxContainer/HBoxContainer4/MarkAllSeen/MarginContainer" unique_id=1174590960]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Mark all as seen"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer4/MarkAllSeen/MarginContainer/CheckButton" unique_id=35478967]
+material = SubResource("ShaderMaterial_rf818")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("29_7y7je")
+expand_mode = 1
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer2/Button" to="." method="BulkRecycle"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer2/Button2" to="." method="TestHeroSelector"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer4/NewFilter/MarginContainer/CheckButton" to="." method="SetNewFilter"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer4/FavouriteFilter/MarginContainer/CheckButton" to="." method="SetFavoriteFilter"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer4/NameSort/MarginContainer/CheckButton" to="." method="SetSortMode"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer4/MarkAllSeen/MarginContainer/CheckButton" to="." method="BulkMarkSeen"]
+
+[editable path="VBoxContainer/HBoxContainer4/TypeFilters2"]

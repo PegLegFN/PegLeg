@@ -49,6 +49,7 @@ public partial class VerticalTab : Control
 	{
         if (Engine.IsEditorHint() && pageNode is not null)
         {
+
             //Renamed -= UpdatePageName;
             //VisibilityChanged -= PressResponse;
             pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));

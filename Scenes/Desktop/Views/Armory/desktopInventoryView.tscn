@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://culat840voiin" path="res://Scripts/UIElements/Virtual Tab Bar/VirtualTabBar.cs" id="1_cq0hx"]
 [ext_resource type="Script" uid="uid://71bid6ulu5rx" path="res://Scripts/UserInterface/InventoryInterface.cs" id="1_ix0kh"]
+[ext_resource type="PackedScene" uid="uid://i65ndlvcjb3f" path="res://Scenes/creator_easter_eggs.tscn" id="2_5b23r"]
 [ext_resource type="StyleBox" uid="uid://cg5f2hwe5io65" path="res://GodotThemes/Styleboxes/CheckButton/CheckContainer.tres" id="2_ytjya"]
 [ext_resource type="StyleBox" uid="uid://cvljwgex83ynh" path="res://GodotThemes/Styleboxes/CheckButton/UnselectedCheck.tres" id="3_jwnrv"]
 [ext_resource type="Texture2D" uid="uid://cir0axuy4xjte" path="res://Images/InterfaceIcons/T_OpenGlow.png" id="3_l2jv4"]
@@ -20,9 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="12_3wbpm"]
 [ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="15_l485q"]
 [ext_resource type="Texture2D" uid="uid://kracdagqcagt" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Ingredients-128.png" id="15_opvrx"]
-[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="16_45lr4"]
 [ext_resource type="Texture2D" uid="uid://cebpugdhhg4s4" path="res://Images/SDF/T_UI_Icon_UIKit_ClearBadges_SDF.png" id="16_opvrx"]
-[ext_resource type="Texture2D" uid="uid://b068tdyuivkmu" path="res://Images/ContentCreators/ArcherDanceSheet4.png" id="17_uggwr"]
 [ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="20_m3xe0"]
 [ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="20_mx4ls"]
 [ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="21_8o7d2"]
@@ -32,23 +31,6 @@
 [ext_resource type="Texture2D" uid="uid://dulj7swgucc3q" path="res://Images/InterfaceIcons/SchematicIcon32.png" id="23_xj7y8"]
 [ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="24_teqqu"]
 [ext_resource type="Texture2D" uid="uid://df1h55n2choqy" path="res://Images/InterfaceIcons/LockerIcons/T_UI_Empty_Pickaxe.png" id="25_novys"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k64ed"]
-shader = ExtResource("16_45lr4")
-shader_parameter/ControlSize = Vector2(100, 100)
-shader_parameter/SliceAmount = Vector2(4, 4)
-shader_parameter/FPS = 25.0
-shader_parameter/CellCount = 0
-shader_parameter/Fit = false
-shader_parameter/Repeat = false
-shader_parameter/HorizontalMask = 0.0
-shader_parameter/VerticalMask = 0.0
-shader_parameter/Frame = -1
-shader_parameter/scriptTime = false
-shader_parameter/time = 0.0
-shader_parameter/UseShadow = false
-shader_parameter/shadowBrightness = 0.0
-shader_parameter/shadowOpacity = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvrrd"]
 bg_color = Color(0.184314, 0.184314, 0.184314, 1)
@@ -88,32 +70,13 @@ devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/Marg
 tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2")
 targetProfile = "campaign"
 typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "Schematic", "Hero", "Defender", "Worker", "AccountResource", "CardPack")
-creatorImageParent = NodePath("Creators")
+creatorImageParent = NodePath("CreatorEasterEggs")
 inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
 heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
 powerLevel = NodePath("VBoxContainer/HBoxContainer/PowerLevel")
 
-[node name="Creators" type="Control" parent="." unique_id=690667769]
+[node name="CreatorEasterEggs" parent="." unique_id=100444052 instance=ExtResource("2_5b23r")]
 layout_mode = 2
-mouse_filter = 2
-
-[node name="33449ecf412c4b6aa3ad655d1e70f7f2" type="TextureRect" parent="Creators" unique_id=1642237496]
-material = SubResource("ShaderMaterial_k64ed")
-custom_minimum_size = Vector2(128, 128)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -128.0
-offset_top = -128.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 0
-size_flags_vertical = 8
-texture = ExtResource("17_uggwr")
-expand_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1504640056]
 layout_mode = 2

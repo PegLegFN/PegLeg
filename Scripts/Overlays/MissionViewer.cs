@@ -35,14 +35,14 @@ public partial class MissionViewer : ModalWindow
             return;
         var m = missionEntry.currentMission;
         DevTextOverlay.ShowTabs([
-            ["Mission", m.missionData.ToString()],
-            ["Generator", m.missionGenerator.rawData.ToString()],
-            ["Zone", m.zoneTheme.rawData.ToString()],
-            ["Difficulty", m.difficultyInfo.ToString()],
-            ["Tile", m.tile.ToString()],
-            ["Alert", m.alertData.ToString()],
-            ["Search Tags", m.searchTags.ToString()],
-            ["Regions", string.Join(",\n", m.regions.Select(r => r.ToString()))]
+            ["Mission", m.missionData?.ToString()],
+            ["Generator", m.missionGenerator?.rawData?.ToString()],
+            ["Zone", m.zoneTheme?.rawData?.ToString()],
+            ["Difficulty", m.difficultyInfo?.ToString()],
+            ["Tile", m.tile?.ToString()],
+            ["Alert", m.alertData?.ToString()],
+            ["Search Tags", m.searchTags?.ToString()],
+            ["Regions", string.Join(",\n", m.regions?.Select(r => r.ToString()) ?? [])]
         ]);
     }
 }

@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://clfdh2vd0pwmp"]
+
+[ext_resource type="PackedScene" uid="uid://dojyge3yqiou" path="res://Scenes/ViewElements/Settings/webhookSettingsSection.tscn" id="1_fcpwu"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_1rwmd"]
+
+[node name="WebhookPage" type="VBoxContainer" unique_id=980400473]
+
+[node name="DailySummary" parent="." unique_id=1626722277 instance=ExtResource("1_fcpwu")]
+layout_mode = 2
+internalName = "dailySummary"
+displayName = "Daily Summary"
+
+[node name="MissionArchive" parent="." unique_id=1281352047 instance=ExtResource("1_fcpwu")]
+layout_mode = 2
+internalName = "missionArchive"
+displayName = "Mission Archive"
+
+[node name="ArchiveWhVisibility" type="CheckBox" parent="MissionArchive" unique_id=1746713360]
+visible = false
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+button_pressed = true
+text = "
+"
+alignment = 2
+script = ExtResource("2_1rwmd")
+section = "advanced"
+key = "archive_missions"
+logChanges = true
+
+[connection signal="ConfigValueChanged" from="MissionArchive/ArchiveWhVisibility" to="MissionArchive" method="set_visible"]

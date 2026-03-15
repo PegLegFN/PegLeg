@@ -12,7 +12,6 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static HeroLoadoutEntry;
 
 public partial class AppData
 {
@@ -26,7 +25,7 @@ public enum OrderRange
     Monthly
 }
 
-public readonly record struct FORTStats(float fortitude, float offense, float resistance, float technology, double loadoutRating = 0, double backpackRating = 0, bool legacy = false)
+public readonly record struct RatingData(float fortitude, float offense, float resistance, float technology, double loadoutRating = 0, double backpackRating = 0, bool legacy = false)
 {
     //todo: export this via BanjoBotAssets
     static DataTableCurve homebaseRatingCurve;
@@ -39,24 +38,30 @@ public readonly record struct FORTStats(float fortitude, float offense, float re
     const double BackpackLoadoutWeight = 0.21;
     const double RatingDeltaWeight = 0.24;
 
+    const double CommanderWeight = 0.7;
+    const double SupportHeroWeight = 0.06;
+
+    const double WeaponWeight1 = 0.5;
+    const double WeaponWeight2 = 0.3;
+    const double WeaponWeight3 = 0.2;
+
     public float PowerLevel
     {
         get
         {
             var homebaseRating = SampleHomebaseRating();
             if (legacy)
-                return (float)homebaseRating;
+                return (float)Mathf.Max(1, homebaseRating);
             //shoutout Krowe moh!
             var averageGearRating = (loadoutRating + backpackRating) / 2;
             var ratingDelta = Mathf.Abs(homebaseRating - averageGearRating);
 
-            return (float)
-                (
-                    (homebaseRating * HomebaseRatingWeight) +
-                    (backpackRating * BackpackLoadoutWeight) +
-                    (loadoutRating * CommanderLoadoutWeight) -
-                    (ratingDelta * RatingDeltaWeight)
-                );
+            return (float)Mathf.Max(1, 
+                (homebaseRating * HomebaseRatingWeight) +
+                (backpackRating * BackpackLoadoutWeight) +
+                (loadoutRating * CommanderLoadoutWeight) -
+                (ratingDelta * RatingDeltaWeight)
+            );
         }
     }
 
@@ -73,6 +78,53 @@ public readonly record struct FORTStats(float fortitude, float offense, float re
             var fortRating = SampleHomebaseRating();
             GD.Print($"{prefix}PL: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (FORT Rating: {fortRating:0.##}) (Loadout: {loadoutRating:0.##}) (Backpack: {backpackRating:0.##})");
         }
+    }
+
+
+    public static double GetWeaponPower(GameAccount account)
+    {
+        var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
+        var backpack = account.GetProfile(FnProfileTypes.Backpack);
+        var backpackPowerLevels = backpack
+            .GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged")
+            .Union(accountItems.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [])
+            .Select(item => item.CalculateRating())
+            .OrderDescending()
+            .ToArray();
+
+        if (backpackPowerLevels.Length > 3)
+            backpackPowerLevels = backpackPowerLevels[..3];
+
+        //GD.Print($"Highest {string.Join(", ", backpackPowerLevels)}");
+
+        double backpackPower = 0;
+
+        if (backpackPowerLevels.Length >= 1)
+            backpackPower += backpackPowerLevels[0] * WeaponWeight1;
+        if (backpackPowerLevels.Length >= 2)
+            backpackPower += backpackPowerLevels[1] * WeaponWeight2;
+        if (backpackPowerLevels.Length >= 3)
+            backpackPower += backpackPowerLevels[2] * WeaponWeight3;
+        return backpackPower;
+    }
+
+    public static double GetLoadoutPower(GameAccount account)
+    {
+        var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
+        double heroPower = 0;
+        var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
+        var crewMembers = loadoutItem.attributes["crew_members"].Deserialize<Dictionary<string, string>>();
+        if (loadoutItem is not null)
+        {
+            heroPower += (70 * accountItems.GetItem(crewMembers["commanderslot"]).CalculateRating()) / 100d;
+
+            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot1"))?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot2"))?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot3"))?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot4"))?.CalculateRating() ?? 0)) / 100d;
+            heroPower += (6 * (accountItems.GetItem(crewMembers.GetValueOrDefault("followerslot5"))?.CalculateRating() ?? 0)) / 100d;
+        }
+        return heroPower;
     }
 }
 
@@ -250,9 +302,9 @@ public partial class GameAccount
             GenericConfirmationWindow.ShowError("Failed to authenticate", "Refresh Failed").StartTask();
             return;
         }
-        _activeAccount.fortStats = null;
-        _activeAccount.ventureFortStats = null;
-        _activeAccount.localData = [];
+        _activeAccount.ratingData = null;
+        _activeAccount.ventureRatingData = null;
+        _activeAccount.localData = null;
         _activeAccount.localPinnedQuests = [];
         foreach (var profile in _activeAccount.profiles.Values)
         {
@@ -807,58 +859,14 @@ public partial class GameAccount
         dir.Remove(accountId);
     }
 
-    double GetBackpackPower()
+    public event Action<GameAccount> OnRatingDataChanged;
+    RatingData? ratingData;
+    public RatingData RatingData => GetRatingData();
+    public void MarkFortStatsDirty() => ratingData = null;
+    public RatingData GetRatingData(bool force = false)
     {
-        var accountItems = GetProfile(FnProfileTypes.AccountItems);
-        var backpack = GetProfile(FnProfileTypes.Backpack);
-        var backpackPowerLevels = backpack
-            .GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged")
-            .Union(accountItems.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [])
-            .Select(item => item.CalculateRating())
-            .OrderDescending()
-            .ToArray();
-
-        if (backpackPowerLevels.Length > 3)
-            backpackPowerLevels = backpackPowerLevels[..3];
-
-        //GD.Print($"Highest {string.Join(", ", backpackPowerLevels)}");
-
-        double backpackPower = 0;
-
-        if (backpackPowerLevels.Length >= 1)
-            backpackPower += (5 * backpackPowerLevels[0]) / 10d;
-        if (backpackPowerLevels.Length >= 2)
-            backpackPower += (3 * backpackPowerLevels[1]) / 10d;
-        if (backpackPowerLevels.Length >= 3)
-            backpackPower += (2 * backpackPowerLevels[2]) / 10d;
-        return backpackPower;
-    }
-
-    double GetLoadoutPower()
-    {
-        var accountItems = GetProfile(FnProfileTypes.AccountItems);
-        double heroPower = 0;
-        var loadoutItem = accountItems.GetItem(accountItems?.statAttributes?["selected_hero_loadout"]?.ToString());
-        if (loadoutItem is not null)
-        {
-            heroPower += (70 * loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["commanderslot"].ToString()).CalculateRating()) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot1"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot2"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot3"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot4"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-            heroPower += (6 * (loadoutItem.profile.GetItem(loadoutItem.attributes["crew_members"]["followerslot5"]?.ToString())?.CalculateRating() ?? 0)) / 100d;
-        }
-        return heroPower;
-    }
-
-    public event Action<GameAccount> OnFortStatsChanged;
-    FORTStats? fortStats;
-    public FORTStats FortStats => GetFORTStats();
-    public void MarkFortStatsDirty() => fortStats = null;
-    public FORTStats GetFORTStats(bool force = false)
-    {
-        if (!force && fortStats is not null)
-            return fortStats.Value;
+        if (!force && ratingData is not null)
+            return ratingData.Value;
         if (!isOwned)
             return default;
 
@@ -883,8 +891,8 @@ public partial class GameAccount
             return stat;
         }
 
-        double backpackPower = GetBackpackPower();
-        double loadoutPower = GetLoadoutPower();
+        double backpackPower = RatingData.GetWeaponPower(this);
+        double loadoutPower = RatingData.GetLoadoutPower(this);
 
         //+ profileStats["fortitude"].GetValue<int>()
         float fortitude = LookupStatItem("Stat:fortitude") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
@@ -893,24 +901,24 @@ public partial class GameAccount
         float technology = LookupStatItem("Stat:technology") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
 
 
-        FORTStats newFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
-        if (fortStats != newFortStats)
+        RatingData newFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
+        if (ratingData != newFortStats)
         {
             newFortStats.Print("Main");
-            fortStats = newFortStats;
-            OnFortStatsChanged?.Invoke(this);
+            ratingData = newFortStats;
+            OnRatingDataChanged?.Invoke(this);
         }
         return newFortStats;
     }
 
-    public event Action<GameAccount> OnVentureFortStatsChanged;
-    FORTStats? ventureFortStats;
-    public FORTStats VentureFortStats => GetVentureFORTStats();
-    public void MarkVentureFortStatsDirty() => ventureFortStats = null;
-    public FORTStats GetVentureFORTStats(bool force = false)
+    public event Action<GameAccount> OnVentureRatingDataChanged;
+    RatingData? ventureRatingData;
+    public RatingData VentureFortStats => GetVentureRatingData();
+    public void MarkVentureFortStatsDirty() => ventureRatingData = null;
+    public RatingData GetVentureRatingData(bool force = false)
     {
-        if (!force && ventureFortStats is not null)
-            return ventureFortStats.Value;
+        if (!force && ventureRatingData is not null)
+            return ventureRatingData.Value;
 
         var accountItems = GetProfile(FnProfileTypes.AccountItems);
         var statItems = accountItems.GetItems("Stat");
@@ -925,14 +933,14 @@ public partial class GameAccount
         float resistance = LookupStatItem("Stat:resistance_phoenix");
         float technology = LookupStatItem("Stat:technology_phoenix");
 
-        FORTStats newVentureFortStats = new(fortitude, offense, resistance, technology, legacy: true);
-        if (ventureFortStats != newVentureFortStats)
+        RatingData newVentureFortStats = new(fortitude, offense, resistance, technology, legacy: true);
+        if (ventureRatingData != newVentureFortStats)
         {
             newVentureFortStats.Print("Venture");
-            ventureFortStats = newVentureFortStats;
-            OnVentureFortStatsChanged?.Invoke(this);
+            ventureRatingData = newVentureFortStats;
+            OnVentureRatingDataChanged?.Invoke(this);
         }
-        return ventureFortStats.Value;
+        return ventureRatingData.Value;
     }
 
     public async Task GenerateXRayLlamaResults(bool force = false)
@@ -1228,7 +1236,7 @@ public partial class GameAccount
         {
             var supportGuid = loadoutSlot.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
             var supportHero = supportGuid is not null ? loadoutSlot.profile.GetItem(supportGuid) : null;
-            crewMembers[$"followerslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintHero.FromHero(supportHero.template), Helpers.JsonOptions.Fields);
+            crewMembers[$"followerslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintHero.FromHero(supportHero?.template), Helpers.JsonOptions.Fields);
         }
 
         var gadgetTemplates = loadoutSlot.attributes["gadgets"]?.AsArray().OrderBy(g => (int)g["slot_index"]).Select(g => g["gadget"].ToString()).ToArray() ?? [];
@@ -1252,7 +1260,7 @@ public partial class GameAccount
 
         public static LoadoutBlueprintHero FromHero(GameItemTemplate heroTemplate)
         {
-            var abilities = heroTemplate.GetHeroAbilities();
+            var abilities = heroTemplate?.GetHeroAbilities();
             if (abilities is null)
                 return default;
             return new()
@@ -1265,10 +1273,15 @@ public partial class GameAccount
 
         public string ResolveHeroUUID(GameProfile profile)
         {
+            if (displayTemplate is null)
+                return null;
             var prefix = heroTemplatePrefix;
             var perk = heroPerkFallback;
+            var display = displayTemplate;
             var candidates = profile.GetItems("Hero", i => i.template?.GetHeroAbilities()[0]?.TemplateId.Equals(perk, StringComparison.OrdinalIgnoreCase) == true)
-                .OrderBy(i => -i.template.RarityLevel)
+                .OrderBy(i => i.templateId != display)
+                .ThenBy(i => !i.templateId.StartsWith(prefix))
+                .ThenBy(i => -i.template.RarityLevel)
                 .ThenBy(i => -i.CalculateRating())
                 .ThenBy(i => !i.templateId.StartsWith(prefix));
             return candidates.FirstOrDefault()?.uuid;

@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://bnw6gwdhv8twq"]
+
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="1_p4q3c"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="2_s2kuj"]
+[ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="3_qiwkn"]
+[ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="4_n30m0"]
+
+[node name="MissionPage" type="VBoxContainer" unique_id=2081319794]
+
+[node name="ShowMissionBackgrounds" type="CheckBox" parent="." unique_id=546791083]
+layout_direction = 3
+layout_mode = 2
+button_pressed = true
+text = "Show mission background images"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "show_background"
+defaultValue = true
+
+[node name="HideMissionLock" type="CheckBox" parent="." unique_id=1387671364]
+layout_direction = 3
+layout_mode = 2
+text = "Hide Lock icon on Missions"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "hide_lock"
+
+[node name="Hide4xXP" type="CheckBox" parent="." unique_id=303758349]
+layout_direction = 3
+layout_mode = 2
+text = "Exclude XP from 4x Mission Collections"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "excludeLargeXP"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=2141917151]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DefaultMissionSearchLabel" type="Label" parent="VBoxContainer2" unique_id=134436572]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Notable Item Filter (Per Account)"
+
+[node name="DefaultMissionSearch" type="TextEdit" parent="VBoxContainer2" unique_id=1383090912]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "eg: (Mythic Survivor) | V-Bucks | X-Ray"
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("2_s2kuj")
+section = "missions"
+key = "notable_mission_filter"
+accountMode = true
+
+[node name="NotableItemCap" type="HBoxContainer" parent="." unique_id=1427632394]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NotableItemCap" unique_id=1815566311]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Max Notable Items  "
+
+[node name="HSlider" type="HSlider" parent="NotableItemCap" unique_id=2065745797]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 30.0
+value = 20.0
+rounded = true
+scrollable = false
+tick_count = 7
+ticks_on_borders = true
+script = ExtResource("3_qiwkn")
+section = "missions"
+key = "notable_count"
+asInt = true
+defaultValue = 20.0
+requireApply = false
+
+[node name="Label2" type="Label" parent="NotableItemCap" unique_id=450573100]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="NotableItemCap" unique_id=1688864720]
+visible = false
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Apply"
+
+[node name="TextureRect" type="TextureRect" parent="NotableItemCap/Button" unique_id=1030555280]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_n30m0")
+expand_mode = 1
+
+[connection signal="AppliedChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="NotableItemCap/HSlider" to="NotableItemCap/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Label2" method="set_text"]
+[connection signal="pressed" from="NotableItemCap/Button" to="NotableItemCap/HSlider" method="ApplyValue"]

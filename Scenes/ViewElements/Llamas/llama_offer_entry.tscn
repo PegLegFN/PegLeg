@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://b0uxwtxndd6x3"]
+[gd_scene format=3 uid="uid://b0uxwtxndd6x3"]
 
 [ext_resource type="Theme" uid="uid://cd7qoq3gay1op" path="res://GodotThemes/BasicTheme.tres" id="1_vtoeo"]
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="2_dhih1"]
@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="10_kbdaw"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="12_vphjs"]
 [ext_resource type="Texture2D" uid="uid://hskfanlp03l8" path="res://Images/InterfaceIcons/T-UI-SoldOut.png" id="13_dsrnj"]
-[ext_resource type="ButtonGroup" uid="uid://cm7rmga74vyve" path="res://Scenes/LlamaEntries/LlamaChoices.tres" id="14_l6u0k"]
+[ext_resource type="ButtonGroup" uid="uid://cm7rmga74vyve" path="res://Scenes/ViewElements/Llamas/LlamaChoices.tres" id="14_l6u0k"]
 [ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="15_3uj10"]
 [ext_resource type="Texture2D" uid="uid://dnqbqca02sqwq" path="res://Images/InterfaceIcons/T-Pattern-OrArrow-128.png" id="16_da4gs"]
 [ext_resource type="Texture2D" uid="uid://c4ixuk0fofeej" path="res://Images/InterfaceIcons/PinataStandardPack-Upgrade.png" id="17_k06hi"]
@@ -28,10 +28,11 @@ resource_local_to_scene = true
 shader = ExtResource("6_41bjr")
 shader_parameter/ControlSize = Vector2(350, 120)
 shader_parameter/CornerRadius = 10.0
+shader_parameter/Simple = false
 shader_parameter/BGCol = Color(1, 1, 1, 1)
-shader_parameter/TriCol1 = Color(0.5, 0.5, 0.5, 0.5)
-shader_parameter/TriCol2 = Color(0.5, 0.5, 0.5, 0.5)
-shader_parameter/TriCol3 = Color(0.5, 0.5, 0.5, 0.5)
+shader_parameter/TriCol1 = Color(0.5019608, 0.10978433, 0.11352929, 0.5019608)
+shader_parameter/TriCol2 = Color(0.091674, 0.5019608, 0.13041188, 0.5019608)
+shader_parameter/TriCol3 = Color(0.12934987, 0.19599824, 0.5019608, 0.5019608)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_37kl4"]
 content_margin_left = 2.0
@@ -60,7 +61,7 @@ shader = ExtResource("9_squpy")
 shader_parameter/packIcon = ExtResource("10_kbdaw")
 shader_parameter/useMask = true
 
-[node name="Catalog Llama Entry" type="MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "selectionGraphics")]
+[node name="Catalog Llama Entry" type="MarginContainer" unique_id=1461616121 node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "selectionGraphics")]
 custom_minimum_size = Vector2(350, 0)
 offset_right = 350.0
 offset_bottom = 120.0
@@ -72,10 +73,10 @@ grantedItemEntry = NodePath("LlamaItem")
 priceEntry = NodePath("LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/PriceItem")
 selectionGraphics = NodePath("Control2/CheckButton")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=98801968]
 layout_mode = 2
 
-[node name="Triangles" type="TextureRect" parent="Control"]
+[node name="Triangles" type="TextureRect" parent="Control" unique_id=1929447656]
 texture_repeat = 2
 material = SubResource("ShaderMaterial_4vgu5")
 layout_mode = 1
@@ -89,7 +90,7 @@ expand_mode = 1
 script = ExtResource("5_u1yf7")
 syncControlSize = true
 
-[node name="LeavingTimer" type="PanelContainer" parent="Control"]
+[node name="LeavingTimer" type="PanelContainer" parent="Control" unique_id=1583000335]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -103,15 +104,15 @@ grow_vertical = 0
 size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_37kl4")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/LeavingTimer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/LeavingTimer" unique_id=347518650]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control/LeavingTimer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="Control/LeavingTimer/HBoxContainer" unique_id=1561984974]
 layout_mode = 2
 texture = ExtResource("6_7i7f0")
 expand_mode = 3
 
-[node name="LeavingLabel" type="Label" parent="Control/LeavingTimer/HBoxContainer"]
+[node name="LeavingLabel" type="Label" parent="Control/LeavingTimer/HBoxContainer" unique_id=1627396294]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
@@ -119,7 +120,7 @@ theme_override_font_sizes/font_size = 12
 text = "59:59"
 script = ExtResource("8_8g41e")
 
-[node name="LlamaItem" type="MarginContainer" parent="."]
+[node name="LlamaItem" type="MarginContainer" parent="." unique_id=1725024546]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 10
@@ -128,17 +129,17 @@ theme_override_constants/margin_bottom = 10
 script = ExtResource("2_e282y")
 includeDescriptionInTooltip = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LlamaItem"]
+[node name="HBoxContainer" type="HBoxContainer" parent="LlamaItem" unique_id=1265279485]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="PinataBG" type="TextureRect" parent="LlamaItem/HBoxContainer"]
+[node name="PinataBG" type="TextureRect" parent="LlamaItem/HBoxContainer" unique_id=248877422]
 layout_mode = 2
 texture = SubResource("GradientTexture2D_an7nb")
 expand_mode = 3
 
-[node name="Pinata" type="TextureRect" parent="LlamaItem/HBoxContainer/PinataBG"]
+[node name="Pinata" type="TextureRect" parent="LlamaItem/HBoxContainer/PinataBG" unique_id=323573472]
 material = SubResource("ShaderMaterial_hkcaq")
 layout_mode = 1
 anchors_preset = 15
@@ -150,10 +151,10 @@ texture = ExtResource("5_hfsg2")
 expand_mode = 3
 script = ExtResource("5_u1yf7")
 
-[node name="InStockToggle" type="Node" parent="LlamaItem/HBoxContainer/PinataBG/Pinata"]
+[node name="InStockToggle" type="Node" parent="LlamaItem/HBoxContainer/PinataBG/Pinata" unique_id=1720625039]
 script = ExtResource("12_vphjs")
 
-[node name="AmountLabel" type="Label" parent="LlamaItem/HBoxContainer/PinataBG/Pinata"]
+[node name="AmountLabel" type="Label" parent="LlamaItem/HBoxContainer/PinataBG/Pinata" unique_id=1279886739]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 1
 anchors_preset = 3
@@ -175,15 +176,15 @@ horizontal_alignment = 2
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="LlamaItem/HBoxContainer/PinataBG/Pinata"]
+[node name="TextureRect" type="TextureRect" parent="LlamaItem/HBoxContainer/PinataBG/Pinata" unique_id=610241338]
 visible = false
-layout_mode = 2
+layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
 texture = ExtResource("13_dsrnj")
 expand_mode = 1
 
-[node name="SoldOutLabel" type="Label" parent="LlamaItem/HBoxContainer/PinataBG/Pinata/TextureRect"]
+[node name="SoldOutLabel" type="Label" parent="LlamaItem/HBoxContainer/PinataBG/Pinata/TextureRect" unique_id=1500020978]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 1
 anchors_preset = 3
@@ -210,12 +211,12 @@ horizontal_alignment = 2
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LlamaItem/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="LlamaItem/HBoxContainer" unique_id=1787231380]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="NameLabel" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer"]
+[node name="NameLabel" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer" unique_id=904263027]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
@@ -223,25 +224,25 @@ text = "Lunar Llama"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="LlamaCost" type="HBoxContainer" parent="LlamaItem/HBoxContainer/VBoxContainer"]
+[node name="LlamaCost" type="HBoxContainer" parent="LlamaItem/HBoxContainer/VBoxContainer" unique_id=1951852962]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="PriceTextLabel" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost"]
+[node name="PriceTextLabel" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost" unique_id=970660552]
 layout_mode = 2
 size_flags_stretch_ratio = 0.25
 theme_override_font_sizes/font_size = 24
 text = "Price: "
 vertical_alignment = 1
 
-[node name="FreeToggle" type="Node" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost"]
+[node name="FreeToggle" type="Node" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost" unique_id=1557683137]
 script = ExtResource("12_vphjs")
 
-[node name="FreeObj" type="Control" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost"]
+[node name="FreeObj" type="Control" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost" unique_id=327748815]
 layout_mode = 2
 
-[node name="PriceNumberLabel2" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/FreeObj"]
-layout_mode = 2
+[node name="PriceNumberLabel2" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/FreeObj" unique_id=515363484]
+layout_mode = 0
 offset_top = 4.0
 offset_right = 57.0
 offset_bottom = 40.0
@@ -253,38 +254,38 @@ theme_override_font_sizes/font_size = 30
 text = "FREE"
 vertical_alignment = 1
 
-[node name="PriceItem" type="HBoxContainer" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost"]
+[node name="PriceItem" type="HBoxContainer" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost" unique_id=7589050]
 layout_mode = 2
 theme_override_constants/separation = 0
 script = ExtResource("3_2od7b")
 
-[node name="TextureRect" type="TextureRect" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/PriceItem"]
+[node name="TextureRect" type="TextureRect" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/PriceItem" unique_id=1154663317]
 layout_mode = 2
 texture = ExtResource("6_n8hwd")
 expand_mode = 3
 
-[node name="PriceNumberLabel" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/PriceItem"]
+[node name="PriceNumberLabel" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/PriceItem" unique_id=1282184610]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "1000"
 vertical_alignment = 1
 
-[node name="AltPrice" type="HBoxContainer" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost"]
+[node name="AltPrice" type="HBoxContainer" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost" unique_id=1276723036]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Control" type="Control" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice"]
+[node name="Control" type="Control" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice" unique_id=534918084]
 custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice"]
+[node name="TextureRect" type="TextureRect" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice" unique_id=264246081]
 layout_mode = 2
 texture = ExtResource("16_da4gs")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice/TextureRect"]
+[node name="Label" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice/TextureRect" unique_id=709459659]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -298,19 +299,19 @@ text = "OR"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect2" type="TextureRect" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice"]
+[node name="TextureRect2" type="TextureRect" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice" unique_id=324203688]
 layout_mode = 2
 texture = ExtResource("17_k06hi")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice"]
+[node name="Label" type="Label" parent="LlamaItem/HBoxContainer/VBoxContainer/LlamaCost/AltPrice" unique_id=1467700220]
 layout_mode = 2
 text = "(No Daily Limit)"
 
-[node name="Control2" type="Control" parent="."]
+[node name="Control2" type="Control" parent="." unique_id=843296221]
 layout_mode = 2
 
-[node name="CheckButton" type="CheckButton" parent="Control2"]
+[node name="CheckButton" type="CheckButton" parent="Control2" unique_id=1368898030]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -321,7 +322,7 @@ grow_vertical = 2
 mouse_filter = 2
 button_group = ExtResource("14_l6u0k")
 
-[node name="TextureRect" type="TextureRect" parent="Control2/CheckButton"]
+[node name="TextureRect" type="TextureRect" parent="Control2/CheckButton" unique_id=2023853887]
 visible = false
 self_modulate = Color(1, 0, 0, 1)
 z_index = 2
@@ -339,11 +340,11 @@ mouse_filter = 2
 texture = ExtResource("15_3uj10")
 expand_mode = 1
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("3_r23ei")]
+[node name="Responsive Button Area" parent="." unique_id=1335377236 instance=ExtResource("3_r23ei")]
 layout_mode = 2
 outlinePadding = 20.0
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource", "offerSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=384661936 node_paths=PackedStringArray("itemSource", "offerSource")]
 script = ExtResource("21_74n11")
 itemSource = NodePath("../../LlamaItem")
 offerSource = NodePath("../..")
@@ -359,6 +360,7 @@ componentList = ExtResource("22_v01fj")
 [connection signal="Color3Changed" from="LlamaItem" to="Control/Triangles" method="SetShaderColor" binds= ["TriCol3"]]
 [connection signal="IconChanged" from="LlamaItem" to="LlamaItem/HBoxContainer/PinataBG/Pinata" method="set_texture"]
 [connection signal="RarityChanged" from="LlamaItem" to="Control/Triangles" method="SetShaderColor" binds= ["BGCol"]]
+[connection signal="SimpleMode" from="LlamaItem" to="Control/Triangles" method="SetShaderBool" binds= ["Simple"]]
 [connection signal="SubtypeIconChanged" from="LlamaItem" to="LlamaItem/HBoxContainer/PinataBG/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
 [connection signal="TooltipChanged" from="LlamaItem" to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="InvertedValue" from="LlamaItem/HBoxContainer/PinataBG/Pinata/InStockToggle" to="LlamaItem/HBoxContainer/PinataBG/Pinata/TextureRect" method="set_visible"]

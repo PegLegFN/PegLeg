@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -33,7 +34,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     bool allowDevMode = true;
     [Export]
     Control creatorImageParent;
-    Control[] creatorImages;
+    AnimationPlayer creatorAnimations;
+    Dictionary<string, Control> creatorImages;
     [Export]
     Control inMissionIndicator;
     [Export]
@@ -41,10 +43,14 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     [Export]
     HomebasePowerLevel powerLevel;
 
+    Control currentCreatorImage;
+    AnimationPlayer currentCreatorAnimation;
+
     public override void _Ready()
     {
-        creatorImages = creatorImageParent.GetChildren().Select(c => (Control)c).ToArray();
-        foreach (var item in creatorImages)
+        creatorImages = creatorImageParent.GetChildren().OfType<Control>().ToDictionary(c => c.Name.ToString(), c => (Control)c);
+        creatorAnimations = creatorImageParent.GetChildren().OfType<AnimationPlayer>().FirstOrDefault();
+        foreach (var item in creatorImages.Values)
         {
             item.Visible = false;
         }
@@ -180,9 +186,17 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         if (targetProfile != FnProfileTypes.AccountItems && !await account.Authenticate())
             return;
 
-        foreach (var image in creatorImages)
+        if(currentCreatorImage is not null)
         {
-            image.Visible = account.accountId == image.Name;
+            currentCreatorImage.Visible = false;
+        }
+        creatorAnimations.Stop();
+        if (creatorImages.TryGetValue(account.accountId, out var image))
+        {
+            currentCreatorImage = image;
+            image.Visible = true;
+            if (creatorAnimations.HasAnimation(account.accountId))
+                creatorAnimations.Play(account.accountId);
         }
 
         if(currentProfile is not null)

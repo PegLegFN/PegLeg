@@ -6,6 +6,8 @@ public partial class CardPackEntry : GameItemEntry
 {
     [Signal]
     public delegate void LlamaPressedEventHandler(string itemId);
+    [Signal]
+    public delegate void SimpleModeEventHandler(bool simple);
 
     [Signal]
     public delegate void Color1ChangedEventHandler(Color color);
@@ -58,9 +60,10 @@ public partial class CardPackEntry : GameItemEntry
         string nameWithAmount = amount >= 0 ? $"{name} ({shopAmount} left)" : name;
         string description = item.template.Description;
 
-        EmitSignal(SignalName.NameChanged, (includeAmountInName && shopAmount >= 0) ? nameWithAmount : name);
-        EmitSignal(SignalName.DescriptionChanged, description);
-        EmitSignal(SignalName.NotificationChanged, !item.IsSeen);
+        //EmitSignalSimpleMode(OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true));
+        EmitSignalNameChanged((includeAmountInName && shopAmount >= 0) ? nameWithAmount : name);
+        EmitSignalDescriptionChanged(description);
+        EmitSignalNotificationChanged(!item.IsSeen);
 
         string amountText = amount.ToString();
         if (addXToAmount)

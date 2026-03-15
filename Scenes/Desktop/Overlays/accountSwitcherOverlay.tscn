@@ -1,6 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://b2k3opkacmxbr"]
+[gd_scene format=3 uid="uid://b2k3opkacmxbr"]
 
-[ext_resource type="Script" uid="uid://82yewyisqicq" path="res://Scripts/Overlays/AccountSelector.cs" id="1_4tkd1"]
+[ext_resource type="Script" uid="uid://82yewyisqicq" path="res://Scripts/Overlays/AccountFoldout.cs" id="1_4tkd1"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_xtbid"]
 [ext_resource type="StyleBox" uid="uid://0tj4whr53nxd" path="res://GodotThemes/Styleboxes/WindowBGTransparant.tres" id="4_fuugn"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="4_qwthi"]
@@ -12,6 +12,7 @@
 [ext_resource type="StyleBox" uid="uid://bv7qeic3nboww" path="res://GodotThemes/Styleboxes/AccountButton/AccountButton.tres" id="7_7lhwc"]
 [ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="7_bsci4"]
 [ext_resource type="Script" uid="uid://dtn74tm25xo14" path="res://Scripts/UIElements/MaxHeightScrollContainer.cs" id="7_gpno0"]
+[ext_resource type="Script" uid="uid://bxnnukevkvf6c" path="res://Scripts/AccountList.cs" id="7_ulxpl"]
 [ext_resource type="PackedScene" uid="uid://b6i4qroblgrhs" path="res://Scenes/Accounts/account_entry.tscn" id="7_xgkqb"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="8_21oxt"]
 [ext_resource type="Script" uid="uid://dvgcv52c2ve0w" path="res://Scripts/UserInterface/ListEntries/GameAccountEntry.cs" id="11_xccdo"]
@@ -35,7 +36,7 @@ shader_parameter/CornerRadius = 20.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8rag4"]
 shader = ExtResource("5_6xcee")
 
-[node name="AccountSwitcher" type="Control" node_paths=PackedStringArray("selectorButtonLabel", "selectorButtonLabelTarget", "selectorButtonIcons", "foldout", "foldoutBtn", "accountEntryParent", "backgroundPanel")]
+[node name="AccountSwitcher" type="Control" unique_id=1442623568 node_paths=PackedStringArray("selectorButtonLabel", "selectorButtonLabelTarget", "selectorButtonIcons", "foldout", "foldoutBtn", "accountList", "backgroundPanel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,13 +52,11 @@ selectorButtonLabelTarget = NodePath("AccountSelector/SelectorButton/MarginConta
 selectorButtonIcons = NodePath("AccountSelector/SelectorButton/MarginContainer")
 foldout = NodePath("AccountSelector")
 foldoutBtn = NodePath("AccountSelector/SelectorButton/Button")
-accountEntryParent = NodePath("AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer")
-accountEntryScene = ExtResource("7_xgkqb")
-onboardingScene = "res://Scenes/Desktop/desktopOnboarding.tscn"
+accountList = NodePath("AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer")
 backgroundPanel = NodePath("Background")
 isUserClosable = true
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1234491881]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -67,7 +66,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25, 0.25, 0.25, 0.501961)
 
-[node name="TextureRect" type="TextureRect" parent="Background"]
+[node name="TextureRect" type="TextureRect" parent="Background" unique_id=152510156]
 self_modulate = Color(1, 1, 1, 0.588235)
 custom_minimum_size = Vector2(500, 400)
 layout_mode = 1
@@ -77,7 +76,7 @@ grow_vertical = 2
 texture = ExtResource("4_qwthi")
 expand_mode = 1
 
-[node name="CloseBtn" type="Button" parent="." groups=["ExcludeButtonSounds"]]
+[node name="CloseBtn" type="Button" parent="." unique_id=1383845613 groups=["ExcludeButtonSounds"]]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -85,13 +84,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
-theme_override_styles/disabled = ExtResource("4_fuugn")
-theme_override_styles/hover = ExtResource("4_fuugn")
-theme_override_styles/pressed = ExtResource("4_fuugn")
 theme_override_styles/normal = ExtResource("4_fuugn")
+theme_override_styles/pressed = ExtResource("4_fuugn")
+theme_override_styles/hover = ExtResource("4_fuugn")
+theme_override_styles/disabled = ExtResource("4_fuugn")
+theme_override_styles/focus = SubResource("StyleBoxFlat_k6l75")
 
-[node name="AccountSelector" type="MarginContainer" parent="." node_paths=PackedStringArray("elementContainer", "foldoutInteractionPanel", "foldoutTarget", "foldoutChildParent", "rotationTarget")]
+[node name="AccountSelector" type="MarginContainer" parent="." unique_id=624837987 node_paths=PackedStringArray("elementContainer", "foldoutInteractionPanel", "foldoutTarget", "foldoutChildParent", "rotationTarget")]
 custom_minimum_size = Vector2(48, 27)
 layout_mode = 1
 offset_left = 5.0
@@ -99,15 +98,15 @@ offset_top = 5.0
 offset_right = 53.0
 offset_bottom = 32.0
 script = ExtResource("5_oyjq8")
-elementContainer = NodePath("SelectorOptions/Control/MarginContainer/VBoxContainer")
+elementContainer = NodePath("SelectorOptions/Control/MarginContainer/MarginContainer2")
 foldoutInteractionPanel = NodePath("SelectorButton")
 foldoutTarget = NodePath("SelectorOptions")
-foldoutChildParent = NodePath("SelectorOptions/Control/MarginContainer/VBoxContainer")
+foldoutChildParent = NodePath("SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer")
 rotationTarget = NodePath("SelectorButton/MarginContainer2/LabelReciever/LabelSource/Control/TextureRect")
 openRotation = 90.0
 extraSpace = 8.0
 
-[node name="SelectorOptions" type="MarginContainer" parent="AccountSelector"]
+[node name="SelectorOptions" type="MarginContainer" parent="AccountSelector" unique_id=1565188773]
 custom_minimum_size = Vector2(0, 185)
 layout_mode = 2
 theme_override_constants/margin_left = 15
@@ -115,11 +114,11 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = -5
 
-[node name="Control" type="Control" parent="AccountSelector/SelectorOptions"]
+[node name="Control" type="Control" parent="AccountSelector/SelectorOptions" unique_id=280035390]
 clip_contents = true
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control"]
+[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control" unique_id=250173874]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -132,44 +131,50 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer" unique_id=2059471967]
 layout_mode = 2
 theme_override_constants/margin_left = -10
 theme_override_constants/margin_top = -10
 theme_override_constants/margin_right = -10
 theme_override_constants/margin_bottom = -5
 
-[node name="TextureRect" type="ColorRect" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer"]
+[node name="TextureRect" type="ColorRect" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer" unique_id=313427572]
 material = SubResource("ShaderMaterial_dqsih")
 layout_mode = 2
 color = Color(0, 0, 0, 0.768627)
 script = ExtResource("3_xtbid")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer" unique_id=112741061]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2" unique_id=1362608362 node_paths=PackedStringArray("accountEntryParent")]
 layout_mode = 2
 alignment = 2
+script = ExtResource("7_ulxpl")
+accountEntryScene = ExtResource("7_xgkqb")
+accountEntryParent = NodePath("ScrollContainer/VBoxContainer")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer" unique_id=1434690379]
 layout_mode = 2
 script = ExtResource("7_gpno0")
 maxSize = Vector2(0, 200)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/ScrollContainer" unique_id=254854671]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AddAccount" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer"]
+[node name="AddAccount" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer" unique_id=1979736398]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount"]
+[node name="Button" type="Button" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount" unique_id=1925802990]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 theme_type_variation = &"AccountButton"
 text = "
 "
 
-[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount"]
+[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount" unique_id=1988730008]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -177,11 +182,11 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount/MarginContainer" unique_id=354404392]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount/MarginContainer/HBoxContainer" unique_id=1650207336]
 custom_minimum_size = Vector2(21, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -189,24 +194,24 @@ mouse_filter = 2
 texture = ExtResource("8_21oxt")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount/MarginContainer/HBoxContainer" unique_id=668361631]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Sign In"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="SelectorButton" type="MarginContainer" parent="AccountSelector"]
+[node name="SelectorButton" type="MarginContainer" parent="AccountSelector" unique_id=927683717]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Button" type="Button" parent="AccountSelector/SelectorButton"]
+[node name="Button" type="Button" parent="AccountSelector/SelectorButton" unique_id=234368989]
 layout_mode = 2
 theme_type_variation = &"AccountButton"
 theme_override_styles/disabled = ExtResource("7_7lhwc")
 
-[node name="MarginContainer2" type="MarginContainer" parent="AccountSelector/SelectorButton"]
+[node name="MarginContainer2" type="MarginContainer" parent="AccountSelector/SelectorButton" unique_id=1452114890]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 7
@@ -214,13 +219,13 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="LabelReciever" type="Control" parent="AccountSelector/SelectorButton/MarginContainer2"]
+[node name="LabelReciever" type="Control" parent="AccountSelector/SelectorButton/MarginContainer2" unique_id=1241152313]
 clip_contents = true
 custom_minimum_size = Vector2(242, 0)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="LabelSource" type="HBoxContainer" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever"]
+[node name="LabelSource" type="HBoxContainer" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever" unique_id=1454093815]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -228,12 +233,12 @@ offset_right = 122.0
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Control" type="Control" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever/LabelSource"]
+[node name="Control" type="Control" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever/LabelSource" unique_id=1483753859]
 custom_minimum_size = Vector2(23, 23)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever/LabelSource/Control"]
+[node name="TextureRect" type="TextureRect" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever/LabelSource/Control" unique_id=746682578]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -246,12 +251,12 @@ mouse_filter = 2
 texture = ExtResource("5_u3pxy")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever/LabelSource"]
+[node name="Label" type="Label" parent="AccountSelector/SelectorButton/MarginContainer2/LabelReciever/LabelSource" unique_id=1343977141]
 layout_mode = 2
 text = "            Select an Account               "
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorButton"]
+[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorButton" unique_id=931736049]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -263,7 +268,7 @@ script = ExtResource("11_xccdo")
 defaultIcon = ExtResource("12_ekrj2")
 useActiveAccount = true
 
-[node name="TextureRect" type="TextureRect" parent="AccountSelector/SelectorButton/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="AccountSelector/SelectorButton/MarginContainer" unique_id=1611543913]
 material = SubResource("ShaderMaterial_8rag4")
 layout_mode = 2
 size_flags_horizontal = 0
@@ -271,15 +276,15 @@ mouse_filter = 2
 texture = ExtResource("6_oabrt")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="AccountSelector/SelectorButton/MarginContainer"]
+[node name="TextureRect2" type="TextureRect" parent="AccountSelector/SelectorButton/MarginContainer" unique_id=1299455537]
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 texture = ExtResource("7_bsci4")
 expand_mode = 3
 
-[connection signal="WindowClosed" from="." to="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount/Button" method="set_pressed" binds= [false]]
+[connection signal="WindowClosed" from="." to="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount/Button" method="set_pressed" binds= [false]]
 [connection signal="pressed" from="CloseBtn" to="." method="CloseWindow"]
-[connection signal="pressed" from="AccountSelector/SelectorOptions/Control/MarginContainer/VBoxContainer/AddAccount/Button" to="." method="OpenLogin"]
+[connection signal="pressed" from="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/AddAccount/Button" to="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer" method="OpenLogin"]
 [connection signal="pressed" from="AccountSelector/SelectorButton/Button" to="." method="CloseWindow"]
 [connection signal="IconChanged" from="AccountSelector/SelectorButton/MarginContainer" to="AccountSelector/SelectorButton/MarginContainer/TextureRect" method="set_texture"]

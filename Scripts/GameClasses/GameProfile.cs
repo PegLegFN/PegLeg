@@ -725,16 +725,16 @@ public class GameProfile
 
         if (profileId == FnProfileTypes.AccountItems)
         {
-            account.GetFORTStats(true);
-            account.GetVentureFORTStats(true);
+            account.GetRatingData(true);
+            account.GetVentureRatingData(true);
         }
         else if (profileId == FnProfileTypes.Backpack)
         {
-            account.GetFORTStats(true);
+            account.GetRatingData(true);
         }
         else if (profileId == FnProfileTypes.VentureBackpack)
         {
-            account.GetVentureFORTStats(true);
+            account.GetVentureRatingData(true);
         }
     }
 

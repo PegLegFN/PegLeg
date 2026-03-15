@@ -36,9 +36,9 @@ public partial class VirtualTab : Control
             if (label is null)
                 return;
             label.Text = Text;
-            label.Visible = (iconRect?.Visible ?? false) || !string.IsNullOrWhiteSpace(Text);
+            label.Visible = !string.IsNullOrWhiteSpace(Text);
             if (labelPadding is not null)
-                labelPadding.Visible = label.Visible;
+                labelPadding.Visible = (iconRect?.Visible ?? false) && label.Visible;
         }
     }
     [Export(PropertyHint.MultilineText)]
@@ -64,9 +64,9 @@ public partial class VirtualTab : Control
             iconRect.Visible = Icon is not null;
             iconRect.Texture = Icon;
             if (label is not null)
-                label.Visible = !iconRect.Visible || !string.IsNullOrWhiteSpace(Text);
+                label.Visible = !string.IsNullOrWhiteSpace(Text);
             if (labelPadding is not null)
-                labelPadding.Visible = label.Visible;
+                labelPadding.Visible = (iconRect?.Visible ?? false) && label.Visible;
         }
     }
     [Export]

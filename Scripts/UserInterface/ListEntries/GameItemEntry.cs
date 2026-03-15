@@ -56,6 +56,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void CanBeLeveledChangedEventHandler(bool canBeLeveled);
 
     [Signal]
+    public delegate void LevelTextChangedEventHandler(string level);
+
+    [Signal]
     public delegate void LevelChangedEventHandler(float level);
 
     [Signal]
@@ -172,6 +175,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public bool defaultClearIconToNull;
     [Export]
     string placeholderItem;
+    [Export]
+    string levelTextPrefix ="Lv ";
     [Export]
     protected CheckButton selectionGraphics;
 
@@ -394,9 +399,11 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         EmitSignalPackIconChanged(packIcon);
         EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
 
+        //bool lowQuality = OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true);
+        bool lowQuality = false;
         EmitSignalIsPack(type == "CardPack");
-        EmitSignalIsSchematic(type == "Schematic");
-        EmitSignalIsHero(type == "Hero");
+        EmitSignalIsSchematic(type == "Schematic" && !lowQuality);
+        EmitSignalIsHero(type == "Hero" && !lowQuality);
 
         EmitSignalAmountVisibility(amountNeeded);
         EmitSignalAmountChanged(amountText);
@@ -425,6 +432,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         EmitSignalIsCollectable(!(displayItem.isCollectedCache ?? true));
         EmitSignalCanBeLeveledChanged(displayItem.template?.HasLevel == true);
+        EmitSignalLevelTextChanged($"{levelTextPrefix}{level}");
         EmitSignalLevelChanged(level);
         EmitSignalLevelMaxChanged(maxLevel);
         EmitSignalLevelProgressChanged(levelProgress);

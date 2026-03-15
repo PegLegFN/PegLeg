@@ -1,3 +1,4 @@
+using Amazon.Auth.AccessControlPolicy;
 using Godot;
 using System;
 using System.Collections.Concurrent;
@@ -59,32 +60,29 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 		loadingIcon.Visible = true;
         itemList.Visible = false;
 
-        //TODO: run asynchronously
         ConcurrentDictionary<string, GameItemTemplate> uniqueTemplates = new();
         List<GameItem> orderedItems = null;
 		await Task.Run(() =>
         {
-            foreach (var source in includedSources)
+            //Parallel.ForEach(
+            //includedSources.SelectMany(source => GameItemTemplate.GetTemplatesOfType(source)),
+            //    t => ProcessTemplate(t, ref uniqueTemplates)
+            //);
+            foreach (var t in includedSources.SelectMany(source => GameItemTemplate.GetTemplatesOfType(source)))
             {
-                //is regular or paralell better here?
-                //Parallel.ForEach(GameItemTemplate.GetTemplatesOfType(source), t => ProcessTemplate(t, ref uniqueTemplates));
-
-                foreach (var t in GameItemTemplate.GetTemplatesOfType(source))
-                {
-                    ProcessTemplate(t, ref uniqueTemplates);
-                }
+                ProcessTemplate(t, ref uniqueTemplates);
             }
 
-            orderedItems = uniqueTemplates.Values
+            orderedItems = [.. uniqueTemplates.Values
 				.OrderBy(item => item.Type == "Hero" ? 0 : 1)
 				.ThenBy(item => -item.RarityLevel)
 				.ThenBy(item => $"""
-						{item.Category} 
-						{item.SubType}
-						{(item.DisplayName.StartsWith("The ") ? item.DisplayName[4..] : item.DisplayName)}
-						""")
+					{item.Category} 
+					{item.SubType}
+					{item.SortingDisplayName}
+					""")
 				.Select(item => item.CreateInstance())
-				.ToList();
+            ];
         });
         compendiumEntries = orderedItems ?? [];
         //compendiumTemplates.ForEach(i => i.GenerateSearchTags());
@@ -99,7 +97,7 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 		var instructions = PLSearch.GenerateSearchInstructions(searchBox.Text);
 		filteredEntries = string.IsNullOrWhiteSpace(searchBox.Text) ? compendiumEntries : compendiumEntries.Where(item => PLSearch.EvaluateInstructions(instructions, item.RawData)).ToList();
 
-        GD.Print("filteredEntries: " + filteredEntries.Count);
+        //GD.Print("filteredEntries: " + filteredEntries.Count);
         itemList.UpdateList(true);
     }
 }

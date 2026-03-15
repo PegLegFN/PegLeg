@@ -1,165 +1,54 @@
-[gd_scene format=3 uid="uid://toetwx8k8ttv"]
+[gd_scene format=3 uid="uid://d8qax8qc6jh8"]
 
-[ext_resource type="Texture2D" uid="uid://coqcy2w41odsp" path="res://Images/InterfaceIcons/OrArrowSquareLeft.png" id="2_1fasw"]
-[ext_resource type="PackedScene" uid="uid://ql3qdwhqjhqh" path="res://Scenes/UI/submenuContainer.tscn" id="2_divt2"]
-[ext_resource type="Script" uid="uid://cnduts0olijb7" path="res://Scripts/UserInterface/Settings/CoreSettings.cs" id="2_i56lq"]
+[ext_resource type="PackedScene" uid="uid://toetwx8k8ttv" path="res://Scenes/Mobile/Views/mobileBaseSettingsView.tscn" id="1_0u16l"]
+[ext_resource type="PackedScene" uid="uid://b55c5fvpjgjs2" path="res://Scenes/ViewElements/Settings/interfaceSettingsPage.tscn" id="2_nlxjj"]
+[ext_resource type="PackedScene" uid="uid://ciepy6jqqfr58" path="res://Scenes/ViewElements/Settings/themeSettingsPage.tscn" id="3_cw6lt"]
+[ext_resource type="PackedScene" uid="uid://4y0pw4m6tes2" path="res://Scenes/ViewElements/Settings/audioSettingsPage.tscn" id="4_ole1h"]
+[ext_resource type="PackedScene" uid="uid://bnw6gwdhv8twq" path="res://Scenes/ViewElements/Settings/missionSettingsPage.tscn" id="5_7bsb0"]
+[ext_resource type="PackedScene" uid="uid://yh3ykg67s05o" path="res://Scenes/ViewElements/Settings/miscSettingsPage.tscn" id="6_cw6lt"]
+[ext_resource type="PackedScene" uid="uid://c5jt6u1d5qp2m" path="res://Scenes/ViewElements/Settings/filterInfoSettingsPage.tscn" id="7_ole1h"]
+[ext_resource type="PackedScene" uid="uid://b4aq3gm8ok7ta" path="res://Scenes/ViewElements/Settings/advancedSettingsPage.tscn" id="8_s4sog"]
+[ext_resource type="PackedScene" uid="uid://3okusvm1npwp" path="res://Scenes/ViewElements/Settings/updatesSettingsPage.tscn" id="9_t6tmo"]
+[ext_resource type="PackedScene" uid="uid://b8hsqxu7wjoo2" path="res://Scenes/ViewElements/Settings/coreSettingsPage.tscn" id="10_82ppn"]
 
-[node name="Settings" type="MarginContainer" unique_id=1392335631]
-custom_minimum_size = Vector2(454, 881)
-theme_override_constants/margin_bottom = 4
+[node name="Settings" unique_id=1392335631 instance=ExtResource("1_0u16l")]
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=729146449]
+[node name="InterfacePage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Interface" parent_id_path=PackedInt32Array(2108461666) index="1" unique_id=342944049 instance=ExtResource("2_nlxjj")]
 layout_mode = 2
-theme_type_variation = &"Panel5Pad"
+size_flags_vertical = 6
 
-[node name="SubmenuContainer" parent="PanelContainer" unique_id=570908151 instance=ExtResource("2_divt2")]
+[node name="ThemePage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Theme" parent_id_path=PackedInt32Array(860992597) index="1" unique_id=641150163 instance=ExtResource("3_cw6lt")]
 layout_mode = 2
-resetWhenInvisible = true
+size_flags_vertical = 6
 
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/ButtonContainer/PanelContainer/VBoxContainer" parent_id_path=PackedInt32Array(570908151, 840187339) index="0" unique_id=1128705701]
+[node name="AudioPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Audio" parent_id_path=PackedInt32Array(755687560) index="1" unique_id=548623827 instance=ExtResource("4_ole1h")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Settings"
-horizontal_alignment = 1
+size_flags_vertical = 6
 
-[node name="ColorRect" type="ColorRect" parent="PanelContainer/SubmenuContainer/PageContainer" parent_id_path=PackedInt32Array(570908151, 933658718) index="0" unique_id=677404027]
+[node name="MissionPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Missions" parent_id_path=PackedInt32Array(1180546069) index="1" unique_id=2081319794 instance=ExtResource("5_7bsb0")]
 layout_mode = 2
-color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+size_flags_vertical = 6
 
-[node name="PageParent" parent="PanelContainer/SubmenuContainer/PageContainer" parent_id_path=PackedInt32Array(570908151, 933658718) index="1" unique_id=1962361108]
-theme_override_constants/margin_bottom = 45
+[node name="MiscPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Misc" parent_id_path=PackedInt32Array(742302789) index="1" unique_id=1874196611 instance=ExtResource("6_cw6lt")]
+layout_mode = 2
+size_flags_vertical = 6
 
-[node name="Interface" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="0" unique_id=2108461666]
+[node name="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Misc/MiscPage" index="9" unique_id=1704661054]
 visible = false
+
+[node name="FilterInfoPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Filter Info" parent_id_path=PackedInt32Array(1714623766) index="1" unique_id=1214352517 instance=ExtResource("7_ole1h")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Interface" unique_id=1840072797]
+[node name="AdvancedPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced" parent_id_path=PackedInt32Array(1355854403) index="1" unique_id=172606478 instance=ExtResource("8_s4sog")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Interface"
-horizontal_alignment = 1
+size_flags_vertical = 6
 
-[node name="Theme" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="1" unique_id=860992597]
-visible = false
+[node name="UpdatesPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Updates" parent_id_path=PackedInt32Array(1499512311) index="1" unique_id=454061998 instance=ExtResource("9_t6tmo")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Theme" unique_id=949088868]
+[node name="CorePage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Core" parent_id_path=PackedInt32Array(468132749) index="1" unique_id=596819378 instance=ExtResource("10_82ppn")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Theme"
-horizontal_alignment = 1
-
-[node name="Audio" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="2" unique_id=755687560]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Audio" unique_id=602550724]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Audio"
-horizontal_alignment = 1
-
-[node name="Missions" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="3" unique_id=1180546069]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Missions" unique_id=1381421313]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Missions"
-horizontal_alignment = 1
-
-[node name="Misc" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="4" unique_id=742302789]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Misc" unique_id=743775784]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Misc"
-horizontal_alignment = 1
-
-[node name="Filter Info" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="5" unique_id=1714623766]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Filter Info" unique_id=2014978906]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Filter Info"
-horizontal_alignment = 1
-
-[node name="Advanced" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="6" unique_id=1355854403]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced" unique_id=1091581746]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Advanced"
-horizontal_alignment = 1
-
-[node name="Updates" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="7" unique_id=1499512311]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Updates" unique_id=2126016503]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Updates"
-horizontal_alignment = 1
-
-[node name="Core" type="VBoxContainer" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent" index="8" unique_id=468132749]
-visible = false
-layout_mode = 2
-size_flags_vertical = 4
-script = ExtResource("2_i56lq")
-
-[node name="Label" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Core" unique_id=1091346795]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.4666667, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/font_size = 40
-text = "Under Construction"
-
-[node name="Label2" type="Label" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Core" unique_id=1041839058]
-custom_minimum_size = Vector2(1, 0)
-layout_mode = 2
-theme_override_constants/line_spacing = -2
-theme_override_font_sizes/font_size = 24
-text = "The Mobile UI is WIP, and I havent built a proper settings menu yet.
-
-Switch to the Desktop UI to configure settings, then switch back to the Mobile UI from the Core tab of Settings
-"
-autowrap_mode = 3
-
-[node name="Button" type="Button" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Core" unique_id=222023346]
-layout_mode = 2
-theme_type_variation = &"LargeButton"
-theme_override_font_sizes/font_size = 32
-text = "Switch to Desktop UI"
-
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/SubmenuContainer/PageContainer" parent_id_path=PackedInt32Array(570908151, 933658718) index="2" unique_id=1356050754]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_right = 4
-
-[node name="Button" type="Button" parent="PanelContainer/SubmenuContainer/PageContainer/MarginContainer" unique_id=662049389]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 32
-text = "Back"
-icon = ExtResource("2_1fasw")
-text_overrun_behavior = 5
-expand_icon = true
-
-[connection signal="pressed" from="PanelContainer/SubmenuContainer/PageContainer/PageParent/Core/Button" to="PanelContainer/SubmenuContainer/PageContainer/PageParent/Core" method="SetMobileMode" binds= [false]]
-[connection signal="pressed" from="PanelContainer/SubmenuContainer/PageContainer/MarginContainer/Button" to="PanelContainer/SubmenuContainer" method="GoBack"]
+size_flags_vertical = 6
 
 [editable path="PanelContainer/SubmenuContainer"]
+[editable path="PanelContainer/SubmenuContainer/PageContainer/PageParent/Misc/MiscPage"]

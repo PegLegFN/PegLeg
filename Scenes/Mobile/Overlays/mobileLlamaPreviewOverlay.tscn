@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://jwpfdhr006rn"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_otdhu"]
+[ext_resource type="PackedScene" uid="uid://bgljw01ejeesa" path="res://Scenes/ViewElements/Llamas/llama_preview.tscn" id="2_wokr2"]
+[ext_resource type="Shader" uid="uid://dmt1xhf6kra1d" path="res://Shaders/LlamaPinata.gdshader" id="3_tfddq"]
+[ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="4_gaglc"]
+[ext_resource type="Texture2D" uid="uid://dmy0erct67y5k" path="res://Images/InterfaceIcons/OrArrowHDVertical.png" id="5_gaglc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ar2sl"]
+resource_local_to_scene = true
+shader = ExtResource("3_tfddq")
+shader_parameter/packIcon = ExtResource("4_gaglc")
+shader_parameter/useMask = true
+
+[node name="LlamaPreviewOverlay" unique_id=811059498 instance=ExtResource("1_otdhu")]
+
+[node name="Llama Contents" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=831886700 node_paths=PackedStringArray("overlayWindow") instance=ExtResource("2_wokr2")]
+custom_minimum_size = Vector2(430, 800)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -266.0
+offset_right = 220.0
+offset_bottom = 266.0
+grow_horizontal = 2
+grow_vertical = 2
+overlayWindow = NodePath("../../..")
+
+[node name="Pinata" parent="Control/WindowContents/Llama Contents/MarginContainer" parent_id_path=PackedInt32Array(831886700, 1168303491) index="0" unique_id=208809737]
+material = SubResource("ShaderMaterial_ar2sl")
+
+[node name="MarginContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry" parent_id_path=PackedInt32Array(831886700, 367128623) index="1" unique_id=660517761]
+theme_override_constants/margin_top = 0
+
+[node name="ChoiceContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" parent_id_path=PackedInt32Array(831886700, 1848558636) index="3" unique_id=348352731]
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 30
+
+[node name="AspectRatioContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer" index="0" unique_id=38822092]
+ratio = 0.38
+
+[node name="TextureRect" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" parent_id_path=PackedInt32Array(831886700, 1518953974) index="0" unique_id=372056322]
+size_flags_horizontal = 1
+size_flags_vertical = 0
+expand_mode = 5
+
+[node name="TextureRect2" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" parent_id_path=PackedInt32Array(831886700, 1518953974) index="1" unique_id=707684761]
+size_flags_horizontal = 1
+size_flags_vertical = 8
+expand_mode = 5
+
+[node name="TextureRect3" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" parent_id_path=PackedInt32Array(831886700, 1518953974) index="2" unique_id=750831355]
+size_flags_horizontal = 1
+size_flags_vertical = 4
+texture = ExtResource("5_gaglc")
+expand_mode = 5
+
+[editable path="Control/WindowContents/Llama Contents"]

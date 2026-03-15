@@ -81,7 +81,7 @@ public partial class HomebasePowerLevel : Control
     {
         if (currentProfile?.account is null)
             return;
-        FORTStats stats = ventures ? currentProfile.account.GetVentureFORTStats() : currentProfile.account.GetFORTStats();
+        RatingData stats = ventures ? currentProfile.account.GetVentureRatingData() : currentProfile.account.GetRatingData();
         var powerLevel = stats.PowerLevel;
         homebaseNumberLabel.Text = Mathf.Floor(powerLevel).ToString();
         homebaseNumberProgressBar.Value = powerLevel % 1;

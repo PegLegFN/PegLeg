@@ -18,7 +18,7 @@
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="10_73y55"]
 [ext_resource type="PackedScene" uid="uid://cb15vvccjgrdk" path="res://Scenes/PerkAndAbilityEntries/hero_ability_entry.tscn" id="12_73y55"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="12_a4v6l"]
-[ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/power_level_indicator.tscn" id="13_y0vih"]
+[ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="13_y0vih"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="14_1eg8j"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="16_qo8q0"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="17_5bpsy"]
@@ -28,7 +28,7 @@ resource_local_to_scene = true
 shader = ExtResource("2_42vc3")
 shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/scale = 0.5
-shader_parameter/Rand = 0.33255148
+shader_parameter/Rand = 0.40275574
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1eg8j"]
 resource_local_to_scene = true
@@ -163,7 +163,6 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
 theme_override_constants/separation = 0
 alignment = 1
 script = ExtResource("1_2i6xj")
@@ -174,37 +173,32 @@ superchargeColor = Color(0, 0.708333, 0.85, 1)
 self_modulate = Color(0, 0.708333, 0.85, 1)
 material = ExtResource("6_2pugj")
 layout_mode = 2
-size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
-expand_mode = 5
+expand_mode = 3
 
 [node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=160491211]
 material = ExtResource("6_2pugj")
 layout_mode = 2
-size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
-expand_mode = 5
+expand_mode = 3
 
 [node name="TextureRect3" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=595750641]
 material = ExtResource("6_2pugj")
 layout_mode = 2
-size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
-expand_mode = 5
+expand_mode = 3
 
 [node name="TextureRect4" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=612826311]
 material = ExtResource("6_2pugj")
 layout_mode = 2
-size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
-expand_mode = 5
+expand_mode = 3
 
 [node name="TextureRect5" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" unique_id=192545565]
 material = ExtResource("6_2pugj")
 layout_mode = 2
-size_flags_horizontal = 3
 texture = ExtResource("2_upnrw")
-expand_mode = 5
+expand_mode = 3
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=768954362]
 layout_mode = 2
@@ -358,10 +352,10 @@ offset_bottom = 26.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="HBoxContainer" parent="Overlay/PowerLevelIndicator" index="2"]
+[node name="HBoxContainer" parent="Overlay/PowerLevelIndicator" index="2" unique_id=530720272]
 theme_override_constants/margin_bottom = 2
 
-[node name="PowerLevelLabel" parent="Overlay/PowerLevelIndicator/HBoxContainer" index="0"]
+[node name="PowerLevelLabel" parent="Overlay/PowerLevelIndicator/HBoxContainer" index="0" unique_id=1940135083]
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 2
@@ -395,8 +389,8 @@ componentList = ExtResource("17_5bpsy")
 [connection signal="RarityChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/TextureRect" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect" method="set_self_modulate"]
 [connection signal="RatingChanged" from="." to="Overlay/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
-[connection signal="RatingVisibility" from="." to="Overlay/PowerLevelIndicator" method="set_visible"]
 [connection signal="RatingVisibility" from="." to="MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer/PLSpace" method="set_visible"]
+[connection signal="RatingVisibility" from="." to="Overlay/PowerLevelIndicator" method="set_visible"]
 [connection signal="SubtypeIconChanged" from="." to="MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/MarginContainer2/Control/TextureRect/SubtypeIcon" method="set_texture"]
 [connection signal="SuperchargeChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetSuperchargedTier"]
 [connection signal="TierChanged" from="." to="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer2/TierController" method="SetTier"]

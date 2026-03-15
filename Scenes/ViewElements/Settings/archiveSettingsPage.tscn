@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://cnldkl7bl76gf"]
+
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="1_5qili"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="2_mhi1h"]
+
+[node name="ArchivePage" type="VBoxContainer" unique_id=83322452]
+
+[node name="CheckButton" type="CheckButton" parent="." unique_id=1907499326]
+layout_mode = 2
+button_pressed = true
+text = "Use UTC for Date"
+script = ExtResource("1_5qili")
+section = "mission_archive"
+key = "sample_utc"
+defaultValue = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=75912907]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LocalArchiveFolderLabel" type="Label" parent="VBoxContainer" unique_id=1872133622]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Local Archive Folder"
+
+[node name="LocalArchiveFolder" type="LineEdit" parent="VBoxContainer" unique_id=74968985]
+layout_mode = 2
+placeholder_text = "user://mission_archive/"
+context_menu_enabled = false
+emoji_menu_enabled = false
+script = ExtResource("2_mhi1h")
+section = "mission_archive"
+key = "target_folder"
+defaultValue = "user://mission_archive/"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1388267558]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LocalLatestMissionsLabel" type="Label" parent="VBoxContainer3" unique_id=309043247]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Latest Mission Path (without extension)"
+
+[node name="LocalLatestMissions" type="LineEdit" parent="VBoxContainer3" unique_id=1683019845]
+layout_mode = 2
+placeholder_text = "user://latest_missions"
+context_menu_enabled = false
+emoji_menu_enabled = false
+script = ExtResource("2_mhi1h")
+section = "missions"
+key = "latest_output"
+defaultValue = "user://latest_missions"
+
+[node name="VBoxContainer2" type="HBoxContainer" parent="." unique_id=1586252879]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LocalArchiveFolderLabel" type="Label" parent="VBoxContainer2" unique_id=1067269031]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/line_spacing = 0
+text = "Date Format"
+
+[node name="LocalArchiveFolder" type="LineEdit" parent="VBoxContainer2" unique_id=629070279]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+placeholder_text = "yyyy-MM-dd"
+script = ExtResource("2_mhi1h")
+section = "mission_archive"
+key = "date_format"
+defaultValue = "yyyy-MM-dd"

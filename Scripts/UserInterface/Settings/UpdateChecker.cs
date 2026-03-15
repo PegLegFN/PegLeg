@@ -20,7 +20,8 @@ public partial class UpdateChecker : Control
 	public override void _Ready()
 	{
         CheckForUpdates();
-        currentVersionLabel.Text = AppConfig.PegLegVersion.ToString();
+        if (currentVersionLabel is not null)
+            currentVersionLabel.Text = AppConfig.PegLegVersion.ToString();
     }
 
 	bool isChecking = false;
@@ -179,9 +180,27 @@ public partial class UpdateChecker : Control
             await GenericConfirmationWindow.ShowError("Could not run update.msi automatically.\nPlease run update.msi manually.", "Update failed");
             */
         }
-		catch
+		catch(Exception e)
         {
-            await GenericConfirmationWindow.ShowError("Uncaught Error", "Update failed");
+            GD.PushError(e);
+            await GenericConfirmationWindow.ShowError("Update failed");
+        }
+#elif GODOT_ANDROID
+        var asset = latestRelease.Value.assets.FirstOrDefault(a => a.name.EndsWith(".apk"));
+		if (asset == default)
+        {
+            await GenericConfirmationWindow.ShowError("No App Package (.apk file) found");
+            return;
+        }
+        try
+        {
+            OS.ShellOpen(asset.browser_download_url);
+            await GenericConfirmationWindow.ShowError("The App Package (.apk file) is being downloaded in your browser. Running it will install the update", "Download Started     ");
+        }
+		catch(Exception e)
+        {
+            GD.PushError(e);
+            await GenericConfirmationWindow.ShowError("Update failed");
         }
 #else
         await GenericConfirmationWindow.ShowError("Update unavailable on this platform", "Error     ");

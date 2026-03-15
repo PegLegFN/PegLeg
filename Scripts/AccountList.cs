@@ -1,41 +1,48 @@
 using Godot;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
-public partial class AccountSelector : ModalWindow
+public partial class AccountList : Control
 {
-    [Export]
-    Control selectorButtonLabel;
-    [Export]
-    Control selectorButtonLabelTarget;
-    [Export]
-    Control selectorButtonIcons;
-    [Export]
-    Foldout foldout;
-    [Export]
-    Button foldoutBtn;
-    [Export]
-    Control accountEntryParent;
+    [Signal]
+    public delegate void AccountSelectedEventHandler(string accountId);
     [Export]
     PackedScene accountEntryScene;
     List<GameAccountEntry> pooledAccounts = [];
-    [Export(PropertyHint.File)]
-    string onboardingScene;
-
-    protected override string OpenSound => "WipeAppear";
-    protected override string CloseSound => "WipeDisappear";
+    [Export]
+    Control accountEntryParent;
+    [Export]
+    bool repopulateWhenMadeVisible;
+    [Export]
+    bool excludeActive;
+    [Export]
+    string bootScenePath = "res://Scenes/boot_scene.tscn";
 
     public override void _Ready()
     {
+        if (repopulateWhenMadeVisible)
+        {
+            VisibilityChanged += () =>
+            {
+                if(IsVisibleInTree())
+                    PopulateAccounts();
+            };
+        }
         for (int i = 0; i < GameAccount.OwnedAccounts.Length; i++)
         {
             GenerateAccountEntry();
         }
     }
 
-    public async void ReloadAccount()
+    void GenerateAccountEntry()
     {
-        using var _ = LoadingOverlay.CreateToken();
-        await GameAccount.RefreshActiveAccount();
+        var accountEntry = accountEntryScene.Instantiate<GameAccountEntry>();
+        accountEntry.Visible = false;
+        accountEntry.Pressed += SelectAccount;
+        accountEntry.Deleted += RemoveAccount;
+        accountEntryParent.AddChild(accountEntry);
+        pooledAccounts.Add(accountEntry);
     }
 
     public async void OpenLogin()
@@ -45,9 +52,9 @@ public partial class AccountSelector : ModalWindow
             PopulateAccounts();
     }
 
-    void PopulateAccounts()
+    public void PopulateAccounts()
     {
-        var accounts = GameAccount.OwnedAccounts;
+        var accounts = GameAccount.OwnedAccounts.Where(a => GameAccount.ActiveAccount != a).ToArray();
         for (int i = 0; i < accounts.Length; i++)
         {
             if (pooledAccounts.Count <= i)
@@ -62,50 +69,6 @@ public partial class AccountSelector : ModalWindow
         }
     }
 
-    protected override Tween BuildTween(bool openState, double duration)
-    {
-        var tween = CreateTween();
-        duration *= 2;
-        if (openState)
-        {
-            PopulateAccounts();
-            selectorButtonIcons.Modulate = Colors.White;
-            selectorButtonLabel.Modulate = Colors.Transparent;
-            foldout.SetFoldoutStateImmediate(false);
-        }
-        else
-        {
-            foldout.SetFoldoutState(false);
-        }
-        foldoutBtn.Disabled = true;
-
-        tween.TweenInterval(openState ? 0 : 0.1f);
-        tween.SetParallel();
-        tween.TweenSubtween(base.BuildTween(openState, openState ? duration : duration * 0.5))
-            .SetDelay(openState ? 0 : duration * 0.5);
-
-        tween.TweenProperty(selectorButtonIcons, "modulate", openState ? Colors.Transparent : Colors.White, duration*0.5)
-            .SetDelay(openState ? duration * 0.25 : duration * 0.5);
-        tween.TweenProperty(selectorButtonLabel, "modulate", openState ? Colors.White : Colors.Transparent, duration*0.5)
-            .SetDelay(openState ? duration * 0.25 : duration * 0.5);
-
-        tween.TweenProperty(selectorButtonLabel, "custom_minimum_size:x", openState ? selectorButtonLabelTarget.GetCombinedMinimumSize().X : 0, duration * 0.5)
-            .SetDelay(duration * 0.5);
-
-        tween.TweenInterval(0.1f);
-        return tween;
-    }
-
-    void GenerateAccountEntry()
-    {
-        var accountEntry = accountEntryScene.Instantiate<GameAccountEntry>();
-        accountEntry.Visible = false;
-        accountEntry.Pressed += SelectAccount;
-        accountEntry.Deleted += RemoveAccount;
-        accountEntryParent.AddChild(accountEntry);
-        pooledAccounts.Add(accountEntry);
-    }
-
     async void SelectAccount(string accountId)
     {
         bool loggedIn = false;
@@ -114,7 +77,8 @@ public partial class AccountSelector : ModalWindow
         {
             loggedIn = await GameAccount.SetActiveAccount(accountId);
         }
-        SetWindowOpen(false);
+        PopulateAccounts();
+        EmitSignalAccountSelected(accountId);
     }
 
     async void RemoveAccount(string accountId)
@@ -156,23 +120,13 @@ public partial class AccountSelector : ModalWindow
                 return;
             }
         }
-        
+
         await GenericConfirmationWindow.ShowError("Could not remove account, Please report this to the developer");
     }
 
     async void ReturnToLogin()
     {
         await GenericConfirmationWindow.ShowError("There are no more authenticated accounts, returning to the login screen.", "Notice");
-        GetTree().ChangeSceneToFile(onboardingScene);
-    }
-
-    protected override void OnTweenFinished(bool openState)
-    {
-        base.OnTweenFinished(openState);
-        if (openState)
-        {
-            foldoutBtn.Disabled = false;
-            foldout.SetFoldoutState(true);
-        }
+        GetTree().ChangeSceneToFile(bootScenePath);
     }
 }

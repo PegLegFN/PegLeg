@@ -85,7 +85,7 @@ public partial class GameOfferEntry : Control
 
     private void CheckForRefresh()
     {
-        if (!IsVisibleInTree())
+        if (!IsInsideTree() || !IsVisibleInTree())
             return;
         if (offerDirty)
             SetOffer(currentOffer).StartTask();

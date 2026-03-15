@@ -183,9 +183,12 @@ public partial class CardPackOpener : Control
             stacheButton.Visible = llamaOffer?.IsXRayLlama == false;
             shouldStacheLlamas = false;
             llamaHits = 0;
+            cardPacks ??= [];
             if (llamaItem is not null)
                 llamaItem = llamaItem.Clone();
             llamaItem ??= llamaOffer?.itemGrants[0];
+            if (cardPacks.Length > 0)
+                llamaItem ??= cardPacks[^1];
             llamaItem ??= defaultLlamaItem;
             if (llamaOffer is not null)
             {
@@ -242,8 +245,6 @@ public partial class CardPackOpener : Control
             {
                 stacheLoadingToken = LoadingOverlay.CreateToken();
             }
-
-            cardPacks ??= [];
 
             GameItem[] extraItems = null;
             GameItem[] extraCardPacks = null;

@@ -1,78 +1,55 @@
 [gd_scene format=3 uid="uid://dr02ht35ldsgb"]
 
-[ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="1_qe3ko"]
+[ext_resource type="PackedScene" uid="uid://c64d0ejhigaib" path="res://Scenes/Desktop/Overlays/settings_window_base.tscn" id="1_qe3ko"]
+[ext_resource type="PackedScene" uid="uid://ciepy6jqqfr58" path="res://Scenes/ViewElements/Settings/themeSettingsPage.tscn" id="2_5d08f"]
+[ext_resource type="PackedScene" uid="uid://eacy1a5oloeb" path="res://Scenes/ViewElements/Settings/advancedSettingsPageLite.tscn" id="2_j1mv5"]
+[ext_resource type="PackedScene" uid="uid://c5jt6u1d5qp2m" path="res://Scenes/ViewElements/Settings/filterInfoSettingsPage.tscn" id="2_jmwrn"]
+[ext_resource type="PackedScene" uid="uid://caybvmlme7cvs" path="res://Scenes/ViewElements/Settings/interfaceSettingsPageLite.tscn" id="2_qn7k4"]
+[ext_resource type="PackedScene" uid="uid://cnldkl7bl76gf" path="res://Scenes/ViewElements/Settings/archiveSettingsPage.tscn" id="3_0g304"]
+[ext_resource type="PackedScene" uid="uid://4y0pw4m6tes2" path="res://Scenes/ViewElements/Settings/audioSettingsPage.tscn" id="3_qn7k4"]
+[ext_resource type="PackedScene" uid="uid://sfb1cgb07mho" path="res://Scenes/ViewElements/Settings/missionSettingsPageLite.tscn" id="4_6hdik"]
+[ext_resource type="PackedScene" uid="uid://bhp6lw87p4us6" path="res://Scenes/ViewElements/Settings/miscSettingsPageLite.tscn" id="6_lfhmt"]
+[ext_resource type="PackedScene" uid="uid://3okusvm1npwp" path="res://Scenes/ViewElements/Settings/updatesSettingsPage.tscn" id="10_lfhmt"]
+[ext_resource type="PackedScene" uid="uid://b8hsqxu7wjoo2" path="res://Scenes/ViewElements/Settings/coreSettingsPage.tscn" id="11_tjj1d"]
 
-[node name="SettingsWindowLite" unique_id=1698528928 instance=ExtResource("1_qe3ko")]
+[node name="SettingsWindow" unique_id=1744220517 instance=ExtResource("1_qe3ko")]
 
-[node name="Interface" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="0" unique_id=223275822]
+[node name="InterfacePage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" parent_id_path=PackedInt32Array(1356957304) index="1" unique_id=342944049 instance=ExtResource("2_qn7k4")]
+layout_mode = 2
+
+[node name="ThemePage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" parent_id_path=PackedInt32Array(694641182) index="1" unique_id=641150163 instance=ExtResource("2_5d08f")]
+layout_mode = 2
+
+[node name="AudioPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio" parent_id_path=PackedInt32Array(780730376) index="1" unique_id=548623827 instance=ExtResource("3_qn7k4")]
+layout_mode = 2
+
+[node name="MissionPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions" parent_id_path=PackedInt32Array(1645099196) index="1" unique_id=2081319794 instance=ExtResource("4_6hdik")]
+layout_mode = 2
+
+[node name="MiscPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" parent_id_path=PackedInt32Array(1420176608) index="1" unique_id=1874196611 instance=ExtResource("6_lfhmt")]
+layout_mode = 2
+
+[node name="FilterInfoPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Filter Info" parent_id_path=PackedInt32Array(446691890) index="1" unique_id=1214352517 instance=ExtResource("2_jmwrn")]
+layout_mode = 2
+
+[node name="AdvancedPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" parent_id_path=PackedInt32Array(789085913) index="1" unique_id=172606478 instance=ExtResource("2_j1mv5")]
+layout_mode = 2
+
+[node name="WebhookTabVisibility" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" parent_id_path=PackedInt32Array(187348734) index="0" unique_id=1194858583]
+disabled = true
+disabled = true
+
+[node name="ArchivePage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" parent_id_path=PackedInt32Array(108618715) index="2" unique_id=83322452 instance=ExtResource("3_0g304")]
+layout_mode = 2
+
+[node name="Updates" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="9" unique_id=169247733]
 visible = true
 
-[node name="NotifSection" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" parent_id_path=PackedInt32Array(102617135) index="3" unique_id=336403493]
-visible = false
-
-[node name="SimpleCosmetics" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" parent_id_path=PackedInt32Array(102617135) index="4" unique_id=690513243]
-visible = false
-disabled = true
-tryBind = false
-disabled = true
-
-[node name="SimpleShopbackgrounds" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" parent_id_path=PackedInt32Array(102617135) index="5" unique_id=1132562874]
-visible = false
-
-[node name="SimpleCosmeticTiles" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" parent_id_path=PackedInt32Array(102617135) index="6" unique_id=1452932099]
-visible = false
-
-[node name="FastAnims" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface/VBoxContainer" parent_id_path=PackedInt32Array(102617135) index="8" unique_id=1389165504]
-visible = false
-
-[node name="Missions" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="3" unique_id=1929441432]
-visible = false
-
-[node name="ShowMissionBackgrounds" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer" parent_id_path=PackedInt32Array(269391269) index="0" unique_id=706519282]
-visible = false
-
-[node name="HideMissionLock" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer" parent_id_path=PackedInt32Array(269391269) index="1" unique_id=44445509]
-visible = false
-
-[node name="DefaultMissionSearchLabel" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer/VBoxContainer2" parent_id_path=PackedInt32Array(710425329) index="0" unique_id=132994580]
-text = "Notable Item Filter"
-
-[node name="DefaultMissionSearch" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer/VBoxContainer2" parent_id_path=PackedInt32Array(710425329) index="1" unique_id=911379539]
-key = "lite_notable_filter"
-accountMode = false
-
-[node name="HSlider" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions/VBoxContainer/NotableItemCap" parent_id_path=PackedInt32Array(1168127054) index="1" unique_id=1537115636]
-max_value = 50.0
-
-[node name="Misc" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="4" unique_id=366398960 groups=["HideTab"]]
-
-[node name="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" parent_id_path=PackedInt32Array(1887000549) index="1" unique_id=1880969144]
-visible = false
-
-[node name="Offset" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" parent_id_path=PackedInt32Array(1887000549) index="2" unique_id=970918328]
-visible = false
-
-[node name="SuspendQuests" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" parent_id_path=PackedInt32Array(1887000549) index="3" unique_id=627328691]
-visible = false
-
-[node name="BulkRefreshQuests" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced/VBoxContainer" parent_id_path=PackedInt32Array(1887000549) index="4" unique_id=813333796]
-visible = false
-
-[node name="WebhookTabVisibility" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" parent_id_path=PackedInt32Array(969523155) index="0" unique_id=1194858583]
-section = ""
-key = ""
-
-[node name="ArchiveTabVisibility" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" parent_id_path=PackedInt32Array(835150600) index="0" unique_id=303293712]
-section = ""
-key = ""
-
-[node name="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(656544816) index="1" unique_id=463025065]
-visible = false
-
-[node name="Button2" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(656544816) index="2" unique_id=2088623842]
+[node name="UpdatesPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" index="1" unique_id=454061998 instance=ExtResource("10_lfhmt")]
 layout_mode = 2
-text = "Disable Lite Mode"
 
-[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core/VBoxContainer/VBoxContainer/Button2" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" method="SetLiteMode" binds= [false]]
+[node name="Core" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="10" unique_id=1107420082]
+visible = false
 
-[editable path="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/VBoxContainer/MissionArchive"]
+[node name="CorePage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" index="1" unique_id=596819378 instance=ExtResource("11_tjj1d")]
+layout_mode = 2

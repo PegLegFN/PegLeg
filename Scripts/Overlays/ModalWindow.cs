@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 public partial class ModalWindow : Control
 {
     protected static List<ModalWindow> windowStack = [];
-    public static bool StackEmpty() => windowStack.Count == 0;
+    public static bool StackEmpty()
+    {
+        windowStack.RemoveAll(x => x?.IsInsideTree() != true);
+        return windowStack.Count == 0;
+    }
     protected bool IsTopOfStack() => windowStack.LastOrDefault() == this;
 
     [Signal]
@@ -34,6 +38,7 @@ public partial class ModalWindow : Control
     protected bool isUserClosable = false;
     protected virtual bool UseWindowAnim => true;
 
+    Window linkedWindow;
     public override void _Ready()
     {
         Visible = false;
@@ -58,11 +63,13 @@ public partial class ModalWindow : Control
         if (startOpen)
             SetWindowOpen(true);
 
-        GetWindow().GoBackRequested += TryCloseWindowViaInput;
+        linkedWindow = GetWindow();
+        linkedWindow.GoBackRequested += TryCloseWindowViaInput;
     }
+
     public override void _ExitTree()
     {
-        GetWindow().GoBackRequested -= TryCloseWindowViaInput;
+        linkedWindow.GoBackRequested -= TryCloseWindowViaInput;
     }
 
     public override void _Process(double delta)

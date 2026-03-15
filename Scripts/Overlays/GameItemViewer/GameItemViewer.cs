@@ -365,7 +365,7 @@ public partial class GameItemViewer : ModalWindow
             await heroStatsQueuedSemaphore.WaitAsync();
             await heroStatsActiveSemaphore.WaitAsync();
             var account = displayedItem.profile?.account ?? GameAccount.ActiveAccount;
-            var fortStats = account.FortStats;
+            var fortStats = account.RatingData;
 
             statsTree.Clear();
             statsTree.Columns = 3;

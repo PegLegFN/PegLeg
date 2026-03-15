@@ -292,7 +292,11 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
             //is support mode and team perk exists
             var hideTeamPerk = commanderContainer.Visible || TeamPerk is null;
             classFilter.SetTabHidden(1, hideTeamPerk);
-            Helpers.Defer(searchInput.GrabFocus);
+            Helpers.Defer(() =>
+            {
+                searchInput.GrabFocus();
+                searchInput.SelectAll();
+            });
         }
 
         base.InitialiseSelector(itemOptions);

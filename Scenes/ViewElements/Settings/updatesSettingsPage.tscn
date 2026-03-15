@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://3okusvm1npwp"]
+
+[ext_resource type="Script" uid="uid://dull1xj5ergmg" path="res://Scripts/UserInterface/Settings/UpdateChecker.cs" id="1_onb73"]
+[ext_resource type="PackedScene" uid="uid://dwba88ym1rkl5" path="res://Scenes/updateVersion.tscn" id="2_jyj08"]
+
+[node name="UpdatesPage" type="VBoxContainer" unique_id=454061998 node_paths=PackedStringArray("failMsg", "updateBtn", "releaseParent")]
+size_flags_vertical = 3
+script = ExtResource("1_onb73")
+failMsg = NodePath("ScrollContainer/MarginContainer/Label")
+updateBtn = NodePath("HBoxContainer/UpdateLaunchBtn")
+releaseParent = NodePath("ScrollContainer/MarginContainer/VBoxContainer")
+releaseScene = ExtResource("2_jyj08")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=797858837]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=1650550126]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer" unique_id=158910344]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer" unique_id=551243115]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+text = "Up to date :)"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=341433676]
+layout_mode = 2
+
+[node name="UpdateCheckBtn" type="Button" parent="HBoxContainer" unique_id=1420951468]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"LargeButton"
+text = "Check For Updates"
+
+[node name="UpdateLaunchBtn" type="Button" parent="HBoxContainer" unique_id=1754498423]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ActionButton"
+text = "Update"

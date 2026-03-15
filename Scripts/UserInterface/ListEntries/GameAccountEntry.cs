@@ -26,6 +26,8 @@ public partial class GameAccountEntry : Control
     [Export]
     Texture2D defaultIcon;
     [Export]
+    string namePrefix = "";
+    [Export]
     bool useActiveAccount = false;
     public GameAccount currentAccount { get; protected set; }
 
@@ -81,7 +83,7 @@ public partial class GameAccountEntry : Control
 
     void UpdateAccount()
     {
-        EmitSignal(SignalName.NameChanged, currentAccount.DisplayName);
+        EmitSignal(SignalName.NameChanged, $"{namePrefix}{currentAccount.DisplayName}");
         EmitSignal(SignalName.IconChanged, currentAccount.ProfileIcon ?? defaultIcon);
         EmitSignal(SignalName.AuthenticatedChanged, currentAccount.isAuthed);
 

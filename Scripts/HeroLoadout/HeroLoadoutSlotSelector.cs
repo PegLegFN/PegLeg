@@ -124,7 +124,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         var confirm = await GenericConfirmationWindow.ShowConfirmation("Create new Blueprint from Slot?");
         if (confirm != true)
             return;
-        visibleLoadout.profile.account.CreateHeroLoadoutBlueprint(visibleLoadout);
+        GameAccount.ActiveAccount.CreateHeroLoadoutBlueprint(visibleLoadout);
     }
 
     public async void DeleteSelectedBlueprint()
@@ -134,7 +134,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         var confirm = await GenericConfirmationWindow.ShowConfirmation("Delete Blueprint?");
         if (confirm != true)
             return;
-        visibleLoadout.profile.account.RemoveHeroLoadoutBlueprint(visibleLoadout);
+        GameAccount.ActiveAccount.RemoveHeroLoadoutBlueprint(visibleLoadout);
         UpdateMode();
     }
 
@@ -148,7 +148,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
         JsonObject newAttributes = [];
         JsonObject crewMembers = new()
         {
-            ["commanderslot"] = selectionTarget.attributes["crew_members"]?["commanderslot"].Deserialize<GameAccount.LoadoutBlueprintHero>(Helpers.JsonOptions.Fields).ResolveHeroUUID(profile)
+            ["commanderslot"] = selectionTarget.attributes["crew_members"]?["commanderslot"].Deserialize<GameAccount.LoadoutBlueprintHero>(Helpers.JsonOptions.Fields).ResolveHeroUUID(profile) ?? profile.GetFirstItem("Hero")?.uuid
         };
         for (int i = 0; i < 5; i++)
         {

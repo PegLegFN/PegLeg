@@ -1,8 +1,8 @@
-[gd_scene load_steps=38 format=3 uid="uid://4hei03rcfvmu"]
+[gd_scene format=3 uid="uid://4hei03rcfvmu"]
 
 [ext_resource type="Script" uid="uid://4x8mjwjel8g5" path="res://Scripts/UserInterface/LlamaInterface.cs" id="1_n8h1q"]
-[ext_resource type="PackedScene" uid="uid://b0uxwtxndd6x3" path="res://Scenes/LlamaEntries/llama_offer_entry.tscn" id="2_eeobp"]
-[ext_resource type="PackedScene" uid="uid://bgn5vgsvgrb1u" path="res://Scenes/LlamaEntries/llama_item_entry.tscn" id="3_h03df"]
+[ext_resource type="PackedScene" uid="uid://b0uxwtxndd6x3" path="res://Scenes/ViewElements/Llamas/llama_offer_entry.tscn" id="2_eeobp"]
+[ext_resource type="PackedScene" uid="uid://bgn5vgsvgrb1u" path="res://Scenes/ViewElements/Llamas/llama_item_entry.tscn" id="3_h03df"]
 [ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="4_1u5ij"]
 [ext_resource type="Texture2D" uid="uid://c4ixuk0fofeej" path="res://Images/InterfaceIcons/PinataStandardPack-Upgrade.png" id="5_1nhqt"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="5_bcyag"]
@@ -74,7 +74,7 @@ shader_parameter/ApplyCornersToFit = false
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = false
 
-[node name="Llamas" type="MarginContainer" node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorIcon", "llamaScrollArea", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent", "selectedLlamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "altOfferEntry", "altPurchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice", "screenshotShareButton", "screenshotOfferEntry", "screenshotCardpackEntry", "screenshotResultEntriesParent", "screenshotChoicePanel", "screenshotFirstChoice", "ScreenshotSecondChoice")]
+[node name="Llamas" type="MarginContainer" unique_id=2047406860 node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorIcon", "llamaScrollArea", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent", "selectedLlamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "altOfferEntry", "altPurchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice", "screenshotShareButton", "screenshotOfferEntry", "screenshotCardpackEntry", "screenshotResultEntriesParent", "screenshotChoicePanel", "screenshotFirstChoice", "ScreenshotSecondChoice")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -85,12 +85,12 @@ catalogLlamaEntryScene = ExtResource("2_eeobp")
 cardpackLlamaEntryScene = ExtResource("3_h03df")
 itemEntryScene = ExtResource("4_1u5ij")
 screenshotItemEntryScene = ExtResource("31_jae7j")
-offerListLoadingIcon = NodePath("HSplitContainer/MarginContainer/SmallLoadingIcon")
-offerListErrorIcon = NodePath("HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error")
-llamaScrollArea = NodePath("HSplitContainer/MarginContainer/ScrollContainer")
-llamaOfferParent = NodePath("HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/LlamaOffers")
-llamaItemEntryPanel = NodePath("HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel")
-llamaItemEntryParent = NodePath("HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/LlamaItems")
+offerListLoadingIcon = NodePath("HSplitContainer/Llama Selector/SmallLoadingIcon")
+offerListErrorIcon = NodePath("HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error")
+llamaScrollArea = NodePath("HSplitContainer/Llama Selector/ScrollContainer")
+llamaOfferParent = NodePath("HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/LlamaOffers")
+llamaItemEntryPanel = NodePath("HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel")
+llamaItemEntryParent = NodePath("HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/LlamaItems")
 selectedLlamaPanel = NodePath("HSplitContainer/Llama Contents")
 currentOfferEntry = NodePath("HSplitContainer/Llama Contents/MarginContainer/OfferEntry")
 currentCardpackEntry = NodePath("HSplitContainer/Llama Contents/MarginContainer/CardPackEntry")
@@ -113,21 +113,22 @@ screenshotChoicePanel = NodePath("SubViewportContainer/SubViewport/PegLegWaterma
 screenshotFirstChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry2")
 ScreenshotSecondChoice = NodePath("SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2")
 
-[node name="HSplitContainer" type="HSplitContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1475550788]
 layout_mode = 2
 size_flags_horizontal = 3
+split_offsets = PackedInt32Array(550)
 split_offset = 550
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer"]
+[node name="Llama Selector" type="MarginContainer" parent="HSplitContainer" unique_id=1600010285]
 custom_minimum_size = Vector2(435, 0)
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/Llama Selector" unique_id=499237682]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer" unique_id=769949079]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -136,38 +137,38 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer" unique_id=1114284010]
 layout_mode = 2
 
-[node name="Shop Header" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Shop Header" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1660455718]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header"]
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header" unique_id=1815248708]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer" unique_id=280688114]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer" unique_id=1478643234]
 layout_mode = 2
 
-[node name="TextLabel" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="TextLabel" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer" unique_id=127557603]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Llama Shop"
 
-[node name="Control" type="Control" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer" unique_id=1006111288]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer" unique_id=1658002536]
 layout_mode = 2
 
-[node name="TextLabel2" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="TextLabel2" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=306908762]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
@@ -175,7 +176,7 @@ theme_override_font_sizes/font_size = 20
 text = "Llamas refresh in: "
 vertical_alignment = 1
 
-[node name="TimeLabel" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer"]
+[node name="TimeLabel" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/Shop Header/PanelContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=447921625]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
@@ -185,31 +186,31 @@ vertical_alignment = 1
 script = ExtResource("5_bcyag")
 timerType = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1973156723]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LlamaOffers" type="VBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="LlamaOffers" type="VBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=2028992496]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
-[node name="Error" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="Error" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1009212769]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error" unique_id=182395373]
 layout_mode = 2
 texture = ExtResource("9_hb2ve")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error" unique_id=439759546]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer" unique_id=755739010]
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -217,7 +218,7 @@ size_flags_vertical = 4
 texture = ExtResource("10_ub6nl")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer" unique_id=1466365554]
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 theme_override_font_sizes/font_size = 24
@@ -225,14 +226,14 @@ text = "Llamas
 Unavailable"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer" unique_id=1164615363]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="RetryButton" type="Button" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer"]
+[node name="RetryButton" type="Button" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer" unique_id=1324327277]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer" unique_id=134794765]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -240,86 +241,86 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer" unique_id=399989449]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1582893591]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1159033567]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("11_hwug4")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1896054848]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Retry"
 
-[node name="LlamaItemPanel" type="VBoxContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="LlamaItemPanel" type="VBoxContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2011928501]
 layout_mode = 2
 
-[node name="InventoryHeader" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel"]
+[node name="InventoryHeader" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel" unique_id=631812686]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/InventoryHeader"]
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/InventoryHeader" unique_id=1153383858]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/InventoryHeader/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/InventoryHeader/PanelContainer" unique_id=1509491034]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="TextLabel" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer"]
+[node name="TextLabel" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer" unique_id=588155586]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Inventory"
 
-[node name="LlamaItems" type="Container" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel"]
+[node name="LlamaItems" type="Container" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel" unique_id=2043318203]
 layout_mode = 2
 script = ExtResource("12_h8kct")
 CompressSpacing = true
 Spacing = Vector2(5, 5)
 
-[node name="OpenAllButton" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel"]
+[node name="OpenAllButton" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel" unique_id=600292937]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton"]
+[node name="Panel" type="Panel" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton" unique_id=1240807468]
 layout_mode = 2
 theme_type_variation = &"PanelButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton" unique_id=1607865647]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton/MarginContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton/MarginContainer" unique_id=738826533]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "^  Open All Inventory Llamas  ^"
 horizontal_alignment = 1
 
-[node name="Responsive Button Area" parent="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton" instance=ExtResource("7_wlhx3")]
+[node name="Responsive Button Area" parent="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton" unique_id=1041430366 instance=ExtResource("7_wlhx3")]
 layout_mode = 2
 useHold = true
 holdTime = 5.0
 
-[node name="SmallLoadingIcon" parent="HSplitContainer/MarginContainer" instance=ExtResource("13_mtq86")]
+[node name="SmallLoadingIcon" parent="HSplitContainer/Llama Selector" unique_id=895993025 instance=ExtResource("13_mtq86")]
 layout_mode = 2
 
-[node name="Llama Contents" type="MarginContainer" parent="HSplitContainer"]
+[node name="Llama Contents" type="MarginContainer" parent="HSplitContainer" unique_id=1879326434]
 custom_minimum_size = Vector2(430, 0)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents" unique_id=594956442]
 material = SubResource("ShaderMaterial_osi5s")
 layout_mode = 2
 texture = ExtResource("9_hhjpb")
@@ -327,12 +328,12 @@ expand_mode = 1
 script = ExtResource("10_qedio")
 syncControlSize = true
 
-[node name="PanelContainer" type="Panel" parent="HSplitContainer/Llama Contents"]
+[node name="PanelContainer" type="Panel" parent="HSplitContainer/Llama Contents" unique_id=1651497081]
 visible = false
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents" unique_id=1696042085]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 10
@@ -340,7 +341,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Pinata" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer"]
+[node name="Pinata" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer" unique_id=20124265]
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 material = SubResource("ShaderMaterial_kno20")
 custom_minimum_size = Vector2(0, 512)
@@ -351,7 +352,7 @@ expand_mode = 1
 stretch_mode = 5
 script = ExtResource("10_qedio")
 
-[node name="OfferEntry" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "priceInInventoryEntry")]
+[node name="OfferEntry" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer" unique_id=1895395376 node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "priceInInventoryEntry")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -363,7 +364,7 @@ priceInInventoryEntry = NodePath("../CardPackEntry/VBoxContainer/Buttons/Purchas
 includeAmountInName = true
 showSingleStockAmount = true
 
-[node name="AltOfferEntry" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer" node_paths=PackedStringArray("priceInInventoryEntry")]
+[node name="AltOfferEntry" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer" unique_id=1750342338 node_paths=PackedStringArray("priceInInventoryEntry")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -373,29 +374,29 @@ priceInInventoryEntry = NodePath("../CardPackEntry/VBoxContainer/AltPurchaseButt
 includeAmountInName = true
 showSingleStockAmount = true
 
-[node name="CardPackEntry" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer"]
+[node name="CardPackEntry" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer" unique_id=272129865]
 layout_mode = 2
 script = ExtResource("8_4nkxo")
 includeAmountInName = true
 useLargePreview = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" unique_id=1796929736]
 layout_mode = 2
 
-[node name="LlamaName" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer"]
+[node name="LlamaName" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer" unique_id=1374418442]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Select a Llama"
 text_overrun_behavior = 3
 
-[node name="ShareButton" type="Button" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer"]
+[node name="ShareButton" type="Button" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer" unique_id=992336049]
 visible = false
 custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton" unique_id=1323441485]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -409,18 +410,18 @@ grow_vertical = 2
 texture = ExtResource("20_mtq86")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" unique_id=246370137]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="Items" type="ScrollContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer"]
+[node name="Items" type="ScrollContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer" unique_id=1672243728]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="HBoxContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items"]
+[node name="HBoxContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items" unique_id=1249185337]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -429,7 +430,7 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="RewardsContainer" type="Container" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer"]
+[node name="RewardsContainer" type="Container" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=801875739]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -438,62 +439,62 @@ script = ExtResource("12_h8kct")
 CompressSpacing = true
 Spacing = Vector2(5, 0)
 
-[node name="SurpriseContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer"]
+[node name="SurpriseContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=1012725797]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer" unique_id=1270453651]
 layout_mode = 2
 texture = ExtResource("11_avnw0")
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer" unique_id=615651273]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "It's a surprise..."
 horizontal_alignment = 1
 
-[node name="SoldOutContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer"]
+[node name="SoldOutContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=92600043]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer" unique_id=1307388494]
 layout_mode = 2
 texture = ExtResource("18_8e8fw")
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer" unique_id=1732511271]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Sold Out"
 horizontal_alignment = 1
 
-[node name="ChoiceContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer"]
+[node name="ChoiceContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=968249811]
 layout_mode = 2
 theme_override_constants/margin_left = 70
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 70
 theme_override_constants/margin_bottom = 50
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer"]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer" unique_id=560099974]
 layout_mode = 2
 ratio = 2.75
 
-[node name="Control" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer"]
+[node name="Control" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer" unique_id=22742919]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=1885454109]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry2" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("33_jixmc")]
+[node name="RewardEntry2" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" unique_id=1418758460 instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -504,14 +505,14 @@ grow_horizontal = 2
 grow_vertical = 2
 autoLinkToViewer = false
 
-[node name="TextureRect2" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect2" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=1683624547]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry2" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("33_jixmc")]
+[node name="RewardEntry2" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" unique_id=1579022254 instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -522,14 +523,14 @@ grow_horizontal = 2
 grow_vertical = 2
 autoLinkToViewer = false
 
-[node name="TextureRect3" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect3" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=1357138181]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 texture = ExtResource("25_jae7j")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3" unique_id=1817585620]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -546,28 +547,28 @@ theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 48
 text = "OR"
 
-[node name="VBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry"]
+[node name="VBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry" unique_id=1694699250]
 layout_mode = 2
 
-[node name="Buttons" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer"]
+[node name="Buttons" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer" unique_id=1580955985]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PurchaseButton" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons"]
+[node name="PurchaseButton" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons" unique_id=942314425]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton"]
+[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton" unique_id=1048255608]
 layout_mode = 2
 theme_type_variation = &"PanelButton"
 
-[node name="Control" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton"]
+[node name="Control" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton" unique_id=25610820]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="InInventory" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control"]
+[node name="InInventory" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control" unique_id=538910746]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 1
 anchors_preset = -1
@@ -579,52 +580,52 @@ script = ExtResource("19_h7xtb")
 compactifyAmount = true
 showSingleItemAmount = true
 
-[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory"]
+[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" unique_id=1609303225]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sxpl1")
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory" unique_id=252039486]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer" unique_id=1472970497]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer" unique_id=98375628]
 layout_mode = 2
 text = " You have: "
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer" unique_id=430777692]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer/MarginContainer" unique_id=1023917381]
 layout_mode = 2
 texture = ExtResource("14_ynnau")
 expand_mode = 3
 
-[node name="AmountText" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer"]
+[node name="AmountText" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/Control/InInventory/MarginContainer/HBoxContainer" unique_id=1614337124]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton" unique_id=1644817559]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="AffordableToggle" type="Node" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer"]
+[node name="AffordableToggle" type="Node" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer" unique_id=1536192171]
 script = ExtResource("22_jia5b")
 
-[node name="CantAffordLabel" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer"]
+[node name="CantAffordLabel" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer" unique_id=537103097]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 56
@@ -632,44 +633,44 @@ text = "Can't Afford"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AffordableContent" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer"]
+[node name="AffordableContent" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer" unique_id=945362409]
 layout_mode = 2
 
-[node name="FreeToggle" type="Node" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent"]
+[node name="FreeToggle" type="Node" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent" unique_id=1943957546]
 script = ExtResource("22_jia5b")
 
-[node name="NotFreeContent" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent"]
+[node name="NotFreeContent" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent" unique_id=138688228]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent" unique_id=1245223449]
 layout_mode = 2
 theme_override_constants/separation = -5
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer" unique_id=1779795651]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Purchase"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Price" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer"]
+[node name="Price" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer" unique_id=664572787]
 layout_mode = 2
 alignment = 1
 script = ExtResource("19_h7xtb")
 
-[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer/Price"]
+[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer/Price" unique_id=321378663]
 layout_mode = 2
 texture = ExtResource("14_ynnau")
 expand_mode = 3
 
-[node name="PriceText" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer/Price"]
+[node name="PriceText" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/NotFreeContent/VBoxContainer/Price" unique_id=1904027256]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "2500"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FreeLabel" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent"]
+[node name="FreeLabel" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent" unique_id=1060353131]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 56
@@ -677,60 +678,60 @@ text = "Claim"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Responsive Button Area" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent" instance=ExtResource("7_wlhx3")]
+[node name="Responsive Button Area" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent" unique_id=1464717708 instance=ExtResource("7_wlhx3")]
 layout_mode = 2
 useHold = true
 
-[node name="OpenButton" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons"]
+[node name="OpenButton" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons" unique_id=1352324965]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton"]
+[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton" unique_id=1280558200]
 layout_mode = 2
 theme_type_variation = &"PanelButton"
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton" unique_id=900330400]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/MarginContainer" unique_id=1320492006]
 layout_mode = 2
 theme_override_constants/separation = -5
 alignment = 1
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/MarginContainer/VBoxContainer" unique_id=2025423803]
 layout_mode = 2
 theme_override_font_sizes/font_size = 56
 text = "Open"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Responsive Button Area" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton" instance=ExtResource("7_wlhx3")]
+[node name="Responsive Button Area" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton" unique_id=2074328270 instance=ExtResource("7_wlhx3")]
 layout_mode = 2
 useHold = true
 holdTime = 1.0
 usePressSound = false
 
-[node name="AltPurchaseButton" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer"]
+[node name="AltPurchaseButton" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer" unique_id=66929454]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 
-[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton"]
+[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton" unique_id=750981663]
 layout_mode = 2
 theme_type_variation = &"PanelButton"
 
-[node name="Control" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton"]
+[node name="Control" type="Control" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton" unique_id=1009969256]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control" unique_id=2099690646]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -741,82 +742,82 @@ offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer" unique_id=722856778]
 layout_mode = 2
 text = "(No Daily Limit)"
 
-[node name="AltInInventory" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer"]
+[node name="AltInInventory" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer" unique_id=693064038]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 script = ExtResource("19_h7xtb")
 compactifyAmount = true
 showSingleItemAmount = true
 
-[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory"]
+[node name="Panel" type="Panel" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" unique_id=300986209]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sxpl1")
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" unique_id=1136555926]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer" unique_id=352053894]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer" unique_id=751380152]
 layout_mode = 2
 text = " You have: "
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer" unique_id=794197817]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer/MarginContainer" unique_id=1360421743]
 layout_mode = 2
 texture = ExtResource("5_1nhqt")
 expand_mode = 3
 
-[node name="AmountText" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer"]
+[node name="AmountText" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer" unique_id=2141246948]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton" unique_id=716760440]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer" unique_id=962441842]
 layout_mode = 2
 theme_override_constants/separation = -5
 
-[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer/VBoxContainer" unique_id=948881649]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Purchase"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer/VBoxContainer"]
+[node name="Icon" type="TextureRect" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer/VBoxContainer" unique_id=523409122]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 texture = ExtResource("5_1nhqt")
 expand_mode = 3
 
-[node name="Responsive Button Area" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer" instance=ExtResource("7_wlhx3")]
+[node name="Responsive Button Area" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/MarginContainer" unique_id=1928856103 instance=ExtResource("7_wlhx3")]
 layout_mode = 2
 useHold = true
 
-[node name="QuantitySpinBox" type="SpinBox" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer"]
+[node name="QuantitySpinBox" type="SpinBox" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer" unique_id=1042229867]
 visible = false
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
@@ -827,28 +828,28 @@ min_value = 1.0
 max_value = 10.0
 value = 1.0
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1621613795]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" node_paths=PackedStringArray("matchSize")]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=937523238 node_paths=PackedStringArray("matchSize")]
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 0
 script = ExtResource("30_lpoky")
 matchSize = NodePath("PegLegWatermark")
 
-[node name="PegLegWatermark" parent="SubViewportContainer/SubViewport" instance=ExtResource("32_84r54")]
+[node name="PegLegWatermark" parent="SubViewportContainer/SubViewport" unique_id=1912781604 instance=ExtResource("32_84r54")]
 offset_right = 64.0
 offset_bottom = 64.0
 
-[node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark"]
+[node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark" unique_id=1530953236]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2"]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2" unique_id=1171611683]
 material = SubResource("ShaderMaterial_lpoky")
 layout_mode = 2
 texture = ExtResource("9_hhjpb")
@@ -856,26 +857,26 @@ expand_mode = 1
 script = ExtResource("10_qedio")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2" unique_id=9620967]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="OfferEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+[node name="OfferEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=954077950 node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
 layout_mode = 2
 script = ExtResource("9_cn6d8")
 grantedItemEntry = NodePath("../CardPackEntry")
 priceEntry = NodePath("../VBoxContainer/Price")
 
-[node name="CardPackEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
+[node name="CardPackEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=1664238255]
 layout_mode = 2
 script = ExtResource("8_4nkxo")
 includeAmountInName = true
 useLargePreview = true
 
-[node name="Pinata" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
+[node name="Pinata" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=1502011676]
 self_modulate = Color(0.5, 0.5, 0.5, 1)
 material = SubResource("ShaderMaterial_kno20")
 custom_minimum_size = Vector2(0, 128)
@@ -886,17 +887,17 @@ expand_mode = 1
 stretch_mode = 5
 script = ExtResource("10_qedio")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=774562876]
 layout_mode = 2
 
-[node name="LlamaName" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer"]
+[node name="LlamaName" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer" unique_id=1243213583]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Llama Name"
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer" unique_id=1727829055]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 15
@@ -904,18 +905,18 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 30
 
-[node name="Items" type="ScrollContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="Items" type="ScrollContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer" unique_id=369850920]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 
-[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items"]
+[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items" unique_id=959808740]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RewardsContainer" type="Container" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
+[node name="RewardsContainer" type="Container" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer" unique_id=975609463]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -924,26 +925,26 @@ script = ExtResource("12_h8kct")
 CompressSpacing = true
 Spacing = Vector2(5, 0)
 
-[node name="ChoiceContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer"]
+[node name="ChoiceContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer" unique_id=1606795908]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer"]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer" unique_id=172194147]
 layout_mode = 2
 ratio = 2.5
 
-[node name="Control" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer"]
+[node name="Control" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer" unique_id=215273271]
 layout_mode = 2
 theme_override_constants/margin_bottom = 20
 
-[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=1715490138]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" instance=ExtResource("33_jixmc")]
+[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" unique_id=1525498365 instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -955,7 +956,7 @@ grow_vertical = 2
 preventInteractability = true
 autoLinkToViewer = false
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect"]
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" unique_id=821217485]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -966,14 +967,14 @@ text = "Name"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=994923092]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 texture = ExtResource("24_lpoky")
 expand_mode = 3
 
-[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" instance=ExtResource("33_jixmc")]
+[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" unique_id=941667885 instance=ExtResource("33_jixmc")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -985,7 +986,7 @@ grow_vertical = 2
 preventInteractability = true
 autoLinkToViewer = false
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2"]
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" unique_id=779157309]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -996,14 +997,14 @@ text = "Name"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
-[node name="TextureRect3" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control"]
+[node name="TextureRect3" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=167880711]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 texture = ExtResource("25_jae7j")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3"]
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3" unique_id=207825236]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1020,26 +1021,26 @@ theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 48
 text = "OR"
 
-[node name="Price" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer"]
+[node name="Price" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer" unique_id=1382068028]
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1
 script = ExtResource("19_h7xtb")
 
-[node name="Icon" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price"]
+[node name="Icon" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" unique_id=1003107657]
 layout_mode = 2
 texture = ExtResource("14_ynnau")
 expand_mode = 3
 
-[node name="PriceText" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price"]
+[node name="PriceText" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" unique_id=740505682]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "2500"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/RetryButton" to="." method="ForceLoadShopLlamas"]
-[connection signal="HoldPressed" from="HSplitContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton/Responsive Button Area" to="." method="BulkOpenAllCardpacks"]
+[connection signal="pressed" from="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/Error/VBoxContainer/MarginContainer/RetryButton" to="." method="ForceLoadShopLlamas"]
+[connection signal="HoldPressed" from="HSplitContainer/Llama Selector/ScrollContainer/MarginContainer/VBoxContainer/LlamaItemPanel/OpenAllButton/Responsive Button Area" to="." method="BulkOpenAllCardpacks"]
 [connection signal="IsAffordableChanged" from="HSplitContainer/Llama Contents/MarginContainer/OfferEntry" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableToggle" method="EmitValues"]
 [connection signal="IsFreeChanged" from="HSplitContainer/Llama Contents/MarginContainer/OfferEntry" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton/MarginContainer/AffordableContent/FreeToggle" method="EmitValues"]
 [connection signal="NameChanged" from="HSplitContainer/Llama Contents/MarginContainer/OfferEntry" to="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/LlamaName" method="set_text"]

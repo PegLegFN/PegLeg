@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://d2oou8oikfcdl"]
+
+[ext_resource type="Script" uid="uid://cubbmrkx273ty" path="res://Scripts/Llamas/LlamaSelector.cs" id="1_2wqxv"]
+[ext_resource type="PackedScene" uid="uid://b0uxwtxndd6x3" path="res://Scenes/ViewElements/Llamas/llama_offer_entry.tscn" id="2_aja16"]
+[ext_resource type="PackedScene" uid="uid://bgn5vgsvgrb1u" path="res://Scenes/ViewElements/Llamas/llama_item_entry.tscn" id="3_pilva"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="4_2wqxv"]
+[ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="5_iqcde"]
+[ext_resource type="Texture2D" uid="uid://bs2rkwdm3joj1" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Caution_128.png" id="6_cmy42"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="7_v4eyt"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="8_aja16"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="8_ke0p7"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="9_uwhf6"]
+
+[node name="LlamaSelector" type="VBoxContainer" unique_id=682672091 node_paths=PackedStringArray("offerListLoadingIcon", "offerListErrorPanel", "llamaOfferParent", "llamaItemEntryPanel", "llamaItemEntryParent")]
+offset_right = 320.0
+offset_bottom = 360.0
+script = ExtResource("1_2wqxv")
+catalogLlamaEntryScene = ExtResource("2_aja16")
+cardpackLlamaEntryScene = ExtResource("3_pilva")
+offerListLoadingIcon = NodePath("MarginContainer/SmallLoadingIcon")
+offerListErrorPanel = NodePath("MarginContainer/Error")
+llamaOfferParent = NodePath("MarginContainer/LlamaOffers")
+llamaItemEntryPanel = NodePath("LlamaItemPanel")
+llamaItemEntryParent = NodePath("LlamaItemPanel/LlamaItems")
+
+[node name="Shop Header" type="MarginContainer" parent="." unique_id=1238872780]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Shop Header" unique_id=1302403703]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Shop Header/PanelContainer" unique_id=903846641]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Shop Header/PanelContainer/MarginContainer" unique_id=2128877752]
+layout_mode = 2
+
+[node name="TextLabel" type="Label" parent="Shop Header/PanelContainer/MarginContainer/HBoxContainer" unique_id=2127093145]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Llama Shop"
+
+[node name="RefreshTimer" parent="Shop Header/PanelContainer/MarginContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("4_2wqxv")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=987069470]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LlamaOffers" type="VBoxContainer" parent="MarginContainer" unique_id=1860061611]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Error" type="MarginContainer" parent="MarginContainer" unique_id=1420798128]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Error" unique_id=1542439005]
+layout_mode = 2
+texture = ExtResource("5_iqcde")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Error" unique_id=602853789]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Error/VBoxContainer" unique_id=669700944]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_cmy42")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Error/VBoxContainer" unique_id=1971304742]
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 24
+text = "Llamas
+Unavailable"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="MarginContainer/Error/VBoxContainer" unique_id=767256396]
+custom_minimum_size = Vector2(70, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Retry"
+icon = ExtResource("7_v4eyt")
+expand_icon = true
+
+[node name="SmallLoadingIcon" parent="MarginContainer" unique_id=217904680 instance=ExtResource("8_aja16")]
+layout_mode = 2
+
+[node name="LlamaItemPanel" type="VBoxContainer" parent="." unique_id=196311472]
+layout_mode = 2
+
+[node name="InventoryHeader" type="MarginContainer" parent="LlamaItemPanel" unique_id=51716620]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="LlamaItemPanel/InventoryHeader" unique_id=576353776]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LlamaItemPanel/InventoryHeader/PanelContainer" unique_id=832429746]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer" unique_id=279479832]
+layout_mode = 2
+
+[node name="TextLabel" type="Label" parent="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer/HBoxContainer" unique_id=177264523]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Inventory"
+
+[node name="OpenAllButton" type="MarginContainer" parent="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer/HBoxContainer" unique_id=1784473516]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer/HBoxContainer/OpenAllButton" unique_id=2050978086]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"PanelContainerButton"
+
+[node name="Label" type="Label" parent="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer/HBoxContainer/OpenAllButton/PanelContainer" unique_id=1239856892]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = " Open All "
+horizontal_alignment = 1
+
+[node name="Responsive Button Area" parent="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer/HBoxContainer/OpenAllButton" unique_id=1627514901 instance=ExtResource("9_uwhf6")]
+layout_mode = 2
+useHold = true
+holdTime = 5.0
+
+[node name="LlamaItems" type="Container" parent="LlamaItemPanel" unique_id=1805050898]
+layout_mode = 2
+script = ExtResource("8_ke0p7")
+CompressSpacing = true
+Spacing = Vector2(5, 5)
+
+[connection signal="pressed" from="MarginContainer/Error/VBoxContainer/RetryButton" to="." method="ForceLoadShopLlamas"]
+[connection signal="HoldPressed" from="LlamaItemPanel/InventoryHeader/PanelContainer/MarginContainer/HBoxContainer/OpenAllButton/Responsive Button Area" to="." method="BulkOpenAllCardpacks"]

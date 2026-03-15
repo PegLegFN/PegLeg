@@ -680,7 +680,7 @@ public partial class LlamaInterface : Control
             }
         }
         allTheLlamas ??= GameItemTemplate.Get("CardPack:cardpack_bronze_10x").CreateInstance();
-        await CardPackOpener.Instance.StartOpening(allCardpacks.ToArray(), selectedLlamaPanel, allTheLlamas);
+        await CardPackOpener.Instance.StartOpening([.. allCardpacks], selectedLlamaPanel, allTheLlamas);
         //await BulkOpenCardpacks(itemIds.ToArray());
         if (includesSelected)
             ClearSelection();

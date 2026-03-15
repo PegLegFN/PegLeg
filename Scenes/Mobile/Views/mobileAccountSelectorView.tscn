@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://conb37uu8vbtd"]
+
+[ext_resource type="Script" uid="uid://bxnnukevkvf6c" path="res://Scripts/AccountList.cs" id="1_iaof2"]
+[ext_resource type="PackedScene" uid="uid://b6i4qroblgrhs" path="res://Scenes/Accounts/account_entry.tscn" id="2_ocamr"]
+[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="3_e5u1p"]
+
+[node name="Accounts" type="MarginContainer" unique_id=742899924]
+custom_minimum_size = Vector2(454, 837)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -227.0
+offset_right = 227.0
+offset_bottom = 837.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1864005124 node_paths=PackedStringArray("accountEntryParent")]
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("1_iaof2")
+accountEntryScene = ExtResource("2_ocamr")
+accountEntryParent = NodePath("VBoxContainer")
+repopulateWhenMadeVisible = true
+excludeActive = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=275957647]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddAccount" type="MarginContainer" parent="VBoxContainer" unique_id=1652867581]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/AddAccount" unique_id=959990458]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+theme_type_variation = &"AccountButton"
+text = "
+"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/AddAccount" unique_id=1184401985]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/AddAccount/MarginContainer" unique_id=1072659125]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/AddAccount/MarginContainer/HBoxContainer" unique_id=436313620]
+custom_minimum_size = Vector2(21, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("3_e5u1p")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/AddAccount/MarginContainer/HBoxContainer" unique_id=1615209301]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sign In"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[connection signal="pressed" from="VBoxContainer/AddAccount/Button" to="VBoxContainer" method="OpenLogin"]

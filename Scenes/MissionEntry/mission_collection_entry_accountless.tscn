@@ -1,9 +1,49 @@
-[gd_scene load_steps=9 format=3 uid="uid://bsmb8rbqn537o"]
+[gd_scene format=3 uid="uid://bsmb8rbqn537o"]
 
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="1_sosuh"]
 [ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="2_k4iy5"]
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="3_1qokd"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_gj8ge"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1qokd"]
+resource_local_to_scene = true
+shader = ExtResource("3_1qokd")
+shader_parameter/ControlSize = Vector2(26, 26)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_gj8ge")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gj8ge"]
+resource_local_to_scene = true
+shader = ExtResource("3_1qokd")
+shader_parameter/ControlSize = Vector2(26, 26)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_gj8ge")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qdar6"]
 resource_local_to_scene = true
@@ -45,66 +85,34 @@ shader_parameter/AltPack = false
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3avkn"]
-resource_local_to_scene = true
-shader = ExtResource("3_1qokd")
-shader_parameter/ControlSize = Vector2(26, 26)
-shader_parameter/CornerRadius = 3.0
-shader_parameter/Fit = true
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("4_gj8ge")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2mpk"]
-resource_local_to_scene = true
-shader = ExtResource("3_1qokd")
-shader_parameter/ControlSize = Vector2(26, 26)
-shader_parameter/CornerRadius = 3.0
-shader_parameter/Fit = true
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("4_gj8ge")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[node name="MissionCollectionEntry" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent") instance=ExtResource("1_sosuh")]
+[node name="MissionCollectionEntry" unique_id=807267820 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent") instance=ExtResource("1_sosuh")]
 offset_right = 316.0
 alertModifierLayout = NodePath("HBoxContainer/Modifiers")
 alertModifierParent = NodePath("HBoxContainer/Modifiers/HBoxContainer")
 
-[node name="MarginContainer" parent="HBoxContainer" index="0"]
+[node name="HBoxContainer_MarginContainer3#Button" type="Button" parent="." index="0" unique_id=1815370892]
+visible = false
+show_behind_parent = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="MarginContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="0" unique_id=1032401245]
 size_flags_horizontal = 1
 
-[node name="TextureRect2" parent="HBoxContainer/MarginContainer/HBoxContainer/Icon" index="0"]
+[node name="TextureRect2" parent="HBoxContainer/MarginContainer/HBoxContainer/Icon" parent_id_path=PackedInt32Array(609254393) index="0" unique_id=609301807]
 modulate = Color(1, 1, 1, 0)
 
-[node name="Modifiers" type="MarginContainer" parent="HBoxContainer" index="1"]
+[node name="Modifiers" type="MarginContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="1" unique_id=1468375306]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Modifiers" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Modifiers" index="0" unique_id=2091435965]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="0"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="0" unique_id=1307254589]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -112,7 +120,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="1"]
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="1" unique_id=723321346]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -120,7 +128,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="2"]
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="2" unique_id=1298254840]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -128,7 +136,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="3"]
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="3" unique_id=743148921]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -136,7 +144,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="4"]
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/Modifiers/HBoxContainer" index="4" unique_id=2010464689]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -144,38 +152,35 @@ size_flags_vertical = 4
 texture = ExtResource("2_k4iy5")
 expand_mode = 3
 
-[node name="MarginContainer2" parent="HBoxContainer" index="2"]
+[node name="MarginContainer2" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="2" unique_id=1782751809]
 size_flags_horizontal = 10
 
-[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem" index="0"]
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem" parent_id_path=PackedInt32Array(785384845) index="0" unique_id=68041144]
+material = SubResource("ShaderMaterial_1qokd")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem/Icon" index="0" unique_id=2062077297]
+theme_override_font_sizes/font_size = 12
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2" parent_id_path=PackedInt32Array(1050302838) index="0" unique_id=68041144]
+material = SubResource("ShaderMaterial_gj8ge")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2/Icon" index="0" unique_id=2062077297]
+theme_override_font_sizes/font_size = 12
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3" parent_id_path=PackedInt32Array(1230469321) index="0" unique_id=68041144]
 material = SubResource("ShaderMaterial_qdar6")
 
-[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem/Icon" index="0"]
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3/Icon" index="0" unique_id=2062077297]
 theme_override_font_sizes/font_size = 12
 
-[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2" index="0"]
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4" parent_id_path=PackedInt32Array(1571990667) index="0" unique_id=68041144]
 material = SubResource("ShaderMaterial_do258")
 
-[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2/Icon" index="0"]
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4/Icon" index="0" unique_id=2062077297]
 theme_override_font_sizes/font_size = 12
 
-[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3" index="0"]
-material = SubResource("ShaderMaterial_3avkn")
-
-[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3/Icon" index="0"]
-theme_override_font_sizes/font_size = 12
-
-[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4" index="0"]
-material = SubResource("ShaderMaterial_c2mpk")
-
-[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4/Icon" index="0"]
-theme_override_font_sizes/font_size = 12
-
-[node name="MarginContainer3" parent="HBoxContainer" index="3"]
-visible = false
-
-[node name="Button" parent="HBoxContainer/MarginContainer3" index="0"]
-visible = false
+[connection signal="TooltipChanged" from="." to="HBoxContainer_MarginContainer3#Button" method="set_tooltip_text"]
+[connection signal="pressed" from="HBoxContainer_MarginContainer3#Button" to="." method="InspectMission"]
 
 [editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem"]
 [editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2"]
