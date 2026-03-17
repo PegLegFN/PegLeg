@@ -156,8 +156,7 @@ public partial class TimelineInterface : Node
                         start = seasonStartDate;
                         while (start.Month != tMonth)
                             start = start.AddMonths(1);
-                        while (start.Day != tDay)
-                            start = start.AddDays(1);
+                        start = start.AddDays(tDay - start.Day);
                         end = start.AddDays(1);
                         if (eData.weekOfTarget)
                         {

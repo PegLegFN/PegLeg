@@ -111,7 +111,7 @@ theme_type_variation = &"PanelContainerButton"
 
 [node name="Label" type="Label" parent="VBoxContainer/ImportButton" unique_id=1065176424]
 layout_mode = 2
-text = "Import accounts from PegLeg (Release)"
+text = " Import accounts from PegLeg (Release) "
 horizontal_alignment = 1
 
 [node name="Responsive Button Area" parent="VBoxContainer/ImportButton" unique_id=361098053 instance=ExtResource("2_4wbbm")]
@@ -141,3 +141,8 @@ text = "Close PegLeg"
 visible = false
 layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
+
+[connection signal="HoldPressed" from="VBoxContainer/ImportButton/Responsive Button Area" to="." method="ImportAccounts"]
+[connection signal="pressed" from="VBoxContainer/UserDataButton" to="." method="OpenAppData"]
+[connection signal="pressed" from="VBoxContainer/InstallFolderButton" to="." method="OpenInstallationFolder"]
+[connection signal="pressed" from="VBoxContainer/CloseAppButton" to="." method="CloseApp"]

@@ -32,7 +32,7 @@ public partial class InversePL : Node
             //    break;
             var node = graphNode.Instantiate<InversePLNode>();
             editor.AddChild(node);
-            GD.Print($"({values[i]}, {keys[i]})");
+            //GD.Print($"({values[i]}, {keys[i]})");
             node.PositionOffset = new((float)values[i]*graphUnit.X, (float)keys[i] * -graphUnit.Y);
             node.SetLabel($"{values[i]}\n{keys[i]}");
             if (i != 0)
