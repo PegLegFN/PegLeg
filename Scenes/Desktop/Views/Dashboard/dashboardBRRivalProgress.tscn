@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://cl73yobkdxkue"]
+
+[ext_resource type="Script" uid="uid://cshfhps6mnk1w" path="res://Scripts/UserInterface/Dashboard/BRRivalryController.cs" id="1_eyjup"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="1_uipxh"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="3_q6jai"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_db4i7"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gx2q3"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 0.79733336, 0.24000001, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ury42"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.27075428, 1, 0.94024336, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[node name="DashboardBRRivalProgress" type="PanelContainer" unique_id=1546053 node_paths=PackedStringArray("rootControl", "loadingIcon", "foundationParent", "foundationProgress", "foundationValue", "iceKingParent", "iceKingProgress", "iceKingValue")]
+custom_minimum_size = Vector2(473.5, 0)
+mouse_filter = 1
+theme_type_variation = &"Panel3PadB"
+script = ExtResource("1_eyjup")
+rootControl = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
+loadingIcon = NodePath("SmallLoadingIcon")
+foundationColor = Color(1, 0.79607844, 0.23921569, 1)
+foundationParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer")
+foundationProgress = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/ProgressBar")
+foundationValue = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Label2")
+iceKingColor = Color(0.27058825, 1, 0.9411765, 1)
+iceKingParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2")
+iceKingProgress = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2/ProgressBar")
+iceKingValue = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2/Label2")
+
+[node name="PanelVisibility" type="CheckButton" parent="." unique_id=2068073425]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SmallLoadingIcon" parent="." unique_id=1462297856 instance=ExtResource("1_uipxh")]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1315121898]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=119107118]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=492074153]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BR Rivalry Progress:"
+
+[node name="RefreshBtn" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1712357030]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/RefreshBtn" unique_id=363360757]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_q6jai")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1294328786]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=118628398]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=353877034]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1460112310]
+custom_minimum_size = Vector2(90, 18)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Team Foundation:"
+horizontal_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=634556320]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_db4i7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gx2q3")
+max_value = 1.0
+value = 0.71
+show_percentage = false
+
+[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=933997333]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 12
+text = "8.03m"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=570297640]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1242466289]
+custom_minimum_size = Vector2(90, 18)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Team Ice King:"
+horizontal_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=482940589]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_db4i7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ury42")
+max_value = 1.0
+value = 0.71
+show_percentage = false
+
+[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=541551884]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 12
+text = "8.03m"
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshBtn" to="." method="UpdateProgress"]

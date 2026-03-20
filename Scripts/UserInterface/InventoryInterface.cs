@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
@@ -42,6 +43,10 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     Control heavySearchWarning;
     [Export]
     HomebasePowerLevel powerLevel;
+    [Export]
+    Control researchTokenArea;
+    [Export]
+    Button researchTokenButton;
 
     Control currentCreatorImage;
     AnimationPlayer currentCreatorAnimation;
@@ -75,6 +80,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             devAllPanel.Visible = dev;
         if (devAllButton is not null)
             devAllButton.Toggled += SetTypeFilter;
+        if (researchTokenButton is not null)
+            researchTokenButton.Pressed += ShowResearchTokenMenu;
+        researchTokenArea.Visible = false;
         tabBar.SetTabPressed(0);
         tabBar.TabsChanged += SetTypeFilter;
         AppConfig.OnConfigChanged += OnConfigChanged;
@@ -121,7 +129,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     {
         GameAccount.ActiveAccountChanged -= UpdateAccount;
         if (currentProfile is not null)
-            currentProfile.OnProfileChanged -= ApplyFilters;
+            currentProfile.OnProfileChanged -= UpdateProfile;
     }
 
     bool filterNew;
@@ -186,7 +194,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         if (targetProfile != FnProfileTypes.AccountItems && !await account.Authenticate())
             return;
 
-        if(currentCreatorImage is not null)
+        researchTokenArea.Visible = false;
+
+        if (currentCreatorImage is not null)
         {
             currentCreatorImage.Visible = false;
         }
@@ -201,7 +211,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
         if(currentProfile is not null)
         {
-            currentProfile.OnProfileChanged -= ApplyFilters;
+            currentProfile.OnProfileChanged -= UpdateProfile;
         }
         currentProfile = await account.GetProfile(targetProfile).Query();
 
@@ -209,8 +219,21 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
         powerLevel?.SetAccountManual(account);
 
-        currentProfile.OnProfileChanged += ApplyFilters;
+        currentProfile.OnProfileChanged += UpdateProfile;
+        UpdateProfile();
+    }
+
+    void UpdateProfile()
+    {
+        researchTokenArea.Visible = false;
         ApplyFilters();
+        if (researchTokenButton is null || targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
+            return;
+
+        //not ready to use this feature, dont know the profile operation to redeem tokens
+        return;
+        var researchToken = currentProfile.GetFirstTemplateItem("Token:campaignresearchtoken");
+        researchTokenArea.Visible = researchToken is not null;
     }
 
     public async void BulkRecycle()
@@ -226,7 +249,11 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         //    item.GetSearchTags();
         //    item.GenerateRawData();
         //}
-        var toRecycle = await SimpleItemSelector.OpenSelector(filteredItems, SimpleItemSelector.RecycleConfig);
+        var config = !Input.IsKeyPressed(Key.Shift) ? SimpleItemSelector.RecycleConfig : SimpleItemSelector.RecycleConfig with
+        {
+            autoselectFilter = _ => true
+        };
+        var toRecycle = await SimpleItemSelector.OpenSelector(filteredItems, config);
         if ((toRecycle?.Length ?? 0) > 0)
         {
             JsonObject content = new()
@@ -292,7 +319,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     //    }
     //}
 
-
     bool accountDirty = false;
     bool itemsDirty = false;
 
@@ -310,7 +336,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             ApplyFilters();
         }
     }
-
 
     int? totalItemCount;
     void LightweithtApplyFilters()
@@ -409,5 +434,61 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     public void OnElementSelected(int index, string context)
     {
         GameItemViewer.Instance.ShowItem(currentItems[index]);
+    }
+
+    static bool recycleNextTokenResearch = false;
+    static async Task<bool> ShowResearchTokenConfirmation(GameItem[] selectedItem)
+    {
+        if (selectedItem.Length == 0)
+            return true;
+        var result = await GenericConfirmationWindow.ShowConfirmation(
+            $"Research \"{selectedItem[0].template.DisplayName}\"?", 
+            "Research", 
+            "Recycle"
+        );
+        if(result is null)
+            return false;
+        recycleNextTokenResearch = !result.Value;
+        return true;
+    }
+
+    struct ResearchItem
+    {
+        public string itemId;
+        public string[] itemPerks;
+        public int itemLevel;
+
+        public GameItem CreateItem()
+        {
+            JsonObject attributes = [];
+            attributes["level"] = Mathf.Max(1, itemLevel);
+            if(itemPerks is not null && itemPerks.Length > 0)
+            {
+                attributes["alterationDefinitions"] = JsonSerializer.SerializeToNode(itemPerks);
+            }
+            return GameItemTemplate.Get(itemId)?.CreateInstance(attributes: attributes);
+        }
+    }
+
+    public async void ShowResearchTokenMenu()
+    {
+        var researchToken = currentProfile.GetFirstTemplateItem("Token:campaignresearchtoken");
+        var researchItems = researchToken.attributes["items_for_schematic_creation_data"].Deserialize<ResearchItem[]>(Helpers.JsonOptions.Fields);
+        GameItem[] possibleItems = [.. researchItems.Select(r => r.CreateItem())];
+
+        recycleNextTokenResearch = false;
+        var result = await SimpleItemSelector.OpenSelector(possibleItems, SimpleItemSelector.DefaultConfig with
+        {
+            confirmationTaskProvider = ShowResearchTokenConfirmation
+        });
+        var recycleThisTokenResearch = recycleNextTokenResearch;
+        if (result.Length == 0)
+            return;
+
+        //perform the research
+        if (recycleThisTokenResearch)
+        {
+            //recycle the result
+        }
     }
 }

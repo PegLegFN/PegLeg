@@ -86,7 +86,7 @@ public class GameItem
 
     public record struct ItemData(string templateId, int quantity = 1, JsonObject attributes = null)
     {
-        public GameItem ToItem() => new(GameItemTemplate.Get(templateId), quantity, attributes.SafeDeepClone());
+        public GameItem ToItem() => new(GameItemTemplate.Get(templateId), quantity, attributes.SafeDeepClone(), templateId:templateId);
 
         public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
 
@@ -121,8 +121,9 @@ public class GameItem
     {
         public string name;
         public string itemType;
+        public JsonElement? attributes;
         public int quantity = 1;
-        public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity);
+        public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>());
     }
 
     public GameItem SetUUID(string customUUID = null)

@@ -54,7 +54,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
     [Export]
     RecycleListContainer smallContainer;
     [Export]
-    Control multiselectButtons;
+    Control[] multiselectControls;
     [Export]
     Control confirmButton;
     [Export]
@@ -147,7 +147,10 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
         activeContainer = CurrentConfig.smallItems ? smallContainer : container;
         survivorFilters.Visible = CurrentConfig.showSurvivorFilters;
 
-        multiselectButtons.Visible = CurrentConfig.multiselectMode;
+        foreach (var ctrl in multiselectControls)
+        {
+            ctrl.Visible = CurrentConfig.multiselectMode;
+        }
         autoSelectButton.Visible = CurrentConfig.autoselectFilter is not null;
 
         base.InitialiseSelector(itemOptions);

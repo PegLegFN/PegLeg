@@ -6,6 +6,7 @@ using System.Text.Json.Nodes;
 public partial class RefreshTimerController : Node
 {
     public static event Action OnSecondChanged;
+    public static event Action OnMinuteChanged;
     public static event Action OnHourChanged;
     public static event Action OnDayChanged;
     [Export]
@@ -68,6 +69,8 @@ public partial class RefreshTimerController : Node
     {
         OnSecondChanged?.Invoke();
         var currentTime = RightNow;
+        if (currentTime.Minute != lastTime.Minute)
+            OnMinuteChanged?.Invoke();
         if (currentTime.Hour != lastTime.Hour)
             OnHourChanged?.Invoke();
         if (currentTime.Day != lastTime.Day)

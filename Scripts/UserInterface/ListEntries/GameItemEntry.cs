@@ -59,13 +59,22 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void LevelTextChangedEventHandler(string level);
 
     [Signal]
+    public delegate void InitLevelTextChangedEventHandler(string level);
+
+    [Signal]
     public delegate void LevelChangedEventHandler(float level);
+
+    [Signal]
+    public delegate void InitLevelChangedEventHandler(float level);
 
     [Signal]
     public delegate void LevelMaxChangedEventHandler(float levelMax);
 
     [Signal]
     public delegate void LevelProgressChangedEventHandler(float levelProgress);
+
+    [Signal]
+    public delegate void InitLevelProgressChangedEventHandler(float levelProgress);
 
     [Signal]
     public delegate void RatingChangedEventHandler(string rating);
@@ -95,10 +104,19 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void RarityChangedEventHandler(Color rarityColour);
 
     [Signal]
+    public delegate void InitRarityChangedEventHandler(Color rarityColour);
+
+    [Signal]
     public delegate void MaxTierChangedEventHandler(int maxTier);
 
     [Signal]
     public delegate void TierChangedEventHandler(int tier);
+
+    [Signal]
+    public delegate void InitTierChangedEventHandler(int tier);
+
+    [Signal]
+    public delegate void InitVisibleEventHandler(bool visible);
 
     [Signal]
     public delegate void SuperchargeChangedEventHandler(int supercharge);
@@ -337,7 +355,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
             useSquadForRating || overrideSurvivorSquad is not null,
             overrideSurvivorSquad
         );
-        string ratingText = rating == 0 ? "" : rating.ToString();
+
+        EmitSignalRatingChanged(rating == 0 ? "" : rating.ToString());
+        EmitSignalRatingVisibility(rating != 0);
 
         int tier = displayItem.template?.Tier ?? 0;
         float levelProgress = 0;
@@ -346,6 +366,41 @@ public partial class GameItemEntry : Control, IRecyclableEntry
         int maxLevel = Mathf.Max(tier * 10, 1) + bonusMaxLevel;
         int minLevel = Mathf.Max(maxLevel - 10, 1);
         levelProgress = minLevel == maxLevel ? 1 : ((float)level - minLevel) / (maxLevel - minLevel);
+
+        int initLevel = displayItem.attributes?["starting_level"]?.GetValue<int>() ?? 0;
+        int initTier = displayItem.attributes?["starting_tier"]?.GetValue<string>() switch
+        {
+            "v" => 5,
+            "iv" => 4,
+            "iii" => 3,
+            "ii" => 2,
+            "i" => 1,
+            _ => tier
+        };
+        int initRarityLevel = displayItem.attributes?["starting_rarity"]?.GetValue<string>() switch
+        {
+            "Mythic" => 6,
+            "Legendary" => 5,
+            "Epic" => 4,
+            "Rare" => 3,
+            "Uncommon" => 2,
+            "Common" => 1,
+            _ => 0
+        };
+
+        bool useInit =
+            (initLevel > 1 && initLevel < level) ||
+            (initTier > 1 && initTier < tier) ||
+            (initRarityLevel > 1 && initRarityLevel < displayItem.template.RarityLevel);
+        EmitSignalInitVisible(useInit);
+        if (useInit)
+        {
+            EmitSignalInitLevelChanged(initLevel);
+            EmitSignalInitTierChanged(initTier);
+            EmitSignalInitRarityChanged(GameItemTemplate.rarityColours[initRarityLevel]);
+            EmitSignalInitLevelTextChanged($"{levelTextPrefix}{level}");
+            EmitSignalInitLevelProgressChanged(((initLevel + 9 % 10) + 1) / 10f);
+        }
 
         if (type == "AccountResource" || type == "ConsumableAccountItem")
         {
@@ -417,9 +472,6 @@ public partial class GameItemEntry : Control, IRecyclableEntry
             }
         }
 
-        EmitSignalRatingChanged(ratingText);
-        EmitSignalRatingVisibility(rating != 0);
-
         bool hasDurability = displayItem.template?.Type == "Weapon" && displayItem.attributes?["durability"] is not null;
         EmitSignalDurabilityVisible(hasDurability);
         if (hasDurability)
@@ -481,6 +533,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
     static bool DefaultInteractable(GameItem item) => item?.template?.Type switch
     {
+        _ when item?.template.HasLevel == true => true,
         "Schematic" or "Weapon" or "Trap" or "Hero" or "Defender" => true,
         "Worker" when item.profile?.account?.isOwned == true => true,
         _ when item.CardPackChoices is not null => true,

@@ -458,20 +458,26 @@ public static partial class Helpers
     }
 
 
-    static char[] compactNumberMilestones = "KMB".ToCharArray();
+    static char[] compactNumberMilestones = "KMBT".ToCharArray();
     public static string Compactify(this int number)
     {
         if (number == int.MaxValue)
             return "Max";
+        return ((long)number).Compactify();
+    }
+    public static string Compactify(this long number)
+    {
+        if (number == long.MaxValue)
+            return "Max";
         int milestoneLevel = 0;
-        int solidNumber = Mathf.FloorToInt(number);
+        long solidNumber = number;
         int decimalNumber = 0;
         for (int i = 0; i < compactNumberMilestones.Length+1; i++)
         {
             if (solidNumber > 999)
             {
-                decimalNumber = solidNumber % 1000;
-                solidNumber = Mathf.FloorToInt(solidNumber*0.001);
+                decimalNumber = (int)solidNumber % 1000;
+                solidNumber = (long)Math.Floor(solidNumber*0.001);
             }
             else
             {
@@ -498,6 +504,12 @@ public static partial class Helpers
     }
 
     public static string Notate(this int number)
+    {
+        if (number == int.MaxValue)
+            return "Max";
+        return ((long)number).Notate();
+    }
+    public static string Notate(this long number)
     {
         if (number == int.MaxValue)
             return "Max";

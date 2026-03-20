@@ -291,14 +291,21 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
             };
 
             List<string> requiredRarities = [.. rarityFilters
-                .Select(c => c.ButtonPressed && c.GetMeta("rarity", "").ToString() is string result && !string.IsNullOrWhiteSpace(result) ? result : null)
-                .Where(result => result is not null)
+                .SelectMany(c => 
+                    c.ButtonPressed && 
+                    c.GetMeta("rarity", "").ToString() is string result && 
+                    !string.IsNullOrWhiteSpace(result) ? 
+                    result.Split(",") : []
+                )
             ];
             List<string> requiredTypes = [.. typeFilters
-                .Select(c => c.ButtonPressed && c.GetMeta("type", "").ToString() is string result && !string.IsNullOrWhiteSpace(result) ? result : null)
-                .Where(result => result is not null)
+                .SelectMany(c => 
+                    c.ButtonPressed && 
+                    c.GetMeta("type", "").ToString() is string result && 
+                    !string.IsNullOrWhiteSpace(result) ? result.Split(",") : []
+                )
             ];
-            itemPredicate = i =>
+            bool StandardFilter(GameItem i)
             {
                 if (repeatabilityFilters[0].ButtonPressed && i.zcpEquivelent is not null)
                     return false;
@@ -315,7 +322,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                 if (
                     requiredTypes.Count > 0 &&
                     !requiredTypes.Any(t => i.sortingTemplate.TemplateId.StartsWith(t)) &&
-                    !requiredTypes.Contains($"{i.sortingTemplate.Type}>{i.sortingTemplate.Category}")
+                    !requiredTypes.Contains($"{i.sortingTemplate.Type}>{i.sortingTemplate.Category}") &&
+                    !(requiredTypes.Contains($"{i.sortingTemplate.Type}>_") && i.sortingTemplate.Category == null) &&
+                    !requiredTypes.Contains($"{i.sortingTemplate.Type}@{i.sortingTemplate.SubType}") &&
+                    !(requiredTypes.Contains($"{i.sortingTemplate.Type}@_") && i.sortingTemplate.SubType == null)
                     )
                     return false;
 
@@ -324,6 +334,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
                 return true;
             };
+            itemPredicate = StandardFilter;
         }
 
         List<MissionRewardPair> filteredRewards = [];
@@ -332,14 +343,22 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         {
             if (missionPredicate is not null && !missionPredicate(mission))
                 continue;
-            foreach (var item in mission.allItems ?? [])
+            foreach (var item in mission.alertRewardItems ?? [])
+            {
+                if (item.template.DisplayName == "Venture XP")
+                    continue;
+                if(itemPredicate?.Invoke(item) == false)
+                    continue;
+                filteredRewards.Add(new(mission, item));
+            }
+            foreach (var item in mission.rewardItems ?? [])
             {
                 if (
-                    item.template.DisplayName == "Gold" || 
+                    item.template.DisplayName == "Gold" ||
                     item.template.DisplayName == "Venture XP"
                     )
                     continue;
-                if(itemPredicate is not null && !itemPredicate(item))
+                if (itemPredicate?.Invoke(item) == false)
                     continue;
                 filteredRewards.Add(new(mission, item));
             }
@@ -365,8 +384,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                     var template = r.item.sortingTemplate;
                     if(GameAccount.ActiveAccount.HasReminder(template))
                         return -25; // reminder items
-                    if (template.RarityLevel == 6 && template.Type == "Worker")
-                        return -20; // mythic leads
+                    if (template.RarityLevel == 6)
+                        return -20; // mythics
                     if (template.VBucksOrXRayTickets)
                         return -19; // v-bucks
                     //if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
@@ -380,12 +399,12 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         sortedRewards = sortedRewards
                 .ThenBy(r => !GameAccount.ActiveAccount.HasReminder(r.item.templateId))
                 .ThenBy(r => !(
-                    r.item.template.VBucksOrXRayTickets ||
-                    r.item.sortingTemplate.HasLevel ||
-                    r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
+                    r.item.template.VBucksOrXRayTickets //||
+                    //r.item.sortingTemplate.HasLevel ||
+                    //r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
                 ))
                 .ThenBy(r => -r.item.sortingTemplate.RarityLevel)
-                .ThenBy(r => r.item.sortingTemplate.Type)
+                .ThenBy(r => OrderByType(r.item.sortingTemplate), StringComparer.InvariantCulture)
                 .ThenBy(r => r.item.sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
                 .ThenBy(r => r.item.sortingTemplate.DisplayName)
                 .ThenBy(r => r.item.sortingTemplate != r.item.template)
@@ -402,6 +421,18 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         missionList.UpdateList(true);
         missionList.Visible = true;
     }
+
+    //todo: user configurable sorting rules
+    static string OrderByType(GameItemTemplate template) => template?.Type switch
+    {
+        "Hero" => "000000",
+        "Worker" when template.SubType is null => "00000Z",
+        "Worker" => "0000ZZ",
+        "AccountResource" when template.DisplayName.Contains("Perk", StringComparison.OrdinalIgnoreCase) => "000AZZ",
+        "AccountResource" when template.Name.Contains("reagent_alteration", StringComparison.OrdinalIgnoreCase) => "000ZZZ",
+        "AccountResource" => "00ZZZZ",
+        _ => template?.Type,
+    };
 
     void ClearMissions()
     {

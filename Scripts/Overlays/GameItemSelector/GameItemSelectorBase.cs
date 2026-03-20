@@ -14,6 +14,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
         public bool allowCancel = true;
         public bool allowEmptySelection;
         public Func<GameItem, bool> selectableFilter;
+        public Func<GameItem[], Task<bool>> confirmationTaskProvider;
     }
 
     public record MultiselectableConfig : BaseConfig
@@ -99,6 +100,8 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
         }
     }
 
+    static bool AllFilter(GameItem _) => true;
+
     protected virtual void ConfigureSelector(T config)
     {
         CurrentConfig = config ?? DefaultConfigInternal;
@@ -127,7 +130,16 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
     protected virtual async Task WaitForSelection()
     {
         while (isSelecting)
+        {
             await Helpers.WaitForFrame();
+            if (isSelecting || isCancelling)
+                continue;
+            if (CurrentConfig.confirmationTaskProvider is null)
+                continue;
+            var result = await CurrentConfig.confirmationTaskProvider([..selectedItems]);
+            if (!result)
+                isSelecting = true;
+        }
     }
 
     protected virtual GameItem[] GetResultItemsAndCleanup()

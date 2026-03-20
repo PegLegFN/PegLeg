@@ -829,6 +829,7 @@ public partial class GameMission
     public GameItem[] rewardItems { get; private set; }
     public GameItem[] alertModifiers { get; private set; }
     public GameItem[] alertRewardItems { get; private set; }
+    public string[] alertFulfillments { get; private set; }
 
     public GameItem[] allItems { get; private set; }
 
@@ -910,14 +911,21 @@ public partial class GameMission
         alertModifiers = [.. alertModifierList];
 
         List<GameItem> alertRewardItemList = [];
+        List<string> alertRewardFulfillmentList = [];
 
         foreach (var itemData in alertRewards ?? [])
         {
+            if (itemData.itemType.StartsWith("#Fulfillment:"))
+            {
+                alertRewardFulfillmentList.Add(itemData.itemType[13..]);
+                continue;
+            }
             GameItem item = itemData.ToItem();
             item.GetSearchTags();
             alertRewardItemList.Add(item);
         }
         alertRewardItems = [.. alertRewardItemList];
+        alertFulfillments = [.. alertRewardFulfillmentList];
         allItems = [.. alertRewardItems ?? [], .. rewardItems];
     }
 
@@ -956,6 +964,8 @@ public partial class GameMission
             HasDoubleLegendary = true;
             searchTags.Add("Double Legendary");
         }
+        if(alertFulfillments.Length>0)
+            searchTags.Add("Fulfillment");
         searchTags.Add(PowerLevel);
         searchTags.Add(Location);
         searchTags.Add(TheaterName);

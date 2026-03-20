@@ -134,6 +134,7 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 compactifyAmount = true
+levelTextPrefix = " Lv "
 
 [node name="Label" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1772908320]
 layout_mode = 2
@@ -141,6 +142,11 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Shadowshard Shadowshard Shadowshard "
 text_overrun_behavior = 3
+
+[node name="ItemLv" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer" unique_id=554594560]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = " Lv 46"
 
 [node name="Control" type="Control" parent="MissionEntry/HBoxContainer/MarginContainer" unique_id=1100358709]
 visible = false
@@ -219,6 +225,8 @@ expand_mode = 1
 [connection signal="TheaterColorChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat/TextureRect" method="set_color"]
 [connection signal="TooltipChanged" from="MissionEntry" to="Button" method="set_tooltip_text"]
 [connection signal="BookmarkChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer3/TextureRect" method="set_visible"]
+[connection signal="CanBeLeveledChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/ItemLv" method="set_visible"]
+[connection signal="LevelTextChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/ItemLv" method="set_text"]
 [connection signal="NameChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Control" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_tooltip_text"]

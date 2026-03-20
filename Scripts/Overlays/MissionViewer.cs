@@ -42,7 +42,8 @@ public partial class MissionViewer : ModalWindow
             ["Tile", m.tile?.ToString()],
             ["Alert", m.alertData?.ToString()],
             ["Search Tags", m.searchTags?.ToString()],
-            ["Regions", string.Join(",\n", m.regions?.Select(r => r.ToString()) ?? [])]
+            ["Regions", string.Join(",\n", m.regions?.Select(r => r.ToString()) ?? [])],
+            ["Fulfillments", string.Join(",\n", m.alertFulfillments ?? [])]
         ]);
     }
 }

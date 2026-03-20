@@ -497,11 +497,9 @@ public partial class GameItemTemplate
         else if (ofLevel > 0)
             resolvedLevel = levels[ofLevel - 1];
 
-        var xpType = "AccountResource:heroxp";
+        var xpType = "AccountResource:peoplexp";
         if (Type == "Schematic")
             xpType = "AccountResource:schematicxp";
-        else if (Type == "Worker")
-            xpType = "AccountResource:personnelxp";
 
         cost = new()
         {

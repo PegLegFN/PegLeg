@@ -163,7 +163,7 @@ public class GameClient
     bool LinkCodeExpired => linkCodeExpiresAt <= Mathf.Max((Time.GetTicksMsec() * 0.001) - 10, 0);
     public async Task<JsonObject> GetLoginLinkData(bool force = false)
     {
-        if (ClientID!=fortNewSwitchClientId)
+        if (ClientID != fortNewSwitchClientId)
             return await NewSwitchClient.GetLoginLinkData(force);
 
         if (!LinkCodeHalfExpired && !force)

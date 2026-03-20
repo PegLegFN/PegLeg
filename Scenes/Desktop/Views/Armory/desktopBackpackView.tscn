@@ -10,13 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://c5pk5nlltrbxc" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Melee-CARD.png" id="7_rtklf"]
 [ext_resource type="Texture2D" uid="uid://bh85x0fij7wr2" path="res://Images/InterfaceIcons/T-Icon-Ammo-CARD-256.png" id="8_rtklf"]
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_rtklf"]
+resource_name = "InventoryTypeFilter"
+
 [sub_resource type="ButtonGroup" id="ButtonGroup_q1x5h"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_wj6lw"]
-resource_name = "InventoryTypeFilter"
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_kgv6f"]
 resource_name = "InventoryTypeFilter"
 
 [node name="Backpack" unique_id=1431127723 instance=ExtResource("1_rmpt8")]
@@ -34,7 +34,7 @@ visible = false
 visible = false
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(144255995) index="0" unique_id=228194712]
-button_group = SubResource("ButtonGroup_q1x5h")
+button_group = SubResource("ButtonGroup_rtklf")
 
 [node name="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1536120470) index="0" unique_id=1375165287]
 texture = ExtResource("2_8da1x")
@@ -43,11 +43,11 @@ texture = ExtResource("2_8da1x")
 text = "Weapons"
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(2039985868) index="0" unique_id=1672625159]
-button_group = SubResource("ButtonGroup_wj6lw")
+button_group = SubResource("ButtonGroup_q1x5h")
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(301043813) index="0" unique_id=1744959934]
 tooltip_text = "Weapons"
-button_group = SubResource("ButtonGroup_q1x5h")
+button_group = SubResource("ButtonGroup_rtklf")
 
 [node name="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(516577698) index="0" unique_id=227857451]
 texture = ExtResource("2_8da1x")
@@ -57,7 +57,7 @@ text = "Weapons"
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1694755347) index="0" unique_id=669176367]
 tooltip_text = "Ammo"
-button_group = SubResource("ButtonGroup_q1x5h")
+button_group = SubResource("ButtonGroup_rtklf")
 
 [node name="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1240518761) index="0" unique_id=231288609]
 texture = ExtResource("3_4b2mk")
@@ -67,7 +67,7 @@ text = "Ammo"
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(426083547) index="0" unique_id=2051298463]
 tooltip_text = "Ingredients"
-button_group = SubResource("ButtonGroup_q1x5h")
+button_group = SubResource("ButtonGroup_rtklf")
 
 [node name="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1361065036) index="0" unique_id=92029602]
 texture = ExtResource("4_q4rx2")
@@ -78,7 +78,7 @@ text = "Ingredients"
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(535625123) index="0" unique_id=1931883480]
 tooltip_text = "Traps"
 theme_type_variation = &"RightCheckButton"
-button_group = SubResource("ButtonGroup_q1x5h")
+button_group = SubResource("ButtonGroup_rtklf")
 
 [node name="TextureRect" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(925601437) index="0" unique_id=916622857]
 texture = ExtResource("5_cy863")
@@ -90,7 +90,7 @@ text = "Traps"
 visible = false
 
 [node name="CheckButton" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" index="0" unique_id=1448244160]
-button_group = SubResource("ButtonGroup_kgv6f")
+button_group = SubResource("ButtonGroup_wj6lw")
 
 [node name="Tab" parent="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2/HBoxContainer" index="0" unique_id=1699324138]
 visible = false
@@ -126,5 +126,8 @@ visible = false
 
 [node name="ScrollContainer" parent="VBoxContainer" parent_id_path=PackedInt32Array(1504640056) index="2" unique_id=317467257]
 elementScene = ExtResource("6_osdn8")
+
+[node name="SchematicTokenButtonArea" parent="." index="2" unique_id=1411973582]
+visible = false
 
 [editable path="VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2"]
