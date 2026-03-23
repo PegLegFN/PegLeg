@@ -132,8 +132,14 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 
     public string OverriddeSurvivorSquad => CurrentConfig.overrideSurvivorSquad;
 
-    public static async Task<GameItem[]> OpenSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
-        await instance.OpenSelectorInternal(itemOptions, config);
+    public static async Task<GameItem> OpenSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
+        (await instance.OpenSelectorInternal(itemOptions, config))?.FirstOrDefault().Key;
+    public static async Task<GameItem[]> OpenMultiSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
+        [.. (await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true })).Select(kvp => kvp.Key)];
+    public static async Task<KeyValuePair<GameItem, int>> OpenQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
+        (await instance.OpenSelectorInternal(itemOptions, config with { quantitySelection = true }))?.FirstOrDefault() ?? default;
+    public static async Task<KeyValuePair<GameItem, int>[]> OpenMultiQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
+        await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true, quantitySelection = true });
 
     protected override void InitialiseSelector(IEnumerable<GameItem> itemOptions)
     {

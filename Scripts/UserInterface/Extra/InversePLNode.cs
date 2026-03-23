@@ -31,6 +31,6 @@ public partial class InversePLNode : GraphElement
         Vector2 prevRelativePos = prevPos - PositionOffset;
         line.Rotation = Vector2.Right.AngleTo(prevRelativePos);
         line.Size = new(Mathf.Sqrt((prevRelativePos.X * prevRelativePos.X) + (prevRelativePos.Y * prevRelativePos.Y)), 1);
-        GD.Print(line.Size);
+        //GD.Print(line.Size);
     }
 }

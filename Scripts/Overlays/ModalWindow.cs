@@ -69,7 +69,8 @@ public partial class ModalWindow : Control
 
     public override void _ExitTree()
     {
-        linkedWindow.GoBackRequested -= TryCloseWindowViaInput;
+        if(linkedWindow is not null)
+            linkedWindow.GoBackRequested -= TryCloseWindowViaInput;
     }
 
     public override void _Process(double delta)

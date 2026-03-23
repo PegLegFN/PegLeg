@@ -128,6 +128,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public delegate void SelectionMarkerChangedEventHandler(Texture2D marker);
 
     [Signal]
+    public delegate void SelectionQuantityChangedEventHandler(string quantity);
+
+    [Signal]
     public delegate void SelectionTintChangedEventHandler(Color rarityColour);
 
     [Signal]
@@ -193,7 +196,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
     public bool defaultClearIconToNull;
     [Export]
     string placeholderItem;
-    [Export]
+    [Export(PropertyHint.MultilineText)]
     string levelTextPrefix ="Lv ";
     [Export]
     protected CheckButton selectionGraphics;
@@ -649,8 +652,10 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
         bool isSelected = selector.IsSelected(currentItem);
         bool isSelectable = selector.IsSelectable(currentItem);
+        int quantity = selector.GetSelectionQuantity(currentItem);
         selectionGraphics.ButtonPressed = isSelected || !isSelectable;
-        EmitSignal(SignalName.SelectionTintChanged, selector.GetSelectableColor(currentItem));
-        EmitSignal(SignalName.SelectionMarkerChanged, selector.GetSelectableIcon(currentItem));
+        EmitSignalSelectionTintChanged(selector.GetSelectableColor(currentItem));
+        EmitSignalSelectionMarkerChanged(selector.GetSelectableIcon(currentItem));
+        EmitSignalSelectionQuantityChanged(quantity > 0 ? quantity.ToString() : "");
     }
 }

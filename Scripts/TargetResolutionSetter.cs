@@ -17,6 +17,10 @@ public partial class TargetResolutionSetter : Node
     Vector2I MinResolution = new(360, 360);
     [Export]
     bool forceVertical;
+    [Export]
+    bool allowResize;
+    [Export]
+    double resizeIncrement = 0.05f;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -31,6 +35,26 @@ public partial class TargetResolutionSetter : Node
         if (OS.HasFeature("mobile"))
             DisplayServer.ScreenSetOrientation(forceVertical ? DisplayServer.ScreenOrientation.SensorPortrait : DisplayServer.ScreenOrientation.Sensor);
         AppConfig.OnConfigChanged += OnConfigChanged;
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if(allowResize && @event is InputEventMouseButton mouseInput)
+        {
+            if (!mouseInput.CtrlPressed)
+                return;
+            double currentZoom = AppConfig.Get("ui", "scale", 1.0);
+            if (mouseInput.ButtonIndex == MouseButton.WheelUp)
+            {
+                AppConfig.Set("ui", "scale", Math.Clamp(currentZoom + resizeIncrement, 0.5, 1));
+                GetViewport().SetInputAsHandled();
+            }
+            else if (mouseInput.ButtonIndex == MouseButton.WheelDown)
+            {
+                AppConfig.Set("ui", "scale", Math.Clamp(currentZoom - resizeIncrement, 0.5, 1));
+                GetViewport().SetInputAsHandled();
+            }
+        }
     }
 
     public override void _ExitTree()

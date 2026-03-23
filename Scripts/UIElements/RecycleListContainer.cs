@@ -283,6 +283,7 @@ public interface ISelectableElementProvider<T>
 {
     public bool IsSelected(T value);
     public bool IsSelectable(T value) => true;
+    public int GetSelectionQuantity(T value) => 1;
 
     public Color GetSelectableColor(T value) => IsSelectable(value) ? Colors.Red : (IsSelected(value) ? Colors.Green : Colors.Transparent);
     public Texture2D GetSelectableIcon(T value) => null;

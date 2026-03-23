@@ -46,6 +46,8 @@ public class GameProfile
     public GameAccount account { get; private set; }
     public string profileId { get; private set; }
     public JsonObject statAttributes { get; private set; }
+    public DateTime profileLockExpiration { get; private set; }
+    public bool IsLocked => profileLockExpiration >= DateTime.UtcNow;
 
     Dictionary<string, GameItem> items = [];
     Dictionary<string, List<GameItem>> groupedItems = new(StringComparer.OrdinalIgnoreCase);
@@ -149,17 +151,17 @@ public class GameProfile
         return this;
     }
 
-    public async Task<JsonArray> PerformOperation(string operation, JsonNode content) =>
-        await PerformOperation(operation, content.ToString());
+    public async Task<JsonArray> PerformOperation(string operation, JsonNode content, bool silent = false) =>
+        await PerformOperation(operation, content.ToString(), silent);
 
-    public async Task<JsonArray> PerformOperation(string operation, string content = "{}")
+    public async Task<JsonArray> PerformOperation(string operation, string content = "{}", bool silent = false)
     {
         if (account is null)
             return null;
         await account.profileOperationSemaphore.WaitAsync();
         try
         {
-            return await PerformOperationUnsafe(operation, content);
+            return await PerformOperationUnsafe(operation, content, silent);
         }
         finally
         {
@@ -379,6 +381,7 @@ public class GameProfile
                 fullUpdate = true;
                 var resultItems = result["profileChanges"][0]["profile"]["items"].AsObject();
                 var resultStats = result["profileChanges"][0]["profile"]["stats"]["attributes"].AsObject();
+                profileLockExpiration = result["profileChanges"][0]["profile"]["profileLockExpiration"]?.Deserialize<DateTime>() ?? DateTime.MinValue;
                 if (hasProfile)
                     ApplyProfileChanges(GenerateChanges(resultItems, resultStats));
                 else

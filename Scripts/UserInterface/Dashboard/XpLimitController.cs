@@ -8,7 +8,7 @@ public partial class XpLimitController : Control
     [Export]
     XpLimitDisplay stwXpDisplay;
     [Export]
-    XpLimitDisplay playtimeXpDisplay;
+    Label playtimeXpLabel;
     [Export]
     XpLimitDisplay creativeXpDisplay;
     [Export]
@@ -114,40 +114,41 @@ public partial class XpLimitController : Control
 
     void CheckForNewWeek()
     {
-        if (stwReset < DateTime.Now || playtimeReset < DateTime.Now)
+        if (stwReset < DateTime.Now || creativeReset < DateTime.Now)
             UpdateProfiles();
     }
 
     DateTime stwReset;
-    DateTime playtimeReset;
+    DateTime creativeReset;
 
     void UpdateXP()
     {
-        stwReset = DateTime.UtcNow.WeeklyRefresh();
-        playtimeReset = DateTime.UtcNow.BRWeeklyRefresh();
-        var playtimeLimit = PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>();
+        stwReset = DateTime.UtcNow.BRWeeklyRefresh();
+        creativeReset = DateTime.UtcNow.WeeklyRefresh();
+        //var playtimeLimit = PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>();
 
         var stwXpItem = stwProfile.GetFirstTemplateItem("Token:stw_accolade_tracker");
 
         bool ignoreStwXp = (stwXpItem?.attributes["last_reset"]?.Deserialize<DateTime>() ?? default) < stwReset.AddDays(-7);
-        int? brWeek = GameCalender.BRSeasonWeek;
-        bool ignorePlaytimeXp = brWeek != brProfile.statAttributes["playtime_xp"]?["currentWeek"]?.GetValue<int?>();
-        bool ignoreCreativeXp = brWeek != brProfile.statAttributes["creative_dynamic_xp"]?["currentWeek"]?.GetValue<int?>();
+        //int? brWeek = GameCalender.BRSeasonWeek;
+        //bool ignorePlaytimeXp = brWeek != brProfile.statAttributes["playtime_xp"]?["currentWeek"]?.GetValue<int?>();
+        bool ignoreCreativeXp = false; //brWeek != brProfile.statAttributes["creative_dynamic_xp"]?["currentWeek"]?.GetValue<int?>();
 
         stwXpDisplay.SetXpProgress(
             ignoreStwXp ? 0 : (stwXpItem?.attributes["weekly_xp"]?.GetValue<int?>() ?? 0), 
             stwXpItem?.template["SoftWeeklyXPCap"].GetValue<int>() ?? 1,
             stwReset
         );
-        playtimeXpDisplay.SetXpProgress(
-            ignorePlaytimeXp ? 0: (brProfile.statAttributes["playtime_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0), 
-            PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>(),
-            playtimeReset
-        );
+        //playtimeXpDisplay.SetXpProgress(
+        //    ignorePlaytimeXp ? 0: (brProfile.statAttributes["playtime_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0), 
+        //    PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>(),
+        //    playtimeReset
+        //);
+        playtimeXpLabel.Text = (brProfile.statAttributes["playtime_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0).Notate();
         creativeXpDisplay.SetXpProgress(
             ignoreCreativeXp ? 0: (brProfile.statAttributes["creative_dynamic_xp"]?["currentWeekXp"]?.GetValue<int?>() ?? 0), 
             PegLegResourceManager.MagicNumbers["playtimeXPLimit"].GetValue<int>(),
-            playtimeReset
+            creativeReset
         );
 
         int rested = brProfile.statAttributes["rested_xp"]?.GetValue<int?>() ?? 0;

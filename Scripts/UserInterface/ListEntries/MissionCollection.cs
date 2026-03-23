@@ -60,7 +60,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
     {
         if (section != "missions")
             return;
-        if (key == "excludeLargeXP")
+        if (key == "excludeLargeXP" || key == "excludeLargeEvo" || key == "excludeLargeReperk")
         {
             UpdateFilters();
             SetMissionsDirty();
@@ -77,7 +77,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 
     void UpdateAccount()
     {
-        if (playableFilter?.IsInsideTree()==true)
+        if (playableFilter?.IsInsideTree() == true)
             playableFilter.Visible = GameAccount.ActiveAccount.isOwned && !alwaysHidePlayableFilter;
         SetMissionsDirty();
     }
@@ -106,6 +106,10 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
         var searchText = testSearch;
         if (AppConfig.Get("missions", "excludeLargeXP", false) && !ignoreLargeXPSetting)
             searchText = searchText.Trim() + " !XP !Gold";
+        if (AppConfig.Get("missions", "excludeLargeEvo", false) && !ignoreLargeXPSetting)
+            searchText = searchText.Trim() + " !(templateId='reagent_c_')";
+        if (AppConfig.Get("missions", "excludeLargeReperk", false) && !ignoreLargeXPSetting)
+            searchText = searchText.Trim() + " !RE-PERK";
         activeSearchText = searchText;
         if (searchText.Contains("///"))
         {

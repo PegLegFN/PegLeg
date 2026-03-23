@@ -1005,7 +1005,7 @@ public partial class CardPackOpener : Control
                 item.GetSearchTags();
                 item.GenerateRawData();
             }
-            var toRecycle = await SimpleItemSelector.OpenSelector(resultItems, SimpleItemSelector.RecycleConfig with
+            var toRecycle = await SimpleItemSelector.OpenMultiSelector(resultItems, SimpleItemSelector.RecycleConfig with
             {
                 allowCancel = false,
                 allowEmptySelection = true,

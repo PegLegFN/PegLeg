@@ -1,15 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://cjo0qsieb4y21"]
+[gd_scene format=3 uid="uid://cjo0qsieb4y21"]
 
 [ext_resource type="Script" uid="uid://bob0mcr4r7qyn" path="res://Scripts/UserInterface/Dashboard/AlertSummaryController.cs" id="1_vcuvx"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="2_n1o3m"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="3_d2rmp"]
-[ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/dashboard_alert_summary.tscn" id="4_fr4qi"]
+[ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/DashboardAlertSummaryRow.tscn" id="4_fr4qi"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_8c0sj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("3_d2rmp")
 
-[node name="DashboardAlertSummary" type="PanelContainer" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
+[node name="DashboardAlertSummary" type="PanelContainer" unique_id=1591586612 node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
 custom_minimum_size = Vector2(474, 420)
 mouse_filter = 1
 theme_type_variation = &"Panel5PadB"
@@ -18,20 +18,20 @@ targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayl
 rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=372137160]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=741974284]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2" unique_id=210731956]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Alert Summary"
 horizontal_alignment = 1
 
-[node name="ShareBtn" type="Button" parent="VBoxContainer/MarginContainer2"]
+[node name="ShareBtn" type="Button" parent="VBoxContainer/MarginContainer2" unique_id=616104917]
 visible = false
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
@@ -39,7 +39,7 @@ size_flags_horizontal = 8
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/ShareBtn"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/ShareBtn" unique_id=2057812752]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -53,14 +53,14 @@ grow_vertical = 2
 texture = ExtResource("2_n1o3m")
 expand_mode = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1490155305]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=415414284]
 layout_mode = 2
 
-[node name="Reward" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Reward" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=14562953]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.5
@@ -68,7 +68,7 @@ theme_type_variation = &"Outline6"
 text = "Reward"
 horizontal_alignment = 1
 
-[node name="Stone" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Stone" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=34493907]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -76,7 +76,7 @@ theme_type_variation = &"Outline6"
 text = "Stone"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Stone"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Stone" unique_id=637766601]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -88,7 +88,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2296, 0.4264, 0.82, 1)
 
-[node name="Plank" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Plank" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=960800374]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -96,7 +96,7 @@ theme_type_variation = &"Outline6"
 text = "Plank"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Plank"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Plank" unique_id=1226347395]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -108,7 +108,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.15, 1, 0, 1)
 
-[node name="Canny" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Canny" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1953433674]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -116,7 +116,7 @@ theme_type_variation = &"Outline6"
 text = "Canny"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Canny"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Canny" unique_id=711557724]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -128,7 +128,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.8, 0, 1)
 
-[node name="Twine" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Twine" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1014319862]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -136,7 +136,7 @@ theme_type_variation = &"Outline6"
 text = "Twine"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Twine"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Twine" unique_id=1999540389]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -148,7 +148,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.683333, 0, 1, 1)
 
-[node name="Total" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Total" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1102780928]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -156,7 +156,7 @@ theme_type_variation = &"Outline6"
 text = "Total"
 horizontal_alignment = 1
 
-[node name="Ventures" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Ventures" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1811083383]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -164,7 +164,7 @@ theme_type_variation = &"Outline6"
 text = "Vent's"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/PanelContainer/HBoxContainer/Ventures" unique_id=1127061763]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -176,80 +176,114 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.883333, 1, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=404805725]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1246307952]
+layout_mode = 2
+alignment = 2
+
+[node name="Control2" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=857381647]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.5
+
+[node name="Control3" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1643837677]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control4" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1205571923]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control5" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1091461359]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control6" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1279618022]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1440110487]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 1, 1, 0.2509804)
+
+[node name="Control" type="Control" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=214321789]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1600702746]
 layout_mode = 2
 
-[node name="DashboardAlertSummary" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=251475838 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary2" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary2" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1841516265 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary3" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary3" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=921514846 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary4" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary4" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1908105098 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary5" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary5" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1863953001 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary6" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary6" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1500122047 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary7" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary7" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=75887755 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary8" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary8" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1853688840 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary9" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary9" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=724258964 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary10" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary10" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1457022792 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary11" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary11" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=634041422 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary12" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary12" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=958973167 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary13" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary13" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=697258957 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary14" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary14" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=468180838 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary15" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary15" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=62425765 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary16" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary16" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=1323194579 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary17" parent="VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_fr4qi")]
+[node name="DashboardAlertSummary17" parent="VBoxContainer/MarginContainer/VBoxContainer" unique_id=902687192 instance=ExtResource("4_fr4qi")]
 visible = false
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" instance=ExtResource("5_8c0sj")]
+[node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" unique_id=683550310 instance=ExtResource("5_8c0sj")]
 layout_mode = 2

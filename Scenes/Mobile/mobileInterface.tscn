@@ -31,16 +31,13 @@
 [ext_resource type="PackedScene" uid="uid://cs4uqvp2hvjpe" path="res://Scenes/powerLevelIndicatorV2Large.tscn" id="14_5jecb"]
 [ext_resource type="PackedScene" uid="uid://53fn442ut5dy" path="res://Scenes/Desktop/Overlays/mission_viewer.tscn" id="17_06gui"]
 [ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="17_bm3s6"]
-[ext_resource type="PackedScene" uid="uid://buf6p8qyydofm" path="res://Scenes/Desktop/Overlays/game_item_viewer.tscn" id="18_78iqf"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="18_hov7v"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="19_bhkvg"]
 [ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="19_k2e4l"]
 [ext_resource type="PackedScene" uid="uid://cwuhp6vco7bb2" path="res://Scenes/Mobile/Views/mobileLlamaView.tscn" id="19_vd53b"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="19_y7kji"]
 [ext_resource type="Script" uid="uid://dbi4mg37e4bvq" path="res://Scripts/CurtainOpener.cs" id="20_5owy4"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="20_31c4o"]
 [ext_resource type="PackedScene" uid="uid://bll4pqljsuwh" path="res://Scenes/Mobile/Views/mobileInventoryView.tscn" id="20_qh5c3"]
-[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="21_k2e4l"]
 [ext_resource type="PackedScene" uid="uid://conb37uu8vbtd" path="res://Scenes/Mobile/Views/mobileAccountSelectorView.tscn" id="22_tdxd6"]
 [ext_resource type="Texture2D" uid="uid://cjtv2aa84wwwr" path="res://Images/InterfaceIcons/T_Icon_Spray_Adjustments_Tab_128.png" id="28_5jecb"]
 [ext_resource type="Texture2D" uid="uid://dgwvyp3xkplbh" path="res://Images/InterfaceIcons/PinataStandardPack-UpgradeWhite.png" id="29_e2uku"]
@@ -50,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://c4lt6qwfc4cou" path="res://Scenes/Desktop/Overlays/loading_overlay.tscn" id="38_60tdr"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="38_qxpsy"]
 [ext_resource type="PackedScene" uid="uid://bj0b3duc8a0co" path="res://Scenes/Mobile/Overlays/mobile_game_item_selector.tscn" id="39_wtfcc"]
+[ext_resource type="PackedScene" uid="uid://b1qu5i4xb4bfr" path="res://Scenes/Mobile/Overlays/mobileGameItemViewer.tscn" id="42_7ax35"]
 [ext_resource type="PackedScene" uid="uid://2okdom0nii2b" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_confirmation_window.tscn" id="43_6xiwr"]
 [ext_resource type="PackedScene" uid="uid://cddyd14hf7dey" path="res://Scenes/Desktop/Overlays/item_upgrade_animation.tscn" id="47_8c7wp"]
 
@@ -83,196 +81,6 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8c7wp"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = true
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e34xc"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_exprw"]
-resource_name = "ItemViewerChoices"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gte3x"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0tm5k"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sa5jl"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fpni2"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lprqp"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("20_31c4o")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0hc6e"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 3.0
-shader_parameter/Fit = true
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ly11p"]
-resource_local_to_scene = true
-shader = ExtResource("19_bhkvg")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 3.0
-shader_parameter/Fit = true
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("21_k2e4l")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d1o0h"]
 shader = ExtResource("17_bm3s6")
@@ -682,71 +490,9 @@ layout_mode = 1
 visible = false
 layout_mode = 1
 
-[node name="GameItemViewer" parent="OverlayWindows" unique_id=1687330932 instance=ExtResource("18_78iqf")]
+[node name="GameItemViewer" parent="OverlayWindows" unique_id=1687330932 instance=ExtResource("42_7ax35")]
 visible = false
 layout_mode = 1
-anchors_preset = -1
-
-[node name="CenterContainer" parent="OverlayWindows/GameItemViewer/Control/WindowContents" parent_id_path=PackedInt32Array(1687330932, 1567660947) index="0" unique_id=655177042]
-scale = Vector2(0.9, 0.9)
-pivot_offset_ratio = Vector2(0.5, 0.5)
-
-[node name="MainContent" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window" parent_id_path=PackedInt32Array(1687330932, 130040293) index="0" unique_id=32777660]
-columns = 1
-
-[node name="CommonItemDetails" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent" index="0" unique_id=546236768]
-size_flags_horizontal = 3
-
-[node name="GridContainer" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails" index="0" unique_id=1301900661]
-columns = 2
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/RewardEntry" parent_id_path=PackedInt32Array(1687330932, 1774023433) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_8c7wp")
-
-[node name="DescriptionAndUpgradeCosts" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer" index="1" unique_id=1619689312]
-size_flags_horizontal = 3
-
-[node name="Label" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/ScrollContainer" parent_id_path=PackedInt32Array(1687330932, 1619486428) index="0" unique_id=822375055]
-custom_minimum_size = Vector2(150, 0)
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 249909613) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_e34xc")
-
-[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control" parent_id_path=PackedInt32Array(1687330932, 228332598) index="1" unique_id=895210744]
-button_group = SubResource("ButtonGroup_exprw")
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 1929620437) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_gte3x")
-
-[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2" parent_id_path=PackedInt32Array(1687330932, 1678473235) index="1" unique_id=1897317201]
-button_group = SubResource("ButtonGroup_exprw")
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 120210783) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_0tm5k")
-
-[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3" parent_id_path=PackedInt32Array(1687330932, 1406663981) index="1" unique_id=1007817772]
-button_group = SubResource("ButtonGroup_exprw")
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 1483141880) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_sa5jl")
-
-[node name="CheckButton" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4" parent_id_path=PackedInt32Array(1687330932, 1108073031) index="1" unique_id=571658869]
-button_group = SubResource("ButtonGroup_exprw")
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1687330932, 1103500248) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_fpni2")
-
-[node name="TextureRect" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2" parent_id_path=PackedInt32Array(1687330932, 459272833) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_lprqp")
-
-[node name="Icon" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1687330932, 1246146297) index="0" unique_id=1191338159]
-material = SubResource("ShaderMaterial_0hc6e")
-
-[node name="Icon" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(1687330932, 527594733) index="0" unique_id=452191492]
-material = SubResource("ShaderMaterial_ly11p")
-
-[node name="GridContainer" parent="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer3" parent_id_path=PackedInt32Array(1687330932, 1225585210) index="1" unique_id=1350815583]
-columns = 4
 
 [node name="LoginPopup" parent="OverlayWindows" unique_id=1746420847 instance=ExtResource("38_qxpsy")]
 visible = false
@@ -797,17 +543,4 @@ curtain = NodePath("..")
 [editable path="OverlayWindows/MissionViewer"]
 [editable path="OverlayWindows/MissionViewer/Control/WindowContents/CenterContainer/MissionEntry/PowerLevel/PowerLevelIndicator"]
 [editable path="OverlayWindows/MissionViewer/SubViewportContainer4/XpSummaryViewport/PegLegWatermark/SharedMissionEntry/PowerLevel/PowerLevelIndicator"]
-[editable path="OverlayWindows/GameItemViewer"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/RewardEntry"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/Control/PowerLevelIndicator"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/ModeSelector"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/LevelUpOrEvolve/CoreSelector"]
-[editable path="OverlayWindows/GameItemViewer/Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer2/VirtualTabBar"]
 [editable path="OverlayWindows/ItemUpgradeAnimation"]

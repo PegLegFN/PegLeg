@@ -233,7 +233,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
         if (string.IsNullOrWhiteSpace(notableFilterText))
         {
             notableFilterText = """
-                (Mythic Survivor) |
+                Mythic |
                 (V-Bucks | X-Ray) |
                 (Upgrade Llama) |
                 (Legendary Survivor !Lead) |
@@ -382,7 +382,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                     if (!notableMode)
                         return 0;
                     var template = r.item.sortingTemplate;
-                    if(GameAccount.ActiveAccount.HasReminder(template))
+                    if (GameAccount.ActiveAccount.HasReminder(template))
                         return -25; // reminder items
                     if (template.RarityLevel == 6)
                         return -20; // mythics
@@ -405,6 +405,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
                 ))
                 .ThenBy(r => -r.item.sortingTemplate.RarityLevel)
                 .ThenBy(r => OrderByType(r.item.sortingTemplate), StringComparer.InvariantCulture)
+                .ThenBy(r => -r.item.attributes?["level"]?.GetValue<int>() ?? 0)
                 .ThenBy(r => r.item.sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
                 .ThenBy(r => r.item.sortingTemplate.DisplayName)
                 .ThenBy(r => r.item.sortingTemplate != r.item.template)

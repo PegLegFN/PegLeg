@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://jsu6mxwb40t6"]
+[gd_scene format=3 uid="uid://jsu6mxwb40t6"]
 
 [ext_resource type="PackedScene" uid="uid://ch7kqyndhfgvs" path="res://Scenes/GameItemEntry/inventory_entry_large.tscn" id="1_dt25g"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_jj4sb"]
@@ -19,10 +19,10 @@ fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_18ceg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ficb"]
 resource_local_to_scene = true
 shader = ExtResource("4_abngg")
-shader_parameter/ControlSize = Vector2(116, 89)
+shader_parameter/ControlSize = Vector2(116, 91)
 shader_parameter/Fit = true
 shader_parameter/VerticalShift = 0.5
 shader_parameter/IsHero = false
@@ -40,19 +40,18 @@ expand_margin_bottom = 2.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ptkuf"]
 bg_color = Color(1, 1, 1, 1)
 
-[node name="BackpackEntry" instance=ExtResource("1_dt25g")]
+[node name="BackpackEntry" unique_id=691176754 instance=ExtResource("1_dt25g")]
 custom_minimum_size = Vector2(120, 120)
-offset_right = 120.0
 offset_bottom = 120.0
 
-[node name="AspectTexture" parent="ItemContent" index="0"]
+[node name="AspectTexture" parent="ItemContent" parent_id_path=PackedInt32Array(2030528173) index="0" unique_id=1533324994]
 texture = ExtResource("2_jj4sb")
 
-[node name="IconWindow" type="Control" parent="ItemContent/EdgePadding/GameItem/MarginContainer" index="0"]
+[node name="IconWindow" type="Control" parent="ItemContent/EdgePadding/GameItem/MarginContainer" parent_id_path=PackedInt32Array(1314792133) index="0" unique_id=1088657179]
 clip_contents = true
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow" index="0" unique_id=1571398410]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -62,13 +61,13 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -2
 theme_override_constants/margin_bottom = -2
 
-[node name="AspectTexture" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer" index="0"]
+[node name="AspectTexture" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer" index="0" unique_id=865752247]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("2_jj4sb")
 expand_mode = 5
 
-[node name="RarityGradient" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="0"]
+[node name="RarityGradient" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="0" unique_id=819834061]
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -79,7 +78,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_4arc4")
 expand_mode = 1
 
-[node name="ItemIcon" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="1"]
+[node name="ItemIcon" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/IconWindow/MarginContainer/AspectTexture" index="1" unique_id=103512812]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -90,17 +89,17 @@ texture = ExtResource("5_abngg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ItemIcon" parent="ItemContent/EdgePadding/GameItem/MarginContainer" index="1"]
-material = SubResource("ShaderMaterial_18ceg")
+[node name="ItemIcon" parent="ItemContent/EdgePadding/GameItem/MarginContainer" parent_id_path=PackedInt32Array(1314792133) index="1" unique_id=2064999133]
+material = SubResource("ShaderMaterial_6ficb")
 texture = ExtResource("7_6ficb")
 
-[node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(741266178) index="1" unique_id=170971590]
 layout_mode = 2
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/MarginContainer" index="0"]
+[node name="ProgressBar" type="ProgressBar" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/MarginContainer" index="0" unique_id=87009353]
 custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -112,18 +111,28 @@ value = 1.0
 fill_mode = 3
 show_percentage = false
 
-[node name="AspectRatioContainer" parent="ItemContent/RarityOutline" index="1"]
-anchors_preset = -1
+[node name="AspectRatioContainer" parent="ItemContent/RarityOutline" parent_id_path=PackedInt32Array(431683393) index="1" unique_id=1875060157]
 offset_right = -6.0
 
-[node name="NotificationLabel" parent="ItemContent/RarityOutline" index="2"]
+[node name="NotificationLabel" parent="ItemContent/RarityOutline" parent_id_path=PackedInt32Array(431683393) index="2" unique_id=1435270321]
 anchors_preset = -1
 offset_right = -10.0
 
-[node name="InvEntryTooltipCtx" parent="Tooltip" index="0"]
+[node name="Label" type="Label" parent="ItemContent/SelectionVisuals/SelectionFX/MarginContainer" parent_id_path=PackedInt32Array(304630564) index="1" unique_id=1491891185]
+visible = false
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 16
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 32
+text = "200"
+horizontal_alignment = 1
+
+[node name="InvEntryTooltipCtx" parent="Tooltip" parent_id_path=PackedInt32Array(1725377709) index="0" unique_id=635282061]
 componentList = ExtResource("4_jsyui")
 
-[node name="InvEntryCtx" parent="Responsive Button Area" index="1"]
+[node name="InvEntryCtx" parent="Responsive Button Area" parent_id_path=PackedInt32Array(1323936485) index="1" unique_id=1071860361]
 componentList = ExtResource("4_jsyui")
 
 [connection signal="DurabilityValue" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/MarginContainer/ProgressBar" method="set_value"]

@@ -877,6 +877,15 @@ public partial class GameMission
         GenerateSearchTags();
     }
 
+    static Dictionary<string, string> fulfillmentLookup;
+    static GameItem CreateItemFromFulfillment(string fulfillmentId)
+    {
+        fulfillmentLookup ??= PegLegResourceManager.MagicNumbers["fulfillmentsToMissionRewards"]?.Deserialize<Dictionary<string, string>>() ?? [];
+        if (fulfillmentLookup.TryGetValue(fulfillmentId, out var itemId))
+            return GameItemTemplate.Get(itemId)?.CreateInstance();
+        return null;
+    }
+
 
     void GenerateItems(GameItem.ItemReward[] rewards, GameItem.ItemReward[] modifiers, GameItem.ItemReward[] alertRewards)
     {
@@ -917,7 +926,15 @@ public partial class GameMission
         {
             if (itemData.itemType.StartsWith("#Fulfillment:"))
             {
-                alertRewardFulfillmentList.Add(itemData.itemType[13..]);
+                string fid = itemData.itemType[13..];
+                alertRewardFulfillmentList.Add(fid);
+                if (CreateItemFromFulfillment(fid) is GameItem fReward)
+                {
+                    fReward.GetSearchTags();
+                    alertRewardItemList.Add(fReward);
+                }
+                if (missionData is not null)
+                    GD.PushWarning($"missing reward type for fulfillment \"{fid}\" in mission \"{missionData?.missionGuid}\"");
                 continue;
             }
             GameItem item = itemData.ToItem();

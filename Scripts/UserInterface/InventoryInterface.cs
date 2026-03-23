@@ -47,6 +47,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     Control researchTokenArea;
     [Export]
     Button researchTokenButton;
+    [Export]
+    string autoDismantleRules;
 
     Control currentCreatorImage;
     AnimationPlayer currentCreatorAnimation;
@@ -82,13 +84,68 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             devAllButton.Toggled += SetTypeFilter;
         if (researchTokenButton is not null)
             researchTokenButton.Pressed += ShowResearchTokenMenu;
-        researchTokenArea.Visible = false;
+        if (researchTokenArea is not null)
+            researchTokenArea.Visible = false;
+
+        if (!string.IsNullOrWhiteSpace(autoDismantleRules))
+        {
+            autoDismantleInstructions = PLSearch.GenerateSearchInstructions(autoDismantleRules);
+        }
+
         tabBar.SetTabPressed(0);
         tabBar.TabsChanged += SetTypeFilter;
         AppConfig.OnConfigChanged += OnConfigChanged;
+        RefreshTimerController.OnMinuteChanged += TryAutoDismantle;
         VisibilityChanged += TryFilter;
         SetTypeFilter();
         UpdateAccount();
+    }
+
+    PLSearch.Instruction[] autoDismantleInstructions;
+    DateTime lastAutoDismantleAttempt = DateTime.MinValue;
+
+    private async void TryAutoDismantle()
+    {
+        if (autoDismantleInstructions is null || !OS.HasFeature("editor"))
+            return;
+
+        if (targetProfile != FnProfileTypes.Backpack || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
+            return;
+
+        if (lastAutoDismantleAttempt.AddMinutes(10) > DateTime.UtcNow)
+            return;
+
+        await currentProfile.Query(true);
+        if (currentProfile.IsLocked)
+            return;
+
+        lastAutoDismantleAttempt = DateTime.UtcNow;
+
+        var toDismantle = currentProfile.GetItems(i => i.template?.Undismantlable==false && PLSearch.EvaluateInstructions(autoDismantleInstructions, i.RawData ?? []));
+
+        if ((toDismantle?.Length ?? 0) <= 0)
+            return;
+
+
+        GD.Print($"Auto-Dismantling {toDismantle.Length} junk items from the backpack of {currentProfile}...");
+        JsonObject content = new()
+        {
+            ["targetItemIdAndQuantityPairs"] = new JsonArray(
+                [.. toDismantle.Select(item => new JsonObject(){
+                    ["itemId"] = item.uuid,
+                    ["quantity"] = item.quantity,
+                })]
+            )
+        };
+        var res = await currentProfile.PerformOperation("DisassembleWorldItems", content, silent: true);
+        if(res is not null)
+            return;
+        if (currentProfile.lastOp?["numericErrorCode"]?.GetValue<int>() != 12821)
+        {
+            GD.Print($"Unknown Dismantle Error:\n{currentProfile.lastOp}".FixLogLines());
+        }
+        GD.Print("Backpack locked, retrying in 1 minute");
+
     }
 
     public override void _ShortcutInput(InputEvent @event)
@@ -174,10 +231,10 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
     async void UpdateAccount()
     {
-        accountDirty = true;
-        if (!IsVisibleInTree())
-            return;
-        accountDirty = false;
+        //accountDirty = true;
+        //if (!IsVisibleInTree())
+        //    return;
+        //accountDirty = false;
 
         filteredItems = [];
         ApplySorting();
@@ -194,7 +251,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         if (targetProfile != FnProfileTypes.AccountItems && !await account.Authenticate())
             return;
 
-        researchTokenArea.Visible = false;
+        if (researchTokenArea is not null)
+            researchTokenArea.Visible = false;
 
         if (currentCreatorImage is not null)
         {
@@ -221,13 +279,20 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
         currentProfile.OnProfileChanged += UpdateProfile;
         UpdateProfile();
+
+        if (currentProfile.account.isOwned)
+        {
+            lastAutoDismantleAttempt = DateTime.MinValue;
+            TryAutoDismantle();
+        }
     }
 
     void UpdateProfile()
     {
-        researchTokenArea.Visible = false;
+        if (researchTokenArea is not null)
+            researchTokenArea.Visible = false;
         ApplyFilters();
-        if (researchTokenButton is null || targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
+        if (researchTokenArea is null || targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
             return;
 
         //not ready to use this feature, dont know the profile operation to redeem tokens
@@ -253,7 +318,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
         {
             autoselectFilter = _ => true
         };
-        var toRecycle = await SimpleItemSelector.OpenSelector(filteredItems, config);
+        var toRecycle = await SimpleItemSelector.OpenMultiSelector(filteredItems, config);
         if ((toRecycle?.Length ?? 0) > 0)
         {
             JsonObject content = new()
@@ -290,34 +355,28 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             GD.Print($"Selected {selected?.uuid ?? "<None>"} ({selected?.templateId ?? "<None>"})");
     }
 
-    //public async void BulkDismantle()
-    //{
-    //    //implement item amount selection in recycling
-    //    return;
+    public async void BulkDismantle()
+    {
+        //implement item amount selection in recycling
 
-    //    if (targetProfile != FnProfileTypes.Backpack || displayedAccount is null || !await displayedAccount.Authenticate())
-    //        return;
-
-    //    if (filteredItems.Any())
-    //    {
-    //        //foreach (var item in filteredItems)
-    //        //{
-    //        //    item.GetSearchTags();
-    //        //    item.GenerateRawData();
-    //        //}
-    //        GameItemSelector.Instance.SetDismantleDefaults();
-    //        var toRecycle = await GameItemSelector.Instance.OpenSelector(filteredItems, null);
-    //        if ((toRecycle?.Length ?? 0) > 0 && await displayedAccount.Authenticate())
-    //        {
-    //            JsonObject content = new()
-    //            {
-    //                ["targetItemIds"] = new JsonArray(toRecycle.Select(item => (JsonNode)item.uuid).ToArray())
-    //            };
-    //            using var _ = LoadingOverlay.CreateToken();
-    //            await displayedAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content);
-    //        }
-    //    }
-    //}
+        if (targetProfile != FnProfileTypes.Backpack || currentProfile?.hasProfile != true || !currentProfile.account.isOwned || filteredItems.Length == 0)
+            return;
+        var toDismantle = await SimpleItemSelector.OpenMultiQuantitySelector(filteredItems, SimpleItemSelector.DismantleConfig);
+        if ((toDismantle?.Length ?? 0) <= 0)
+            return;
+        lastAutoDismantleAttempt = DateTime.UtcNow;
+        JsonObject content = new()
+        {
+            ["targetItemIdAndQuantityPairs"] = new JsonArray(
+                [.. toDismantle.Select(kvp => new JsonObject(){
+                        ["itemId"] = kvp.Key.uuid,
+                        ["quantity"] = kvp.Value,
+                })]
+            )
+        };
+        using var _ = LoadingOverlay.CreateToken();
+        await currentProfile.PerformOperation("DisassembleWorldItems", content);
+    }
 
     bool accountDirty = false;
     bool itemsDirty = false;
@@ -345,8 +404,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             ApplyFilters();
         else if (heavySearchWarning is not null)
             heavySearchWarning.Visible = true;
-
-
     }
 
     static bool EvaluateTypeFilter(GameItem item, string filter)
@@ -437,12 +494,12 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
     }
 
     static bool recycleNextTokenResearch = false;
-    static async Task<bool> ShowResearchTokenConfirmation(GameItem[] selectedItem)
+    static async Task<bool> ShowResearchTokenConfirmation(KeyValuePair<GameItem, int>[] selectedItem)
     {
         if (selectedItem.Length == 0)
             return true;
         var result = await GenericConfirmationWindow.ShowConfirmation(
-            $"Research \"{selectedItem[0].template.DisplayName}\"?", 
+            $"Research \"{selectedItem[0].Key.template.DisplayName}\"?", 
             "Research", 
             "Recycle"
         );
@@ -482,7 +539,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
             confirmationTaskProvider = ShowResearchTokenConfirmation
         });
         var recycleThisTokenResearch = recycleNextTokenResearch;
-        if (result.Length == 0)
+        if (result is null)
             return;
 
         //perform the research

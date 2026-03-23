@@ -203,9 +203,11 @@ public static class GameCalender
     }
 
     public static int BRSeasonNumber => currentState.GetCurrentState().state.seasonNumber;
+    public static DateTime BRStartDate => currentState.GetCurrentState().state.seasonBegin;
+    public static DateTime BREndDate => currentState.GetCurrentState().state.seasonEnd;
 
-    static EventTimeRange? BRSeasonRange => currentState.GetCurrentState().ActiveEvents.TryGetValue($"EventFlag.Event_S{BRSeasonNumber}_Discovery", out var range) ? range : null;
+    static EventTimeRange? BRSeasonRange => new() { activeSince = BRStartDate, activeUntil = BREndDate };
     public static DateTime? BRSeasonStart => BRSeasonRange?.activeSince;
-    public static int? BRSeasonWeek => BRSeasonRange is EventTimeRange range ? Mathf.FloorToInt((DateTime.UtcNow - range.activeSince).TotalDays) / 7 : null;
+    public static int BRSeasonWeek => Mathf.FloorToInt((DateTime.UtcNow - BRStartDate).TotalDays) / 7;
     public static DateTime? BRSeasonEnd => BRSeasonRange?.activeUntil;
 }

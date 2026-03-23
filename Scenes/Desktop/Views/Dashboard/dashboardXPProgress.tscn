@@ -85,18 +85,6 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0h4l"]
-shader = ExtResource("8_1siby")
-shader_parameter/ControlSize = Vector2(366, 16)
-shader_parameter/progress = 0.51
-shader_parameter/tileScale = 0.4
-shader_parameter/tileSpeed = 0.2
-shader_parameter/tileSpeedRatio = 0.5
-shader_parameter/useAlpha = false
-shader_parameter/rainbow = false
-shader_parameter/pattern = ExtResource("11_frfar")
-shader_parameter/tint = Color(0.95, 1, 0.4, 1)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dlqc6"]
 shader = ExtResource("8_1siby")
 shader_parameter/ControlSize = Vector2(366, 16)
@@ -108,6 +96,18 @@ shader_parameter/useAlpha = true
 shader_parameter/rainbow = false
 shader_parameter/pattern = ExtResource("12_52r5v")
 shader_parameter/tint = Color(0, 0.9, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0h4l"]
+shader = ExtResource("8_1siby")
+shader_parameter/ControlSize = Vector2(366, 16)
+shader_parameter/progress = 1.0
+shader_parameter/tileScale = 0.4
+shader_parameter/tileSpeed = 0.2
+shader_parameter/tileSpeedRatio = 0.5
+shader_parameter/useAlpha = false
+shader_parameter/rainbow = false
+shader_parameter/pattern = ExtResource("11_frfar")
+shader_parameter/tint = Color(0.95, 1, 0.4, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4kbf4"]
 shader = ExtResource("8_1siby")
@@ -127,13 +127,13 @@ expand_margin_top = 1.0
 expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
-[node name="DashboardXPProgress" type="PanelContainer" unique_id=1433313793 node_paths=PackedStringArray("stwXpDisplay", "playtimeXpDisplay", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
+[node name="DashboardXPProgress" type="PanelContainer" unique_id=1433313793 node_paths=PackedStringArray("stwXpDisplay", "playtimeXpLabel", "creativeXpDisplay", "superchargedXpDisplay", "xpProgress", "levelLabel", "xpAmount", "xpUntilMax", "loading", "content", "superchargedContent")]
 custom_minimum_size = Vector2(474, 0)
 mouse_filter = 1
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_fdl4h")
 stwXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer")
-playtimeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2")
+playtimeXpLabel = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer/Label")
 creativeXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3")
 superchargedXpDisplay = NodePath("VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4")
 xpProgress = NodePath("VBoxContainer/Body/XPContent/MarginContainer/TextureProgressBar")
@@ -220,7 +220,7 @@ columns = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Body/XPContent" unique_id=1408989734]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
+size_flags_vertical = 0
 theme_override_constants/separation = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer" unique_id=448940194 node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
@@ -352,134 +352,6 @@ horizontal_alignment = 2
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer" unique_id=1537716544]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer" unique_id=1901097064 node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
-layout_mode = 2
-theme_override_constants/separation = 1
-script = ExtResource("5_xbh73")
-progressText = NodePath("MarginContainer/MarginContainer/Label")
-progressBar = NodePath("MarginContainer/ProgressBar")
-progressPercent = NodePath("MarginContainer/MarginContainer/Label2")
-refreshTime = NodePath("HBoxContainer/RefreshTimerContainer")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" unique_id=1953628484]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=380471006]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Playtime XP"
-
-[node name="RefreshTimerContainer" type="VBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1918580412 node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-size_flags_stretch_ratio = 0.0
-tooltip_text = "test"
-mouse_filter = 0
-theme_override_constants/separation = 0
-script = ExtResource("6_qrhk5")
-target = NodePath("TimerPanel/HBoxContainer/TimerLabel")
-tooltipTarget = NodePath(".")
-timerType = 5
-formatType = 2
-customWarningTime = 10080
-customCritTime = 4320
-progressBar = NodePath("TimerProgress")
-
-[node name="TimerPanel" type="PanelContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer" unique_id=1750686231]
-custom_minimum_size = Vector2(47, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_as0uf")
-
-[node name="LeavingSoonAlert" type="MarginContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel" unique_id=372874393]
-visible = false
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = -2
-theme_override_constants/margin_top = -2
-theme_override_constants/margin_right = -3
-theme_override_constants/margin_bottom = -2
-
-[node name="Panel" type="Panel" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" unique_id=937947171]
-visible = false
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ho1op")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel" unique_id=725062263]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" unique_id=560060842]
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("7_54q2i")
-expand_mode = 3
-
-[node name="TimerLabel" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" unique_id=113090412]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 12
-text = "99h"
-
-[node name="TimerProgress" type="ProgressBar" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer/RefreshTimerContainer" unique_id=664959092]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-mouse_filter = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_sfcv1")
-theme_override_styles/fill = SubResource("StyleBoxFlat_at20a")
-min_value = -0.1
-max_value = 1.0
-step = 0.0
-value = 0.615
-show_percentage = false
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" unique_id=1538305157]
-material = SubResource("ShaderMaterial_k0h4l")
-layout_mode = 2
-script = ExtResource("10_uvuj6")
-syncControlSize = true
-
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" unique_id=910755900]
-use_parent_material = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
-theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
-max_value = 1.0
-value = 0.51
-show_percentage = false
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" unique_id=1417347812]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = -1
-theme_override_constants/margin_right = 5
-
-[node name="Label" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" unique_id=2085964725]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 12
-text = "3,999,999/4,000,000"
-
-[node name="Label2" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" unique_id=1588722266]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 12
-text = "99%"
-horizontal_alignment = 2
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" unique_id=443929598]
-layout_mode = 2
-
 [node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer" unique_id=480636164 node_paths=PackedStringArray("progressText", "progressBar", "progressPercent", "refreshTime")]
 layout_mode = 2
 theme_override_constants/separation = 1
@@ -606,6 +478,59 @@ text = "99%"
 horizontal_alignment = 2
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3" unique_id=955065926]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer" unique_id=1901097064]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" unique_id=1953628484]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=380471006]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Playtime XP"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" unique_id=1538305157]
+material = SubResource("ShaderMaterial_k0h4l")
+layout_mode = 2
+script = ExtResource("10_uvuj6")
+syncControlSize = true
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" unique_id=910755900]
+use_parent_material = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_nh5vk")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4kbf4")
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" unique_id=1417347812]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" unique_id=2085964725]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "3,999,999"
+
+[node name="Label2" type="Label" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/MarginContainer" unique_id=1957218134]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 12
+text = "Uncapped"
+horizontal_alignment = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2" unique_id=443929598]
 visible = false
 layout_mode = 2
 
@@ -833,6 +758,6 @@ vertical_alignment = 1
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn" to="." method="UpdateProfiles"]
 [connection signal="value_changed" from="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer/ProgressBar" to="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
-[connection signal="value_changed" from="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 [connection signal="value_changed" from="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer/ProgressBar" to="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer3/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
+[connection signal="value_changed" from="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer/ProgressBar" to="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer2/MarginContainer" method="SetShaderFloat" binds= ["progress"]]
 [connection signal="value_changed" from="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer/ProgressBar" to="VBoxContainer/Body/XPContent/VBoxContainer/VBoxContainer4/MarginContainer" method="SetShaderFloat" binds= ["progress"]]

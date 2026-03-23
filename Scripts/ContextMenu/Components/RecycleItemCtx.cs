@@ -39,7 +39,10 @@ public partial class RecycleItemCtx : AbstractContextComponent
         if (item?.profile is null)
             return;
         menu.CloseMenu();
-        var toRecycle = await SimpleItemSelector.OpenSelector([item], SimpleItemSelector.RecycleConfig);
+        //var confirmRecycle = await GenericConfirmationWindow.ShowConfirmation($"Recycle {item.template?.DisplayName}?", "Recycle");
+        //if (confirmRecycle != true)
+        //    return;
+        var toRecycle = await SimpleItemSelector.OpenMultiSelector([item], SimpleItemSelector.RecycleConfig with { autoselectFilter = _ => true });
         if (toRecycle.Length == 0)
             return;
         var json = $$"""

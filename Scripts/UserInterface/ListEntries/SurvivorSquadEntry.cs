@@ -159,7 +159,7 @@ public partial class SurvivorSquadEntry : Control
         var fromItem = slot.slottedItem;
         var squadID = PegLegResourceManager.supplimentaryData.SynergyToSquadId[synergy];
 
-        var selectedItems = await SimpleItemSelector.OpenSelector(profile.GetItems("Worker", filter), SimpleItemSelector.DefaultConfig with
+        var selectedItem = await SimpleItemSelector.OpenSelector(profile.GetItems("Worker", filter), SimpleItemSelector.DefaultConfig with
         {
             titleText = "Select a Survivor",
             overrideSurvivorSquad = squadID,
@@ -168,17 +168,16 @@ public partial class SurvivorSquadEntry : Control
         });
 
         //occurs when cancelled
-        if (selectedItems is null)
+        if (selectedItem is null)
             return;
 
-        var toHandle = selectedItems.FirstOrDefault();
         JsonObject body = null;
-        if (toHandle?.profile is not null)
+        if (selectedItem?.profile is not null)
         {
             //set slotted survivor
             body = new()
             {
-                ["characterId"] = toHandle.uuid,
+                ["characterId"] = selectedItem.uuid,
                 ["squadId"] = squadID,
                 ["slotIndex"] = slotIndex
             };

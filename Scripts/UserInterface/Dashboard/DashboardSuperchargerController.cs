@@ -5,6 +5,8 @@ using System.Linq;
 public partial class DashboardSuperchargerController : Control
 {
     [Export]
+    Control content;
+    [Export]
     GameItemEntry entry;
     [Export]
     Control noSuperchargerMessage;
@@ -12,6 +14,8 @@ public partial class DashboardSuperchargerController : Control
     Control checkmark;
     [Export]
     Control loading;
+    [Export]
+    ProgressBar progressBar;
     [Export]
     bool onlyShowOnResetDay = false;
 
@@ -40,7 +44,7 @@ public partial class DashboardSuperchargerController : Control
                 return;
         }
         entry.ClearItem();
-        entry.Visible = false;
+        content.Visible = false;
         checkmark.Visible = false;
         loading.Visible = true;
         noSuperchargerMessage.Visible = false;
@@ -59,8 +63,13 @@ public partial class DashboardSuperchargerController : Control
 
         loading.Visible = false;
         checkmark.Visible = possibleQuest?.QuestComplete ?? false;
-        entry.Visible = possibleQuest is not null;
+        content.Visible = possibleQuest is not null;
         noSuperchargerMessage.Visible = possibleQuest is null;
         entry.SetItem(possibleQuest?.template?.GetVisibleQuestRewards()?.FirstOrDefault());
+        if (possibleQuest is not null && progressBar is not null)
+        {
+            var objective = possibleQuest.template["Objectives"][0].AsObject();
+            progressBar.Value = (possibleQuest.attributes[objective["BackendName"].ToString()]?.GetValue<int>() ?? 0) / (float)objective["Count"].GetValue<int>();
+        }
     }
 }

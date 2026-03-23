@@ -67,6 +67,7 @@ public partial class GameOfferEntry : Control
 
     public override void _ExitTree()
     {
+        ClearOffer();
         VisibilityChanged -= CheckForRefresh;
         GameAccount.ActiveAccountChanged -= MarkOfferDirty;
     }
@@ -202,6 +203,12 @@ public partial class GameOfferEntry : Control
     public void ClearOffer()
     {
         cts?.Cancel();
+
+        if (currentOffer is not null)
+        {
+            currentOffer.OnChanged -= MarkOfferDirty;
+            currentOffer.OnRemoved -= ClearOffer;
+        }
 
         currentOffer = null;
         grantedItem = null;

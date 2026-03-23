@@ -1,3 +1,4 @@
+using Amazon.Runtime.Internal.Transform;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,9 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
     {
         public bool allowCancel = true;
         public bool allowEmptySelection;
+        public bool quantitySelection;
         public Func<GameItem, bool> selectableFilter;
-        public Func<GameItem[], Task<bool>> confirmationTaskProvider;
+        public Func<KeyValuePair<GameItem, int>[], Task<bool>> confirmationTaskProvider;
     }
 
     public record MultiselectableConfig : BaseConfig
@@ -27,7 +29,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
     protected bool isCancelling;
     protected List<GameItem> items = [];
     protected List<GameItem> filteredItems = [];
-    protected List<GameItem> selectedItems = [];
+    protected Dictionary<GameItem, int> selectedItems = [];
     protected RecycleListContainer activeContainer;
 
     public static bool RecyclableFilter(GameItem item) =>
@@ -72,7 +74,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
     private bool multiselectMode;
 
-    protected async Task<GameItem[]> OpenSelectorInternal(IEnumerable<GameItem> itemOptions, T config = null)
+    protected async Task<KeyValuePair<GameItem, int>[]> OpenSelectorInternal(IEnumerable<GameItem> itemOptions, T config = null)
     {
         try
         {
@@ -118,9 +120,8 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
         if (supportsMultiselect && msConfig.multiselectMode)
         {
-            selectedItems = [..items.Where(CurrentConfig.selectableFilter)];
-            if (msConfig.autoselectFilter is not null)
-                selectedItems = [.. selectedItems.Where(msConfig.autoselectFilter)];
+            var filter = msConfig.autoselectFilter ?? CurrentConfig.selectableFilter;
+            selectedItems = items.Where(filter).ToDictionary(i => i, i => i.quantity);
         }
         else
             selectedItems = [];
@@ -138,11 +139,15 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
                 continue;
             var result = await CurrentConfig.confirmationTaskProvider([..selectedItems]);
             if (!result)
+            {
                 isSelecting = true;
+                if (!multiselectMode)
+                    selectedItems = [];
+            }
         }
     }
 
-    protected virtual GameItem[] GetResultItemsAndCleanup()
+    protected virtual KeyValuePair<GameItem, int>[] GetResultItemsAndCleanup()
     {
         selectedItems.Remove(GameItem.Empty);
         var toReturn = selectedItems.ToArray();
@@ -159,7 +164,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
     protected void SortItems()
     {
-        var presortedItems = items.OrderBy(item => item == GameItem.Empty ? 0 : 1).ThenBy(item => selectedItems.Contains(item) ? 0 : 1);
+        var presortedItems = items.OrderBy(item => item == GameItem.Empty ? 0 : 1).ThenBy(item => selectedItems.ContainsKey(item) ? 0 : 1);
         items = SortingFunction is null ? [..presortedItems] : [..SortingFunction(presortedItems)];
         FilterItems();
     }
@@ -176,11 +181,14 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
             return;
         var fromItems = filteredOnly ? filteredItems : items;
 
-        selectedItems = [..fromItems
+        KeyValuePair<GameItem, int>[] selectedKVPs = [
+            ..fromItems
             .Where(CurrentConfig.selectableFilter)
             .Where(msConfig.autoselectFilter)
-            .Union(selectedItems)
+            .ToDictionary(i=>i, i=>i.quantity),
+            ..selectedItems
         ];
+        selectedItems = selectedKVPs.ToDictionary();
         SelectionChanged();
         SortItems();
     }
@@ -205,7 +213,12 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
     }
 
     public bool IsSelectable(GameItem item) => CurrentConfig.selectableFilter.Try(item);
-    public bool IsSelected(GameItem item) => multiselectMode && selectedItems.Contains(item);
+    public bool IsSelected(GameItem item) => multiselectMode && selectedItems.ContainsKey(item);
+    public int GetSelectionQuantity(GameItem item) =>
+        multiselectMode &&
+        CurrentConfig.quantitySelection &&
+        selectedItems.TryGetValue(item, out var count) ?
+            count : 0;
     public virtual Color GetSelectableColor(GameItem item) => 
         IsSelectable(item) ? 
             (
@@ -216,24 +229,37 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
             Colors.Gray;
     public virtual Texture2D GetSelectableIcon(GameItem item) => null;
 
-    public void OnElementSelected(int index, string context)
+    public async void OnElementSelected(int index, string context)
     {
-        if (isSelecting && CurrentConfig.selectableFilter.Try(filteredItems[index]))
+        if (!isSelecting || !CurrentConfig.selectableFilter.Try(filteredItems[index]))
+            return;
+
+        var quantity = filteredItems[index].quantity;
+        if (CurrentConfig.quantitySelection)
         {
-            if (multiselectMode)
+            //show quantity selector menu
+        }
+        if (multiselectMode)
+        {
+            if (CurrentConfig.quantitySelection)
             {
-                if (selectedItems.Contains(filteredItems[index]))
+                if (quantity == 0)
                     selectedItems.Remove(filteredItems[index]);
-                else
-                    selectedItems.Add(filteredItems[index]);
-                SelectionChanged();
+                else if (!selectedItems.TryAdd(filteredItems[index], quantity))
+                    selectedItems[filteredItems[index]] = quantity;
             }
             else
             {
-                selectedItems.Clear();
-                selectedItems.Add(filteredItems[index]);
-                isSelecting = false;
+                if (!selectedItems.TryAdd(filteredItems[index], quantity))
+                    selectedItems.Remove(filteredItems[index]);
             }
+            SelectionChanged();
+        }
+        else
+        {
+            selectedItems.Clear();
+            selectedItems.Add(filteredItems[index], quantity);
+            isSelecting = false;
         }
     }
 

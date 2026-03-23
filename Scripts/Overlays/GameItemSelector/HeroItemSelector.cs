@@ -263,7 +263,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
     public static async Task<GameItem> OpenSelector(IEnumerable<GameItem> itemOptions, Config config = null)
     {
         var result = await instance.OpenSelectorInternal(itemOptions, config);
-        return result is null ? null : (result.FirstOrDefault() ?? GameItem.Empty);
+        return result is null ? null : (result.FirstOrDefault().Key ?? GameItem.Empty);
     }
 
     protected override void InitialiseSelector(IEnumerable<GameItem> itemOptions)
@@ -318,7 +318,9 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
             first = GameItem.Empty;
         if (first is null)
             return;
-        selectedItems = [first];
+        selectedItems ??= [];
+        selectedItems.Clear();
+        selectedItems.Add(first, first.quantity);
         ConfirmSelection();
     }
 
