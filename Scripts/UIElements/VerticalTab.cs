@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Linq;
 
 [Tool]
@@ -9,24 +8,24 @@ public partial class VerticalTab : Control
 	int margin = 10;
 	[Export]
 	Button triggerButton;
-    [Export]
-    MarginContainer marginContainer;
+	[Export]
+	MarginContainer marginContainer;
 
 	public override void _Ready()
-    {
-        if (!Engine.IsEditorHint())
-        {
-            triggerButton ??= FindChildren("*", "Button").FirstOrDefault() is Button b ? b : null;
-            marginContainer ??= FindChildren("*", "MarginContainer").FirstOrDefault() is MarginContainer m ? m : null;
-        }
+	{
+		if (!Engine.IsEditorHint())
+		{
+			triggerButton ??= FindChildren("*", "Button").FirstOrDefault() is Button b ? b : null;
+			marginContainer ??= FindChildren("*", "MarginContainer").FirstOrDefault() is MarginContainer m ? m : null;
+		}
 	}
 
-    public override void _EnterTree()
-    {
-        //if (triggerButton is not null)
-        //    triggerButton.Pressed += PressResponse;
-        triggerButton?.SafeConnect(Button.SignalName.Pressed, Callable.From(PressResponse));
-    }
+	public override void _EnterTree()
+	{
+		//if (triggerButton is not null)
+		//    triggerButton.Pressed += PressResponse;
+		triggerButton?.SafeConnect(Button.SignalName.Pressed, Callable.From(PressResponse));
+	}
 
 	VerticalTabContainer tabContainer;
 	int tabIndex;
@@ -36,74 +35,74 @@ public partial class VerticalTab : Control
 		tabIndex = newIndex;
 	}
 
-    bool visibilityLocked = false;
-    private void PressResponse()
-    {
-        if (!visibilityLocked)
-            tabContainer?.SetTabState(tabIndex);
-    }
-
-    Control pageNode;
-    public Control Page => pageNode;
-    public void SetPage(Control newPageNode)
+	bool visibilityLocked = false;
+	private void PressResponse()
 	{
-        if (Engine.IsEditorHint() && pageNode is not null)
-        {
+		if (!visibilityLocked)
+			tabContainer?.SetTabState(tabIndex);
+	}
 
-            //Renamed -= UpdatePageName;
-            //VisibilityChanged -= PressResponse;
-            pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
-            pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
-        }
-        pageNode = newPageNode;
-        UpdatePageName();
-        SetState(triggerButton?.ButtonPressed ?? false);
-        if (Engine.IsEditorHint() && pageNode is not null)
-        {
-            //Renamed += UpdatePageName;
-            //VisibilityChanged += PressResponse;
-            pageNode.SafeConnect(SignalName.Renamed, Callable.From(UpdatePageName));
-            pageNode.SafeConnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
-        }
-    }
+	Control pageNode;
+	public Control Page => pageNode;
+	public void SetPage(Control newPageNode)
+	{
+		if (Engine.IsEditorHint() && pageNode is not null)
+		{
 
-    private void UpdatePageName()
-    {
-        if (triggerButton is not null)
-            triggerButton.Text = pageNode?.Name ?? "";
-        Visible = pageNode?.IsInGroup("HideTab") == false;
-        Name = (pageNode?.Name ?? "Blank")+"Tab";
-    }
+			//Renamed -= UpdatePageName;
+			//VisibilityChanged -= PressResponse;
+			pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
+			pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
+		}
+		pageNode = newPageNode;
+		UpdatePageName();
+		SetState(triggerButton?.ButtonPressed ?? false);
+		if (Engine.IsEditorHint() && pageNode is not null)
+		{
+			//Renamed += UpdatePageName;
+			//VisibilityChanged += PressResponse;
+			pageNode.SafeConnect(SignalName.Renamed, Callable.From(UpdatePageName));
+			pageNode.SafeConnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
+		}
+	}
 
-    public void SetState(bool pressed)
-    {
-        if (marginContainer is not null)
-        {
-            marginContainer.AddThemeConstantOverride("margin_left", pressed ? 0 : margin);
-            marginContainer.AddThemeConstantOverride("margin_right", pressed ? margin : 0);
-        }
-		if(triggerButton is not null)
+	private void UpdatePageName()
+	{
+		if (triggerButton is not null)
+			triggerButton.Text = pageNode?.Name ?? "";
+		Visible = pageNode?.IsInGroup("HideTab") == false;
+		Name = (pageNode?.Name ?? "Blank") + "Tab";
+	}
+
+	public void SetState(bool pressed)
+	{
+		if (marginContainer is not null)
+		{
+			marginContainer.AddThemeConstantOverride("margin_left", pressed ? 0 : margin);
+			marginContainer.AddThemeConstantOverride("margin_right", pressed ? margin : 0);
+		}
+		if (triggerButton is not null)
 			triggerButton.ButtonPressed = pressed;
-		if(pageNode is not null && pageNode.IsInsideTree())
-        {
-            visibilityLocked = true;
-            pageNode.Visible = pressed;
-            visibilityLocked = false;
-        }
-    }
+		if (pageNode is not null && pageNode.IsInsideTree())
+		{
+			visibilityLocked = true;
+			pageNode.Visible = pressed;
+			visibilityLocked = false;
+		}
+	}
 
-    public override void _ExitTree()
-    {
-        if (Engine.IsEditorHint() && pageNode is not null && pageNode.IsInsideTree())
-        {
-            //Renamed -= UpdatePageName;
-            //VisibilityChanged -= PressResponse;
-            pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
-            pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
-        }
-        //if (triggerButton is not null)
-        //    triggerButton.Pressed -= PressResponse;
-        if (triggerButton?.IsInsideTree() == true)
-            triggerButton.SafeDisconnect(Button.SignalName.Pressed, Callable.From(PressResponse));
-    }
+	public override void _ExitTree()
+	{
+		if (Engine.IsEditorHint() && pageNode is not null && pageNode.IsInsideTree())
+		{
+			//Renamed -= UpdatePageName;
+			//VisibilityChanged -= PressResponse;
+			pageNode.SafeDisconnect(SignalName.Renamed, Callable.From(UpdatePageName));
+			pageNode.SafeDisconnect(SignalName.VisibilityChanged, Callable.From(PressResponse));
+		}
+		//if (triggerButton is not null)
+		//    triggerButton.Pressed -= PressResponse;
+		if (triggerButton?.IsInsideTree() == true)
+			triggerButton.SafeDisconnect(Button.SignalName.Pressed, Callable.From(PressResponse));
+	}
 }

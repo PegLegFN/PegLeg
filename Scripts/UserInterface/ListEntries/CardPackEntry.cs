@@ -4,156 +4,156 @@ using System.Text.Json.Nodes;
 
 public partial class CardPackEntry : GameItemEntry
 {
-    [Signal]
-    public delegate void LlamaPressedEventHandler(string itemId);
-    [Signal]
-    public delegate void SimpleModeEventHandler(bool simple);
+	[Signal]
+	public delegate void LlamaPressedEventHandler(string itemId);
+	[Signal]
+	public delegate void SimpleModeEventHandler(bool simple);
 
-    [Signal]
-    public delegate void Color1ChangedEventHandler(Color color);
-    [Signal]
-    public delegate void Color2ChangedEventHandler(Color color);
-    [Signal]
-    public delegate void Color3ChangedEventHandler(Color color);
-    [Signal]
-    public delegate void GradientChangedEventHandler(Gradient gradient);
+	[Signal]
+	public delegate void Color1ChangedEventHandler(Color color);
+	[Signal]
+	public delegate void Color2ChangedEventHandler(Color color);
+	[Signal]
+	public delegate void Color3ChangedEventHandler(Color color);
+	[Signal]
+	public delegate void GradientChangedEventHandler(Gradient gradient);
 
-    [Export]
-    bool includeAmountInName;
-    //[Export]
-    //bool debug = false;
+	[Export]
+	bool includeAmountInName;
+	//[Export]
+	//bool debug = false;
 
-    const string defaultPreviewImage = "PinataStandardPack";
-    static JsonObject llamaColorData;
+	const string defaultPreviewImage = "PinataStandardPack";
+	static JsonObject llamaColorData;
 
-    Color[] currentLlamaColors;
-    public Gradient currentLlamaGradient { get; private set; }
+	Color[] currentLlamaColors;
+	public Gradient currentLlamaGradient { get; private set; }
 
-    protected override void UpdateItem(GameItem item)
-    {
-        if (!IsInstanceValid(this) || !IsInsideTree())
-            return;
-        if (item is null)
-        {
-            ClearItem();
-            return;
-        }
+	protected override void UpdateItem(GameItem item)
+	{
+		if (!IsInstanceValid(this) || !IsInsideTree())
+			return;
+		if (item is null)
+		{
+			ClearItem();
+			return;
+		}
 
-        if (item.template?.Type != "CardPack")
-        {
-            GD.Print("not a cardpack");
-            base.UpdateItem(item);
-            var basisColor = item.template?.RarityColor ?? missingRarityColor;
-            SetColours([
-                basisColor,
-                basisColor*1.05f,
-                basisColor*1.1f,
-                basisColor*1.15f,
-            ]);
-            return;
-        }
-        displayItem = item;
+		if (item.template?.Type != "CardPack")
+		{
+			GD.Print("not a cardpack");
+			base.UpdateItem(item);
+			var basisColor = item.template?.RarityColor ?? missingRarityColor;
+			SetColours([
+				basisColor,
+				basisColor*1.05f,
+				basisColor*1.1f,
+				basisColor*1.15f,
+			]);
+			return;
+		}
+		displayItem = item;
 
-        string name = item.template.DisplayName;
-        int amount = item.customData["stackQuantity"]?.GetValue<int>() ?? item.quantity;
-        int shopAmount = item.customData["shopQuantity"]?.GetValue<int>() ?? amount;
-        string nameWithAmount = amount >= 0 ? $"{name} ({shopAmount} left)" : name;
-        string description = item.template.Description;
+		string name = item.template.DisplayName;
+		int amount = item.customData["stackQuantity"]?.GetValue<int>() ?? item.quantity;
+		int shopAmount = item.customData["shopQuantity"]?.GetValue<int>() ?? amount;
+		string nameWithAmount = amount >= 0 ? $"{name} ({shopAmount} left)" : name;
+		string description = item.template.Description;
 
-        //EmitSignalSimpleMode(OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true));
-        EmitSignalNameChanged((includeAmountInName && shopAmount >= 0) ? nameWithAmount : name);
-        EmitSignalDescriptionChanged(description);
-        EmitSignalNotificationChanged(!item.IsSeen);
+		//EmitSignalSimpleMode(OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true));
+		EmitSignalNameChanged((includeAmountInName && shopAmount >= 0) ? nameWithAmount : name);
+		EmitSignalDescriptionChanged(description);
+		EmitSignalNotificationChanged(!item.IsSeen);
 
-        string amountText = amount.ToString();
-        if (addXToAmount)
-            amountText = "x" + amountText;
-        if (amount <= (showSingleItemAmount ? 0 : 1))
-            amountText = null;
-        EmitSignal(SignalName.AmountChanged, amountText ?? null);
-
-
-        int llamaTier = item.customData?["llamaTier"]?.GetValue<int>() ?? 0;
-        if (item.template.Rarity == "Legendary")
-            llamaTier = 2;//force gold tier for legendary rarity llamas
-        string llamaPinataName =
-            (item.template.TryGetTexturePath(out var imagePath) ? imagePath : null)
-            ?.ToString().Split("\\")[^1];
-        if (llamaPinataName?.StartsWith(defaultPreviewImage) ?? false)
-        {
-            llamaPinataName = llamaTier switch
-            {
-                2 => "Gold",
-                1 => "Silver",
-                _ => "Standard"
-            };
-        }
-
-        Color? rarityColor = null;
-        if (item.attributes?.ContainsKey("options") ?? false)
-            rarityColor = item.template.RarityColor;
-
-        llamaColorData ??= PegLegResourceManager.LoadResourceObj("llamaColors.json");
-        JsonArray colorData = llamaColorData?.FirstOrDefault(kvp => llamaPinataName?.StartsWith(kvp.Key) ?? false).Value?.AsArray();
-
-        SetColours([
-            rarityColor ?? Color.FromString(colorData?[0]?.ToString() ?? "", new("#0073ffff")),
-            Color.FromString(colorData?[1]?.ToString() ?? "", new("#e600c3e3")),
-            Color.FromString(colorData?[2]?.ToString() ?? "", new("#aa00ffd4")),
-            Color.FromString(colorData?[3]?.ToString() ?? "", new("#00eaff8f"))
-        ]);
+		string amountText = amount.ToString();
+		if (addXToAmount)
+			amountText = "x" + amountText;
+		if (amount <= (showSingleItemAmount ? 0 : 1))
+			amountText = null;
+		EmitSignal(SignalName.AmountChanged, amountText ?? null);
 
 
-        EmitSignalTooltipChanged(
-            CustomTooltip.GenerateSimpleTooltip(
-                name,
-                amountText,
-                [description],
-                currentLlamaColors[0].ToHtml()
-            )
-        );
+		int llamaTier = item.customData?["llamaTier"]?.GetValue<int>() ?? 0;
+		if (item.template.Rarity == "Legendary")
+			llamaTier = 2;//force gold tier for legendary rarity llamas
+		string llamaPinataName =
+			(item.template.TryGetTexturePath(out var imagePath) ? imagePath : null)
+			?.ToString().Split("\\")[^1];
+		if (llamaPinataName?.StartsWith(defaultPreviewImage) ?? false)
+		{
+			llamaPinataName = llamaTier switch
+			{
+				2 => "Gold",
+				1 => "Silver",
+				_ => "Standard"
+			};
+		}
 
-        //var packIcon = item.GetTexture(FnItemTextureType.PackImage);
-        //if (!llamaPinataName.Contains("Pinata") || (name?.Contains("Mini") ?? false))
-        //{
-        //    GD.Print(llamaPinataName);
-        //    packIcon = null;
-        //}
+		Color? rarityColor = null;
+		if (item.attributes?.ContainsKey("options") ?? false)
+			rarityColor = item.template.RarityColor;
 
-        EmitSignalIconChanged(item.GetTexture());
-        EmitSignalSubtypeIconChanged(item.GetTexture(FnItemTextureType.PackImage));
-    }
+		llamaColorData ??= PegLegResourceManager.LoadResourceObj("llamaColors.json");
+		JsonArray colorData = llamaColorData?.FirstOrDefault(kvp => llamaPinataName?.StartsWith(kvp.Key) ?? false).Value?.AsArray();
 
-    void SetColours(Color[] colors)
-    {
-        currentLlamaColors = colors;
-        currentLlamaGradient ??= new()
-        {
-            Offsets = [0, 0.25f, 0.5f, 0.75f],
-            InterpolationMode = Gradient.InterpolationModeEnum.Constant,
-        };
-        currentLlamaGradient.Colors = currentLlamaColors;
+		SetColours([
+			rarityColor ?? Color.FromString(colorData?[0]?.ToString() ?? "", new("#0073ffff")),
+			Color.FromString(colorData?[1]?.ToString() ?? "", new("#e600c3e3")),
+			Color.FromString(colorData?[2]?.ToString() ?? "", new("#aa00ffd4")),
+			Color.FromString(colorData?[3]?.ToString() ?? "", new("#00eaff8f"))
+		]);
 
-        EmitSignalRarityChanged(currentLlamaColors[0]);
-        EmitSignal(SignalName.Color1Changed, currentLlamaColors[1]);
-        EmitSignal(SignalName.Color2Changed, currentLlamaColors[2]);
-        EmitSignal(SignalName.Color3Changed, currentLlamaColors[3]);
-        EmitSignal(SignalName.GradientChanged, currentLlamaGradient);
-    }
 
-    public override void ClearItem(Texture2D clearTexture)
-    {
-        base.ClearItem(clearTexture);
-        EmitSignal(SignalName.NameChanged, "Select a Llama");
-        EmitSignal(SignalName.IconChanged, GameItem.llamaTierIcons[0]);
-        EmitSignal(SignalName.SubtypeIconChanged, PegLegResourceManager.defaultIcon);
-    }
+		EmitSignalTooltipChanged(
+			CustomTooltip.GenerateSimpleTooltip(
+				name,
+				amountText,
+				[description],
+				currentLlamaColors[0].ToHtml()
+			)
+		);
 
-    public override void EmitPressedSignal()
-    {
-        if (selectionGraphics is not null)
-            selectionGraphics.ButtonPressed = true;
-        if (currentItem?.uuid is not null)
-            EmitSignal(SignalName.LlamaPressed, currentItem.uuid);
-    }
+		//var packIcon = item.GetTexture(FnItemTextureType.PackImage);
+		//if (!llamaPinataName.Contains("Pinata") || (name?.Contains("Mini") ?? false))
+		//{
+		//    GD.Print(llamaPinataName);
+		//    packIcon = null;
+		//}
+
+		EmitSignalIconChanged(item.GetTexture());
+		EmitSignalSubtypeIconChanged(item.GetTexture(FnItemTextureType.PackImage));
+	}
+
+	void SetColours(Color[] colors)
+	{
+		currentLlamaColors = colors;
+		currentLlamaGradient ??= new()
+		{
+			Offsets = [0, 0.25f, 0.5f, 0.75f],
+			InterpolationMode = Gradient.InterpolationModeEnum.Constant,
+		};
+		currentLlamaGradient.Colors = currentLlamaColors;
+
+		EmitSignalRarityChanged(currentLlamaColors[0]);
+		EmitSignal(SignalName.Color1Changed, currentLlamaColors[1]);
+		EmitSignal(SignalName.Color2Changed, currentLlamaColors[2]);
+		EmitSignal(SignalName.Color3Changed, currentLlamaColors[3]);
+		EmitSignal(SignalName.GradientChanged, currentLlamaGradient);
+	}
+
+	public override void ClearItem(Texture2D clearTexture)
+	{
+		base.ClearItem(clearTexture);
+		EmitSignal(SignalName.NameChanged, "Select a Llama");
+		EmitSignal(SignalName.IconChanged, GameItem.llamaTierIcons[0]);
+		EmitSignal(SignalName.SubtypeIconChanged, PegLegResourceManager.defaultIcon);
+	}
+
+	public override void EmitPressedSignal()
+	{
+		if (selectionGraphics is not null)
+			selectionGraphics.ButtonPressed = true;
+		if (currentItem?.uuid is not null)
+			EmitSignal(SignalName.LlamaPressed, currentItem.uuid);
+	}
 }
