@@ -1,95 +1,94 @@
 using Godot;
-using System;
 using System.Text.Json.Nodes;
 
 public partial class ConfigToggleHook : Control
 {
-    [Signal]
-    public delegate void ConfigValueChangedEventHandler(bool newValue);
-    [Signal]
-    public delegate void OnTrueEventHandler();
-    [Signal]
-    public delegate void OnFalseEventHandler();
+	[Signal]
+	public delegate void ConfigValueChangedEventHandler(bool newValue);
+	[Signal]
+	public delegate void OnTrueEventHandler();
+	[Signal]
+	public delegate void OnFalseEventHandler();
 
-    [Export]
-    string section;
+	[Export]
+	string section;
 
-    [Export]
-    string key;
+	[Export]
+	string key;
 
-    [Export]
-    bool defaultValue = false;
+	[Export]
+	bool defaultValue = false;
 
-    [Export]
-    bool tryBind = true;
-    [Export]
-    bool logChanges = false;
-    [Export]
-    bool disabled = false;
+	[Export]
+	bool tryBind = true;
+	[Export]
+	bool logChanges = false;
+	[Export]
+	bool disabled = false;
 
-    bool valueIsChanging;
+	bool valueIsChanging;
 
-    public void UpdateTargetSetting(string section, string key)
-    {
-        this.section = section ?? this.section;
-        this.key = key ?? this.key;
+	public void UpdateTargetSetting(string section, string key)
+	{
+		this.section = section ?? this.section;
+		this.key = key ?? this.key;
 
-        valueIsChanging = true;
-        Emit(AppConfig.Get(this.section, this.key, defaultValue));
-        valueIsChanging = false;
-    }
+		valueIsChanging = true;
+		Emit(AppConfig.Get(this.section, this.key, defaultValue));
+		valueIsChanging = false;
+	}
 
-    public override void _Ready()
-    {
-        if (disabled)
-            return;
+	public override void _Ready()
+	{
+		if (disabled)
+			return;
 
-        if (tryBind)
-        {
-            if (HasSignal("toggled"))
-            {
-                Connect("toggled", Callable.From<bool>(SetValue));
-            }
-            if ((bool?)Get("button_pressed") is bool)
-            {
-                ConfigValueChanged += newVal => Set("button_pressed", newVal);
-            }
-        }
+		if (tryBind)
+		{
+			if (HasSignal("toggled"))
+			{
+				Connect("toggled", Callable.From<bool>(SetValue));
+			}
+			if ((bool?)Get("button_pressed") is bool)
+			{
+				ConfigValueChanged += newVal => Set("button_pressed", newVal);
+			}
+		}
 
-        AppConfig.OnConfigChanged += UpdateValue;
-        valueIsChanging = true;
-        Emit(AppConfig.Get(section, key, defaultValue));
-        valueIsChanging = false;
-    }
+		AppConfig.OnConfigChanged += UpdateValue;
+		valueIsChanging = true;
+		Emit(AppConfig.Get(section, key, defaultValue));
+		valueIsChanging = false;
+	}
 
-    private void UpdateValue(string section, string key, JsonValue val)
-    {
-        if (section != this.section || key != this.key)
-            return;
-        valueIsChanging = true;
-        Emit(val.GetValue<bool>());
-        valueIsChanging = false;
-    }
+	private void UpdateValue(string section, string key, JsonValue val)
+	{
+		if (section != this.section || key != this.key)
+			return;
+		valueIsChanging = true;
+		Emit(val.GetValue<bool>());
+		valueIsChanging = false;
+	}
 
-    private void Emit(bool newVal)
-    {
-        if (newVal)
-            EmitSignalOnTrue();
-        else
-            EmitSignalOnFalse();
-        EmitSignalConfigValueChanged(newVal);
-        if (logChanges)
-            GD.Print($"{section}:{key} = {newVal}");
-    }
+	private void Emit(bool newVal)
+	{
+		if (newVal)
+			EmitSignalOnTrue();
+		else
+			EmitSignalOnFalse();
+		EmitSignalConfigValueChanged(newVal);
+		if (logChanges)
+			GD.Print($"{section}:{key} = {newVal}");
+	}
 
-    public void SetValue(bool newValue)
-    {
-        if (!valueIsChanging)
-            AppConfig.Set(section, key, newValue);
-    }
+	public void SetValue(bool newValue)
+	{
+		if (!valueIsChanging)
+			AppConfig.Set(section, key, newValue);
+	}
 
-    public override void _ExitTree()
-    {
-        AppConfig.OnConfigChanged -= UpdateValue;
-    }
+	public override void _ExitTree()
+	{
+		AppConfig.OnConfigChanged -= UpdateValue;
+	}
 }

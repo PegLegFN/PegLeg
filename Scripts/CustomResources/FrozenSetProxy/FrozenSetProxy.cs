@@ -1,11 +1,10 @@
 using Godot;
 using System.Collections.Frozen;
-using System.Collections.Generic;
 
-public abstract partial class FrozenSetProxy<[MustBeVariant]T> : Resource
+public abstract partial class FrozenSetProxy<[MustBeVariant] T> : Resource
 {
-    protected abstract T[] SetContents { get; }
-    FrozenSet<T> _fSet;
-    public FrozenSet<T> FSet => _fSet ??= (SetContents ?? []).ToFrozenSet();
-    public bool Contains(T val) => FSet.Contains(val);
+	protected abstract T[] SetContents { get; }
+	FrozenSet<T> _fSet;
+	public FrozenSet<T> FSet => _fSet ??= (SetContents ?? []).ToFrozenSet();
+	public bool Contains(T val) => FSet.Contains(val);
 }
