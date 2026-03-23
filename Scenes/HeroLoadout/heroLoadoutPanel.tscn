@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://cbwhly7mce0o5"]
+[gd_scene format=3 uid="uid://cbwhly7mce0o5"]
 
 [ext_resource type="Script" uid="uid://b1oq60dmtd83s" path="res://Scripts/HeroLoadout/HeroLoadoutEntry.cs" id="1_c8eoj"]
 [ext_resource type="PackedScene" uid="uid://3ic5fe2i0n0w" path="res://Scenes/HeroLoadout/commander.tscn" id="1_u4s5x"]
 [ext_resource type="PackedScene" uid="uid://ewoytphqxrj1" path="res://Scenes/HeroLoadout/team_perk.tscn" id="2_12pqf"]
 [ext_resource type="PackedScene" uid="uid://cnerbcrevhc7w" path="res://Scenes/HeroLoadout/support_hero.tscn" id="3_npbx8"]
 [ext_resource type="PackedScene" uid="uid://dkjv8n3gxf51c" path="res://Scenes/HeroLoadout/gadget.tscn" id="4_8hd00"]
+[ext_resource type="PackedScene" uid="uid://p1itgg61rypj" path="res://Scenes/HeroLoadout/loadout_defender.tscn" id="6_hd1yr"]
 
-[node name="HeroLoadoutPanel" type="MarginContainer" node_paths=PackedStringArray("commander", "teamPerk", "support", "gadgets")]
+[node name="HeroLoadoutPanel" type="MarginContainer" unique_id=2013622918 node_paths=PackedStringArray("commander", "teamPerk", "support", "gadgets")]
 custom_minimum_size = Vector2(360, 0)
 offset_right = 360.0
 offset_bottom = 382.0
@@ -16,54 +17,74 @@ teamPerk = NodePath("VBoxContainer/TeamPerk")
 support = [NodePath("VBoxContainer/SupportHero"), NodePath("VBoxContainer/SupportHero2"), NodePath("VBoxContainer/SupportHero3"), NodePath("VBoxContainer/SupportHero4"), NodePath("VBoxContainer/SupportHero5")]
 gadgets = [NodePath("VBoxContainer/HBoxContainer/Gadget"), NodePath("VBoxContainer/HBoxContainer/Gadget2")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=527948275]
 layout_mode = 2
 alignment = 1
 
-[node name="CommanderHeader" type="Label" parent="VBoxContainer"]
+[node name="CommanderHeader" type="Label" parent="VBoxContainer" unique_id=814467104]
 layout_mode = 2
 text = "Commander"
 
-[node name="Commander" parent="VBoxContainer" instance=ExtResource("1_u4s5x")]
+[node name="Commander" parent="VBoxContainer" unique_id=520792862 instance=ExtResource("1_u4s5x")]
 layout_mode = 2
 
-[node name="TeamPerkHeader" type="Label" parent="VBoxContainer"]
+[node name="TeamPerkHeader" type="Label" parent="VBoxContainer" unique_id=153462857]
 layout_mode = 2
 text = "Team Perk"
 
-[node name="TeamPerk" parent="VBoxContainer" instance=ExtResource("2_12pqf")]
+[node name="TeamPerk" parent="VBoxContainer" unique_id=305477515 instance=ExtResource("2_12pqf")]
 layout_mode = 2
 
-[node name="SupportHeader" type="Label" parent="VBoxContainer"]
+[node name="SupportHeader" type="Label" parent="VBoxContainer" unique_id=1075279271]
 layout_mode = 2
 text = "Support"
 
-[node name="SupportHero" parent="VBoxContainer" instance=ExtResource("3_npbx8")]
+[node name="SupportHero" parent="VBoxContainer" unique_id=2061752950 instance=ExtResource("3_npbx8")]
 layout_mode = 2
 
-[node name="SupportHero2" parent="VBoxContainer" instance=ExtResource("3_npbx8")]
+[node name="SupportHero2" parent="VBoxContainer" unique_id=96747310 instance=ExtResource("3_npbx8")]
 layout_mode = 2
 
-[node name="SupportHero3" parent="VBoxContainer" instance=ExtResource("3_npbx8")]
+[node name="SupportHero3" parent="VBoxContainer" unique_id=691620182 instance=ExtResource("3_npbx8")]
 layout_mode = 2
 
-[node name="SupportHero4" parent="VBoxContainer" instance=ExtResource("3_npbx8")]
+[node name="SupportHero4" parent="VBoxContainer" unique_id=1932199706 instance=ExtResource("3_npbx8")]
 layout_mode = 2
 
-[node name="SupportHero5" parent="VBoxContainer" instance=ExtResource("3_npbx8")]
+[node name="SupportHero5" parent="VBoxContainer" unique_id=1616428472 instance=ExtResource("3_npbx8")]
 layout_mode = 2
 
-[node name="GadgetsHeader" type="Label" parent="VBoxContainer"]
+[node name="GadgetsHeader" type="Label" parent="VBoxContainer" unique_id=357405060]
 layout_mode = 2
 text = "Gadgets"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1828176719]
 layout_mode = 2
 
-[node name="Gadget" parent="VBoxContainer/HBoxContainer" instance=ExtResource("4_8hd00")]
+[node name="Gadget" parent="VBoxContainer/HBoxContainer" unique_id=1549903098 instance=ExtResource("4_8hd00")]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Gadget2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("4_8hd00")]
+[node name="Gadget2" parent="VBoxContainer/HBoxContainer" unique_id=1881220449 instance=ExtResource("4_8hd00")]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1687865294]
+visible = false
+layout_mode = 2
+
+[node name="GadgetsHeader2" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=735525977]
+layout_mode = 2
+text = "Defenders"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=1716359730]
+layout_mode = 2
+
+[node name="LoadoutDefender" parent="VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=2040792206 instance=ExtResource("6_hd1yr")]
+layout_mode = 2
+
+[node name="LoadoutDefender2" parent="VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1249748027 instance=ExtResource("6_hd1yr")]
+layout_mode = 2
+
+[node name="LoadoutDefender3" parent="VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=3903986 instance=ExtResource("6_hd1yr")]
+layout_mode = 2

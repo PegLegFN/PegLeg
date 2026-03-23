@@ -536,7 +536,7 @@ public partial class GameMission
 		{
 			if (!account.isOwned)
 				return true;
-			var pl = ventures ? account.VentureFortStats.PowerLevel : account.RatingData.PowerLevel;
+			var pl = ventures ? account.VentureRatingData.PowerLevel : account.RatingData.PowerLevel;
 			if (pl < personalPowerRating)
 				return false;
 			if (maxPersonalPowerRating > 0 && pl > maxPersonalPowerRating)
@@ -944,7 +944,7 @@ public partial class GameMission
 				if (fPack is not null)
 				{
 					var fReward = fPack.CreateInstance();
-					fReward.GetSearchTags();
+					fReward.GetSearchTags(extraTags: unknown ? [fid] : []);
 					alertRewardItemList.Add(fReward);
 				}
 				if (unknown && missionData is not null)

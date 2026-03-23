@@ -1,6 +1,8 @@
 using Godot;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using static VirtualTabBar;
 
 public partial class BRRivalryController : Control
 {
@@ -29,19 +31,27 @@ public partial class BRRivalryController : Control
 
 	public override void _Ready()
 	{
-		RefreshTimerController.OnHourChanged += UpdateProgress;
+		RefreshTimerController.OnMinuteChanged += UpdateProgress;
 		UpdateProgress();
 	}
 
 	public override void _ExitTree()
 	{
-		RefreshTimerController.OnHourChanged -= UpdateProgress;
+		RefreshTimerController.OnMinuteChanged -= UpdateProgress;
 	}
 
+	bool hasData = false;
+
+	static SemaphoreSlim semaphore = new(1);
 	async void UpdateProgress()
 	{
-		rootControl.Visible = false;
-		loadingIcon.Visible = true;
+		using var _ = await semaphore.AwaitToken();
+
+		if (!hasData)
+		{
+			rootControl.Visible = false;
+			loadingIcon.Visible = true;
+		}
 
 		var eventResponse = await WebHelpers.MakeRequest("https://mesh-public-service-live.ol.epicgames.com/mesh/Fortnite/Fortnite.Hera_Terrain.51188288/metadata").Send();
 		if (await eventResponse.CheckForError())
@@ -52,6 +62,7 @@ public partial class BRRivalryController : Control
 		var eventJson = await eventResponse.ReadJson();
 		var eventData = eventJson.Deserialize<EventData>(Helpers.JsonOptions.Fields);
 
+		hasData = true;
 		rootControl.Visible = true;
 		loadingIcon.Visible = false;
 

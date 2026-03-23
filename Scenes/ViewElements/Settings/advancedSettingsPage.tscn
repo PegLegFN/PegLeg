@@ -8,17 +8,16 @@
 [node name="AdvancedPage" type="VBoxContainer" unique_id=172606478]
 theme_override_constants/separation = 6
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1616947118]
+[node name="AutoRecycle" type="VBoxContainer" parent="." unique_id=1616947118]
 layout_mode = 2
-theme_override_constants/separation = 0
 
-[node name="AutoRecycleParamsLabel" type="Label" parent="VBoxContainer" unique_id=410167744]
+[node name="AutoRecycleLabel" type="Label" parent="AutoRecycle" unique_id=410167744]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/line_spacing = 0
 text = "Auto-Recycle Parameters"
 
-[node name="AutoRecycleParams" type="TextEdit" parent="VBoxContainer" unique_id=2132595796]
+[node name="AutoRecycleParams" type="TextEdit" parent="AutoRecycle" unique_id=2132595796]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Common | Uncommon | Rare | 
@@ -32,6 +31,42 @@ script = ExtResource("1_32dbh")
 section = "automation"
 key = "recycle_filter"
 defaultValue = "Common | Uncommon | Rare"
+
+[node name="AutoDismantle" type="VBoxContainer" parent="." unique_id=1385807091]
+visible = false
+layout_mode = 2
+
+[node name="AutoDismantleLabel" type="Label" parent="AutoDismantle" unique_id=1260443878]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Auto-Dismantle Parameters"
+
+[node name="AutoRecycleParams" type="TextEdit" parent="AutoDismantle" unique_id=641078251]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "!\"Trap\" | quantity=..3 
+Common | Uncommon | Rare"
+placeholder_text = "eg: !\"Trap\" | quantity=..3 
+Common | Uncommon"
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("1_32dbh")
+section = "automation"
+key = "dismantle_filter"
+defaultValue = "Common | Uncommon | Rare"
+
+[node name="MissionAutoDismantle" type="CheckBox" parent="AutoDismantle" unique_id=1827642513]
+layout_direction = 3
+layout_mode = 2
+tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
+text = "Auto Dismantle every 10 mins"
+alignment = 2
+script = ExtResource("2_ktmhl")
+section = "advanced"
+key = "auto_dismantle_on_timer"
 
 [node name="Offset" type="CheckBox" parent="." unique_id=942822940]
 layout_direction = 3
@@ -168,6 +203,7 @@ script = ExtResource("2_ktmhl")
 section = "advanced"
 key = "beastmode"
 
+[connection signal="ConfigValueChanged" from="AutoDismantle/MissionAutoDismantle" to="HBoxContainer" method="set_visible"]
 [connection signal="ConfigValueChanged" from="AutoRestartToggle" to="HBoxContainer" method="set_visible"]
 [connection signal="AppliedChanged" from="TimeTravel/HSlider" to="TimeTravel/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="TimeTravel/HSlider" to="TimeTravel/HSlider" method="SetValue"]

@@ -256,13 +256,14 @@ public class GameItem
 	}
 
 	JsonArray _searchTags;
-	public JsonArray GetSearchTags(bool assumeUncommon = true)
+	public JsonArray GetSearchTags(bool assumeUncommon = true, string[] extraTags = null)
 	{
 		if (_searchTags is not null)
 			return _searchTags;
+		extraTags ??= [];
 		if (zcpEquivelent is not null)
 		{
-			_searchTags = zcpEquivelent.GetSearchTags(assumeUncommon);
+			_searchTags = zcpEquivelent.GetSearchTags(assumeUncommon, extraTags);
 			_searchTags.Add("Bundle");
 			return _searchTags;
 		}
@@ -277,6 +278,26 @@ public class GameItem
 			_searchTags.Add(ParseSurvivorAttribute(rawSetBonus));
 		if (attributes?["quest_state"]?.ToString() is string questState)
 			_searchTags.Add(questState);
+		if (attributes?["itemsource"]?.ToString() is string itemSources)
+		{
+			var allSources = itemSources.Split(",");
+			foreach (var source in allSources)
+			{
+				string pickupTag = itemSources switch
+				{
+					"EFortPickupSourceTypeFlag::Container" => "Container Loot",
+					"EFortPickupSourceTypeFlag::Tossed: EFortPickupSpawnSource::TossedByPlayer" => "Dropped by Player",
+					"EFortPickupSourceTypeFlag::AI" => "Dropped by Creature",
+					_ => null
+				};
+				if (pickupTag is not null)
+					_searchTags.Add(pickupTag);
+			}
+		}
+		foreach (var extra in extraTags)
+		{
+			_searchTags.Add(extra);
+		}
 		return _searchTags;
 	}
 

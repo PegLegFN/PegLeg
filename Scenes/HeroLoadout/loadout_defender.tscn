@@ -1,0 +1,230 @@
+[gd_scene format=3 uid="uid://p1itgg61rypj"]
+
+[ext_resource type="Shader" uid="uid://l02ho3o5c4rd" path="res://Shaders/HeroLoadoutBGPulse.gdshader" id="2_25jjo"]
+[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_bv1uj"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_3tir6"]
+[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="5_63ci2"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="6_0jkfn"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="7_o1l34"]
+[ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="8_w2s0p"]
+[ext_resource type="Texture2D" uid="uid://mv7ibkfn58qo" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Defenders-Defender-Pistol-L.png" id="10_rggsi"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="10_ywqut"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="12_fhgs4"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="13_7nhti"]
+[ext_resource type="Texture2D" uid="uid://bimg0dt1ksn23" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-Pistol-CARD.png" id="13_vex60"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="15_23wao"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="16_sxfjf"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="17_6f7kv"]
+[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="18_n65nb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vpt60"]
+resource_local_to_scene = true
+resource_name = "HeroLoadoutBGPulse"
+shader = ExtResource("2_25jjo")
+shader_parameter/enabled = false
+shader_parameter/offset = 0.0
+shader_parameter/scale = 0.5
+shader_parameter/period = 1.25
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6iioa"]
+resource_local_to_scene = true
+shader = ExtResource("10_ywqut")
+shader_parameter/ControlSize = Vector2(260, 27)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="Gradient" id="Gradient_qs3o8"]
+offsets = PackedFloat32Array(0.153846, 1)
+colors = PackedColorArray(0.982343, 0.982342, 0.982342, 1, 0.529066, 0.529067, 0.529067, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a4oe6"]
+gradient = SubResource("Gradient_qs3o8")
+height = 16
+fill_to = Vector2(0.9, 0.1)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpin5"]
+resource_local_to_scene = true
+shader = ExtResource("10_ywqut")
+shader_parameter/ControlSize = Vector2(52, 52)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w14yl"]
+shader = ExtResource("13_7nhti")
+shader_parameter/inset = 0.1
+shader_parameter/shade = 0.2
+shader_parameter/shadeAlpha = 0.8
+
+[node name="LoadoutDefender" type="MarginContainer" unique_id=2040792206]
+offset_right = 277.0
+offset_bottom = 44.0
+size_flags_horizontal = 3
+
+[node name="LoadoutBG" type="Panel" parent="." unique_id=1547872229]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_vpt60")
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_bv1uj")
+script = ExtResource("4_3tir6")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1687389302]
+layout_mode = 2
+
+[node name="HeroPerk" type="PanelContainer" parent="HBoxContainer" unique_id=1191671083]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = ExtResource("5_63ci2")
+script = ExtResource("6_0jkfn")
+defaultClearIconToNull = true
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk" unique_id=206811912]
+material = ExtResource("7_o1l34")
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("8_w2s0p")
+expand_mode = 3
+
+[node name="Content" type="MarginContainer" parent="HBoxContainer" unique_id=42228520]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Content" unique_id=1064277433]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer/Content/VBoxContainer" unique_id=1204797202]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Plasma Overdrive"
+text_overrun_behavior = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1699935801]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2" unique_id=1997049101]
+self_modulate = Color(1, 0.633333, 0, 1)
+material = SubResource("ShaderMaterial_6iioa")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_a4oe6")
+expand_mode = 1
+script = ExtResource("4_3tir6")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2" unique_id=769431662]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_top = -25
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer2/MarginContainer" unique_id=1314746219]
+material = SubResource("ShaderMaterial_mpin5")
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("10_rggsi")
+expand_mode = 3
+script = ExtResource("4_3tir6")
+syncControlSize = true
+
+[node name="Control" type="Control" parent="HBoxContainer/MarginContainer2" unique_id=961055175]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control" unique_id=242177730]
+self_modulate = Color(1, 0.633333, 0, 1)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_fhgs4")
+expand_mode = 3
+
+[node name="Subtype" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control/TextureRect" unique_id=32063342]
+material = SubResource("ShaderMaterial_w14yl")
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_vex60")
+expand_mode = 3
+
+[node name="TooltipFallback" type="Control" parent="." unique_id=1876321207]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1998018455]
+script = ExtResource("15_23wao")
+componentList = ExtResource("16_sxfjf")
+
+[node name="Responsive Button Area" parent="." unique_id=1997860144 instance=ExtResource("17_6f7kv")]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=865508840]
+script = ExtResource("15_23wao")
+componentList = ExtResource("16_sxfjf")
+
+[node name="Overlay" type="Control" parent="." unique_id=717118593]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PerkWarning" type="TextureRect" parent="Overlay" unique_id=466982141]
+visible = false
+self_modulate = Color(1, 0.9, 0, 1)
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 4.0
+offset_top = 4.0
+texture = ExtResource("12_fhgs4")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Overlay/PerkWarning" unique_id=1606780400]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_n65nb")
+expand_mode = 1
+
+[connection signal="IconChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label" method="set_text"]

@@ -247,7 +247,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 				account = (await GameAccount.SearchForAccount(targetUser?.Text)) ?? account;
 		}
 		if (allowDevMode)
+		{
 			GD.Print("Inventory target: " + account?.accountId);
+		}
 		if (targetProfile != FnProfileTypes.AccountItems && !await account.Authenticate())
 			return;
 
@@ -277,6 +279,12 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 		powerLevel?.SetAccountManual(account);
 
+		if (!account.isOwned)
+		{
+			var custom = account.RatingData with { backpackRating = 144 };
+			custom.Print("Profile Target with 144 backpack");
+		}
+
 		currentProfile.OnProfileChanged += UpdateProfile;
 		UpdateProfile();
 
@@ -295,8 +303,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		if (researchTokenArea is null || targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
 			return;
 
-		//not ready to use this feature, dont know the profile operation to redeem tokens
-		return;
 		var researchToken = currentProfile.GetFirstTemplateItem("Token:campaignresearchtoken");
 		researchTokenArea.Visible = researchToken is not null;
 	}
@@ -529,23 +535,34 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 	public async void ShowResearchTokenMenu()
 	{
+		if (currentProfile.account != GameAccount.ActiveAccount)
+			return;
 		var researchToken = currentProfile.GetFirstTemplateItem("Token:campaignresearchtoken");
 		var researchItems = researchToken.attributes["items_for_schematic_creation_data"].Deserialize<ResearchItem[]>(Helpers.JsonOptions.Fields);
 		GameItem[] possibleItems = [.. researchItems.Select(r => r.CreateItem())];
 
 		recycleNextTokenResearch = false;
-		var result = await SimpleItemSelector.OpenSelector(possibleItems, SimpleItemSelector.DefaultConfig with
+		var resultItem = await SimpleItemSelector.OpenSelector(possibleItems, SimpleItemSelector.DefaultConfig with
 		{
 			confirmationTaskProvider = ShowResearchTokenConfirmation
 		});
 		var recycleThisTokenResearch = recycleNextTokenResearch;
-		if (result is null)
+		if (resultItem is null)
+			return;
+		var idx = Array.IndexOf(possibleItems, resultItem);
+
+		using var _ = LoadingOverlay.CreateToken();
+
+		if (!await currentProfile.TryQuery(true))
 			return;
 
-		//perform the research
-		if (recycleThisTokenResearch)
-		{
-			//recycle the result
-		}
+		var notifs = await currentProfile.PerformOperation("RedeemResearchToken", $@"{{""index"":{idx}}}");
+
+		if (!recycleThisTokenResearch || notifs is null)
+			return;
+		var itemAddedChange = currentProfile.lastOp["profileChanges"].AsArray().FirstOrDefault(n => n["changeType"].ToString() == "itemAdded");
+		var newId = itemAddedChange["itemId"].ToString();
+
+		await currentProfile.PerformOperation("RecycleItem", $@"{{""targetItemId"": ""{newId}""}}");
 	}
 }

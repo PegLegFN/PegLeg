@@ -75,18 +75,19 @@ public readonly record struct RatingData(float fortitude, float offense, float r
 		else
 		{
 			var fortRating = SampleHomebaseRating();
-			GD.Print($"{prefix}PL: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology}) (FORT Rating: {fortRating:0.##}) (Loadout: {loadoutRating:0.##}) (Backpack: {backpackRating:0.##})");
+			GD.Print($"{prefix}PL: {PowerLevel:0.##} (FORT: {fortitude}, {offense}, {resistance}, {technology})\n>>> (Homebase Rating: {fortRating:0.##}) (Loadout Rating: {loadoutRating:0.##}) (Backpack Rating: {backpackRating:0.##})");
 		}
 	}
 
 
 	public static double GetWeaponPower(GameAccount account)
 	{
-		var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
-		var backpack = account.GetProfile(FnProfileTypes.Backpack);
-		var backpackPowerLevels = backpack
-			.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged")
-			.Union(accountItems.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [])
+		var accountProfile = account.GetProfile(FnProfileTypes.AccountItems);
+		var backpackProfile = account.isOwned ? account.GetProfile(FnProfileTypes.Backpack) : null;
+		var accountItems = accountProfile.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged");
+		var backpackItems = backpackProfile?.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [];
+
+		var backpackPowerLevels = backpackItems.Union(accountItems)
 			.Select(item => item.CalculateRating())
 			.OrderDescending()
 			.ToArray();
@@ -483,98 +484,91 @@ public partial class GameAccount
 		if (!loadingOverlay)
 			loadToken.Dispose();
 
-		await authSemaphore.WaitAsync();
-		try
+		using var _ = await authSemaphore.AwaitToken();
+
+		if (!assumeValid)
 		{
+			using var req = await FnWebAddresses.EpicAccount
+				.MakeRequest("account/api/oauth/verify")
+				.SetAuthorisation(AuthHeader)
+				.Send();
+			if (req.IsSuccessStatusCode)
+				return true;
+			ForceExpireToken();
+		}
 
-			if (!assumeValid)
+		if (!RefreshTokenExpired)
+		{
+			var refreshRequest = await TargetClient.LoginWithRefreshToken(refreshToken);
+
+			if (!await refreshRequest.CheckForError())
 			{
-				using var req = await FnWebAddresses.EpicAccount
-					.MakeRequest("account/api/oauth/verify")
-					.SetAuthorisation(AuthHeader)
-					.Send();
-				if (req.IsSuccessStatusCode)
-					return true;
-				ForceExpireToken();
+				GD.Print($"Token refreshed for {DisplayName}");
+				var json = await refreshRequest.ReadJson();
+				SetAuthentication(json);
+				return true;
+			}
+			GD.Print($"Refresh token error for {DisplayName}");
+		}
+		var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
+		var ddJson = DecryptDeviceDetails(dd);
+		string failMsg = "";
+		bool offline = false;
+		if (ddJson is null)
+		{
+			failMsg = "Failed to decrypt auth data\n(You may have changed the name of your device)";
+		}
+		else
+		{
+			var deviceRequest = await TargetClient.LoginWithDeviceAuth(ddJson);
+
+			(var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
+			if (!didError)
+			{
+				GD.Print($"Token created for {DisplayName}");
+				SetAuthentication(await deviceRequest.ReadJson());
+				return true;
 			}
 
-			if (!RefreshTokenExpired)
-			{
-				var refreshRequest = await TargetClient.LoginWithRefreshToken(refreshToken);
+			//check if offline by pinging googles dns
+			offline = !await WebHelpers.Ping("8.8.8.8");
 
-				if (!await refreshRequest.CheckForError())
-				{
-					GD.Print($"Token refreshed for {DisplayName}");
-					var json = await refreshRequest.ReadJson();
-					SetAuthentication(json);
-					return true;
-				}
-				GD.Print($"Refresh token error for {DisplayName}");
-			}
-			var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
-			var ddJson = DecryptDeviceDetails(dd);
-			string failMsg = "";
-			bool offline = false;
-			if (ddJson is null)
-			{
-				failMsg = "Failed to decrypt auth data\n(You may have changed the name of your device)";
-			}
-			else
-			{
-				var deviceRequest = await TargetClient.LoginWithDeviceAuth(ddJson);
-
-				(var didError, var errorContent) = await deviceRequest.CheckForErrorJson();
-				if (!didError)
-				{
-					GD.Print($"Token created for {DisplayName}");
-					SetAuthentication(await deviceRequest.ReadJson());
-					return true;
-				}
-
-				//check if offline by pinging googles dns
-				offline = !await WebHelpers.Ping("8.8.8.8");
-
-				failMsg = offline ?
-					"Offline" :
-					(
-						errorContent?["errorMessage"].ToString() ??
-						deviceRequest.ReasonPhrase ??
-						"Unknown error"
-					);
-			}
-			GD.Print("Login failure: " + failMsg);
-			if (!loginFailure)
-			{
-				loginFailure = true;
-				loginFailureMessage = failMsg;
-				OnAccountUpdated?.Invoke();
-
-				//dont send login failure notif when offline
-				if (offline)
-					return false;
-
-				NotificationManager.Push(
-					[
-						new()
-						{
-							header = "Login Failure",
-							icon = ProfileIcon,
-							itemColor = Color.FromHtml("#aa0000"),
-							body=$"""
-                            Could not Login to {DisplayName}, please Login again from the Account Selector
-                            Err: {loginFailureMessage}
-                            """
-						}
-					]
+			failMsg = offline ?
+				"Offline" :
+				(
+					errorContent?["errorMessage"].ToString() ??
+					deviceRequest.ReasonPhrase ??
+					"Unknown error"
 				);
-			}
-
-			return false;
 		}
-		finally
+		GD.Print("Login failure: " + failMsg);
+		if (!loginFailure)
 		{
-			authSemaphore.Release();
+			loginFailure = true;
+			loginFailureMessage = failMsg;
+			OnAccountUpdated?.Invoke();
+
+			//dont send login failure notif when offline
+			if (offline)
+				return false;
+
+			NotificationManager.Push(
+				[
+					new()
+					{
+						header = "Login Failure",
+						icon = ProfileIcon,
+						itemColor = Color.FromHtml("#aa0000"),
+						body=$"""
+                        Could not Login to {DisplayName}, please Login again from the Account Selector
+                        Err: {loginFailureMessage}
+                        """
+					}
+				]
+			);
 		}
+
+		return false;
 	}
 
 	public void ForceExpireToken() => authExpiresAt = 0;
@@ -871,8 +865,6 @@ public partial class GameAccount
 	{
 		if (!force && ratingData is not null)
 			return ratingData.Value;
-		if (!isOwned)
-			return default;
 
 		var accountItems = GetProfile(FnProfileTypes.AccountItems);
 		var statItems = accountItems.GetItems("Stat");
@@ -908,7 +900,8 @@ public partial class GameAccount
 		RatingData newFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
 		if (ratingData != newFortStats)
 		{
-			newFortStats.Print("Main");
+			if (isOwned)
+				newFortStats.Print("Main");
 			ratingData = newFortStats;
 			OnRatingDataChanged?.Invoke(this);
 		}
@@ -917,7 +910,7 @@ public partial class GameAccount
 
 	public event Action<GameAccount> OnVentureRatingDataChanged;
 	RatingData? ventureRatingData;
-	public RatingData VentureFortStats => GetVentureRatingData();
+	public RatingData VentureRatingData => GetVentureRatingData();
 	public void MarkVentureFortStatsDirty() => ventureRatingData = null;
 	public RatingData GetVentureRatingData(bool force = false)
 	{

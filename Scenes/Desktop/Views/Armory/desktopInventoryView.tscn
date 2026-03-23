@@ -32,6 +32,9 @@
 [ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="24_teqqu"]
 [ext_resource type="Texture2D" uid="uid://df1h55n2choqy" path="res://Images/InterfaceIcons/LockerIcons/T_UI_Empty_Pickaxe.png" id="25_novys"]
 [ext_resource type="Texture2D" uid="uid://7taj4xrecshe" path="res://Images/InterfaceIcons/T-Icon-ResearchPoint-128.png" id="32_hre2m"]
+[ext_resource type="Shader" uid="uid://scvs5j1r5xyp" path="res://Shaders/ResearchGlow.gdshader" id="32_xj7y8"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="33_teqqu"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="34_novys"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvrrd"]
 bg_color = Color(0.184314, 0.184314, 0.184314, 1)
@@ -56,16 +59,9 @@ shader_parameter/smoothness = 0.25
 shader_parameter/msdf = false
 shader_parameter/skipSDF = false
 
-[sub_resource type="Gradient" id="Gradient_hre2m"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_xj7y8"]
-gradient = SubResource("Gradient_hre2m")
-height = 25
-fill = 1
-fill_from = Vector2(0.5, 1)
-fill_to = Vector2(1, 1)
-metadata/_snap_enabled = true
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_teqqu"]
+shader = ExtResource("32_xj7y8")
+shader_parameter/ControlSize = Vector2(375, 100)
 
 [node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel", "researchTokenArea", "researchTokenButton")]
 anchors_preset = 15
@@ -769,18 +765,22 @@ size_flags_vertical = 8
 mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="SchematicTokenButtonArea" unique_id=2051651378]
-self_modulate = Color(0.8, 0.8, 0.568, 1)
+self_modulate = Color(0.29679546, 0.8, 0, 1)
+material = SubResource("ShaderMaterial_teqqu")
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_xj7y8")
-expand_mode = 5
+texture = ExtResource("33_teqqu")
+expand_mode = 1
+script = ExtResource("34_novys")
+syncControlSize = true
 
 [node name="MarginContainer" type="MarginContainer" parent="SchematicTokenButtonArea" unique_id=139463343]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 20
 
 [node name="Button" type="Button" parent="SchematicTokenButtonArea/MarginContainer" unique_id=1159347956]
 custom_minimum_size = Vector2(315, 40)
