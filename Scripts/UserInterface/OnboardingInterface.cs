@@ -2,160 +2,160 @@ using Godot;
 
 public partial class OnboardingInterface : Control
 {
-	[Export]
-	float curtainOpenDuration = 0.25f;
-	[Export]
-	ShaderHook curtain;
-	[Export]
-	AudioStreamPlayer music;
-	[Export]
-	Control loadingWheel;
-	[Export]
-	string bootScenePath = "res://Scenes/boot_scene.tscn";
+    [Export]
+    float curtainOpenDuration = 0.25f;
+    [Export]
+    ShaderHook curtain;
+    [Export]
+    AudioStreamPlayer music;
+    [Export]
+    Control loadingWheel;
+    [Export]
+    string bootScenePath = "res://Scenes/boot_scene.tscn";
 
-	[ExportGroup("Login Code")]
-	[Export]
-	Control loginCodeContent;
-	[Export]
-	CodeLoginLabel loginLabel;
-	[Export]
-	Button retryLoginButton;
-	[Export]
-	Button continueButton;
-	[Export]
-	Button importButton;
+    [ExportGroup("Login Code")]
+    [Export]
+    Control loginCodeContent;
+    [Export]
+    CodeLoginLabel loginLabel;
+    [Export]
+    Button retryLoginButton;
+    [Export]
+    Button continueButton;
+    [Export]
+    Button importButton;
 
-	[ExportGroup("Account Selection")]
-	[Export]
-	Control accountSelectionPanel;
+    [ExportGroup("Account Selection")]
+    [Export]
+    Control accountSelectionPanel;
 
-	public override async void _Ready()
-	{
-		retryLoginButton.Visible = false;
-		continueButton.Disabled = true;
-		continueButton.Text = "";
-		curtain.SetShaderFloat(0, "RevealScale");
-		curtain.Visible = true;
+    public override async void _Ready()
+    {
+        retryLoginButton.Visible = false;
+        continueButton.Disabled = true;
+        continueButton.Text = "";
+        curtain.SetShaderFloat(0, "RevealScale");
+        curtain.Visible = true;
 
-		importButton.Visible = DirAccess.DirExistsAbsolute("user://../accounts");
-		importButton.Text = AppConfig.PegLegVersion.IsBeta ? "Import Accounts from PegLeg (Release)" : "Import Accounts from PegLeg Beta Branch";
+        importButton.Visible = DirAccess.DirExistsAbsolute("user://../accounts");
+        importButton.Text = AppConfig.PegLegVersion.IsBeta ? "Import Accounts from PegLeg (Release)" : "Import Accounts from PegLeg Beta Branch";
 
-		MusicController.StopMusic();
-		music.VolumeDb = -80;
-		var musicFadeout = GetTree().CreateTween().SetParallel();
-		musicFadeout.TweenProperty(music, "volume_db", 0, 1)
-			.SetTrans(Tween.TransitionType.Expo)
-			.SetEase(Tween.EaseType.Out);
-		music.Play();
+        MusicController.StopMusic();
+        music.VolumeDb = -80;
+        var musicFadeout = GetTree().CreateTween().SetParallel();
+        musicFadeout.TweenProperty(music, "volume_db", 0, 1)
+            .SetTrans(Tween.TransitionType.Expo)
+            .SetEase(Tween.EaseType.Out);
+        music.Play();
 
-		TweenCurtain(true);
-		await Helpers.WaitForTimer(curtainOpenDuration);
-		curtain.Visible = false;
+        TweenCurtain(true);
+        await Helpers.WaitForTimer(curtainOpenDuration);
+        curtain.Visible = false;
 
-		StartLogin();
-	}
+        StartLogin();
+    }
 
-	void SwitchToLite()
-	{
-		AppConfig.Set("core", "litemode", true);
-		GetTree().ChangeSceneToFile(bootScenePath);
-	}
+    void SwitchToLite()
+    {
+        AppConfig.Set("core", "litemode", true);
+        GetTree().ChangeSceneToFile(bootScenePath);
+    }
 
-	async void ImportAccounts()
-	{
-		loginCodeContent.Visible = false;
-		loadingWheel.Visible = true;
-		bool hasAccount = false;
-		bool isBeta = AppConfig.PegLegVersion.IsBeta;
-		string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
+    async void ImportAccounts()
+    {
+        loginCodeContent.Visible = false;
+        loadingWheel.Visible = true;
+        bool hasAccount = false;
+        bool isBeta = AppConfig.PegLegVersion.IsBeta;
+        string fromPath = isBeta ? "user://../accounts" : "user://Beta/accounts";
 
-		foreach (var file in DirAccess.GetFilesAt(fromPath))
-		{
-			DirAccess.CopyAbsolute($"{fromPath}/{file}", $"user://accounts/{file}");
-		}
-		GameAccount.UpdateAccountCache();
+        foreach (var file in DirAccess.GetFilesAt(fromPath))
+        {
+            DirAccess.CopyAbsolute($"{fromPath}/{file}", $"user://accounts/{file}");
+        }
+        GameAccount.UpdateAccountCache();
 
-		if (!hasAccount)
-		{
-			foreach (var a in GameAccount.OwnedAccounts)
-			{
-				if (!await a.SetAsActiveAccount())
-					continue;
-				hasAccount = true;
-				break;
-			}
-		}
-		if (hasAccount)
-		{
-			GetTree().ChangeSceneToFile(bootScenePath);
-		}
-		else
-		{
-			loginCodeContent.Visible = true;
-			loadingWheel.Visible = false;
-			importButton.Disabled = true;
-		}
-	}
+        if (!hasAccount)
+        {
+            foreach (var a in GameAccount.OwnedAccounts)
+            {
+                if (!await a.SetAsActiveAccount())
+                    continue;
+                hasAccount = true;
+                break;
+            }
+        }
+        if (hasAccount)
+        {
+            GetTree().ChangeSceneToFile(bootScenePath);
+        }
+        else
+        {
+            loginCodeContent.Visible = true;
+            loadingWheel.Visible = false;
+            importButton.Disabled = true;
+        }
+    }
 
-	void TweenCurtain(bool open)
-	{
-		//var iconStart = panelIcon.GlobalPosition;
-		//panelIcon.AnchorTop = panelIcon.AnchorBottom = open ? 0 : 0.5f;
-		//panelIcon.ResetOffsets();
-		//var iconEnd = panelIcon.GlobalPosition;
-		//panelIcon.GlobalPosition = iconStart;
+    void TweenCurtain(bool open)
+    {
+        //var iconStart = panelIcon.GlobalPosition;
+        //panelIcon.AnchorTop = panelIcon.AnchorBottom = open ? 0 : 0.5f;
+        //panelIcon.ResetOffsets();
+        //var iconEnd = panelIcon.GlobalPosition;
+        //panelIcon.GlobalPosition = iconStart;
 
-		var tween = GetTree().CreateTween().SetParallel();
-		tween.TweenProperty(curtain, "SH_RevealScale", open ? 1 : 0, curtainOpenDuration);
-		//tween.TweenProperty(panelIcon, "global_position", iconEnd, curtainOpenDuration);
-	}
+        var tween = GetTree().CreateTween().SetParallel();
+        tween.TweenProperty(curtain, "SH_RevealScale", open ? 1 : 0, curtainOpenDuration);
+        //tween.TweenProperty(panelIcon, "global_position", iconEnd, curtainOpenDuration);
+    }
 
-	public void StartLogin()
-	{
-		codeAccountId = "";
-		retryLoginButton.Visible = false;
-		loginLabel.GenerateCode();
-		continueButton.Text = "Waiting for approval...";
-		continueButton.Disabled = true;
-	}
+    public void StartLogin()
+    {
+        codeAccountId = "";
+        retryLoginButton.Visible = false;
+        loginLabel.GenerateCode();
+        continueButton.Text = "Waiting for approval...";
+        continueButton.Disabled = true;
+    }
 
-	public void LoginCodeFail()
-	{
-		retryLoginButton.Visible = true;
-		continueButton.Text = "Approval Failed";
-	}
+    public void LoginCodeFail()
+    {
+        retryLoginButton.Visible = true;
+        continueButton.Text = "Approval Failed";
+    }
 
-	public void LoginCodeSuccess(string accountId)
-	{
-		codeAccountId = accountId;
-		continueButton.Text = "Login";
-		continueButton.Disabled = false;
-	}
+    public void LoginCodeSuccess(string accountId)
+    {
+        codeAccountId = accountId;
+        continueButton.Text = "Login";
+        continueButton.Disabled = false;
+    }
 
-	string codeAccountId;
-	public async void ComplateCodeLogin()
-	{
-		if (string.IsNullOrEmpty(codeAccountId))
-			return;
-		var account = GameAccount.GetOrCreateAccount(codeAccountId);
-		curtain.Visible = true;
-		TweenCurtain(false);
-		var timer = Helpers.WaitForTimer(curtainOpenDuration);
-		await account.SaveDeviceDetails();
-		await account.SetAsActiveAccount();
-		await timer;
-		LoadMainScene();
-	}
+    string codeAccountId;
+    public async void ComplateCodeLogin()
+    {
+        if (string.IsNullOrEmpty(codeAccountId))
+            return;
+        var account = GameAccount.GetOrCreateAccount(codeAccountId);
+        curtain.Visible = true;
+        TweenCurtain(false);
+        var timer = Helpers.WaitForTimer(curtainOpenDuration);
+        await account.SaveDeviceDetails();
+        await account.SetAsActiveAccount();
+        await timer;
+        LoadMainScene();
+    }
 
-	public async void ContinueToMainScene()
-	{
-		curtain.Visible = true;
-		TweenCurtain(false);
-		await Helpers.WaitForTimer(curtainOpenDuration);
-	}
+    public async void ContinueToMainScene()
+    {
+        curtain.Visible = true;
+        TweenCurtain(false);
+        await Helpers.WaitForTimer(curtainOpenDuration);
+    }
 
-	void LoadMainScene()
-	{
-		GetTree().ChangeSceneToFile(bootScenePath);
-	}
+    void LoadMainScene()
+    {
+        GetTree().ChangeSceneToFile(bootScenePath);
+    }
 }

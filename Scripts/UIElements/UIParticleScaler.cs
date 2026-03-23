@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 [Tool]
 public partial class UIParticleScaler : Control
@@ -7,24 +8,24 @@ public partial class UIParticleScaler : Control
 	Vector2 basisResolution = Vector2.Zero;
 	Node2D firstChild;
 
-	public override void _Ready()
-	{
+    public override void _Ready()
+    {
 		firstChild = GetChildOrNull<Node2D>(0);
-	}
+    }
 
-	public override void _Process(double delta)
+    public override void _Process(double delta)
 	{
 		if (firstChild is null)
-		{
-			if (!Engine.IsEditorHint())
-				return;
-			firstChild = GetChildOrNull<Node2D>(0);
+        {
+            if (!Engine.IsEditorHint())
+                return;
+            firstChild = GetChildOrNull<Node2D>(0);
 
-			if (firstChild is null)
-				return;
-		}
+            if (firstChild is null)
+                return;
+        }
 
-		firstChild.Position = Size * 0.5f;
-		firstChild.Scale = (Size / basisResolution);
+        firstChild.Position = Size * 0.5f;
+		firstChild.Scale = (Size/basisResolution);
 	}
 }

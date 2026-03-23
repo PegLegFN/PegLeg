@@ -1,54 +1,55 @@
+using Godot;
 using System.Linq;
 
 public partial class RecycleItemCtx : AbstractContextComponent
 {
-	public override string Id => "RecycleItem";
-	GameItem currentItem;
-	public override void Update(ContextMenuHook hook)
-	{
-		currentItem = hook?.itemSource?.currentItem;
-		if (currentItem?.inspectorOverride is not null) //ensures we're targeting the actual profile item
-			currentItem = currentItem.inspectorOverride;
-		SetDisabled(true);
+    public override string Id => "RecycleItem";
+    GameItem currentItem;
+    public override void Update(ContextMenuHook hook)
+    {
+        currentItem = hook?.itemSource?.currentItem;
+        if (currentItem?.inspectorOverride is not null) //ensures we're targeting the actual profile item
+            currentItem = currentItem.inspectorOverride;
+        SetDisabled(true);
 
-		if (currentItem?.profile is null)
-			return;
+        if (currentItem?.profile is null)
+            return;
 
-		if (!SimpleItemSelector.RecyclableFilter(currentItem))
-			return;
+        if (!SimpleItemSelector.RecyclableFilter(currentItem))
+            return;
 
-		bool isInHeroLoadout = currentItem.profile
-			.GetItems("CampaignHeroLoadout")
-			.SelectMany(loadout =>
-				loadout.attributes["crew_members"]
-				.AsObject()
-				.Select(kvp => kvp.Value.ToString())
-			)
-			.Distinct()
-			.Contains(currentItem.uuid);
-		if (isInHeroLoadout)
-			return;
+        bool isInHeroLoadout = currentItem.profile
+            .GetItems("CampaignHeroLoadout")
+            .SelectMany(loadout =>
+                loadout.attributes["crew_members"]
+                .AsObject()
+                .Select(kvp => kvp.Value.ToString())
+            )
+            .Distinct()
+            .Contains(currentItem.uuid);
+        if (isInHeroLoadout)
+            return;
 
-		SetDisabled(false);
-	}
+        SetDisabled(false);
+    }
 
-	public async void Recycle()
-	{
-		var item = currentItem;
-		if (item?.profile is null)
-			return;
-		menu.CloseMenu();
-		//var confirmRecycle = await GenericConfirmationWindow.ShowConfirmation($"Recycle {item.template?.DisplayName}?", "Recycle");
-		//if (confirmRecycle != true)
-		//    return;
-		var toRecycle = await SimpleItemSelector.OpenMultiSelector([item], SimpleItemSelector.RecycleConfig with { autoselectFilter = _ => true });
-		if (toRecycle.Length == 0)
-			return;
-		var json = $$"""
+    public async void Recycle()
+    {
+        var item = currentItem;
+        if (item?.profile is null)
+            return;
+        menu.CloseMenu();
+        //var confirmRecycle = await GenericConfirmationWindow.ShowConfirmation($"Recycle {item.template?.DisplayName}?", "Recycle");
+        //if (confirmRecycle != true)
+        //    return;
+        var toRecycle = await SimpleItemSelector.OpenMultiSelector([item], SimpleItemSelector.RecycleConfig with { autoselectFilter = _ => true });
+        if (toRecycle.Length == 0)
+            return;
+        var json = $$"""
         {
             "targetItemIds":["{{item.uuid}}"]
         }
         """;
-		await item?.profile.PerformOperation("RecycleItemBatch", json);
-	}
+        await item?.profile.PerformOperation("RecycleItemBatch", json);
+    }
 }
