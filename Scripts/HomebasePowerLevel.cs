@@ -27,7 +27,7 @@ public partial class HomebasePowerLevel : Control
     CancellationTokenSource accountChangeCts = new();
     async void OnActiveAccountChanged()
     {
-        accountChangeCts.CancelAndRegenerate(out var ct);
+        accountChangeCts = accountChangeCts.CancelAndRegenerate(out var ct);
 
         if (currentProfile is not null)
         {

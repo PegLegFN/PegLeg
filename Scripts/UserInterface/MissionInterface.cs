@@ -194,7 +194,7 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
         if (now.Hour > 1 || !AppConfig.Get("missions", "reset_detection", true))
             return;
         GD.Print("Starting update check timer");
-        updateCheckCTS.CancelAndRegenerate(out var ct);
+        updateCheckCTS = updateCheckCTS.CancelAndRegenerate(out var ct);
         while (true)
         {
             now = DateTime.UtcNow;

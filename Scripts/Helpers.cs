@@ -1,49 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Nodes;
+using System.Text;
 using System.Threading.Tasks;
 using Godot;
 using System.Threading;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Net.NetworkInformation;
-using System.Text.RegularExpressions;
 
 public static partial class Helpers
 {
-    public static class JsonOptions
+    // Godot's FileAccess.GetAsText has issues with unicode files and can throw exceptions, this is a workaround for that
+    public static string GetAsText(this FileAccess file)
     {
-        public static JsonSerializerOptions Fields { get; private set; } = new()
-        {
-            IncludeFields = true,
-            WriteIndented = true
-        };
-        public static JsonSerializerOptions CamelCase { get; private set; } = new()
-        {
-            IncludeFields = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
-        };
-    }
-
-    public static T[] FlexDeserialise<T>(this JsonElement ele, Func<JsonElement, T> innerCtor, int depth = 1) =>
-        ele.ValueKind switch
-        {
-            JsonValueKind.Array when depth > 0 => ele.Deserialize<JsonElement[]>().SelectMany(e => e.FlexDeserialise<T>(innerCtor, depth - 1)).ToArray(),
-            JsonValueKind.Object => [ele.Deserialize<T>()],
-            JsonValueKind.Undefined => [],
-            _ => [innerCtor(ele).FakeDeserialise()]
-        };
-
-    static T FakeDeserialise<T>(this T construct)
-    {
-        if (construct is IJsonOnDeserialized jsonConstruct)
-            jsonConstruct.OnDeserialized();
-        return construct;
+        var buffer = file.GetBuffer((long)file.GetLength());
+        return Encoding.UTF8.GetString(buffer);
     }
 
     public static bool EvalMetaBool(this Node node, string metaKey) => node.GetMeta(metaKey).AsBool();
+
+    public static T FirstChildOfType<T>(this Node parent) where T:Node
+    {
+        var childCount = parent.GetChildCount();
+        for (int i = 0; i < childCount; i++)
+        {
+            if (parent.GetChild(i) is T typedChild)
+                return typedChild;
+        }
+        return null;
+    }
 
     public static void Unpress(this ButtonGroup group)
     {
@@ -91,96 +75,6 @@ public static partial class Helpers
         label.Visible = !string.IsNullOrWhiteSpace(label.Text);
     }
 
-    public static T SafeDeepClone<T>(this T toReserialise) where T : JsonNode
-    {
-        if(toReserialise is null)
-            return null;
-        lock (toReserialise)
-        {
-            return (T)toReserialise.DeepClone();
-        }
-    }
-
-    public static JsonNode DetachNode(this JsonNode targetParent, string name) => targetParent.AsObject().DetachNode(name);
-    public static JsonNode DetachNode(this JsonObject targetParent, string name)
-    {
-        if (targetParent is null || name is null || !targetParent.ContainsKey(name))
-            return null;
-        var targetNode = targetParent[name];
-        targetParent.Remove(name);
-        return targetNode;
-    }
-
-    public static JsonNode DetachNode(this JsonNode targetParent, int idx) => targetParent.AsArray().DetachNode(idx);
-    public static JsonNode DetachNode(this JsonArray targetParent, int idx)
-    {
-        if (targetParent is null || targetParent.Count == 0 || targetParent.Count <= idx)
-            return null;
-        var targetNode = targetParent[idx];
-        targetParent.Remove(targetNode);
-        return targetNode;
-    }
-
-    [GeneratedRegex("^([a-z]+)(?:\\[(\\d)\\])?$", RegexOptions.IgnoreCase)]
-    private static partial Regex NodePathParserGeneratedRegex();
-    public static bool TryGetNodeFromPath(this JsonObject root, string path, out JsonNode node)
-    {
-        node = null;
-        var splitPath = path.Split('.');
-        if (splitPath.Length == 0)
-            return false;
-        JsonNode current = root;
-        for (int i = 0; i < splitPath.Length; i++)
-        {
-            var parsedPath = NodePathParserGeneratedRegex().Match(splitPath[i]);
-            if (!parsedPath.Success)
-                return false;
-            if (current is not JsonObject)
-                return false;
-            current = current[parsedPath.Groups[0].Value];
-
-            if (parsedPath.Groups.Count == 2)
-            {
-                //handle array index
-                if (current is not JsonArray)
-                    return false;
-                current = current[int.Parse(parsedPath.Groups[1].Value)];
-            }
-        }
-        return true;
-    }
-
-    public static T FirstChildOfType<T>(this Node parent) where T:Node
-    {
-        var childCount = parent.GetChildCount();
-        for (int i = 0; i < childCount; i++)
-        {
-            if (parent.GetChild(i) is T typedChild)
-                return typedChild;
-        }
-        return null;
-    }
-
-    public static DateTime AsTime(this JsonNode value) => 
-        value.Deserialize<DateTime>();
-
-    public static JsonNode[] DetachAll(this JsonArray targetParent)
-    {
-        if (targetParent is null)
-            return null;
-        var values = targetParent.ToArray();
-        targetParent.Clear();
-        return values;
-    }
-    public static KeyValuePair<string, JsonNode>[] DetachAll(this JsonObject targetParent)
-    {
-        if (targetParent is null)
-            return null;
-        var values = targetParent.ToArray();
-        targetParent.Clear();
-        return values;
-    }
-
     public static string GlobalisePath(string godotPath)
     {
         if (godotPath.StartsWith("res://") && !OS.HasFeature("editor"))
@@ -192,9 +86,10 @@ public static partial class Helpers
     public static CancellationTokenSource CancelAndRegenerate(this CancellationTokenSource original, out CancellationToken ct)
     {
         original?.Cancel();
-        original = new();
-        ct = original.Token;
-        return original;
+        original?.Dispose();
+        var replacement = new CancellationTokenSource();
+        ct = replacement.Token;
+        return replacement;
     }
 
     static SceneTree MainLoopSceneTree => (SceneTree)Engine.GetMainLoop();
@@ -265,73 +160,14 @@ public static partial class Helpers
         tree.ChangeSceneToPacked(scene);
     }
 
-    public static KeyValuePair<string, JsonNode> CreateKVP(this JsonObject from, string keyTerm)
-    {
-        return KeyValuePair.Create<string, JsonNode>(from[keyTerm]?.ToString() ?? from.ToString(), from.SafeDeepClone());
-    }
-
-    public static int GetCosmeticItemCounts(this JsonObject from)
-    {
-        int total = 0;
-        if (from["brItems"] is JsonArray brItemArray)
-            total += brItemArray.Count;
-        if (from["tracks"] is JsonArray trackArray)
-            total += trackArray.Count;
-        if (from["instruments"] is JsonArray instrumentArray)
-            total += instrumentArray.Count;
-        if (from["cars"] is JsonArray carArray)
-            total += carArray.Count;
-        if (from["legoKits"] is JsonArray legoArray)
-            total += legoArray.Count;
-        return total;
-    }
-    public static JsonObject GetFirstCosmeticItem(this JsonObject from)
-    {
-        if (from["brItems"] is JsonArray brItemArray)
-            return brItemArray[0].AsObject();
-        if (from["tracks"] is JsonArray trackArray)
-            return trackArray[0].AsObject();
-        if (from["instruments"] is JsonArray instrumentArray)
-            return instrumentArray[0].AsObject();
-        if (from["cars"] is JsonArray carArray)
-            return carArray[0].AsObject();
-        if (from["legoKits"] is JsonArray legoArray)
-            return legoArray[0].AsObject();
-        return null;
-    }
-    public static JsonArray MergeCosmeticItems(this JsonObject from)
-    {
-        List<JsonNode> resultNodes = [];
-        if (from["brItems"] is JsonArray brItemArray)
-            resultNodes.AddRange(brItemArray);
-        if (from["tracks"] is JsonArray trackArray)
-            resultNodes.AddRange(trackArray);
-        if (from["instruments"] is JsonArray instrumentArray)
-            resultNodes.AddRange(instrumentArray);
-        if (from["cars"] is JsonArray carArray)
-            resultNodes.AddRange(carArray);
-        if (from["legoKits"] is JsonArray legoArray)
-            resultNodes.AddRange(legoArray);
-        if (from["fallbackItems"] is JsonArray fallbackItems)
-            resultNodes.AddRange(fallbackItems);
-        return resultNodes.Count == 0 ? null : new(resultNodes.Select(n => n.SafeDeepClone()).ToArray());
-    }
-
-    //why merge into a json array when you can just have a regular array
-    public static JsonObject[] GetAllCosmetics(this JsonObject from)
-    {
-        var brItems = from["brItems"]?.AsArray() ?? [];
-        var tracks = from["tracks"]?.AsArray() ?? [];
-        var instruments = from["instruments"]?.AsArray() ?? [];
-        var cars = from["cars"]?.AsArray() ?? [];
-        var legoKits = from["legoKits"]?.AsArray() ?? [];
-        return brItems.Union(tracks).Union(instruments).Union(cars).Union(legoKits).Select(n=>n.AsObject()).ToArray();
-    }
-
     public static async void RunWithDelay(Task task, float delay)
     {
-        await WaitForTimer(delay);
-        await task;
+        try
+        {
+            await WaitForTimer(delay);
+            await task;
+        }
+        catch (Exception e) { GD.PushError($"Unhandled async exception in RunWithDelay: {e}"); }
     }
 
     //public static void GetNodeOrNull<T>(this Node owner, NodePath path, out T result) where T : Node
@@ -347,7 +183,6 @@ public static partial class Helpers
     //    }
     //}
 
-    public const string cosmeticSalsa = "676b8175-a049-4f03-b829-323c95153a43";
     /* Old Web Request system
     public static async Task<JsonNode> MakeRequest(HttpMethod method, System.Net.Http.HttpClient endpoint, string uri, string body, AuthenticationHeaderValue authentication, string mediaType = "application/x-www-form-urlencoded", bool addCosmeticHeader = false)
     {
@@ -591,30 +426,10 @@ public static partial class Helpers
         }
     }
 
-    public static async void StartTask(this Task task) => await task;
-
-    public static JsonObject AsFlexibleObject(this JsonNode node, string objectKey)
+    public static async void StartTask(this Task task)
     {
-        if (node is JsonObject nodeObj)
-            return nodeObj;
-        return new() { [objectKey] = node.SafeDeepClone()};
-    }
-
-    public static JsonArray AsFlexibleArray(this JsonNode node)
-    {
-        if (node is JsonArray nodeArr)
-            return nodeArr;
-        return [node.SafeDeepClone()];
-    }
-    public static JsonArray Slice(this JsonArray array, System.Range range)
-    {
-        (int startIdx, int length) = range.GetOffsetAndLength(array.Count);
-        JsonArray result = [];
-        for (int i = startIdx; i < startIdx + length; i++)
-        {
-            result.Add(array[i].SafeDeepClone());
-        }
-        return result;
+        try { await task; }
+        catch (Exception e) { GD.PushError($"Unhandled async exception: {e}"); }
     }
 
     public static async Task<SemaphoreToken> AwaitToken(this SemaphoreSlim source, Action onRelease = null)
