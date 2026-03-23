@@ -3,128 +3,128 @@ using System.Text.Json.Nodes;
 
 public partial class CodeLoginLabel : Node
 {
-    [Signal]
-    public delegate void UserCodeChangedEventHandler(string userCode);
+	[Signal]
+	public delegate void UserCodeChangedEventHandler(string userCode);
 
-    [Signal]
-    public delegate void LoginStartedEventHandler();
-    [Signal]
-    public delegate void LoginEndedEventHandler();
-    [Signal]
-    public delegate void LoginSucceededEventHandler();
-    [Signal]
-    public delegate void LoginSuccessEventHandler(string accountId);
-    [Signal]
-    public delegate void LoginFailedEventHandler();
+	[Signal]
+	public delegate void LoginStartedEventHandler();
+	[Signal]
+	public delegate void LoginEndedEventHandler();
+	[Signal]
+	public delegate void LoginSucceededEventHandler();
+	[Signal]
+	public delegate void LoginSuccessEventHandler(string accountId);
+	[Signal]
+	public delegate void LoginFailedEventHandler();
 
-    [Signal]
-    public delegate void LoginActiveChangedEventHandler(bool started);
-    [Signal]
-    public delegate void LoginResultChangedEventHandler(bool success);
+	[Signal]
+	public delegate void LoginActiveChangedEventHandler(bool started);
+	[Signal]
+	public delegate void LoginResultChangedEventHandler(bool success);
 
-    int codeExpiresAt = -99;
-    bool CodeExpired => codeExpiresAt <= (Time.GetTicksMsec() * 0.001) - 10;
-    bool gettingClient = false;
-    bool started = false;
-    string currentUserCode;
+	int codeExpiresAt = -99;
+	bool CodeExpired => codeExpiresAt <= (Time.GetTicksMsec() * 0.001) - 10;
+	bool gettingClient = false;
+	bool started = false;
+	string currentUserCode;
 
-    public async void GenerateCode(bool force = false)
-    {
-        if (gettingClient)
-            return;
-        if (started)
-        {
-            if (!force)
-                return;
-            started = false;
-            EmitSignal(SignalName.LoginEnded);
-            EmitSignal(SignalName.LoginActiveChanged, false);
-            EmitSignal(SignalName.UserCodeChanged, "");
-        }
+	public async void GenerateCode(bool force = false)
+	{
+		if (gettingClient)
+			return;
+		if (started)
+		{
+			if (!force)
+				return;
+			started = false;
+			EmitSignal(SignalName.LoginEnded);
+			EmitSignal(SignalName.LoginActiveChanged, false);
+			EmitSignal(SignalName.UserCodeChanged, "");
+		}
 
-        gettingClient=true;
-        var linkData = await GameClient.PreferredClient.GetLoginLinkData();
-        gettingClient = false;
+		gettingClient = true;
+		var linkData = await GameClient.PreferredClient.GetLoginLinkData();
+		gettingClient = false;
 
-        if (linkData is null)
-            return;
+		if (linkData is null)
+			return;
 
-        cooldown = 0;
-        started = true;
-        codeExpiresAt = linkData["expires_at"].GetValue<int>();
+		cooldown = 0;
+		started = true;
+		codeExpiresAt = linkData["expires_at"].GetValue<int>();
 
-        EmitSignal(SignalName.LoginStarted);
-        EmitSignal(SignalName.LoginActiveChanged, true);
+		EmitSignal(SignalName.LoginStarted);
+		EmitSignal(SignalName.LoginActiveChanged, true);
 
-        currentUserCode = linkData["user_code"].ToString();
-        EmitSignal(SignalName.UserCodeChanged, currentUserCode);
-    }
+		currentUserCode = linkData["user_code"].ToString();
+		EmitSignal(SignalName.UserCodeChanged, currentUserCode);
+	}
 
-    public void CopyCode()
-    {
-        if (!started)
-            return;
-        DisplayServer.ClipboardSet(currentUserCode);
-    }
+	public void CopyCode()
+	{
+		if (!started)
+			return;
+		DisplayServer.ClipboardSet(currentUserCode);
+	}
 
-    public void Cancel()
-    {
-        if (!started)
-            return;
-        codeExpiresAt = -99;
-    }
+	public void Cancel()
+	{
+		if (!started)
+			return;
+		codeExpiresAt = -99;
+	}
 
-    float cooldown = 0;
-    public override void _Process(double delta)
-    {
-        if (!started)
-            return;
+	float cooldown = 0;
+	public override void _Process(double delta)
+	{
+		if (!started)
+			return;
 
-        if (CodeExpired)
-        {
-            started = false;
-            
-            EmitSignal(SignalName.LoginFailed);
-            EmitSignal(SignalName.LoginResultChanged, false);
+		if (CodeExpired)
+		{
+			started = false;
 
-            EmitSignal(SignalName.LoginEnded);
-            EmitSignal(SignalName.LoginActiveChanged, false);
+			EmitSignal(SignalName.LoginFailed);
+			EmitSignal(SignalName.LoginResultChanged, false);
 
-            currentUserCode = "";
-            EmitSignal(SignalName.UserCodeChanged, "");
-            return;
-        }
+			EmitSignal(SignalName.LoginEnded);
+			EmitSignal(SignalName.LoginActiveChanged, false);
 
-        cooldown -= (float)delta;
-        if (cooldown >= 0)
-            return;
-        cooldown = 11;
-        CheckForCode();
-    }
+			currentUserCode = "";
+			EmitSignal(SignalName.UserCodeChanged, "");
+			return;
+		}
 
-    async void CheckForCode()
-    {
-        var linkCheckRequest = await GameClient.PreferredClient.CheckLoginLinkCode();
-        if (await linkCheckRequest.CheckForError())
-            return;
-        var linkData = await linkCheckRequest.ReadJson<JsonObject>();
+		cooldown -= (float)delta;
+		if (cooldown >= 0)
+			return;
+		cooldown = 11;
+		CheckForCode();
+	}
 
-        started = false;
+	async void CheckForCode()
+	{
+		var linkCheckRequest = await GameClient.PreferredClient.CheckLoginLinkCode();
+		if (await linkCheckRequest.CheckForError())
+			return;
+		var linkData = await linkCheckRequest.ReadJson<JsonObject>();
 
-        //GD.Print("APPROVE: " + linkCheckRequest);
+		started = false;
 
-        EmitSignal(SignalName.LoginSuccess, linkData["account_id"].ToString());
+		//GD.Print("APPROVE: " + linkCheckRequest);
 
-        EmitSignal(SignalName.LoginSucceeded);
-        EmitSignal(SignalName.LoginResultChanged, true);
+		EmitSignal(SignalName.LoginSuccess, linkData["account_id"].ToString());
 
-        EmitSignal(SignalName.LoginEnded);
-        EmitSignal(SignalName.LoginActiveChanged, false);
+		EmitSignal(SignalName.LoginSucceeded);
+		EmitSignal(SignalName.LoginResultChanged, true);
 
-        currentUserCode = "";
-        EmitSignal(SignalName.UserCodeChanged, "");
+		EmitSignal(SignalName.LoginEnded);
+		EmitSignal(SignalName.LoginActiveChanged, false);
 
-        GameAccount.LoginToAccount(linkData);
-        return;
-    }
+		currentUserCode = "";
+		EmitSignal(SignalName.UserCodeChanged, "");
+
+		GameAccount.LoginToAccount(linkData);
+		return;
+	}
 }

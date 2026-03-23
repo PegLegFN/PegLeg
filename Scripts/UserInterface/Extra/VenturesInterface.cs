@@ -1,329 +1,328 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
 public partial class VenturesInterface : Control
 {
-    [ExportGroup("Status Bar")]
-    [Export]
-    Control statusBarRoot;
-    [Export]
-    Label currentLevelLabel;
-    [Export]
-    ProgressBar levelProgress;
-    [Export]
-    Label nextLevelLabel;
-    [Export]
-    GameItemEntry nextReward;
-    [Export]
-    Control majorLevelSection;
-    [Export]
-    Label nextMajorLevelLabel;
-    [Export]
-    GameItemEntry nextMajorReward;
+	[ExportGroup("Status Bar")]
+	[Export]
+	Control statusBarRoot;
+	[Export]
+	Label currentLevelLabel;
+	[Export]
+	ProgressBar levelProgress;
+	[Export]
+	Label nextLevelLabel;
+	[Export]
+	GameItemEntry nextReward;
+	[Export]
+	Control majorLevelSection;
+	[Export]
+	Label nextMajorLevelLabel;
+	[Export]
+	GameItemEntry nextMajorReward;
 
-    [ExportGroup("Modifiers")]
-    [Export(PropertyHint.ArrayType)]
-    GameItemEntry[] modifierEntries;
+	[ExportGroup("Modifiers")]
+	[Export(PropertyHint.ArrayType)]
+	GameItemEntry[] modifierEntries;
 
-    [ExportGroup("Main Rewards")]
-    [Export(PropertyHint.ArrayType)]
-    Control[] mainItems;
-    [Export]
-    CheckButton legendaryToggle;
-    GameItemEntry[] mainItemEntries;
-    Control[] mainItemCheckmarks;
-    Label[] mainItemLabels;
+	[ExportGroup("Main Rewards")]
+	[Export(PropertyHint.ArrayType)]
+	Control[] mainItems;
+	[Export]
+	CheckButton legendaryToggle;
+	GameItemEntry[] mainItemEntries;
+	Control[] mainItemCheckmarks;
+	Label[] mainItemLabels;
 
-    [ExportGroup("Extra Rewards")]
-    [Export(PropertyHint.ArrayType)]
-    Control[] extraItems;
-    GameItemEntry[] extraItemEntries;
-    Control[] extraItemCheckmarks;
-    Label[] extraItemLabels;
+	[ExportGroup("Extra Rewards")]
+	[Export(PropertyHint.ArrayType)]
+	Control[] extraItems;
+	GameItemEntry[] extraItemEntries;
+	Control[] extraItemCheckmarks;
+	Label[] extraItemLabels;
 
-    bool hasSeason = false;
-    VentureSeasonProgressData currentSeason;
-    Dictionary<string, VentureSeasonProgressData> ventureSeasons;
-    public override void _Ready()
-    {
-        ventureSeasons = PegLegResourceManager.LoadResourceObj<Dictionary<string, VentureSeasonProgressData>>("GameAssets/VenturesSeasons.json");
-        RefreshTimerController.OnDayChanged += CheckSeason;
-        legendaryToggle.Toggled += _ => FilterLegendaryItems();
+	bool hasSeason = false;
+	VentureSeasonProgressData currentSeason;
+	Dictionary<string, VentureSeasonProgressData> ventureSeasons;
+	public override void _Ready()
+	{
+		ventureSeasons = PegLegResourceManager.LoadResourceObj<Dictionary<string, VentureSeasonProgressData>>("GameAssets/VenturesSeasons.json");
+		RefreshTimerController.OnDayChanged += CheckSeason;
+		legendaryToggle.Toggled += _ => FilterLegendaryItems();
 
-        mainItemEntries = new GameItemEntry[mainItems.Length];
-        mainItemCheckmarks = new Control[mainItems.Length];
-        mainItemLabels = new Label[mainItems.Length];
+		mainItemEntries = new GameItemEntry[mainItems.Length];
+		mainItemCheckmarks = new Control[mainItems.Length];
+		mainItemLabels = new Label[mainItems.Length];
 
-        for (int i = 0; i < mainItems.Length; i++)
-        {
-            var item = mainItems[i];
-            mainItemEntries[i] = item.GetNode<GameItemEntry>("%RewardEntry");
-            mainItemCheckmarks[i] = item.GetNode<Control>("%Checkmark");
-            mainItemLabels[i] = item.GetNode<Label>("%Label");
-        }
+		for (int i = 0; i < mainItems.Length; i++)
+		{
+			var item = mainItems[i];
+			mainItemEntries[i] = item.GetNode<GameItemEntry>("%RewardEntry");
+			mainItemCheckmarks[i] = item.GetNode<Control>("%Checkmark");
+			mainItemLabels[i] = item.GetNode<Label>("%Label");
+		}
 
-        extraItemEntries = new GameItemEntry[extraItems.Length];
-        extraItemCheckmarks = new Control[extraItems.Length];
-        extraItemLabels = new Label[extraItems.Length];
+		extraItemEntries = new GameItemEntry[extraItems.Length];
+		extraItemCheckmarks = new Control[extraItems.Length];
+		extraItemLabels = new Label[extraItems.Length];
 
-        for (int i = 0; i < extraItems.Length; i++)
-        {
-            var item = extraItems[i];
-            extraItemEntries[i] = item.GetNode<GameItemEntry>("%RewardEntry");
-            extraItemCheckmarks[i] = item.GetNode<Control>("%Checkmark");
-            extraItemLabels[i] = item.GetNode<Label>("%Label");
-        }
+		for (int i = 0; i < extraItems.Length; i++)
+		{
+			var item = extraItems[i];
+			extraItemEntries[i] = item.GetNode<GameItemEntry>("%RewardEntry");
+			extraItemCheckmarks[i] = item.GetNode<Control>("%Checkmark");
+			extraItemLabels[i] = item.GetNode<Label>("%Label");
+		}
 
-        CheckSeason();
+		CheckSeason();
 
-        GameAccount.ActiveAccountChanged += UpdateAccount;
-    }
+		GameAccount.ActiveAccountChanged += UpdateAccount;
+	}
 
-    public override void _ExitTree()
-    {
-        GameAccount.ActiveAccountChanged -= UpdateAccount;
-        RefreshTimerController.OnDayChanged -= CheckSeason;
-    }
+	public override void _ExitTree()
+	{
+		GameAccount.ActiveAccountChanged -= UpdateAccount;
+		RefreshTimerController.OnDayChanged -= CheckSeason;
+	}
 
-    void CheckSeason()
-    {
-        //await CalenderRequests.CheckCalender();
-        string currentSeasonFlag = RefreshTimerController.GetSeasonIndex() switch
-        {
-            0 => "EventFlag.Phoenix.NewBeginnings",
-            1 => "EventFlag.Phoenix.Adventure",
-            2 => "EventFlag.Phoenix.RoadTrip",
-            3 => "EventFlag.Phoenix.Fortnitemares",
-            4 => "EventFlag.Phoenix.Winterfest",
-            _ => null
-        };
-        hasSeason = ventureSeasons.TryGetValue(currentSeasonFlag, out currentSeason);
-        //foreach (var key in ventureSeasons.Keys)
-        //{
-        //    if (CalenderRequests.EventFlagActive(key))
-        //    {
-        //        hasSeason = true;
-        //        if (currentSeason == ventureSeasons[key])
-        //            return;
-        //        currentSeasonFlag = key;
-        //        currentSeason = ventureSeasons[key];
-        //        break;
-        //    }
-        //}
+	void CheckSeason()
+	{
+		//await CalenderRequests.CheckCalender();
+		string currentSeasonFlag = RefreshTimerController.GetSeasonIndex() switch
+		{
+			0 => "EventFlag.Phoenix.NewBeginnings",
+			1 => "EventFlag.Phoenix.Adventure",
+			2 => "EventFlag.Phoenix.RoadTrip",
+			3 => "EventFlag.Phoenix.Fortnitemares",
+			4 => "EventFlag.Phoenix.Winterfest",
+			_ => null
+		};
+		hasSeason = ventureSeasons.TryGetValue(currentSeasonFlag, out currentSeason);
+		//foreach (var key in ventureSeasons.Keys)
+		//{
+		//    if (CalenderRequests.EventFlagActive(key))
+		//    {
+		//        hasSeason = true;
+		//        if (currentSeason == ventureSeasons[key])
+		//            return;
+		//        currentSeasonFlag = key;
+		//        currentSeason = ventureSeasons[key];
+		//        break;
+		//    }
+		//}
 
-        string[] modifiers = currentSeasonFlag switch
-        {
-            "EventFlag.Phoenix.NewBeginnings" => [
-                "GameplayModifier:gm_phoenix_escalation"
-            ],
-            "EventFlag.Phoenix.Adventure" => [
-                "GameplayModifier:gm_phoenix_superhusks_huskmods",
-                "GameplayModifier:gm_phoenix_superhusks_playerbenefits"
-            ],
-            "EventFlag.Phoenix.RoadTrip" => [
-                "GameplayModifier:gm_phoenix_ragemeter"
-            ],
-            "EventFlag.Phoenix.Fortnitemares" => [
-                "GameplayModifier:gm_phoenix_closequarters"
-            ],
-            "EventFlag.Phoenix.Winterfest" => [
-                "GameplayModifier:gm_phoenix_superheroic",
-                "GameplayModifier:gm_phoenix_superconstructor",
-                "GameplayModifier:gm_phoenix_superninja",
-                "GameplayModifier:gm_phoenix_superoutlander"
-            ],
-            _ => []
-        };
+		string[] modifiers = currentSeasonFlag switch
+		{
+			"EventFlag.Phoenix.NewBeginnings" => [
+				"GameplayModifier:gm_phoenix_escalation"
+			],
+			"EventFlag.Phoenix.Adventure" => [
+				"GameplayModifier:gm_phoenix_superhusks_huskmods",
+				"GameplayModifier:gm_phoenix_superhusks_playerbenefits"
+			],
+			"EventFlag.Phoenix.RoadTrip" => [
+				"GameplayModifier:gm_phoenix_ragemeter"
+			],
+			"EventFlag.Phoenix.Fortnitemares" => [
+				"GameplayModifier:gm_phoenix_closequarters"
+			],
+			"EventFlag.Phoenix.Winterfest" => [
+				"GameplayModifier:gm_phoenix_superheroic",
+				"GameplayModifier:gm_phoenix_superconstructor",
+				"GameplayModifier:gm_phoenix_superninja",
+				"GameplayModifier:gm_phoenix_superoutlander"
+			],
+			_ => []
+		};
 
-        for (int i = 0; i < modifiers.Length; i++)
-        {
-            modifierEntries[i].Visible = true;
-            modifierEntries[i].SetItem(GameItemTemplate.Get(modifiers[i]).CreateInstance());
-        }
-        for (int i = modifiers.Length; i < modifierEntries.Length; i++)
-        {
-            modifierEntries[i].Visible = false;
-        }
+		for (int i = 0; i < modifiers.Length; i++)
+		{
+			modifierEntries[i].Visible = true;
+			modifierEntries[i].SetItem(GameItemTemplate.Get(modifiers[i]).CreateInstance());
+		}
+		for (int i = modifiers.Length; i < modifierEntries.Length; i++)
+		{
+			modifierEntries[i].Visible = false;
+		}
 
-        GD.Print(currentSeason.Levels.Length);
-        currentSeason.Levels ??= [];
-        var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
-        for (int i = 1; i < levels.Length; i++)
-        {
-            mainItems[i-1].Visible = true;
-            mainItemEntries[i-1].SetItem(levels[i].Rewards[0].AsItem());
-            mainItemLabels[i - 1].Text = $"Lv {i+1}";
-            mainItemCheckmarks[i-1].Visible = false;
-        }
-        for (int i = levels.Length-1; i < mainItems.Length; i++)
-        {
-            if (i < 0)
-                continue;
-            mainItems[i].Visible = false;
-        }
+		GD.Print(currentSeason.Levels.Length);
+		currentSeason.Levels ??= [];
+		var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
+		for (int i = 1; i < levels.Length; i++)
+		{
+			mainItems[i - 1].Visible = true;
+			mainItemEntries[i - 1].SetItem(levels[i].Rewards[0].AsItem());
+			mainItemLabels[i - 1].Text = $"Lv {i + 1}";
+			mainItemCheckmarks[i - 1].Visible = false;
+		}
+		for (int i = levels.Length - 1; i < mainItems.Length; i++)
+		{
+			if (i < 0)
+				continue;
+			mainItems[i].Visible = false;
+		}
 
-        var pastLevels = currentSeason.PastLevels ?? [];
-        for (int i = 0; i < pastLevels.Length; i++)
-        {
-            extraItems[i].Visible = true;
-            extraItemLabels[i].Text = $"Lv {50+i+1}";
-            extraItemEntries[i].SetItem(pastLevels[i].AsItem());
-            extraItemCheckmarks[i].Visible = false;
-        }
-        for (int i = pastLevels.Length; i < extraItems.Length; i++)
-        {
-            extraItems[i].Visible = false;
-        }
+		var pastLevels = currentSeason.PastLevels ?? [];
+		for (int i = 0; i < pastLevels.Length; i++)
+		{
+			extraItems[i].Visible = true;
+			extraItemLabels[i].Text = $"Lv {50 + i + 1}";
+			extraItemEntries[i].SetItem(pastLevels[i].AsItem());
+			extraItemCheckmarks[i].Visible = false;
+		}
+		for (int i = pastLevels.Length; i < extraItems.Length; i++)
+		{
+			extraItems[i].Visible = false;
+		}
 
-        FilterLegendaryItems();
-        UpdateAccount();
-    }
+		FilterLegendaryItems();
+		UpdateAccount();
+	}
 
-    void FilterLegendaryItems()
-    {
-        bool requireLegendary = legendaryToggle.ButtonPressed;
-        var levelCount = currentSeason.Levels?.Length ?? 0;
-        for (int i = 1; i < levelCount; i++)
-        {
-            //GD.Print($"reward {i}: {mainItemEntries[i - 1].currentItem?.template?.Rarity == "Legendary"}");
-            mainItems[i - 1].Visible = !requireLegendary || mainItemEntries[i - 1].currentItem?.template?.Rarity == "Legendary";
-        }
-    }
+	void FilterLegendaryItems()
+	{
+		bool requireLegendary = legendaryToggle.ButtonPressed;
+		var levelCount = currentSeason.Levels?.Length ?? 0;
+		for (int i = 1; i < levelCount; i++)
+		{
+			//GD.Print($"reward {i}: {mainItemEntries[i - 1].currentItem?.template?.Rarity == "Legendary"}");
+			mainItems[i - 1].Visible = !requireLegendary || mainItemEntries[i - 1].currentItem?.template?.Rarity == "Legendary";
+		}
+	}
 
-    async void UpdateAccount()
-    {
-        if (!hasSeason)
-            return;
+	async void UpdateAccount()
+	{
+		if (!hasSeason)
+			return;
 
-        var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
-        var pastLevels = currentSeason.PastLevels ?? [];
+		var levels = currentSeason.Levels?.OrderBy(l => l.TotalRequiredXP).ToArray() ?? [];
+		var pastLevels = currentSeason.PastLevels ?? [];
 
-        if (!GameAccount.ActiveAccount.isOwned)
-        {
-            statusBarRoot.Visible = false;
-            for (int i = 1; i < levels.Length; i++)
-            {
-                mainItemCheckmarks[i - 1].Visible = false;
-            }
+		if (!GameAccount.ActiveAccount.isOwned)
+		{
+			statusBarRoot.Visible = false;
+			for (int i = 1; i < levels.Length; i++)
+			{
+				mainItemCheckmarks[i - 1].Visible = false;
+			}
 
-            for (int i = 0; i < pastLevels.Length; i++)
-            {
-                extraItemLabels[i].Text = $"Lv {50 + i + 1}";
-                extraItemCheckmarks[i].Visible = false;
-            }
-            return;
-        }
-        statusBarRoot.Visible = true;
+			for (int i = 0; i < pastLevels.Length; i++)
+			{
+				extraItemLabels[i].Text = $"Lv {50 + i + 1}";
+				extraItemCheckmarks[i].Visible = false;
+			}
+			return;
+		}
+		statusBarRoot.Visible = true;
 
-        var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
-        var ventureXP = profile.GetFirstTemplateItem("AccountResource:phoenixxp")?.quantity ?? 0;
-        int currentLevel = 0;
+		var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+		var ventureXP = profile.GetFirstTemplateItem("AccountResource:phoenixxp")?.quantity ?? 0;
+		int currentLevel = 0;
 
-        int currentProgress = 0;
-        int targetProgress = 0;
-        int totalTarget = 0;
+		int currentProgress = 0;
+		int targetProgress = 0;
+		int totalTarget = 0;
 
-        GameItem nextItem = null;
-        GameItem nextMilestone = null;
-        int milestoneLevel = 0;
+		GameItem nextItem = null;
+		GameItem nextMilestone = null;
+		int milestoneLevel = 0;
 
-        for (int i = 1; i < levels.Length; i++)
-        {
-            bool aboveLevel = ventureXP > levels[i].TotalRequiredXP;
-            mainItemCheckmarks[i-1].Visible = aboveLevel;
-            if (aboveLevel)
-            {
-                currentLevel = i;
-            }
-            else if(currentLevel+1 == i)
-            {
-                nextItem = levels[i].Rewards[0].AsItem();
-                int startProgress = levels[i - 1].TotalRequiredXP;
-                currentProgress = ventureXP - startProgress;
-                targetProgress = levels[i].TotalRequiredXP - startProgress;
-                totalTarget = levels[i].TotalRequiredXP;
-            }
-            else if(nextMilestone is null && levels[i].IsMajorReward)
-            {
-                nextMilestone = levels[i].Rewards[0].AsItem();
-                milestoneLevel = i;
-            }
-        }
+		for (int i = 1; i < levels.Length; i++)
+		{
+			bool aboveLevel = ventureXP > levels[i].TotalRequiredXP;
+			mainItemCheckmarks[i - 1].Visible = aboveLevel;
+			if (aboveLevel)
+			{
+				currentLevel = i;
+			}
+			else if (currentLevel + 1 == i)
+			{
+				nextItem = levels[i].Rewards[0].AsItem();
+				int startProgress = levels[i - 1].TotalRequiredXP;
+				currentProgress = ventureXP - startProgress;
+				targetProgress = levels[i].TotalRequiredXP - startProgress;
+				totalTarget = levels[i].TotalRequiredXP;
+			}
+			else if (nextMilestone is null && levels[i].IsMajorReward)
+			{
+				nextMilestone = levels[i].Rewards[0].AsItem();
+				milestoneLevel = i;
+			}
+		}
 
 
-        if (currentLevel == currentSeason.Levels.Length-1)
-        {
-            var pastMaxXP = ventureXP - levels[^1].TotalRequiredXP;
-            int pastMaxLevel = pastMaxXP / currentSeason.PastLevelXPRequirement;
-            currentProgress = pastMaxXP - (pastMaxLevel * currentSeason.PastLevelXPRequirement);
-            targetProgress = currentSeason.PastLevelXPRequirement;
-            currentLevel += pastMaxLevel;
-            totalTarget = levels[^1].TotalRequiredXP + ((pastMaxLevel + 1) * currentSeason.PastLevelXPRequirement);
+		if (currentLevel == currentSeason.Levels.Length - 1)
+		{
+			var pastMaxXP = ventureXP - levels[^1].TotalRequiredXP;
+			int pastMaxLevel = pastMaxXP / currentSeason.PastLevelXPRequirement;
+			currentProgress = pastMaxXP - (pastMaxLevel * currentSeason.PastLevelXPRequirement);
+			targetProgress = currentSeason.PastLevelXPRequirement;
+			currentLevel += pastMaxLevel;
+			totalTarget = levels[^1].TotalRequiredXP + ((pastMaxLevel + 1) * currentSeason.PastLevelXPRequirement);
 
-            var nextRewardIndex = pastMaxLevel % currentSeason.PastLevels.Length;
-            nextItem = currentSeason.PastLevels[nextRewardIndex].AsItem();
+			var nextRewardIndex = pastMaxLevel % currentSeason.PastLevels.Length;
+			nextItem = currentSeason.PastLevels[nextRewardIndex].AsItem();
 
-            var startingPoint = pastMaxLevel - nextRewardIndex;
-            for (int i = 0; i < pastLevels.Length; i++)
-            {
-                extraItemLabels[i].Text = $"Lv {startingPoint + i+1}";
-                extraItemCheckmarks[i].Visible = nextRewardIndex > i;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < pastLevels.Length; i++)
-            {
-                extraItemLabels[i].Text = $"Lv {50 + i + 1}";
-                extraItemCheckmarks[i].Visible = false;
-            }
-        }
+			var startingPoint = pastMaxLevel - nextRewardIndex;
+			for (int i = 0; i < pastLevels.Length; i++)
+			{
+				extraItemLabels[i].Text = $"Lv {startingPoint + i + 1}";
+				extraItemCheckmarks[i].Visible = nextRewardIndex > i;
+			}
+		}
+		else
+		{
+			for (int i = 0; i < pastLevels.Length; i++)
+			{
+				extraItemLabels[i].Text = $"Lv {50 + i + 1}";
+				extraItemCheckmarks[i].Visible = false;
+			}
+		}
 
-            currentLevelLabel.Text = $"Lv {currentLevel + 1}";
-        levelProgress.Value = (float)currentProgress / targetProgress;
-        levelProgress.TooltipText = $"{(targetProgress - currentProgress).Notate()} XP to Lv {currentLevel + 2} ({ventureXP.Notate()}/{totalTarget.Notate()})";
-        nextLevelLabel.Text = $"Lv {currentLevel+2}";
-        nextReward.SetItem(nextItem);
+		currentLevelLabel.Text = $"Lv {currentLevel + 1}";
+		levelProgress.Value = (float)currentProgress / targetProgress;
+		levelProgress.TooltipText = $"{(targetProgress - currentProgress).Notate()} XP to Lv {currentLevel + 2} ({ventureXP.Notate()}/{totalTarget.Notate()})";
+		nextLevelLabel.Text = $"Lv {currentLevel + 2}";
+		nextReward.SetItem(nextItem);
 
-        majorLevelSection.Visible = nextMilestone is not null;
-        if (nextMilestone is not null)
-        {
-            nextMajorLevelLabel.Text = $"Lv {milestoneLevel+1}";
-            nextMajorReward.SetItem(nextMilestone);
-        }
-    }
+		majorLevelSection.Visible = nextMilestone is not null;
+		if (nextMilestone is not null)
+		{
+			nextMajorLevelLabel.Text = $"Lv {milestoneLevel + 1}";
+			nextMajorReward.SetItem(nextMilestone);
+		}
+	}
 
-    public record struct VentureSeasonProgressData
-    {
-        [JsonInclude]
-        public VentureLevel[] Levels;
-        [JsonInclude]
-        public int PastLevelXPRequirement;
-        [JsonInclude]
-        public VentureReward[] PastLevels;//todo: make one dimensional array
-    }
+	public record struct VentureSeasonProgressData
+	{
+		[JsonInclude]
+		public VentureLevel[] Levels;
+		[JsonInclude]
+		public int PastLevelXPRequirement;
+		[JsonInclude]
+		public VentureReward[] PastLevels;//todo: make one dimensional array
+	}
 
-    public record struct VentureLevel
-    {
-        [JsonInclude]
-        public bool IsMajorReward;
-        [JsonInclude]
-        public VentureReward[] Rewards;
-        [JsonInclude]
-        public int TotalRequiredXP;
-    }
+	public record struct VentureLevel
+	{
+		[JsonInclude]
+		public bool IsMajorReward;
+		[JsonInclude]
+		public VentureReward[] Rewards;
+		[JsonInclude]
+		public int TotalRequiredXP;
+	}
 
-    //todo: this is the structure of a quest reward, once we serialise quests properly this should be replaced
-    public record struct VentureReward
-    {
-        [JsonInclude]
-        public string Item;
-        [JsonInclude]
-        public int Quantity;
+	//todo: this is the structure of a quest reward, once we serialise quests properly this should be replaced
+	public record struct VentureReward
+	{
+		[JsonInclude]
+		public string Item;
+		[JsonInclude]
+		public int Quantity;
 
-        public readonly GameItem AsItem() => GameItemTemplate.Get(Item).CreateInstance(Quantity);
-    }
+		public readonly GameItem AsItem() => GameItemTemplate.Get(Item).CreateInstance(Quantity);
+	}
 }

@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class MobilePadding : MarginContainer
 {
@@ -14,8 +13,8 @@ public partial class MobilePadding : MarginContainer
         OffsetConst("margin_bottom", extraPaddingOnMobile.W);
 #endif
 
-    }
+	}
 
-    void OffsetConst(string key, int amt) =>
+	void OffsetConst(string key, int amt) =>
 		AddThemeConstantOverride(key, GetThemeConstant(key) + amt);
 }
