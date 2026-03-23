@@ -184,106 +184,106 @@ public static partial class Helpers
 	//}
 
 	/* Old Web Request system
-    public static async Task<JsonNode> MakeRequest(HttpMethod method, System.Net.Http.HttpClient endpoint, string uri, string body, AuthenticationHeaderValue authentication, string mediaType = "application/x-www-form-urlencoded", bool addCosmeticHeader = false)
-    {
-        using StringContent content = mediaType != "" ? new(body, Encoding.UTF8, mediaType) : null;
-        using var request = new HttpRequestMessage(method, uri) { Content = content };
-        if (authentication is not null)
-            request.Headers.Authorization = authentication;
-        if (addCosmeticHeader)
-            request.Headers.Add("x-api-key", cosmeticSalsa);
-        return await MakeRequest(endpoint, request);
-    }
+	public static async Task<JsonNode> MakeRequest(HttpMethod method, System.Net.Http.HttpClient endpoint, string uri, string body, AuthenticationHeaderValue authentication, string mediaType = "application/x-www-form-urlencoded", bool addCosmeticHeader = false)
+	{
+		using StringContent content = mediaType != "" ? new(body, Encoding.UTF8, mediaType) : null;
+		using var request = new HttpRequestMessage(method, uri) { Content = content };
+		if (authentication is not null)
+			request.Headers.Authorization = authentication;
+		if (addCosmeticHeader)
+			request.Headers.Add("x-api-key", cosmeticSalsa);
+		return await MakeRequest(endpoint, request);
+	}
 
-    public static async Task<JsonNode> MakeRequest(System.Net.Http.HttpClient endpoint, HttpRequestMessage request)
-    {
-        using var result = await MakeRequestRaw(endpoint, request);
-        var resultText = result is not null ? await result.Content.ReadAsStringAsync() : null;
+	public static async Task<JsonNode> MakeRequest(System.Net.Http.HttpClient endpoint, HttpRequestMessage request)
+	{
+		using var result = await MakeRequestRaw(endpoint, request);
+		var resultText = result is not null ? await result.Content.ReadAsStringAsync() : null;
 
-        JsonNode resultNode = null;
-        try
-        {
-            resultNode = JsonNode.Parse(resultText);
-        }
-        catch (JsonException)
-        {
-            GD.Print("result was not json: " + resultText);
-            resultNode = new JsonObject()
-            {
-                ["success"] = result.IsSuccessStatusCode,
-                ["code"] = (int)result.StatusCode,
-                ["response"] = resultText,
-            };
-            if (result.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
-                resultNode["offline"] = true;
-        }
-        catch (ArgumentNullException)
-        {
-            GD.Print("result text was null");
-            resultNode = new JsonObject()
-            {
-                ["success"] = result?.IsSuccessStatusCode ?? false,
-            };
-            if(result is not null)
-                resultNode["code"] = (int)result.StatusCode;
-            if (result?.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
-                resultNode["offline"] = true;
-        }
+		JsonNode resultNode = null;
+		try
+		{
+			resultNode = JsonNode.Parse(resultText);
+		}
+		catch (JsonException)
+		{
+			GD.Print("result was not json: " + resultText);
+			resultNode = new JsonObject()
+			{
+				["success"] = result.IsSuccessStatusCode,
+				["code"] = (int)result.StatusCode,
+				["response"] = resultText,
+			};
+			if (result.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
+				resultNode["offline"] = true;
+		}
+		catch (ArgumentNullException)
+		{
+			GD.Print("result text was null");
+			resultNode = new JsonObject()
+			{
+				["success"] = result?.IsSuccessStatusCode ?? false,
+			};
+			if(result is not null)
+				resultNode["code"] = (int)result.StatusCode;
+			if (result?.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
+				resultNode["offline"] = true;
+		}
 
-        if (result?.IsSuccessStatusCode == true)
-            resultNode ??= new JsonObject() { ["success"] = true };
-        //todo: throw exception when encountering a response with an errorMessage
+		if (result?.IsSuccessStatusCode == true)
+			resultNode ??= new JsonObject() { ["success"] = true };
+		//todo: throw exception when encountering a response with an errorMessage
 
-        if (resultNode is JsonObject && resultNode["numericErrorCode"]?.GetValue<int>() == 1031)
-        {
-            //todo: move this web stuff around so that we know which account is making the request
-            GameAccount.activeAccount.ForceExpireToken();
-        }
+		if (resultNode is JsonObject && resultNode["numericErrorCode"]?.GetValue<int>() == 1031)
+		{
+			//todo: move this web stuff around so that we know which account is making the request
+			GameAccount.activeAccount.ForceExpireToken();
+		}
 
-        return resultNode;
-    }
+		return resultNode;
+	}
 
-    public static async Task<HttpResponseMessage> MakeRequestRaw(System.Net.Http.HttpClient endpoint, HttpRequestMessage request)
-    {
-        //GD.Print("Debug: "+request.ToString());
-        HttpResponseMessage response = null;
-        try
-        {
-            response = await endpoint.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-        }
-        catch (HttpRequestException ex)
-        {
-            if (await IsOffline())
-            {
-                GD.Print($"Offline ({response})");
-                return new() { Content = new StringContent("Offline"), StatusCode = System.Net.HttpStatusCode.GatewayTimeout };
-            }
-            try
-            {
-                var resultText = response is not null ? await response.Content.ReadAsStringAsync() : null;
-                if(resultText is not null)
-                {
-                    var resultNode = JsonNode.Parse(resultText);
-                    if (resultNode["numericErrorCode"]?.GetValue<int>() == 1012)
-                    {
-                        // silences Device Code check fails
-                        return response;
-                    }
-                }
-            }
-            catch (JsonException) { }
-            catch (Exception e)
-            {
-                GD.PushError("Exception in web request: "+e.Message);
-            }
-            GD.Print($"\nException Caught! ({ex.HttpRequestError})");
-            GD.Print($"Message :{ex.Message} ");
-            GD.Print($"Response :{(response is not null ? (await response.Content.ReadAsStringAsync()) : "null response")} ");
-        }
-        return response;
-    }
-    */
+	public static async Task<HttpResponseMessage> MakeRequestRaw(System.Net.Http.HttpClient endpoint, HttpRequestMessage request)
+	{
+		//GD.Print("Debug: "+request.ToString());
+		HttpResponseMessage response = null;
+		try
+		{
+			response = await endpoint.SendAsync(request);
+			response.EnsureSuccessStatusCode();
+		}
+		catch (HttpRequestException ex)
+		{
+			if (await IsOffline())
+			{
+				GD.Print($"Offline ({response})");
+				return new() { Content = new StringContent("Offline"), StatusCode = System.Net.HttpStatusCode.GatewayTimeout };
+			}
+			try
+			{
+				var resultText = response is not null ? await response.Content.ReadAsStringAsync() : null;
+				if(resultText is not null)
+				{
+					var resultNode = JsonNode.Parse(resultText);
+					if (resultNode["numericErrorCode"]?.GetValue<int>() == 1012)
+					{
+						// silences Device Code check fails
+						return response;
+					}
+				}
+			}
+			catch (JsonException) { }
+			catch (Exception e)
+			{
+				GD.PushError("Exception in web request: "+e.Message);
+			}
+			GD.Print($"\nException Caught! ({ex.HttpRequestError})");
+			GD.Print($"Message :{ex.Message} ");
+			GD.Print($"Response :{(response is not null ? (await response.Content.ReadAsStringAsync()) : "null response")} ");
+		}
+		return response;
+	}
+	*/
 
 	//assumes google is online
 	public static async Task<bool> IsOffline()

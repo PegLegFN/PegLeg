@@ -1,198 +1,242 @@
 [gd_scene format=3 uid="uid://cahl7hl513h2i"]
 
 [ext_resource type="Texture2D" uid="uid://bite5sw5cyx0l" path="res://Images/InterfaceIcons/T-Items-MTX.png" id="1_ha1su"]
-[ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="2_ou708"]
+[ext_resource type="PackedScene" uid="uid://bb01pn2pbtea5" path="res://Scenes/newVbucksProtoMission.tscn" id="2_ou708"]
+[ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="3_ou708"]
 
-[node name="Control" type="PanelContainer" unique_id=1147655091]
+[sub_resource type="Gradient" id="Gradient_cgx5j"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_h7wdk"]
+gradient = SubResource("Gradient_cgx5j")
+fill = 1
+fill_from = Vector2(1, 0.5)
+fill_to = Vector2(0.5, 0.5)
+metadata/_snap_enabled = true
+
+[node name="VBoxContainer" type="VBoxContainer" unique_id=1396828502]
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 347.0
+offset_bottom = 103.0
+
+[node name="Control" type="PanelContainer" parent="." unique_id=1147655091]
 custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
 theme_type_variation = &"Panel3PadB"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=358765122]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=358765122]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=256751599]
+[node name="MarginContainer" type="MarginContainer" parent="Control/VBoxContainer" unique_id=1559768926]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/VBoxContainer/MarginContainer" unique_id=1836372626]
+modulate = Color(1, 0.4969027, 0, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Control" type="Control" parent="Control/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=333818523]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/MarginContainer/HBoxContainer2/Control" unique_id=1911627365]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7wdk")
+expand_mode = 1
+
+[node name="Control2" type="Control" parent="Control/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=297215687]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/MarginContainer/HBoxContainer2/Control2" unique_id=2113130622]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 2.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7wdk")
+expand_mode = 1
+flip_h = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/MarginContainer" unique_id=256751599]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer" unique_id=426787252]
+[node name="TextureRect" type="TextureRect" parent="Control/VBoxContainer/MarginContainer/HBoxContainer" unique_id=426787252]
 layout_mode = 2
 texture = ExtResource("1_ha1su")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1538588723]
+[node name="Label" type="Label" parent="Control/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1538588723]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "V-Bucks & X-Ray Tickets:"
 
-[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer" unique_id=1943155079]
+[node name="HFlowContainer" type="HFlowContainer" parent="Control/VBoxContainer" unique_id=1943155079]
 layout_mode = 2
 last_wrap_alignment = 1
 
-[node name="MissionRewardEntry" parent="VBoxContainer/HFlowContainer" unique_id=512148745 instance=ExtResource("2_ou708")]
-custom_minimum_size = Vector2(0, 30)
+[node name="MicroMissionRewardEntry" parent="Control/VBoxContainer/HFlowContainer" unique_id=1117377689 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="HBoxContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(512148745, 1267303960) index="0" unique_id=142706386]
-custom_minimum_size = Vector2(0, 0)
+[node name="PowerLevel" parent="Control/VBoxContainer/HFlowContainer/MicroMissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1117377689, 1472039922) index="2" unique_id=155650047]
+text = "9"
 
-[node name="PowerLevel" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" index="2" unique_id=295920822]
-custom_minimum_size = Vector2(0, 0)
-text = "19"
+[node name="Control" parent="Control/VBoxContainer/HFlowContainer/MicroMissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1117377689, 1472039922) index="3" unique_id=778346871]
+visible = false
 
-[node name="Control" type="Control" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" index="3" unique_id=1154662947]
-custom_minimum_size = Vector2(3, 0)
+[node name="ItemLevel" parent="Control/VBoxContainer/HFlowContainer/MicroMissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1117377689, 1472039922) index="4" unique_id=585772025]
+visible = false
+
+[node name="Control2" type="PanelContainer" parent="." unique_id=176740345]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2" unique_id=365134193]
 layout_mode = 2
 
-[node name="MarginContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(512148745, 1267303960) index="1" unique_id=633279153]
-visible = false
-
-[node name="Checkmark" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(512148745, 1267303960) index="2" unique_id=453039118]
-visible = false
-
-[node name="MarginContainer3" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(512148745, 1267303960) index="3" unique_id=1703440662]
-visible = false
-
-[node name="MarginContainer2" parent="VBoxContainer/HFlowContainer/MissionRewardEntry/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(512148745, 1267303960) index="4" unique_id=327077591]
-visible = false
-
-[node name="MissionRewardEntry2" parent="VBoxContainer/HFlowContainer" unique_id=1204812695 instance=ExtResource("2_ou708")]
-custom_minimum_size = Vector2(0, 30)
+[node name="MarginContainer" type="MarginContainer" parent="Control2/VBoxContainer" unique_id=1572388068]
 layout_mode = 2
 
-[node name="HBoxContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1204812695, 1267303960) index="0" unique_id=142706386]
-custom_minimum_size = Vector2(0, 0)
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control2/VBoxContainer/MarginContainer" unique_id=684318240]
+modulate = Color(1, 0.4969027, 0, 1)
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 0
 
-[node name="PowerLevel" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer/HBoxContainer" index="2" unique_id=295920822]
-custom_minimum_size = Vector2(0, 0)
-text = "46"
-
-[node name="Control" type="Control" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer/HBoxContainer" index="3" unique_id=1296991063]
-custom_minimum_size = Vector2(3, 0)
+[node name="Control" type="Control" parent="Control2/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=226962877]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
-[node name="MarginContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1204812695, 1267303960) index="1" unique_id=633279153]
-visible = false
+[node name="TextureRect" type="TextureRect" parent="Control2/VBoxContainer/MarginContainer/HBoxContainer2/Control" unique_id=1718003374]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7wdk")
+expand_mode = 1
 
-[node name="Checkmark" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1204812695, 1267303960) index="2" unique_id=453039118]
-visible = false
-
-[node name="MarginContainer3" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1204812695, 1267303960) index="3" unique_id=1703440662]
-visible = false
-
-[node name="MarginContainer2" parent="VBoxContainer/HFlowContainer/MissionRewardEntry2/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1204812695, 1267303960) index="4" unique_id=327077591]
-visible = false
-
-[node name="MissionRewardEntry3" parent="VBoxContainer/HFlowContainer" unique_id=1733610524 instance=ExtResource("2_ou708")]
-custom_minimum_size = Vector2(0, 30)
+[node name="Control2" type="Control" parent="Control2/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=499657396]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 
-[node name="HBoxContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1733610524, 1267303960) index="0" unique_id=142706386]
-custom_minimum_size = Vector2(0, 0)
+[node name="TextureRect" type="TextureRect" parent="Control2/VBoxContainer/MarginContainer/HBoxContainer2/Control2" unique_id=925579368]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 2.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7wdk")
+expand_mode = 1
+flip_h = true
 
-[node name="PowerLevel" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer/HBoxContainer" index="2" unique_id=295920822]
-custom_minimum_size = Vector2(0, 0)
-text = "52"
-
-[node name="Control" type="Control" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer/HBoxContainer" index="3" unique_id=1818497256]
-custom_minimum_size = Vector2(3, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="Control2/VBoxContainer/MarginContainer" unique_id=1235184073]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="MarginContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1733610524, 1267303960) index="1" unique_id=633279153]
-visible = false
+[node name="TextureRect" type="TextureRect" parent="Control2/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2115987898]
+layout_mode = 2
+texture = ExtResource("3_ou708")
+expand_mode = 3
 
-[node name="Checkmark" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1733610524, 1267303960) index="2" unique_id=453039118]
-visible = false
+[node name="Label" type="Label" parent="Control2/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1306066128]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Legendary Survivors:"
 
-[node name="MarginContainer3" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1733610524, 1267303960) index="3" unique_id=1703440662]
-visible = false
+[node name="HFlowContainer" type="HFlowContainer" parent="Control2/VBoxContainer" unique_id=700408270]
+layout_mode = 2
+last_wrap_alignment = 1
 
-[node name="MarginContainer2" parent="VBoxContainer/HFlowContainer/MissionRewardEntry3/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1733610524, 1267303960) index="4" unique_id=327077591]
-visible = false
-
-[node name="MissionRewardEntry4" parent="VBoxContainer/HFlowContainer" unique_id=922141100 instance=ExtResource("2_ou708")]
-custom_minimum_size = Vector2(0, 30)
+[node name="MicroMissionRewardEntry" parent="Control2/VBoxContainer/HFlowContainer" unique_id=932981455 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="HBoxContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(922141100, 1267303960) index="0" unique_id=142706386]
-custom_minimum_size = Vector2(0, 0)
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(932981455, 1472039922) index="2" unique_id=155650047]
+text = "94"
 
-[node name="PowerLevel" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer/HBoxContainer" index="2" unique_id=295920822]
-custom_minimum_size = Vector2(0, 0)
-text = "64"
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(932981455, 1472039922) index="4" unique_id=585772025]
+text = "Lv32"
 
-[node name="Control" type="Control" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer/HBoxContainer" index="3" unique_id=1598134573]
-custom_minimum_size = Vector2(3, 0)
+[node name="MicroMissionRewardEntry3" parent="Control2/VBoxContainer/HFlowContainer" unique_id=1202299451 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="MarginContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(922141100, 1267303960) index="1" unique_id=633279153]
-visible = false
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry3/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1202299451, 1472039922) index="2" unique_id=155650047]
+text = "94"
 
-[node name="Checkmark" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(922141100, 1267303960) index="2" unique_id=453039118]
-visible = false
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry3/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1202299451, 1472039922) index="4" unique_id=585772025]
+text = "Lv35"
 
-[node name="MarginContainer3" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(922141100, 1267303960) index="3" unique_id=1703440662]
-visible = false
-
-[node name="MarginContainer2" parent="VBoxContainer/HFlowContainer/MissionRewardEntry4/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(922141100, 1267303960) index="4" unique_id=327077591]
-visible = false
-
-[node name="MissionRewardEntry5" parent="VBoxContainer/HFlowContainer" unique_id=1659551073 instance=ExtResource("2_ou708")]
-custom_minimum_size = Vector2(0, 30)
+[node name="MicroMissionRewardEntry2" parent="Control2/VBoxContainer/HFlowContainer" unique_id=510368907 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="HBoxContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1659551073, 1267303960) index="0" unique_id=142706386]
-custom_minimum_size = Vector2(0, 0)
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry2/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(510368907, 1472039922) index="2" unique_id=155650047]
+text = "100 x2"
 
-[node name="PowerLevel" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer/HBoxContainer" index="2" unique_id=295920822]
-custom_minimum_size = Vector2(0, 0)
-text = "70"
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry2/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(510368907, 1472039922) index="4" unique_id=585772025]
+text = "Lv35
+Lv35"
 
-[node name="Control" type="Control" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer/HBoxContainer" index="3" unique_id=1331645936]
-custom_minimum_size = Vector2(3, 0)
+[node name="MicroMissionRewardEntry4" parent="Control2/VBoxContainer/HFlowContainer" unique_id=444437512 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="MarginContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1659551073, 1267303960) index="1" unique_id=633279153]
-visible = false
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry4/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(444437512, 1472039922) index="2" unique_id=155650047]
+text = "108 x2"
 
-[node name="Checkmark" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1659551073, 1267303960) index="2" unique_id=453039118]
-visible = false
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry4/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(444437512, 1472039922) index="4" unique_id=585772025]
+text = "Lv38
+Lv41"
 
-[node name="MarginContainer3" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1659551073, 1267303960) index="3" unique_id=1703440662]
-visible = false
-
-[node name="MarginContainer2" parent="VBoxContainer/HFlowContainer/MissionRewardEntry5/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1659551073, 1267303960) index="4" unique_id=327077591]
-visible = false
-
-[node name="MissionRewardEntry6" parent="VBoxContainer/HFlowContainer" unique_id=287224684 instance=ExtResource("2_ou708")]
-custom_minimum_size = Vector2(0, 30)
+[node name="MicroMissionRewardEntry6" parent="Control2/VBoxContainer/HFlowContainer" unique_id=1387891877 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="HBoxContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(287224684, 1267303960) index="0" unique_id=142706386]
-custom_minimum_size = Vector2(0, 0)
-
-[node name="PowerLevel" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer/HBoxContainer" index="2" unique_id=295920822]
-custom_minimum_size = Vector2(0, 0)
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry6/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1387891877, 1472039922) index="2" unique_id=155650047]
 text = "108"
 
-[node name="Control" type="Control" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer/HBoxContainer" index="3" unique_id=846164762]
-custom_minimum_size = Vector2(3, 0)
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry6/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1387891877, 1472039922) index="4" unique_id=585772025]
+text = "Lv41"
+
+[node name="MicroMissionRewardEntry5" parent="Control2/VBoxContainer/HFlowContainer" unique_id=1775061644 instance=ExtResource("2_ou708")]
 layout_mode = 2
 
-[node name="MarginContainer" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(287224684, 1267303960) index="1" unique_id=633279153]
-visible = false
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry5/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1775061644, 1472039922) index="2" unique_id=155650047]
+text = "124"
 
-[node name="Checkmark" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(287224684, 1267303960) index="2" unique_id=453039118]
-visible = false
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry5/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1775061644, 1472039922) index="4" unique_id=585772025]
+text = "Lv41"
 
-[node name="MarginContainer3" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(287224684, 1267303960) index="3" unique_id=1703440662]
-visible = false
+[node name="MicroMissionRewardEntry7" parent="Control2/VBoxContainer/HFlowContainer" unique_id=1825499317 instance=ExtResource("2_ou708")]
+layout_mode = 2
 
-[node name="MarginContainer2" parent="VBoxContainer/HFlowContainer/MissionRewardEntry6/MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(287224684, 1267303960) index="4" unique_id=327077591]
-visible = false
+[node name="PowerLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry7/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1825499317, 1472039922) index="2" unique_id=155650047]
+text = "140 x2"
 
-[editable path="VBoxContainer/HFlowContainer/MissionRewardEntry"]
-[editable path="VBoxContainer/HFlowContainer/MissionRewardEntry2"]
-[editable path="VBoxContainer/HFlowContainer/MissionRewardEntry3"]
-[editable path="VBoxContainer/HFlowContainer/MissionRewardEntry4"]
-[editable path="VBoxContainer/HFlowContainer/MissionRewardEntry5"]
-[editable path="VBoxContainer/HFlowContainer/MissionRewardEntry6"]
+[node name="ItemLevel" parent="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry7/MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1825499317, 1472039922) index="4" unique_id=585772025]
+text = "Lv45
+Lv46"
+
+[editable path="Control/VBoxContainer/HFlowContainer/MicroMissionRewardEntry"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry3"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry2"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry4"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry6"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry5"]
+[editable path="Control2/VBoxContainer/HFlowContainer/MicroMissionRewardEntry7"]

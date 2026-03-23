@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static GameItem;
 
 public partial class GameMission
 {
@@ -509,9 +510,9 @@ public partial class GameMission
 			public string zoneName;
 			public int powerLevel;
 			public bool fourPlayer;
-			public GameItem.ItemReward[] rewards;
-			public GameItem.ItemReward[] modifiers;
-			public GameItem.ItemReward[] alertRewards;
+			public ItemReward[] rewards;
+			public ItemReward[] modifiers;
+			public ItemReward[] alertRewards;
 
 			public int tileIndex;
 			public string missionGuid;
@@ -565,15 +566,20 @@ public partial class GameMission
 	public record struct ItemCollection
 	{
 		public string tierGroupName;
-		public GameItem.ItemReward[] items;
+		public ItemReward[] items;
 		[JsonIgnore]
-		public GameItem.ItemReward[] NamedItems
+		public ItemReward[] NamedItems
 		{
 			get
 			{
 				items ??= [];
 				for (int i = 0; i < items.Length; i++)
 				{
+					if (FulfillmentToTemplate(items[i].itemType, out var fid, out var fPack))
+					{
+						items[i].name = fPack?.DisplayName ?? $"<fid:{fid}>";
+						continue;
+					}
 					items[i].name = GameItemTemplate.Get(items[i].itemType)?.DisplayName ?? $"<{items[i].itemType}>";
 				}
 				return items;
@@ -878,17 +884,22 @@ public partial class GameMission
 		GenerateSearchTags();
 	}
 
-	static Dictionary<string, string> fulfillmentLookup;
-	static GameItem CreateItemFromFulfillment(string fulfillmentId)
+	static Dictionary<string, string> fulfillmentLookup; 
+	static bool FulfillmentToTemplate(string type, out string fulfillmentId, out GameItemTemplate template)
 	{
+		fulfillmentId = "";
+		template = null;
+		if (!type.StartsWith("#Fulfillment:"))
+			return false;
+		fulfillmentId = type[13..];
 		fulfillmentLookup ??= PegLegResourceManager.MagicNumbers["fulfillmentsToMissionRewards"]?.Deserialize<Dictionary<string, string>>() ?? [];
 		if (fulfillmentLookup.TryGetValue(fulfillmentId, out var itemId))
-			return GameItemTemplate.Get(itemId)?.CreateInstance();
-		return null;
+			template = GameItemTemplate.Get(itemId);
+		return true;
 	}
 
 
-	void GenerateItems(GameItem.ItemReward[] rewards, GameItem.ItemReward[] modifiers, GameItem.ItemReward[] alertRewards)
+	void GenerateItems(ItemReward[] rewards, ItemReward[] modifiers, ItemReward[] alertRewards)
 	{
 		Dictionary<string, GameItem> rewardItemList = [];
 		foreach (var itemData in rewards ?? [])
@@ -925,16 +936,18 @@ public partial class GameMission
 
 		foreach (var itemData in alertRewards ?? [])
 		{
-			if (itemData.itemType.StartsWith("#Fulfillment:"))
+			if (FulfillmentToTemplate(itemData.itemType, out var fid, out var fPack))
 			{
-				string fid = itemData.itemType[13..];
 				alertRewardFulfillmentList.Add(fid);
-				if (CreateItemFromFulfillment(fid) is GameItem fReward)
+				bool unknown = fPack is null;
+				fPack ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest");
+				if (fPack is not null)
 				{
+					var fReward = fPack.CreateInstance();
 					fReward.GetSearchTags();
 					alertRewardItemList.Add(fReward);
 				}
-				if (missionData is not null)
+				if (unknown && missionData is not null)
 					GD.PushWarning($"missing reward type for fulfillment \"{fid}\" in mission \"{missionData?.missionGuid}\"");
 				continue;
 			}
@@ -966,17 +979,17 @@ public partial class GameMission
 				i.sortingTemplate?.Name.Equals("PersonnelXP", StringComparison.InvariantCultureIgnoreCase) == true ||
 				i.sortingTemplate?.Name.Equals("SchematicXP", StringComparison.InvariantCultureIgnoreCase) == true ||
 				i.sortingTemplate?.Name.Equals("HeroXP", StringComparison.InvariantCultureIgnoreCase) == true
-			).Select(i => i.quantity).Sum() >= 4
+			).Sum(i => i.quantity) >= 4
 		)
 		{
 			HasLargeReward = true;
 			searchTags.Add("Large Reward");
 		}
 		if (
-			alertRewardItems.Where(i =>
+			alertRewardItems.Count(i =>
 				i.template?.Rarity == "Legendary" &&
 				!i.templateId.StartsWith("AccountResource:")
-			).Count() >= 2
+			) >= 2
 		)
 		{
 			HasDoubleLegendary = true;

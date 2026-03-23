@@ -116,7 +116,7 @@ public static class WebHelpers
 	}
 	public static MultipartFormDataContent AddImageContent(this MultipartFormDataContent multipartFormContent, string name, Image content, string filename = "image")
 	{
-		multipartFormContent.Add(new ByteArrayContent(content.SavePngToBuffer()), name, filename + ".png");
+		multipartFormContent.Add(new ByteArrayContent(content.SaveWebpToBuffer()), name, filename + ".webp");
 		return multipartFormContent;
 	}
 
