@@ -364,6 +364,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 					item.template.DisplayName == "Venture XP"
 					)
 					continue;
+				if (ignorePrefixes.Any(p => item.templateId.StartsWith(p)))
+					continue;
 				if (itemPredicate?.Invoke(item) == false)
 					continue;
 				filteredRewards.Add(new(mission, item));

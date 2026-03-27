@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_4dqrj"]
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_h68g4"]
 [ext_resource type="Script" uid="uid://ce73kldw4p5yw" path="res://Scripts/UserInterface/Dashboard/MissionRewardsController.cs" id="3_2noju"]
-[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/specific_mission_reward_container.tscn" id="3_6jjmv"]
+[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="3_6jjmv"]
+[ext_resource type="PackedScene" uid="uid://dhpixv4oijehf" path="res://Scenes/MissionEntry/specific_mission_reward_entry_shareable.tscn" id="4_6jjmv"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="5_rymeg"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="7_emma3"]
 [ext_resource type="PackedScene" uid="uid://dx5ueh2xxydys" path="res://Scenes/MissionEntry/mission_reward_entry_shareable.tscn" id="8_0ubh0"]
@@ -55,6 +56,7 @@ layout_mode = 2
 theme_type_variation = &"Panel5PadB"
 targetTemplateId = "AccountResource:currency_mtxswap"
 targetTemplatePrefix = "AccountResource:currency_mtxswap"
+rewardEntryScene = ExtResource("4_6jjmv")
 
 [node name="LegSurvivors" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" unique_id=1929304913 instance=ExtResource("3_6jjmv")]
 layout_mode = 2
@@ -62,6 +64,7 @@ theme_type_variation = &"Panel5PadB"
 targetTemplateId = "Worker:workerbasic_sr_t01"
 targetTemplatePrefix = "Worker:workerbasic_sr_t0"
 titleText = "Legendary Survivors"
+rewardEntryScene = ExtResource("4_6jjmv")
 
 [node name="NotableRewards" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/VBoxContainer" unique_id=146581107 node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
 custom_minimum_size = Vector2(350, 0)
