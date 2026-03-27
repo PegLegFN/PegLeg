@@ -1,11 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgr0eeg3fek2e"]
+[gd_scene format=3 uid="uid://bgr0eeg3fek2e"]
 
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="1_klo2e"]
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_qh3cy"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="3_0tkrv"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_ll1yb"]
+[ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="5_qh3cy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6cwwm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0tkrv"]
 resource_local_to_scene = true
 shader = ExtResource("2_qh3cy")
 shader_parameter/ControlSize = Vector2(128, 128)
@@ -14,25 +15,37 @@ shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
 shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
 shader_parameter/IsChoice = true
 shader_parameter/MainIcon = ExtResource("4_ll1yb")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
 shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("3_0tkrv")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 
-[node name="RewardEntry" instance=ExtResource("1_klo2e")]
+[node name="RewardEntry" unique_id=2049989955 instance=ExtResource("1_klo2e")]
 custom_minimum_size = Vector2(128, 128)
 useLargePreview = true
 
-[node name="TextureRect" parent="." index="0"]
-material = SubResource("ShaderMaterial_6cwwm")
+[node name="TextureRect" parent="." index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_0tkrv")
 
-[node name="RightIcon" parent="Overlays/AmountContainer" index="0"]
+[node name="RightIcon" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="0" unique_id=2033524404]
 custom_minimum_size = Vector2(32, 32)
 
-[node name="LeftIcon" parent="Overlays/AmountContainer" index="2"]
+[node name="LeftIcon" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="2" unique_id=1152878404]
 custom_minimum_size = Vector2(32, 32)
+
+[node name="PowerLevelIndicator" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="4" unique_id=123897073 instance=ExtResource("5_qh3cy")]
+layout_mode = 0
+offset_top = 10.0
+offset_bottom = 32.0
+
+[connection signal="RatingChanged" from="." to="Overlays/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="RatingVisibility" from="." to="Overlays/PowerLevelIndicator" method="set_visible"]
+
+[editable path="Overlays/PowerLevelIndicator"]

@@ -127,7 +127,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			return;
 
 
-		GD.Print($"Auto-Dismantling {toDismantle.Length} junk items from the backpack of {currentProfile}...");
+		GD.Print($"Auto-Dismantling {toDismantle.Length} junk items from the backpack of {currentProfile.account.DisplayName}...");
 		JsonObject content = new()
 		{
 			["targetItemIdAndQuantityPairs"] = new JsonArray(

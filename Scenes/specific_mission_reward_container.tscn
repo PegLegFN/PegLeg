@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://cogh58dgygj4l"]
+
+[ext_resource type="Texture2D" uid="uid://bite5sw5cyx0l" path="res://Images/InterfaceIcons/T-Items-MTX.png" id="1_lqpmk"]
+[ext_resource type="Script" uid="uid://bwf1wjkushwlv" path="res://Scripts/UserInterface/Dashboard/SpecificMissionRewardController.cs" id="1_ukikw"]
+[ext_resource type="PackedScene" uid="uid://bb01pn2pbtea5" path="res://Scenes/specific_mission_reward_entry.tscn" id="2_ukikw"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="3_56gc5"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_3hrlb"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="5_e5j6g"]
+
+[sub_resource type="Gradient" id="Gradient_cgx5j"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_h7wdk"]
+gradient = SubResource("Gradient_cgx5j")
+fill = 1
+fill_from = Vector2(1, 0.5)
+fill_to = Vector2(0.5, 0.5)
+metadata/_snap_enabled = true
+
+[node name="SpecificMissionRewardContainer" type="PanelContainer" unique_id=1333906878 node_paths=PackedStringArray("titleLabel", "fallbackLabel", "titleItem", "rewardParent", "loadingIndicator")]
+custom_minimum_size = Vector2(350, 0)
+theme_type_variation = &"Panel3PadB"
+script = ExtResource("1_ukikw")
+hideWhileEmpty = true
+titleLabel = NodePath("VBoxContainer/TitleItem/HBoxContainer/Title")
+fallbackLabel = NodePath("VBoxContainer/TitleItem/HBoxContainer/FallbackName")
+titleItem = NodePath("VBoxContainer/TitleItem")
+rewardEntryScene = ExtResource("2_ukikw")
+rewardParent = NodePath("VBoxContainer/HFlowContainer")
+loadingIndicator = NodePath("VBoxContainer/SmallLoadingIcon")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1124750935]
+layout_mode = 2
+
+[node name="TitleItem" type="MarginContainer" parent="VBoxContainer" unique_id=1656498305]
+layout_mode = 2
+script = ExtResource("3_56gc5")
+
+[node name="Rarity" type="HBoxContainer" parent="VBoxContainer/TitleItem" unique_id=1384008620]
+modulate = Color(1, 0.4969027, 0, 1)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Control" type="Control" parent="VBoxContainer/TitleItem/Rarity" unique_id=528437017]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TitleItem/Rarity/Control" unique_id=1320102310]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7wdk")
+expand_mode = 1
+
+[node name="Control2" type="Control" parent="VBoxContainer/TitleItem/Rarity" unique_id=1644822929]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TitleItem/Rarity/Control2" unique_id=2102775946]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 2.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_h7wdk")
+expand_mode = 1
+flip_h = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleItem" unique_id=334064636]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TitleItem/HBoxContainer" unique_id=41263383]
+layout_mode = 2
+texture = ExtResource("1_lqpmk")
+expand_mode = 3
+
+[node name="Title" type="Label" parent="VBoxContainer/TitleItem/HBoxContainer" unique_id=1781715585]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "Specific Reward Name:"
+
+[node name="FallbackName" type="Label" parent="VBoxContainer/TitleItem/HBoxContainer" unique_id=1640502529]
+visible = false
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "Fallback"
+
+[node name="HFlowContainer" type="Container" parent="VBoxContainer" unique_id=22627370]
+layout_mode = 2
+script = ExtResource("5_e5j6g")
+CompressSpacing = true
+Spacing = Vector2(4, 4)
+UseLargestChild = true
+
+[node name="SmallLoadingIcon" parent="VBoxContainer" unique_id=949166411 instance=ExtResource("4_3hrlb")]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[connection signal="IconChanged" from="VBoxContainer/TitleItem" to="VBoxContainer/TitleItem/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="VBoxContainer/TitleItem" to="VBoxContainer/TitleItem/HBoxContainer/FallbackName" method="set_text"]
+[connection signal="RarityChanged" from="VBoxContainer/TitleItem" to="VBoxContainer/TitleItem/Rarity" method="set_modulate"]

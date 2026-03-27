@@ -20,6 +20,7 @@ public class PegLegResourceManager
 
 	public static readonly Texture2D defaultIcon = ResourceLoader.Load<Texture2D>("res://Images/InterfaceIcons/T-Icon-Unknown-128.png");
 	public static readonly BanjoSuppliments supplimentaryData = ResourceLoader.Load<BanjoSuppliments>("res://DataResources/BanjoSuppliments.tres");
+	public static event Action OnResourcesLoaded;
 
 	static FrozenDictionary<string, JsonObject> dataSources;
 	public static FrozenDictionary<string, JsonObject> itemSources { get; private set; }
@@ -151,6 +152,7 @@ public class PegLegResourceManager
 			LoadNamedItems()
 		);
 		hasLoadedResources = true;
+		OnResourcesLoaded?.Invoke();
 	}
 
 	//temporary until proper resource versioning system is ready

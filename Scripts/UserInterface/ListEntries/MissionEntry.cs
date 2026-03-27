@@ -142,6 +142,30 @@ public partial class MissionEntry : Control, IRecyclableEntry
 		currentMission?.UpdateRewardNotifications();
 	}
 
+	public void ClearMission()
+	{
+		currentMission = null;
+		EmitSignalNameChanged(null);
+		EmitSignalDescriptionChanged(null);
+		EmitSignalLocationChanged(null);
+		EmitSignalIconChanged(null);
+		EmitSignalPowerLevelChanged(null);
+		EmitSignalBackgroundChanged(null);
+		EmitSignalIsToDo(false);
+
+		EmitSignalMissionLocked(false);
+		EmitSignalMissionComplete(false);
+
+		EmitSignalTheaterNameChanged(null);
+		EmitSignalVenturesIndicatorVisible(false);
+		EmitSignalTheaterCategoryChanged(null);
+		EmitSignalTheaterColorChanged(Colors.White);
+
+		EmitSignalTooltipChanged(null);
+
+		UpdateHighlightedItems();
+	}
+
 	public void SetMission(GameMission mission)
 	{
 		currentMission = mission;
@@ -185,16 +209,18 @@ public partial class MissionEntry : Control, IRecyclableEntry
 		List<string> tooltipDescriptions =
 		[
 			currentMission.Description ?? "",
-            //"Item Id: " + item.templateId,
-        ];
+			//"Item Id: " + item.templateId,
+		];
 		if (mission.searchTags.Count > 0)
 			tooltipDescriptions.Add("Search Tags: " + mission.searchTags.Select(n => n.ToString()).Except([currentMission.DisplayName]).ToArray().Join(", "));
 
-		EmitSignalTooltipChanged(CustomTooltip.GenerateSimpleTooltip(
-			currentMission.DisplayName,
-			null,
-			[.. tooltipDescriptions]
-			));
+		EmitSignalTooltipChanged(
+			CustomTooltip.GenerateSimpleTooltip(
+				currentMission.DisplayName,
+				null,
+				[.. tooltipDescriptions]
+			)
+		);
 
 		if (alertModifierLayout is not null && alertModifierParent is not null)
 		{
@@ -313,8 +339,8 @@ public partial class MissionEntry : Control, IRecyclableEntry
 			if (highlightedItemProvider?.HighlightedItemFilter is not Func<GameItem, bool> predicate)
 				return [];
 			var rewards = fullItems ?
-				currentMission.allItems :
-				[.. currentMission.allItems
+				currentMission?.allItems :
+				[.. (currentMission?.allItems ?? [])
 					.Where(r =>
 						r.template.DisplayName != "Gold" &&
 						r.template.DisplayName != "Venture XP"
@@ -340,6 +366,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
 			var controlChild = parent.GetChild<GameItemEntry>(i);
 			if (itemArray.Length <= i)
 			{
+				controlChild.ClearItem();
 				controlChild.Visible = false;
 				controlChild.ProcessMode = ProcessModeEnum.Disabled;
 				continue;

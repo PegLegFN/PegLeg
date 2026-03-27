@@ -40,6 +40,8 @@ public partial class DailySummaryWebhookDispatcher : Node
 				GameMission.UpdateMissions(),
 				Helpers.WaitForTimer(10)
 			);
+			if (AppConfig.TryGet("automation", "summary_160_fallback", out string _))
+				await Helpers.WaitForTimer(6);
 			await Helpers.WaitForFrames(3);
 		}
 

@@ -1220,9 +1220,10 @@ public partial class GameAccount
 			return;
 
 		var displayName = GetCustomNameForLoadoutSlot(loadoutSlot);
+		JsonObject loadoutCrew = loadoutSlot.attributes["crew_members"]?.AsObject() ?? [];
 
 		JsonObject crewMembers = [];
-		var commanderGuid = loadoutSlot.attributes["crew_members"][$"commanderslot"]?.ToString();
+		var commanderGuid = loadoutCrew[$"commanderslot"]?.ToString();
 		var commanderHero = commanderGuid is not null ? loadoutSlot.profile.GetItem(commanderGuid) : null;
 		crewMembers[$"commanderslot"] = JsonSerializer.SerializeToNode(LoadoutBlueprintHero.FromHero(commanderHero.template), Helpers.JsonOptions.Fields);
 
@@ -1231,12 +1232,22 @@ public partial class GameAccount
 
 		for (int i = 0; i < 5; i++)
 		{
-			var supportGuid = loadoutSlot.attributes["crew_members"][$"followerslot{i + 1}"]?.ToString();
+			var supportGuid = loadoutCrew[$"followerslot{i + 1}"]?.ToString();
 			var supportHero = supportGuid is not null ? loadoutSlot.profile.GetItem(supportGuid) : null;
 			crewMembers[$"followerslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintHero.FromHero(supportHero?.template), Helpers.JsonOptions.Fields);
 		}
 
 		var gadgetTemplates = loadoutSlot.attributes["gadgets"]?.AsArray().OrderBy(g => (int)g["slot_index"]).Select(g => g["gadget"].ToString()).ToArray() ?? [];
+
+		if (loadoutCrew.Any(kvp => kvp.Key.StartsWith("defenderslot")))
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				var supportGuid = loadoutCrew[$"defenderslot{i + 1}"]?.ToString();
+				var supportDefender = supportGuid is not null ? loadoutSlot.profile.GetItem(supportGuid) : null;
+				crewMembers[$"followerslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintDefender.FromDefender(supportDefender?.template), Helpers.JsonOptions.Fields);
+			}
+		}
 
 		GameItem newLoadoutBlueprint = new GameItem(null, 1, new()
 		{
@@ -1279,8 +1290,34 @@ public partial class GameAccount
 				.OrderBy(i => i.templateId != display)
 				.ThenBy(i => !i.templateId.StartsWith(prefix))
 				.ThenBy(i => -i.template.RarityLevel)
-				.ThenBy(i => -i.CalculateRating())
-				.ThenBy(i => !i.templateId.StartsWith(prefix));
+				.ThenBy(i => -i.CalculateRating());
+			return candidates.FirstOrDefault()?.uuid;
+		}
+	}
+	public partial struct LoadoutBlueprintDefender
+	{
+		public string displayTemplate;
+		public string defenderType;
+
+		public static LoadoutBlueprintDefender FromDefender(GameItemTemplate defenderTemplate)
+		{
+			return new()
+			{
+				displayTemplate = defenderTemplate.TemplateId,
+				defenderType = defenderTemplate.SubType
+			};
+		}
+
+		public string ResolveDefenderUUID(GameProfile profile)
+		{
+			if (displayTemplate is null)
+				return null;
+			var subtype = defenderType;
+			var display = displayTemplate;
+			var candidates = profile.GetItems("Defender", i => i.template?.SubType?.Equals(subtype, StringComparison.OrdinalIgnoreCase) == true)
+				.OrderBy(i => i.templateId != display)
+				.ThenBy(i => -i.template.RarityLevel)
+				.ThenBy(i => -i.CalculateRating());
 			return candidates.FirstOrDefault()?.uuid;
 		}
 	}

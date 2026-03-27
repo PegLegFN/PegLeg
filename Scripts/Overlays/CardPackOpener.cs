@@ -1011,11 +1011,12 @@ public partial class CardPackOpener : Control
 				unselectableMarkerTex = null,
 				unselectableTintColor = Colors.Transparent,
 			});
+			var recycleIds = toRecycle.Select(item => (JsonNode)item.uuid).Where(id => id is not null).ToArray();
 			if (toRecycle.Length > 0)
 			{
 				JsonObject content = new()
 				{
-					["targetItemIds"] = new JsonArray(toRecycle.Select(item => (JsonNode)item.uuid).ToArray())
+					["targetItemIds"] = new JsonArray(recycleIds)
 				};
 				await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content);
 			}

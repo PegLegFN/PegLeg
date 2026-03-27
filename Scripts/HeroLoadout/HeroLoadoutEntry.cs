@@ -20,6 +20,10 @@ public partial class HeroLoadoutEntry : GameItemEntry
 	[Export]
 	GameItemEntry[] gadgets;
 	[Export]
+	GameItemEntry[] defenders;
+	[Export]
+	Control defenderLayout;
+	[Export]
 	Control selectionFX;
 	[Export]
 	Control altSelectionFX;
@@ -36,6 +40,14 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
 	public override void _Ready()
 	{
+		if (PegLegResourceManager.MagicNumbers["showDefenders"]?.GetValue<bool>() != true)
+		{
+			if (defenderLayout is not null)
+				defenderLayout.Visible = false;
+			defenders = [];
+		}
+		defenders ??= [];
+
 		ClearItem();
 		if (useActiveAccount)
 		{
@@ -53,6 +65,11 @@ public partial class HeroLoadoutEntry : GameItemEntry
 		{
 			int idx = i;
 			gadgets[i].Pressed += () => InteractGadget(idx);
+		}
+		for (int i = 0; i < defenders.Length; i++)
+		{
+			int idx = i;
+			defenders[i].Pressed += () => InteractDefender(idx);
 		}
 	}
 
@@ -120,6 +137,15 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
 		gadgets[1].SetItem(null);
 		SetBGAnim(gadgets[1], offset);
+
+		offset += 0.05f;
+
+		for (int i = 0; i < defenders.Length; i++)
+		{
+			defenders[i].SetItem(null);
+			defenders[i].SetInteractable(false);
+			SetBGAnim(defenders[i], offset);
+		}
 
 		bufferWhenCleared = false;
 	}
@@ -201,6 +227,15 @@ public partial class HeroLoadoutEntry : GameItemEntry
 		var gadgetTemplates = currentItem.attributes["gadgets"]?.Deserialize<string[]>();
 		TrySetGadget(gadgets[0], gadgetTemplates.Length > 0 ? gadgetTemplates[0] : null);
 		TrySetGadget(gadgets[1], gadgetTemplates.Length > 1 ? gadgetTemplates[1] : null);
+
+		for (int i = 0; i < defenders.Length; i++)
+		{
+			var supportNode = currentItem.attributes["crew_members"][$"defenderslot{i + 1}"];
+			var supportTemplate = supportNode?.Deserialize<GameAccount.LoadoutBlueprintDefender?>(Helpers.JsonOptions.Fields)?.displayTemplate;
+			var supportDefender = GameItemTemplate.Get(supportTemplate)?.CreateInstance();
+			defenders[i].SetItem(supportDefender);
+			defenders[i].SetInteractable(interactable);
+		}
 	}
 
 	void SetAsLoadoutSlot()
@@ -279,6 +314,14 @@ public partial class HeroLoadoutEntry : GameItemEntry
 		var gadgetTemplates = currentItem.attributes["gadgets"]?.AsArray().OrderBy(g => g?["slot_index"]?.GetValue<int>()).Select(g => g?["gadget"]?.ToString()).ToArray() ?? [];
 		TrySetGadget(gadgets[0], gadgetTemplates.Length > 0 ? gadgetTemplates[0] : null);
 		TrySetGadget(gadgets[1], gadgetTemplates.Length > 1 ? gadgetTemplates[1] : null);
+
+		for (int i = 0; i < defenders.Length; i++)
+		{
+			var supportGuid = currentItem.attributes["crew_members"][$"defenderslot{i + 1}"]?.ToString();
+			var supportDefender = supportGuid is not null ? currentItem.profile.GetItem(supportGuid) : null;
+			defenders[i].SetItem(supportDefender);
+			defenders[i].SetInteractable(interactable);
+		}
 	}
 
 	//public Vector2 BasisSize => node.CustomMinimumSize;
@@ -349,6 +392,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
 			teamPerk.Inspect();
 			return;
 		}
+		if (currentItem.profile.GetFirstTemplateItem("HomebaseNode:questreward_teamperk_slot1") is null)
+			return;
 		var newTeamPerk = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("TeamPerk"), HeroItemSelector.TeamPerkConfig with
 		{
 			commanderType = commander.currentItem?.templateId,
@@ -375,6 +420,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
 			support[idx].Inspect();
 			return;
 		}
+		if(currentItem.profile.GetFirstTemplateItem($"HomebaseNode:questreward_newfollower{idx+1}_slot") is null)
+			return;
 		var current = support[idx].currentItem?.uuid;
 		HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current ?? ""])];
 		var newHero = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Hero").Where(item =>
@@ -434,6 +481,50 @@ public partial class HeroLoadoutEntry : GameItemEntry
             "gadgetId": "{{newGadget?.templateId}}",
             "loadoutId": "{{currentItem.uuid}}",
             "slotIndex": {{idx}}
+        }
+        """);
+	}
+
+	async void InteractDefender(int idx)
+	{
+		if(defenders.Length==0 || defenders.Length <= idx)
+		{
+			GD.PushWarning($"Defender {idx} out of range of {defenders.Length}");
+			return;
+		}
+		if (currentItem.profile.GetFirstTemplateItem($"HomebaseNode:questreward_newdefender{idx + 1}_slot") is null)
+			return;
+		if (Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
+		{
+			defenders[idx].Inspect();
+			return;
+		}
+		var current = defenders[idx].currentItem?.uuid;
+		HashSet<string> exclusions = [.. currentItem.attributes["crew_members"].AsObject().Select(kvp => kvp.Value.ToString()).Except([current ?? ""])];
+		var newDefender = await HeroItemSelector.OpenSelector(currentItem.profile.GetItems("Defender").Where(item =>
+		{
+			if (exclusions.Contains(item.uuid) || item.attributes?["squad_id"] is not null)
+				return false;
+			return true;
+		}), HeroItemSelector.DefaultConfig with
+		{
+			title = "Select Defender",
+			lastSelectedId = current,
+			allowEmptySelection = true,
+		});
+		if (newDefender is null)
+		{
+			//GD.Print("cancelled");
+			return;
+		}
+		if (newDefender == GameItem.Empty)
+			newDefender = null;
+		//using var _ = LoadingOverlay.CreateToken();
+		await currentItem.profile.PerformOperation("AssignDefenderToLoadout", $$"""
+        {
+            "defenderId": "{{newDefender?.uuid}}",
+            "loadoutId": "{{currentItem.uuid}}",
+            "slotName": "DefenderSlot{{idx + 1}}"
         }
         """);
 	}

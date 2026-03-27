@@ -123,7 +123,8 @@ public class GameItem
 		public string itemType;
 		public JsonElement? attributes;
 		public int quantity = 1;
-		public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>());
+		public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>(), templateId: itemType);
+		public GameItem CreateItem() => GameItemTemplate.Get(itemType)?.CreateInstance(quantity, attributes?.Deserialize<JsonObject>());
 	}
 
 	public GameItem SetUUID(string customUUID = null)
@@ -233,6 +234,7 @@ public class GameItem
 
 	public string Personality => attributes?["personality"]?.ToString() is string rawPersonality ? ParseSurvivorAttribute(rawPersonality) : null;
 	public string SetBonus => attributes?["set_bonus"]?.ToString() is string rawSetBonus ? ParseSurvivorAttribute(rawSetBonus) : null;
+	public int Level => attributes?["level"]?.GetValue<int>() ?? 0; 
 
 	GameItem[] cardPackChoices;
 	public GameItem[] CardPackChoices => cardPackChoices ??= attributes?["options"]?

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cqrhkmo2wovb1" path="res://Scenes/Desktop/Views/Dashboard/dashboardToDoList.tscn" id="3_fuvb8"]
 [ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="3_iknkm"]
 [ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="4_fuvb8"]
+[ext_resource type="PackedScene" uid="uid://c177xe08uufqj" path="res://Scenes/MissionEntry/mission_reward_entry_todo_large.tscn" id="4_j4kb0"]
 [ext_resource type="Texture2D" uid="uid://dc6umid5fw8b3" path="res://Images/InterfaceIcons/T-Icon-Manage-All-512.png" id="5_j4kb0"]
 [ext_resource type="Texture2D" uid="uid://bashr5wthp5vk" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_List_128.png" id="6_gnm8f"]
 
@@ -38,9 +39,10 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 20
 text = "Multi-Filter"
 
-[node name="All" parent="PanelContainer/MarginContainer/AllMissions" unique_id=887790858 node_paths=PackedStringArray("itemSearchBar") instance=ExtResource("1_vmt3o")]
+[node name="All" parent="PanelContainer/MarginContainer/AllMissions" unique_id=887790858 node_paths=PackedStringArray("itemSearchBar", "multiFilterToggle") instance=ExtResource("1_vmt3o")]
 layout_mode = 2
 itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/SearchBox3")
+multiFilterToggle = NodePath("../HBoxContainer/CheckButton")
 
 [node name="SearchBox" parent="PanelContainer/MarginContainer/AllMissions/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 2007388593) index="0" unique_id=88566526]
 theme_override_font_sizes/font_size = 24
@@ -152,9 +154,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "To-Do List"
 
-[node name="To-Do List (0)" parent="PanelContainer/MarginContainer/ToDoList" unique_id=1998254745 instance=ExtResource("3_fuvb8")]
+[node name="To-Do List (0)" parent="PanelContainer/MarginContainer/ToDoList" unique_id=1998254745 node_paths=PackedStringArray("tab") instance=ExtResource("3_fuvb8")]
 layout_mode = 2
 size_flags_vertical = 3
+tab = NodePath("../../../VirtualTabBar/HBoxContainer/Tab2")
+
+[node name="ScrollContainer" parent="PanelContainer/MarginContainer/ToDoList/To-Do List (0)" index="0" unique_id=194545143]
+elementScene = ExtResource("4_j4kb0")
 
 [node name="VirtualTabBar" parent="PanelContainer" unique_id=1464370482 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("3_iknkm")]
 custom_minimum_size = Vector2(14, 32)
@@ -178,4 +184,5 @@ Text = "To-Do List"
 Icon = ExtResource("6_gnm8f")
 
 [editable path="PanelContainer/MarginContainer/AllMissions/All"]
+[editable path="PanelContainer/MarginContainer/ToDoList/To-Do List (0)"]
 [editable path="PanelContainer/VirtualTabBar"]

@@ -83,6 +83,17 @@ public partial class DynamicGridContainer : Container
 	}
 	bool useManualColCounts;
 	[Export]
+	bool UseLargestChild
+	{
+		get => useLargestChild;
+		set
+		{
+			useLargestChild = value;
+			UpdateLayout();
+		}
+	}
+	bool useLargestChild;
+	[Export]
 	int[] ColumnCounts
 	{
 		get => manualColumnCounts;
@@ -111,14 +122,14 @@ public partial class DynamicGridContainer : Container
 		try
 		{
 			lockMinSize = true;
-			(var firstChild, var children) = GetRelevantChildren();
+			(var sizeChild, var children) = GetRelevantChildren();
 			if (children.Length == 0)
 			{
 				lockMinSize = false;
 				return Vector2.Zero;
 			}
 
-			int colCount = GetColCount(firstChild.GetCombinedMinimumSize().X, out var colWidth);
+			int colCount = GetColCount(sizeChild.GetCombinedMinimumSize().X, out var colWidth);
 			int rowCount = Mathf.CeilToInt((float)children.Length / colCount);
 			float totalHeight = GetRowHeights(children, colCount).Sum();
 
@@ -135,19 +146,20 @@ public partial class DynamicGridContainer : Container
 	}
 
 	Control[] GetControlChildren() => [.. GetChildren().OfType<Control>()];
+	Control PrimaryChild(Control[] ofChildren) => useLargestChild ? (ofChildren ?? []).OrderBy(c => c.GetCombinedMinimumSize().X).LastOrDefault() : ofChildren?.FirstOrDefault();
 
 	(Control, Control[]) GetRelevantChildren()
 	{
 		var children = GetControlChildren();
 		if (children.Length == 0)
 			return (null, []);
-		return (children[0], children.Where(c => c.Visible).ToArray());
+		return (PrimaryChild(children), children.Where(c => c.Visible).ToArray());
 	}
 
 	public int GetColCount(float? givenChildWidth = null) => GetColCount(givenChildWidth, out var _);
 	public int GetColCount(float? givenChildWidth, out float colWidth)
 	{
-		colWidth = autoColWidth ? (givenChildWidth ?? this.FirstChildOfType<Control>().GetCombinedMinimumSize().X) : manualColWidth;
+		colWidth = autoColWidth ? (givenChildWidth ?? PrimaryChild(GetControlChildren()).GetCombinedMinimumSize().X) : manualColWidth;
 		int colCount = Mathf.Max(Mathf.FloorToInt((Size.X + spacing.X) / (colWidth + spacing.X)), minCols);
 
 		if (useManualColCounts && manualColumnCounts is not null)

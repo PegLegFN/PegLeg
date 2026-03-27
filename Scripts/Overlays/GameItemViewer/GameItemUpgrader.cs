@@ -102,6 +102,7 @@ public partial class GameItemUpgrader : Control
 	bool showCores = false;
 	bool isShardable = false;
 	bool canLevel = false;
+	bool capped = false;
 	bool canSupercharge = false;
 
 	public override void _Ready()
@@ -170,8 +171,9 @@ public partial class GameItemUpgrader : Control
 			maxTier = 1;
 		maxDisplayTier = currentItem.template.MaxTier;
 		maxTier = Mathf.Min(maxTier, maxDisplayTier);
+		capped = level == tier * 10 && maxTier == tier;
 		var minTier = tier;
-		if (level == tier * 10 && !canSupercharge)
+		if (level == tier * 10 && !capped)
 		{
 			minLevel -= 1;
 			minTier += 1;

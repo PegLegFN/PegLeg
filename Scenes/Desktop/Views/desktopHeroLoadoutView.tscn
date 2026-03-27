@@ -109,9 +109,10 @@ script = ExtResource("2_ht23k")
 section = "inventory"
 key = "loadout_list_heroes"
 
-[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer" unique_id=676573375 instance=ExtResource("2_kwlnb")]
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer" unique_id=676573375 node_paths=PackedStringArray("defenders") instance=ExtResource("2_kwlnb")]
 visible = false
 layout_mode = 2
+defenders = []
 
 [node name="PlainBG" parent="HBoxContainer/LoadoutSlots/VBoxContainer/PanelContainer/VBoxContainer/LoadoutSlotEntry" index="0" unique_id=1870629595]
 material = SubResource("ShaderMaterial_ne8ju")
@@ -188,8 +189,9 @@ layout_mode = 2
 size_flags_horizontal = 0
 alignment = 1
 
-[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=801908463 instance=ExtResource("2_kwlnb")]
+[node name="LoadoutSlotEntry" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=801908463 node_paths=PackedStringArray("defenders") instance=ExtResource("2_kwlnb")]
 layout_mode = 2
+defenders = []
 
 [node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=171399611]
 layout_mode = 2
@@ -204,8 +206,9 @@ size_flags_vertical = 4
 texture = ExtResource("3_1fwhb")
 expand_mode = 3
 
-[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=2056718919 instance=ExtResource("2_kwlnb")]
+[node name="LoadoutSlotEntry2" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/IncomingLodout" unique_id=2056718919 node_paths=PackedStringArray("defenders") instance=ExtResource("2_kwlnb")]
 layout_mode = 2
+defenders = []
 
 [node name="OverwriteIcon" type="MarginContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts" unique_id=1826548157]
 visible = false
@@ -236,41 +239,41 @@ theme_override_font_sizes/font_size = 30
 text = "Loadout Slot 20"
 horizontal_alignment = 1
 
-[node name="HeroLoadoutPanel" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout" unique_id=793496851 instance=ExtResource("2_qqdfd")]
+[node name="HeroLoadoutPanel" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Loadouts/PanelContainer/CurrentLoadout" unique_id=793496851 node_paths=PackedStringArray("defenders") instance=ExtResource("2_qqdfd")]
 layout_mode = 2
 size_flags_horizontal = 8
+defenders = []
 useActiveAccount = false
 editable = true
 
 [node name="Control" type="Control" parent="HBoxContainer/LoadoutPreview/VBoxContainer" unique_id=652491440]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control" unique_id=367031590]
-custom_minimum_size = Vector2(250, 0)
+[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control" unique_id=1162983422]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 13
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -125.0
-offset_top = -30.0
-offset_right = 125.0
-offset_bottom = 30.0
+anchor_bottom = 1.0
+offset_left = -152.5
+offset_right = 152.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 alignment = 1
 
 [node name="Button2" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=1427241406]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 20
 text = "Set As Active Slot"
 
 [node name="CreateBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=1070068777]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 20
@@ -278,6 +281,7 @@ text = "Create Blueprint"
 
 [node name="LoadBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=607715024]
 visible = false
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 20
@@ -285,6 +289,7 @@ text = "Load Blueprint"
 
 [node name="DeleteBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=497449298]
 visible = false
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 20
@@ -292,6 +297,7 @@ text = "Delete Blueprint"
 
 [node name="CancelBlueprint" type="Button" parent="HBoxContainer/LoadoutPreview/VBoxContainer/Control/VBoxContainer" unique_id=388695608]
 visible = false
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 20

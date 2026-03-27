@@ -4,8 +4,10 @@
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_b8fb5"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="3_uviiw"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_c1c73"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="5_uviiw"]
+[ext_resource type="PackedScene" uid="uid://qdtb6peaahfr" path="res://Scenes/UI/TabBar/virtualTabLarge.tscn" id="6_c1c73"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b5lqv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uviiw"]
 resource_local_to_scene = true
 shader = ExtResource("2_b8fb5")
 shader_parameter/ControlSize = Vector2(200, 200)
@@ -25,30 +27,6 @@ shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("3_uviiw")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8fb5"]
-resource_local_to_scene = true
-shader = ExtResource("2_b8fb5")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("4_c1c73")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("3_uviiw")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_uviiw"]
-resource_name = "ItemViewerChoices"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c1c73"]
 resource_local_to_scene = true
@@ -71,26 +49,8 @@ shader_parameter/AltIcon = ExtResource("3_uviiw")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7r0bt"]
-resource_local_to_scene = true
-shader = ExtResource("2_b8fb5")
-shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("4_c1c73")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("3_uviiw")
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
+[sub_resource type="ButtonGroup" id="ButtonGroup_7r0bt"]
+resource_name = "ItemViewerChoices"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vfuu5"]
 resource_local_to_scene = true
@@ -159,23 +119,45 @@ shader_parameter/ChoiceShift = 0.0
 resource_local_to_scene = true
 shader = ExtResource("2_b8fb5")
 shader_parameter/ControlSize = Vector2(0, 0)
-shader_parameter/CornerRadius = 3.0
-shader_parameter/Fit = true
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
 shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
+shader_parameter/IsSchematic = true
 shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("4_c1c73")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
+shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
 shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("3_uviiw")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bn4kg"]
+resource_local_to_scene = true
+shader = ExtResource("2_b8fb5")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_c1c73")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("3_uviiw")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i3y7m"]
 resource_local_to_scene = true
 shader = ExtResource("2_b8fb5")
 shader_parameter/ControlSize = Vector2(0, 0)
@@ -195,7 +177,28 @@ shader_parameter/AltPack = false
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 
-[node name="GameItemViewer" unique_id=1687330932 instance=ExtResource("1_b5lqv")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sehr0"]
+resource_local_to_scene = true
+shader = ExtResource("2_b8fb5")
+shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_c1c73")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+
+[node name="GameItemViewer" unique_id=1687330932 node_paths=PackedStringArray("tabBar") instance=ExtResource("1_b5lqv")]
+tabBar = NodePath("Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar2")
 
 [node name="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=655177042]
 scale = Vector2(0.85, 0.85)
@@ -211,43 +214,74 @@ size_flags_horizontal = 3
 columns = 2
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/RewardEntry" parent_id_path=PackedInt32Array(1774023433) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_b5lqv")
+material = SubResource("ShaderMaterial_uviiw")
+
+[node name="VirtualTabBar" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer" parent_id_path=PackedInt32Array(447050226) index="0" unique_id=613172966]
+visible = false
+custom_minimum_size = Vector2(14, 32)
+
+[node name="VirtualTabBar2" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer" parent_id_path=PackedInt32Array(447050226) index="1" unique_id=61724403 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("5_uviiw")]
+custom_minimum_size = Vector2(14, 32)
+layout_mode = 2
+useAsTabContainer = NodePath("../Tabs")
+
+[node name="Tab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar2/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("6_c1c73")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = "Perks"
+
+[node name="Tab2" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar2/HBoxContainer" index="1" unique_id=1713291992 instance=ExtResource("6_c1c73")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Abilities"
+
+[node name="Tab3" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar2/HBoxContainer" index="2" unique_id=41729600 instance=ExtResource("6_c1c73")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Stats"
+
+[node name="Tab4" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar2/HBoxContainer" index="3" unique_id=1773033050 instance=ExtResource("6_c1c73")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = "Dev"
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal" parent_id_path=PackedInt32Array(249909613) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_b8fb5")
-
-[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control" parent_id_path=PackedInt32Array(228332598) index="1" unique_id=895210744]
-button_group = SubResource("ButtonGroup_uviiw")
-
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1929620437) index="0" unique_id=1323663121]
 material = SubResource("ShaderMaterial_c1c73")
 
-[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2" parent_id_path=PackedInt32Array(1678473235) index="1" unique_id=1897317201]
-button_group = SubResource("ButtonGroup_uviiw")
+[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control" parent_id_path=PackedInt32Array(228332598) index="1" unique_id=895210744]
+button_group = SubResource("ButtonGroup_7r0bt")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" parent_id_path=PackedInt32Array(120210783) index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_7r0bt")
-
-[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3" parent_id_path=PackedInt32Array(1406663981) index="1" unique_id=1007817772]
-button_group = SubResource("ButtonGroup_uviiw")
-
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1483141880) index="0" unique_id=1323663121]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1929620437) index="0" unique_id=1323663121]
 material = SubResource("ShaderMaterial_vfuu5")
 
-[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4" parent_id_path=PackedInt32Array(1108073031) index="1" unique_id=571658869]
-button_group = SubResource("ButtonGroup_uviiw")
+[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2" parent_id_path=PackedInt32Array(1678473235) index="1" unique_id=1897317201]
+button_group = SubResource("ButtonGroup_7r0bt")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1103500248) index="0" unique_id=1323663121]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal" parent_id_path=PackedInt32Array(120210783) index="0" unique_id=1323663121]
 material = SubResource("ShaderMaterial_ybcbo")
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2" parent_id_path=PackedInt32Array(459272833) index="0" unique_id=1323663121]
+[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3" parent_id_path=PackedInt32Array(1406663981) index="1" unique_id=1007817772]
+button_group = SubResource("ButtonGroup_7r0bt")
+
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1483141880) index="0" unique_id=1323663121]
 material = SubResource("ShaderMaterial_auokc")
 
-[node name="Icon" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1246146297) index="0" unique_id=1191338159]
+[node name="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer3/Control4" parent_id_path=PackedInt32Array(1108073031) index="1" unique_id=571658869]
+button_group = SubResource("ButtonGroup_7r0bt")
+
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal" parent_id_path=PackedInt32Array(1103500248) index="0" unique_id=1323663121]
 material = SubResource("ShaderMaterial_wtfwu")
 
-[node name="Icon" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(527594733) index="0" unique_id=452191492]
+[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2" parent_id_path=PackedInt32Array(459272833) index="0" unique_id=1323663121]
 material = SubResource("ShaderMaterial_bn4kg")
+
+[node name="Icon" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1246146297) index="0" unique_id=1191338159]
+material = SubResource("ShaderMaterial_i3y7m")
+
+[node name="Icon" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(527594733) index="0" unique_id=452191492]
+material = SubResource("ShaderMaterial_sehr0")
 
 [node name="GridContainer" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer3" parent_id_path=PackedInt32Array(1225585210) index="1" unique_id=1350815583]
 columns = 4
@@ -255,6 +289,7 @@ columns = 4
 [editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/RewardEntry"]
 [editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/Control/PowerLevelIndicator"]
 [editable path="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar"]
+[editable path="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar2"]
 [editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control/RewardEntryHorizontal"]
 [editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/Control2/RewardEntryHorizontal"]
 [editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/HBoxContainer2/Control3/RewardEntryHorizontal"]

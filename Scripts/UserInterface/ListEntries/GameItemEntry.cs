@@ -534,10 +534,11 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 
 	static bool DefaultInteractable(GameItem item) => item?.template?.Type switch
 	{
-		_ when item?.template.HasLevel == true => true,
+		null => false,
+		_ when item.template?.HasLevel == true => true,
 		"Schematic" or "Weapon" or "Trap" or "Hero" or "Defender" => true,
 		"Worker" when item.profile?.account?.isOwned == true => true,
-		_ when item.CardPackChoices is not null => true,
+		"CardPack" when item.CardPackChoices is not null => true,
 		_ => false
 	};
 

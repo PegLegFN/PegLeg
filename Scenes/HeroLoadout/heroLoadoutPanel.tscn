@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dkjv8n3gxf51c" path="res://Scenes/HeroLoadout/gadget.tscn" id="4_8hd00"]
 [ext_resource type="PackedScene" uid="uid://p1itgg61rypj" path="res://Scenes/HeroLoadout/loadout_defender.tscn" id="6_hd1yr"]
 
-[node name="HeroLoadoutPanel" type="MarginContainer" unique_id=2013622918 node_paths=PackedStringArray("commander", "teamPerk", "support", "gadgets")]
+[node name="HeroLoadoutPanel" type="MarginContainer" unique_id=2013622918 node_paths=PackedStringArray("commander", "teamPerk", "support", "gadgets", "defenders", "defenderLayout")]
 custom_minimum_size = Vector2(360, 0)
 offset_right = 360.0
 offset_bottom = 382.0
@@ -16,6 +16,8 @@ commander = NodePath("VBoxContainer/Commander")
 teamPerk = NodePath("VBoxContainer/TeamPerk")
 support = [NodePath("VBoxContainer/SupportHero"), NodePath("VBoxContainer/SupportHero2"), NodePath("VBoxContainer/SupportHero3"), NodePath("VBoxContainer/SupportHero4"), NodePath("VBoxContainer/SupportHero5")]
 gadgets = [NodePath("VBoxContainer/HBoxContainer/Gadget"), NodePath("VBoxContainer/HBoxContainer/Gadget2")]
+defenders = [NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/LoadoutDefender"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/LoadoutDefender2"), NodePath("VBoxContainer/VBoxContainer/HBoxContainer2/LoadoutDefender3")]
+defenderLayout = NodePath("VBoxContainer/VBoxContainer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=527948275]
 layout_mode = 2
@@ -70,7 +72,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1687865294]
-visible = false
 layout_mode = 2
 
 [node name="GadgetsHeader2" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=735525977]

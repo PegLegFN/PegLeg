@@ -9,6 +9,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	[Signal]
 	public delegate void HasVBucksEventHandler(bool value);
 	[Export]
+	bool notableMode;
+	[Export]
 	RecycleListContainer missionList;
 	[Export]
 	Control loadingIcon;
@@ -29,9 +31,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	[Export]
 	TextureRect emptyIcon;
 	[Export]
-	CheckBox multiFilterToggle;
-	[Export]
-	bool notableMode;
+	Button multiFilterToggle;
 
 	[Export]
 	CheckButton[] rarityFilters;
@@ -39,6 +39,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	CheckButton[] zoneFilters;
 	[Export]
 	CheckButton[] typeFilters;
+	[Export]
+	SpecificMissionRewardController[] excludeRewards;
 
 	[Export]
 	CheckButton[] repeatabilityFilters;
@@ -64,6 +66,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	public override void _Ready()
 	{
+		excludeRewards ??= [];
 		missionList.SetProvider(this);
 		allFilters = rarityFilters.Union(zoneFilters).Union(typeFilters).Where(f => f is not null).ToArray();
 		SetupFilters(rarityFilters);
@@ -338,6 +341,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		}
 
 		List<MissionRewardPair> filteredRewards = [];
+		string[] ignorePrefixes = [.. excludeRewards.Select(e => e.TargetTemplatePrefix)];
 
 		foreach (var mission in missions)
 		{
@@ -346,6 +350,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			foreach (var item in mission.alertRewardItems ?? [])
 			{
 				if (item.template.DisplayName == "Venture XP")
+					continue;
+				if (ignorePrefixes.Any(p => item.templateId.StartsWith(p)))
 					continue;
 				if (itemPredicate?.Invoke(item) == false)
 					continue;
@@ -403,6 +409,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 														//r.item.sortingTemplate.HasLevel ||
 														//r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
 				))
+				.ThenBy(r => r.item.sortingTemplate?.Type == "AccountResource")
 				.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
 				.ThenBy(r => OrderByType(r.item.sortingTemplate), StringComparer.InvariantCulture)
 				.ThenBy(r => -r.item.attributes?["level"]?.GetValue<int>() ?? 0)

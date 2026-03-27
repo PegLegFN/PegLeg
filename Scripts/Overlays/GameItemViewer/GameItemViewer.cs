@@ -154,7 +154,7 @@ public partial class GameItemViewer : ModalWindow
 			);
 		}
 
-		if (!JsonNode.DeepEquals(displayedItem.GetSearchTags(), displayedItem.template.GenerateSearchTags()))
+		if (!JsonNode.DeepEquals(displayedItem.GetSearchTags(), displayedItem.template?.GenerateSearchTags()))
 		{
 			contents.Insert(2,
 				["Search Tags", displayedItem.GetSearchTags().ToString()]

@@ -898,28 +898,32 @@ public partial class GameMission
 		return true;
 	}
 
+	static GameItemTemplate genericFallback;
+	static GameItemTemplate fulfillmentFallback;
 
 	void GenerateItems(ItemReward[] rewards, ItemReward[] modifiers, ItemReward[] alertRewards)
 	{
-		Dictionary<string, GameItem> rewardItemList = [];
+		Dictionary<string, GameItem> rewardItemDict = [];
 		foreach (var itemData in rewards ?? [])
 		{
-			GameItem item = itemData.ToItem();
+			GameItem item = itemData.CreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
+			if (item is null)
+				continue;
 			item.GetSearchTags();
 			var match = ZCPConverter().Match(item.template.Name.ToLower());
 			string key = match.Success ?
 				match.Groups[0].Value :
 				item.template.Name.ToLower();
-			if (rewardItemList.TryGetValue(key, out GameItem targetItem))
+			if (rewardItemDict.TryGetValue(key, out GameItem targetItem))
 			{
 				targetItem.SetLocalQuantity(targetItem.quantity + item.quantity);
 			}
 			else
 			{
-				rewardItemList.Add(key, item);
+				rewardItemDict.Add(key, item);
 			}
 		}
-		rewardItems = [.. rewardItemList.Values];
+		rewardItems = [.. rewardItemDict.Values];
 
 		List<GameItem> alertModifierList = [];
 		foreach (var itemData in modifiers ?? [])
@@ -940,7 +944,7 @@ public partial class GameMission
 			{
 				alertRewardFulfillmentList.Add(fid);
 				bool unknown = fPack is null;
-				fPack ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest");
+				fPack ??= fulfillmentFallback ??= GameItemTemplate.Get(PegLegResourceManager.MagicNumbers["fallbackFulfillment"]?.ToString() ?? "Token:athena_unrevealedsummerquest");
 				if (fPack is not null)
 				{
 					var fReward = fPack.CreateInstance();
@@ -951,7 +955,9 @@ public partial class GameMission
 					GD.PushWarning($"missing reward type for fulfillment \"{fid}\" in mission \"{missionData?.missionGuid}\"");
 				continue;
 			}
-			GameItem item = itemData.ToItem();
+			GameItem item = itemData.CreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
+			if (item is null)
+				continue;
 			item.GetSearchTags();
 			alertRewardItemList.Add(item);
 		}

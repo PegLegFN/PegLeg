@@ -18,6 +18,8 @@ public partial class DashboardSuperchargerController : Control
 	ProgressBar progressBar;
 	[Export]
 	bool onlyShowOnResetDay = false;
+	[Export]
+	bool tryUseSummaryFallback = false;
 
 	public override void _Ready()
 	{
@@ -48,6 +50,13 @@ public partial class DashboardSuperchargerController : Control
 		checkmark.Visible = false;
 		loading.Visible = true;
 		noSuperchargerMessage.Visible = false;
+
+		var targetAccount = GameAccount.ActiveAccount;
+		if (tryUseSummaryFallback && AppConfig.TryGet("automation", "summary_160_fallback", out string accountId))
+		{
+			targetAccount = GameAccount.GetOrCreateAccount(accountId);
+			await Helpers.WaitForTimer(5);
+		}
 
 		await Helpers.WaitForFrame();
 		await Helpers.WaitForFrame();

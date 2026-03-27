@@ -488,7 +488,7 @@ expand_mode = 3
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Auto Select"
+text = "Auto Select from Filtered"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" index="0" unique_id=818886907]
 visible = false
@@ -638,7 +638,7 @@ text = "Hidden Items Selected: ??"
 [connection signal="SortTypeChanged" from="." to="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/Label" method="set_text"]
 [connection signal="TitleChanged" from="." to="Control/MarginContainer/VBoxContainer/Header/MarginContainer/Label" method="set_text"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/ClearSelected" to="." method="ClearSelection"]
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" to="." method="AutoMarkSelection"]
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" to="." method="AutoselectItems" binds= [true]]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/Sort" to="." method="CycleSort"]
 [connection signal="HoldPressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm/Responsive Button Area" to="." method="ConfirmSelection"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip/Responsive Button Area" to="." method="ConfirmSelection"]

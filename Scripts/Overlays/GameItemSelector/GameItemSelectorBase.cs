@@ -119,8 +119,10 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
 		if (supportsMultiselect && msConfig.multiselectMode)
 		{
-			var filter = msConfig.autoselectFilter ?? CurrentConfig.selectableFilter;
-			selectedItems = items.Where(filter).ToDictionary(i => i, i => i.quantity);
+			selectedItems = items
+				.Where(CurrentConfig.selectableFilter ?? AllFilter)
+				.Where(msConfig.autoselectFilter ?? AllFilter)
+				.ToDictionary(i => i, i => i.quantity);
 		}
 		else
 			selectedItems = [];
