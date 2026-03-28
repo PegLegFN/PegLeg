@@ -569,7 +569,7 @@ public static partial class Helpers
 		_ => default,
 	};
 
-	public static string FixLogLines(this string toPrint) => toPrint.Replace("\r\n", "\n");
+	public static string FixNewlines(this string toPrint) => toPrint.Replace("\r\n", "\n");
 
 	public static Func<T, bool> ToFunc<T>(this Predicate<T> predicate, bool defaultResult = true) => t => predicate.Try(t, defaultResult);
 	public static bool Try<T>(this Predicate<T> predicate, T t, bool defaultResult = true) => predicate is not null ? predicate(t) : defaultResult;

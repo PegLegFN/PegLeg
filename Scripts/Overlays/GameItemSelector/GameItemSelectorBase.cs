@@ -95,7 +95,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 		}
 		catch (Exception e)
 		{
-			GD.PushError(e.ToString().FixLogLines());
+			GD.PushError(e.ToString().FixNewlines());
 			isSelecting = false;
 			return null;
 		}

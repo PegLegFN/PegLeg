@@ -359,7 +359,7 @@ public static class WebHelpers
 				logMsg += $"\nContent: \n{errorContent.ToJsonString()}";
 			else if (fallbackErrorCode is not null)
 				logMsg += $"\nEpic Error Name: {fallbackErrorCode}";
-			logMsg = logMsg.FixLogLines();
+			logMsg = logMsg.FixNewlines();
 			GD.PrintRich($"[color=orange]{logMsg}[/color]");
 			if (OS.HasFeature("editor"))
 				GD.PushWarning(logMsg);

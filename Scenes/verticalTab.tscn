@@ -1,20 +1,33 @@
-[gd_scene load_steps=2 format=3 uid="uid://dedxnr814fng7"]
+[gd_scene format=3 uid="uid://dedxnr814fng7"]
 
 [ext_resource type="Script" uid="uid://g5i4usaw1fcl" path="res://Scripts/UIElements/VerticalTab.cs" id="1_e8bp3"]
+[ext_resource type="PackedScene" uid="uid://bgs7wpcqmkgvo" path="res://Scenes/update_notif.tscn" id="2_3d2j0"]
 
-[node name="InterfaceTab" type="MarginContainer" node_paths=PackedStringArray("triggerButton", "marginContainer")]
+[node name="InterfaceTab" type="MarginContainer" unique_id=876586362 node_paths=PackedStringArray("triggerButton", "marginContainer")]
 script = ExtResource("1_e8bp3")
 triggerButton = NodePath("MarginContainer/Button")
 marginContainer = NodePath("MarginContainer")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=219284687]
 layout_mode = 2
 theme_override_constants/margin_right = 10
 
-[node name="Button" type="Button" parent="MarginContainer"]
+[node name="Button" type="Button" parent="MarginContainer" unique_id=531939987]
 layout_mode = 2
 theme_type_variation = &"VTab"
 toggle_mode = true
 button_pressed = true
 text = "Interface"
 alignment = 0
+
+[node name="Control" type="Control" parent="MarginContainer" unique_id=1016744228]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="UpdateNotif" parent="MarginContainer/Control" unique_id=941434612 instance=ExtResource("2_3d2j0")]
+layout_mode = 1
+anchors_preset = -1
+offset_top = 2.0
+
+[connection signal="IsUpdate" from="." to="MarginContainer/Control" method="set_visible"]

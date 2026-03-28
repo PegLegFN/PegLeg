@@ -483,7 +483,7 @@ public partial class GameItemUpgrader : Control
                 "conversionRecipeIndexChoice" : {{(includeCore ? weaponCoreSelector.LatestTab : "-1")}}
             }
             """;
-			GD.Print(content.FixLogLines());
+			GD.Print(content.FixNewlines());
 			//ensure that the profile is up to date before upgrading
 			bool success = await currentItem.profile.TryQuery(true);
 			if (success)

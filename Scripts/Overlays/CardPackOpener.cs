@@ -330,7 +330,7 @@ public partial class CardPackOpener : Control
 					.Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
 					.ToArray();
 
-				GD.Print("LlamaResult: \n" + resultItemData.ToString().FixLogLines());
+				GD.Print("LlamaResult: \n" + resultItemData.ToString().FixNewlines());
 
 				var exceptions = resultItemData
 					.Where(val => !val.AsObject().ContainsKey("itemGuid"))

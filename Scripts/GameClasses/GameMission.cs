@@ -220,9 +220,10 @@ public partial class GameMission
 				.ThenBy(m => m.IsFourPlayer)
 				.ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
 			];
-			OnMissionsUpdated?.Invoke();
 
 			ArchiveMissions();
+
+			OnMissionsUpdated?.Invoke();
 
 			return;
 		}

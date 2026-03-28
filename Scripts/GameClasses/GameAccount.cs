@@ -83,8 +83,18 @@ public readonly record struct RatingData(float fortitude, float offense, float r
 	public static double GetWeaponPower(GameAccount account)
 	{
 		var accountProfile = account.GetProfile(FnProfileTypes.AccountItems);
-		var backpackProfile = account.isOwned ? account.GetProfile(FnProfileTypes.Backpack) : null;
 		var accountItems = accountProfile.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged");
+
+		if (!account.isOwned)
+		{
+			//since the highest schematic can make 2x copies of the weapon, assume the highest schematic PL is the highest obtained Weapon Power
+			return accountItems
+				.Select(item => item.CalculateRating())
+				.OrderDescending()
+				.FirstOrDefault();
+		}
+
+		var backpackProfile = account.GetProfile(FnProfileTypes.Backpack);
 		var backpackItems = backpackProfile?.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [];
 
 		var backpackPowerLevels = backpackItems.Union(accountItems)
@@ -94,6 +104,7 @@ public readonly record struct RatingData(float fortitude, float offense, float r
 
 		if (backpackPowerLevels.Length > 3)
 			backpackPowerLevels = backpackPowerLevels[..3];
+
 
 		//GD.Print($"Highest {string.Join(", ", backpackPowerLevels)}");
 

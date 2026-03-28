@@ -17,9 +17,9 @@ public partial class AverageVbuckCaclulator : Control
 
 	public override void _Ready()
 	{
-		weekText = weekAverage.Text;
-		monthText = monthAverage.Text;
-		seasonText = seasonAverage.Text;
+		weekText = weekAverage.Text.FixNewlines();
+		monthText = monthAverage.Text.FixNewlines();
+		seasonText = seasonAverage.Text.FixNewlines();
 		GameMission.OnMissionsUpdated += UpdateVbucks;
 
 		Visible = false;

@@ -89,6 +89,7 @@ public partial class UpdateChecker : Control
 					failMsg.Text = "Up to date :)";
 					return;
 				}
+				UpdateNotificationHook.SetNotifVisible();
 				latestRelease = filteredReleases[0];
 				//show filtered releases
 				for (int i = 0; i < filteredReleases.Length; i++)
@@ -103,7 +104,7 @@ public partial class UpdateChecker : Control
 					curReleaseEntry.Visible = true;
 					curReleaseEntry.GetNode<Label>("%Name").Text = filteredReleases[i].name;
 					curReleaseEntry.GetNode<Label>("%Tag").Text = filteredReleases[i].tag_name;
-					curReleaseEntry.GetNode<Label>("%Body").Text = filteredReleases[i].body;
+					curReleaseEntry.GetNode<Label>("%Body").Text = filteredReleases[i].body.FixNewlines();
 					curReleaseEntry.GetNode<Control>("%Separator").Visible = i != (filteredReleases.Length - 1);
 				}
 				for (int i = filteredReleases.Length; i < releaseEntries.Count; i++)

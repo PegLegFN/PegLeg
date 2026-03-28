@@ -142,7 +142,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			return;
 		if (currentProfile.lastOp?["numericErrorCode"]?.GetValue<int>() != 12821)
 		{
-			GD.Print($"Unknown Dismantle Error:\n{currentProfile.lastOp}".FixLogLines());
+			GD.Print($"Unknown Dismantle Error:\n{currentProfile.lastOp}".FixNewlines());
 		}
 		GD.Print("Backpack locked, retrying in 1 minute");
 

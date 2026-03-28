@@ -4,6 +4,8 @@ using System.Linq;
 [Tool]
 public partial class VerticalTab : Control
 {
+	[Signal]
+	public delegate void IsUpdateEventHandler(bool value);
 	[Export]
 	int margin = 10;
 	[Export]
@@ -70,6 +72,7 @@ public partial class VerticalTab : Control
 	{
 		if (triggerButton is not null)
 			triggerButton.Text = pageNode?.Name ?? "";
+		EmitSignalIsUpdate(triggerButton.Text == "Updates");
 		Visible = pageNode?.IsInGroup("HideTab") == false;
 		Name = (pageNode?.Name ?? "Blank") + "Tab";
 	}
