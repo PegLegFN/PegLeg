@@ -40,20 +40,21 @@ shader_parameter/UseShadow = true
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[node name="Notable" type="MarginContainer" unique_id=650228639 node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="Notable" type="MarginContainer" unique_id=650228639 node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_5wvbh")
+notableMode = true
 missionList = NodePath("VBoxContainer/MarginContainer/ScrollContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 emptyContent = NodePath("VBoxContainer/MarginContainer/EmptyContent")
 emptyIcon = NodePath("VBoxContainer/MarginContainer/EmptyContent/HBoxContainer/TextureRect")
-notableMode = true
 rarityFilters = []
 zoneFilters = []
 typeFilters = []
+excludeRewards = []
 repeatabilityFilters = []
 metadata/_tab_index = 0
 
@@ -78,7 +79,7 @@ theme_override_font_sizes/font_size = 24
 text = "Notable Rewards"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=530096324]
-custom_minimum_size = Vector2(0, 160)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -87,7 +88,7 @@ layout_mode = 2
 size_flags_vertical = 3
 scroll_hint_mode = 1
 script = ExtResource("3_hph4w")
-elementSpace = 4.0
+elementSpace = 2.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
@@ -112,6 +113,7 @@ layout_mode = 2
 
 [node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=887429013]
 layout_mode = 2
+theme_override_constants/separation = 2
 
 [node name="Padding" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=561523468]
 layout_mode = 2
@@ -169,7 +171,7 @@ custom_minimum_size = Vector2(80, 80)
 size_flags_vertical = 4
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
-elementSpace = 0.0
+elementSpace = 2.0
 elementScene = ExtResource("9_5wvbh")
 dumbMode = true
 
@@ -178,6 +180,9 @@ material = SubResource("ShaderMaterial_4qqas")
 size_flags_vertical = 4
 mouse_filter = 2
 script = ExtResource("11_uqbmg")
+
+[node name="DynGridContainer" parent="VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1123076066, 1305908567) index="1" unique_id=909569221]
+theme_override_constants/separation = 2
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/MarginContainer" method="set_visible"]

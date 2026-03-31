@@ -57,17 +57,48 @@ script = ExtResource("1_p4q3c")
 section = "missions"
 key = "excludeLargeReperk"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=2141917151]
+[node name="GroupVBucks" type="CheckBox" parent="." unique_id=1911846529]
+layout_direction = 3
 layout_mode = 2
-theme_override_constants/separation = 0
+button_pressed = true
+text = "Group V-Bucks & X-Ray Tickets as Notable"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "groupVBucks"
+defaultValue = true
 
-[node name="DefaultMissionSearchLabel" type="Label" parent="VBoxContainer2" unique_id=134436572]
+[node name="GroupLegSurvivors" type="CheckBox" parent="." unique_id=1509784846]
+layout_direction = 3
 layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/line_spacing = 0
-text = "Notable Item Filter (Per Account)"
+button_pressed = true
+text = "Group Legendary Survivors as Notable"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "groupLegSurvivors"
+defaultValue = true
 
-[node name="DefaultMissionSearch" type="TextEdit" parent="VBoxContainer2" unique_id=1383090912]
+[node name="FoldableContainer" type="FoldableContainer" parent="." unique_id=93952813]
+layout_mode = 2
+folded = true
+title = "Notable Item Filter (per-account)"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FoldableContainer" unique_id=141283485]
+visible = false
+layout_mode = 2
+
+[node name="GroupVBucks" type="CheckBox" parent="FoldableContainer/VBoxContainer" unique_id=1185557558]
+visible = false
+layout_direction = 3
+layout_mode = 2
+text = "Simple Filter Mode"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "simpleFilter"
+
+[node name="NotableFilter" type="TextEdit" parent="FoldableContainer/VBoxContainer" unique_id=1383090912]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "eg: Mythic | \"X-Ray Tickets\" | (Legendary Hero)"
@@ -79,6 +110,17 @@ script = ExtResource("2_s2kuj")
 section = "missions"
 key = "notable_mission_filter"
 accountMode = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=2141917151]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DefaultMissionSearchLabel" type="Label" parent="VBoxContainer2" unique_id=134436572]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Notable Item Filter (Per Account)"
 
 [node name="NotableItemCap" type="HBoxContainer" parent="." unique_id=1427632394]
 layout_mode = 2

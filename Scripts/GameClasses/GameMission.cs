@@ -163,6 +163,8 @@ public partial class GameMission
 			List<GameMission> generatedMissions;
 			try
 			{
+				foolsAlerts = null;
+				foolsAlertsDistinct = null;
 				generatedMissions = GenerateMissions(missionData);
 				GD.Print("missions parsed");
 			}
@@ -902,14 +904,27 @@ public partial class GameMission
 	static GameItemTemplate genericFallback;
 	static GameItemTemplate fulfillmentFallback;
 
+	static GameItem[] foolsHeroAlerts;
+	static GameItem[] foolsTypedAlerts;
+	static GameItem[] foolsAlerts;
+	static List<GameItem> foolsAlertsDistinct;
+	static JsonObject foolsData = new() { ["fools"] = true };
+	static int foolsCount = 0;
+
 	void GenerateItems(ItemReward[] rewards, ItemReward[] modifiers, ItemReward[] alertRewards)
 	{
+
+		var now = DateTime.UtcNow;
+		bool isFools = OS.HasFeature("editor") || (now.Day == 1 && now.Month == 4 && now.Hour == 0 && now.Minute <= 1);
+
 		Dictionary<string, GameItem> rewardItemDict = [];
 		foreach (var itemData in rewards ?? [])
 		{
 			GameItem item = itemData.CreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
 			if (item is null)
 				continue;
+			if (isFools)
+				item = item.Clone(item.quantity * 4);
 			item.GetSearchTags();
 			var match = ZCPConverter().Match(item.template.Name.ToLower());
 			string key = match.Success ?
@@ -938,6 +953,52 @@ public partial class GameMission
 
 		List<GameItem> alertRewardItemList = [];
 		List<string> alertRewardFulfillmentList = [];
+
+		if (isFools && (alertRewards?.Length ?? 0) > 0)
+		{
+			foolsAlerts ??= [
+				GameItemTemplate.Get("AccountResource:reagent_promotion_heroes").CreateInstance(5, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:reagent_promotion_survivors").CreateInstance(5, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:reagent_promotion_weapons").CreateInstance(5, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:reagent_promotion_traps").CreateInstance(5, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:voucher_herobuyback").CreateInstance(2, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:voucher_item_buyback").CreateInstance(2, customData:foolsData.SafeDeepClone()),
+			];
+			foolsAlertsDistinct ??= [
+				GameItemTemplate.Get("Hero:hid_constructor_025_progressivepirateconstructor_sr_t01").CreateInstance(1, customData:foolsData.SafeDeepClone(), attributes:[]),
+				GameItemTemplate.Get("Hero:hid_constructor_035_birthday_constructor_sr_t01").CreateInstance(1, customData:foolsData.SafeDeepClone(), attributes:[]),
+				GameItemTemplate.Get("Hero:hid_ninja_042_assembler_sr_t01").CreateInstance(1, customData:foolsData.SafeDeepClone(), attributes:[]),
+				GameItemTemplate.Get("Hero:hid_commando_011_m_sr_t01").CreateInstance(1, customData:foolsData.SafeDeepClone(), attributes:[]),
+				GameItemTemplate.Get("Hero:hid_commando_010_bday_sr_t01").CreateInstance(1, customData:foolsData.SafeDeepClone(), attributes:[]),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(150, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(150, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(150, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(100, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(100, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(100, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(100, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(200, customData:foolsData.SafeDeepClone()),
+				GameItemTemplate.Get("AccountResource:currency_mtxswap").CreateInstance(200, customData:foolsData.SafeDeepClone()),
+				..foolsAlerts,
+				..foolsAlerts
+			];
+			if ((missionData?.tileIndex ?? 0) % 7 == 1)
+			{
+				//GameItem item = foolsAlerts[foolsCount % foolsAlerts.Length];
+				//foolsCount += GD.RandRange(1, 3);
+				GameItem item = foolsAlertsDistinct.Count > 0 ? 
+					foolsAlertsDistinct[GD.RandRange(0, foolsAlertsDistinct.Count - 1)] : 
+					foolsAlerts[GD.RandRange(0, foolsAlerts.Length - 1)];
+				if (item.templateId.StartsWith("Hero"))
+				{
+					item.attributes["level"] = GD.RandRange(35, 49);
+				}
+				if (foolsAlertsDistinct.Count > 0)
+					foolsAlertsDistinct.Remove(item);
+				item.GetSearchTags();
+				alertRewardItemList.Add(item);
+			}
+		}
 
 		foreach (var itemData in alertRewards ?? [])
 		{

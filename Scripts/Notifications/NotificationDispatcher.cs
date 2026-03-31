@@ -373,8 +373,8 @@ public partial class NotificationDispatcher : Node
         }];
         */
 
-		List<NotificationItemData> mainItems = [];
-		List<NotificationItemData> ventItems = [];
+		List<MissionRewardPair> mainItems = [];
+		List<MissionRewardPair> ventItems = [];
 		var notableFilter = MissionRewardsController.CreateNotableFilter();
 		int limit = AppConfig.Get("missions", "notable_count", 20);
 
@@ -385,26 +385,32 @@ public partial class NotificationDispatcher : Node
 				var list = mission.TheaterCat == "v" ? ventItems : mainItems;
 				foreach (var item in (mission.alertRewardItems ?? []).Where(notableFilter))
 				{
-					list.Add(new()
-					{
-						item = item,
-						powerLabel = $"{mission.PowerLevel}",
-						powerTooltip = $"{mission.TheaterName}, Power Level {mission.PowerLevel}"
-					});
-					if (list.Count >= limit)
-						break;
+					list.Add(new(mission, item));
 				}
-				if (list.Count >= limit)
-					break;
 			}
 		}, ct);
 
+		mainItems = [.. MissionRewardsController.OrderByNotable(mainItems)];
+		ventItems = [.. MissionRewardsController.OrderByNotable(ventItems)];
+
+		if (mainItems.Count > 20)
+			mainItems = mainItems[..20];
+		if (ventItems.Count > 20)
+			ventItems = ventItems[..20];
+
 		return [MissionNotif with {
-			items = [..mainItems],
-			secondaryItems = [..ventItems],
+			items = ConvertMissionPairs(mainItems),
+			secondaryItems = ConvertMissionPairs(ventItems),
 			expires = GameMission.missionReset
 		}];
 	}
+
+	static NotificationItemData[] ConvertMissionPairs(IEnumerable<MissionRewardPair> pairs) => [.. pairs.Select(r => new NotificationItemData()
+	{
+		item = r.item,
+		powerLabel = $"{r.mission.PowerLevel}",
+		powerTooltip = $"{r.mission.TheaterName}, Power Level {r.mission.PowerLevel}"
+	})];
 
 
 	NotificationData? _shopNotif;

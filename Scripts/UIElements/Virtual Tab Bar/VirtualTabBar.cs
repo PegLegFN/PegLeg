@@ -56,6 +56,8 @@ public partial class VirtualTabBar : Control
 
 	void PreloadTabs()
 	{
+		if (virtualTabParent is null)
+			return;
 		if (allTabs is not null)
 			return;
 		VirtualTab firstVisible = null;
@@ -88,6 +90,8 @@ public partial class VirtualTabBar : Control
 
 	public void SetTabContents(TabData[] tabDatas)
 	{
+		if (virtualTabParent is null)
+			return;
 		PreloadTabs();
 		activeTabs.Clear();
 		for (int i = 0; i < tabDatas.Length; i++)

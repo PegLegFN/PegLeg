@@ -71,21 +71,20 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry
 		itemEntry?.SetItem(mainItem);
 		if (levelLabel is null || missionPowerLabel is null)
 			return;
-		levelLabel.Visible = mainItem?.template?.CanBeLeveled == true;
-		missionPowerLabel.Visible = true;
-
-		if (items.Length <= 1)
+		if (items.Length <= 1 || items.Any(i => i.customData.ContainsKey("fools")))
 		{
 			//single level
 			missionPowerLabel.Text = mission.PowerLevel.ToString();
-			levelLabel.Text = levelLabel.Visible ? $"Lv {mainItem.Level}" : "";
+			levelLabel.Text = mainItem?.template?.CanBeLeveled == true ? $"Lv {mainItem.Level}" : (items[0].quantity > 1 ? $"x{items[0].quantity}" : "");
 		}
 		else
 		{
 			//double level
 			missionPowerLabel.Text = mission.PowerLevel.ToString()+" x2";
-			levelLabel.Text = levelLabel.Visible ? $"Lv {mainItem.Level}\nLv {items[1].Level}" : "";
+			levelLabel.Text = mainItem?.template?.CanBeLeveled == true ? $"Lv {mainItem.Level}\nLv {items[1].Level}" : "";
 		}
+		missionPowerLabel.Visible = true;
+		levelLabel.Visible = !string.IsNullOrWhiteSpace(levelLabel.Text);
 	}
 
 	public void SetRecycleIndex(int index)

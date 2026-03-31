@@ -244,8 +244,57 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		}
 		var notableSearchInstructions = PLSearch.GenerateSearchInstructions(notableFilterText);
 		//templateId="Schematic:sid_edged_axe_scavenger_sr_ore_t01"
-		return item => PLSearch.EvaluateInstructions(notableSearchInstructions, item.RawData);
+		return item => PLSearch.EvaluateInstructions(notableSearchInstructions, item.RawData) || item.customData.ContainsKey("fools");
 	}
+
+	public static IOrderedEnumerable<GameItem> OrderByNotable(IEnumerable<GameItem> items) => OrderByNotableGen(items, StandardItemSelector);
+	public static IOrderedEnumerable<MissionRewardPair> OrderByNotable(IEnumerable<MissionRewardPair> pairs) => OrderByNotableGen(pairs, RewardPairSelector);
+	public static IOrderedEnumerable<MissionRewardPair> OrderByPower(IEnumerable<MissionRewardPair> pairs)
+	{
+		var initialOrder = pairs.OrderBy(r => -r.mission.PowerLevel);
+		return ThenByRewardPriority(initialOrder, RewardPairSelector);
+	}
+
+	static GameItem StandardItemSelector(GameItem item) => item;
+	static GameItem RewardPairSelector(MissionRewardPair pair) => pair.item;
+
+	static IOrderedEnumerable<T> OrderByNotableGen<T>(IEnumerable<T> rewards, Func<T, GameItem> itemSelector)
+	{
+		var initialOrder = rewards.OrderBy(r => NotablePriority(itemSelector(r).sortingTemplate));
+		return ThenByRewardPriority(initialOrder, itemSelector);
+	}
+
+	static int NotablePriority(GameItemTemplate template)
+	{
+		if (GameAccount.ActiveAccount.HasReminder(template))
+			return -25; // reminder items
+		if (template.RarityLevel == 6)
+			return -20; // mythics
+		if (template.VBucksOrXRayTickets)
+			return -19; // v-bucks
+						//if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
+						//    return -18; // upgrade llamas
+		if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
+			return -17; // legendary survivor (excl. leads)
+		return 0;
+	}
+
+	static IOrderedEnumerable<T> ThenByRewardPriority<T>(IOrderedEnumerable<T> items, Func<T, GameItem> itemSelector) => items
+			.ThenBy(r => !GameAccount.ActiveAccount.HasReminder(itemSelector(r).templateId))
+			.ThenBy(r => !(
+				itemSelector(r).template.VBucksOrXRayTickets //||
+															 //r.item.sortingTemplate.HasLevel ||
+															 //r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
+			))
+			.ThenBy(r => itemSelector(r).sortingTemplate?.Type == "AccountResource")
+			.ThenBy(r => -itemSelector(r).sortingTemplate.RarityLevel)
+			.ThenBy(r => OrderByType(itemSelector(r).sortingTemplate), StringComparer.InvariantCulture)
+			.ThenBy(r => -itemSelector(r).attributes?["level"]?.GetValue<int>() ?? 0)
+			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
+			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName)
+			.ThenBy(r => itemSelector(r).sortingTemplate != itemSelector(r).template)
+			.ThenBy(r => -itemSelector(r).quantity);
+
 
 	bool needsRefresh = false;
 	void FilterMissions()
@@ -341,7 +390,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		}
 
 		List<MissionRewardPair> filteredRewards = [];
-		string[] ignorePrefixes = [.. excludeRewards.Select(e => e.TargetTemplatePrefix)];
+		string[] ignorePrefixes = [.. excludeRewards.Select(e => e.TargetTemplatePrefix).Where(p => p is not null)];
 
 		foreach (var mission in missions)
 		{
@@ -379,46 +428,16 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 		if (sortByPower?.ButtonPressed == true)
 		{
-			sortedRewards = filteredRewards
-				.OrderBy(r => -r.mission.PowerLevel);
+			sortedRewards = OrderByPower(filteredRewards);
+		}
+		else if (!notableMode)
+		{
+			sortedRewards = filteredRewards.OrderBy(_ => false);
 		}
 		else
 		{
-			sortedRewards = filteredRewards
-				.OrderBy(r =>
-				{
-					if (!notableMode)
-						return 0;
-					var template = r.item.sortingTemplate;
-					if (GameAccount.ActiveAccount.HasReminder(template))
-						return -25; // reminder items
-					if (template.RarityLevel == 6)
-						return -20; // mythics
-					if (template.VBucksOrXRayTickets)
-						return -19; // v-bucks
-									//if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
-									//    return -18; // upgrade llamas
-					if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
-						return -17; // legendary survivor (excl. leads)
-					return 0;
-				});
+			sortedRewards = OrderByNotable(filteredRewards);
 		}
-
-		sortedRewards = sortedRewards
-				.ThenBy(r => !GameAccount.ActiveAccount.HasReminder(r.item.templateId))
-				.ThenBy(r => !(
-					r.item.template.VBucksOrXRayTickets //||
-														//r.item.sortingTemplate.HasLevel ||
-														//r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
-				))
-				.ThenBy(r => r.item.sortingTemplate?.Type == "AccountResource")
-				.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
-				.ThenBy(r => OrderByType(r.item.sortingTemplate), StringComparer.InvariantCulture)
-				.ThenBy(r => -r.item.attributes?["level"]?.GetValue<int>() ?? 0)
-				.ThenBy(r => r.item.sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
-				.ThenBy(r => r.item.sortingTemplate.DisplayName)
-				.ThenBy(r => r.item.sortingTemplate != r.item.template)
-				.ThenBy(r => -r.item.quantity);
 
 		rewards = [.. sortedRewards];
 		int limit = AppConfig.Get("missions", "notable_count", 20);

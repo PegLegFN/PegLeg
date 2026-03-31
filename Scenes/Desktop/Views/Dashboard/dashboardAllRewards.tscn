@@ -31,7 +31,7 @@ resource_local_to_scene = false
 resource_name = "RewardType"
 allow_unpress = true
 
-[node name="All" type="MarginContainer" unique_id=887790858 node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "itemSearchBar", "sortByPower", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "repeatabilityFilters")]
+[node name="All" type="MarginContainer" unique_id=887790858 node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "itemSearchBar", "sortByPower", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(370, 0)
 size_flags_vertical = 3
@@ -49,6 +49,7 @@ filterStory = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContain
 rarityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common")]
 zoneFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures")]
 typeFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Lead Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Heroes"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Evo Mats"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Perk Up"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Re Perk"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Ranged Weapons"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Melee Weapons"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/HBoxContainer/Traps")]
+excludeRewards = []
 repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RewardTypeFilter/HBoxContainer/4x")]
 metadata/_tab_index = 1
 
@@ -843,7 +844,7 @@ layout_mode = 2
 size_flags_vertical = 3
 scroll_hint_mode = 1
 script = ExtResource("20_t0hu3")
-elementSpace = 4.0
+elementSpace = 2.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
@@ -868,6 +869,7 @@ layout_mode = 2
 
 [node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1493096660]
 layout_mode = 2
+theme_override_constants/separation = 2
 
 [node name="Padding" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1436640475]
 layout_mode = 2

@@ -9,11 +9,16 @@ public partial class SpecificMissionRewardController : Control
 	string targetTemplateId;
 	[Export]
 	string targetTemplatePrefix;
-	public string TargetTemplatePrefix => targetTemplatePrefix;
+	public string TargetTemplatePrefix => IsBlockedByConfig ? null : targetTemplatePrefix;
+	bool IsBlockedByConfig => configDependancy is not null && !AppConfig.Get(configSection, configKey, configDefault);
 	[Export]
 	string titleText;
 	[Export]
 	bool hideWhileEmpty;
+	[Export]
+	string configDependancy;
+	[Export]
+	bool configDefault = true;
 	[ExportGroup("Nodes")]
 	[Export]
 	Label titleLabel;
@@ -29,10 +34,20 @@ public partial class SpecificMissionRewardController : Control
 	Control loadingIndicator;
 	List<MissionRewardEntry> rewards = [];
 
+	string configSection;
+	string configKey;
+
 	public override void _Ready()
 	{
+		if(configDependancy is not null)
+		{
+			var split = configDependancy.Split(':');
+			configSection = split[0];
+			configKey = split[1];
+		}
 		GameMission.OnMissionsInvalidated += ClearMissions;
 		GameMission.OnMissionsUpdated += UpdateMissions;
+		AppConfig.OnConfigChanged += OnConfigChanged;
 		var template = GameItemTemplate.Get(targetTemplateId);
 		titleItem.SetItem(template?.CreateInstance());
 		titleLabel.Text = titleText;
@@ -45,10 +60,24 @@ public partial class SpecificMissionRewardController : Control
 		if (GameMission.MissionList is not null)
 			UpdateMissions();
 	}
+
+	private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonValue value)
+	{
+		if (configDependancy is null)
+			return;
+		if (section != configSection)
+			return;
+		if (key != configKey)
+			return;
+		if (GameMission.MissionList is not null)
+			UpdateMissions();
+	}
+
 	public override void _ExitTree()
 	{
 		GameMission.OnMissionsInvalidated -= ClearMissions;
 		GameMission.OnMissionsUpdated -= UpdateMissions;
+		AppConfig.OnConfigChanged -= OnConfigChanged;
 	}
 
 	private void ClearMissions()
@@ -69,6 +98,13 @@ public partial class SpecificMissionRewardController : Control
 
 	private void UpdateMissions()
 	{
+		if (IsBlockedByConfig)
+		{
+			ClearMissions();
+			Visible = false;
+			return;
+		}
+
 		loadingIndicator.Visible = false;
 		rewardParent.Visible = true;
 		var matchingMissions = GameMission.MissionList.Where(m => 

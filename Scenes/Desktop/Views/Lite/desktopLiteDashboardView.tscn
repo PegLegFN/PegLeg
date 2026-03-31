@@ -41,38 +41,49 @@ Text = "To-Do List"
 [node name="TabContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1851956005, 1412053505) index="2" unique_id=1431888005]
 visible = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs" parent_id_path=PackedInt32Array(1851956005, 798859068) index="0" unique_id=1283047810]
+[node name="ScrollContainer" type="ScrollContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs" parent_id_path=PackedInt32Array(1851956005, 798859068) index="0" unique_id=80088377]
 layout_mode = 2
 
-[node name="VBucks" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/VBoxContainer" unique_id=1333906878 instance=ExtResource("2_e2hkg")]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer" unique_id=1283047810]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBucks" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer" unique_id=1333906878 instance=ExtResource("2_e2hkg")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "AccountResource:currency_hybrid_mtx_xrayllama"
 targetTemplatePrefix = "AccountResource:currency_hybrid_mtx_xrayllama"
+configDependancy = "missions:groupVBucks"
 
-[node name="LegSurvivors" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/VBoxContainer" unique_id=1085911053 instance=ExtResource("2_e2hkg")]
+[node name="LegSurvivors" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer" unique_id=1085911053 instance=ExtResource("2_e2hkg")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "Worker:workerbasic_sr_t01"
 targetTemplatePrefix = "Worker:workerbasic_sr_t0"
 titleText = "Legendary Survivors"
+configDependancy = "missions:groupLegSurvivors"
 
-[node name="Control" type="MarginContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/VBoxContainer" unique_id=1166270023]
+[node name="Control" type="MarginContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer" unique_id=1166270023]
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="HSeparator" type="HSeparator" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/VBoxContainer/Control" unique_id=536441053]
+[node name="HSeparator" type="HSeparator" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer/Control" unique_id=536441053]
 layout_mode = 2
 
-[node name="Notable" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/VBoxContainer" unique_id=101494279 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("2_qxtsr")]
+[node name="Notable" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer" unique_id=101494279 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("2_qxtsr")]
 layout_mode = 2
 excludeRewards = [NodePath("../LegSurvivors"), NodePath("../VBucks")]
 
-[node name="All" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs" parent_id_path=PackedInt32Array(1851956005, 798859068) index="1" unique_id=5834371 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("3_hcg37")]
+[node name="ScrollContainer" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer/Notable/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(101494279, 530096324) index="0" unique_id=263457377]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+dumbMode = true
+
+[node name="All" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs" parent_id_path=PackedInt32Array(1851956005, 798859068) index="1" unique_id=5834371 instance=ExtResource("3_hcg37")]
 visible = false
 layout_mode = 2
-excludeRewards = []
 
 [node name="To-Do List (0)" parent="BeastDashboard/MissionRewards/VBoxContainer3/Tabs" parent_id_path=PackedInt32Array(1851956005, 798859068) index="2" unique_id=47496478 node_paths=PackedStringArray("tab") instance=ExtResource("4_g4vaj")]
 visible = false
@@ -270,7 +281,7 @@ layout_mode = 2
 [node name="MissionSummaryViewport" parent="ShareableMissionSummary" index="0" unique_id=424942682]
 render_target_update_mode = 0
 
-[node name="CheckButton" parent="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer/CheckButton" parent_id_path=PackedInt32Array(1275124624, 370873070, 1160045743) index="1" unique_id=669145984]
+[node name="CheckButton" parent="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Header/HBoxContainer/CheckButton" parent_id_path=PackedInt32Array(1275124624, 370873070, 1160045743) index="1" unique_id=669145984]
 tryBind = false
 
 [node name="ShareableAlertSummary" parent="." unique_id=1311100369 instance=ExtResource("12_yr1bg")]
@@ -286,6 +297,8 @@ render_target_update_mode = 0
 
 [editable path="BeastDashboard/MissionRewards"]
 [editable path="BeastDashboard/MissionRewards/VBoxContainer3/VirtualTabBar"]
+[editable path="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer/Notable"]
+[editable path="BeastDashboard/MissionRewards/VBoxContainer3/Tabs/ScrollContainer/VBoxContainer/Notable/VBoxContainer/MissionCollection"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/Container/DashboardAlertSummary"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/DoubleLegendary"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Stone"]
@@ -294,6 +307,7 @@ render_target_update_mode = 0
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Vents"]
 [editable path="BeastDashboard/ScrollContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/Twine"]
 [editable path="ShareableMissionSummary"]
-[editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/VBoxContainer/MissionCollection"]
+[editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer/VBucks"]
+[editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection"]
 [editable path="ShareableAlertSummary"]
 [editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]

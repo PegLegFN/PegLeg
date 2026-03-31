@@ -469,7 +469,8 @@ public partial class GameItemViewer : ModalWindow
 		if (currentOffer is null)
 			return;
 		var template = currentOffer.itemGrants[0].templateId;
-		bool workaround = template.Equals("Token:accountinventorybonus", StringComparison.OrdinalIgnoreCase);
+		bool workaround = false;
+		//workaround |= template.Equals("Token:accountinventorybonus", StringComparison.OrdinalIgnoreCase);
 		//workaround |= template.StartsWith("CardPack:cardpack_schematic", StringComparison.OrdinalIgnoreCase);
 		ShopPurchaseAnimation.PlayAnimation(
 			currentOffer.itemGrants[0].GetTexture(),
