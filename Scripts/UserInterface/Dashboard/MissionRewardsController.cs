@@ -430,10 +430,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		{
 			sortedRewards = OrderByPower(filteredRewards);
 		}
-		else if (!notableMode)
-		{
-			sortedRewards = filteredRewards.OrderBy(_ => false);
-		}
 		else
 		{
 			sortedRewards = OrderByNotable(filteredRewards);
