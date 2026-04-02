@@ -40,15 +40,15 @@ public partial class GenericConfirmationWindow : ModalWindow
 	public static async Task ShowError(string description, string header = "Error            ")
 	{
 		if (instance is not null)
-			await instance.ShowConfirmationInst(header, null, "Close", description, "", false, 8);
+			await instance.ShowConfirmationInst(header, null, "Close", description, "", false, 8, true);
 	}
 
-	public static async Task<bool?> ShowConfirmation(string headerText, string postiveText = "Confirm", string negativeText = "", string contextText = "", string warningText = "", bool allowCancel = true, int headerSpace = 8) =>
-		instance is null ? null : await instance.ShowConfirmationInst(headerText, postiveText, negativeText, contextText, warningText, allowCancel, headerSpace);
+	public static async Task<bool?> ShowConfirmation(string headerText, string postiveText = "Confirm", string negativeText = "", string contextText = "", string warningText = "", bool allowCancel = true, int headerSpace = 8, bool highlightConfirm = true) =>
+		instance is null ? null : await instance.ShowConfirmationInst(headerText, postiveText, negativeText, contextText, warningText, allowCancel, headerSpace, highlightConfirm);
 
 	SemaphoreSlim msgSemaphone = new(1);
 
-	public async Task<bool?> ShowConfirmationInst(string headerText, string positiveText, string negativeText, string contextText, string warningText, bool allowCancel, int headerSpace)
+	public async Task<bool?> ShowConfirmationInst(string headerText, string positiveText, string negativeText, string contextText, string warningText, bool allowCancel, int headerSpace, bool highlightConfirm)
 	{
 		await msgSemaphone.WaitAsync();
 		try
@@ -71,6 +71,7 @@ public partial class GenericConfirmationWindow : ModalWindow
 
 			positiveButton.Text = positiveText;
 			positiveButton.Visible = !string.IsNullOrWhiteSpace(positiveText);
+			positiveButton.ThemeTypeVariation = highlightConfirm ? "ActionButton" : "LargeButton";
 
 			negativeButton.Text = negativeText;
 			negativeButton.Visible = !string.IsNullOrWhiteSpace(negativeText);

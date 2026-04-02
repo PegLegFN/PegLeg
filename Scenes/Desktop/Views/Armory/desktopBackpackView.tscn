@@ -23,7 +23,7 @@ resource_name = "InventoryTypeFilter"
 targetProfile = "theater0"
 typeFilters = PackedStringArray("", "Weapon:Ranged", "Weapon:Melee", "Ammo", "Trap", "Ingredient,WorldItem")
 allowDevMode = false
-autoDismantleRules = "(\"Trap\" !(attributes.level=10 | attributes.level=20 | attributes.level=30 | attributes.level=40 | attributes.level=50..)) (\"Trap\" | !\"Legendary\" quantity=..3 attributes.itemsource='EFortPickupSourceTypeFlag::Container' | attributes.itemsource='EFortPickupSourceTypeFlag::Tossed' | attributes.itemsource='EFortPickupSourceTypeFlag::AI')"
+autoDismantleRules = "(\"Trap\" !(Legendary | Defender | Jump | Boost) | !(attributes.level=10 | attributes.level=20 | attributes.level=30 | attributes.level=40 | attributes.level=50..) | quantity=..3) (\"Trap\" | !\"Legendary\" quantity=..3 attributes.itemsource='EFortPickupSourceTypeFlag::Container' | attributes.itemsource='EFortPickupSourceTypeFlag::Tossed' | attributes.itemsource='EFortPickupSourceTypeFlag::AI')"
 
 [node name="NewFilter" parent="VBoxContainer/HBoxContainer2/HBoxContainer" parent_id_path=PackedInt32Array(771268266) index="0" unique_id=2055423901]
 visible = false

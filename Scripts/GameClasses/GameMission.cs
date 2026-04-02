@@ -915,7 +915,7 @@ public partial class GameMission
 	{
 
 		var now = DateTime.UtcNow;
-		bool isFools = OS.HasFeature("editor") || (now.Day == 1 && now.Month == 4 && now.Hour == 0 && now.Minute <= 1);
+		bool isFools = /*OS.HasFeature("editor") || */(now.Day == 1 && now.Month == 4 && now.Hour == 0 && now.Minute <= 1);
 
 		Dictionary<string, GameItem> rewardItemDict = [];
 		foreach (var itemData in rewards ?? [])

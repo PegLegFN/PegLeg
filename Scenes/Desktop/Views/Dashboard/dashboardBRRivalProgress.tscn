@@ -40,13 +40,15 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
-[node name="DashboardBRRivalProgress" type="PanelContainer" unique_id=1546053 node_paths=PackedStringArray("rootControl", "loadingIcon", "foundationParent", "foundationProgress", "foundationValue", "iceKingParent", "iceKingProgress", "iceKingValue")]
+[node name="DashboardBRRivalProgress" type="PanelContainer" unique_id=1546053 node_paths=PackedStringArray("rootControl", "loadingIcon", "currentTeamLabel", "switchButton", "foundationParent", "foundationProgress", "foundationValue", "iceKingParent", "iceKingProgress", "iceKingValue")]
 custom_minimum_size = Vector2(473.5, 0)
 mouse_filter = 1
 theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_eyjup")
 rootControl = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
 loadingIcon = NodePath("SmallLoadingIcon")
+currentTeamLabel = NodePath("VBoxContainer/HBoxContainer2/Label")
+switchButton = NodePath("VBoxContainer/HBoxContainer2/Button")
 foundationColor = Color(1, 0.79607844, 0.23921569, 1)
 foundationParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer")
 foundationProgress = NodePath("VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/ProgressBar")
@@ -161,4 +163,23 @@ size_flags_vertical = 1
 theme_override_font_sizes/font_size = 12
 text = "8.03m"
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=230345125]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=981867268]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Current: Placeholder"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=678287222]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+text = "Choose Alliegence"
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshBtn" to="." method="UpdateProgress"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/Button" to="." method="TryChangeTeam"]

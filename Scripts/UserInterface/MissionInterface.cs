@@ -11,17 +11,6 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 {
 	#region Statics
 	static MissionInterface instance;
-
-	static NotificationData? unexpectedResetNotif;
-	static NotificationData UnexpectedResetNotif => unexpectedResetNotif ??= new()
-	{
-		header = "Unexpected Reset Detected",
-		icon = instance?.unexpectedResetNotifIcon,
-		sound = instance?.unexpectedResetSound,
-		itemColor = Color.FromHtml("#ff5555"),
-		urgent = true,
-	};
-
 	static readonly string[] theaterFilters =
 	[
 		"spct",
@@ -135,7 +124,6 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 		missionList.SetProvider(this);
 
 		RefreshTimerController.OnDayChanged += ForceReloadMissions;
-		RefreshTimerController.OnDayChanged += StartUpdateCheckTimer;
 
 		GameAccount.ActiveAccountChanged += FilterMissions;
 		GameMission.OnMissionsUpdated += OnMissionsUpdated;
@@ -147,7 +135,6 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 			OnMissionsUpdated();
 		else
 			GameMission.UpdateMissions().StartTask();
-		StartUpdateCheckTimer();
 
 		GetTree().Root.FilesDropped += TryArchiveFiles;
 	}
@@ -155,7 +142,6 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 	public override void _ExitTree()
 	{
 		RefreshTimerController.OnDayChanged -= ForceReloadMissions;
-		RefreshTimerController.OnDayChanged -= StartUpdateCheckTimer;
 
 		GameAccount.ActiveAccountChanged -= FilterMissions;
 		GameMission.OnMissionsUpdated -= OnMissionsUpdated;
@@ -187,44 +173,11 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 		}
 	}
 
-	CancellationTokenSource updateCheckCTS = new();
-	async void StartUpdateCheckTimer()
-	{
-		var now = DateTime.UtcNow;
-		if (now.Hour > 1 || !AppConfig.Get("missions", "reset_detection", true))
-			return;
-		GD.Print("Starting update check timer");
-		updateCheckCTS = updateCheckCTS.CancelAndRegenerate(out var ct);
-		while (true)
-		{
-			now = DateTime.UtcNow;
-			if (now.Hour > 1 || !AppConfig.Get("missions", "reset_detection", true))
-			{
-				GD.Print("Ending update check timer");
-				return;
-			}
-			int duration = now.Minute < 10 ? 15 : 90;
-			while (duration > 0)
-			{
-				await Helpers.WaitForTimer(1);
-				if (ct.IsCancellationRequested || !AppConfig.Get("missions", "reset_detection", true))
-					return;
-				duration--;
-			}
-			if (await GameMission.MissionsNeedUpdate() && GameMission.MissionList is not null)
-			{
-				GD.Print("Unexpected reset detected");
-				NotificationManager.Push([UnexpectedResetNotif]);
-				await GameMission.UpdateMissions();
-			}
-		}
-	}
-
 	public void FakeUnexpectedReset()
 	{
-		NotificationManager.Push([UnexpectedResetNotif with {
-			expires = DateTime.UtcNow.AddSeconds(5)
-		}]);
+		//NotificationManager.Push([UnexpectedResetNotif with {
+		//	expires = DateTime.UtcNow.AddSeconds(5)
+		//}]);
 		//NotificationManager.PushNotification(unexpectedResetNotif);
 		//NotificationManager.PushNotification(unexpectedResetNotif);
 	}

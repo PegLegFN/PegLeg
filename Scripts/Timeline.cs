@@ -70,7 +70,7 @@ public static class Timeline
 		int currentSeasonIndex = 0;
 		var currentSeason = timelineData.seasons[currentSeasonIndex];
 		compareDate = anchor.AddDays(currentSeason.duration * 7);
-		while (thisWeek > compareDate)
+		while (thisWeek >= compareDate)
 		{
 			anchor = anchor.AddDays(currentSeason.duration * 7);
 			currentSeasonIndex += 1;

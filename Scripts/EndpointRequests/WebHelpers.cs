@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -146,38 +147,51 @@ public static class WebHelpers
 
 	public static async Task<HttpResponseMessage> Send(this BoundHttpsRequestMessage msg, bool disposeMsg = true)
 	{
-		if (msg.BoundAccount is not null)
+		try
 		{
-			await msg.BoundAccount.Authenticate();
-			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
-		}
-		var response = await CloneAndSend(msg, disposeMsg);
+			if (msg.BoundAccount is not null)
+			{
+				await msg.BoundAccount.Authenticate();
+				msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
+			}
+			var response = await CloneAndSend(msg, disposeMsg);
 
-		//TODO: configurable retry attempt count
-		for (int i = 0; i < 2; i++)
-		{
-			if (response.StatusCode != HttpStatusCode.ServiceUnavailable)
-				break;
-			//TODO: configurable retry delay
-			await Task.Delay(1000);
-			response = await CloneAndSend(msg, disposeMsg);
-		}
+			//TODO: configurable retry attempt count
+			for (int i = 0; i < 2; i++)
+			{
+				if (response.StatusCode != HttpStatusCode.ServiceUnavailable)
+					break;
+				//TODO: configurable retry delay
+				await Task.Delay(1000);
+				response = await CloneAndSend(msg, disposeMsg);
+			}
 
-		if (
-			msg.BoundAccount is not null &&
-			!response.IsSuccessStatusCode &&
-			response.Headers.TryGetValues("x-epic-error-code", out var errCode) &&
-			errCode.FirstOrDefault() == "1031"
-		)
-		{
-			GD.Print("token invalid, exiring token and retrying with new token...");
-			msg.BoundAccount.ForceExpireToken();
-			await msg.BoundAccount.Authenticate();
-			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
-			response = await CloneAndSend(msg, disposeMsg);
+			if (
+				msg.BoundAccount is not null &&
+				!response.IsSuccessStatusCode &&
+				response.Headers.TryGetValues("x-epic-error-code", out var errCode) &&
+				errCode.FirstOrDefault() == "1031"
+			)
+			{
+				GD.Print("token invalid, exiring token and retrying with new token...");
+				msg.BoundAccount.ForceExpireToken();
+				await msg.BoundAccount.Authenticate();
+				msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
+				response = await CloneAndSend(msg, disposeMsg);
+			}
+			msg.Dispose();
+			return response;
 		}
-		msg.Dispose();
-		return response;
+		catch (SocketException ex)
+		{
+			var accountURI = FnWebAddresses.EpicAccount;
+			if (ex.Message.StartsWith("No such host is known "))
+			{
+				GD.Print("Bingo");
+			}
+			GD.Print("TODO: Investigate this");
+			throw;
+		}
 	}
 
 	static async Task<HttpResponseMessage> CloneAndSend(BoundHttpsRequestMessage msg, bool disposeMsg) =>

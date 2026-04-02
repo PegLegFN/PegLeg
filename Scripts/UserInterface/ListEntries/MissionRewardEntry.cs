@@ -39,7 +39,7 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry
 	private void TryEmitComplete(bool complete)
 	{
 		knownCompleteState = complete;
-		EmitSignalMissionCompleteIfAlert(complete && itemEntry.currentItem?.template.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase) == false);
+		EmitSignalMissionCompleteIfAlert(complete && itemEntry.currentItem?.template?.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase) == false);
 	}
 
 	IRecyclableElementProvider<MissionRewardPair> provider;

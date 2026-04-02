@@ -439,23 +439,14 @@ public static partial class Helpers
 		return new SemaphoreToken(source, onRelease, immadiate);
 	}
 
-	public struct SemaphoreToken : IDisposable
+	public struct SemaphoreToken(SemaphoreSlim source, Action onRelease, bool wasImmediate) : IDisposable
 	{
-		private readonly SemaphoreSlim _source;
-		private readonly Action _onRelease;
-		public readonly bool wasImmediate;
-
-		public SemaphoreToken(SemaphoreSlim source, Action onRelease, bool wasImmediate)
-		{
-			_source = source;
-			_onRelease = onRelease;
-			this.wasImmediate = wasImmediate;
-		}
+		public readonly bool wasImmediate = wasImmediate;
 
 		public void Dispose()
 		{
-			_onRelease?.Invoke();
-			_source?.Release();
+			onRelease?.Invoke();
+			source?.Release();
 		}
 	}
 
