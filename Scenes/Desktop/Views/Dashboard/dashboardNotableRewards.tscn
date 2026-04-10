@@ -143,9 +143,16 @@ size_flags_horizontal = 3
 text = "No Notable Rewards 
 Instead, here's a cat"
 
-[node name="MissionCollection" parent="VBoxContainer" unique_id=1123076066 instance=ExtResource("8_kojpx")]
-custom_minimum_size = Vector2(250, 100)
+[node name="Hidden" type="Control" parent="VBoxContainer" unique_id=1456453596]
+visible = false
 layout_mode = 2
+
+[node name="MissionCollection" parent="VBoxContainer/Hidden" unique_id=1123076066 instance=ExtResource("8_kojpx")]
+visible = false
+custom_minimum_size = Vector2(250, 100)
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 100.0
 size_flags_vertical = 0
 testName = "PL160 Repeatable Rewards"
 testSearch = "\"Large Reward\" 160///bundle !XP"
@@ -155,38 +162,34 @@ requireAnyUnlockedForVisibility = true
 alwaysHidePlayableFilter = true
 ignoreLargeXPSetting = true
 
-[node name="Name" parent="VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1123076066, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1123076066, 1750868079) index="0" unique_id=796681065]
 text = "PL160 Repeatable Rewards"
 
-[node name="CheckButton" parent="VBoxContainer/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1123076066, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1123076066, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="SmallLoadingIcon" parent="VBoxContainer/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="0" unique_id=1398539103]
+[node name="SmallLoadingIcon" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="0" unique_id=1398539103]
 mouse_filter = 0
 
-[node name="ScrollContainer" parent="VBoxContainer/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="1" unique_id=1876069311]
+[node name="ScrollContainer" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="1" unique_id=1876069311]
 visible = false
 clip_contents = false
 custom_minimum_size = Vector2(80, 80)
 size_flags_vertical = 4
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
-elementSpace = 2.0
 elementScene = ExtResource("9_5wvbh")
 dumbMode = true
 
-[node name="MarginContainer" parent="VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer" index="0" unique_id=1071309336]
+[node name="MarginContainer" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body/ScrollContainer" index="0" unique_id=1071309336]
 material = SubResource("ShaderMaterial_4qqas")
 size_flags_vertical = 4
 mouse_filter = 2
 script = ExtResource("11_uqbmg")
-
-[node name="DynGridContainer" parent="VBoxContainer/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1123076066, 1305908567) index="1" unique_id=909569221]
-theme_override_constants/separation = 2
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/MarginContainer" method="set_visible"]
 [connection signal="OnFalse" from="VBoxContainer/HBoxContainer/CheckButton/Node" to="." method="set_stretch_ratio"]
 [connection signal="OnTrue" from="VBoxContainer/HBoxContainer/CheckButton/Node" to="." method="set_stretch_ratio"]
 
-[editable path="VBoxContainer/MissionCollection"]
+[editable path="VBoxContainer/Hidden/MissionCollection"]

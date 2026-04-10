@@ -811,6 +811,18 @@ public partial class GameMission
 		theaterInfo.displayName[..^13] :
 		theaterInfo.displayName;
 	public string TheaterCat => theaterInfo.category;
+	public Color TheaterColor => TheaterColorFromCat(theaterInfo.category);
+
+	public static Color TheaterColorFromCat(string cat) => cat switch
+	{
+		"s" => Color.FromHtml("#224767"),
+		"p" => Color.FromHtml("#2d9351"),
+		"c" => Color.FromHtml("#c0804f"),
+		"t" => Color.FromHtml("#6c3c98"),
+		"v" => Color.FromHtml("#0286e4"),
+		_ => Colors.Transparent
+	};
+
 	public int TheaterIdx => TheaterCat switch
 	{
 		"s" => 0,

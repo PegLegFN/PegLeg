@@ -21,6 +21,7 @@ uniform sampler2D AltIcon : hint_default_transparent;
 uniform sampler2D AltPackIcon: hint_default_transparent;
 uniform bool HeroBeamsOnly;
 uniform float ChoiceShift : hint_range(0.0, 1.0);
+uniform bool HideRarity;
 
 varying vec4 modulate;
 void vertex() {
@@ -42,6 +43,8 @@ vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, 
 {
 	vec4 backgroundCol = rarity;
 	float gradient = 1.0-distance(vec2(0.5, 1.25), uv*vec2(1,1.5));
+	if(HideRarity)
+		rarity = vec4(0);
 	if(hero)
 	{
 		if(HeroBeamsOnly)
@@ -92,6 +95,8 @@ void fragment() {
 	vec2 fitUV = adaptToAspect(ControlSize, vec2(0.5, 1), 1.0/TEXTURE_PIXEL_SIZE, UV, Fit);
 	vec2 controlSpace = UV*ControlSize;
 	vec4 barColor = modulate;
+	if(HideRarity)
+		barColor = vec4(0);
 
 	if(IsChoice)
 	{

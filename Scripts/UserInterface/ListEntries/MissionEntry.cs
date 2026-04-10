@@ -192,15 +192,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
 		EmitSignalTheaterNameChanged(currentMission.TheaterName);
 		EmitSignalVenturesIndicatorVisible(currentMission.TheaterCat == "v");
 		EmitSignalTheaterCategoryChanged(currentMission.TheaterCat.ToUpper());
-		EmitSignalTheaterColorChanged(currentMission.TheaterCat switch
-		{
-			"s" => Colors.Aquamarine,
-			"p" => Colors.ForestGreen,
-			"c" => Colors.SandyBrown,
-			"t" => Colors.MediumPurple,
-			"v" => Colors.Cyan,
-			_ => Colors.Transparent
-		});
+		EmitSignalTheaterColorChanged(currentMission.TheaterColor);
 
 		string tileEventFlag = currentMission.tile.requirements.eventFlag;
 		bool hasEventFlag = !string.IsNullOrWhiteSpace(tileEventFlag);

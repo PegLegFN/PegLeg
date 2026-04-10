@@ -637,12 +637,14 @@ public class GameProfile
 				case "statModified":
 					var statName = change["name"].ToString();
 					var statVal = change["value"].SafeDeepClone();
-					var hadStatBefore = statAttributes.TryGetPropertyValue(statName, out var oldStatVal);
+					JsonNode oldStatVal = null;
+					var hadStatBefore = statAttributes?.TryGetPropertyValue(statName, out oldStatVal) ?? false;
 					var hasStatNow = statVal is not null;
 
 					string statValText = "[Removed]";
 					if (hasStatNow)
 					{
+						statAttributes ??= [];
 						statAttributes[statName] = statVal;
 						statValText = statVal.ToString();
 						if (statValText.Length > 500)

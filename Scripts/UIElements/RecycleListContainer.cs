@@ -29,7 +29,7 @@ public partial class RecycleListContainer : ScrollContainer
 	public override async void _Ready()
 	{
 		base._Ready();
-
+		ProcessPriority = 2;
 		basis = elementScene.Instantiate<IRecyclableEntry>();
 		await Helpers.WaitForFrame();
 		basis.node.Visible = false;
@@ -234,7 +234,7 @@ public partial class RecycleListContainer : ScrollContainer
 		UpdateList();
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public override void _Process(double delta)
 	{
 		if (lastSize != Size || lastScroll != ScrollVertical)
 			UpdateList();

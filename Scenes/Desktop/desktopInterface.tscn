@@ -113,9 +113,11 @@ shader_parameter/ClipOOB = false
 
 [node name="Root" type="Control" unique_id=1605944334]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_3bqtb")
 
 [node name="NonUI" type="Node" parent="." unique_id=1477233975]
@@ -124,6 +126,8 @@ theme = ExtResource("1_3bqtb")
 script = ExtResource("2_34fsc")
 rootNode = NodePath("../..")
 allowResize = true
+onlyExpandWhenSmaller = true
+resizeMax = 2.0
 
 [node name="AutoButtonSounds" type="Node" parent="NonUI" unique_id=1376755451]
 script = ExtResource("2_db3cl")
@@ -255,11 +259,10 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 3
+current_tab = 0
 script = ExtResource("16_hsemp")
 
 [node name="Dashboard" parent="Content/MainTabs" unique_id=291427184 instance=ExtResource("10_xfiw1")]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -274,6 +277,7 @@ layout_mode = 2
 metadata/_tab_index = 2
 
 [node name="Armoury" type="TabContainer" parent="Content/MainTabs" unique_id=1848144313]
+visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1

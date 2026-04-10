@@ -392,7 +392,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 		bool useInit =
 			(initLevel > 1 && initLevel < level) ||
 			(initTier > 1 && initTier < tier) ||
-			(initRarityLevel > 1 && initRarityLevel < displayItem.template.RarityLevel);
+			(initRarityLevel > 1 && initRarityLevel < (displayItem?.template?.RarityLevel ?? 1));
 		EmitSignalInitVisible(useInit);
 		if (useInit)
 		{

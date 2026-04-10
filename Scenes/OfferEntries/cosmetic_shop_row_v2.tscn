@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ce4nh58o1rsd6"]
+[gd_scene format=3 uid="uid://ce4nh58o1rsd6"]
 
 [ext_resource type="Script" uid="uid://0oda6tiwfc3m" path="res://Scripts/UserInterface/ListEntries/CosmeticShopRow.cs" id="1_dvx4w"]
 [ext_resource type="PackedScene" uid="uid://khtmsxilpw3n" path="res://Scenes/OfferEntries/cosmetic_offer_entry.tscn" id="2_t6xhm"]
@@ -21,6 +21,11 @@ shader_parameter/Repeat = true
 shader_parameter/HorizontalMask = 0.0
 shader_parameter/VerticalMask = 0.0
 shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c6vp3"]
 shader = ExtResource("6_4n434")
@@ -38,13 +43,18 @@ shader_parameter/Repeat = true
 shader_parameter/HorizontalMask = 0.0
 shader_parameter/VerticalMask = 0.0
 shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
-[node name="CosmeticShopRowV2" type="ScrollContainer" node_paths=PackedStringArray("entryParent", "loadingCubes", "contentNode")]
+[node name="CosmeticShopRowV2" type="ScrollContainer" unique_id=1111542173 node_paths=PackedStringArray("entryParent", "loadingCubes", "contentNode")]
 clip_contents = false
-custom_minimum_size = Vector2(0, 333)
+custom_minimum_size = Vector2(0, 250)
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 175.0
+offset_bottom = 325.0
 grow_horizontal = 2
 scroll_horizontal_custom_step = 0.0
 scroll_vertical_custom_step = 0.0
@@ -55,26 +65,26 @@ cosmeticShopEntry = ExtResource("2_t6xhm")
 entryParent = NodePath("MarginContainer/HBoxContainer/HFlowContainer")
 loadingCubes = NodePath("MarginContainer/NewLoadingIcon")
 contentNode = NodePath("MarginContainer")
+v2Height = 225.0
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-custom_minimum_size = Vector2(0, 325)
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=893434730]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1092612110]
 layout_mode = 2
 
-[node name="HFlowContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="HFlowContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1841457014]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="LoadingIcon5" type="TextureRect" parent="MarginContainer"]
+[node name="LoadingIcon5" type="TextureRect" parent="MarginContainer" unique_id=1713520873]
 visible = false
 material = SubResource("ShaderMaterial_7ojdw")
 custom_minimum_size = Vector2(0, 150)
@@ -86,12 +96,12 @@ expand_mode = 1
 script = ExtResource("5_e0edl")
 syncControlSize = true
 
-[node name="NewLoadingIcon" type="Control" parent="MarginContainer"]
+[node name="NewLoadingIcon" type="Control" parent="MarginContainer" unique_id=798567152]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="LoadingIcon7" type="TextureRect" parent="MarginContainer/NewLoadingIcon"]
+[node name="LoadingIcon7" type="TextureRect" parent="MarginContainer/NewLoadingIcon" unique_id=719015443]
 visible = false
 material = SubResource("ShaderMaterial_c6vp3")
 custom_minimum_size = Vector2(500, 500)
@@ -115,7 +125,7 @@ expand_mode = 1
 script = ExtResource("5_e0edl")
 syncControlSize = true
 
-[node name="LoadingIcon6" type="TextureRect" parent="MarginContainer/NewLoadingIcon"]
+[node name="LoadingIcon6" type="TextureRect" parent="MarginContainer/NewLoadingIcon" unique_id=1197085496]
 visible = false
 material = SubResource("ShaderMaterial_chcek")
 custom_minimum_size = Vector2(170, 300)

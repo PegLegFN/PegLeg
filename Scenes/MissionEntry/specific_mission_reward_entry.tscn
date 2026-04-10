@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="2_i0jq4"]
 [ext_resource type="Resource" uid="uid://da112m72yfpe2" path="res://Scripts/ContextMenu/ComponentLists/MissionRewardCtxList.tres" id="3_unoxb"]
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="4_gvws2"]
-[ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="5_8rrsm"]
 [ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="6_k3xux"]
 [ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="7_p325m"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="10_eldv1"]
@@ -12,8 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="13_tceri"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="14_legm4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
-shader = ExtResource("5_8rrsm")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_df1l5"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="SpecificMissionRewardEntry" type="MarginContainer" unique_id=1117377689 node_paths=PackedStringArray("missionEntry", "levelLabel", "missionPowerLabel")]
 custom_minimum_size = Vector2(0, 30)
@@ -55,7 +58,7 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="TheaterCat" type="Label" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=27218240]
-custom_minimum_size = Vector2(20, 0)
+custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 20
@@ -63,9 +66,9 @@ text = "T"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat" unique_id=1664052663]
+[node name="TextureRect" type="Panel" parent="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat" unique_id=601773779]
+self_modulate = Color(0.688, 0.28, 1, 1)
 show_behind_parent = true
-material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,7 +76,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.688, 0.28, 1, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_df1l5")
 
 [node name="Icon" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=1784993644]
 layout_mode = 2
@@ -185,6 +188,6 @@ expand_mode = 1
 [connection signal="IconChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/Icon" method="set_texture"]
 [connection signal="MissionLocked" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
 [connection signal="TheaterCategoryChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat" method="set_text"]
-[connection signal="TheaterColorChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat/TextureRect" method="set_color"]
+[connection signal="TheaterColorChanged" from="MissionEntry" to="MissionEntry/HBoxContainer/HBoxContainer/TheaterCat/TextureRect" method="set_self_modulate"]
 [connection signal="TooltipChanged" from="MissionEntry" to="Button" method="set_tooltip_text"]
 [connection signal="pressed" from="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/Button" to="." method="AddToList"]

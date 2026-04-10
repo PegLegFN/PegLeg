@@ -51,6 +51,9 @@ public partial class DashboardSuperchargerController : Control
 		loading.Visible = true;
 		noSuperchargerMessage.Visible = false;
 
+		if (!GameAccount.ActiveAccount.isOwned)
+			return;
+
 		var targetAccount = GameAccount.ActiveAccount;
 		if (tryUseSummaryFallback && AppConfig.TryGet("automation", "summary_160_fallback", out string accountId))
 		{
@@ -60,7 +63,7 @@ public partial class DashboardSuperchargerController : Control
 
 		await Helpers.WaitForFrame();
 		await Helpers.WaitForFrame();
-		var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+		var profile = await targetAccount.GetProfile(FnProfileTypes.AccountItems).Query();
 		var possibleQuest = profile.GetFirstItem("Quest", q => q.templateId.StartsWith("Quest:weekly_elder"));
 		GD.Print(possibleQuest?.template?.DisplayName ?? "NoSupercharger");
 
@@ -78,7 +81,7 @@ public partial class DashboardSuperchargerController : Control
 		if (possibleQuest is not null && progressBar is not null)
 		{
 			var objective = possibleQuest.template["Objectives"][0].AsObject();
-			progressBar.Value = (possibleQuest.attributes[objective["BackendName"].ToString()]?.GetValue<int>() ?? 0) / (float)objective["Count"].GetValue<int>();
+			progressBar.Value = (possibleQuest.attributes["completion_"+objective["BackendName"].ToString()]?.GetValue<int>() ?? 0) / (float)objective["Count"].GetValue<int>();
 		}
 	}
 }

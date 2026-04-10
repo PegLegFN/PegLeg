@@ -57,6 +57,8 @@ public partial class BRRivalryController : Control
 
 	private async void ActiveAccountChanged()
 	{
+		if (!GameAccount.ActiveAccount.isOwned)
+			return;
 		var athena = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.CosmeticInventory).Query();
 		var token = athena.GetFirstTemplateItem("Token:athena_ch7s2_factionatoken");
 		token ??= athena.GetFirstTemplateItem("Token:athena_ch7s2_factionbtoken");

@@ -393,7 +393,9 @@ static class CatalogRequests
 			cosmeticDisplayData[offer.Key] = displayData;
 		});
 
-		var partiallyOrganisedCosmetics = cosmeticDisplayData
+		var filteredCosmetics = cosmeticDisplayData.Where(n => (n.Value["layoutId"]?.ToString() ?? "Unknown") != "alc.0");
+
+		var partiallyOrganisedCosmetics = filteredCosmetics
 			.Select(n => KeyValuePair.Create(n.Key, n.Value.SafeDeepClone()))
 			.OrderBy(n => -n.Value["sortPriority"]?.GetValue<int>() ?? 0)// sort by offer index (descending)
 			.GroupBy(n => n.Value["layoutId"]?.ToString() ?? "Unknown")// group into pages
@@ -625,7 +627,7 @@ static class CatalogRequests
 		return localPath;
 	}
 
-	const float imageSizeLimit = 256;
+	const float imageSizeLimit = 325;
 
 	public static ImageTexture GetLocalCosmeticResource(string serverPath, float resolutionScale = 1)
 	{

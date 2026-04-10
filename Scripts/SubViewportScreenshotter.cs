@@ -1,8 +1,14 @@
 using Godot;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public partial class SubViewportScreenshotter : SubViewport
 {
+	static Dictionary<string, SubViewportScreenshotter> activeNamedScreenshotters = [];
+
+	[Export]
+	string uniqueName;
+
 	public override async void _Ready()
 	{
 		if (GetParent() is SubViewportContainer containerParent)
@@ -11,10 +17,25 @@ public partial class SubViewportScreenshotter : SubViewport
 				containerParent.VisibilityChanged += QueueRender;
 			else
 				containerParent.Visible = false;
+			if(string.IsNullOrWhiteSpace(uniqueName))
+				uniqueName = containerParent.Name;
 		}
+		if(!string.IsNullOrWhiteSpace(uniqueName))
+			activeNamedScreenshotters.TryAdd(uniqueName, this);
 		await Helpers.WaitForFrame();
 		await Helpers.WaitForFrame();
 		QueueRender();
+	}
+
+	public static void QueueRenderOfNamed(string name)
+	{
+		if(activeNamedScreenshotters.TryGetValue(name, out var screenshotter))
+			screenshotter.QueueRender();
+	}
+
+	public override void _ExitTree()
+	{
+		activeNamedScreenshotters.Remove(uniqueName);
 	}
 
 	void QueueRender()

@@ -69,16 +69,6 @@ public partial class GameItemViewer : ModalWindow
 	[Export]
 	Label searchResult;
 
-	[ExportGroup("Buttons")]
-	[Export]
-	Control recycleButtonPanel;
-	[Export]
-	Control levelupButtonPanel;
-	[Export]
-	Control evolveButtonPanel;
-	[Export]
-	Control rarityupButtonPanel;
-
 	[ExportGroup("Choices")]
 	[Export]
 	Control itemChoiceParent;

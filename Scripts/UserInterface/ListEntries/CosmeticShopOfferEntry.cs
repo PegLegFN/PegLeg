@@ -336,7 +336,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 
 		imageDisplayAssetPath = entryData["fallbackDisplayAsset"]?.ToString();
 
-		JsonObject[] allItems = entryData.MergeCosmeticItems()?.Select(n => n.AsObject())?.ToArray() ?? Array.Empty<JsonObject>();
+		JsonObject[] allItems = entryData.MergeCosmeticItems()?.Select(n => n.AsObject())?.ToArray() ?? [];
 
 		foreach (var item in allItems)
 		{
@@ -378,12 +378,14 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 		var resourceRender = entryData["newDisplayAsset"]?["renderImages"]?.AsArray()?.FirstOrDefault()?.AsObject();
 		var resourceMat = entryData["newDisplayAsset"]?["materialInstances"]?.AsArray()?.FirstOrDefault()?.AsObject();
 
-		if (cellSize.X == 4)
-			resourceShift = new Vector2(0.5f, 0.125f);
-		else if (cellSize.X == 3)
-			resourceShift = new Vector2(0.5f, 0f);
-		else
-			resourceShift = new Vector2(0.5f, 0f);
+		//if (cellSize.X == 4)
+		//	resourceShift = new Vector2(0.5f, 0.0f);
+		//else if (cellSize.X == 3)
+		//	resourceShift = new Vector2(0.5f, 0.2f);
+		//else if (cellSize.X == 2)
+		//	resourceShift = new Vector2(0.5f, 0.3f);
+		//else
+		resourceShift = new Vector2(0.5f, 0.0f);
 		resourceFit = false;
 
 		bgGradient ??= (backgroundGradientTexture.Texture as GradientTexture2D).Gradient;
@@ -456,7 +458,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 				allItems[0]["images"]?["small"]?.ToString() ??
 				allItems[0]["images"]?["icon"]?.ToString() ??
 				allItems[0]["images"]?["smallIcon"]?.ToString();
-			resourceShift = new Vector2(0.5f, 0.5f);
+			resourceShift = new Vector2(0.5f, 0.0f);
 		}
 		else
 			imageUrl = null;
@@ -465,7 +467,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 		if (nonLobbyMusicItems.Length == 1 && nonLobbyMusicItems[0]["type"]?["displayValue"].ToString() == "Jam Track")
 		{
 			resourceFit = true;
-			resourceShift = new Vector2(0.5f, 0f);
+			resourceShift = new Vector2(0.5f, 1.0f);
 			//TODO: if jam track, use dedicated jam track tile format
 		}
 

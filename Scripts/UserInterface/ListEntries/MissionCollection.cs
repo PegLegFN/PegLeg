@@ -106,7 +106,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		var searchText = testSearch;
 		if (!ignoreLargeXPSetting) //XP is now always excluded 
 			searchText = searchText.Trim() + " !XP !Gold";
-		if (AppConfig.Get("missions", "excludeLargeEvo", false) && !ignoreLargeXPSetting)
+		if (AppConfig.Get("missions", "excludeLargeEvo", true) && !ignoreLargeXPSetting)
 			searchText = searchText.Trim() + " !(templateId='reagent_c_')";
 		if (AppConfig.Get("missions", "excludeLargeReperk", false) && !ignoreLargeXPSetting)
 			searchText = searchText.Trim() + " !RE-PERK";

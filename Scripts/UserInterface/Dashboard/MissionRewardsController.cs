@@ -19,7 +19,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	[Export]
 	LineEdit itemSearchBar;
 	[Export]
-	Button sortByPower;
+	OptionButton sortMode;
+	[Export]
+	Button filterNotable;
 	[Export]
 	Button filterPower;
 	[Export]
@@ -72,10 +74,12 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		SetupFilters(rarityFilters);
 		SetupFilters(zoneFilters);
 		SetupFilters(typeFilters);
-		if (sortByPower is not null)
-			sortByPower.Toggled += _ => FilterMissions();
+		if (sortMode is not null)
+			sortMode.ItemSelected += _ => FilterMissions();
 		if (filterPower is not null)
 			filterPower.Toggled += _ => FilterMissions();
+		if (filterNotable is not null)
+			filterNotable.Toggled += _ => FilterMissions();
 		if (filterPowerContainer is not null)
 			filterPowerContainer.Visible = GameAccount.ActiveAccount.isOwned;
 		if (filterStory is not null)
@@ -237,7 +241,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			notableFilterText = """
                 Mythic |
                 (V-Bucks | X-Ray) |
-                (Upgrade Llama) |
                 (Legendary Survivor !Lead) |
                 REMINDER
                 """;
@@ -253,6 +256,15 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	{
 		var initialOrder = pairs.OrderBy(r => -r.mission.PowerLevel);
 		return ThenByRewardPriority(initialOrder, RewardPairSelector);
+	}
+	public static IOrderedEnumerable<MissionRewardPair> OrderByDB(IEnumerable<MissionRewardPair> pairs)
+	{
+		return pairs.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+			.ThenBy(r => -r.mission.TheaterIdx)
+			.ThenBy(r => !r.item.sortingTemplate.VBucksOrXRayTickets)
+			.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
+			.ThenBy(r => -r.mission.PowerLevel)
+			.ThenBy(r => r.mission.Guid);
 	}
 
 	static GameItem StandardItemSelector(GameItem item) => item;
@@ -279,7 +291,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		return 0;
 	}
 
-	static IOrderedEnumerable<T> ThenByRewardPriority<T>(IOrderedEnumerable<T> items, Func<T, GameItem> itemSelector) => items
+	static IOrderedEnumerable<T> ThenByRewardPriority<T>(IOrderedEnumerable<T> items, Func<T, GameItem> itemSelector)
+	{
+		return items
 			.ThenBy(r => !GameAccount.ActiveAccount.HasReminder(itemSelector(r).templateId))
 			.ThenBy(r => !(
 				itemSelector(r).template.VBucksOrXRayTickets //||
@@ -294,6 +308,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName)
 			.ThenBy(r => itemSelector(r).sortingTemplate != itemSelector(r).template)
 			.ThenBy(r => -itemSelector(r).quantity);
+	}
 
 
 	bool needsRefresh = false;
@@ -356,6 +371,27 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 					!string.IsNullOrWhiteSpace(result) ? result.Split(",") : []
 				)
 			];
+			Func<GameItem, bool> notableItemFilter = null;
+			bool TypeFilter(GameItem i)
+			{
+				if (requiredTypes.Any(t => i.sortingTemplate.TemplateId.StartsWith(t)))
+					return true;
+				if (requiredTypes.Contains("Hero") && i.sortingTemplate.Type == "CardPack" && i.sortingTemplate.RarityLevel != 6)
+					return true;
+				if (requiredTypes.Contains("Worker:manager") && i.sortingTemplate.Type == "CardPack" && i.sortingTemplate.RarityLevel == 6)
+					return true;
+				if (requiredTypes.Contains($"{i.sortingTemplate.Type}>{i.sortingTemplate.Category}"))
+					return true;
+				if (requiredTypes.Contains($"{i.sortingTemplate.Type}>_") && i.sortingTemplate.Category == null)
+					return true;
+				if (requiredTypes.Contains($"{i.sortingTemplate.Type}@{i.sortingTemplate.SubType}"))
+					return true;
+				if (requiredTypes.Contains($"{i.sortingTemplate.Type}@_") && i.sortingTemplate.SubType == null)
+					return true;
+				if (requiredTypes.Contains($"{i.sortingTemplate.Type}@_") && i.sortingTemplate.SubType == null)
+					return true;
+				return false;
+			}
 			bool StandardFilter(GameItem i)
 			{
 				if (repeatabilityFilters[0].ButtonPressed && i.zcpEquivelent is not null)
@@ -365,27 +401,24 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 				else if (repeatabilityFilters[2].ButtonPressed && (i.zcpEquivelent is null || i.quantity < 4))
 					return false;
 
-				if (
-					requiredRarities.Count > 0 &&
-					!requiredRarities.Contains(i.sortingTemplate.Rarity ?? "Uncommon")
-					)
+				if (requiredRarities.Count > 0 && !requiredRarities.Contains(i.sortingTemplate.Rarity ?? "Uncommon"))
 					return false;
-				if (
-					requiredTypes.Count > 0 &&
-					!requiredTypes.Any(t => i.sortingTemplate.TemplateId.StartsWith(t)) &&
-					!requiredTypes.Contains($"{i.sortingTemplate.Type}>{i.sortingTemplate.Category}") &&
-					!(requiredTypes.Contains($"{i.sortingTemplate.Type}>_") && i.sortingTemplate.Category == null) &&
-					!requiredTypes.Contains($"{i.sortingTemplate.Type}@{i.sortingTemplate.SubType}") &&
-					!(requiredTypes.Contains($"{i.sortingTemplate.Type}@_") && i.sortingTemplate.SubType == null)
-					)
+
+				if (requiredTypes.Count > 0 && !TypeFilter(i))
 					return false;
+
+				if (filterNotable?.ButtonPressed == true)
+				{
+					notableItemFilter ??= CreateNotableFilter();
+					if (!notableItemFilter(i))
+						return false;
+				}
 
 				if (!PLSearch.EvaluateInstructions(itemSearchInstructions, i.RawData))
 					return false;
 
 				return true;
 			}
-			;
 			itemPredicate = StandardFilter;
 		}
 
@@ -426,14 +459,12 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 		IOrderedEnumerable<MissionRewardPair> sortedRewards;
 
-		if (sortByPower?.ButtonPressed == true)
+		sortedRewards = sortMode?.GetSelectedId() switch
 		{
-			sortedRewards = OrderByPower(filteredRewards);
-		}
-		else
-		{
-			sortedRewards = OrderByNotable(filteredRewards);
-		}
+			160 => OrderByPower(filteredRewards),
+			465 => OrderByDB(filteredRewards),
+			_ => OrderByNotable(filteredRewards),
+		};
 
 		rewards = [.. sortedRewards];
 		int limit = AppConfig.Get("missions", "notable_count", 20);

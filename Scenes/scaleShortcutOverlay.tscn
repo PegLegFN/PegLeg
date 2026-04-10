@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://0ukwdd7ccp6a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0em5i"]
+bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75040007, 0.304, 0.8, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4x4v"]
+bg_color = Color(0.6, 0.6, 0.6, 0.10980392)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.304828, 0.34067234, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll5xk"]
+bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.304, 0.39493322, 0.8, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4fl1"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[node name="ScaleShortcutOverlay" type="MarginContainer" unique_id=106392459]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=355541257]
+custom_minimum_size = Vector2(256, 144)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=1946740762]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TargetSize" type="Panel" parent="MarginContainer/MarginContainer" unique_id=1924579144]
+custom_minimum_size = Vector2(128, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0em5i")
+
+[node name="WindowSize" type="Panel" parent="MarginContainer/MarginContainer" unique_id=897382513]
+custom_minimum_size = Vector2(192, 108)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_w4x4v")
+
+[node name="FitSize" type="Panel" parent="MarginContainer/MarginContainer" unique_id=345824557]
+custom_minimum_size = Vector2(128, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ll5xk")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/FitSize" unique_id=1083407193]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_top = 2.0
+grow_horizontal = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/MarginContainer/FitSize/HBoxContainer" unique_id=988736102]
+custom_minimum_size = Vector2(12, 3)
+layout_mode = 2
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer/MarginContainer/FitSize/HBoxContainer" unique_id=1207918538]
+custom_minimum_size = Vector2(12, 3)
+layout_mode = 2
+
+[node name="ColorRect3" type="ColorRect" parent="MarginContainer/MarginContainer/FitSize/HBoxContainer" unique_id=56912782]
+custom_minimum_size = Vector2(12, 3)
+layout_mode = 2
+
+[node name="ColorRect4" type="ColorRect" parent="MarginContainer/MarginContainer/FitSize/HBoxContainer" unique_id=484767633]
+visible = false
+custom_minimum_size = Vector2(12, 3)
+layout_mode = 2
+
+[node name="ColorRect5" type="ColorRect" parent="MarginContainer/MarginContainer/FitSize/HBoxContainer" unique_id=191323071]
+visible = false
+custom_minimum_size = Vector2(12, 3)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/MarginContainer/FitSize" unique_id=1465444848]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 6.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/MarginContainer/FitSize/Control" unique_id=1009801318]
+self_modulate = Color(1, 1, 1, 0.47843137)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.301
+anchor_bottom = 1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4fl1")
+
+[node name="Panel2" type="Panel" parent="MarginContainer/MarginContainer/FitSize/Control" unique_id=1870747884]
+self_modulate = Color(1, 1, 1, 0.47843137)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.301
+anchor_right = 1.0
+anchor_bottom = 0.209
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4fl1")
+
+[node name="Panel3" type="Panel" parent="MarginContainer/MarginContainer/FitSize/Control" unique_id=2113868319]
+self_modulate = Color(1, 1, 1, 0.47843137)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.301
+anchor_top = 0.209
+anchor_right = 0.67
+anchor_bottom = 0.476
+offset_top = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4fl1")
+
+[node name="Panel4" type="Panel" parent="MarginContainer/MarginContainer/FitSize/Control" unique_id=43600176]
+self_modulate = Color(1, 1, 1, 0.47843137)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.67
+anchor_top = 0.209
+anchor_right = 1.0
+anchor_bottom = 0.733
+offset_left = 1.0
+offset_top = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4fl1")

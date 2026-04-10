@@ -4,18 +4,19 @@
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_xnsoy"]
 [ext_resource type="Script" uid="uid://bob0mcr4r7qyn" path="res://Scripts/UserInterface/Dashboard/AlertSummaryController.cs" id="3_6k71c"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="4_gmqrm"]
-[ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/DashboardAlertSummaryRow.tscn" id="5_mrch3"]
+[ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummaryRow.tscn" id="5_mrch3"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="6_xb20p"]
-
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("4_gmqrm")
+shader_parameter/scalar = 2.0
+shader_parameter/base = 1.0
 
-[node name="ShareableAlertSummary" type="SubViewportContainer"]
+[node name="ShareableAlertSummary" type="SubViewportContainer" unique_id=1600453108]
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="AlertSummaryViewport" type="SubViewport" parent="." node_paths=PackedStringArray("matchSize")]
+[node name="AlertSummaryViewport" type="SubViewport" parent="." unique_id=1497359965 node_paths=PackedStringArray("matchSize")]
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
@@ -23,9 +24,9 @@ render_target_update_mode = 4
 script = ExtResource("1_u1eso")
 matchSize = NodePath("PegLegWatermark")
 
-[node name="PegLegWatermark" parent="AlertSummaryViewport" instance=ExtResource("2_xnsoy")]
+[node name="PegLegWatermark" parent="AlertSummaryViewport" unique_id=449743012 instance=ExtResource("2_xnsoy")]
 
-[node name="Alert Summary" type="PanelContainer" parent="AlertSummaryViewport/PegLegWatermark" node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
+[node name="Alert Summary" type="PanelContainer" parent="AlertSummaryViewport/PegLegWatermark" unique_id=369664178 node_paths=PackedStringArray("rewardRowParent", "loadingIcon")]
 custom_minimum_size = Vector2(485, 420)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
@@ -34,22 +35,22 @@ targetTemplateIds = PackedStringArray("AccountResource:currency_hybrid_mtx_xrayl
 rewardRowParent = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary" unique_id=254374509]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+[node name="Label" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer" unique_id=725704889]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Alert Summary"
 horizontal_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer" unique_id=980870230]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer" unique_id=2121544897]
 layout_mode = 2
 
-[node name="Reward" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Reward" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1659662731]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.5
@@ -57,7 +58,7 @@ theme_type_variation = &"Outline6"
 text = "Reward"
 horizontal_alignment = 1
 
-[node name="Stone" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Stone" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=2096028165]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -65,7 +66,7 @@ theme_type_variation = &"Outline6"
 text = "Stone"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Stone"]
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Stone" unique_id=46416098]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -77,7 +78,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.2296, 0.4264, 0.82, 1)
 
-[node name="Plank" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Plank" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1183308326]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -85,7 +86,7 @@ theme_type_variation = &"Outline6"
 text = "Plank"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Plank"]
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Plank" unique_id=1194213443]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -97,7 +98,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.15, 1, 0, 1)
 
-[node name="Canny" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Canny" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=662102525]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -105,7 +106,7 @@ theme_type_variation = &"Outline6"
 text = "Canny"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Canny"]
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Canny" unique_id=29613920]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -117,7 +118,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.8, 0, 1)
 
-[node name="Twine" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Twine" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1749219191]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -125,7 +126,7 @@ theme_type_variation = &"Outline6"
 text = "Twine"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Twine"]
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Twine" unique_id=2074953271]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -137,7 +138,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.683333, 0, 1, 1)
 
-[node name="Total" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Total" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1084827339]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -145,7 +146,7 @@ theme_type_variation = &"Outline6"
 text = "Total"
 horizontal_alignment = 1
 
-[node name="Ventures" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="Ventures" type="Label" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer" unique_id=23914869]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -153,7 +154,7 @@ theme_type_variation = &"Outline6"
 text = "Vent's"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Ventures"]
+[node name="TextureRect" type="ColorRect" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/PanelContainer/HBoxContainer/Ventures" unique_id=1189412459]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w6d4a")
 layout_mode = 1
@@ -165,85 +166,82 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.883333, 1, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer" unique_id=122223264]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer" unique_id=1976390181]
 layout_mode = 2
 
-[node name="DashboardAlertSummary" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=88080159 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="ItemEntry" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer" index="0"]
-forceShowVBucks = true
-
-[node name="DashboardAlertSummary2" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary2" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=438652918 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary3" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary3" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=2035338225 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary4" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary4" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1319838359 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary5" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary5" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1010588930 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary6" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary6" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1107273549 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary7" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary7" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=242965479 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary8" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary8" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1372752094 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary9" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary9" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1859189109 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary10" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary10" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1659668636 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary11" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary11" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=643868367 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary12" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary12" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=27931865 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary13" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary13" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1810206816 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary14" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary14" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1888795066 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary15" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary15" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=262736205 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary16" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary16" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=68761596 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="DashboardAlertSummary17" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource("5_mrch3")]
+[node name="DashboardAlertSummary17" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1806577619 instance=ExtResource("5_mrch3")]
 visible = false
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer" instance=ExtResource("6_xb20p")]
+[node name="SmallLoadingIcon" parent="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer" unique_id=750857929 instance=ExtResource("6_xb20p")]
 layout_mode = 2
 
 [editable path="AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]

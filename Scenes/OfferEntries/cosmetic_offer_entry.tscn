@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://khtmsxilpw3n"]
+[gd_scene format=3 uid="uid://khtmsxilpw3n"]
 
 [ext_resource type="Script" uid="uid://b3dwgyqw1ptf1" path="res://Scripts/UserInterface/ListEntries/CosmeticShopOfferEntry.cs" id="1_a2plt"]
 [ext_resource type="Shader" uid="uid://dwr30ie6yoste" path="res://Shaders/AdaptivePanel.tres" id="2_655vb"]
@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bnbph4c6t2sui" path="res://Scenes/cosmetic_loading_icon.tscn" id="5_5xuyv"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="6_x3vll"]
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="6_yu1fs"]
-[ext_resource type="Texture2D" uid="uid://dp5rilo88xsps" path="res://Images/InterfaceIcons/lqKiryu.png" id="7_lygc2"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="7_lygc2"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_yjpnu"]
 [ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="9_7kwsg"]
 [ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="11_wpcy6"]
@@ -27,11 +27,27 @@ shader_parameter/shiftDirection = Vector2(0.5, 0.5)
 shader_parameter/UseCorners = true
 shader_parameter/CornerRadius = 10.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxgw7"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7eerc"]
 resource_local_to_scene = true
 shader = ExtResource("6_x3vll")
-shader_parameter/ControlSize = Vector2(150, 150)
-shader_parameter/ShiftDirection = Vector2(0.5, 0)
+shader_parameter/ControlSize = Vector2(150, 152.5)
+shader_parameter/ShiftDirection = Vector2(0.5, 1)
 shader_parameter/Fit = true
 shader_parameter/UseCorners = true
 shader_parameter/UseGlobalCorners = false
@@ -39,7 +55,7 @@ shader_parameter/ApplyCornersToFit = true
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_shqsb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_278xo"]
 resource_local_to_scene = true
 shader = ExtResource("6_yu1fs")
 shader_parameter/ControlSize = Vector2(140, 120)
@@ -78,22 +94,6 @@ corner_radius_bottom_left = 10
 expand_margin_top = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tkqcf"]
-bg_color = Color(1, 1, 1, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pt1cr"]
 content_margin_left = 2.0
 content_margin_top = 2.0
@@ -128,7 +128,7 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="CosmeticOfferEntry" type="MarginContainer" node_paths=PackedStringArray("expiryTimerText", "loadingCubes", "backgroundGradientTexture", "resourceTarget")]
+[node name="CosmeticOfferEntry" type="MarginContainer" unique_id=1963553576 node_paths=PackedStringArray("expiryTimerText", "loadingCubes", "backgroundGradientTexture", "resourceTarget")]
 custom_minimum_size = Vector2(150, 150)
 offset_right = 150.0
 offset_bottom = 150.0
@@ -143,21 +143,32 @@ fallbackTexture = ExtResource("2_ydd6l")
 useOutlineColor = true
 fallbackOutlineColor = Color(0, 0.0705882, 0.231373, 1)
 
-[node name="ItemBG" type="TextureRect" parent="."]
+[node name="ItemBG" type="TextureRect" parent="." unique_id=1198445779]
 material = SubResource("ShaderMaterial_eh405")
-clip_contents = true
 layout_mode = 2
 texture = ExtResource("3_8yx3v")
 expand_mode = 1
 script = ExtResource("7_yjpnu")
 syncControlSize = true
 
-[node name="ItemIcon" type="TextureRect" parent="ItemBG"]
-material = SubResource("ShaderMaterial_7eerc")
+[node name="Outline" type="Panel" parent="ItemBG" unique_id=1297836249]
+self_modulate = Color(0, 0.0705882, 0.231373, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oxgw7")
+
+[node name="ItemIcon" type="TextureRect" parent="ItemBG" unique_id=1211284356]
+material = SubResource("ShaderMaterial_7eerc")
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_lygc2")
@@ -165,8 +176,8 @@ expand_mode = 1
 script = ExtResource("7_yjpnu")
 syncControlSize = true
 
-[node name="CosmeticLoadingIcon" parent="ItemBG" instance=ExtResource("5_5xuyv")]
-material = SubResource("ShaderMaterial_shqsb")
+[node name="CosmeticLoadingIcon" parent="ItemBG" unique_id=1550021752 instance=ExtResource("5_5xuyv")]
+material = SubResource("ShaderMaterial_278xo")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0
@@ -178,23 +189,23 @@ offset_top = 5.0
 offset_right = -5.0
 offset_bottom = -25.0
 
-[node name="DetailsArea" type="VBoxContainer" parent="."]
+[node name="DetailsArea" type="VBoxContainer" parent="." unique_id=1825829364]
 clip_contents = true
 layout_mode = 2
 
-[node name="Space" type="Control" parent="DetailsArea"]
+[node name="Space" type="Control" parent="DetailsArea" unique_id=1467439514]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NameBox" type="PanelContainer" parent="DetailsArea"]
+[node name="NameBox" type="PanelContainer" parent="DetailsArea" unique_id=1146250184]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_b2nlk")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DetailsArea/NameBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailsArea/NameBox" unique_id=168275394]
 layout_mode = 2
 theme_override_constants/separation = -3
 
-[node name="TypeLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer"]
+[node name="TypeLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer" unique_id=1707707102]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = 0
@@ -206,7 +217,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="NameLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer"]
+[node name="NameLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer" unique_id=550291052]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
@@ -218,19 +229,19 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="DetailsArea"]
+[node name="MarginContainer" type="MarginContainer" parent="DetailsArea" unique_id=810646573]
 layout_mode = 2
 theme_override_constants/margin_bottom = 1
 
-[node name="PriceBox" type="MarginContainer" parent="DetailsArea/MarginContainer"]
+[node name="PriceBox" type="MarginContainer" parent="DetailsArea/MarginContainer" unique_id=1119836036]
 self_modulate = Color(0, 0.0705882, 0.231373, 1)
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 
-[node name="Control" type="Control" parent="DetailsArea/MarginContainer/PriceBox"]
+[node name="Control" type="Control" parent="DetailsArea/MarginContainer/PriceBox" unique_id=1356692602]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="DetailsArea/MarginContainer/PriceBox/Control"]
+[node name="Control" type="Control" parent="DetailsArea/MarginContainer/PriceBox/Control" unique_id=560468819]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -241,7 +252,7 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SlantPanel" type="Panel" parent="DetailsArea/MarginContainer/PriceBox/Control/Control"]
+[node name="SlantPanel" type="Panel" parent="DetailsArea/MarginContainer/PriceBox/Control/Control" unique_id=815950343]
 self_modulate = Color(0, 0.0705882, 0.231373, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -251,7 +262,7 @@ grow_horizontal = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pndfx")
 
-[node name="CornerPanel" type="Panel" parent="DetailsArea/MarginContainer/PriceBox/Control"]
+[node name="CornerPanel" type="Panel" parent="DetailsArea/MarginContainer/PriceBox/Control" unique_id=331254047]
 self_modulate = Color(0, 0.0705882, 0.231373, 1)
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 1
@@ -263,21 +274,21 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gmw55")
 
-[node name="MarginContainer" type="MarginContainer" parent="DetailsArea/MarginContainer/PriceBox"]
+[node name="MarginContainer" type="MarginContainer" parent="DetailsArea/MarginContainer/PriceBox" unique_id=454536186]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer" unique_id=831002838]
 layout_mode = 2
 
-[node name="CurrencyIcon" type="TextureRect" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer"]
+[node name="CurrencyIcon" type="TextureRect" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer" unique_id=1618350364]
 layout_mode = 2
 texture = ExtResource("4_dvpr2")
 expand_mode = 3
 
-[node name="FinalPrice" type="Label" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer"]
+[node name="FinalPrice" type="Label" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer" unique_id=628113499]
 layout_mode = 2
 theme_override_constants/line_spacing = 0
 theme_override_constants/shadow_offset_x = 1
@@ -285,7 +296,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 15
 text = "10,000"
 
-[node name="OriginalPrice" type="Label" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice"]
+[node name="OriginalPrice" type="Label" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice" unique_id=798303853]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -0.15
@@ -302,7 +313,7 @@ theme_override_font_sizes/font_size = 12
 text = "25,000"
 vertical_alignment = 2
 
-[node name="ColorRect" type="ColorRect" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice/OriginalPrice"]
+[node name="ColorRect" type="ColorRect" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice/OriginalPrice" unique_id=443239796]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.565
@@ -313,90 +324,52 @@ grow_vertical = 2
 rotation = 0.122173
 color = Color(0, 0, 0, 0.501961)
 
-[node name="OwnedLabel" type="Label" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer"]
+[node name="OwnedLabel" type="Label" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer" unique_id=1408497357]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1875, 0.75, 0.1875, 1)
 text = "Owned"
 
-[node name="Outline" type="Panel" parent="."]
-self_modulate = Color(0, 0.0705882, 0.231373, 1)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_tkqcf")
-
-[node name="Responsive Button Area" parent="." instance=ExtResource("5_4aip3")]
+[node name="Responsive Button Area" parent="." unique_id=1463734458 instance=ExtResource("5_4aip3")]
 layout_mode = 2
 outlinePadding = 20.0
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("cosmeticSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=295182873 node_paths=PackedStringArray("cosmeticSource")]
 script = ExtResource("12_am3j1")
 cosmeticSource = NodePath("../..")
 componentList = ExtResource("13_uwc4i")
 
-[node name="Button" type="Button" parent="." groups=["ExcludeHoverSounds"]]
+[node name="Button" type="Button" parent="." unique_id=2110815276 groups=["ExcludeHoverSounds"]]
 visible = false
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 
-[node name="Overlays" type="Control" parent="."]
+[node name="Overlays" type="Control" parent="." unique_id=2136210566]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Overlays"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlays" unique_id=839283881]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -66.0
-offset_top = 5.0
+anchor_bottom = 1.0
 offset_right = -5.0
-offset_bottom = 47.0
+offset_bottom = -60.0
 grow_horizontal = 0
+grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 2
 
-[node name="LeavingTimer" type="PanelContainer" parent="Overlays/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-tooltip_text = "Time until the item leaves the shop"
-theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
-
-[node name="LeavingSoonAlert" type="MarginContainer" parent="Overlays/VBoxContainer/LeavingTimer"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = -2
-theme_override_constants/margin_top = -2
-theme_override_constants/margin_right = -3
-theme_override_constants/margin_bottom = -2
-
-[node name="Panel" type="Panel" parent="Overlays/VBoxContainer/LeavingTimer/LeavingSoonAlert"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ikqmt")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/VBoxContainer/LeavingTimer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="Overlays/VBoxContainer/LeavingTimer/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("9_7kwsg")
-expand_mode = 3
-
-[node name="LeavingLabel" type="Label" parent="Overlays/VBoxContainer/LeavingTimer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 12
-text = "2d"
-
-[node name="LastSeenPanel" type="PanelContainer" parent="Overlays/VBoxContainer"]
+[node name="LastSeenPanel" type="PanelContainer" parent="Overlays/VBoxContainer" unique_id=1121278558]
 layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "Days since the item was last in the shop 
 (before it returned)"
 theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
 
-[node name="LastSeenAlert" type="MarginContainer" parent="Overlays/VBoxContainer/LastSeenPanel"]
+[node name="LastSeenAlert" type="MarginContainer" parent="Overlays/VBoxContainer/LastSeenPanel" unique_id=256512533]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = -2
@@ -404,37 +377,37 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="Overlays/VBoxContainer/LastSeenPanel/LastSeenAlert"]
+[node name="Panel" type="Panel" parent="Overlays/VBoxContainer/LastSeenPanel/LastSeenAlert" unique_id=619443712]
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ikqmt")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/VBoxContainer/LastSeenPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/VBoxContainer/LastSeenPanel" unique_id=922294911]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer" unique_id=692066476]
 layout_mode = 2
 theme_override_constants/margin_top = -2
 theme_override_constants/margin_bottom = -1
 
-[node name="TextureRect" type="TextureRect" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer/MarginContainer" unique_id=417391686]
 layout_mode = 2
 texture = ExtResource("14_n2okj")
 expand_mode = 3
 
-[node name="LastSeenLabel" type="Label" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer"]
+[node name="LastSeenLabel" type="Label" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer" unique_id=1546786789]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "500d"
 
-[node name="Control" type="Control" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer"]
+[node name="Control" type="Control" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer" unique_id=552657056]
 visible = false
 custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
-[node name="NotificationLabel" type="Label" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer/Control"]
+[node name="NotificationLabel" type="Label" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer/Control" unique_id=1796695511]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -453,28 +426,63 @@ text = " ! "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HeadlinePanel" type="PanelContainer" parent="Overlays"]
+[node name="LeavingTimer" type="PanelContainer" parent="Overlays/VBoxContainer" unique_id=1910063822]
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Time until the item leaves the shop"
+theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="Overlays/VBoxContainer/LeavingTimer" unique_id=714371069]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="Overlays/VBoxContainer/LeavingTimer/LeavingSoonAlert" unique_id=1438835707]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ikqmt")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/VBoxContainer/LeavingTimer" unique_id=1644348748]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Overlays/VBoxContainer/LeavingTimer/HBoxContainer" unique_id=2076557640]
+layout_mode = 2
+texture = ExtResource("9_7kwsg")
+expand_mode = 3
+
+[node name="LeavingLabel" type="Label" parent="Overlays/VBoxContainer/LeavingTimer/HBoxContainer" unique_id=750389805]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "2d"
+
+[node name="HeadlinePanel" type="PanelContainer" parent="Overlays" unique_id=1251169943]
 layout_mode = 1
 anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 5.0
-offset_top = 5.0
-offset_right = 21.0
-offset_bottom = 25.0
+offset_bottom = -60.0
+grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rfdvo")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/HeadlinePanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/HeadlinePanel" unique_id=822271329]
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="Overlays/HeadlinePanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="Overlays/HeadlinePanel/HBoxContainer" unique_id=2100098715]
 visible = false
 layout_mode = 2
 texture = ExtResource("9_7kwsg")
 expand_mode = 3
 
-[node name="HeadlineLabel" type="Label" parent="Overlays/HeadlinePanel/HBoxContainer"]
+[node name="HeadlineLabel" type="Label" parent="Overlays/HeadlinePanel/HBoxContainer" unique_id=1350383139]
 layout_mode = 2
 theme_override_constants/line_spacing = -1
 theme_override_constants/shadow_offset_x = 1
@@ -482,20 +490,23 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = " # "
 
-[node name="AlmostAYear" type="Control" parent="Overlays"]
+[node name="AlmostAYear" type="Control" parent="Overlays" unique_id=1776421360]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Overlays/AlmostAYear" unique_id=1692529766]
+z_index = 2
+layout_mode = 1
+anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
+offset_top = -8.0
+offset_bottom = -8.0
 grow_horizontal = 0
-
-[node name="Label" type="Label" parent="Overlays/AlmostAYear"]
-z_index = 2
-layout_mode = 0
-offset_left = -115.0
-offset_top = -7.0
-offset_right = 20.0
-offset_bottom = 9.0
 rotation = -0.0436332
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
@@ -503,19 +514,27 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 12
 text = "That's almost a whole year!"
+metadata/_edit_use_anchors_ = true
 
-[node name="TextureRect" type="TextureRect" parent="Overlays/AlmostAYear"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 30.0
-offset_right = 16.0
-offset_bottom = 55.0
-rotation = -2.79253
+[node name="TextureRect" type="TextureRect" parent="Overlays/AlmostAYear" unique_id=1563365150]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -92.000015
+offset_right = 9.0
+offset_bottom = -43.75615
+grow_horizontal = 0
+grow_vertical = 0
+rotation = -2.9496064
 mouse_filter = 2
 texture = ExtResource("16_4iqq1")
 expand_mode = 1
 
-[node name="BestsellerStar" type="TextureRect" parent="Overlays"]
+[node name="BestsellerStar" type="TextureRect" parent="Overlays" unique_id=806499072]
 self_modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(23, 23)
 layout_mode = 1
@@ -533,7 +552,7 @@ tooltip_text = "Bestseller"
 texture = ExtResource("11_wpcy6")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="Overlays/BestsellerStar"]
+[node name="TextureRect2" type="TextureRect" parent="Overlays/BestsellerStar" unique_id=608250185]
 self_modulate = Color(1, 0.972, 0.58, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -563,11 +582,10 @@ expand_mode = 1
 [connection signal="OldPriceVisibility" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice/OriginalPrice" method="set_visible"]
 [connection signal="OutlineChanged" from="." to="DetailsArea/MarginContainer/PriceBox/Control/Control/SlantPanel" method="set_self_modulate"]
 [connection signal="OutlineChanged" from="." to="DetailsArea/MarginContainer/PriceBox/Control/CornerPanel" method="set_self_modulate"]
-[connection signal="OutlineChanged" from="." to="Outline" method="set_self_modulate"]
+[connection signal="OutlineChanged" from="." to="ItemBG/Outline" method="set_self_modulate"]
 [connection signal="OwnedVisibility" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/OwnedLabel" method="set_visible"]
 [connection signal="PriceAmount" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice" method="set_text"]
 [connection signal="ReminingTimeVisibility" from="." to="Overlays/VBoxContainer/LeavingTimer/LeavingSoonAlert" method="set_visible"]
-[connection signal="TooltipChanged" from="." to="Outline" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Button" method="set_tooltip_text"]
 [connection signal="TypeChanged" from="." to="DetailsArea/NameBox/VBoxContainer/TypeLabel" method="set_text"]

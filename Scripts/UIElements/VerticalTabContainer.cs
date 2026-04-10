@@ -75,7 +75,10 @@ public partial class VerticalTabContainer : Node
 		newTabs.RemoveRange(pages.Length, newTabs.Count - pages.Length);
 		tabs = [.. newTabs];
 
-		SetTabState(Mathf.Max(0, newTabs.IndexOf(newTabs.FirstOrDefault(t => t.Page?.Visible == true))));
+		if (OS.HasFeature("editor"))
+			SetTabState(Mathf.Max(0, newTabs.IndexOf(newTabs.FirstOrDefault(t => t.Page?.Visible == true))));
+		else
+			SetTabState(0);
 		lockTabs = false;
 	}
 

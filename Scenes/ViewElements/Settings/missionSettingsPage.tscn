@@ -9,16 +9,9 @@
 offset_right = 334.0
 offset_bottom = 198.0
 
-[node name="ShowMissionBackgrounds" type="CheckBox" parent="." unique_id=546791083]
-layout_direction = 3
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=257004908]
+visible = false
 layout_mode = 2
-button_pressed = true
-text = "Show mission background images"
-alignment = 2
-script = ExtResource("1_p4q3c")
-section = "missions"
-key = "show_background"
-defaultValue = true
 
 [node name="HideMissionLock" type="CheckBox" parent="." unique_id=1387671364]
 layout_direction = 3
@@ -47,6 +40,7 @@ alignment = 2
 script = ExtResource("1_p4q3c")
 section = "missions"
 key = "excludeLargeEvo"
+defaultValue = true
 
 [node name="HideReperk" type="CheckBox" parent="." unique_id=1960580171]
 layout_direction = 3
@@ -170,6 +164,17 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_n30m0")
 expand_mode = 1
+
+[node name="ShowMissionBackgrounds" type="CheckBox" parent="." unique_id=546791083]
+layout_direction = 3
+layout_mode = 2
+button_pressed = true
+text = "Show mission background images"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "show_background"
+defaultValue = true
 
 [connection signal="AppliedChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="NotableItemCap/HSlider" to="NotableItemCap/HSlider" method="SetValue"]
