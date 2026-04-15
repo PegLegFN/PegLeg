@@ -129,7 +129,8 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	void UpdateList()
 	{
 		CheckForNewDay();
-		tab?.Text = $"To-Do List ({targetMissionRewards.Count})";
+		if (tab is not null)
+			tab.Text = $"To-Do List ({targetMissionRewards.Count})";
 		missionList?.UpdateList(true);
 		newMissionList?.UpdateList();
 	}
