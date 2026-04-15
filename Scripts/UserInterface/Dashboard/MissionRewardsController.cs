@@ -11,6 +11,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	[Export]
 	bool notableMode;
 	[Export]
+	bool excludeTodo;
+	[Export]
 	RecycleListContainer missionList;
 	[Export]
 	Node newMissionListNode;
@@ -113,6 +115,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		GameAccount.ActiveAccountChanged += OnAccountChanged;
 		GameAccount.RemindersChanged += FilterMissions;
 		GameAccount.LocalDataChanged += OnAccountDataChanged;
+		MissionToDoListController.OnToDoListChanged += FilterMissions;
 		AppConfig.OnConfigChanged += OnConfigChanged;
 		VisibilityChanged += TryRefresh;
 		FilterMissions();
@@ -120,6 +123,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	public override void _ExitTree()
 	{
+		MissionToDoListController.OnToDoListChanged -= FilterMissions;
 		GameMission.OnMissionsUpdated -= FilterMissions;
 		GameMission.OnMissionsInvalidated -= ClearMissions;
 		GameAccount.ActiveAccountChanged -= OnAccountChanged;
@@ -458,6 +462,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 					continue;
 				if (itemPredicate?.Invoke(item) == false)
 					continue;
+				if (excludeTodo && MissionToDoListController.IsOnToDoList(item))
+					continue;
 				filteredRewards.Add(new(mission, item));
 			}
 			foreach (var item in mission.rewardItems ?? [])
@@ -472,6 +478,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 				if (ignorePrefixes.Any(p => item.templateId.StartsWith(p)))
 					continue;
 				if (itemPredicate?.Invoke(item) == false)
+					continue;
+				if (excludeTodo && MissionToDoListController.IsOnToDoList(item))
 					continue;
 				filteredRewards.Add(new(mission, item));
 			}

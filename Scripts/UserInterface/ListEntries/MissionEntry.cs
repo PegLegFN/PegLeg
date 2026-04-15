@@ -169,6 +169,11 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 
 	public void SetMission(GameMission mission)
 	{
+		if(mission is null)
+		{
+			ClearMission();
+			return;
+		}
 		currentMission = mission;
 
 		EmitSignalNameChanged(currentMission.DisplayName);
@@ -381,7 +386,6 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 	public void InspectMission()
 	{
 		MissionViewer.ShowMission(currentMission);
-		_MissionListEntryItemProvider?.OnItemSelected(_MissionListEntryIndexTarget);
 	}
 
 	public void AddToList()
@@ -410,13 +414,8 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 		}
 	}
 
-	void IListEntry.ClearListEntry() => ClearMission();
-
-
-	int _MissionListEntryIndexTarget;
-	IListProvider<GameMission> _MissionListEntryItemProvider;
-	int IListEntry<GameMission>.CurrentIndexTarget { get => _MissionListEntryIndexTarget; set => _MissionListEntryIndexTarget = value; }
-	IListProvider<GameMission> IListEntry<GameMission>.CurrentListProvider { get => _MissionListEntryItemProvider; set => _MissionListEntryItemProvider = value; }
+	int IListEntry<GameMission>.CurrentIndexTarget { get; set; }
+	IListProvider<GameMission> IListEntry<GameMission>.CurrentListProvider { get; set; }
 	void IListEntry<GameMission>.SetListEntryValue(GameMission newValue) => SetMission(newValue);
 
 }

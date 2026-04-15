@@ -41,6 +41,11 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	PLSearch.Instruction[] itemSearchInstructions = [];
 	IList<MissionRewardSet> IListProvider<MissionRewardSet>.List => rewardSets;
 
+	public void OnItemSelected(MissionRewardSet rewardSet, string context)
+	{
+		MissionViewer.ShowMission(rewardSet.mission);
+	}
+
 	IListHandler newMissionList;
 	public override void _Ready()
 	{

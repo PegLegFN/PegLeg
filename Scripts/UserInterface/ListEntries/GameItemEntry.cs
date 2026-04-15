@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 
-public partial class GameItemEntry : Control, IRecyclableEntry
+public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameItem>
 {
 	[Signal]
 	public delegate void ItemDoesExistEventHandler(bool value);
@@ -570,14 +570,14 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 			!preventInteractability
 		);
 
-
-
 	public virtual void EmitPressedSignal()
 	{
 		if (selectionGraphics is not null && autoSelectOnPress)
 			selectionGraphics.ButtonPressed = true;
+		((IListEntry<GameItem>)this).SelectEntry();
 		EmitSignal(SignalName.Pressed);
 	}
+
 
 	public void ClearItem() => ClearItem(defaultClearIconToNull ? null : PegLegResourceManager.defaultIcon);
 	public virtual void ClearItem(Texture2D clearIcon)
@@ -666,4 +666,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 		EmitSignalSelectionMarkerChanged(selector.GetSelectableIcon(currentItem));
 		EmitSignalSelectionQuantityChanged(quantity > 0 ? quantity.ToString() : "");
 	}
+
+	int IListEntry<GameItem>.CurrentIndexTarget { get; set; }
+	IListProvider<GameItem> IListEntry<GameItem>.CurrentListProvider { get; set; }
+	public void SetListEntryValue(GameItem newValue) => SetItem(newValue);
 }

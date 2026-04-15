@@ -3,14 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="1_hgs56"]
 [ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="2_mwplg"]
 
-[node name="MissionCollectionEntry" unique_id=380401269 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent") instance=ExtResource("1_hgs56")]
-alertModifierLayout = NodePath("HBoxContainer/MarginContainer3")
-alertModifierParent = NodePath("HBoxContainer/MarginContainer3/HBoxContainer")
+[node name="MissionCollectionEntry" unique_id=380401269 instance=ExtResource("1_hgs56")]
 
-[node name="MarginContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="0" unique_id=1032401245]
+[node name="HBoxContainer" parent="." index="1" unique_id=651459051 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent")]
+alertModifierLayout = NodePath("MarginContainer3")
+alertModifierParent = NodePath("MarginContainer3/HBoxContainer")
+
+[node name="MarginContainer" parent="HBoxContainer" index="0" unique_id=1032401245]
 size_flags_horizontal = 1
 
-[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="1" unique_id=756618328]
+[node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer" index="1" unique_id=756618328]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 3
@@ -51,7 +53,7 @@ size_flags_horizontal = 4
 texture = ExtResource("2_mwplg")
 expand_mode = 3
 
-[node name="MarginContainer2" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="2" unique_id=1782751809]
+[node name="MarginContainer2" parent="HBoxContainer" index="2" unique_id=1782751809]
 size_flags_horizontal = 10
 
 [node name="MissionCollectionHighlightItem3" parent="HBoxContainer/MarginContainer2/Highlights" parent_id_path=PackedInt32Array(838251907) index="2" unique_id=1230469321]

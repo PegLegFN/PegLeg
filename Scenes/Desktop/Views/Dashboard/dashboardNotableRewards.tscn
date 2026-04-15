@@ -2,15 +2,13 @@
 
 [ext_resource type="Script" uid="uid://ce73kldw4p5yw" path="res://Scripts/UserInterface/Dashboard/MissionRewardsController.cs" id="1_5wvbh"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="2_x6uk2"]
-[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_hph4w"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="3_ggqn6"]
 [ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="4_hai2m"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_3tmod"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="6_bvm4m"]
 [ext_resource type="Texture2D" uid="uid://d3xmte5l018rl" path="res://Images/InterfaceIcons/T_WavePattern_01.png" id="7_tk817"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="8_kojpx"]
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="9_5wvbh"]
-[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="10_osjtt"]
-[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="11_uqbmg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8h2ix"]
 shader = ExtResource("6_bvm4m")
@@ -23,31 +21,14 @@ shader_parameter/ApplyCornersToFit = false
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4qqas"]
-shader = ExtResource("10_osjtt")
-shader_parameter/ControlSize = Vector2(6, 14)
-shader_parameter/SliceAmount = Vector2(6, 5)
-shader_parameter/FPS = 20.0
-shader_parameter/CellCount = 0
-shader_parameter/Fit = true
-shader_parameter/Repeat = false
-shader_parameter/HorizontalMask = 0.0
-shader_parameter/VerticalMask = 0.0
-shader_parameter/Frame = -1
-shader_parameter/scriptTime = false
-shader_parameter/time = 0.0
-shader_parameter/UseShadow = true
-shader_parameter/shadowBrightness = 0.0
-shader_parameter/shadowOpacity = 1.0
-
-[node name="Notable" type="MarginContainer" unique_id=650228639 node_paths=PackedStringArray("missionList", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
+[node name="Notable" type="MarginContainer" unique_id=650228639 node_paths=PackedStringArray("newMissionListNode", "loadingIcon", "emptyContent", "emptyIcon", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_5wvbh")
 notableMode = true
-missionList = NodePath("VBoxContainer/MarginContainer/ScrollContainer")
+newMissionListNode = NodePath("VBoxContainer/MarginContainer/ScrollContainer2/RecycleContainer")
 loadingIcon = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 emptyContent = NodePath("VBoxContainer/MarginContainer/EmptyContent")
 emptyIcon = NodePath("VBoxContainer/MarginContainer/EmptyContent/HBoxContainer/TextureRect")
@@ -83,40 +64,14 @@ custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer" unique_id=263457377 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer/MarginContainer" unique_id=125549210]
 layout_mode = 2
-size_flags_vertical = 3
-scroll_hint_mode = 1
-script = ExtResource("3_hph4w")
-elementSpace = 2.0
-offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
-paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
-elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
-elementScene = ExtResource("4_hai2m")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/ScrollContainer" unique_id=33525325]
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/MarginContainer/ScrollContainer2" unique_id=1028390328]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer" unique_id=1801430277]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Offset" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1984662401]
-layout_mode = 2
-
-[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=887429013]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Padding" type="Control" parent="VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=561523468]
-layout_mode = 2
+script = ExtResource("3_ggqn6")
+recycleEntryScene = ExtResource("4_hai2m")
 
 [node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" unique_id=532557855 instance=ExtResource("5_3tmod")]
 layout_mode = 2
@@ -171,21 +126,7 @@ visible = false
 [node name="SmallLoadingIcon" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="0" unique_id=1398539103]
 mouse_filter = 0
 
-[node name="ScrollContainer" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="1" unique_id=1876069311]
-clip_contents = false
-custom_minimum_size = Vector2(80, 80)
-size_flags_vertical = 4
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
-dumbMode = true
-
-[node name="MarginContainer" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body/ScrollContainer" index="0" unique_id=1071309336]
-material = SubResource("ShaderMaterial_4qqas")
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("11_uqbmg")
-
-[node name="RecycleContainer" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="2" unique_id=812189577]
+[node name="RecycleContainer" parent="VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(1123076066, 1401981871) index="1" unique_id=812189577]
 recycleEntryScene = ExtResource("9_5wvbh")
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]

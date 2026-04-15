@@ -33,6 +33,7 @@ theme_type_variation = &"LargeButton"
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=651459051 node_paths=PackedStringArray("toDoListContent")]
 custom_minimum_size = Vector2(220, 30)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 script = ExtResource("1_qnyc5")
 toDoListContent = NodePath("AddToList")
@@ -169,7 +170,7 @@ texture = ExtResource("5_f2nuh")
 expand_mode = 1
 
 [connection signal="IsToDo" from="." to="HBoxContainer/AddToList/Button" method="set_disabled"]
-[connection signal="pressed" from="Button" to="." method="InspectMission"]
+[connection signal="pressed" from="Button" to="HBoxContainer" method="InspectMission"]
 [connection signal="IconChanged" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
 [connection signal="MissionLocked" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
 [connection signal="PowerLevelChanged" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/PowerLevel" method="set_text"]

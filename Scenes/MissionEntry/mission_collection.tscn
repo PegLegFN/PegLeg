@@ -122,11 +122,18 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
-[node name="RecycleContainer" type="Container" parent="VBoxContainer/Body" unique_id=812189577]
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/Body" unique_id=812189577 node_paths=PackedStringArray("blinkRect")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("9_r6w6s")
 recycleEntryScene = ExtResource("3_2dnay")
+blinkRect = NodePath("../ColorRect")
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/Body" unique_id=612941277]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
 
 [connection signal="NameChanged" from="." to="VBoxContainer/Header/HBoxContainer/Name" method="set_text"]
 [connection signal="pressed" from="VBoxContainer/Header/HBoxContainer/SearchBtn" to="." method="GoToSearch"]

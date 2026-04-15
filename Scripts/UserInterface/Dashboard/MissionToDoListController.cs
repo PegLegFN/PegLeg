@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
-public partial class MissionToDoListController : Control, IRecyclableElementProvider<MissionRewardPair>
+public partial class MissionToDoListController : Control, IRecyclableElementProvider<MissionRewardPair>, IListProvider<MissionRewardPair>
 {
 	static MissionToDoListController inst;
 	public static event Action OnToDoListChanged;
@@ -13,11 +13,17 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	RecycleListContainer missionList;
 
 	[Export]
+	Node newMissionListNode;
+	IListHandler newMissionList;
+
+	[Export]
 	VirtualTab tab;
 
 	DateTime lastKnownReset;
 	List<MissionRewardDataPair> targetMissionRewardData = [];
 	List<MissionRewardPair> targetMissionRewards = [];
+
+	public IList<MissionRewardPair> List => targetMissionRewards;
 
 	record struct MissionRewardDataPair(string missionGUID, int indexOfReward);
 
@@ -28,7 +34,12 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	public override void _Ready()
 	{
 		inst = this;
-		missionList.SetProvider(this);
+		missionList?.SetProvider(this);
+		if(newMissionListNode is IListHandler listHandler)
+		{
+			newMissionList = listHandler;
+			newMissionList?.LinkListProvider(this);
+		}
 		GameMission.OnMissionsUpdated += GenerateRewards;
 		GameMission.OnMissionsInvalidated += ClearRewards;
 		GameAccount.ActiveAccountChanged += LoadMissions;
@@ -118,9 +129,9 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	void UpdateList()
 	{
 		CheckForNewDay();
-		if (tab is not null)
-			tab.Text = $"To-Do List ({targetMissionRewards.Count})";
-		missionList.UpdateList(true);
+		tab?.Text = $"To-Do List ({targetMissionRewards.Count})";
+		missionList?.UpdateList(true);
+		newMissionList?.UpdateList();
 	}
 
 	bool CheckForNewDay()

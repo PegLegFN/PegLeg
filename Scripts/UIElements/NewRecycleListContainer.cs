@@ -61,7 +61,12 @@ public partial class NewRecycleListContainer : Container, IListHandler
 			while (viewportParent.GetParent() is Control parentControl)
 			{
 				viewportParent = parentControl;
-				if (viewportParent is ScrollContainer)
+				if (viewportParent is ScrollContainer sc &&
+						(
+							sc.HorizontalScrollMode != ScrollContainer.ScrollMode.Disabled ||
+							sc.VerticalScrollMode != ScrollContainer.ScrollMode.Disabled
+						)
+					)
 					break;
 			}
 		}

@@ -13,7 +13,7 @@ public interface IListEntry
 public interface IListEntry<T> : IListEntry
 {
 	int CurrentIndexTarget { get; protected set; }
-	protected IListProvider<T> CurrentListProvider { get; set; }
+	IListProvider<T> CurrentListProvider { get; protected set; }
 	void IListEntry.SetListProvider(IListProvider provider)
 	{
 		if (CurrentListProvider == provider || provider is not IListProvider<T> typed)
@@ -22,6 +22,9 @@ public interface IListEntry<T> : IListEntry
 		if (CurrentListProvider.List is IList<T> list)
 			SetListEntryValue(list[CurrentIndexTarget]);
 	}
+
+	void SelectEntry(string context = "") =>
+		CurrentListProvider?.OnItemSelected(CurrentIndexTarget, context);
 
 	void IListEntry.SetTargetListIndex(int index)
 	{
@@ -46,7 +49,8 @@ public interface IListEntry<T> : IListEntry
 		SetListEntryValue(list[index]);
 	}
 
-	public void SetListEntryValue(T newValue);
+	protected void SetListEntryValue(T newValue);
+	void IListEntry.ClearListEntry() => SetListEntryValue(default);
 }
 
 public class EntryList<T> : List<T>, IListProvider<T>
@@ -76,6 +80,10 @@ public interface IListProvider<T> : IListProvider
 {
 	public IList<T> List { get; }
 	int IListProvider.ListItemCount => List.Count;
+
+	void IListProvider.OnItemSelected(int index, string context) =>
+		OnItemSelected(List[index], context);
+	public void OnItemSelected(T item, string context) { }
 }
 
 public interface IListHandler

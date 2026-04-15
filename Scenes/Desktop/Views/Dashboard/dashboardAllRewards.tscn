@@ -21,7 +21,6 @@
 [ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="17_5wxrf"]
 [ext_resource type="Texture2D" uid="uid://b50pdjevad7c6" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Traps-CARD.png" id="18_vbf3x"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="19_s5xqb"]
-[ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="20_t0hu3"]
 [ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="21_myk2v"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="22_1fh4v"]
 [ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="24_yip6p"]
@@ -958,53 +957,24 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1982009328 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
-layout_mode = 2
-size_flags_vertical = 3
-scroll_hint_mode = 1
-script = ExtResource("20_t0hu3")
-elementSpace = 2.0
-offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
-paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
-elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
-elementScene = ExtResource("21_myk2v")
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer" unique_id=2045216625]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer" unique_id=804878826]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Offset" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1911427063]
-layout_mode = 2
-
-[node name="DynGridContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1493096660]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Padding" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1436640475]
-layout_mode = 2
-
 [node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=749997421]
 layout_mode = 2
 
-[node name="RecycleContainer" type="Container" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2" unique_id=1155007216 node_paths=PackedStringArray("viewportParent")]
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2" unique_id=1155007216 node_paths=PackedStringArray("blinkRect")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("24_yip6p")
-viewportParent = NodePath("..")
 recycleEntryScene = ExtResource("21_myk2v")
+blinkRect = NodePath("../../ColorRect")
 
 [node name="SmallLoadingIcon" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1686755788 instance=ExtResource("22_1fh4v")]
 layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1331413839]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/VBoxContainer" method="set_visible"]

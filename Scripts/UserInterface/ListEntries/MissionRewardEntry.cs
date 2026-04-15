@@ -56,7 +56,7 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 
 	public void ClearReward()
 	{
-		missionEntry.ClearMission();
+		missionEntry?.ClearMission();
 		itemEntry?.ClearItem();
 		currentItems = [];
 		if (levelLabel is null || missionPowerLabel is null)
