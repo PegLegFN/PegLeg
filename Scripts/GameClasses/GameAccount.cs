@@ -979,6 +979,9 @@ public partial class GameAccount
 
 	public async Task<JsonObject> GetOrderCounts(OrderRange range)
 	{
+		if(!isOwned)
+			return null;
+
 		var commonData = await GetProfile(FnProfileTypes.Common).Query();
 
 		var orderRange = commonData.statAttributes?[range.ToAttribute()];
@@ -1031,7 +1034,7 @@ public partial class GameAccount
 		if (totalLimit > 0 && offer.EventLimit != -1)
 		{
 			var commonData = await GetProfile(FnProfileTypes.Common).Query();
-			GameItem eventTracker = commonData.GetItems("EventPurchaseTracker", item =>
+			GameItem eventTracker = commonData?.GetItems("EventPurchaseTracker", item =>
 					item.attributes?["event_instance_id"]?.ToString() == offer.EventId
 				).FirstOrDefault();
 
@@ -1044,13 +1047,13 @@ public partial class GameAccount
 		if (offer.itemGrants[0].templateId == "Token:accountinventorybonus")
 		{
 			var accountItemData = await GetProfile(FnProfileTypes.AccountItems).Query();
-			totalLimit = Mathf.Min(totalLimit, 3000 - accountItemData.GetFirstTemplateItem("Token:accountinventorybonus")?.quantity ?? 0);
+			totalLimit = Mathf.Min(totalLimit, 3000 - accountItemData?.GetFirstTemplateItem("Token:accountinventorybonus")?.quantity ?? 0);
 		}
 
 		if (offer.itemGrants[0].templateId == "CampaignHeroLoadout:purchaseabledefaultloadout")
 		{
 			var accountItemData = await GetProfile(FnProfileTypes.AccountItems).Query();
-			totalLimit = Mathf.Min(totalLimit, 11 - accountItemData.GetTemplateItems("CampaignHeroLoadout:purchaseabledefaultloadout").Length);
+			totalLimit = Mathf.Min(totalLimit, 11 - accountItemData?.GetTemplateItems("CampaignHeroLoadout:purchaseabledefaultloadout")?.Length ?? 0);
 		}
 
 		return totalLimit;
@@ -1067,12 +1070,15 @@ public partial class GameAccount
 			int vbucks = 0;//put vbucks here
 			return Mathf.FloorToInt((float)vbucks / pricePerPurchase.quantity);
 		}
-		var inInventory = (await GetProfile(FnProfileTypes.AccountItems).Query()).GetFirstTemplateItem(pricePerPurchase.templateId);
+		var inInventory = (await GetProfile(FnProfileTypes.AccountItems).Query())?.GetFirstTemplateItem(pricePerPurchase.templateId);
 		return Mathf.FloorToInt((float)(inInventory?.quantity ?? 0) / pricePerPurchase.quantity);
 	}
 
 	public async Task<bool> MatchesFulfillmentRequirements(GameOffer offer)
 	{
+		if (!isOwned)
+			return true;
+
 		JsonObject fulfillments = null;
 		if (offer.FulfillmentDenyList.Count > 0)
 		{
@@ -1107,9 +1113,9 @@ public partial class GameAccount
 	public async Task<string> GetSACCode(bool addExpiredText = true)
 	{
 		var commonData = await GetProfile(FnProfileTypes.Common).Query();
-		var lastSetTime = DateTime.TryParse(commonData.statAttributes["mtx_affiliate_set_time"]?.ToString(), null, DateTimeStyles.RoundtripKind, out var dt) ? dt : DateTime.UtcNow.AddDays(-15);
+		var lastSetTime = DateTime.TryParse(commonData?.statAttributes["mtx_affiliate_set_time"]?.ToString(), null, DateTimeStyles.RoundtripKind, out var dt) ? dt : DateTime.UtcNow.AddDays(-15);
 		bool isExpired = (DateTime.UtcNow - lastSetTime).Days > 13;
-		var creator = commonData.statAttributes["mtx_affiliate"]?.ToString();
+		var creator = commonData?.statAttributes["mtx_affiliate"]?.ToString();
 		return (creator ?? "None") + (isExpired && creator is not null && addExpiredText ? " (Expired)" : "");
 	}
 

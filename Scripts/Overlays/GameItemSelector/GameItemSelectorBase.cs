@@ -31,6 +31,13 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 	protected Dictionary<GameItem, int> selectedItems = [];
 	protected RecycleListContainer activeContainer;
 
+	public static Func<GameItem, bool> CreateRecycleFilter()
+	{
+		if (GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem("HomebaseNode:questreward_recyclecollection") is null)
+			return i => false;
+		return RecyclableFilter;
+	}
+
 	public static bool RecyclableFilter(GameItem item) =>
 		item.template?.Unrecyclable == false &&
 		item.attributes?["favorite"]?.GetValue<bool>() != true &&

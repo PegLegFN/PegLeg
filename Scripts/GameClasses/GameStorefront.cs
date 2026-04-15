@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ public class GameStorefront
 		[RefreshTimeType.Event] = default,
 	};
 
+	public static DateTime lastUpdated { get; private set; } = DateTime.MinValue;
 	static Dictionary<string, JsonObject> storefrontCache;
 	static Dictionary<string, GameStorefront> storefronts = [];
 	public static bool RequiresUpdate(RefreshTimeType? refreshType)
@@ -25,8 +27,55 @@ public class GameStorefront
 		return refreshType is null || DateTime.UtcNow.CompareTo(expirationDates[refreshType.Value]) >= 0;
 	}
 
-	static SemaphoreSlim catalogSemaphore = new(1);
+	static async Task<JsonNode> FetchCatalog()
+	{
+		if (!GameAccount.ActiveAccount.isOwned)
+		{
+			if (DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0)
+			{
+				GD.Print("pausing 5 seconds to wait for lite catalog");
+				await Helpers.WaitForTimer(5);
+			}
+			bool useRetries = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second < 30;
+			for (int i = 0; i < 5; i++)
+			{
+				var liteResponse = await ApiWebAddresses.pegLegLiteBucket
+					.MakeRequest("latestCatalog.json")
+					.Send();
+				if (!await liteResponse.CheckForError())
+				{
+					var data = await liteResponse.ReadJson();
+					var expiration = data["expiration"].Deserialize<DateTime>();
+					if (expiration >= DateTime.UtcNow)
+						return data;
+				}
+				if (!useRetries)
+					break;
+				if (i < 4)
+				{
+					GD.Print("lite catalog still out of date, pausing 5 more seconds");
+					await Helpers.WaitForTimer(5);
+				}
+				else
+				{
+					GD.Print("abandoning lite catalog retries");
+				}
+			}
+			GD.Print("Warning: lite catalog is out of date");
+			return null;
+		}
 
+		GD.Print("retrieving catalog from epic...");
+		var response = await FnWebAddresses.FortGame
+			.MakeRequest("fortnite/api/storefront/v2/catalog")
+			.SetAccount(GameAccount.ActiveAccount)
+			.Send();
+		if (await response.CheckForError())
+			return null;
+		return await response.ReadJson();
+	}
+
+	static SemaphoreSlim catalogSemaphore = new(1);
 	public static async Task<bool> UpdateCatalog(RefreshTimeType? refreshType = null)
 	{
 		if (!RequiresUpdate(refreshType))
@@ -37,14 +86,10 @@ public class GameStorefront
 			if (!RequiresUpdate(refreshType))
 				return true;
 
-			GD.Print("retrieving catalog from epic...");
-			var response = await FnWebAddresses.FortGame
-				.MakeRequest("fortnite/api/storefront/v2/catalog")
-				.SetAccount(GameAccount.ActiveAccount)
-				.Send();
-			if (await response.CheckForError())
+			var catalog = await FetchCatalog();
+			if(catalog is null)
 				return false;
-			var catalog = await response.ReadJson();
+			lastUpdated = DateTime.UtcNow;
 
 			storefrontCache = catalog["storefronts"]
 				.AsArray()
@@ -72,12 +117,40 @@ public class GameStorefront
 				expirationDates[refreshTypeKey] = RefreshTimerController.GetRefreshTime(refreshTypeKey);
 			}
 
+			SendCatalogToBucket(catalog);
+
 			return true;
 		}
 		finally
 		{
 			catalogSemaphore.Release();
 		}
+	}
+
+
+	static DateTime lastBucketedAt;
+	static async void SendCatalogToBucket(JsonNode catalog)
+	{
+		if (!BucketHelper.CanUseBucket)
+			return;
+		if ((lastBucketedAt - DateTime.UtcNow).TotalHours < 1 && lastBucketedAt.Date == DateTime.UtcNow.Date && lastBucketedAt.Hour == DateTime.UtcNow.Hour)
+			return;
+
+		var catalogData = catalog.ToString();
+		const string litePath = "user://liteCatalog.json";
+		if (FileAccess.FileExists(litePath))
+		{
+			using var latestCatalogFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Read);
+			if (latestCatalogFile.GetError() == Error.Ok && catalogData.Hash() == latestCatalogFile.GetAsText().Hash())
+				return;
+		}
+
+		lastBucketedAt = DateTime.UtcNow;
+
+		using (var latestCatalogFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Write))
+			latestCatalogFile.StoreString(catalogData);
+
+		await BucketHelper.SendToBucket(litePath, "latestCatalog.json");
 	}
 
 	static GameStorefront GetOrCreateStorefront(string storefrontKey, RefreshTimeType? refreshType = null)
@@ -196,11 +269,11 @@ public class GameStorefront
 		offers.Clear();
 	}
 
-	public GameOffer this[string offerId] => offers[offerId];
-	public GameOffer[] Offers => [.. offers.Values];
+	public GameOffer this[string offerId] => offers?[offerId] ?? null;
+	public GameOffer[] Offers => offers?.Values?.ToArray() ?? [];
 
 	public Dictionary<string, Dictionary<string, GameOffer[]>> GroupCosmeticsByLayout() =>
-		offers.Values.GroupBy(o => o.CosmeticSectionId)
+		(offers ?? []).Values.GroupBy(o => o.CosmeticSectionId)
 		.ToDictionary(
 			section => section.Key,
 			section => section.GroupBy(o => o.CosmeticLayoutId)

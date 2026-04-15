@@ -130,13 +130,13 @@ public partial class DynamicGridContainer : Container
 			}
 
 			int colCount = GetColCount(sizeChild.GetCombinedMinimumSize().X, out var colWidth);
-			int rowCount = Mathf.CeilToInt((float)children.Length / colCount);
-			float totalHeight = GetRowHeights(children, colCount).Sum();
+			//int rowCount = Mathf.CeilToInt((float)children.Length / colCount);
+			//float totalHeight = GetRowHeights(children, colCount).Sum();
 
 			Vector2 newMinSize = new(
 				(colWidth * minCols) + (Mathf.Max(spacing.X, 0) * (minCols - 1)),
 				GetRowHeights(children, colCount).Sum()
-				);
+			);
 			return newMinSize;
 		}
 		finally

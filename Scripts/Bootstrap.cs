@@ -33,41 +33,46 @@ public partial class Bootstrap : Node
 	[Export]
 	bool shareInEditor;
 	[Export]
+	bool testingRequiresAccount = true;
+	[Export]
 	GpuParticles2D downloadParticles;
 
 	[ExportGroup("Scenes")]
 	[ExportSubgroup("Desktop")]
-	[Export(PropertyHint.File, "*.tscn")]
-	string testingSceneUid;
+
 	[Export]
 	PackedScene testingScene;
 	[Export]
-	bool testingRequiresAccount = true;
-	[Export(PropertyHint.File, "*.tscn")]
-	string desktopOnboardingUid;
-	[Export]
 	PackedScene desktopOnboarding;
-	[Export(PropertyHint.File, "*.tscn")]
-	string desktopInterfaceUid;
 	[Export]
 	PackedScene desktopInterface;
-	[Export(PropertyHint.File, "*.tscn")]
-	string liteInterfaceUid;
 	[Export]
 	PackedScene liteInterface;
-	[Export(PropertyHint.File, "*.tscn")]
-	string shareMenuUid;
 	[Export]
 	PackedScene shareMenu;
+
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string testingSceneUid;
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string desktopOnboardingUid;
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string desktopInterfaceUid;
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string liteInterfaceUid;
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string shareMenuUid;
+
 	[ExportSubgroup("Mobile")]
-	[Export(PropertyHint.File, "*.tscn")]
-	string mobileInterfaceUid;
+
 	[Export]
 	PackedScene mobileInterface;
-	[Export(PropertyHint.File, "*.tscn")]
-	string mobileLiteInterfaceUid;
 	[Export]
 	PackedScene mobileLiteInterface;
+
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string mobileInterfaceUid;
+	//[Export(PropertyHint.File, "*.tscn")]
+	//string mobileLiteInterfaceUid;
 
 	[ExportGroup("UserPrefs")]
 	[Export]
@@ -93,18 +98,22 @@ public partial class Bootstrap : Node
 	public static bool UseShareMenu { get; private set; } = cmdLineArgs.Contains("--share-menu");
 
 	static bool hasBooted = false;
+	static bool isFirstBoot = false;
 
 	public override void _Ready()
 	{
 		var window = GetWindow();
-
-		window.Mode = Window.ModeEnum.Windowed;
-		window.ContentScaleSize = window.Size = bootSize;
-		window.Transparent = true;
-		window.TransparentBg = true;
-		window.Borderless = true;
-		window.Unfocusable = false;
-		window.MoveToCenter();
+		isFirstBoot = !hasBooted;
+		if (isFirstBoot)
+		{
+			window.Mode = Window.ModeEnum.Windowed;
+			window.ContentScaleSize = window.Size = bootSize;
+			window.Transparent = true;
+			window.TransparentBg = true;
+			window.Borderless = true;
+			window.Unfocusable = false;
+			window.MoveToCenter();
+		}
 
 #if GODOT_ANDROID
         background.Visible = true;
@@ -113,6 +122,7 @@ public partial class Bootstrap : Node
 
 		if (hasBooted)
 		{
+			background.Visible = true;
 			Initialise();
 			return;
 		}
@@ -180,6 +190,7 @@ public partial class Bootstrap : Node
 #endif
 
 #if GODOT_WINDOWS
+		/* still no workey
 		var updatePath = Helpers.GlobalisePath("user://updateTest.msi");
 		if (FileAccess.FileExists(updatePath))
 		{
@@ -211,6 +222,7 @@ public partial class Bootstrap : Node
 			}
 
 		}
+		*/
 		if (FileAccess.FileExists("user://update.msi"))
 			DirAccess.RemoveAbsolute("user://update.msi");
 		if (FileAccess.FileExists("user://update.bat"))
@@ -418,13 +430,16 @@ public partial class Bootstrap : Node
 				targetScene = desktopInterface;
 		}
 
-		window.Size = targetSize;
-		window.ContentScaleSize = targetSize;
-		window.MoveToCenter();
-		window.Transparent = false;
-		window.TransparentBg = true;
-		window.Borderless = false;
-		window.Unfocusable = false;
+		if (isFirstBoot)
+		{
+			window.Size = targetSize;
+			window.ContentScaleSize = targetSize;
+			window.MoveToCenter();
+			window.Transparent = false;
+			window.TransparentBg = true;
+			window.Borderless = false;
+			window.Unfocusable = false;
+		}
 
 		var iconPath = ProjectSettings.GetSettingWithOverride("application/config/icon").ToString();
 		DisplayServer.SetIcon(ResourceLoader.Load<Texture2D>(iconPath).GetImage());

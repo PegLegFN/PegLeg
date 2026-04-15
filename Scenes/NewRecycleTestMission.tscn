@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://b0d57rraccw20"]
+
+[ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="1_ji8lj"]
+[ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_uxhbd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uxhbd"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.24, 0.4, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="TestRecycleMissionEntry" type="MarginContainer" unique_id=117773780]
+offset_right = 134.0
+offset_bottom = 134.0
+script = ExtResource("1_uxhbd")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1754764372]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 1
+theme_type_variation = &"Panel3PadB"
+theme_override_styles/panel = SubResource("StyleBoxFlat_uxhbd")
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer" unique_id=1829545003]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("1_ji8lj")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="PanelContainer" unique_id=416999413]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 32
+text = "128"
+horizontal_alignment = 1
+
+[connection signal="IconChanged" from="." to="PanelContainer/TextureRect" method="set_texture"]
+[connection signal="PowerLevelChanged" from="." to="PanelContainer/Label" method="set_text"]

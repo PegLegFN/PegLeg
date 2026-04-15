@@ -226,7 +226,7 @@ public partial class GameItemViewer : ModalWindow
 		purchaseSpinner.Visible = totalLimit > 1;
 		purchaseSpinner.Value = 1;
 		SpinnerChanged(1);
-		currentOfferEntry.Visible = currentItem?.template is not null && !currentOffer.FakeOffer;
+		currentOfferEntry.Visible = currentItem?.template is not null && !currentOffer.FakeOffer && GameAccount.ActiveAccount.isOwned;
 	}
 
 	GameItem displayedItem = null;

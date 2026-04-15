@@ -134,7 +134,7 @@ public partial class RefreshTimerHook : Control
 	{
 		if (!force && !IsVisibleInTree())
 			return;
-		var remainingTime = (refreshTime - RefreshTimerController.RightNow);
+		var remainingTime = refreshTime - RefreshTimerController.RightNow;
 		if (remainingTime.TotalMinutes < criticalCountdownTime)
 			SelfModulate = Colors.Red;
 		else if (remainingTime.TotalMinutes < warningCountdownTime)

@@ -49,21 +49,21 @@ static class CatalogRequests
 	//    return llamaCache;
 	//}
 
-
+	static DateTime lastUpdatedCosmetics = DateTime.MinValue;
 	static JsonObject cosmeticCache;
 	public static async Task<JsonObject> GetCosmeticShop(bool forceRefresh = false)
 	{
-		if (!StorefrontRequiresUpdate() && !forceRefresh && cosmeticCache is not null)
+		if (!GameStorefront.RequiresUpdate(RefreshTimeType.Daily) && GameStorefront.lastUpdated <= lastUpdatedCosmetics && !forceRefresh && cosmeticCache is not null)
 			return cosmeticCache;
-
 		var layoutTask = GetCosmeticLayouts(true);
-		var storefrontTask = EnsureStorefront(forceRefresh);
+		var storefrontTask = GameStorefront.UpdateCatalog(RefreshTimeType.Daily);
 		var bestsellingCosmetics = await RequestCosmeticBestsellingData();
 		var jamTrackData = await RequestJamtrackData();
 		var cosmeticDisplayData = await RequestCosmeticDisplayData();
 		await storefrontTask;
 		await layoutTask;
-		return cosmeticCache = ProcessCosmetics(cosmeticDisplayData, bestsellingCosmetics, jamTrackData);
+		lastUpdatedCosmetics = GameStorefront.lastUpdated;
+		return cosmeticCache = ProcessCosmetics(GameStorefront.CosmeticWeekly, cosmeticDisplayData, bestsellingCosmetics, jamTrackData);
 	}
 
 	public static JsonObject GetCachedCosmeticOfferData(string offerId)
@@ -192,19 +192,17 @@ static class CatalogRequests
 	//}
 
 	static JsonObject ProcessCosmetics(
+		GameStorefront cosmeticStorefront,
 		JsonObject cosmeticDisplayData,
 		FrozenDictionary<string, string[]> bestsellingCosmetics,
 		FrozenDictionary<string, JamTrackData> jamTracks)
 	{
-		var shopOfferList = storefrontCache[FnStorefrontTypes.WeeklyCosmeticShopCatalog]?.AsArray().ToList();
-		if (shopOfferList is null)
-			return null;
 		bestsellingCosmetics ??= FrozenDictionary<string, string[]>.Empty;
 		//shopOfferList.AddRange(storefrontCache[FnStorefrontTypes.DailyCosmeticShopCatalog].AsArray());
-		var shopOfferDict = shopOfferList.ToDictionary(n => n["offerId"].ToString());
+		var shopOfferDict = cosmeticStorefront.Offers.ToDictionary(o => o.OfferId, o => o.rawData.SafeDeepClone());
 
 		var globalBestSellers = bestsellingCosmetics.TryGetValue("bestsellers_list", out var globBSList) ? globBSList : [];
-
+		cosmeticDisplayData ??= [];
 		Parallel.ForEach(shopOfferDict, offer =>
 		{
 			bool needsFallback = false;
@@ -322,7 +320,7 @@ static class CatalogRequests
 			JsonNode displayData = null;
 			lock (cosmeticDisplayData)
 			{
-				displayData = cosmeticDisplayData[offer.Key];
+				displayData = cosmeticDisplayData[offer.Key].SafeDeepClone();
 			}
 
 			//additions
@@ -441,55 +439,56 @@ static class CatalogRequests
 		return -100;
 	}
 
-	public static bool StorefrontRequiresUpdate()
+	public static bool CosmeticsRequireUpdate()
 	{
-		if (storefrontCache is null)
-			return true;
-		var expirationTime = DateTime.Parse(storefrontCache["expiration"].ToString(), null, DateTimeStyles.RoundtripKind);
-		return DateTime.UtcNow.CompareTo(expirationTime) >= 0;
+		return GameStorefront.RequiresUpdate(RefreshTimeType.Daily) || GameStorefront.lastUpdated > lastUpdatedCosmetics;
+		//if (storefrontCache is null)
+		//	return true;
+		//var expirationTime = DateTime.Parse(storefrontCache["expiration"].ToString(), null, DateTimeStyles.RoundtripKind);
+		//return DateTime.UtcNow.CompareTo(expirationTime) >= 0;
 	}
 
-	static Task<JsonObject> activeStorefrontRequest = null;
-	static async Task EnsureStorefront(bool forceRefresh)
-	{
-		if (activeStorefrontRequest is not null && activeStorefrontRequest.IsCompleted)
-			activeStorefrontRequest = null;
+	//static Task<JsonObject> activeStorefrontRequest = null;
+	//static async Task EnsureStorefront(bool forceRefresh)
+	//{
+	//	if (activeStorefrontRequest is not null && activeStorefrontRequest.IsCompleted)
+	//		activeStorefrontRequest = null;
 
-		if (forceRefresh)
-		{
-			GD.Print("forcing refresh");
-			storefrontCache = null;
-		}
+	//	if (forceRefresh)
+	//	{
+	//		GD.Print("forcing refresh");
+	//		storefrontCache = null;
+	//	}
 
-		if (storefrontCache is not null)
-		{
-			var refreshTime = DateTime.Parse(storefrontCache["expiration"].ToString(), null, DateTimeStyles.RoundtripKind);
-			if (DateTime.UtcNow.CompareTo(refreshTime) >= 0)
-			{
-				storefrontCache = null;
-			}
-		}
+	//	if (storefrontCache is not null)
+	//	{
+	//		var refreshTime = DateTime.Parse(storefrontCache["expiration"].ToString(), null, DateTimeStyles.RoundtripKind);
+	//		if (DateTime.UtcNow.CompareTo(refreshTime) >= 0)
+	//		{
+	//			storefrontCache = null;
+	//		}
+	//	}
 
-		if (storefrontCache is null)
-		{
-			activeStorefrontRequest ??= RequestStorefront();
-			await Task.WhenAny(activeStorefrontRequest);
-		}
-	}
+	//	if (storefrontCache is null)
+	//	{
+	//		activeStorefrontRequest ??= RequestStorefront();
+	//		await Task.WhenAny(activeStorefrontRequest);
+	//	}
+	//}
 
-	static async Task<JsonObject> RequestStorefront()
-	{
-		GD.Print("retrieving catalog from epic...");
-		var sfResponse = await FnWebAddresses.FortGame
-			.MakeRequest("/fortnite/api/storefront/v2/catalog")
-			.SetAccount(GameAccount.ActiveAccount)
-			.Send();
-		if (await sfResponse.CheckForError())
-			return null;
-		JsonNode fullStorefront = await sfResponse.ReadJson();
-		storefrontCache = SimplifyStorefront(fullStorefront);
-		return storefrontCache;
-	}
+	//static async Task<JsonObject> RequestStorefront()
+	//{
+	//	GD.Print("retrieving catalog from epic...");
+	//	var sfResponse = await FnWebAddresses.FortGame
+	//		.MakeRequest("/fortnite/api/storefront/v2/catalog")
+	//		.SetAccount(GameAccount.ActiveAccount)
+	//		.Send();
+	//	if (await sfResponse.CheckForError())
+	//		return null;
+	//	JsonNode fullStorefront = await sfResponse.ReadJson();
+	//	storefrontCache = SimplifyStorefront(fullStorefront);
+	//	return storefrontCache;
+	//}
 
 	public static async Task<FrozenDictionary<string, string[]>> RequestCosmeticBestsellingData()
 	{

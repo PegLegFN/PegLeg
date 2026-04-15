@@ -147,51 +147,38 @@ public static class WebHelpers
 
 	public static async Task<HttpResponseMessage> Send(this BoundHttpsRequestMessage msg, bool disposeMsg = true)
 	{
-		try
+		if (msg.BoundAccount is not null)
 		{
-			if (msg.BoundAccount is not null)
-			{
-				await msg.BoundAccount.Authenticate();
-				msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
-			}
-			var response = await CloneAndSend(msg, disposeMsg);
-
-			//TODO: configurable retry attempt count
-			for (int i = 0; i < 2; i++)
-			{
-				if (response.StatusCode != HttpStatusCode.ServiceUnavailable)
-					break;
-				//TODO: configurable retry delay
-				await Task.Delay(1000);
-				response = await CloneAndSend(msg, disposeMsg);
-			}
-
-			if (
-				msg.BoundAccount is not null &&
-				!response.IsSuccessStatusCode &&
-				response.Headers.TryGetValues("x-epic-error-code", out var errCode) &&
-				errCode.FirstOrDefault() == "1031"
-			)
-			{
-				GD.Print("token invalid, exiring token and retrying with new token...");
-				msg.BoundAccount.ForceExpireToken();
-				await msg.BoundAccount.Authenticate();
-				msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
-				response = await CloneAndSend(msg, disposeMsg);
-			}
-			msg.Dispose();
-			return response;
+			await msg.BoundAccount.Authenticate();
+			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
 		}
-		catch (SocketException ex)
+		var response = await CloneAndSend(msg, disposeMsg);
+
+		//TODO: configurable retry attempt count
+		for (int i = 0; i < 2; i++)
 		{
-			var accountURI = FnWebAddresses.EpicAccount;
-			if (ex.Message.StartsWith("No such host is known "))
-			{
-				GD.Print("Bingo");
-			}
-			GD.Print("TODO: Investigate this");
-			throw;
+			if (response.StatusCode != HttpStatusCode.ServiceUnavailable)
+				break;
+			//TODO: configurable retry delay
+			await Task.Delay(1000);
+			response = await CloneAndSend(msg, disposeMsg);
 		}
+
+		if (
+			msg.BoundAccount is not null &&
+			!response.IsSuccessStatusCode &&
+			response.Headers.TryGetValues("x-epic-error-code", out var errCode) &&
+			errCode.FirstOrDefault() == "1031"
+		)
+		{
+			GD.Print("token invalid, exiring token and retrying with new token...");
+			msg.BoundAccount.ForceExpireToken();
+			await msg.BoundAccount.Authenticate();
+			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
+			response = await CloneAndSend(msg, disposeMsg);
+		}
+		msg.Dispose();
+		return response;
 	}
 
 	static async Task<HttpResponseMessage> CloneAndSend(BoundHttpsRequestMessage msg, bool disposeMsg) =>
@@ -231,10 +218,33 @@ public static class WebHelpers
 
 	public static async Task<HttpResponseMessage> SendTo(this HttpRequestMessage msg, HttpClient client, bool disposeMsg = true)
 	{
-		var r = await client.SendAsync(msg);
-		if (disposeMsg)
-			msg.Dispose();
-		return r;
+		try
+		{
+			var r = await client.SendAsync(msg);
+			if (disposeMsg)
+				msg.Dispose();
+			return r;
+		}
+		catch (HttpRequestException ex)
+		{
+			var accountURI = FnWebAddresses.EpicAccount;
+			if (ex.Message.StartsWith("No such host is known "))
+			{
+				GD.Print("HttpRequest Ex");
+			}
+			GD.Print("TODO: Investigate this");
+			throw;
+		}
+		catch (SocketException ex)
+		{
+			var accountURI = FnWebAddresses.EpicAccount;
+			if (ex.Message.StartsWith("No such host is known "))
+			{
+				GD.Print("Socket Ex");
+			}
+			GD.Print("TODO: Investigate this");
+			throw;
+		}
 	}
 
 	public class DownloadProgressHandle : IProgress<(long, long)>

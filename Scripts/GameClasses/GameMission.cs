@@ -93,7 +93,7 @@ public partial class GameMission
 					var reset = DateTime.Parse(expiryDate, CultureInfo.InvariantCulture);
 					if (reset > DateTime.UtcNow)
 						return new HttpResponseMessage() { Content = new StringContent(missionText) };
-					GD.Print("latest lite missions out of date");
+					GD.Print("local lite missions out of date");
 				}
 			}
 			return await ApiWebAddresses.pegLegLiteBucket
@@ -114,7 +114,7 @@ public partial class GameMission
 		if (!st.wasImmediate)
 			return;
 		bool delayFirst = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
-		bool retryLiteMissions = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second < 30; ;
+		bool retryLiteMissions = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second < 30;
 
 		MissionDict = null;
 		MissionList = null;
@@ -187,7 +187,7 @@ public partial class GameMission
 				}
 				else if (totalRetries >= 3)
 				{
-					GD.Print("abandoning retries");
+					GD.Print("abandoning lite mission retries");
 				}
 				GD.Print("Warning: lite missions are out of date");
 				//todo: show onscreen error
@@ -234,14 +234,8 @@ public partial class GameMission
 	static DateTime lastBucketedAt;
 	static async void SendMissionsToBucket()
 	{
-		if (
-			!GameAccount.ActiveAccount.isOwned ||
-			!AppConfig.TryGet("missions", "bucketAccessID", out string bucketAccessID) ||
-			!AppConfig.TryGet("missions", "bucketAccessSecret", out string bucketAccessSecret) ||
-			!AppConfig.TryGet("missions", "bucketURL", out string bucketURL)
-		)
+		if (!BucketHelper.CanUseBucket)
 			return;
-
 		if ((lastBucketedAt - DateTime.UtcNow).TotalDays < 1 && lastBucketedAt.Date == DateTime.UtcNow.Date)
 			return;
 
@@ -258,24 +252,8 @@ public partial class GameMission
 
 		using (var latestMissionsFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Write))
 			latestMissionsFile.StoreString(missionData);
-		var fullPath = ProjectSettings.GlobalizePath(litePath);
 
-		BucketClient ??= new(bucketAccessID, bucketAccessSecret, new AmazonS3Config()
-		{
-			ServiceURL = bucketURL
-		});
-		var response = await BucketClient.PutObjectAsync(new()
-		{
-			BucketName = "pegleg-lite-data",
-			Key = "latestMissions.json",
-			FilePath = fullPath,
-			DisablePayloadSigning = true
-		});
-		var statusCode = (int)response.HttpStatusCode;
-		if (statusCode < 200 || statusCode > 299)
-		{
-			GD.Print($"Bucket Upload Failure, status: {response.HttpStatusCode}");
-		}
+		await BucketHelper.SendToBucket(litePath, "latestMissions.json");
 	}
 
 	//https://cataas.com/cat?width=64&height=64

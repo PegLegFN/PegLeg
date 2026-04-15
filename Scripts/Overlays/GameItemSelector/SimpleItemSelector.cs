@@ -93,8 +93,6 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 	private Config _RecycleConfig;
 	public static Config RecycleConfig => instance is null ? new() : (instance._RecycleConfig ??= instance._DefaultConfig with
 	{
-		selectableFilter = RecyclableFilter,
-
 		multiselectMode = true,
 
 		smallItems = false,
@@ -109,6 +107,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 		collectionMarkerTex = instance.collectionIcon,
 	}) with
 	{
+		selectableFilter = CreateRecycleFilter(),
 		autoselectFilter = CreateAutorecycleFilter(),
 	};
 
@@ -133,11 +132,11 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 	public string OverriddeSurvivorSquad => CurrentConfig.overrideSurvivorSquad;
 
 	public static async Task<GameItem> OpenSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
-		(await instance.OpenSelectorInternal(itemOptions, config))?.FirstOrDefault().Key;
+		(await instance.OpenSelectorInternal(itemOptions, config) ?? []).FirstOrDefault().Key;
 	public static async Task<GameItem[]> OpenMultiSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
-		[.. (await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true })).Select(kvp => kvp.Key)];
+		[.. (await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true }) ?? []).Select(kvp => kvp.Key)];
 	public static async Task<KeyValuePair<GameItem, int>> OpenQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
-		(await instance.OpenSelectorInternal(itemOptions, config with { quantitySelection = true }))?.FirstOrDefault() ?? default;
+		(await instance.OpenSelectorInternal(itemOptions, config with { quantitySelection = true }) ?? []).FirstOrDefault();
 	public static async Task<KeyValuePair<GameItem, int>[]> OpenMultiQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
 		await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true, quantitySelection = true });
 

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 
-public partial class MissionRewardEntry : Control, IRecyclableEntry
+public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<MissionRewardPair>
 {
 	[Signal]
 	public delegate void MissionCompleteIfAlertEventHandler(bool complete);
@@ -17,6 +17,11 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry
 	[Export]
 	Label missionPowerLabel;
 	public Control node => this;
+
+	int _ListEntryIndex;
+	IListProvider<MissionRewardPair> _ListEntryItemProvider;
+	int IListEntry<MissionRewardPair>.CurrentIndexTarget { get => _ListEntryIndex; set => _ListEntryIndex = value; }
+	IListProvider<MissionRewardPair> IListEntry<MissionRewardPair>.CurrentListProvider { get => _ListEntryItemProvider; set => _ListEntryItemProvider = value; }
 
 	public override void _Ready()
 	{
@@ -39,7 +44,7 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry
 	private void TryEmitComplete(bool complete)
 	{
 		knownCompleteState = complete;
-		EmitSignalMissionCompleteIfAlert(complete && itemEntry.currentItem?.template?.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase) == false);
+		EmitSignalMissionCompleteIfAlert(complete && itemEntry?.currentItem?.template?.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase) == false);
 	}
 
 	IRecyclableElementProvider<MissionRewardPair> provider;
@@ -87,11 +92,17 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry
 		levelLabel.Visible = !string.IsNullOrWhiteSpace(levelLabel.Text);
 	}
 
+	void IListEntry<MissionRewardPair>.SetListEntryValue(MissionRewardPair newValue) => SetPair(newValue);
+
 	public void SetRecycleIndex(int index)
 	{
 		if (provider is null)
 			return;
-		var pair = provider.GetRecycleElement(index);
+		SetPair(provider.GetRecycleElement(index));
+	}
+
+	void SetPair(MissionRewardPair pair)
+	{
 		missionEntry.SetMission(pair.mission);
 		pair.item.SetRewardNotification();
 		itemEntry.SetItem(pair.item);

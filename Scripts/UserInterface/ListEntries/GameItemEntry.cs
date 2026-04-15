@@ -295,9 +295,18 @@ public partial class GameItemEntry : Control, IRecyclableEntry
 		if (
 			!forceShowVBucks &&
 			displayItem.templateId == "AccountResource:currency_hybrid_mtx_xrayllama" &&
-			GameAccount.ActiveAccount
-				.GetProfile(FnProfileTypes.AccountItems)
-				.GetFirstTemplateItem("Token:receivemtxcurrency") is null
+			(
+				(
+					GameAccount.ActiveAccount.isOwned &&
+					GameAccount.ActiveAccount
+						.GetProfile(FnProfileTypes.AccountItems)
+						.GetFirstTemplateItem("Token:receivemtxcurrency") is null
+				)||
+				(
+					!GameAccount.ActiveAccount.isOwned && 
+					!AppConfig.Get("missions", "showLiteVbucks", true)
+				)
+			)
 		)
 		{
 			displayItem = GameItemTemplate.Get("AccountResource:currency_xrayllama").CreateInstance(amount);

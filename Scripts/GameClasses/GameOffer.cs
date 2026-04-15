@@ -177,14 +177,14 @@ public class GameOffer
 	{
 		account ??= GameAccount.ActiveAccount;
 		var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
-		return accountItems.GetFirstTemplateItem(basePrice?.templateId)?.quantity ?? 0;
+		return accountItems?.GetFirstTemplateItem(basePrice?.templateId)?.quantity ?? 0;
 	}
 
 	public async Task<GameItem> GetCurrencyItem(GameAccount account = null)
 	{
 		account ??= GameAccount.ActiveAccount;
 		var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
-		return accountItems.GetFirstTemplateItem(basePrice?.templateId);
+		return accountItems?.GetFirstTemplateItem(basePrice?.templateId);
 	}
 
 	public async Task<GameItem> CalculatePersonalPrice(GameAccount account = null, bool forceCosmetics = false)

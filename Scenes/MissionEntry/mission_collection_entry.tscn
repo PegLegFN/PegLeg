@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bekssnfes28vf"]
 
+[ext_resource type="Script" uid="uid://cwsqhasiq5pko" path="res://Scripts/UserInterface/ListEntries/MissionCollectionEntry.cs" id="1_3sm56"]
 [ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="1_fam8x"]
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_qnyc5"]
 [ext_resource type="PackedScene" uid="uid://dbrrcnce14w8h" path="res://Scenes/GameItemEntry/mission_collection_highlight_item.tscn" id="2_8t80l"]
@@ -14,13 +15,13 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="MissionCollectionEntry" type="MarginContainer" unique_id=599808066 node_paths=PackedStringArray("highlightedRewardParent", "toDoListContent")]
+[node name="MissionCollectionEntry" type="MarginContainer" unique_id=599808066 node_paths=PackedStringArray("missionEntry", "itemEntries")]
 custom_minimum_size = Vector2(220, 30)
 offset_right = 220.0
 offset_bottom = 30.0
-script = ExtResource("1_qnyc5")
-highlightedRewardParent = NodePath("HBoxContainer/MarginContainer2/Highlights")
-toDoListContent = NodePath("HBoxContainer/AddToList")
+script = ExtResource("1_3sm56")
+missionEntry = NodePath("HBoxContainer")
+itemEntries = [NodePath("HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem"), NodePath("HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2"), NodePath("HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem3"), NodePath("HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem4")]
 
 [node name="Button" type="Button" parent="." unique_id=1815370892]
 show_behind_parent = true
@@ -29,10 +30,12 @@ layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=651459051]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=651459051 node_paths=PackedStringArray("toDoListContent")]
+custom_minimum_size = Vector2(220, 30)
 layout_mode = 2
-mouse_filter = 2
 theme_override_constants/separation = 0
+script = ExtResource("1_qnyc5")
+toDoListContent = NodePath("AddToList")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1032401245]
 layout_mode = 2
@@ -165,12 +168,12 @@ grow_vertical = 2
 texture = ExtResource("5_f2nuh")
 expand_mode = 1
 
-[connection signal="IconChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
 [connection signal="IsToDo" from="." to="HBoxContainer/AddToList/Button" method="set_disabled"]
-[connection signal="MissionLocked" from="." to="HBoxContainer/MarginContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
-[connection signal="PowerLevelChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/PowerLevel" method="set_text"]
-[connection signal="TheaterCategoryChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/TheaterCat2" method="set_text"]
-[connection signal="TheaterColorChanged" from="." to="HBoxContainer/MarginContainer/HBoxContainer/TheaterCat2/TextureRect" method="set_self_modulate"]
-[connection signal="TooltipChanged" from="." to="Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Button" to="." method="InspectMission"]
+[connection signal="IconChanged" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
+[connection signal="MissionLocked" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/Icon/TextureRect2" method="set_visible"]
+[connection signal="PowerLevelChanged" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/PowerLevel" method="set_text"]
+[connection signal="TheaterCategoryChanged" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/TheaterCat2" method="set_text"]
+[connection signal="TheaterColorChanged" from="HBoxContainer" to="HBoxContainer/MarginContainer/HBoxContainer/TheaterCat2/TextureRect" method="set_self_modulate"]
+[connection signal="TooltipChanged" from="HBoxContainer" to="Button" method="set_tooltip_text"]
 [connection signal="pressed" from="HBoxContainer/AddToList/Button" to="." method="AddToList"]

@@ -125,7 +125,6 @@ public class GameProfile
 		await account.profileOperationSemaphore.WaitAsync();
 		try
 		{
-
 			if (hasProfile && !ignoreCache)
 				return true;
 			if (ignoreRevision)

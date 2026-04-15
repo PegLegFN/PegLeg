@@ -6,10 +6,16 @@ public partial class CurrencyHighlight : GameItemEntry
 
 	[Export]
 	string fixedCurrencyType;
+	[Export]
+	bool disable;
 
 	public override void _Ready()
 	{
 		base._Ready();
+		if (disable)
+			return;
+		showZeroItemAmount = true;
+		showSingleItemAmount = true;
 		var defaultCurrency = "AccountResource:eventcurrency_scaling";
 		if (string.IsNullOrWhiteSpace(fixedCurrencyType))
 			Instance = this;
@@ -23,6 +29,8 @@ public partial class CurrencyHighlight : GameItemEntry
 	public override void _ExitTree()
 	{
 		base._ExitTree();
+		if (disable)
+			return;
 		GameAccount.ActiveAccountChanged -= OnAccountChanged;
 	}
 
@@ -32,6 +40,8 @@ public partial class CurrencyHighlight : GameItemEntry
 
 	public async void SetCurrencyTemplate(GameItemTemplate currencyTemplate)
 	{
+		if (disable)
+			return;
 		currentTemplate = currencyTemplate;
 
 		if (currencyTemplate is null)
@@ -46,7 +56,7 @@ public partial class CurrencyHighlight : GameItemEntry
 			SetItem(currencyTemplate.CreateInstance(0));
 
 		var account = GameAccount.ActiveAccount;
-		var profileItem = (await account.GetProfile(FnProfileTypes.AccountItems).Query()).GetFirstTemplateItem(currencyTemplate.TemplateId);
+		var profileItem = (await account.GetProfile(FnProfileTypes.AccountItems).Query())?.GetFirstTemplateItem(currencyTemplate.TemplateId);
 
 		SetItem(profileItem ?? currencyTemplate.CreateInstance(0));
 	}

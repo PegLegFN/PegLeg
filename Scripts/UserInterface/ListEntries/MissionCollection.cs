@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class MissionCollection : Control, IMissionHighlightProvider, IRecyclableElementProvider<GameMission>
+public partial class MissionCollection : Control, IMissionHighlightProvider, IRecyclableElementProvider<GameMission>, IListProvider<MissionRewardSet>
 {
 	public event Action OnHighlightedItemFilterChanged;
 	[Signal]
@@ -14,6 +14,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	string testSearch;
 	[Export]
 	RecycleListContainer missionList;
+	[Export]
+	Node newMissionListNode;
 	[Export]
 	Control loadingIcon;
 	[Export]
@@ -30,16 +32,25 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	bool ignoreLargeXPSetting;
 
 	List<GameMission> filteredMissions = [];
+	List<MissionRewardSet> rewardSets = [];
 
 	public GameMission GetRecycleElement(int index) => (index >= 0 && index < filteredMissions.Count) ? filteredMissions[index] : null;
 	public int GetRecycleElementCount() => filteredMissions.Count;
 
 	PLSearch.Instruction[] missionSearchInstructions = [];
 	PLSearch.Instruction[] itemSearchInstructions = [];
+	IList<MissionRewardSet> IListProvider<MissionRewardSet>.List => rewardSets;
 
+	IListHandler newMissionList;
 	public override void _Ready()
 	{
-		missionList.SetProvider(this);
+		missionList?.SetProvider(this);
+		if (newMissionListNode is IListHandler newListHandler)
+		{
+			newMissionList = newListHandler;
+			newMissionList.LinkListProvider(this);
+		}
+
 		GameAccount.ActiveAccountChanged += UpdateAccount;
 		GameMission.OnMissionsUpdated += SetMissionsDirty;
 		GameMission.OnMissionsInvalidated += ClearMissions;
@@ -140,7 +151,10 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	public void ClearMissions()
 	{
 		loadingIcon.Visible = true;
-		missionList.Visible = false;
+		rewardSets = [];
+		newMissionList?.UpdateList();
+		if (missionList is not null)
+			missionList.Visible = false;
 		if (requireAnyUnlockedForVisibility)
 			Visible = false;
 	}
@@ -163,7 +177,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		missionsDirty = false;
 
 		loadingIcon.Visible = false;
-		missionList.Visible = true;
+		if (missionList is not null)
+			missionList.Visible = true;
 
 		var sortedMissions =
 			(GameMission.MissionList?
@@ -200,13 +215,27 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 			sortedMissions = sortedMissions
 				.ThenBy(m => m.allItems
 					.Where(ItemFilter)
-					.Select(i => -i.sortingTemplate.RarityLevel * i.quantity)
-					.Sum()
+					.Sum(i => -i.sortingTemplate.RarityLevel * i.quantity)
 				);
 		}
 
 		filteredMissions = [.. sortedMissions];
+		rewardSets = [..
+			filteredMissions.Select(m => new MissionRewardSet(m, [
+				.. m.allItems
+					.Where(r =>
+						r.template.DisplayName != "Gold" &&
+						r.template.DisplayName != "Venture XP"
+					)
+					.Where(ItemFilter)
+					.OrderBy(r => -r.sortingTemplate.RarityLevel)
+					.ThenBy(r => -r.quantity)
+			]))
+		];
 
-		missionList.UpdateList(true);
+		newMissionList?.UpdateList();
+		missionList?.UpdateList(true);
 	}
 }
+
+public record struct MissionRewardSet(GameMission mission, GameItem[] items);

@@ -19,12 +19,19 @@ public interface IListEntry<T> : IListEntry
 		if (CurrentListProvider == provider || provider is not IListProvider<T> typed)
 			return;
 		CurrentListProvider = typed;
+		if (CurrentListProvider.List is IList<T> list)
+			SetListEntryValue(list[CurrentIndexTarget]);
 	}
 
 	void IListEntry.SetTargetListIndex(int index)
 	{
 		if (index >= 0)
 			CurrentIndexTarget = index;
+		else
+		{
+			ClearListEntry();
+			return;
+		}
 		if (CurrentListProvider is null)
 		{
 			ClearListEntry();
@@ -44,11 +51,19 @@ public interface IListEntry<T> : IListEntry
 
 public class EntryList<T> : List<T>, IListProvider<T>
 {
-	public delegate void ItemSelected(int index, string context);
+	public delegate void IndexSelected(int index, string context);
+	public delegate void ItemSelected(T item, string context);
+
+	public event IndexSelected OnIndexSelectedEvt;
 	public event ItemSelected OnItemSelectedEvt;
-	public List<T> List => this;
-	void IListProvider.OnItemSelected(int index, string context) => 
-		OnItemSelectedEvt?.Invoke(index, context);
+
+	public IList<T> List => this;
+
+	void IListProvider.OnItemSelected(int index, string context)
+	{
+		OnIndexSelectedEvt?.Invoke(index, context);
+		OnItemSelectedEvt?.Invoke(this[index], context);
+	}
 }
 
 public interface IListProvider
@@ -59,6 +74,12 @@ public interface IListProvider
 
 public interface IListProvider<T> : IListProvider
 {
-	public List<T> List { get; }
+	public IList<T> List { get; }
 	int IListProvider.ListItemCount => List.Count;
+}
+
+public interface IListHandler
+{
+	public void LinkListProvider(IListProvider listProvider);
+	public void UpdateList() { }
 }

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 public partial class XpLimitController : Control
@@ -68,7 +69,6 @@ public partial class XpLimitController : Control
 	}
 
 	private async void UpdateProfiles() => await UpdateProfileTask();
-	static Task profileFetchTask = null;
 
 	private async Task FetchProfileTask()
 	{
@@ -91,17 +91,23 @@ public partial class XpLimitController : Control
 		}
 	}
 
+	SemaphoreSlim updateProfileSemaphore = new(1);
 	private async Task UpdateProfileTask()
 	{
 		loading.Visible = true;
 		content.Visible = false;
 		try
 		{
-			profileFetchTask ??= FetchProfileTask();
-			//this weird task summersault ensures that multiple XPLimitControllers refreshing simultaniously wont cause multiple profile updates
-			var toAwait = profileFetchTask;
-			await toAwait;
-			profileFetchTask = null;
+			//if multiple XPLimits try updating at the same time, only the first will update the profiles
+			if (updateProfileSemaphore.CurrentCount > 0)
+			{
+				using var _ = await updateProfileSemaphore.AwaitToken();
+				await FetchProfileTask();
+			}
+			else
+			{
+				using var _ = await updateProfileSemaphore.AwaitToken();
+			}
 
 			UpdateXP();
 			content.Visible = true;

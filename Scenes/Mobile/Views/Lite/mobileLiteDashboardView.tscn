@@ -6,7 +6,26 @@
 [ext_resource type="PackedScene" uid="uid://bvwsqi0jrxlg6" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers_large.tscn" id="3_x306q"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="4_o2hky"]
 [ext_resource type="PackedScene" uid="uid://bcndr63noahkr" path="res://Scenes/MissionEntry/mission_collection_entry_large.tscn" id="5_hdipl"]
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="5_n8x5w"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="6_8onvr"]
 [ext_resource type="PackedScene" uid="uid://c481c4iyad6y5" path="res://Scenes/Desktop/Views/Dashboard/dashboardBRRivalProgressLite.tscn" id="7_ihxnk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hr8ja"]
+shader = ExtResource("5_n8x5w")
+shader_parameter/ControlSize = Vector2(6, 14)
+shader_parameter/SliceAmount = Vector2(6, 5)
+shader_parameter/FPS = 20.0
+shader_parameter/CellCount = 0
+shader_parameter/Fit = true
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = true
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
 
 [node name="MobileDashboardView" type="MarginContainer" unique_id=1679969338]
 custom_minimum_size = Vector2(454, 881)
@@ -44,7 +63,7 @@ vertical_scroll_mode = 0
 elementScene = ExtResource("2_tc88d")
 dumbMode = true
 
-[node name="ScrollContainer" parent="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(650228639, 1123076066, 1401981871) index="1" unique_id=1876069311]
+[node name="ScrollContainer" parent="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/Hidden/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(650228639, 1123076066, 1401981871) index="1" unique_id=1876069311]
 elementScene = ExtResource("3_x306q")
 
 [node name="Container" type="HBoxContainer" parent="VBoxContainer" unique_id=2088072512]
@@ -54,6 +73,46 @@ alignment = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Container" unique_id=1525714886]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="160" parent="VBoxContainer/Container/VBoxContainer" unique_id=1352265404 instance=ExtResource("4_o2hky")]
+custom_minimum_size = Vector2(327, 60)
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"Panel3PadB"
+testName = "x5 Twine Peaks"
+testSearch = "\"Large Reward\" 160///bundle !XP"
+sortByPower = true
+sortByZoneCat = true
+alwaysHidePlayableFilter = true
+ignoreLargeXPSetting = true
+
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
+text = "x5 Twine Peaks"
+horizontal_alignment = 1
+
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="3" unique_id=1160045743]
+visible = false
+button_pressed = false
+
+[node name="SmallLoadingIcon" parent="VBoxContainer/Container/VBoxContainer/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="0" unique_id=1398539103]
+mouse_filter = 0
+
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="1" unique_id=1876069311]
+clip_contents = false
+custom_minimum_size = Vector2(80, 80)
+size_flags_vertical = 4
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+dumbMode = true
+
+[node name="MarginContainer" parent="VBoxContainer/Container/VBoxContainer/160/VBoxContainer/Body/ScrollContainer" index="0" unique_id=1071309336]
+material = SubResource("ShaderMaterial_hr8ja")
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("6_8onvr")
+
+[node name="RecycleContainer" parent="VBoxContainer/Container/VBoxContainer/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="2" unique_id=812189577]
+recycleEntryScene = ExtResource("3_x306q")
 
 [node name="DoubleLegendary" parent="VBoxContainer/Container/VBoxContainer" unique_id=367729193 instance=ExtResource("4_o2hky")]
 custom_minimum_size = Vector2(0, 60)
@@ -147,7 +206,7 @@ vertical_scroll_mode = 0
 elementScene = ExtResource("5_hdipl")
 dumbMode = true
 
-[node name="Stone" parent="VBoxContainer/Container/VBoxContainer" unique_id=1352265404 instance=ExtResource("4_o2hky")]
+[node name="Stone" parent="VBoxContainer/Container/VBoxContainer" unique_id=289013508 instance=ExtResource("4_o2hky")]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -157,14 +216,14 @@ testSearch = "Stonewood \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(289013508, 1750868079) index="0" unique_id=796681065]
 text = "x4 Stonewood"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(289013508, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="1" unique_id=1876069311]
+[node name="ScrollContainer" parent="VBoxContainer/Container/VBoxContainer/Stone/VBoxContainer/Body" parent_id_path=PackedInt32Array(289013508, 1401981871) index="1" unique_id=1876069311]
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 elementScene = ExtResource("5_hdipl")
@@ -198,15 +257,16 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="DashboardBRRivalProgress" parent="VBoxContainer" unique_id=1546053 instance=ExtResource("7_ihxnk")]
+layout_mode = 2
+
 [node name="DashboardAlertSummary" parent="VBoxContainer" unique_id=1516572395 instance=ExtResource("2_nbel3")]
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
 
-[node name="DashboardBRRivalProgress" parent="VBoxContainer" unique_id=1546053 instance=ExtResource("7_ihxnk")]
-layout_mode = 2
-
 [editable path="VBoxContainer/Notable/VBoxContainer/Notable"]
-[editable path="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/MissionCollection"]
+[editable path="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/Hidden/MissionCollection"]
+[editable path="VBoxContainer/Container/VBoxContainer/160"]
 [editable path="VBoxContainer/Container/VBoxContainer/DoubleLegendary"]
 [editable path="VBoxContainer/Container/VBoxContainer/Twine"]
 [editable path="VBoxContainer/Container/VBoxContainer/Canny"]

@@ -29,6 +29,8 @@ public partial class RecycleListContainer : ScrollContainer
 	public override async void _Ready()
 	{
 		base._Ready();
+		if (elementScene is null)
+			return;
 		ProcessPriority = 2;
 		basis = elementScene.Instantiate<IRecyclableEntry>();
 		await Helpers.WaitForFrame();
@@ -61,6 +63,8 @@ public partial class RecycleListContainer : ScrollContainer
 	public void UpdateList() => UpdateList(false);
 	public void UpdateList(bool force)
 	{
+		if (elementScene is null)
+			return;
 		if (linkedProvider is null)
 		{
 			GD.PushWarning("no linked provider in recyclable list");
@@ -240,8 +244,8 @@ public partial class RecycleListContainer : ScrollContainer
 			UpdateList();
 		lastSize = Size;
 		lastScroll = ScrollVertical;
-		//if pooled entries is more than the length of active entries (plus a buffer of 20), remove 1 pooled entry per physics frame
-		if (pooledEntries.Count > activeEntries.Count + 20)
+		//if pooled entries is more than the length of active entries (plus a buffer of 3), remove 1 pooled entry per physics frame
+		if (pooledEntries.Count > activeEntries.Count + 3)
 		{
 			var toFree = pooledEntries.Dequeue();
 			toFree.node.QueueFree();

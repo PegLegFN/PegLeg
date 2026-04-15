@@ -297,7 +297,7 @@ public partial class CosmeticShopInterface : Control
 	public async void ForceReloadShop() => await LoadShopTask(true, true);
 	public async Task LoadShopTask(bool forceUIRefresh = false, bool forceFetchShop = false)
 	{
-		if (!IsVisibleInTree() || isLoadingShop || !(CatalogRequests.StorefrontRequiresUpdate() || forceUIRefresh || forceFetchShop || activeOffers.Count == 0))
+		if (!IsVisibleInTree() || isLoadingShop || !(CatalogRequests.CosmeticsRequireUpdate() || forceUIRefresh || forceFetchShop || activeOffers.Count == 0))
 			return;
 
 		var sacTask = UpdateSAC();

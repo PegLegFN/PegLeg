@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://bpy26x7f5xvvo"]
+
+[ext_resource type="Script" uid="uid://hqf7e75xn46h" path="res://Scripts/NewRecycleListTest.cs" id="1_0mhw2"]
+[ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="1_6ijb2"]
+[ext_resource type="PackedScene" uid="uid://b0d57rraccw20" path="res://Scenes/NewRecycleTestMission.tscn" id="2_4qqm1"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="2_go7jy"]
+[ext_resource type="Texture2D" uid="uid://dp5rilo88xsps" path="res://Images/InterfaceIcons/lqKiryu.png" id="3_go7jy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3mntv"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.17599998, 0.44, 0.40039998, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="NewRecycleTest" type="PanelContainer" unique_id=1516832771 node_paths=PackedStringArray("recycleList")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("1_0mhw2")
+recycleList = NodePath("HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer/MarginContainer/MarginContainer/Panel/RecycleContainer")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=119681667]
+layout_mode = 2
+split_offsets = PackedInt32Array(0, 0, 0)
+
+[node name="Control" type="Control" parent="HSplitContainer" unique_id=1898839011]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer" unique_id=79751337]
+layout_mode = 2
+split_offsets = PackedInt32Array(0, 0, 0)
+
+[node name="Control" type="Control" parent="HSplitContainer/VSplitContainer" unique_id=559585933]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/VSplitContainer" unique_id=1994655292]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/VSplitContainer/PanelContainer" unique_id=207852980]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer" unique_id=1923210726]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer/MarginContainer" unique_id=347813067]
+self_modulate = Color(1, 1, 1, 0.21568628)
+layout_mode = 2
+texture = ExtResource("1_6ijb2")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer/MarginContainer" unique_id=1506014889]
+layout_mode = 2
+theme_override_constants/margin_left = 600
+theme_override_constants/margin_top = 600
+theme_override_constants/margin_right = 600
+theme_override_constants/margin_bottom = 600
+
+[node name="Panel" type="PanelContainer" parent="HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer/MarginContainer/MarginContainer" unique_id=852959798]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3mntv")
+
+[node name="RecycleContainer" type="Container" parent="HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer/MarginContainer/MarginContainer/Panel" unique_id=1999823832 node_paths=PackedStringArray("viewportParent", "demoRect")]
+custom_minimum_size = Vector2(610, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("2_go7jy")
+viewportParent = NodePath("../../../..")
+recycleEntryScene = ExtResource("2_4qqm1")
+demoRect = NodePath("DemoRect")
+shift = Vector2(-1, 0.5)
+
+[node name="DemoRect" type="TextureRect" parent="HSplitContainer/VSplitContainer/PanelContainer/ScrollContainer/MarginContainer/MarginContainer/Panel/RecycleContainer" unique_id=1249976850]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_go7jy")
+expand_mode = 1
+
+[node name="Control2" type="Control" parent="HSplitContainer/VSplitContainer" unique_id=1730054785]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control2" type="Control" parent="HSplitContainer" unique_id=1200708198]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 3

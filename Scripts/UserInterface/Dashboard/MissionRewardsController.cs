@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 
-public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>
+public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>, IListProvider<MissionRewardPair>
 {
 	[Signal]
 	public delegate void HasVBucksEventHandler(bool value);
@@ -12,6 +12,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	bool notableMode;
 	[Export]
 	RecycleListContainer missionList;
+	[Export]
+	Node newMissionListNode;
 	[Export]
 	Control loadingIcon;
 	[Export]
@@ -51,6 +53,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	List<MissionRewardPair> rewards = [];
 
+	IList<MissionRewardPair> IListProvider<MissionRewardPair>.List => rewards;
+
 
 	public MissionRewardPair GetRecycleElement(int index) => index >= 0 && index < rewards.Count ? rewards[index] : default;
 
@@ -66,10 +70,16 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		await GameMission.UpdateMissions();
 	}
 
+	IListHandler newMissionList;
 	public override void _Ready()
 	{
 		excludeRewards ??= [];
-		missionList.SetProvider(this);
+		missionList?.SetProvider(this);
+		if(newMissionListNode is IListHandler newListHandler)
+		{
+			newMissionList = newListHandler;
+			newMissionList.LinkListProvider(this);
+		}
 		allFilters = rarityFilters.Union(zoneFilters).Union(typeFilters).Where(f => f is not null).ToArray();
 		SetupFilters(rarityFilters);
 		SetupFilters(zoneFilters);
@@ -135,9 +145,14 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	{
 		if (section != "missions")
 			return;
-		if (key == "lite_notable_filter" && notableMode)
-			FilterMissions();
-		if (key == "notable_count" && notableMode)
+		if (notableMode && 
+			(
+				key == "lite_notable_filter" ||
+				key == "notable_count" ||
+				key == "groupVBucks" ||
+				key == "groupLegSurvivors"
+			)
+		)
 			FilterMissions();
 	}
 
@@ -259,12 +274,17 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	}
 	public static IOrderedEnumerable<MissionRewardPair> OrderByDB(IEnumerable<MissionRewardPair> pairs)
 	{
-		return pairs.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+		return pairs
+			//.Reverse()
+			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenBy(r => -r.mission.TheaterIdx)
 			.ThenBy(r => !r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
 			.ThenBy(r => -r.mission.PowerLevel)
-			.ThenBy(r => r.mission.Guid);
+			.ThenBy(r => r.mission.missionData.missionGenerator)
+			//.ThenBy(r => r.mission.Guid)
+			//.Reverse().OrderBy(_=>true)
+			;
 	}
 
 	static GameItem StandardItemSelector(GameItem item) => item;
@@ -312,6 +332,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 
 	bool needsRefresh = false;
+
 	void FilterMissions()
 	{
 		var missions = GameMission.MissionList;
@@ -443,7 +464,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			{
 				if (
 					item.template.DisplayName == "Gold" ||
-					item.template.DisplayName == "Venture XP"
+					item.template.DisplayName == "Venture XP" ||
+					item.template.DisplayName == "People XP" ||
+					item.template.DisplayName == "Schematic XP"
 					)
 					continue;
 				if (ignorePrefixes.Any(p => item.templateId.StartsWith(p)))
@@ -474,6 +497,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		if (emptyContent is not null)
 			emptyContent.Visible = rewards.Count == 0;
 
+		newMissionList?.UpdateList();
+		if (missionList is null)
+			return;
 		missionList.UpdateList(true);
 		missionList.Visible = true;
 	}
@@ -493,7 +519,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	void ClearMissions()
 	{
 		loadingIcon.Visible = true;
-		missionList.Visible = false;
+		rewards.Clear();
+		newMissionList?.UpdateList();
+		if (missionList is not null)
+			missionList.Visible = false;
 		if (emptyContent is not null)
 			emptyContent.Visible = false;
 	}

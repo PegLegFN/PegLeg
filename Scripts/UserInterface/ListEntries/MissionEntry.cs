@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 
-public partial class MissionEntry : Control, IRecyclableEntry
+public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMission>
 {
 	[Signal]
 	public delegate void NameChangedEventHandler(string name);
@@ -145,6 +145,7 @@ public partial class MissionEntry : Control, IRecyclableEntry
 	public void ClearMission()
 	{
 		currentMission = null;
+		manualHighlights = null;
 		EmitSignalNameChanged(null);
 		EmitSignalDescriptionChanged(null);
 		EmitSignalLocationChanged(null);
@@ -324,10 +325,13 @@ public partial class MissionEntry : Control, IRecyclableEntry
 		UpdateHighlightedItems();
 	}
 
+	GameItem[] manualHighlights;
 	IEnumerable<GameItem> HighlightItems
 	{
 		get
 		{
+			if (manualHighlights is not null)
+				return manualHighlights;
 			if (highlightedItemProvider?.HighlightedItemFilter is not Func<GameItem, bool> predicate)
 				return [];
 			var rewards = fullItems ?
@@ -374,7 +378,11 @@ public partial class MissionEntry : Control, IRecyclableEntry
 		}
 	}
 
-	public void InspectMission() => MissionViewer.ShowMission(currentMission);
+	public void InspectMission()
+	{
+		MissionViewer.ShowMission(currentMission);
+		_MissionListEntryItemProvider?.OnItemSelected(_MissionListEntryIndexTarget);
+	}
 
 	public void AddToList()
 	{
@@ -401,6 +409,16 @@ public partial class MissionEntry : Control, IRecyclableEntry
 			MissionToDoListController.RemoveFromList(item);
 		}
 	}
+
+	void IListEntry.ClearListEntry() => ClearMission();
+
+
+	int _MissionListEntryIndexTarget;
+	IListProvider<GameMission> _MissionListEntryItemProvider;
+	int IListEntry<GameMission>.CurrentIndexTarget { get => _MissionListEntryIndexTarget; set => _MissionListEntryIndexTarget = value; }
+	IListProvider<GameMission> IListEntry<GameMission>.CurrentListProvider { get => _MissionListEntryItemProvider; set => _MissionListEntryItemProvider = value; }
+	void IListEntry<GameMission>.SetListEntryValue(GameMission newValue) => SetMission(newValue);
+
 }
 
 public interface IMissionHighlightProvider

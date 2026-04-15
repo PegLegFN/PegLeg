@@ -298,8 +298,8 @@ public partial class TimelineInterface : Node
 				markers.events.Add(eventsToAdd[j]);
 			}
 
-			GD.Print("CurWk" + currentWeekIndex);
-			GD.Print("CurSzShops" + currentSeason.eventShop.Length);
+			//GD.Print("CurWk" + currentWeekIndex);
+			//GD.Print("CurSzShops" + currentSeason.eventShop.Length);
 			var shopItems = currentSeason.eventShop[Mathf.Clamp(currentWeekIndex, 0, currentSeason.eventShop.Length-1)];
 			if (shopItems.Length > 0)
 				markers.shops.Add(new()

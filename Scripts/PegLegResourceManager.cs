@@ -271,6 +271,9 @@ public class PegLegResourceManager
 		{
 			//await template.GetTextureAsync(onProgress: PrintProgress);
 			concurrentTemplateTasks.Add(template.GetTextureAsync());
+			concurrentTemplateTasks.Add(template.GetTextureAsync(FnItemTextureType.Icon));
+			concurrentTemplateTasks.Add(template.GetTextureAsync(FnItemTextureType.PackImage));
+			concurrentTemplateTasks.Add(template.GetTextureAsync(FnItemTextureType.LoadingScreen));
 			//template.GetTexture();
 			//concurrentTemplates--;
 			templatesProcessed++;
@@ -280,7 +283,7 @@ public class PegLegResourceManager
 			//    concurrentTemplates = OS.HasFeature("mobile") ? 40 : 60;
 			//    PrintProgress(0);
 			//}
-			if (concurrentTemplateTasks.Count >= (OS.HasFeature("mobile") ? 500 : 500))
+			if (concurrentTemplateTasks.Count >= 1000)
 			{
 				await Task.WhenAll(concurrentTemplateTasks);
 				concurrentTemplateTasks.Clear();

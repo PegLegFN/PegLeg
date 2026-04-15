@@ -24,6 +24,7 @@
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="20_t0hu3"]
 [ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="21_myk2v"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="22_1fh4v"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="24_yip6p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
 shader = ExtResource("3_hd8iq")
@@ -43,14 +44,14 @@ resource_local_to_scene = false
 resource_name = "RewardType"
 allow_unpress = true
 
-[node name="All" type="MarginContainer" unique_id=887790858 node_paths=PackedStringArray("missionList", "loadingIcon", "searchBar", "itemSearchBar", "sortMode", "filterNotable", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
+[node name="All" type="MarginContainer" unique_id=887790858 node_paths=PackedStringArray("newMissionListNode", "loadingIcon", "searchBar", "itemSearchBar", "sortMode", "filterNotable", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(370, 0)
 size_flags_vertical = 3
 size_flags_stretch_ratio = 5.0
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("1_3jaku")
-missionList = NodePath("VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer")
+newMissionListNode = NodePath("VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2/RecycleContainer")
 loadingIcon = NodePath("VBoxContainer/VBoxContainer/MarginContainer/SmallLoadingIcon")
 searchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox")
 itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox2")
@@ -866,6 +867,8 @@ vertical_alignment = 1
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1711726904]
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 theme_override_constants/outline_size = 0
 theme_override_constants/icon_max_width = 20
 theme_override_icons/icon = ExtResource("7_h4lof")
@@ -989,6 +992,16 @@ theme_override_constants/separation = 2
 
 [node name="Padding" type="Control" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1436640475]
 layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=749997421]
+layout_mode = 2
+
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2" unique_id=1155007216 node_paths=PackedStringArray("viewportParent")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("24_yip6p")
+viewportParent = NodePath("..")
+recycleEntryScene = ExtResource("21_myk2v")
 
 [node name="SmallLoadingIcon" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1686755788 instance=ExtResource("22_1fh4v")]
 layout_mode = 2

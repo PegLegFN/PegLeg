@@ -11,9 +11,10 @@ public partial class RecycleItemCtx : AbstractContextComponent
 			currentItem = currentItem.inspectorOverride;
 		SetDisabled(true);
 
-		if (currentItem?.profile is null)
+		if (currentItem?.profile?.account != GameAccount.ActiveAccount || currentItem.profile.profileId != FnProfileTypes.AccountItems)
 			return;
-
+		if (currentItem.profile.GetFirstTemplateItem("HomebaseNode:questreward_recyclecollection") is null)
+			return;
 		if (!SimpleItemSelector.RecyclableFilter(currentItem))
 			return;
 

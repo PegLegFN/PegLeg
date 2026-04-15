@@ -1,9 +1,57 @@
 [gd_scene format=3 uid="uid://bvwsqi0jrxlg6"]
 
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="1_gfjh1"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_8ujqw"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_f58ei"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8ujqw"]
+resource_local_to_scene = true
+shader = ExtResource("2_8ujqw")
+shader_parameter/ControlSize = Vector2(41, 41)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("3_f58ei")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f58ei"]
+resource_local_to_scene = true
+shader = ExtResource("2_8ujqw")
+shader_parameter/ControlSize = Vector2(41, 41)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("3_f58ei")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
 
 [node name="MissionCollectionEntry" unique_id=1675851289 instance=ExtResource("1_gfjh1")]
 custom_minimum_size = Vector2(220, 45)
+
+[node name="HBoxContainer" parent="." index="1" unique_id=651459051 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent")]
+alertModifierLayout = NodePath("MarginContainer3")
+alertModifierParent = NodePath("MarginContainer3/HBoxContainer")
 
 [node name="TheaterCat2" parent="HBoxContainer/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(39457196) index="0" unique_id=2021903316]
 custom_minimum_size = Vector2(30, 0)
@@ -16,12 +64,21 @@ custom_minimum_size = Vector2(39, 0)
 custom_minimum_size = Vector2(42, 0)
 theme_override_font_sizes/font_size = 28
 
-[node name="MarginContainer3" parent="HBoxContainer" parent_id_path=PackedInt32Array(651459051) index="1" unique_id=756618328]
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_bottom = 3
+[node name="MarginContainer3" parent="HBoxContainer" index="1" unique_id=756618328]
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="MissionCollectionHighlightItem3" parent="HBoxContainer/MarginContainer2/Highlights" parent_id_path=PackedInt32Array(838251907) index="2" unique_id=1230469321]
-visible = false
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem" parent_id_path=PackedInt32Array(785384845) index="0" unique_id=68041144]
+material = SubResource("ShaderMaterial_8ujqw")
 
-[node name="MissionCollectionHighlightItem4" parent="HBoxContainer/MarginContainer2/Highlights" parent_id_path=PackedInt32Array(838251907) index="3" unique_id=1571990667]
-visible = false
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem/Icon" index="0" unique_id=2062077297]
+theme_override_font_sizes/font_size = 14
+
+[node name="Icon" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2" parent_id_path=PackedInt32Array(1050302838) index="0" unique_id=68041144]
+material = SubResource("ShaderMaterial_f58ei")
+
+[node name="Label" parent="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2/Icon" index="0" unique_id=2062077297]
+theme_override_font_sizes/font_size = 14
+
+[editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem"]
+[editable path="HBoxContainer/MarginContainer2/Highlights/MissionCollectionHighlightItem2"]

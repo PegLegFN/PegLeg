@@ -18,6 +18,8 @@ public partial class MissionViewer : ModalWindow
 
 	public static void ShowMission(GameMission mission)
 	{
+		if (instance is null)
+			return;
 		instance.missionEntry.SetMission(mission);
 		instance.secondMissionEntry.SetMission(mission);
 		instance.SetWindowOpen(true);
