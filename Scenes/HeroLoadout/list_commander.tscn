@@ -48,7 +48,7 @@ corner_radius_top_left = 3
 corner_radius_bottom_left = 3
 
 [node name="SupportHero" unique_id=2066640686 node_paths=PackedStringArray("heroAbilityEntries", "heroCommanderPerkEntry") instance=ExtResource("1_yb0uk")]
-heroAbilityEntries = [NodePath("Abilities/TierController/TextureRect"), NodePath("Abilities/TierController/TextureRect2"), NodePath("Abilities/TierController/TextureRect3")]
+heroAbilityEntries = [NodePath("MarginContainer/HBoxContainer/Abilities/TextureRect"), NodePath("MarginContainer/HBoxContainer/Abilities/TextureRect2"), NodePath("MarginContainer/HBoxContainer/Abilities/TextureRect3")]
 heroCommanderPerkEntry = NodePath("HBoxContainer/HeroPerk")
 useHeroPerkDescription = false
 useCommanderPerkDescription = true
@@ -56,7 +56,7 @@ useCommanderPerkDescription = true
 [node name="LoadoutBG" parent="." index="0" unique_id=933949742]
 material = SubResource("ShaderMaterial_3gqum")
 
-[node name="Abilities" type="MarginContainer" parent="." index="1" unique_id=1163510249]
+[node name="MarginContainer" type="MarginContainer" parent="." index="1" unique_id=1163510249]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
@@ -65,18 +65,25 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="TierController" type="HBoxContainer" parent="Abilities" index="0" unique_id=79906637 node_paths=PackedStringArray("tierImages")]
-custom_minimum_size = Vector2(0, 24)
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" index="0" unique_id=733436570]
+layout_mode = 2
+
+[node name="LvText" type="Label" parent="MarginContainer/HBoxContainer" index="0" unique_id=2076732613]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+text = "Lv ??"
+
+[node name="Abilities" type="HBoxContainer" parent="MarginContainer/HBoxContainer" index="1" unique_id=79906637]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_constants/separation = 0
-script = ExtResource("9_0ende")
-tierImages = [null, null, null, null, null]
-superchargeColor = Color(0, 0.708333, 0.85, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Abilities/TierController" index="0" unique_id=381857361]
-custom_minimum_size = Vector2(10, 0)
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/Abilities" index="0" unique_id=381857361]
+custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("5_076b4")
@@ -84,8 +91,8 @@ expand_mode = 3
 script = ExtResource("6_lnr5c")
 defaultClearIconToNull = true
 
-[node name="TextureRect2" type="TextureRect" parent="Abilities/TierController" index="1" unique_id=661701591]
-custom_minimum_size = Vector2(10, 0)
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/Abilities" index="1" unique_id=661701591]
+custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("5_076b4")
@@ -93,8 +100,8 @@ expand_mode = 3
 script = ExtResource("6_lnr5c")
 defaultClearIconToNull = true
 
-[node name="TextureRect3" type="TextureRect" parent="Abilities/TierController" index="2" unique_id=1073228670]
-custom_minimum_size = Vector2(10, 0)
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer/Abilities" index="2" unique_id=1073228670]
+custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("5_076b4")
@@ -343,12 +350,23 @@ size_flags_horizontal = 4
 texture = ExtResource("10_4p0qo")
 expand_mode = 3
 
-[node name="Overlay" parent="." index="8" unique_id=696618774]
+[node name="PLIndicator" parent="." index="5" unique_id=1572938112]
+theme_override_constants/margin_bottom = 5
+
+[node name="PowerLevelLabel" parent="PLIndicator/HBoxContainer" parent_id_path=PackedInt32Array(1572938112, 530720272) index="0" unique_id=1940135083]
+theme_override_font_sizes/font_size = 16
+
+[node name="LvContainer" parent="." index="6" unique_id=878248873]
+visible = false
+
+[node name="Overlay" parent="." index="9" unique_id=696618774]
 modulate = Color(1, 1, 1, 0)
 
+[connection signal="ItemDoesExist" from="." to="MarginContainer/HBoxContainer/LvText" method="set_visible"]
+[connection signal="LevelTextChanged" from="." to="MarginContainer/HBoxContainer/LvText" method="set_text"]
 [connection signal="SuperchargeChanged" from="." to="HBoxContainer/HeroPerk/TierController" method="SetSuperchargedTier"]
-[connection signal="IconChanged" from="Abilities/TierController/TextureRect" to="Abilities/TierController/TextureRect" method="set_texture"]
-[connection signal="IconChanged" from="Abilities/TierController/TextureRect2" to="Abilities/TierController/TextureRect2" method="set_texture"]
-[connection signal="IconChanged" from="Abilities/TierController/TextureRect3" to="Abilities/TierController/TextureRect3" method="set_texture"]
+[connection signal="IconChanged" from="MarginContainer/HBoxContainer/Abilities/TextureRect" to="MarginContainer/HBoxContainer/Abilities/TextureRect" method="set_texture"]
+[connection signal="IconChanged" from="MarginContainer/HBoxContainer/Abilities/TextureRect2" to="MarginContainer/HBoxContainer/Abilities/TextureRect2" method="set_texture"]
+[connection signal="IconChanged" from="MarginContainer/HBoxContainer/Abilities/TextureRect3" to="MarginContainer/HBoxContainer/Abilities/TextureRect3" method="set_texture"]
 
 [editable path="PLIndicator"]

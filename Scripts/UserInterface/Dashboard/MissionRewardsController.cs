@@ -290,6 +290,16 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			//.Reverse().OrderBy(_=>true)
 			;
 	}
+	public static IOrderedEnumerable<MissionRewardPair> OrderByDBPower(IEnumerable<MissionRewardPair> pairs)
+	{
+		return pairs
+			//.Reverse()
+			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+			.ThenBy(r => -r.mission.PowerLevel)
+			//.ThenBy(r => r.mission.Guid)
+			//.Reverse().OrderBy(_=>true)
+			;
+	}
 
 	static GameItem StandardItemSelector(GameItem item) => item;
 	static GameItem RewardPairSelector(MissionRewardPair pair) => pair.item;
@@ -494,6 +504,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		{
 			160 => OrderByPower(filteredRewards),
 			465 => OrderByDB(filteredRewards),
+			333 => OrderByDBPower(filteredRewards),
 			_ => OrderByNotable(filteredRewards),
 		};
 

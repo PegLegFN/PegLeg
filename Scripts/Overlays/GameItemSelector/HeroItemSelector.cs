@@ -15,6 +15,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 		Standard,
 		Commander,
 		TeamPerk,
+		Defender,
 		Support
 	}
 
@@ -59,6 +60,8 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 	[Export]
 	RecycleListContainer teamperkContainer;
 	[Export]
+	RecycleListContainer defenderContainer;
+	[Export]
 	RecycleListContainer supportContainer;
 	[Export]
 	LineEdit searchInput;
@@ -84,6 +87,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 		standardContainer.SetProvider(this);
 		commanderContainer.SetProvider(this);
 		teamperkContainer.SetProvider(this);
+		defenderContainer.SetProvider(this);
 		supportContainer.SetProvider(this);
 		instance = this;
 		rootPanel.OffsetLeft = -rootPanel.GetCombinedMinimumSize().X;
@@ -275,12 +279,14 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 		standardContainer.Visible = false;
 		commanderContainer.Visible = false;
 		teamperkContainer.Visible = false;
+		defenderContainer.Visible = false;
 		supportContainer.Visible = false;
 		activeContainer = CurrentConfig.displayMode switch
 		{
 			DisplayMode.Commander => commanderContainer,
 			DisplayMode.TeamPerk => teamperkContainer,
 			DisplayMode.Support => supportContainer,
+			DisplayMode.Defender => defenderContainer,
 			_ => standardContainer
 		};
 		activeContainer.Visible = true;

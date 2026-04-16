@@ -116,6 +116,7 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	int[] lastIndices = [];
 	Vector2 lastListSize = Vector2.Zero;
 	bool wasEnclosed = false;
+	int lastCount = 0;
 
 	void IListHandler.UpdateList() => CheckItems(true);
 
@@ -136,8 +137,18 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		}
 		prevRelativePos = relativePos;
 		listDirty = false;
+		
 		var viewportRect = viewportParent.GetGlobalRect();
 		var listRect = GetGlobalRect();
+
+		Vector2 sizeScale = Vector2.One;
+		if (listRect.Size.X > 0)
+			sizeScale.X = Size.X / listRect.Size.X;
+		if (listRect.Size.Y > 0)
+			sizeScale.Y = Size.Y / listRect.Size.Y;
+
+		viewportRect.Size *= sizeScale;
+		listRect.Size *= sizeScale;
 
 		viewportRect.Size += extendViewportBounds;
 		viewportRect.Position -= extendViewportBounds / 2;
@@ -152,10 +163,11 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		listRect.Size = currentLayoutProvider.GetMinSize(currentLayoutInfo, listRect, false);
 
 		//saves computation when the list is fully within the viewport (such as small lists in big viewports)
-		bool isEnclosed = viewportRect.Encloses(listRect);
-		if (wasEnclosed && isEnclosed && !force)
-			return;
-		wasEnclosed = isEnclosed;
+		//bool isEnclosed = viewportRect.Encloses(listRect);
+		//if (wasEnclosed && isEnclosed && lastCount == currentListProvider.ListItemCount && !force)
+		//	return;
+		//wasEnclosed = isEnclosed;
+		//lastCount = currentListProvider.ListItemCount;
 
 		Vector2 relativeViewportPos = viewportRect.Position - listRect.Position;
 		Vector2 clampedViewportPos = new(

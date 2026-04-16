@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://bosi6o0a0u7eb" path="res://Scripts/UserInterface/Dashboard/DashboardSuperchargerController.cs" id="11_fkcfa"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="12_qu71t"]
 [ext_resource type="Texture2D" uid="uid://c0n3kv5onb5c2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Items-Hero-PromotionCurrency-L.png" id="13_cvjj8"]
+[ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="13_rymeg"]
 [ext_resource type="Script" uid="uid://d2gdvkomm7sxb" path="res://Scripts/DiscordWebhooks/DailySummaryWebhookDispatcher.cs" id="14_d41r0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rymeg"]
@@ -229,7 +230,9 @@ text = "This Season:
 {x}/day"
 horizontal_alignment = 1
 
-[node name="MissionCollection" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2" unique_id=370873070 node_paths=PackedStringArray("loadingIcon") instance=ExtResource("9_ay20g")]
+[node name="S160" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2" unique_id=370873070 node_paths=PackedStringArray("loadingIcon") instance=ExtResource("9_ay20g")]
+process_mode = 4
+visible = false
 custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 size_flags_vertical = 0
@@ -242,32 +245,44 @@ sortByZoneCat = true
 alwaysHidePlayableFilter = true
 ignoreLargeXPSetting = true
 
-[node name="Name" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(370873070, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(370873070, 1750868079) index="0" unique_id=796681065]
 text = "PL160 Repeatable Rewards"
 
-[node name="CheckButton" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(370873070, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(370873070, 1750868079) index="3" unique_id=1160045743]
 visible = false
 button_pressed = false
 
-[node name="Control" type="Control" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="0" unique_id=1862687171]
+[node name="Control" type="Control" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="0" unique_id=1862687171]
+visible = false
 layout_mode = 2
 
-[node name="SmallLoadingIcon" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="1" unique_id=1398539103]
+[node name="SmallLoadingIcon" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="1" unique_id=1398539103]
 visible = false
 
-[node name="ScrollContainer" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="2" unique_id=1876069311]
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
-dumbMode = true
-
-[node name="Offset" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(370873070, 1305908567) index="0" unique_id=302711610]
-visible = false
-
-[node name="Padding" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Body/ScrollContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(370873070, 1305908567) index="2" unique_id=1767575863]
-visible = false
-
-[node name="RecycleContainer" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="3" unique_id=812189577]
+[node name="RecycleContainer" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160/VBoxContainer/Body" parent_id_path=PackedInt32Array(370873070, 1401981871) index="2" unique_id=812189577]
 recycleEntryScene = ExtResource("10_h68g4")
+
+[node name="160" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2" unique_id=1352265404 instance=ExtResource("9_ay20g")]
+custom_minimum_size = Vector2(327, 60)
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"Panel3PadB"
+testName = "x5 Twine Peaks"
+testSearch = "\"Large Reward\" 160///bundle !XP"
+sortByPower = true
+sortByZoneCat = true
+alwaysHidePlayableFilter = true
+ignoreLargeXPSetting = true
+
+[node name="Name" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
+text = "x5 Twine Peaks"
+horizontal_alignment = 1
+
+[node name="SmallLoadingIcon" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="0" unique_id=1398539103]
+mouse_filter = 0
+
+[node name="RecycleContainer" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="1" unique_id=812189577]
+recycleEntryScene = ExtResource("13_rymeg")
 
 [node name="Supercharger" type="PanelContainer" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2" unique_id=1734822233 node_paths=PackedStringArray("content", "entry", "noSuperchargerMessage", "checkmark", "loading")]
 custom_minimum_size = Vector2(239.5, 0)
@@ -359,4 +374,5 @@ screenshotter = NodePath("../MissionSummaryViewport")
 [connection signal="NameChanged" from="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/Supercharger/VBoxContainer/PanelContainer/HBoxContainer" to="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/Supercharger/VBoxContainer/PanelContainer/HBoxContainer/Label" method="set_text"]
 
 [editable path="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer/VBucks"]
-[editable path="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/MissionCollection"]
+[editable path="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160"]
+[editable path="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160"]

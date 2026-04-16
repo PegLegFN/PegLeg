@@ -1,17 +1,17 @@
-[gd_scene format=3 uid="uid://bcl72cn06lq2i"]
+[gd_scene format=3 uid="uid://dnvstx6j6x0fp"]
 
-[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_vhrfs"]
-[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_gwp5v"]
-[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_ot1w6"]
-[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_i8bw6"]
-[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="5_2vpxv"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="6_fjst6"]
-[ext_resource type="Texture2D" uid="uid://dllvnb5xtdqk1" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Gadget-AdrenalineRush-bg-128.png" id="7_4fyam"]
-[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="8_ei8qr"]
-[ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="9_krdsd"]
-[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="10_1080f"]
-[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="11_pd2lc"]
-[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="12_awiyb"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_otp6n"]
+[ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_hjcq4"]
+[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_m683y"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_f8hmt"]
+[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="5_d704d"]
+[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="6_qcpxm"]
+[ext_resource type="Texture2D" uid="uid://dllvnb5xtdqk1" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Gadget-AdrenalineRush-bg-128.png" id="7_iowlb"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="7_ipnqa"]
+[ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="8_s8ojh"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="15_g5375"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="16_fhwb1"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="17_fw7i8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iowlb"]
 content_margin_left = 6.0
@@ -22,33 +22,33 @@ bg_color = Color(0.3111, 0.3111, 0.51, 0.4509804)
 corner_radius_top_left = 5
 corner_radius_bottom_left = 5
 
-[node name="StandardListItem" type="MarginContainer" unique_id=1541840474]
+[node name="DefenderListItem" type="MarginContainer" unique_id=1541840474]
 offset_right = 302.0
 offset_bottom = 44.0
-script = ExtResource("1_vhrfs")
+script = ExtResource("1_otp6n")
 interactableWhenEmpty = true
 autoLinkToViewer = false
 autoLinkToRecycleSelection = true
 
 [node name="LoadoutBG" type="Panel" parent="." unique_id=933949742]
 unique_name_in_owner = true
-material = ExtResource("2_gwp5v")
+material = ExtResource("2_hjcq4")
 layout_mode = 2
-theme_override_styles/panel = ExtResource("3_ot1w6")
-script = ExtResource("4_i8bw6")
+theme_override_styles/panel = ExtResource("3_m683y")
+script = ExtResource("4_f8hmt")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1295952962]
 layout_mode = 2
 
 [node name="HeroPerk" type="PanelContainer" parent="HBoxContainer" unique_id=2092928171]
 layout_mode = 2
-theme_override_styles/panel = ExtResource("5_2vpxv")
+theme_override_styles/panel = ExtResource("5_d704d")
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk" unique_id=1326314791]
-material = ExtResource("6_fjst6")
+material = ExtResource("7_ipnqa")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("7_4fyam")
+texture = ExtResource("7_iowlb")
 expand_mode = 3
 
 [node name="ClearIcon" type="PanelContainer" parent="HBoxContainer" unique_id=45921404]
@@ -56,21 +56,21 @@ visible = false
 custom_minimum_size = Vector2(44, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_iowlb")
-script = ExtResource("8_ei8qr")
+script = ExtResource("6_qcpxm")
 defaultClearIconToNull = true
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/ClearIcon" unique_id=1724632093]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
-texture = ExtResource("9_krdsd")
+texture = ExtResource("8_s8ojh")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="HBoxContainer" unique_id=899559456]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
-text = "Adrenaline Rush"
+text = "Defender"
 text_overrun_behavior = 3
 
 [node name="Label2" type="Label" parent="HBoxContainer" unique_id=1840323243]
@@ -81,29 +81,39 @@ theme_override_font_sizes/font_size = 20
 text = "Clear"
 text_overrun_behavior = 3
 
+[node name="Label3" type="Label" parent="HBoxContainer" unique_id=269449785]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv 00"
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=533621555]
+layout_mode = 2
+
 [node name="TooltipFallback" type="Control" parent="." unique_id=747216973]
 layout_mode = 2
 
 [node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1849095451 node_paths=PackedStringArray("itemSource")]
-script = ExtResource("10_1080f")
+script = ExtResource("15_g5375")
 itemSource = NodePath("../..")
-componentList = ExtResource("11_pd2lc")
+componentList = ExtResource("16_fhwb1")
 
-[node name="Responsive Button Area" parent="." unique_id=663396105 instance=ExtResource("12_awiyb")]
+[node name="Responsive Button Area" parent="." unique_id=663396105 instance=ExtResource("17_fw7i8")]
 layout_mode = 2
 
 [node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=275445449 node_paths=PackedStringArray("itemSource")]
-script = ExtResource("10_1080f")
+script = ExtResource("15_g5375")
 itemSource = NodePath("../..")
-componentList = ExtResource("11_pd2lc")
+componentList = ExtResource("16_fhwb1")
 
-[connection signal="IconChanged" from="." to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
 [connection signal="ItemDoesExist" from="." to="HBoxContainer/HeroPerk" method="set_visible"]
 [connection signal="ItemDoesExist" from="." to="HBoxContainer/Label" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/Label3" method="set_visible"]
 [connection signal="ItemDoesNotExist" from="." to="HBoxContainer/ClearIcon" method="set_visible"]
 [connection signal="ItemDoesNotExist" from="." to="HBoxContainer/Label2" method="set_visible"]
+[connection signal="LevelTextChanged" from="." to="HBoxContainer/Label3" method="set_text"]
 [connection signal="NameChanged" from="." to="HBoxContainer/Label" method="set_text"]
+[connection signal="SubtypeIconChanged" from="." to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="IconChanged" from="HBoxContainer/ClearIcon" to="HBoxContainer/ClearIcon/TextureRect" method="set_texture"]

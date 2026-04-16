@@ -34,6 +34,7 @@
 [ext_resource type="Script" uid="uid://840dnd45qqla" path="res://Scripts/UIElements/MobilePadding.cs" id="30_pkwxh"]
 [ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="31_0jcd2"]
 [ext_resource type="Script" uid="uid://cu5f8smruq3v0" path="res://Scripts/UIElements/ProcessSwitchingTabContainer.cs" id="31_082wr"]
+[ext_resource type="PackedScene" uid="uid://bgs7wpcqmkgvo" path="res://Scenes/update_notif.tscn" id="31_dcbu2"]
 [ext_resource type="PackedScene" uid="uid://dr02ht35ldsgb" path="res://Scenes/Desktop/Overlays/settings_window_lite.tscn" id="31_fu1xu"]
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="32_aqo04"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="33_llww6"]
@@ -46,7 +47,7 @@
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="45_pbdue"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="46_hiis4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcbu2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_so8mv"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(200, 341)
@@ -64,10 +65,10 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_so8mv"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_pkwxh"]
 resource_name = "CosmeticTimeFilter"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pkwxh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_082wr"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(0, 20)
@@ -261,25 +262,25 @@ visible = false
 visible = false
 
 [node name="LoadingIcon6" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/BigScrollContainer/MarginContainer/NewLoadingIcon" parent_id_path=PackedInt32Array(1968674659, 244303536) index="1" unique_id=285240235]
-material = SubResource("ShaderMaterial_dcbu2")
+material = SubResource("ShaderMaterial_so8mv")
 
 [node name="VeryNew" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="0" unique_id=2050379603]
-button_group = SubResource("ButtonGroup_so8mv")
+button_group = SubResource("ButtonGroup_pkwxh")
 
 [node name="New" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="1" unique_id=1886976013]
-button_group = SubResource("ButtonGroup_so8mv")
+button_group = SubResource("ButtonGroup_pkwxh")
 
 [node name="Any" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="2" unique_id=1457088269]
-button_group = SubResource("ButtonGroup_so8mv")
+button_group = SubResource("ButtonGroup_pkwxh")
 
 [node name="Old" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="3" unique_id=423896336]
-button_group = SubResource("ButtonGroup_so8mv")
+button_group = SubResource("ButtonGroup_pkwxh")
 
 [node name="Popular" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="4" unique_id=34668795]
-button_group = SubResource("ButtonGroup_so8mv")
+button_group = SubResource("ButtonGroup_pkwxh")
 
 [node name="LoadingIcon5" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/FilterBlocker" parent_id_path=PackedInt32Array(1968674659, 1161231320) index="0" unique_id=1782587914]
-material = SubResource("ShaderMaterial_pkwxh")
+material = SubResource("ShaderMaterial_082wr")
 
 [node name="Timeline" parent="Content/MainTabs" unique_id=692063504 instance=ExtResource("32_aqo04")]
 visible = false
@@ -349,6 +350,10 @@ grow_vertical = 2
 texture = ExtResource("44_6q5er")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="UpdateNotif" parent="Content/StatusBar/Right/SettingsButton" unique_id=941434612 instance=ExtResource("31_dcbu2")]
+layout_mode = 1
+anchors_preset = -1
 
 [node name="MuteBtn" type="Button" parent="Content/StatusBar/Right" unique_id=1757728599]
 custom_minimum_size = Vector2(25, 25)

@@ -40,12 +40,12 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
 	public override void _Ready()
 	{
-		if (PegLegResourceManager.MagicNumbers["showDefenders"]?.GetValue<bool>() != true)
-		{
-			if (defenderLayout is not null)
-				defenderLayout.Visible = false;
-			defenders = [];
-		}
+		//if (PegLegResourceManager.MagicNumbers["showDefenders"]?.GetValue<bool>() != true)
+		//{
+		//	if (defenderLayout is not null)
+		//		defenderLayout.Visible = false;
+		//	defenders = [];
+		//}
 		defenders ??= [];
 
 		ClearItem();
@@ -487,13 +487,17 @@ public partial class HeroLoadoutEntry : GameItemEntry
 
 	async void InteractDefender(int idx)
 	{
-		if(defenders.Length==0 || defenders.Length <= idx)
+		if (defenders.Length==0 || defenders.Length <= idx)
 		{
 			GD.PushWarning($"Defender {idx} out of range of {defenders.Length}");
 			return;
 		}
-		if (currentItem.profile.GetFirstTemplateItem($"HomebaseNode:questreward_newdefender{idx + 1}_slot") is null)
+		string displayIdx = idx==0 ? "" :(idx + 1).ToString();
+		if (currentItem.profile.GetFirstTemplateItem($"HomebaseNode:questreward_mission_defender{displayIdx}") is null)
+		{
+			//GD.Print("noDefenderPerms");
 			return;
+		}
 		if (Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
 		{
 			defenders[idx].Inspect();
@@ -511,6 +515,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
 			title = "Select Defender",
 			lastSelectedId = current,
 			allowEmptySelection = true,
+			displayMode = HeroItemSelector.DisplayMode.Defender
 		});
 		if (newDefender is null)
 		{

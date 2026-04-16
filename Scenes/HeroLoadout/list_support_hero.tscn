@@ -126,24 +126,39 @@ material = SubResource("ShaderMaterial_521pf")
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_bottom = 6
 
-[node name="MarginContainer" parent="PLIndicator" index="0"]
+[node name="MarginContainer" parent="PLIndicator" index="0" unique_id=383205245]
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = -2
 theme_override_constants/margin_bottom = -2
 
-[node name="HBoxContainer" parent="PLIndicator" index="2"]
+[node name="HBoxContainer" parent="PLIndicator" index="2" unique_id=530720272]
 theme_override_constants/margin_top = -2
 theme_override_constants/margin_bottom = 1
 
-[node name="PowerLevelLabel" parent="PLIndicator/HBoxContainer" index="0"]
-theme_override_font_sizes/font_size = 10
+[node name="PowerLevelLabel" parent="PLIndicator/HBoxContainer" index="0" unique_id=1940135083]
+theme_override_font_sizes/font_size = 14
+
+[node name="LvContainer" type="MarginContainer" parent="." index="3" unique_id=878248873]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_right = 5
+
+[node name="LvText" type="Label" parent="LvContainer" index="0" unique_id=386200891]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+text = "Lv ??"
 
 [connection signal="ItemDoesExist" from="." to="HBoxContainer/HeroPerk" method="set_visible"]
 [connection signal="ItemDoesExist" from="." to="HBoxContainer/Content" method="set_visible"]
+[connection signal="ItemDoesExist" from="." to="LvContainer/LvText" method="set_visible"]
 [connection signal="ItemDoesNotExist" from="." to="HBoxContainer/ClearIcon" method="set_visible"]
 [connection signal="ItemDoesNotExist" from="." to="HBoxContainer/Clear Label" method="set_visible"]
+[connection signal="LevelTextChanged" from="." to="LvContainer/LvText" method="set_text"]
 [connection signal="RatingChanged" from="." to="PLIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
 [connection signal="RatingVisibility" from="." to="PLIndicator" method="set_visible"]
 [connection signal="DescriptionChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label2" method="set_text"]

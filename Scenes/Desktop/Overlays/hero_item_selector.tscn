@@ -41,16 +41,18 @@
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="36_d1v52"]
 [ext_resource type="PackedScene" uid="uid://b2yvtxwgbw1vm" path="res://Scenes/HeroLoadout/list_support_hero.tscn" id="38_e1y6d"]
 [ext_resource type="PackedScene" uid="uid://dpbrdqqxc8xeq" path="res://Scenes/HeroLoadout/list_commander.tscn" id="38_hccc8"]
-[ext_resource type="PackedScene" uid="uid://dnvstx6j6x0fp" path="res://Scenes/HeroLoadout/list_standard.tscn" id="40_hgbox"]
+[ext_resource type="PackedScene" uid="uid://dnvstx6j6x0fp" path="res://Scenes/HeroLoadout/list_defender.tscn" id="40_hgbox"]
+[ext_resource type="PackedScene" uid="uid://bcl72cn06lq2i" path="res://Scenes/HeroLoadout/list_standard.tscn" id="41_1l8cn"]
 [ext_resource type="PackedScene" uid="uid://dxtm1fkjsapu2" path="res://Scenes/HeroLoadout/list_team_perk.tscn" id="41_7btbo"]
 
-[node name="HeroItemSelector" unique_id=324941650 node_paths=PackedStringArray("header", "heroFiltersLayout", "standardContainer", "commanderContainer", "teamperkContainer", "supportContainer", "searchInput", "classFilter", "perkFilter", "abilityFilterLayout", "abilityFilters", "abilityFilterNotice", "rootPanel") instance=ExtResource("1_ov44w")]
+[node name="HeroItemSelector" unique_id=324941650 node_paths=PackedStringArray("header", "heroFiltersLayout", "standardContainer", "commanderContainer", "teamperkContainer", "defenderContainer", "supportContainer", "searchInput", "classFilter", "perkFilter", "abilityFilterLayout", "abilityFilters", "abilityFilterNotice", "rootPanel") instance=ExtResource("1_ov44w")]
 script = ExtResource("2_ky5nb")
 header = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Label")
 heroFiltersLayout = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer")
 standardContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard")
 commanderContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/CommanderHeroes")
 teamperkContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk")
+defenderContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Defender")
 supportContainer = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/SupportHeroes")
 searchInput = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/Search")
 classFilter = NodePath("Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/VBoxContainer/HeroTypeFilter/HeroTypes")
@@ -448,7 +450,7 @@ elementSpace = 4.0
 offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
 paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
-elementScene = ExtResource("40_hgbox")
+elementScene = ExtResource("41_1l8cn")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard" index="0" unique_id=1863747539]
 layout_mode = 2
@@ -472,7 +474,43 @@ layout_mode = 2
 [node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Standard/MarginContainer/VBoxContainer" index="2" unique_id=377340493]
 layout_mode = 2
 
-[node name="TeamPerk" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="3" unique_id=1391153808 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="Defender" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="3" unique_id=17303642 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
+script = ExtResource("36_d1v52")
+elementSpace = 4.0
+offsetControl = NodePath("MarginContainer/VBoxContainer/Offset")
+paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
+elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
+elementScene = ExtResource("40_hgbox")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Defender" index="0" unique_id=1936128623]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Defender/MarginContainer" index="0" unique_id=1497300941]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Offset" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Defender/MarginContainer/VBoxContainer" index="0" unique_id=961602949]
+layout_mode = 2
+
+[node name="DynGridContainer" type="VBoxContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Defender/MarginContainer/VBoxContainer" index="1" unique_id=1598296552]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/Defender/MarginContainer/VBoxContainer" index="2" unique_id=1430966286]
+layout_mode = 2
+
+[node name="TeamPerk" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="4" unique_id=1391153808 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -508,7 +546,7 @@ layout_mode = 2
 [node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/TeamPerk/MarginContainer/VBoxContainer" index="2" unique_id=1107956457]
 layout_mode = 2
 
-[node name="CommanderHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="4" unique_id=374995708 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="CommanderHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="5" unique_id=374995708 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -544,7 +582,7 @@ layout_mode = 2
 [node name="Padding" type="Control" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer/CommanderHeroes/MarginContainer/VBoxContainer" index="2" unique_id=1661302222]
 layout_mode = 2
 
-[node name="SupportHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="5" unique_id=269822272 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
+[node name="SupportHeroes" type="ScrollContainer" parent="Control/WindowContents/Control/MarginContainer/PanelContainer/VBoxContainer" index="6" unique_id=269822272 node_paths=PackedStringArray("offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3

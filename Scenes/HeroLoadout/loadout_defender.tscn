@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://bimg0dt1ksn23" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-Pistol-CARD.png" id="13_vex60"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="15_23wao"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="16_sxfjf"]
+[ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="16_vex60"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="17_6f7kv"]
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="18_n65nb"]
 
@@ -72,6 +73,9 @@ offset_right = 277.0
 offset_bottom = 44.0
 size_flags_horizontal = 3
 script = ExtResource("1_rggsi")
+interactableWhenEmpty = true
+autoLinkToViewer = false
+defaultClearIconToNull = true
 
 [node name="LoadoutBG" type="Panel" parent="." unique_id=1547872229]
 unique_name_in_owner = true
@@ -117,7 +121,7 @@ text_overrun_behavior = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
+theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
@@ -151,7 +155,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control" unique_id=242177730]
 self_modulate = Color(1, 0.633333, 0, 1)
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.5
@@ -167,21 +171,15 @@ expand_mode = 3
 
 [node name="Subtype" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control/TextureRect" unique_id=32063342]
 material = SubResource("ShaderMaterial_w14yl")
-custom_minimum_size = Vector2(0, 16)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("13_vex60")
-expand_mode = 3
+expand_mode = 1
 
 [node name="TooltipFallback" type="Control" parent="." unique_id=1876321207]
 layout_mode = 2
@@ -190,11 +188,31 @@ layout_mode = 2
 script = ExtResource("15_23wao")
 componentList = ExtResource("16_sxfjf")
 
+[node name="PLIndicator" parent="." unique_id=123897073 instance=ExtResource("16_vex60")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="MarginContainer" parent="PLIndicator" index="0" unique_id=383205245]
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="HBoxContainer" parent="PLIndicator" index="2" unique_id=530720272]
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_bottom = 1
+
+[node name="PowerLevelLabel" parent="PLIndicator/HBoxContainer" index="0" unique_id=1940135083]
+theme_override_font_sizes/font_size = 10
+
 [node name="Responsive Button Area" parent="." unique_id=1997860144 instance=ExtResource("17_6f7kv")]
 layout_mode = 2
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=865508840]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=865508840 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("15_23wao")
+itemSource = NodePath("../..")
 componentList = ExtResource("16_sxfjf")
 
 [node name="Overlay" type="Control" parent="." unique_id=717118593]
@@ -228,5 +246,17 @@ grow_vertical = 2
 texture = ExtResource("18_n65nb")
 expand_mode = 1
 
+[connection signal="IconChanged" from="." to="HBoxContainer/MarginContainer2/MarginContainer/Icon" method="set_texture"]
+[connection signal="ItemDoesExist" from="." to="HBoxContainer/MarginContainer2/Control" method="set_visible"]
+[connection signal="RarityChanged" from="." to="HBoxContainer/MarginContainer2/TextureRect" method="set_self_modulate"]
+[connection signal="RarityChanged" from="." to="HBoxContainer/MarginContainer2/Control/TextureRect" method="set_self_modulate"]
+[connection signal="RatingChanged" from="." to="PLIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="RatingVisibility" from="." to="PLIndicator" method="set_visible"]
+[connection signal="SubtypeIconChanged" from="." to="HBoxContainer/MarginContainer2/Control/TextureRect/Subtype" method="set_texture"]
+[connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
 [connection signal="IconChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
 [connection signal="NameChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label" method="set_text"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]
+
+[editable path="PLIndicator"]

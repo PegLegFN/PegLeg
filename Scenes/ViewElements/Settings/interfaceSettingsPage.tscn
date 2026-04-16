@@ -73,16 +73,6 @@ text = " Unlimited"
 alignment = 1
 metadata/zone = "c"
 
-[node name="WindowUIScale" type="CheckBox" parent="." unique_id=1648342630]
-layout_direction = 3
-layout_mode = 2
-text = "Scale up UI with Window Size"
-alignment = 2
-script = ExtResource("4_dnpv7")
-section = "ui"
-key = "window"
-defaultValue = true
-
 [node name="UIScale" type="HBoxContainer" parent="." unique_id=230136301]
 layout_mode = 2
 
@@ -275,7 +265,6 @@ script = ExtResource("4_dnpv7")
 section = "misc"
 key = "fast_animations"
 
-[connection signal="ConfigValueChanged" from="WindowUIScale" to="SimpleCosmeticTiles" method="set_visible"]
 [connection signal="AppliedChanged" from="UIScale/HSlider" to="UIScale/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="UIScale/HSlider" to="UIScale/HSlider" method="SetValue"]
 [connection signal="UnappliedLabelChanged" from="UIScale/HSlider" to="UIScale/Label2" method="set_text"]

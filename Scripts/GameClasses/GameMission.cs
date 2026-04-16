@@ -1045,7 +1045,7 @@ public partial class GameMission
 		}
 		if (
 			alertRewardItems.Count(i =>
-				i.template?.Rarity == "Legendary" &&
+				(i.template?.RarityLevel ?? 0) >= 5 &&
 				!i.templateId.StartsWith("AccountResource:")
 			) >= 2
 		)
