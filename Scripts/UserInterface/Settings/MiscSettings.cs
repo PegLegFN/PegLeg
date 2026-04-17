@@ -47,6 +47,29 @@ public partial class MiscSettings : Control
 		accountImportButton.Visible = false;
 	}
 
+	async void CopyExchange()
+	{
+		if (!GameAccount.ActiveAccount.isOwned)
+			return;
+		string exchangeCode = null;
+		using (var _ = LoadingOverlay.CreateToken())
+		{
+			exchangeCode = await GameAccount.ActiveAccount.GenerateExchangeCode();
+		}
+		if (exchangeCode is null)
+		{
+			GenericConfirmationWindow.ShowError("Failed to generate Exchange Code").StartTask();
+			return;
+		}
+		DisplayServer.ClipboardSet(exchangeCode);
+		GenericConfirmationWindow.ShowInfo("Exchange Code copied").StartTask();
+	}
+
+	void OpenIssuePage()
+	{
+		OS.ShellOpen("https://github.com/PegLegFN/PegLeg/issues");
+	}
+
 	void OpenAppData()
 	{
 		OS.ShellOpen(ProjectSettings.GlobalizePath("user://"));

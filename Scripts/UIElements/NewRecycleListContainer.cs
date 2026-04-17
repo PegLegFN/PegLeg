@@ -27,6 +27,8 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	Vector2 shift = new(0.5f, 0.5f);
 	[Export]
 	Vector2 extendViewportBounds = new(100,100);//todo: extend the effective bounds of the viewport by this amount, to compensate for elastic scrolling on mobile
+	[Export]
+	bool debug;
 
 	Queue<IListEntry> pooledEntries = [];
 	Dictionary<int, IListEntry> activeEntries = [];
@@ -194,9 +196,11 @@ public partial class NewRecycleListContainer : Container, IListHandler
 			return;
 
 		//if (listRect.Size != lastListSize)
-		//	GD.Print($"Size: {lastListSize}=>{listRect.Size}");
-		//if (!indicesMatch)
-		//	GD.Print($"Indices: \n{string.Join(", ", lastIndices)}\n=>\n{string.Join(", ", currentIndexes)}");
+		if (debug)
+			GD.Print($"Size: {lastListSize}=>{listRect.Size}");
+			//if (!indicesMatch)
+		if (debug)
+			GD.Print($"Indices: \n{string.Join(", ", lastIndices)}\n=>\n{string.Join(", ", currentIndexes)}");
 
 		lastListSize = listRect.Size;
 		lastIndices = currentIndexes;

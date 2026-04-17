@@ -8,6 +8,14 @@
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="4_6ha8o"]
 [ext_resource type="Texture2D" uid="uid://dllvnb5xtdqk1" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Gadget-AdrenalineRush-bg-128.png" id="6_51cn4"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_expaw"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="8_5xlop"]
+[ext_resource type="Script" uid="uid://cne4d66s1q01a" path="res://Scripts/ContextMenu/ContextComponentList.cs" id="9_5xlop"]
+
+[sub_resource type="Resource" id="Resource_lj1b7"]
+resource_name = "GadgetComponents"
+script = ExtResource("9_5xlop")
+components = PackedStringArray("ItemTitle", "InspectItem", "-", "CopyItemIcon", "d_-", "d_CopyTemplateId")
+metadata/_custom_type_script = "uid://cne4d66s1q01a"
 
 [node name="Gadget" type="MarginContainer" unique_id=1319989748]
 custom_minimum_size = Vector2(0, 44)
@@ -102,8 +110,18 @@ color = Color(0, 0, 0, 1)
 [node name="TooltipFallback" type="Control" parent="." unique_id=1069744356]
 layout_mode = 2
 
+[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1660047282 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("8_5xlop")
+itemSource = NodePath("../..")
+componentList = SubResource("Resource_lj1b7")
+
 [node name="Responsive Button Area" parent="." unique_id=243374042 instance=ExtResource("6_expaw")]
 layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=2039368378 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("8_5xlop")
+itemSource = NodePath("../..")
+componentList = SubResource("Resource_lj1b7")
 
 [connection signal="IconChanged" from="." to="HBoxContainer/PanelContainer/GadgetIcon" method="set_texture"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]

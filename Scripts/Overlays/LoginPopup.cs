@@ -81,7 +81,7 @@ public partial class LoginPopup : ModalWindow
 		var exchangeCodeResponse = await GameClient.PreferredClient.LoginWithExchangeCode(exchangeCodeBox.Text);
 		if (await exchangeCodeResponse.CheckForError(true))
 		{
-			SetWindowOpen(false);
+			Cancel();
 			return;
 		}
 		var acc = GameAccount.LoginToAccount(await exchangeCodeResponse.ReadJson<JsonObject>());
@@ -89,6 +89,6 @@ public partial class LoginPopup : ModalWindow
 			await acc.SaveDeviceDetails();
 		else
 			GD.Print("Account Missing?");
-		SetWindowOpen(false);
+		Cancel();
 	}
 }

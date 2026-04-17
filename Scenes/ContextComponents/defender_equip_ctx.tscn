@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bh3420a1kiwo7"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_mlqcm"]
+[ext_resource type="Script" uid="uid://d2yndx2q4oms" path="res://Scripts/ContextMenu/Components/DefenderEquipCtx.cs" id="2_mlqcm"]
+[ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="3_3laqt"]
+
+[node name="DefenderEquipCtx" unique_id=1825618976 instance=ExtResource("1_mlqcm")]
+script = ExtResource("2_mlqcm")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" parent_id_path=PackedInt32Array(16911845) index="0" unique_id=1417089072]
+texture = ExtResource("3_3laqt")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(650842185) index="1" unique_id=1106396072]
+text = "Assign Weapon"
+
+[connection signal="pressed" from="TextureButton" to="." method="OpenEquipMenu"]

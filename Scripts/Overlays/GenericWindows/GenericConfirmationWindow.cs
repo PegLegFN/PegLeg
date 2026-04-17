@@ -37,10 +37,13 @@ public partial class GenericConfirmationWindow : ModalWindow
 	//    await instance.ShowConfirmationInst("Uh oh! Something Goofed", "Continue", "", errorResult["errorMessage"].ToString(), errorResult["errorCode"].ToString(), false, 8);
 	//}
 
-	public static async Task ShowError(string description, string header = "Error            ")
+	public static async Task ShowError(string description, string header = "Error", int headerSpace = 20) =>
+		await ShowInfo(description, header, headerSpace);
+
+	public static async Task ShowInfo(string description, string header = "Info", int headerSpace = 20)
 	{
 		if (instance is not null)
-			await instance.ShowConfirmationInst(header, null, "Close", description, "", false, 8, true);
+			await instance.ShowConfirmationInst(header, null, "Close", description, "", false, headerSpace, true);
 	}
 
 	public static async Task<bool?> ShowConfirmation(string headerText, string postiveText = "Confirm", string negativeText = "", string contextText = "", string warningText = "", bool allowCancel = true, int headerSpace = 8, bool highlightConfirm = true) =>

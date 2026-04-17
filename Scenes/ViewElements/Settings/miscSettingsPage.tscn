@@ -103,6 +103,11 @@ layout_mode = 2
 size_flags_vertical = 3
 alignment = 2
 
+[node name="ReportButton" type="Button" parent="VBoxContainer" unique_id=2021986333]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Report Issue"
+
 [node name="ImportButton" type="PanelContainer" parent="VBoxContainer" unique_id=627278635]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -118,6 +123,10 @@ horizontal_alignment = 1
 layout_mode = 2
 useHold = true
 holdTime = 2.5
+
+[node name="ExchangeToken" type="Button" parent="VBoxContainer" unique_id=1544907619]
+layout_mode = 2
+text = "Copy Exchange Token"
 
 [node name="DevHourRefresh" type="Button" parent="VBoxContainer" unique_id=9223083]
 visible = false
@@ -142,7 +151,9 @@ visible = false
 layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
 
+[connection signal="pressed" from="VBoxContainer/ReportButton" to="." method="OpenAppData"]
 [connection signal="HoldPressed" from="VBoxContainer/ImportButton/Responsive Button Area" to="." method="ImportAccounts"]
+[connection signal="pressed" from="VBoxContainer/ExchangeToken" to="." method="CopyExchange"]
 [connection signal="pressed" from="VBoxContainer/UserDataButton" to="." method="OpenAppData"]
 [connection signal="pressed" from="VBoxContainer/InstallFolderButton" to="." method="OpenInstallationFolder"]
 [connection signal="pressed" from="VBoxContainer/CloseAppButton" to="." method="CloseApp"]

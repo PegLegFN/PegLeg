@@ -586,11 +586,15 @@ public partial class GameAccount
 
 	public async Task<string> GenerateExchangeCode()
 	{
+		if (!await Authenticate())
+			return null;
 		var response = await FnWebAddresses.EpicAccount
 			.MakeRequest("account/api/oauth/exchange")
 			.SetFormContent("consumingClientId=launcherAppClient2")
 			.SetAccount(this)
 			.Send();
+		if (await response.CheckForError())
+			return null;
 		var result = await response.ReadJson();
 		return result["code"]?.ToString();
 	}
@@ -949,6 +953,33 @@ public partial class GameAccount
 			OnVentureRatingDataChanged?.Invoke(this);
 		}
 		return ventureRatingData.Value;
+	}
+
+	int itemLevelCap = 0;
+	public int GetItemLevelCap(bool force = false)
+	{
+		if (!isOwned)
+			return 999;
+		if (itemLevelCap > 0 && !force)
+			return itemLevelCap;
+		var profile = GetProfile(FnProfileTypes.AccountItems);
+		var resourceLookupData = PegLegResourceManager.MagicNumbers["questTemplateToItemLevelCap"]?.AsObject() ?? new()
+		{
+			["Quest:outpostquest_t1_l6"] = 20,
+			["Quest:plankertonquest_outpost_l4"] = 30,
+			["Quest:cannyvalleyquest_outpost_l2"] = 40,
+			["Quest:cannyvalleyquest_outpost_l6"] = 50
+		};
+		var resourceLookup = resourceLookupData.Deserialize<Dictionary<string, int>>().ToArray();
+		resourceLookup = [.. resourceLookup.OrderBy(kvp => -kvp.Value)];
+		foreach (var kvp in resourceLookup)
+		{
+			if (profile.GetFirstTemplateItem(kvp.Key) is GameItem quest && quest.QuestClaimed) //this could instead depend on quest completion, idk
+			{
+				return itemLevelCap = kvp.Value;
+			}
+		}
+		return itemLevelCap = 10;
 	}
 
 	public async Task GenerateXRayLlamaResults(bool force = false)

@@ -66,6 +66,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	public delegate void InitLevelChangedEventHandler(float level);
 
 	[Signal]
+	public delegate void UncappedLevelTextChangedEventHandler(string level);
+
+	[Signal]
 	public delegate void LevelMaxChangedEventHandler(float levelMax);
 
 	[Signal]
@@ -115,6 +118,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 	[Signal]
 	public delegate void InitVisibleEventHandler(bool visible);
+	[Signal]
+
+	public delegate void UncappedVisibleEventHandler(bool visible);
 
 	[Signal]
 	public delegate void SuperchargeChangedEventHandler(int supercharge);
@@ -370,12 +376,25 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		EmitSignalRatingVisibility(rating != 0);
 
 		int tier = displayItem.template?.Tier ?? 0;
-		float levelProgress = 0;
-		int level = displayItem.attributes?["level"]?.GetValue<int>() ?? 1;
+		int level = Mathf.Max(displayItem.Level, 1);
+		if (displayItem.DesiredLevel > 0)
+		{
+			int desiredLevel = displayItem.DesiredLevel;
+			level = displayItem.ResolveDesiredLevel();
+			tier = ((level - 1) / 10) + 1;
+			EmitSignalUncappedVisible(level < desiredLevel);
+			EmitSignalUncappedLevelTextChanged($"{levelTextPrefix}{desiredLevel}");
+		}
+		else
+		{
+			EmitSignalUncappedVisible(false);
+			EmitSignalUncappedLevelTextChanged("");
+		}
+
 		int bonusMaxLevel = displayItem.attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;
 		int maxLevel = Mathf.Max(tier * 10, 1) + bonusMaxLevel;
 		int minLevel = Mathf.Max(maxLevel - 10, 1);
-		levelProgress = minLevel == maxLevel ? 1 : ((float)level - minLevel) / (maxLevel - minLevel);
+		float levelProgress = minLevel == maxLevel ? 1 : ((float)level - minLevel) / (maxLevel - minLevel);
 
 		int initLevel = displayItem.attributes?["starting_level"]?.GetValue<int>() ?? 0;
 		int initTier = displayItem.attributes?["starting_tier"]?.GetValue<string>() switch
@@ -385,7 +404,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			"iii" => 3,
 			"ii" => 2,
 			"i" => 1,
-			_ => tier
+			_ => 0
 		};
 		int initRarityLevel = displayItem.attributes?["starting_rarity"]?.GetValue<string>() switch
 		{
@@ -590,22 +609,23 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		}
 		displayItem = null;
 		inspectorOverride = null;
-		EmitSignal(SignalName.ItemDoesExist, false);
-		EmitSignal(SignalName.ItemDoesNotExist, true);
-		EmitSignal(SignalName.NameChanged, "");
-		EmitSignal(SignalName.DescriptionChanged, "");
-		EmitSignal(SignalName.TooltipChanged, "");
-		EmitSignal(SignalName.IconChanged, clearIcon);
-		EmitSignal(SignalName.SubtypeIconChanged, clearIcon);
-		EmitSignal(SignalName.TypeChanged, "");
-		EmitSignal(SignalName.AmountVisibility, false);
-		EmitSignal(SignalName.RatingVisibility, false);
-		EmitSignal(SignalName.AmountChanged, "");
-		EmitSignal(SignalName.RarityChanged, Colors.Transparent);
-		EmitSignal(SignalName.InteractableChanged, interactableWhenEmpty);
-		EmitSignal(SignalName.NotificationChanged, false);
-		EmitSignal(SignalName.FavoriteChanged, false);
-		EmitSignal(SignalName.OverflowWarning, false);
+		EmitSignalItemDoesExist(false);
+		EmitSignalItemDoesNotExist(true);
+		EmitSignalNameChanged("");
+		EmitSignalDescriptionChanged("");
+		EmitSignalTooltipChanged("");
+		EmitSignalIconChanged(clearIcon);
+		EmitSignalSubtypeIconChanged(clearIcon);
+		EmitSignalTypeChanged("");
+		EmitSignalAmountVisibility(false);
+		EmitSignalRatingVisibility(false);
+		EmitSignalUncappedVisible(false);
+		EmitSignalAmountChanged("");
+		EmitSignalRarityChanged(Colors.Transparent);
+		EmitSignalInteractableChanged(interactableWhenEmpty);
+		EmitSignalNotificationChanged(false);
+		EmitSignalFavoriteChanged(false);
+		EmitSignalOverflowWarning(false);
 	}
 
 	public void Inspect()

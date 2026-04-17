@@ -729,6 +729,7 @@ public class GameProfile
 		{
 			account.GetRatingData(true);
 			account.GetVentureRatingData(true);
+			account.GetItemLevelCap(true);
 		}
 		else if (profileId == FnProfileTypes.Backpack)
 		{
