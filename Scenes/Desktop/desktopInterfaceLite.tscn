@@ -13,9 +13,13 @@
 [ext_resource type="AudioStream" uid="uid://qe86vjs1x5xq" path="res://Audio/SFX/LlamaSounds/Greet/UI_Frontend_Llama_PopUp_Silver.ogg" id="15_x4ly8"]
 [ext_resource type="AudioStream" uid="uid://belvq04k8nvcu" path="res://Audio/SFX/LlamaSounds/Greet/UI_Frontend_Llama_PopUp_Gold.ogg" id="16_llww6"]
 [ext_resource type="Texture2D" uid="uid://d4g8ui1d04ui3" path="res://Images/Flipbook/AtlasOneShot.png" id="17_i1xpj"]
+[ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/AppIcons/PegLegIcon256.png" id="18_aqo04"]
 [ext_resource type="AudioStream" uid="uid://b7nif883tap0j" path="res://Audio/SFX/Notifs/PLMissionNotif.ogg" id="18_fu1xu"]
 [ext_resource type="Texture2D" uid="uid://d21c3cdy7sqyf" path="res://Images/Flipbook/VendingSheet.png" id="19_xmpkd"]
+[ext_resource type="Script" uid="uid://c24lmsr7knt32" path="res://Scripts/TrayIcon.cs" id="19_xs1ek"]
+[ext_resource type="Texture2D" uid="uid://bl88wu2p8c4o6" path="res://Images/AppIcons/PegLegIconEditor.png" id="20_h2p2r"]
 [ext_resource type="AudioStream" uid="uid://bjjgpivjq30po" path="res://Audio/SFX/Notifs/VendingMachine_Vend_Sparkle.wav" id="20_j5m3u"]
+[ext_resource type="Texture2D" uid="uid://bcb4xp8puusy5" path="res://Images/AppIcons/PegLegIconTestBuild.png" id="21_3l2jb"]
 [ext_resource type="PackedScene" uid="uid://kgl0dydu0mtf" path="res://Scenes/Desktop/desktopContextMenu.tscn" id="21_psdk2"]
 [ext_resource type="PackedScene" uid="uid://53fn442ut5dy" path="res://Scenes/Desktop/Overlays/mission_viewer.tscn" id="22_u6s0m"]
 [ext_resource type="PackedScene" uid="uid://bciw7pflkhsnd" path="res://Scenes/Desktop/Views/Lite/desktopLiteDashboardView.tscn" id="22_x4ly8"]
@@ -47,7 +51,7 @@
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="45_pbdue"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="46_hiis4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_so8mv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_36vak"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(200, 341)
@@ -65,10 +69,10 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_pkwxh"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_6ysvb"]
 resource_name = "CosmeticTimeFilter"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_082wr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wt277"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(0, 20)
@@ -158,6 +162,21 @@ shopSound = ExtResource("20_j5m3u")
 
 [node name="DesktopContextMenu" parent="NonUI" unique_id=2132509342 instance=ExtResource("21_psdk2")]
 mouse_passthrough_polygon = PackedVector2Array(0, 0, 0, 0)
+
+[node name="StatusIndicator" type="StatusIndicator" parent="NonUI" unique_id=246151413]
+tooltip = "PegLeg"
+icon = ExtResource("18_aqo04")
+menu = NodePath("PopupMenu")
+script = ExtResource("19_xs1ek")
+editorIcon = ExtResource("20_h2p2r")
+testBuildIcon = ExtResource("21_3l2jb")
+
+[node name="PopupMenu" type="PopupMenu" parent="NonUI/StatusIndicator" unique_id=1163295507]
+prefer_native_menu = true
+item_count = 2
+item_0/text = "Close"
+item_0/id = 0
+item_1/id = 1
 
 [node name="BGController" type="Control" parent="." unique_id=1913076825 node_paths=PackedStringArray("bgMain", "bgOverlay")]
 layout_mode = 1
@@ -262,25 +281,25 @@ visible = false
 visible = false
 
 [node name="LoadingIcon6" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/BigScrollContainer/MarginContainer/NewLoadingIcon" parent_id_path=PackedInt32Array(1968674659, 244303536) index="1" unique_id=285240235]
-material = SubResource("ShaderMaterial_so8mv")
+material = SubResource("ShaderMaterial_36vak")
 
 [node name="VeryNew" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="0" unique_id=2050379603]
-button_group = SubResource("ButtonGroup_pkwxh")
+button_group = SubResource("ButtonGroup_6ysvb")
 
 [node name="New" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="1" unique_id=1886976013]
-button_group = SubResource("ButtonGroup_pkwxh")
+button_group = SubResource("ButtonGroup_6ysvb")
 
 [node name="Any" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="2" unique_id=1457088269]
-button_group = SubResource("ButtonGroup_pkwxh")
+button_group = SubResource("ButtonGroup_6ysvb")
 
 [node name="Old" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="3" unique_id=423896336]
-button_group = SubResource("ButtonGroup_pkwxh")
+button_group = SubResource("ButtonGroup_6ysvb")
 
 [node name="Popular" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="4" unique_id=34668795]
-button_group = SubResource("ButtonGroup_pkwxh")
+button_group = SubResource("ButtonGroup_6ysvb")
 
 [node name="LoadingIcon5" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/FilterBlocker" parent_id_path=PackedInt32Array(1968674659, 1161231320) index="0" unique_id=1782587914]
-material = SubResource("ShaderMaterial_082wr")
+material = SubResource("ShaderMaterial_wt277")
 
 [node name="Timeline" parent="Content/MainTabs" unique_id=692063504 instance=ExtResource("32_aqo04")]
 visible = false

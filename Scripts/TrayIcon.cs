@@ -54,7 +54,7 @@ public partial class TrayIcon : StatusIndicator
 		menu = GetNode<PopupMenu>(Menu);
 		menu.IdPressed += HandleMenu;
 #if GODOT_WINDOWS
-		GetWindow().CloseRequested += Minimise;
+		GetWindow().CloseRequested += OnCloseAttempt;
 		GetTree().AutoAcceptQuit = false;
 #endif
 		restartFlags ??= [];
@@ -77,6 +77,20 @@ public partial class TrayIcon : StatusIndicator
 		if (Bootstrap.cmdLineArgs.Contains("--start-minimised"))
 			Minimise();
 	}
+
+	public override void _ExitTree()
+	{
+		if (minimised)
+			Unminimise();
+#if GODOT_WINDOWS
+		GetWindow().CloseRequested -= Minimise;
+		GetTree().AutoAcceptQuit = true;
+#endif
+		RefreshTimerController.OnHourChanged -= TryAutoRestart;
+		menu.IdPressed -= HandleMenu;
+		Visible = false;
+	}
+
 	static int runtimeFPS = 60;
 
 	private void OnConfigChanged(string section, string key, JsonValue value)
@@ -147,6 +161,18 @@ public partial class TrayIcon : StatusIndicator
 		}
 	}
 
+	void OnCloseAttempt()
+	{
+		if(AppConfig.Get("advanced", "use_tray", true))
+		{
+			Minimise();
+		}
+		else
+		{
+			GetTree().Quit();
+		}
+	}
+
 	void Minimise()
 	{
 		if (!minimised)
@@ -213,16 +239,5 @@ public partial class TrayIcon : StatusIndicator
 				Visible = false;
 		}
 		window.GrabFocus();
-	}
-
-	public override void _ExitTree()
-	{
-		if (minimised)
-			Unminimise();
-		GetWindow().CloseRequested -= Minimise;
-		GetTree().AutoAcceptQuit = true;
-		RefreshTimerController.OnHourChanged -= TryAutoRestart;
-		menu.IdPressed -= HandleMenu;
-		Visible = false;
 	}
 }

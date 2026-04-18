@@ -85,19 +85,20 @@ public readonly record struct RatingData(float fortitude, float offense, float r
 		var accountProfile = account.GetProfile(FnProfileTypes.AccountItems);
 		var accountItems = accountProfile.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged");
 
-		if (!account.isOwned)
-		{
-			//since the highest schematic can make 2x copies of the weapon, assume the highest schematic PL is the highest obtained Weapon Power
-			return accountItems
-				.Select(item => item.CalculateRating())
-				.OrderDescending()
-				.FirstOrDefault();
-		}
+		//if (!account.isOwned)
+		//{
+		//	//since the highest schematic can make 2x copies of the weapon, assume the highest schematic PL is the highest obtained Weapon Power
+		//	return accountItems
+		//		.Select(item => item.CalculateRating())
+		//		.OrderDescending()
+		//		.FirstOrDefault();
+		//}
 
-		var backpackProfile = account.GetProfile(FnProfileTypes.Backpack);
-		var backpackItems = backpackProfile?.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [];
+		//var backpackProfile = account.GetProfile(FnProfileTypes.Backpack);
+		//var backpackItems = backpackProfile?.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [];
 
-		var backpackPowerLevels = backpackItems.Union(accountItems)
+		//var backpackPowerLevels = backpackItems.Union(accountItems)
+		var backpackPowerLevels = accountItems
 			.Select(item => item.CalculateRating())
 			.OrderDescending()
 			.ToArray();

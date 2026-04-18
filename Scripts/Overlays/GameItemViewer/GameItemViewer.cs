@@ -253,13 +253,13 @@ public partial class GameItemViewer : ModalWindow
 
 			tabBar.SetTabHidden(heroTab, false);
 
-			int tier = item.template.Tier;
+			//int tier = item.template.Tier;
 			var heroItems = item.template.GetHeroAbilities();
 			heroPerkEntry.SetAbility(heroItems[0], false);
-			heroCommanderPerkEntry.SetAbility(heroItems[1], tier < 2);
+			heroCommanderPerkEntry.SetAbility(heroItems[1], false);
 			for (int i = 0; i < 3; i++)
 			{
-				heroAbilityEntries[i].SetAbility(heroItems[i + 2], tier <= i);
+				heroAbilityEntries[i].SetAbility(heroItems[i + 2], false);
 			}
 			if (item.template["UnlocksTeamPerk"]?.ToString() is string teamPerk)
 			{
