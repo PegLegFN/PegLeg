@@ -8,6 +8,9 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	public delegate void MissionCompleteIfAlertEventHandler(bool complete);
 	[Signal]
 	public delegate void IsToDoEventHandler(bool todo);
+
+	[Export]
+	public bool ignoreLevelCap = false;
 	[Export]
 	MissionEntry missionEntry;
 	[Export]
@@ -80,13 +83,13 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 		{
 			//single level
 			missionPowerLabel.Text = mission.PowerLevel.ToString();
-			levelLabel.Text = mainItem?.template?.CanBeLeveled == true ? $"Lv {mainItem.ResolveDesiredLevel()}" : (items[0].quantity > 1 ? $"x{items[0].quantity}" : "");
+			levelLabel.Text = mainItem?.template?.CanBeLeveled == true ? $"Lv {(ignoreLevelCap ? mainItem.DesiredLevel : mainItem.ResolveDesiredLevel())}" : (items[0].quantity > 1 ? $"x{items[0].quantity}" : "");
 		}
 		else
 		{
 			//double level
 			missionPowerLabel.Text = mission.PowerLevel.ToString()+" x2";
-			levelLabel.Text = mainItem?.template?.CanBeLeveled == true ? $"Lv {mainItem.ResolveDesiredLevel()}\nLv {items[1].ResolveDesiredLevel()}" : "";
+			levelLabel.Text = mainItem?.template?.CanBeLeveled == true ? $"Lv {(ignoreLevelCap ? mainItem.DesiredLevel : mainItem.ResolveDesiredLevel())}\nLv {(ignoreLevelCap ? items[1].DesiredLevel : items[1].ResolveDesiredLevel())}" : "";
 		}
 		missionPowerLabel.Visible = true;
 		levelLabel.Visible = !string.IsNullOrWhiteSpace(levelLabel.Text);

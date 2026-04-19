@@ -197,6 +197,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	[Export]
 	public bool packImageAsSubtype = true;
 	[Export]
+	public bool ignoreLevelCap = false;
+	[Export]
 	public bool defaultClearIconToNull;
 	[Export]
 	string placeholderItem;
@@ -380,7 +382,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		if (displayItem.DesiredLevel > 0)
 		{
 			int desiredLevel = displayItem.DesiredLevel;
-			level = displayItem.ResolveDesiredLevel();
+			level = ignoreLevelCap ? desiredLevel : displayItem.ResolveDesiredLevel();
 			tier = ((level - 1) / 10) + 1;
 			EmitSignalUncappedVisible(level < desiredLevel);
 			EmitSignalUncappedLevelTextChanged($"{levelTextPrefix}{desiredLevel}");
