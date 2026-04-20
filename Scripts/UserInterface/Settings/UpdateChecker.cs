@@ -141,22 +141,30 @@ public partial class UpdateChecker : Control
 		}
 		try
 		{
+            var updatePath = Helpers.GlobalisePath($"user://Updates/Update-{latestRelease.Value.Version}.msi");
+			try
+			{
+				using var overlay = LoadingOverlay.CreateToken();
+				if (!FileAccess.FileExists(updatePath))
+				{
+					using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
+					{
+						await asset.DownloadTo(fileStream, overlay);
+					}
+					await Helpers.WaitForTimer(1);
+				}
+			}
+			catch (Exception ex)
+			{
+				GD.PushError("Error when downloading desktop update:\n"+ex);
+				await GenericConfirmationWindow.ShowError("An error occured when downloading the update");
+				return;
+			}
+			await GenericConfirmationWindow.ShowInfo("The Update has been downloaded. PegLeg will close, and the \"Updates\" folder will be opened. Run the .msi file to Install the Update", "Update Downloaded");
 			OS.ShellOpen(asset.browser_download_url);
-			await GenericConfirmationWindow.ShowError("The installer is being downloaded in your browser. Running it will install the update", "Download Started     ");
+			GetTree().Quit();
 			/* Disabled until I figure out how to run MSI installers from within PegLeg
-            var updatePath = Helpers.GlobalisePath("user://update.msi");
             var batchPath = Helpers.GlobalisePath("user://update.bat");
-            using (var overlay = LoadingOverlay.CreateToken())
-            {
-                if (!FileAccess.FileExists(updatePath))
-                {
-                    using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
-                    {
-                        await asset.DownloadTo(fileStream, overlay);
-                    }
-                    await Helpers.WaitForTimer(1);
-                }
-            }
             using (var batFile = FileAccess.Open(batchPath, FileAccess.ModeFlags.Write))
             {
                 batFile.StoreString("""

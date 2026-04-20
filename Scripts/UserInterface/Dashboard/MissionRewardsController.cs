@@ -337,7 +337,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			.ThenBy(r => itemSelector(r).sortingTemplate?.Type == "AccountResource")
 			.ThenBy(r => -itemSelector(r).sortingTemplate.RarityLevel)
 			.ThenBy(r => OrderByType(itemSelector(r).sortingTemplate), StringComparer.InvariantCulture)
-			.ThenBy(r => -itemSelector(r).attributes?["level"]?.GetValue<int>() ?? 0)
+			.ThenBy(r => -itemSelector(r).DesiredLevel)
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName)
 			.ThenBy(r => itemSelector(r).sortingTemplate != itemSelector(r).template)
