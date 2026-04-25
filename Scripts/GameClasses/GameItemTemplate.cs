@@ -535,6 +535,30 @@ public partial class GameItemTemplate
 		return rarityId + "_" + tierId;
 	}
 
+	public string GetTemplatePrefix(bool includeRarity = false)
+	{
+		string tid = TemplateId;
+		foreach (var tier in tierIds)
+		{
+			if (tid.EndsWith($"_{tier.ToLower()}"))
+			{
+				tid = tid[..^4];
+				break;
+			}
+		}
+		if(includeRarity)
+			return tid;
+		foreach (var rarity in rarityIds)
+		{
+			if (tid.EndsWith($"_{rarity.ToLower()}"))
+			{
+				tid = tid[..^(rarity.Length + 1)];
+				break;
+			}
+		}
+		return tid;
+	}
+
 	GameItemTemplate[] heroAbilities;
 	public GameItemTemplate[] GetHeroAbilities()
 	{
@@ -779,8 +803,8 @@ public partial class GameItemTemplate
 
 		List<string> tags =
 		[
-			DisplayName,
-            //Description,
+			$"hidetag_{DisplayName}",
+			//$"hidetag_{Description}",
             Rarity ?? (assumeUncommon ? "Uncommon" : null),
 			Type,
 			SubType,
@@ -793,10 +817,9 @@ public partial class GameItemTemplate
 			foreach (var ability in abilities)
 			{
 				if (!ability?.DisplayName?.EndsWith('+') ?? false)
-				{
 					tags.Add(ability.DisplayName);
-					//tags.Add(ability.Description);
-				}
+				//if (ability["PreferredQuickbarSlot"] is null)
+				//	tags.Add($"hidetag_{ability.Description}");
 			}
 		}
 		if (GetTeamPerk() is GameItemTemplate teamPerk)

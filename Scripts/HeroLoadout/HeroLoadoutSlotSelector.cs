@@ -154,6 +154,11 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 			crewMembers[$"followerslot{i + 1}"] = selectionTarget.attributes["crew_members"]?[$"followerslot{i + 1}"]?
 				.Deserialize<GameAccount.LoadoutBlueprintHero>(Helpers.JsonOptions.Fields).ResolveHeroUUID(profile) ?? "";
 		}
+		for (int i = 0; i < 3; i++)
+		{
+			crewMembers[$"defenderslot{i + 1}"] = selectionTarget.attributes["crew_members"]?[$"defenderslot{i + 1}"]?
+				.Deserialize<GameAccount.LoadoutBlueprintDefender>(Helpers.JsonOptions.Fields).ResolveDefenderUUID(profile) ?? "";
+		}
 		newAttributes["crew_members"] = crewMembers;
 		if (profile.GetFirstTemplateItem(selectionTarget.attributes["team_perk"]?.ToString()) is GameItem tPerk)
 			newAttributes["team_perk"] = tPerk.uuid;

@@ -124,7 +124,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 
 		currentMission?.UpdateRewardNotifications(true);
 		if (toDoListContent is not null)
-			toDoListContent.Visible = GameAccount.ActiveAccount.isOwned;
+			toDoListContent.Visible = !ignoreAccountStatus && GameAccount.ActiveAccount.isOwned;
 	}
 
 	IRecyclableElementProvider<GameMission> missionProvider;
@@ -210,7 +210,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 			//"Item Id: " + item.templateId,
 		];
 		if (mission.searchTags.Count > 0)
-			tooltipDescriptions.Add("Search Tags: " + mission.searchTags.Select(n => n.ToString()).Except([currentMission.DisplayName]).ToArray().Join(", "));
+			tooltipDescriptions.Add("Search Tags: " + mission.searchTags.Select(n => n.ToString()).Where(t => !t.StartsWith("hidetag_")).ToArray().Join(", "));
 
 		EmitSignalTooltipChanged(
 			CustomTooltip.GenerateSimpleTooltip(

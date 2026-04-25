@@ -389,7 +389,7 @@ public static partial class PLSearch
 						if (target["searchTags"] is JsonArray tagArray)
 						{
 							string checkString = item.meta.ToString();
-							comparisonTrue = tagArray.Any(t => CheckString(t?.ToString().ToLower(), checkString.ToLower()));
+							comparisonTrue = tagArray.Any(t => CheckString(ParseTag(t?.ToString().ToLower()), checkString.ToLower()));
 						}
 						if (item.inverted)
 							comparisonTrue = !comparisonTrue;
@@ -420,7 +420,7 @@ public static partial class PLSearch
 						}
 						else if (target["searchTags"] is JsonArray tagArray)
 						{
-							comparisonTrue = tagArray.Any(t => t?.ToString().Contains(checkString, StringComparison.CurrentCultureIgnoreCase) ?? false);
+							comparisonTrue = tagArray.Any(t => ParseTag(t?.ToString().ToLower())?.Contains(checkString, StringComparison.CurrentCultureIgnoreCase) ?? false);
 						}
 						if (item.inverted)
 							comparisonTrue = !comparisonTrue;
@@ -443,6 +443,16 @@ public static partial class PLSearch
 		output += "final result: " + currentState.overallResult;
 		return currentState.overallResult;
 	}
+
+	static string ParseTag(string tag)
+	{
+		if (tag is null)
+			return null;
+		if (tag.StartsWith("hidetag_") && tag.Length > 8)
+			return tag[8..];
+		return tag;
+	}
+
 	static string Indent(int level)
 	{
 		string indentText = "";

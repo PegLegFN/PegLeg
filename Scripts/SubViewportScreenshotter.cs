@@ -38,10 +38,14 @@ public partial class SubViewportScreenshotter : SubViewport
 		activeNamedScreenshotters.Remove(uniqueName);
 	}
 
-	void QueueRender()
+	void QueueRender() => QueueRenderTask().StartTask();
+	async Task QueueRenderTask()
 	{
 		if (matchSize is not null)
 		{
+			matchSize.Size = Vector2.Zero;
+			await Helpers.WaitForFrame();
+			await Helpers.WaitForFrame();
 			var targetSize = matchSize.Size * matchSize.Scale;
 			Size = (Vector2I)targetSize;
 		}
@@ -65,7 +69,7 @@ public partial class SubViewportScreenshotter : SubViewport
 
 	public async Task<Image> CaptureScreenshot()
 	{
-		QueueRender();
+		await QueueRenderTask();
 		await Helpers.WaitForFrame();
 		await Helpers.WaitForFrame();
 		return GetTexture().GetImage();

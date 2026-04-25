@@ -338,11 +338,6 @@ public partial class SurvivorLoadoutInterface : Node
 
 		GameItem[] filteredItems = accountItems.GetItems(recycleFilter);
 
-		foreach (var item in filteredItems)
-		{
-			await item.SetCollected();
-		}
-
 		loadingToken.Dispose();
 
 		var recycleItems = await SimpleItemSelector.OpenMultiSelector(filteredItems, SimpleItemSelector.RecycleConfig);

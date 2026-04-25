@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_7kpq3"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="5_16t0b"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7kpq3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16t0b"]
 resource_local_to_scene = true
 shader = ExtResource("2_13deq")
 shader_parameter/ControlSize = Vector2(96, 96)
@@ -26,12 +26,13 @@ shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("3_16t0b")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
 
 [node name="RewardEntry" unique_id=1479818569 instance=ExtResource("1_7nwdj")]
 custom_minimum_size = Vector2(96, 96)
 
 [node name="TextureRect" parent="." index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_7kpq3")
+material = SubResource("ShaderMaterial_16t0b")
 
 [node name="RightIcon" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="0" unique_id=2033524404]
 custom_minimum_size = Vector2(24, 24)
@@ -42,6 +43,12 @@ custom_minimum_size = Vector2(24, 24)
 [node name="AmountLabel" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="4" unique_id=476859936]
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 30
+
+[node name="NotificationLabel" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="1" unique_id=1542411967]
+scale = Vector2(1.5, 1.5)
+
+[node name="CollectableIcon" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="2" unique_id=463839468]
+scale = Vector2(2, 2)
 
 [node name="PowerLevelIndicator" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="4" unique_id=123897073 instance=ExtResource("5_16t0b")]
 layout_mode = 0

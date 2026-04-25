@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="4_tj077"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_oo5m0"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="7_qcb58"]
+[ext_resource type="Texture2D" uid="uid://ddjxkaoe8stlj" path="res://Images/InterfaceIcons/T-Icon-ST-CollectionBook-128.png" id="8_w2xcd"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="9_4i2dj"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="10_1eq7g"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="11_tkmrp"]
@@ -94,7 +95,6 @@ horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="NotificationLabel" type="Label" parent="Overlays" unique_id=1542411967]
-visible = false
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 29.0
@@ -105,6 +105,43 @@ theme_override_font_sizes/font_size = 24
 text = " ! "
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CollectableIcon" type="TextureRect" parent="Overlays" unique_id=463839468]
+self_modulate = Color(0.53098965, 0.9850764, 1, 1)
+material = ExtResource("9_4i2dj")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -8.0
+offset_right = 8.0
+offset_bottom = 16.0
+grow_horizontal = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset_ratio = Vector2(0.5, 0)
+mouse_filter = 2
+texture = ExtResource("8_w2xcd")
+expand_mode = 1
+
+[node name="NotificationLabel" type="Label" parent="Overlays/CollectableIcon" unique_id=1985518224]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -7.955
+offset_top = -1.105
+offset_right = 1.0450001
+offset_bottom = 12.895
+grow_horizontal = 0
+rotation = -0.1309
+scale = Vector2(0.635, 0.635)
+pivot_offset_ratio = Vector2(0.77, 0.145)
+theme_override_colors/font_outline_color = Color(0, 0.61666656, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = " ! "
+horizontal_alignment = 2
 
 [node name="InteractableIcon" type="TextureRect" parent="Overlays" unique_id=51579903]
 material = ExtResource("9_4i2dj")
@@ -140,6 +177,7 @@ componentList = ExtResource("13_4i2dj")
 [connection signal="IconChanged" from="." to="TextureRect" method="SetShaderTexture" binds= ["MainIcon"]]
 [connection signal="InteractableChanged" from="." to="Overlays/InteractableIcon" method="set_visible"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
+[connection signal="IsCollectable" from="." to="Overlays/CollectableIcon" method="set_visible"]
 [connection signal="IsHero" from="." to="TextureRect" method="SetShaderBool" binds= ["IsHero"]]
 [connection signal="IsPack" from="." to="TextureRect" method="SetShaderBool" binds= ["IsPack"]]
 [connection signal="IsSchematic" from="." to="TextureRect" method="SetShaderBool" binds= ["IsSchematic"]]

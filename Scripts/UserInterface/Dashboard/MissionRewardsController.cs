@@ -290,12 +290,16 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			//.Reverse().OrderBy(_=>true)
 			;
 	}
+
 	public static IOrderedEnumerable<MissionRewardPair> OrderByDBPower(IEnumerable<MissionRewardPair> pairs)
 	{
 		return pairs
 			//.Reverse()
 			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenBy(r => -r.mission.PowerLevel)
+			.ThenBy(r => -r.mission.TheaterIdx)
+			.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
+			.ThenBy(r => OrderByMissionNameDB(r.mission.missionGenerator), StringComparer.InvariantCultureIgnoreCase)
 			//.ThenBy(r => r.mission.Guid)
 			//.Reverse().OrderBy(_=>true)
 			;
@@ -336,7 +340,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			))
 			.ThenBy(r => itemSelector(r).sortingTemplate?.Type == "AccountResource")
 			.ThenBy(r => -itemSelector(r).sortingTemplate.RarityLevel)
-			.ThenBy(r => OrderByType(itemSelector(r).sortingTemplate), StringComparer.InvariantCulture)
+			.ThenBy(r => OrderByItemType(itemSelector(r).sortingTemplate), StringComparer.InvariantCultureIgnoreCase)
 			.ThenBy(r => -itemSelector(r).DesiredLevel)
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName)
@@ -524,7 +528,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	}
 
 	//todo: user configurable sorting rules
-	static string OrderByType(GameItemTemplate template) => template?.Type switch
+	static string OrderByItemType(GameItemTemplate template) => template?.Type switch
 	{
 		"Hero" => "000000",
 		"Worker" when template.SubType is null => "00000Z",
@@ -533,6 +537,22 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		"AccountResource" when template.Name.Contains("reagent_alteration", StringComparison.OrdinalIgnoreCase) => "000ZZZ",
 		"AccountResource" => "00ZZZZ",
 		_ => template?.Type,
+	};
+
+	static string OrderByMissionNameDB(GameItemTemplate template) => template?.DisplayName switch
+	{
+		"Fight Category 4 Storm" => "000000",
+		"Fight Category 3 Storm" => "000001",
+		"Fight Category 2 Storm" => "000002",
+		"Ride The Lightning" => "000010",
+		"Repair the Shelter" => "000020",
+		"Resupply" => "000020",
+		"Retrieve the Data" => "000025",
+		"Refuel the Homebase" => "000030",
+		"Fight the Storm" => "000033",
+		"Elimenate and Collect" => "000040",
+		"Destroy the Encampments" => "000050",
+		_ => template?.DisplayName,
 	};
 
 	void ClearMissions()

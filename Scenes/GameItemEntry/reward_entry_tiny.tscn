@@ -1,29 +1,64 @@
-[gd_scene load_steps=3 format=3 uid="uid://cg2qqkx3wm41t"]
+[gd_scene format=3 uid="uid://cg2qqkx3wm41t"]
 
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="1_an1m2"]
-[ext_resource type="Material" uid="uid://3nw1g0lbs4qq" path="res://Sh_Materials/ItemRewardMatSmall.tres" id="2_m1m3a"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_m1m3a"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_w03cp"]
 
-[node name="RewardEntry" instance=ExtResource("1_an1m2")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1h6rj"]
+resource_local_to_scene = true
+shader = ExtResource("2_m1m3a")
+shader_parameter/ControlSize = Vector2(32, 32)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("3_w03cp")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+
+[node name="RewardEntry" unique_id=1679564155 instance=ExtResource("1_an1m2")]
 custom_minimum_size = Vector2(32, 32)
 offset_right = 32.0
 offset_bottom = 32.0
 preventInteractability = true
 
-[node name="TextureRect" parent="." index="0"]
-material = ExtResource("2_m1m3a")
+[node name="TextureRect" parent="." index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_1h6rj")
 
-[node name="RightIcon" parent="Overlays/AmountContainer" index="0"]
+[node name="RightIcon" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="0" unique_id=2033524404]
 visible = false
 custom_minimum_size = Vector2(12, 12)
 
-[node name="LeftIcon" parent="Overlays/AmountContainer" index="2"]
+[node name="LeftIcon" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="2" unique_id=1152878404]
 visible = false
 custom_minimum_size = Vector2(12, 12)
 
-[node name="AmountLabel" parent="Overlays/AmountContainer" index="4"]
+[node name="AmountLabel" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="4" unique_id=476859936]
 theme_override_font_sizes/font_size = 16
 
-[node name="InteractableIcon" parent="Overlays" index="2"]
+[node name="CollectableIcon" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="2" unique_id=463839468]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="InteractableIcon" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="3" unique_id=51579903]
 custom_minimum_size = Vector2(12, 12)
 offset_left = -12.0
 offset_bottom = 12.0

@@ -64,7 +64,7 @@ public partial class RefreshTimerController : Node
 		if (section == "advanced")
 		{
 			if (key == "offset_refresh")
-				offset = AppConfig.Get("advanced", "offset_refresh", true) ? 0 : targetDelayedOffset;
+				offset = AppConfig.Get("advanced", "offset_refresh", true) ? targetDelayedOffset : 0;
 			if (key == "time_travel")
 				timeTravelDays = AppConfig.Get("advanced", "time_travel", 0);
 		}

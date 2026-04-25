@@ -1294,7 +1294,7 @@ public partial class GameAccount
 			{
 				var supportGuid = loadoutCrew[$"defenderslot{i + 1}"]?.ToString();
 				var supportDefender = supportGuid is not null ? loadoutSlot.profile.GetItem(supportGuid) : null;
-				crewMembers[$"followerslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintDefender.FromDefender(supportDefender?.template), Helpers.JsonOptions.Fields);
+				crewMembers[$"defenderslot{i + 1}"] = JsonSerializer.SerializeToNode(LoadoutBlueprintDefender.FromDefender(supportDefender?.template), Helpers.JsonOptions.Fields);
 			}
 		}
 

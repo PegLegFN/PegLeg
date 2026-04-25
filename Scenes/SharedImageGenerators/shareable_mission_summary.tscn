@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://dx5ueh2xxydys" path="res://Scenes/MissionEntry/mission_reward_entry_shareable.tscn" id="8_0ubh0"]
 [ext_resource type="Script" uid="uid://b0xkvg3grgfya" path="res://Scripts/UserInterface/Dashboard/AverageVbuckCaclulator.cs" id="8_h68g4"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="9_2noju"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="9_6jjmv"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="9_ay20g"]
-[ext_resource type="Texture2D" uid="uid://d3xmte5l018rl" path="res://Images/InterfaceIcons/T_WavePattern_01.png" id="10_6jjmv"]
 [ext_resource type="PackedScene" uid="uid://cjmsu4rc7s4a0" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers_shareable.tscn" id="10_h68g4"]
 [ext_resource type="Script" uid="uid://bosi6o0a0u7eb" path="res://Scripts/UserInterface/Dashboard/DashboardSuperchargerController.cs" id="11_fkcfa"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="12_qu71t"]
@@ -44,9 +44,10 @@ script = ExtResource("1_4dqrj")
 matchSize = NodePath("PegLegWatermark")
 
 [node name="PegLegWatermark" parent="MissionSummaryViewport" unique_id=1716002338 instance=ExtResource("2_h68g4")]
-offset_right = 750.0
-offset_bottom = 371.0
+offset_right = 701.0
+offset_bottom = 358.0
 scale = Vector2(2, 2)
+size_flags_vertical = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MissionSummaryViewport/PegLegWatermark" unique_id=1827186954]
 layout_mode = 2
@@ -74,6 +75,7 @@ text = "V-Bucks only available to Founders"
 horizontal_alignment = 1
 
 [node name="LegSurvivors" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer" unique_id=1929304913 instance=ExtResource("3_6jjmv")]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 theme_type_variation = &"Panel5PadB"
 targetTemplateId = "Worker:workerbasic_sr_t01"
@@ -171,7 +173,7 @@ material = SubResource("ShaderMaterial_rymeg")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 0
-texture = ExtResource("10_6jjmv")
+texture = ExtResource("9_6jjmv")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer/MarginContainer/EmptyContent/HBoxContainer" unique_id=432736894]

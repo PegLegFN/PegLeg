@@ -463,7 +463,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
             //"Item Id: " + item.templateId,
         ];
 		if (displayItem.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
-			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Except([name]).ToArray().Join(", "));
+			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Where(t=>!t.StartsWith("hidetag_")).ToArray().Join(", "));
 
 		if (displayItem.template is null)
 			tooltipDescriptions[0] = "Err: Missing Template";
@@ -512,8 +512,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			var currentDura = displayItem.attributes?["durability"]?.GetValue<float>() ?? maxDura;
 			EmitSignalDurabilityValue(currentDura / maxDura);
 		}
-
-		EmitSignalIsCollectable(!(displayItem.isCollectedCache ?? true));
+		
+		EmitSignalIsCollectable(!(displayItem.IsCollected() ?? true));
 		EmitSignalCanBeLeveledChanged(displayItem.template?.HasLevel == true);
 		EmitSignalLevelTextChanged($"{levelTextPrefix}{level}");
 		EmitSignalLevelChanged(level);

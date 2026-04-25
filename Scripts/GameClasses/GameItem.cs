@@ -303,6 +303,8 @@ public class GameItem
 					_searchTags.Add(pickupTag);
 			}
 		}
+		//if (IsCollected() == true)
+		//	_searchTags.Add("Collected");
 		foreach (var extra in extraTags)
 		{
 			_searchTags.Add(extra);
@@ -430,7 +432,7 @@ public class GameItem
 		return [];
 	}
 
-	public async void SetRewardNotification(GameAccount account = null, bool force = false)
+	public void SetRewardNotification(GameAccount account = null, bool force = false)
 	{
 		account ??= GameAccount.ActiveAccount;
 		if (profile is not null || (!force && isSeenLocal != null))
@@ -442,19 +444,18 @@ public class GameItem
 		if (!account.isOwned)
 			return;
 
-		bool exists = await SetCollected(account) ?? true;
+		bool hideNotif = IsCollected(account) ?? true;
 
-		if (!exists)
+		if (!hideNotif && account.GetProfile(FnProfileTypes.AccountItems) is GameProfile accountItems)
 		{
-			var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
-			exists = accountItems
-			.GetItems(template.Type, item =>
-				item.template?.DisplayName == (template?.DisplayName ?? "nope") &&
-				item.template?.RarityLevel >= template?.RarityLevel)
-			.Any();
+			hideNotif = accountItems
+				.GetFirstItem(template.Type, item =>
+					item.template?.DisplayName == (template?.DisplayName ?? "nope") &&
+					item.template?.RarityLevel >= template?.RarityLevel
+				) is not null;
 		}
 
-		if (!exists)
+		if (!hideNotif)
 			SetSeenLocal(false);
 	}
 
@@ -489,58 +490,57 @@ public class GameItem
 		await backpack.PerformOperation("StorageTransfer", content);
 	}
 
-	public bool? isCollectedCache { get; private set; }
-	public async Task<bool?> SetCollected(GameAccount account = null)
+	public bool? IsCollected(GameAccount account = null)
 	{
+		//if(isCollectedCache is not null && account == GameAccount.ActiveAccount || account == null)
+		//	return isCollectedCache;
+
 		if (template?.IsCollectable != true)
 			return null;
 
-		account ??= profile?.account ?? GameAccount.ActiveAccount;
-		await account.GetProfile(template.CollectionProfile).Query();
-
+		account ??= GameAccount.ActiveAccount;
+		if(!account.isOwned)
+			return null;
 		var collectionBook = account.GetProfile(template.CollectionProfile);
-		if (template.Type == "Worker")
+		if (collectionBook == null) 
+			return null;
+
+		var prefix = template.GetTemplatePrefix(true);
+
+		if (template.Type != "Worker")
+			return collectionBook.GetFirstItem(template.Type, item => item.templateId.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) is not null;
+
+		if (template.Name.StartsWith("workerhalloween"))
 		{
-			if (template.Name.StartsWith("workerhalloween"))
-			{
-				//with costume party attendees, 3 of each rarity can be collected
-				return collectionBook
-					.GetItems("Worker", item =>
-						item.template.Name.StartsWith("workerhalloween") &&
-						item.template.Rarity == template.Rarity)
-					.Length < 3;
-			}
-			else if (template.SubType is not null)
-			{
-				//with mythic lead survivors, one of each unique lead can be collected
-				if (template.Rarity == "Mythic")
-					return collectionBook
-						.GetItems("Worker", item => item.templateId == templateId)
-						.Any();
-				//with regular lead survivors, one of each subtype-rarity combo can be collected
-				else
-					return collectionBook
-						.GetItems("Worker", item =>
-							item.template.SubType == template.SubType &&
-							item.template.Rarity == template.Rarity)
-						.Any();
-			}
-			//with regular survivors, one of personality-rarity combo can be collected
+			//with costume party attendees, 3 of each rarity can be collected
 			return collectionBook
 				.GetItems("Worker", item =>
-					item.attributes?["personality"]?.ToString() == (attributes?["personality"]?.ToString() ?? "nope") &&
-					item.template.Rarity == template.Rarity)
-				.Any();
+					item.template.Name.StartsWith("workerhalloween", StringComparison.OrdinalIgnoreCase) &&
+					item.template.Rarity == template.Rarity
+				).Length < 3;
 		}
-		var result = collectionBook
-			.GetItems(template.Type, item => item.templateId == templateId)
-			.Any();
-		if (isCollectedCache != result)
+		
+		if (template.SubType is not null)
 		{
-			isCollectedCache = result;
-			NotifyChanged();
+			//with mythic lead survivors, one of each unique lead can be collected
+			if (template.Rarity == "Mythic")
+				return collectionBook.GetFirstItem("Worker", item => item.templateId.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) is not null;
+			//with regular lead survivors, one of each subtype-rarity combo can be collected
+			else
+				return collectionBook
+					.GetFirstItem("Worker", item =>
+						item.template.SubType == template.SubType &&
+						item.template.Rarity == template.Rarity
+					) is not null;
 		}
-		return result;
+
+		//with regular survivors, one of personality-rarity combo can be collected
+		var personality = (Personality ?? "nope");
+		return collectionBook
+			.GetFirstItem("Worker", item =>
+				item.Personality == personality &&
+				item.template.Rarity == template.Rarity
+			) is not null;
 	}
 
 	public float GetHeroStat(string stat, int givenLevel = 0, int givenTier = 0)

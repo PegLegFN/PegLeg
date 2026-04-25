@@ -1021,7 +1021,10 @@ public partial class GameMission
 	void GenerateSearchTags()
 	{
 		searchTags = [];
-		searchTags.Add(DisplayName);
+		searchTags.Add($"hidetag_{DisplayName}");
+		searchTags.Add($"PL-{PowerLevel}");
+		searchTags.Add(Location);
+		searchTags.Add(TheaterName);
 		if (IsFourPlayer)
 			searchTags.Add("Group");
 		if (alertModifiers.Length > 0)
@@ -1055,9 +1058,6 @@ public partial class GameMission
 		}
 		if (alertFulfillments.Length > 0)
 			searchTags.Add("Fulfillment");
-		searchTags.Add(PowerLevel);
-		searchTags.Add(Location);
-		searchTags.Add(TheaterName);
 	}
 
 	public bool PlayableBy(GameAccount account)
