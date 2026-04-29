@@ -261,7 +261,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 			return CurrentConfig.unselectableTintColor;
 		if (!IsSelected(item))
 			return Colors.Transparent;
-		if (item?.IsCollected() ?? false)
+		if (item?.IsCollected() == false)
 			return CurrentConfig.collectionTintColor;
 		return CurrentConfig.selectedTintColor;
 	}
@@ -272,7 +272,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 			return CurrentConfig.unselectableMarkerTex;
 		if (!IsSelected(item))
 			return null;
-		if (item?.IsCollected() ?? false)
+		if (item?.IsCollected() == false)
 			return CurrentConfig.collectionMarkerTex;
 		return CurrentConfig.selectedMarkerTex;
 	}

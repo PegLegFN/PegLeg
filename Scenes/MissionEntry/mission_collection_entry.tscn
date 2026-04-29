@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_qnyc5"]
 [ext_resource type="PackedScene" uid="uid://dbrrcnce14w8h" path="res://Scenes/GameItemEntry/mission_collection_highlight_item.tscn" id="2_8t80l"]
 [ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="3_f2nuh"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="3_lw2j7"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="5_f2nuh"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="6_3sm56"]
 
@@ -14,6 +15,15 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_023hd"]
+shader = ExtResource("3_lw2j7")
+shader_parameter/inset = 0.0
+shader_parameter/shade = 0.0
+shader_parameter/shadeAlpha = 0.6000000285
+shader_parameter/base = 0.0
+shader_parameter/scalar = 2.0
+shader_parameter/power = 1.5
 
 [node name="MissionCollectionEntry" type="MarginContainer" unique_id=599808066 node_paths=PackedStringArray("missionEntry", "itemEntries")]
 custom_minimum_size = Vector2(220, 30)
@@ -81,6 +91,7 @@ text = "T"
 horizontal_alignment = 1
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer/HBoxContainer" unique_id=609254393]
+material = SubResource("ShaderMaterial_023hd")
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 mouse_filter = 2

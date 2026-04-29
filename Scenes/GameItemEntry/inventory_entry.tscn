@@ -68,7 +68,7 @@ border_width_bottom = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yfccu"]
 shader = ExtResource("10_acofu")
-shader_parameter/time = 0.935
+shader_parameter/time = 0.25
 
 [node name="InventoryEntry" type="MarginContainer" unique_id=262566370 node_paths=PackedStringArray("selectionGraphics")]
 custom_minimum_size = Vector2(90, 135)
@@ -196,11 +196,32 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [node name="TextureRect2" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/Space/Collectable" unique_id=326691565]
+visible = false
+self_modulate = Color(0.53098965, 0.9850764, 1, 1)
 material = ExtResource("15_cxgs0")
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("11_seqqo")
 expand_mode = 1
+
+[node name="NotificationLabel" type="Label" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/Space/Collectable/TextureRect2" unique_id=296435351]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -7.955
+offset_top = -1.105
+offset_right = 1.0450001
+offset_bottom = 12.895
+grow_horizontal = 0
+rotation = -0.1309
+scale = Vector2(0.635, 0.635)
+pivot_offset_ratio = Vector2(0.77, 0.145)
+theme_override_colors/font_outline_color = Color(0, 0.61666656, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = " ! "
+horizontal_alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1228603064]
 layout_mode = 2
@@ -217,17 +238,18 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/MarginContainer" unique_id=749024753]
-custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="Subtype" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=260806156]
 material = ExtResource("15_cxgs0")
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 texture = ExtResource("7_4uv0h")
-expand_mode = 3
+expand_mode = 5
 
 [node name="Tersiary" type="TextureRect" parent="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1362726478]
 material = ExtResource("15_cxgs0")
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 texture = ExtResource("7_4uv0h")
 expand_mode = 3

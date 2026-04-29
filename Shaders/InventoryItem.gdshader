@@ -37,6 +37,9 @@ void fragment() {
 	vec2 adaptedUV = adaptToAspect(ControlSize, vec2(0.5, VerticalShift), 1.0/TEXTURE_PIXEL_SIZE, UV, Fit);
 	vec2 backgroundUV = adaptToAspect(ControlSize, vec2(0.5), vec2(1.0), UV, false);
 	vec4 texCol = texture(TEXTURE, adaptedUV);
+	if(adaptedUV.y > 1.0 || adaptedUV.y < 0.0){
+		texCol.a = 0.0;
+	}
 	vec4 backgroundCol = modulate;
 
 	if(IsHero)

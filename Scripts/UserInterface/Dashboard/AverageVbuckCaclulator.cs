@@ -55,7 +55,9 @@ public partial class AverageVbuckCaclulator : Control
 		var today = DateTime.UtcNow.Date;
 		weekAverage.Text = weekText.Replace("{x}", CalcAverage(today.AddDays(-6)).ToString());
 		monthAverage.Text = monthText.Replace("{x}", CalcAverage(today.AddDays(-29)).ToString());
-		seasonAverage.Text = seasonText.Replace("{x}", CalcAverage(RefreshTimerController.GetLastRefreshTime(RefreshTimeType.Event)).ToString());
+		var eventRefresh = RefreshTimerController.GetLastRefreshTime(RefreshTimeType.Event);
+		GD.Print("LastEvent: " + eventRefresh);
+		seasonAverage.Text = seasonText.Replace("{x}", CalcAverage(eventRefresh).ToString());
 	}
 
 	int CalcAverage(DateTime startDate)

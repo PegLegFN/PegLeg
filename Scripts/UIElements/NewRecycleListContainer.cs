@@ -24,9 +24,11 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	[Export]
 	Vector2 spacing = new(5, 5);
 	[Export]
+	Vector4 padding = new(0, 0, 0, 0);//todo: implement padding to skip having a margincontainer parent
+	[Export]
 	Vector2 shift = new(0.5f, 0.5f);
 	[Export]
-	Vector2 extendViewportBounds = new(100,100);//todo: extend the effective bounds of the viewport by this amount, to compensate for elastic scrolling on mobile
+	Vector2 extendViewportBounds = new(100,100);
 	[Export]
 	bool debug;
 

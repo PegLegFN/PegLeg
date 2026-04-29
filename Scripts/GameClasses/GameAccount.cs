@@ -895,10 +895,8 @@ public partial class GameAccount
 
 		float LookupWorkers(string squadId)
 		{
-			var matchingWorkers = equippedWorkerItems
-				.Where(item => item.attributes["squad_id"].ToString() == squadId);
-			var stats = matchingWorkers.Select(item => item.CalculateSurvivorRating()).ToArray();
-			var stat = stats.Sum();
+			var matchingWorkers = equippedWorkerItems.Where(item => item.attributes["squad_id"].ToString() == squadId);
+			var stat = matchingWorkers.Sum(item => item?.CalculateSurvivorRating() ?? 0);
 			//GD.Print($"Squad:{squadId}:{stat}");
 			return stat;
 		}

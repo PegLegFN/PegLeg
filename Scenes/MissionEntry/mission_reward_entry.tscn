@@ -11,9 +11,10 @@
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="8_xxymo"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="9_2fn55"]
 [ext_resource type="Texture2D" uid="uid://b3m1n41ikas8t" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Bell_128.png" id="9_qt2jc"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="10_n4hef"]
+[ext_resource type="Texture2D" uid="uid://ddjxkaoe8stlj" path="res://Images/InterfaceIcons/T-Icon-ST-CollectionBook-128.png" id="11_2fn55"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="11_40ktf"]
 [ext_resource type="Texture2D" uid="uid://0dsm5rygx6qr" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_64.png" id="11_xa8gw"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="13_mcydf"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="13_xa8gw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4hef"]
@@ -23,6 +24,15 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_023hd"]
+shader = ExtResource("13_mcydf")
+shader_parameter/inset = 0.0
+shader_parameter/shade = 0.0
+shader_parameter/shadeAlpha = 0.6000000285
+shader_parameter/base = 0.0
+shader_parameter/scalar = 2.0
+shader_parameter/power = 1.5
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xxymo"]
 bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 3
@@ -30,7 +40,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xxymo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xfu10"]
 resource_local_to_scene = true
 shader = ExtResource("8_xxymo")
 shader_parameter/ControlSize = Vector2(26, 26)
@@ -114,6 +124,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n4hef")
 
 [node name="Icon" type="TextureRect" parent="MissionEntry/HBoxContainer/HBoxContainer" unique_id=189692744]
+material = SubResource("ShaderMaterial_023hd")
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -184,7 +195,7 @@ compactifyAmount = true
 levelTextPrefix = " Lv "
 
 [node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" index="0" unique_id=68041144]
-material = SubResource("ShaderMaterial_xxymo")
+material = SubResource("ShaderMaterial_xfu10")
 
 [node name="Label" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1772908320]
 layout_mode = 2
@@ -192,6 +203,35 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Shadowshard Shadowshard Shadowshard "
 text_overrun_behavior = 3
+
+[node name="CollectableIcon" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=689731058]
+self_modulate = Color(0.53098965, 0.9850764, 1, 1)
+material = SubResource("ShaderMaterial_023hd")
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("11_2fn55")
+expand_mode = 3
+
+[node name="NotificationLabel" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/CollectableIcon" unique_id=184197745]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -7.955
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 12.895
+grow_horizontal = 0
+rotation = -0.1309
+pivot_offset_ratio = Vector2(1, 1)
+theme_override_colors/font_outline_color = Color(0, 0.61666656, 1, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+text = " ! "
+horizontal_alignment = 2
 
 [node name="ItemLv" type="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=554594560]
 layout_mode = 2
@@ -210,7 +250,7 @@ outlinePadding = 3.0
 
 [node name="Checkmark" type="TextureRect" parent="MissionEntry/HBoxContainer" unique_id=453039118]
 self_modulate = Color(0, 1, 0.26666665, 1)
-material = ExtResource("10_n4hef")
+material = SubResource("ShaderMaterial_023hd")
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 tooltip_text = "You've already completed this Mission and claimed this Mission Alert Reward"
@@ -221,6 +261,7 @@ expand_mode = 3
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer3" unique_id=1373976760]
+material = SubResource("ShaderMaterial_023hd")
 layout_mode = 2
 texture = ExtResource("9_qt2jc")
 expand_mode = 3
@@ -276,6 +317,7 @@ expand_mode = 1
 [connection signal="TooltipChanged" from="MissionEntry" to="Button" method="set_tooltip_text"]
 [connection signal="BookmarkChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer3/TextureRect" method="set_visible"]
 [connection signal="CanBeLeveledChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/ItemLv" method="set_visible"]
+[connection signal="IsCollectable" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/CollectableIcon" method="set_visible"]
 [connection signal="LevelTextChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/ItemLv" method="set_text"]
 [connection signal="NameChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
 [connection signal="RarityChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/ColorRect" method="set_self_modulate"]

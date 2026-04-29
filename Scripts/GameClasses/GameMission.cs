@@ -1089,11 +1089,11 @@ public partial class GameMission
 		}
 	}
 
-	public void UpdateRewardNotifications(bool force = false)
+	public void UpdateRewardNotifications()
 	{
-		foreach (var item in allItems)
+		foreach (var item in alertRewardItems)
 		{
-			item.SetRewardNotification(null, force);
+			item.SetRewardNotification();
 		}
 	}
 

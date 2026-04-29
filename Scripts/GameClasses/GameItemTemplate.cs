@@ -542,17 +542,21 @@ public partial class GameItemTemplate
 		{
 			if (tid.EndsWith($"_{tier.ToLower()}"))
 			{
-				tid = tid[..^4];
+				tid = tid[..^3];
 				break;
 			}
 		}
-		if(includeRarity)
+		if (tid.Contains("_ore_"))
+			tid = tid.Replace("_ore_", "_");
+		if (tid.Contains("_crystal_"))
+			tid = tid.Replace("_crystal_", "_");
+		if (includeRarity)
 			return tid;
 		foreach (var rarity in rarityIds)
 		{
-			if (tid.EndsWith($"_{rarity.ToLower()}"))
+			if (tid.EndsWith($"_{rarity.ToLower()}_"))
 			{
-				tid = tid[..^(rarity.Length + 1)];
+				tid = tid[..^(rarity.Length)];
 				break;
 			}
 		}

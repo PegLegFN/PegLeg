@@ -1,15 +1,58 @@
-[gd_scene load_steps=3 format=3 uid="uid://fcp6vypncmbj"]
+[gd_scene format=3 uid="uid://fcp6vypncmbj"]
 
 [ext_resource type="PackedScene" uid="uid://byv58kd1qnkw5" path="res://Scenes/GameItemEntry/reward_entry.tscn" id="1_sj0kl"]
-[ext_resource type="Material" uid="uid://3nw1g0lbs4qq" path="res://Sh_Materials/ItemRewardMatSmall.tres" id="2_ntug5"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_ro8di"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_b8xvh"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="4_b8xvh"]
 
-[node name="RewardEntry" instance=ExtResource("1_sj0kl")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cedtd"]
+resource_local_to_scene = true
+shader = ExtResource("2_ro8di")
+shader_parameter/ControlSize = Vector2(48, 48)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("3_b8xvh")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8upk5"]
+shader = ExtResource("4_b8xvh")
+shader_parameter/inset = 0.250000011875
+shader_parameter/shade = 0.0
+shader_parameter/shadeAlpha = 1.0
+shader_parameter/base = 0.0
+shader_parameter/scalar = 2.0
+shader_parameter/power = 2.0
+
+[node name="RewardEntry" unique_id=1696346027 instance=ExtResource("1_sj0kl")]
 custom_minimum_size = Vector2(48, 48)
 offset_right = 48.0
 offset_bottom = 48.0
 
-[node name="TextureRect" parent="." index="0"]
-material = ExtResource("2_ntug5")
+[node name="TextureRect" parent="." index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_cedtd")
 
-[node name="AmountLabel" parent="Overlays/AmountContainer" index="4"]
+[node name="AmountLabel" parent="Overlays/AmountContainer" parent_id_path=PackedInt32Array(814566120) index="4" unique_id=476859936]
 theme_override_font_sizes/font_size = 16
+
+[node name="NotificationLabel" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="1" unique_id=1542411967]
+offset_right = 14.0
+offset_bottom = 22.0
+theme_override_font_sizes/font_size = 20
+
+[node name="CollectableIcon" parent="Overlays" parent_id_path=PackedInt32Array(894561848) index="2" unique_id=463839468]
+material = SubResource("ShaderMaterial_8upk5")
+anchors_preset = -1
+scale = Vector2(1.1, 1.1)
+pivot_offset_ratio = Vector2(0.5, 0.75)

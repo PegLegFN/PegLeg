@@ -122,7 +122,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 			!ignoreAccountStatus
 		);
 
-		currentMission?.UpdateRewardNotifications(true);
+		currentMission?.UpdateRewardNotifications();
 		if (toDoListContent is not null)
 			toDoListContent.Visible = !ignoreAccountStatus && GameAccount.ActiveAccount.isOwned;
 	}
@@ -294,6 +294,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 
 		if (alertRewardLayout is not null && alertRewardParent is not null)
 		{
+			currentMission.UpdateRewardNotifications();
 			var rewards = fullItems ?
 				currentMission.alertRewardItems :
 				[.. currentMission.alertRewardItems.Where(r =>

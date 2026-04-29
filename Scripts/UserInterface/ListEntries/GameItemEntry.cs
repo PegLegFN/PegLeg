@@ -199,6 +199,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	[Export]
 	public bool ignoreLevelCap = false;
 	[Export]
+	public bool ignoreCollectable = false;
+	[Export]
 	public bool defaultClearIconToNull;
 	[Export]
 	string placeholderItem;
@@ -394,7 +396,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		}
 
 		int bonusMaxLevel = displayItem.attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;
-		int maxLevel = Mathf.Max(tier * 10, 1) + bonusMaxLevel;
+		int maxLevel = Mathf.Clamp(tier * 10, 1, 50) + bonusMaxLevel;
 		int minLevel = Mathf.Max(maxLevel - 10, 1);
 		float levelProgress = minLevel == maxLevel ? 1 : ((float)level - minLevel) / (maxLevel - minLevel);
 
@@ -513,7 +515,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			EmitSignalDurabilityValue(currentDura / maxDura);
 		}
 		
-		EmitSignalIsCollectable(!(displayItem.IsCollected() ?? true));
+		EmitSignalIsCollectable(!(displayItem.IsCollected() ?? true) && !ignoreCollectable);
 		EmitSignalCanBeLeveledChanged(displayItem.template?.HasLevel == true);
 		EmitSignalLevelTextChanged($"{levelTextPrefix}{level}");
 		EmitSignalLevelChanged(level);

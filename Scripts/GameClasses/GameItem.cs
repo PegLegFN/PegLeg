@@ -250,7 +250,7 @@ public class GameItem
 				{
 					var template = GameItemTemplate.Get(c["itemType"].ToString());
 					var choiceItem = template.CreateInstance(c["quantity"].GetValue<int>(), c["attributes"]?.AsObject().SafeDeepClone());
-					choiceItem.SetRewardNotification(null, true);
+					choiceItem.SetRewardNotification();
 					return choiceItem;
 				})
 				.ToArray();
@@ -432,11 +432,11 @@ public class GameItem
 		return [];
 	}
 
-	public void SetRewardNotification(GameAccount account = null, bool force = false)
+	public void SetRewardNotification(GameAccount account = null)
 	{
-		account ??= GameAccount.ActiveAccount;
-		if (profile is not null || (!force && isSeenLocal != null))
+		if (profile is not null)
 			return;
+		account ??= GameAccount.ActiveAccount;
 
 		if (!IsSeen)
 			SetSeenLocal(true);
@@ -450,8 +450,8 @@ public class GameItem
 		{
 			hideNotif = accountItems
 				.GetFirstItem(template.Type, item =>
-					item.template?.DisplayName == (template?.DisplayName ?? "nope") &&
-					item.template?.RarityLevel >= template?.RarityLevel
+					item.template?.DisplayName == (template.DisplayName ?? "nope") &&
+					item.template?.RarityLevel >= template.RarityLevel
 				) is not null;
 		}
 
@@ -535,7 +535,10 @@ public class GameItem
 		}
 
 		//with regular survivors, one of personality-rarity combo can be collected
-		var personality = (Personality ?? "nope");
+		var personality = Personality;
+		//if personality is null, cant determine if collected
+		if (personality is null)
+			return null;
 		return collectionBook
 			.GetFirstItem("Worker", item =>
 				item.Personality == personality &&
