@@ -292,7 +292,7 @@ public static class ExternalCosmetics
 
 		lock (imageCache)
 		{
-			if (imageCache.TryGetImage(identifier, out var cachedImage))
+			if (imageCache.TryGetWeakRef<ImageTexture>(identifier, out var cachedImage))
 				return cachedImage;
 		}
 

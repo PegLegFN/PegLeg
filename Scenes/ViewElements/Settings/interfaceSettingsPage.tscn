@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://b55c5fvpjgjs2"]
 
+[ext_resource type="Script" uid="uid://be6rky1ok4flt" path="res://Scripts/UserInterface/Settings/InterfaceSettings.cs" id="1_2xq05"]
 [ext_resource type="Script" uid="uid://yme0qwqj3yob" path="res://Scripts/Config/ConfigFloatSwitchHook.cs" id="1_comot"]
 [ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="2_v5lx2"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="3_e7whk"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_dnpv7"]
 
-[node name="InterfacePage" type="VBoxContainer" unique_id=342944049]
+[node name="InterfacePage" type="VBoxContainer" unique_id=342944049 node_paths=PackedStringArray("preferredScreenOptions")]
 theme_override_constants/separation = 6
+script = ExtResource("1_2xq05")
+preferredScreenOptions = NodePath("HBoxContainer/OptionButton")
 
 [node name="FPS" type="HBoxContainer" parent="." unique_id=121239265]
 layout_mode = 2
@@ -72,6 +75,25 @@ theme_type_variation = &"RightCheckButton"
 text = " Unlimited"
 alignment = 1
 metadata/zone = "c"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1962974185]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1726963180]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Target Display"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer" unique_id=1530537235]
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 2
+popup/item_0/text = "Auto"
+popup/item_0/id = 0
+popup/item_1/text = "Display 1"
+popup/item_1/id = 1
 
 [node name="UIScale" type="HBoxContainer" parent="." unique_id=230136301]
 layout_mode = 2

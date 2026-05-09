@@ -38,24 +38,14 @@ public static partial class Helpers
 		group.AllowUnpress = allowUnpress;
 	}
 
-	public static bool TryGetImage(this Dictionary<string, WeakRef> refDict, string key, out ImageTexture image)
+	public static bool TryGetWeakRef<T>(this Dictionary<string, WeakRef> refDict, string key, out T resource) where T : Resource
 	{
-		if (refDict.TryGetValue(key, out var wRef) && wRef?.GetRef().Obj is ImageTexture cachedTexture)
+		if (refDict.TryGetValue(key, out var wRef) && wRef?.GetRef().Obj is T cachedResource)
 		{
-			image = cachedTexture;
+			resource = cachedResource;
 			return true;
 		}
-		image = null;
-		return false;
-	}
-	public static bool TryGetImage(this WeakRef wRef, out ImageTexture image)
-	{
-		if (wRef?.GetRef().Obj is ImageTexture cachedTexture)
-		{
-			image = cachedTexture;
-			return true;
-		}
-		image = null;
+		resource = null;
 		return false;
 	}
 

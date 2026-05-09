@@ -289,6 +289,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 	public float imageResolutionScale = 1;
 	public string displayName { get; private set; } = null;
 	public string displayType { get; private set; } = null;
+	public string primaryTemplate { get; private set; } = null;
 	string imageDisplayAssetPath = null;
 	Vector2 resourceShift = new(0.5f, 0.5f);
 	bool resourceFit = false;
@@ -337,18 +338,23 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 		imageDisplayAssetPath = entryData["fallbackDisplayAsset"]?.ToString();
 
 		JsonObject[] allItems = entryData.MergeCosmeticItems()?.Select(n => n.AsObject())?.ToArray() ?? [];
+		string firstTemplate = null;
 
 		foreach (var item in allItems)
 		{
 			string type = item["type"]?["backendValue"]?.ToString();
 			if (type is not null && !itemTypes.Contains(type))
+			{
+				firstTemplate ??= $"{type}:{item["id"]}";
 				itemTypes.Add(type);
+			}
 		}
 		if (entryData["fallbackGrants"] is JsonArray fallbackItems)
 		{
 			foreach (var item in fallbackItems)
 			{
 				string type = item.ToString().Split(':')[0];
+				firstTemplate ??= item.ToString();
 				if (!itemTypes.Contains(type))
 					itemTypes.Add(type);
 			}
@@ -373,6 +379,7 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 		{
 			PopulateAsItem(entryData, allItems);
 		}
+		primaryTemplate = firstTemplate;
 
 		outDate = entryData["outDate"].AsTime().ToUniversalTime();
 		var resourceRender = entryData["newDisplayAsset"]?["renderImages"]?.AsArray()?.FirstOrDefault()?.AsObject();

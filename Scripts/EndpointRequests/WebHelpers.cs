@@ -15,6 +15,8 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using XmppDotNet.Xmpp.XData;
 using HttpClient = System.Net.Http.HttpClient;
 
 public static class WebHelpers
@@ -26,7 +28,7 @@ public static class WebHelpers
 		{
 			if (plClient is not null)
 				return plClient;
-			plClient = new HttpClient();
+			plClient = new();
 			plClient.DefaultRequestHeaders.Add("User-Agent", $"PegLeg/PegLeg-{AppConfig.PegLegVersion}");
 			return plClient;
 		}
@@ -82,6 +84,15 @@ public static class WebHelpers
 	public static T AddHeader<T>(this T msg, string name, string value) where T : HttpRequestMessage
 	{
 		msg.Headers.Add(name, value);
+		return msg;
+	}
+
+	public static T Accepts<T>(this T msg, params MediaTypeWithQualityHeaderValue[] media) where T : HttpRequestMessage
+	{
+		for (int i = 0; i < media.Length; i++)
+		{
+			msg.Headers.Accept.Add(media[i]);
+		}
 		return msg;
 	}
 
@@ -307,32 +318,51 @@ public static class WebHelpers
 		return response.Content.ReadFromJsonAsync<T>(options);
 	}
 
-	public static async Task<Image> ReadImage(this HttpResponseMessage response)
+	public static async Task<Image> ReadImage(this HttpResponseMessage response) => (await response.ReadImageWithBuffer()).image;
+	public static async Task<(Image image, byte[] buffer)> ReadImageWithBuffer(this HttpResponseMessage response)
 	{
 		var mediaType = response.Content?.Headers?.ContentType?.MediaType;
 		if (!mediaType.StartsWith("image/"))
-			return null;
+			return (null, null);
 		string subtype = mediaType.Split("/")[1];
 		Image image = new();
+		var buffer = await response.Content.ReadAsByteArrayAsync();
 		Error status = subtype switch
 		{
-			"jpeg" => image.LoadJpgFromBuffer(await response.Content.ReadAsByteArrayAsync()),
-			"png" => image.LoadPngFromBuffer(await response.Content.ReadAsByteArrayAsync()),
-			"webp" => image.LoadWebpFromBuffer(await response.Content.ReadAsByteArrayAsync()),
+			"jpeg" => image.LoadJpgFromBuffer(buffer),
+			"png" => image.LoadPngFromBuffer(buffer),
+			"webp" => image.LoadWebpFromBuffer(buffer),
 			_ => Error.CantOpen
 		};
-		if (status == Error.Ok)
-			return image;
-		return null;
+		if (status != Error.Ok)
+			return (null, null);
+		return (image, buffer);
 	}
-
-	public static async Task<bool> CheckForError(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true)
+	public static async Task<(Image image, byte[] buffer)> ReadDownloadImage(this HttpResponseMessage response, MemoryStream stream)
 	{
-		(var res, _) = await response.CheckForErrorJson(showErrorPopup, logError);
-		return res;
+		var mediaType = response.Content?.Headers?.ContentType?.MediaType;
+		if (!mediaType.StartsWith("image/"))
+			return (null, null);
+		string subtype = mediaType.Split("/")[1];
+		Image image = new();
+		
+		var buffer = stream.ToArray();
+		Error status = subtype switch
+		{
+			"jpeg" => image.LoadJpgFromBuffer(buffer),
+			"png" => image.LoadPngFromBuffer(buffer),
+			"webp" => image.LoadWebpFromBuffer(buffer),
+			_ => Error.CantOpen
+		};
+		if (status != Error.Ok)
+			return (null, null);
+		return (image, buffer);
 	}
 
-	public static async Task<(bool, JsonNode)> CheckForErrorJson(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true)
+	public static async Task<bool> CheckForError(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true) =>
+		(await response.CheckForErrorJson(showErrorPopup, logError)).didError;
+
+	public static async Task<(bool didError, JsonNode errorContents)> CheckForErrorJson(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true)
 	{
 		if (response.IsSuccessStatusCode)
 			return (false, null);
@@ -409,3 +439,45 @@ public static class WebHelpers
 		return (true, errorContent);
 	}
 }
+
+//todo: this could be automated with codegen?
+public static class WebMedia
+{
+	public static MediaTypeWithQualityHeaderValue Any { get; private set; } = new("*/*");
+	public static class Application
+	{
+		static string baseType = "application";
+		public static MediaTypeWithQualityHeaderValue Any { get; private set; } = new(baseType + "/*");
+		public static MediaTypeWithQualityHeaderValue Json { get; private set; } = new(baseType + "/json");
+	}
+	public static class Image
+	{
+		static string baseType = "image";
+		public static MediaTypeWithQualityHeaderValue Any { get; private set; } = new(baseType + "/*");
+		public static MediaTypeWithQualityHeaderValue Png { get; private set; } = new(baseType + "/png");
+		public static MediaTypeWithQualityHeaderValue Jpeg { get; private set; } = new(baseType + "/jpeg");
+		public static MediaTypeWithQualityHeaderValue Webp { get; private set; } = new(baseType + "/webp");
+	}
+	public static class Text
+	{
+		static string baseType = "text";
+		public static MediaTypeWithQualityHeaderValue Any { get; private set; } = new(baseType + "/*");
+		public static MediaTypeWithQualityHeaderValue Plain { get; private set; } = new(baseType + "/plain");
+		public static MediaTypeWithQualityHeaderValue Csv { get; private set; } = new(baseType + "/csv");
+		public static MediaTypeWithQualityHeaderValue Html { get; private set; } = new(baseType + "/html");
+	}
+	public static class Video
+	{
+		static string baseType = "video";
+		public static MediaTypeWithQualityHeaderValue Any { get; private set; } = new(baseType + "/*");
+		public static MediaTypeWithQualityHeaderValue Mp4 { get; private set; } = new(baseType + "/mp4");
+		public static MediaTypeWithQualityHeaderValue Webm { get; private set; } = new(baseType + "/webm");
+	}
+	public static class Multipart
+	{
+		static string baseType = "multipart";
+		public static MediaTypeWithQualityHeaderValue Any { get; private set; } = new(baseType + "/*");
+		public static MediaTypeWithQualityHeaderValue FormData { get; private set; } = new(baseType + "/form-data");
+	}
+}
+

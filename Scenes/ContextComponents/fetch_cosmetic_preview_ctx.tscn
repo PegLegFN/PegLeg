@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cqlna1t4gcpy"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_gv0ib"]
+[ext_resource type="Script" uid="uid://chxr3yceptv8" path="res://Scripts/ContextMenu/Components/FetchCosmeticPreviewCtx.cs" id="2_gv0ib"]
+[ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="3_3a8pn"]
+
+[node name="FetchCosmeticIconCtx" unique_id=437618324 instance=ExtResource("1_gv0ib")]
+script = ExtResource("2_gv0ib")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" parent_id_path=PackedInt32Array(16911845) index="0" unique_id=1417089072]
+texture = ExtResource("3_3a8pn")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(650842185) index="1" unique_id=1106396072]
+text = "Fetch Preview"
+
+[connection signal="pressed" from="TextureButton" to="." method="Copy"]

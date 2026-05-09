@@ -91,31 +91,31 @@ static class CatalogRequests
 	//    return eventCache = ProcessShop(EventShopCatalog);
 	//}
 
-	static readonly Dictionary<string, string[]> defaultShops = new()
-	{
-		[FnStorefrontTypes.WeeklyShopCatalog] =
-		[
-			"v2:/8833e6245fe4bf6f0a87e2d248398ec079aac302a1d0b17d036cdd6a1f485d85",
-			"v2:/a3eeb54f8f9d2f32ba2f1769a095a9fa406a5c6f239235a8d810d7263cd727e5",
-			"v2:/485f70bb37ced8eb25c4b4e42302ee5274532823c17091afb486e1879c4ecc16",
-			"v2:/9b91076467e61cf01a3c16e39a18331d2e23d754cdafc860aac0fdd7155615ae",
-			"v2:/365d69d31591ba699bdf2c89730b8fa02883302ac56d1bd43b06d81f2ef25f0e",
-			"v2:/d9fe40e917bf98babee1c239153990efe3e1a568dd0e985c663dbba228eef03f",
-			"v2:/bfd337ddb7380a663929ae0ad03f6cdbff5b562d1639c8c813cb8316b37f83bb",
-			"v2:/d8c8f59ca26294a0192676567f75ee6c3631f96eea201fd14f8cac0c47acfb5c",
-			"v2:/4f1c82dc8fb66fef5a0046fb2163344069b65b6ba64e496939d2fc8e8f779157",
-			"v2:/9af32d7a9a16f864eae99d17542ec08763d118f3ce9c72ad05d5fc5f44586dc1",
-			"v2:/fd2b5edc1839496be18a0cb1ef1bc74c07f391b4448de53d07bb63f695f1763b"
-		],
-		[FnStorefrontTypes.EventShopCatalog] =
-		[
-			"v2:/222374fc7ea9f6ef8eb0b3c20f3a5d7f64f612e9f3435c74e3d51d785739bf9f",
-			"v2:/570ff3bed6fc8a1f7006610dbb6ce9e4bcd244a32caa435a60392460da356c88",
-			"v2:/6633ab8087f2a2e80bdf7a90d06351e7a03b82790cc2e286f4b6851020532ed4",
-			"v2:/5c841be6c7cf1635cca83f2d4c345242c85192bf5beda2af0317e1cc745a3a38",
-			"v2:/bfe19601a5107b1a6ba83ab25ac9fef02ae14b78ee451ab33c6b5218938183c4"
-		]
-	};
+	//static readonly Dictionary<string, string[]> defaultShops = new()
+	//{
+	//	[FnStorefrontTypes.WeeklyShopCatalog] =
+	//	[
+	//		"v2:/8833e6245fe4bf6f0a87e2d248398ec079aac302a1d0b17d036cdd6a1f485d85",
+	//		"v2:/a3eeb54f8f9d2f32ba2f1769a095a9fa406a5c6f239235a8d810d7263cd727e5",
+	//		"v2:/485f70bb37ced8eb25c4b4e42302ee5274532823c17091afb486e1879c4ecc16",
+	//		"v2:/9b91076467e61cf01a3c16e39a18331d2e23d754cdafc860aac0fdd7155615ae",
+	//		"v2:/365d69d31591ba699bdf2c89730b8fa02883302ac56d1bd43b06d81f2ef25f0e",
+	//		"v2:/d9fe40e917bf98babee1c239153990efe3e1a568dd0e985c663dbba228eef03f",
+	//		"v2:/bfd337ddb7380a663929ae0ad03f6cdbff5b562d1639c8c813cb8316b37f83bb",
+	//		"v2:/d8c8f59ca26294a0192676567f75ee6c3631f96eea201fd14f8cac0c47acfb5c",
+	//		"v2:/4f1c82dc8fb66fef5a0046fb2163344069b65b6ba64e496939d2fc8e8f779157",
+	//		"v2:/9af32d7a9a16f864eae99d17542ec08763d118f3ce9c72ad05d5fc5f44586dc1",
+	//		"v2:/fd2b5edc1839496be18a0cb1ef1bc74c07f391b4448de53d07bb63f695f1763b"
+	//	],
+	//	[FnStorefrontTypes.EventShopCatalog] =
+	//	[
+	//		"v2:/222374fc7ea9f6ef8eb0b3c20f3a5d7f64f612e9f3435c74e3d51d785739bf9f",
+	//		"v2:/570ff3bed6fc8a1f7006610dbb6ce9e4bcd244a32caa435a60392460da356c88",
+	//		"v2:/6633ab8087f2a2e80bdf7a90d06351e7a03b82790cc2e286f4b6851020532ed4",
+	//		"v2:/5c841be6c7cf1635cca83f2d4c345242c85192bf5beda2af0317e1cc745a3a38",
+	//		"v2:/bfe19601a5107b1a6ba83ab25ac9fef02ae14b78ee451ab33c6b5218938183c4"
+	//	]
+	//};
 
 	static JsonObject cachedCosmeticLayouts;
 	static SemaphoreSlim cosmeticLayoutSemaphore = new(1);
@@ -584,19 +584,19 @@ static class CatalogRequests
 		FnStorefrontTypes.DailyCosmeticShopCatalog
 	];
 
-	static JsonObject SimplifyStorefront(JsonNode fullStorefront)
-	{
-		var filteredStorefronts = fullStorefront["storefronts"].AsArray().Where(val => relevantStorefronts.Contains(val["name"].ToString()));
-		JsonObject jsonFilteredStorefronts = new()
-		{
-			["expiration"] = fullStorefront["expiration"].ToString()
-		};
-		foreach (var item in filteredStorefronts)
-		{
-			jsonFilteredStorefronts.Add(item["name"].ToString(), item["catalogEntries"].SafeDeepClone());
-		}
-		return jsonFilteredStorefronts;
-	}
+	//static JsonObject SimplifyStorefront(JsonNode fullStorefront)
+	//{
+	//	var filteredStorefronts = fullStorefront["storefronts"].AsArray().Where(val => relevantStorefronts.Contains(val["name"].ToString()));
+	//	JsonObject jsonFilteredStorefronts = new()
+	//	{
+	//		["expiration"] = fullStorefront["expiration"].ToString()
+	//	};
+	//	foreach (var item in filteredStorefronts)
+	//	{
+	//		jsonFilteredStorefronts.Add(item["name"].ToString(), item["catalogEntries"].SafeDeepClone());
+	//	}
+	//	return jsonFilteredStorefronts;
+	//}
 
 	const string fnDashApiPrefix = "https://fortnite-api.com/images/cosmetics/";
 	const string fnDashApiCdnPrefix = "https://cdn.fortnite-api.com/tracks/";
@@ -606,91 +606,53 @@ static class CatalogRequests
 	static readonly Dictionary<string, WeakRef> activeResourceCache = [];
 	static readonly Dictionary<string, JsonObject> activeMetaCache = [];
 
-	public static string LocalCosmeticResourcePath(string serverPath)
+	public static string LocalCosmeticResourcePath(string serverPath) =>
+		$"{imageCacheFolderPath}{LocalCosmeticResourceId(serverPath)}.webp";
+
+	public static string LocalCosmeticResourceId(string serverPath) => serverPath switch
 	{
-		bool isJamTrack = serverPath.StartsWith(fnDashApiCdnPrefix);
-		bool isFNDot = serverPath.StartsWith(fnDotApiPrefix);
-		string localPath = imageCacheFolderPath;
-		if (isFNDot)
-		{
-			localPath += "/" + serverPath.Split('/')[^1] + ".png";
-		}
-		else if (isJamTrack)
-		{
-			localPath += serverPath[fnDashApiCdnPrefix.Length..].Replace("/", "-");
-		}
-		else
-		{
-			localPath += serverPath[fnDashApiPrefix.Length..].Replace("/", "-");
-		}
-		return localPath;
-	}
+		_ when serverPath.StartsWith(fnDotApiPrefix) => serverPath.Split('/')[^1],
+		_ when serverPath.StartsWith(fnDashApiCdnPrefix) => serverPath[fnDashApiCdnPrefix.Length..].Replace("/", "-").Split(".")[0],
+		_ => serverPath[fnDashApiPrefix.Length..].Replace("/", "-").Split(".")[0]
+	};
 
 	const float imageSizeLimit = 325;
 
 	public static ImageTexture GetLocalCosmeticResource(string serverPath, float resolutionScale = 1)
 	{
-		lock (activeResourceCache)
+		if(TryGetCosmeticTexture(LocalCosmeticResourceId(serverPath), resolutionScale) is ImageTexture texture)
 		{
-			if (activeResourceCache.TryGetImage(serverPath, out var cachedTexture))
-				return cachedTexture;
+			texture.ResourcePath = serverPath;
+			return texture;
 		}
+		return null;
+		//lock (activeResourceCache)
+		//{
+		//	if (activeResourceCache.TryGetWeakRef<ImageTexture>(serverPath, out var cachedTexture))
+		//		return cachedTexture;
+		//}
 
-		string localPath = LocalCosmeticResourcePath(serverPath);
+		//Image resourceImage = TryGetCosmeticImage(LocalCosmeticResourcePath(serverPath));
+		//if (resourceImage is null)
+		//	return null;
 
-		if (!FileAccess.FileExists(localPath))
-			return null;
+		//ResizeCosmeticImage(ref resourceImage, resolutionScale);
 
-		//GD.Print("file exists");
-		Image resourceImage = new();
-		using var imageFile = FileAccess.Open(localPath, FileAccess.ModeFlags.ReadWrite);
-		var error = LoadImageWithCtx(resourceImage, imageFile.GetBuffer((long)imageFile.GetLength()), localPath);
-		if (error != Error.Ok)
-			return null;
-		//GD.Print("file loaded");
+		//var imageTex = ImageTexture.CreateFromImage(resourceImage);
+		////imageTex.ResourceName = serverPath;
+		//imageTex.ResourcePath = serverPath;
+		//lock (activeResourceCache)
+		//{
+		//	activeResourceCache[serverPath] = GodotObject.WeakRef(imageTex);
+		//}
 
-		//make a fake modification to change the modified date when the file is disposed
-		imageFile.SeekEnd(-1);
-		byte temp = imageFile.Get8();
-		imageFile.SeekEnd(-1);
-		imageFile.Store8(temp);
-
-		var imageSize = resourceImage.GetSize();
-		var limit = imageSizeLimit * resolutionScale;
-		var startingSize = imageSize;
-		var clampedSize = imageSize;
-		if (clampedSize.X > limit)
-			clampedSize = (Vector2I)((Vector2)clampedSize * (limit / clampedSize.X));
-		if (clampedSize.Y > limit)
-			clampedSize = (Vector2I)((Vector2)clampedSize * (limit / clampedSize.Y));
-		if (imageSize.X != clampedSize.X || imageSize.Y != clampedSize.Y)
-		{
-
-			if (imageSize.X < 1 || imageSize.Y == 1)
-				GD.PushWarning($"Cosmetic Size Error: {startingSize} >> {imageSize}");
-			resourceImage.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
-		}
-
-		var imageTex = ImageTexture.CreateFromImage(resourceImage);
-		//imageTex.ResourceName = serverPath;
-		imageTex.ResourcePath = serverPath;
-		lock (activeResourceCache)
-		{
-			activeResourceCache[serverPath] = GodotObject.WeakRef(imageTex);
-		}
-
-		return imageTex;
+		//return imageTex;
 	}
 
 	public static async Task<ImageTexture> GetCosmeticResource(string serverPath, bool printSuccess = false, float resolutionScale = 1)
 	{
 		if (GetLocalCosmeticResource(serverPath, resolutionScale) is ImageTexture localImageTex)
-		{
-			if (localImageTex is not null)
-				return localImageTex;
-			else
-				GD.Print("NULL LOCAL TEXTURE");
-		}
+			return localImageTex;
 
 		bool isJamTrack = serverPath.StartsWith(fnDashApiCdnPrefix);
 		bool isFNCentral = serverPath.StartsWith(fnDotApiPrefix);
@@ -700,44 +662,33 @@ static class CatalogRequests
 		//    GD.Print("/tracks/" + serverPath[fnapiJamTrackPrefix.Length..]);
 		//    GD.Print(ExternalEndpoints.jamTracksEndpoint);
 		//}
-		string localPath = imageCacheFolderPath;
-		string imageName = "";
-		if (isFNCentral)
-			imageName = serverPath.Split('/')[^1] + ".png";
-		else if (isJamTrack)
-			imageName = serverPath[fnDashApiCdnPrefix.Length..].Replace("/", "-");
-		else
-			imageName = serverPath[fnDashApiPrefix.Length..].Replace("/", "-");
+		string uniqueId = LocalCosmeticResourceId(serverPath);
 
-		if (isFNCentral)
-			localPath += $"/{imageName}";
-		else
-			localPath += imageName;
-
-		GD.PrintRich($"Requesting cosmetic image [url={serverPath}]\"{imageName}\"[/url]");
+		GD.PrintRich($"Requesting cosmetic image [url={serverPath}]\"{uniqueId}\"[/url]");
 		using var result = await WebHelpers.MakeRequest(serverPath).Send();
 		if (await result.CheckForError())
 			return null;
 		if (printSuccess)
 			GD.Print("remote file exists");
 
-		Image resourceImage = new();
-		byte[] imageBuffer = await result.Content.ReadAsByteArrayAsync();
-		var error = LoadImageWithCtx(resourceImage, imageBuffer, localPath);
-		if (error != Error.Ok)
+		Image resourceImage = await result.ReadImage();
+		if (resourceImage is null)
 			return null;
 		if (printSuccess)
 			GD.Print("remote file loaded");
 
-		if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
-			DirAccess.MakeDirAbsolute(imageCacheFolderPath);
+		ResizeCosmeticImage(ref resourceImage, resolutionScale);
+		RegisterCosmeticImage(resourceImage, uniqueId);
 
-		using (var imageFile = FileAccess.Open(localPath, FileAccess.ModeFlags.Write))
-		{
-			imageFile.StoreBuffer(imageBuffer);
-		}
+		var imageTex = TryGetCosmeticTexture(uniqueId);
+		imageTex.ResourcePath = serverPath; 
 
-		var imageSize = resourceImage.GetSize();
+		return imageTex;
+	}
+
+	static void ResizeCosmeticImage(ref Image image, float resolutionScale = 1)
+	{
+		var imageSize = image.GetSize();
 		var limit = imageSizeLimit * resolutionScale;
 		var startingSize = imageSize;
 		var clampedSize = imageSize;
@@ -750,18 +701,79 @@ static class CatalogRequests
 
 			if (imageSize.X < 1 || imageSize.Y == 1)
 				GD.PushWarning($"Cosmetic Size Error: {startingSize} >> {imageSize}");
-			resourceImage.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+			image.Resize(Mathf.Max(clampedSize.X, 1), Mathf.Max(clampedSize.Y, 1));
+		}
+	}
+
+	public static void RegisterCosmeticImage(Image image, string uniqueId, bool writeToFile = true)
+	{
+		if(activeResourceCache.ContainsKey(uniqueId))
+			GD.PushWarning($"Overwriting cosmetic resource \"{uniqueId}\"");
+		if (writeToFile)
+		{
+			if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
+				DirAccess.MakeDirAbsolute(imageCacheFolderPath);
+			using var imageFile = FileAccess.Open($"{imageCacheFolderPath}{uniqueId}.webp", FileAccess.ModeFlags.Write);
+			imageFile.StoreBuffer(image.SaveWebpToBuffer());
+		}
+		lock (activeResourceCache)
+		{
+			activeResourceCache[uniqueId] = GodotObject.WeakRef(image);
+		}
+	}
+
+	public static Image TryGetCosmeticImage(string uniqueId, float resolutionScale = 1)
+	{
+		lock (activeResourceCache)
+		{
+			if (activeResourceCache.TryGetWeakRef<Image>(uniqueId, out var cachedImage))
+				return cachedImage;
 		}
 
-		var imageTex = ImageTexture.CreateFromImage(resourceImage);
-		//imageTex.ResourceName = serverPath;
-		imageTex.ResourcePath = serverPath;
+		var localPath = $"{imageCacheFolderPath}{uniqueId}.webp";
+
+		if (!FileAccess.FileExists(localPath))
+			return null;
+
+		//GD.Print("file exists");
+		Image resourceImage = Image.LoadFromFile(localPath);
+		if (resourceImage is null)
+			return null;
+		//GD.Print("file loaded");
+
+		ResizeCosmeticImage(ref resourceImage, resolutionScale);
+
+		//make a fake modification to change the modified date when the file is disposed
+		using (var imageFile = FileAccess.Open(localPath, FileAccess.ModeFlags.ReadWrite))
+		{
+			imageFile.SeekEnd(-1);
+			byte temp = imageFile.Get8();
+			imageFile.SeekEnd(-1);
+			imageFile.Store8(temp);
+		}
+
+		return resourceImage;
+	}
+
+	public static ImageTexture TryGetCosmeticTexture(string uniqueId, float resolutionScale = 1)
+	{
+		var textureUniqueId = $"{uniqueId}_TEXTURE";
+		lock (activeResourceCache)
+		{
+			if (activeResourceCache.TryGetWeakRef<ImageTexture>(textureUniqueId, out var cachedImageTexture))
+				return cachedImageTexture;
+		}
+
+		var image = TryGetCosmeticImage(uniqueId, resolutionScale);
+		if (image is null)
+			return null;
+
+		var imageTex = ImageTexture.CreateFromImage(image);
 
 		lock (activeResourceCache)
 		{
-			activeResourceCache[serverPath] = GodotObject.WeakRef(imageTex);
+			activeResourceCache[textureUniqueId] = GodotObject.WeakRef(imageTex);
 		}
-
 		return imageTex;
 	}
 
@@ -916,21 +928,21 @@ static class CatalogRequests
 		};
 	}
 
-	static Error LoadImageWithCtx(Image image, byte[] data, string path)
-	{
-		var urlEnding = path.Split(".")[^1].ToLower();
-		switch (urlEnding)
-		{
-			case "png":
-				return image.LoadPngFromBuffer(data);
-			case "webp":
-				return image.LoadWebpFromBuffer(data);
-			case "jpg":
-				return image.LoadJpgFromBuffer(data);
-			default:
-				return Error.Failed;
-		}
-	}
+	//public static Error LoadImageWithCtx(Image image, byte[] data, string path)
+	//{
+	//	var urlEnding = path.Split(".")[^1].ToLower();
+	//	switch (urlEnding)
+	//	{
+	//		case "png":
+	//			return image.LoadPngFromBuffer(data);
+	//		case "webp":
+	//			return image.LoadWebpFromBuffer(data);
+	//		case "jpg":
+	//			return image.LoadJpgFromBuffer(data);
+	//		default:
+	//			return Error.Failed;
+	//	}
+	//}
 
 	public static void CleanCosmeticResourceCache()
 	{
@@ -940,7 +952,7 @@ static class CatalogRequests
 		var cacheFolder = DirAccess.Open(imageCacheFolderPath);
 		DateTime invalidDateTime = DateTime.Now.AddDays(-2); //images are removed if they havent been used in more than 2 days
 		var invalidCacheFilePaths = cacheFolder.GetFiles()
-			.Where(p => p.EndsWith(".png") || p.EndsWith(".webp"))
+			.Where(p => p.EndsWith(".png") || p.EndsWith(".webp") || p.EndsWith(".jpg"))
 			.Select(p => imageCacheFolderPath + "/" + p)
 			.Where(p => DateTime.Parse(Time.GetDatetimeStringFromUnixTime((long)FileAccess.GetModifiedTime(p))).CompareTo(invalidDateTime) < 0);
 

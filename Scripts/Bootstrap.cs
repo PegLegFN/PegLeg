@@ -4,6 +4,7 @@ using System.Collections.Frozen;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
+using System.Xml;
 using FileAccess = Godot.FileAccess;
 
 
@@ -100,18 +101,43 @@ public partial class Bootstrap : Node
 	static bool hasBooted = false;
 	static bool isFirstBoot = false;
 
+	static void PrintCosmo(string tid)
+	{
+		var cosmoUrl = CosmoRequests.GetCosmoURL(tid);
+		GD.PrintRich($"Cosmo Test: [url={cosmoUrl}]\"{tid}\"[/url] ({cosmoUrl})");
+	}
+
 	public override void _Ready()
 	{
 		var window = GetWindow();
 		isFirstBoot = !hasBooted;
 		if (isFirstBoot)
 		{
+			//NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01
+			PrintCosmo("AthenaCharacter:character_glamclaws");
+			PrintCosmo("NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01");
+			//return;
 			window.Mode = Window.ModeEnum.Windowed;
 			window.ContentScaleSize = window.Size = bootSize;
 			window.Transparent = true;
 			window.TransparentBg = true;
 			window.Borderless = true;
 			window.Unfocusable = false;
+
+			AppConfig.PreloadConfig();
+			var preferredScreen = AppConfig.Get("ui", "preferred_screen", -1);
+			GD.Print($"Preferred Screen: {preferredScreen}");
+			if (preferredScreen <= -1)
+			{
+				preferredScreen = DisplayServer.GetScreenFromRect(
+					new(
+						window.GetMousePosition() + window.Position,
+						Vector2.One
+					)
+				);
+				GD.Print($"Auto Screen: {preferredScreen}");
+			}
+			window.CurrentScreen = preferredScreen;
 			window.MoveToCenter();
 		}
 
@@ -257,7 +283,6 @@ public partial class Bootstrap : Node
 
 		loadingContent.Visible = true;
 
-		AppConfig.PreloadConfig();
 		//GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
 
 		//bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();

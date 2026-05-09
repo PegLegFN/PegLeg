@@ -55,7 +55,7 @@ shader_parameter/ApplyCornersToFit = true
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_278xo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lygc2"]
 resource_local_to_scene = true
 shader = ExtResource("6_yu1fs")
 shader_parameter/ControlSize = Vector2(140, 120)
@@ -177,7 +177,7 @@ script = ExtResource("7_yjpnu")
 syncControlSize = true
 
 [node name="CosmeticLoadingIcon" parent="ItemBG" unique_id=1550021752 instance=ExtResource("5_5xuyv")]
-material = SubResource("ShaderMaterial_278xo")
+material = SubResource("ShaderMaterial_lygc2")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0
@@ -497,6 +497,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="Overlays/AlmostAYear" unique_id=1692529766]
 z_index = 2
@@ -580,9 +581,9 @@ expand_mode = 1
 [connection signal="NameChanged" from="." to="DetailsArea/NameBox/VBoxContainer/NameLabel" method="set_text"]
 [connection signal="OldPriceAmount" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice/OriginalPrice" method="set_text"]
 [connection signal="OldPriceVisibility" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice/OriginalPrice" method="set_visible"]
+[connection signal="OutlineChanged" from="." to="ItemBG/Outline" method="set_self_modulate"]
 [connection signal="OutlineChanged" from="." to="DetailsArea/MarginContainer/PriceBox/Control/Control/SlantPanel" method="set_self_modulate"]
 [connection signal="OutlineChanged" from="." to="DetailsArea/MarginContainer/PriceBox/Control/CornerPanel" method="set_self_modulate"]
-[connection signal="OutlineChanged" from="." to="ItemBG/Outline" method="set_self_modulate"]
 [connection signal="OwnedVisibility" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/OwnedLabel" method="set_visible"]
 [connection signal="PriceAmount" from="." to="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice" method="set_text"]
 [connection signal="ReminingTimeVisibility" from="." to="Overlays/VBoxContainer/LeavingTimer/LeavingSoonAlert" method="set_visible"]
