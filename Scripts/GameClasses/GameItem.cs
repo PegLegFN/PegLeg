@@ -235,7 +235,7 @@ public class GameItem
 	public string Personality => attributes?["personality"]?.ToString() is string rawPersonality ? ParseSurvivorAttribute(rawPersonality) : null;
 	public string SetBonus => attributes?["set_bonus"]?.ToString() is string rawSetBonus ? ParseSurvivorAttribute(rawSetBonus) : null;
 	public int Level => attributes?["level"]?.GetValue<int>() ?? 0;
-	public int DesiredLevel => attributes?["desired_level"]?.GetValue<int>() ?? Level;
+	public int DesiredLevel => attributes?["desired_level"]?.GetValue<int>() ?? 0;
 
 	public int ResolveDesiredLevel(GameAccount forAccount = null)
 	{

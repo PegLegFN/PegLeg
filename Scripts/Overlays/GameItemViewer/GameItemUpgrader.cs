@@ -152,10 +152,8 @@ public partial class GameItemUpgrader : Control
 		int tier = currentItem.template.Tier;
 		minLevel = Mathf.Min(level + 1, 50);
 		int maxLevel = currentItem.template.MaxTier * 10;
-		showCores = currentItem.template.Type == "Schematic";
-		isShardable = showCores &&
-			(currentItem.template.SubType ?? "Explosive") != "Explosive" &&
-			(currentItem.template.Category ?? "Trap") != "Trap";
+		showCores = currentItem.template.Type == "Schematic" && (currentItem.template.Category ?? "Trap") != "Trap";
+		isShardable = showCores && (currentItem.template.SubType ?? "Explosive") != "Explosive";
 		canLevel = currentItem.template.CanBeLeveled == true && level < maxLevel;
 		canSupercharge = currentItem.template.CanBeSupercharged == true && level >= 50 && level < 60;
 
@@ -168,7 +166,16 @@ public partial class GameItemUpgrader : Control
 		else if (campaign.GetFirstTemplateItem("HomebaseNode:questreward_evolution") is not null)
 			maxTier = 2;
 		else
-			maxTier = 1;
+			maxTier = 2;
+
+		canLevel &= currentItem.template.Type switch
+		{
+			"Worker" => campaign.GetFirstTemplateItem("HomebaseNode:questreward_feature_survivorlevelup") is not null,
+			"Schematic" => campaign.GetFirstTemplateItem("HomebaseNode:questreward_feature_survivorlevelup") is not null,
+			"Hero" or "Defender" => campaign.GetFirstTemplateItem("HomebaseNode:questreward_feature_herolevelup") is not null,
+			_ => false
+		};
+
 		maxDisplayTier = currentItem.template.MaxTier;
 		maxTier = Mathf.Min(maxTier, maxDisplayTier);
 		capped = level == tier * 10 && maxTier == tier;
@@ -178,6 +185,7 @@ public partial class GameItemUpgrader : Control
 			minLevel -= 1;
 			minTier += 1;
 		}
+		canLevel &= !capped;
 
 		var rarityUp = currentItem.template.TryGetNextRarity();
 
@@ -393,13 +401,8 @@ public partial class GameItemUpgrader : Control
 			costItems[i].Visible = false;
 		}
 
-		for (int i = 0; i < resultCostItems.Length; i++)
-		{
-			if (campaignProfile.SumTemplateItems(resultCostItems[i].templateId) > resultCostItems[i].quantity)
-				continue;
+		if (resultCostItems.Any(cost => campaignProfile.SumTemplateItems(cost.templateId) < cost.quantity))
 			canAfford = false;
-			break;
-		}
 
 		SetButtonEnabled(canAfford);
 		confirmLabel.Text = canAfford ? (tier == targetTier ? "Level Up" : "Evolve") : "Can't Afford";
