@@ -1,9 +1,9 @@
 ### NOTICE
 Although I can assure PegLegs safety at the time of writing, Epics future changes could theoretically cause PegLeg to become unsafe to use while logged in. I have personally encountered this (through work that was unrelated to PegLeg), when a bug on Epics end affecting Party Join Requests resulted in Epic banning anyone who had made a Party Join Request via their web services around that time, myself included. Although this is an unbelievably rare circumstance, now that Epic have set a precedent for such action I feel the need to add this notice. 
 
-There is an extremely unlikely (but not impossible) chance that usage of PegLeg while logged in could result in sanctions being applied to your account, up to and including a complete ban from Epics platforms and services. If you do not believe this is worth the risk, do not log into PegLeg, or any other third-party service uch as Discord Bots
+There is an extremely unlikely (but not impossible) chance that usage of PegLeg while logged in could result in sanctions being applied to your account, up to and including a complete ban from Epics platforms and services. If you do not believe this is worth the risk, do not log into PegLeg, or any other third-party services such as Discord Bots
 
-The [Latest Betas](https://github.com/TomatechGames/PegLeg/releases) have a Lite mode that not need a Login, and therefore has a 0% chance of getting your account banned.
+The [Latest Betas](https://github.com/TomatechGames/PegLeg/releases) have a Lite mode that not need a Login, and therefore are guarenteed to have no risk of getting your account banned.
 
 # PegLeg
 PegLeg is a lightweight and ***unofficial*** companion app for use with Fortnite: Save The World. It essentially aims to recreate the functionality of the Homebase menu without needing the entire game to be running.
