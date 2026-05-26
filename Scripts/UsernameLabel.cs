@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class UsernameLabel : Label
 {
@@ -16,6 +17,13 @@ public partial class UsernameLabel : Label
 
 	private void UpdateAccount()
 	{
-		Text = GameAccount.ActiveAccount?.DisplayName;
+		string displayName = GameAccount.ActiveAccount?.DisplayName;
+		if (AppConfig.Get("interface", "obscure_names", false))
+		{
+			var idx = Array.IndexOf(GameAccount.OwnedAccounts, GameAccount.ActiveAccount);
+			if (idx >= 0)
+				displayName = $"Account #{idx + 1}";
+		}
+		Text = displayName;
 	}
 }

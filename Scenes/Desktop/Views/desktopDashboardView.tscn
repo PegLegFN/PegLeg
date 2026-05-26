@@ -24,10 +24,8 @@ custom_minimum_size = Vector2(720, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_right = -2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1107341100]
 layout_mode = 2
@@ -57,10 +55,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="2" unique_id=1771145246]
+[node name="CheckButton" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="2" unique_id=1980086915]
+visible = true
+custom_minimum_size = Vector2(28, 0)
+
+[node name="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="3" unique_id=1771145246]
 visible = true
 
-[node name="Button2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="3" unique_id=316163759]
+[node name="Button2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="4" unique_id=316163759]
 visible = true
 
 [node name="VirtualTabBar" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="1" unique_id=1243899430]
@@ -85,20 +87,22 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 2
 
-[node name="VBucks" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1333906878 instance=ExtResource("2_b8wcl")]
+[node name="VBucks" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("2_b8wcl")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "AccountResource:currency_hybrid_mtx_xrayllama"
 targetTemplatePrefix = "AccountResource:currency_hybrid_mtx_xrayllama"
 configDependancy = "missions:groupVBucks"
+filterPlayable = NodePath("../../HBoxContainer/CheckButton")
 
-[node name="LegSurvivors" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1954780742 instance=ExtResource("2_b8wcl")]
+[node name="LegSurvivors" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1954780742 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("2_b8wcl")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "Worker:workerbasic_sr_t01"
 targetTemplatePrefix = "Worker:workerbasic_sr_t0"
 titleText = "Legendary Survivors"
 configDependancy = "missions:groupLegSurvivors"
+filterPlayable = NodePath("../../HBoxContainer/CheckButton")
 
 [node name="Control" type="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=2077097802]
 visible = false
@@ -108,8 +112,9 @@ mouse_filter = 2
 [node name="HSeparator" type="HSeparator" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Control" unique_id=1626285031]
 layout_mode = 2
 
-[node name="Notable" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1099693610 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("6_6qpji")]
+[node name="Notable" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1099693610 node_paths=PackedStringArray("filterPower", "excludeRewards") instance=ExtResource("6_6qpji")]
 layout_mode = 2
+filterPower = NodePath("../../HBoxContainer/CheckButton")
 excludeRewards = [NodePath("../LegSurvivors"), NodePath("../VBucks")]
 
 [node name="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer" parent_id_path=PackedInt32Array(1099693610, 1661216227) index="1" unique_id=530096324]

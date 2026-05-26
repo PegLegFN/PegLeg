@@ -74,8 +74,8 @@ public partial class TrayIcon : StatusIndicator
 		runtimeFPS = (int)AppConfig.Get("ui", "fps", 60.0);
 		RegisterResponsiveWindow(mainWindowTag);
 		RefreshTimerController.OnHourChanged += TryAutoRestart;
-		if (Bootstrap.cmdLineArgs.Contains("--start-minimised"))
-			Minimise();
+		if (Bootstrap.StartMinimised)
+			Helpers.Defer(Minimise, 2);
 	}
 
 	public override void _ExitTree()
@@ -187,7 +187,7 @@ public partial class TrayIcon : StatusIndicator
 			}
 			if (!hasShownTutorial)
 			{
-				NotificationManager.Push([tutorialNotif]);
+				NotificationManager.PushOne(tutorialNotif);
 				hasShownTutorial = true;
 			}
 			Visible = true;

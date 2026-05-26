@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class GameAccountEntry : Control
 {
@@ -82,18 +83,25 @@ public partial class GameAccountEntry : Control
 
 	void UpdateAccount()
 	{
-		EmitSignal(SignalName.NameChanged, $"{namePrefix}{currentAccount.DisplayName}");
+		var displayName = currentAccount.DisplayName;
+		if (AppConfig.Get("interface", "obscure_names", false))
+		{
+			var idx = Array.IndexOf(GameAccount.OwnedAccounts, currentAccount);
+			if (idx >= 0)
+				displayName = $"Account #{idx + 1}";
+		}
+		EmitSignal(SignalName.NameChanged, $"{namePrefix}{displayName}");
 		EmitSignal(SignalName.IconChanged, currentAccount.ProfileIcon ?? defaultIcon);
 		EmitSignal(SignalName.AuthenticatedChanged, currentAccount.isAuthed);
 
 		string tooltipText = CustomTooltip.GenerateSimpleTooltip(
-				$" {currentAccount.DisplayName}   ",
-				null,
-				[
-					currentAccount.isAuthed ? "Logged In" : (currentAccount.isOwned ? $"Login Failure:\n\"{currentAccount.loginFailureMessage}\"" : "External")
-				],
-				Colors.Blue.ToHtml()
-			);
+			$" {displayName}   ",
+			null,
+			[
+				currentAccount.isAuthed ? "Logged In" : (currentAccount.isOwned ? $"Login Failure:\n\"{currentAccount.loginFailureMessage}\"" : "External")
+			],
+			Colors.Blue.ToHtml()
+		);
 		EmitSignal(SignalName.TooltipChanged, tooltipText);
 	}
 

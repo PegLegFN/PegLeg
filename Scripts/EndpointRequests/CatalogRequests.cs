@@ -677,8 +677,7 @@ static class CatalogRequests
 		if (printSuccess)
 			GD.Print("remote file loaded");
 
-		ResizeCosmeticImage(ref resourceImage, resolutionScale);
-		RegisterCosmeticImage(resourceImage, uniqueId);
+		RegisterCosmeticImage(ref resourceImage, uniqueId);
 
 		var imageTex = TryGetCosmeticTexture(uniqueId);
 		imageTex.ResourcePath = serverPath; 
@@ -705,17 +704,18 @@ static class CatalogRequests
 		}
 	}
 
-	public static void RegisterCosmeticImage(Image image, string uniqueId, bool writeToFile = true)
+	public static void RegisterCosmeticImage(ref Image image, string uniqueId, float resolutionScale = 1)
 	{
 		if(activeResourceCache.ContainsKey(uniqueId))
 			GD.PushWarning($"Overwriting cosmetic resource \"{uniqueId}\"");
-		if (writeToFile)
-		{
-			if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
-				DirAccess.MakeDirAbsolute(imageCacheFolderPath);
-			using var imageFile = FileAccess.Open($"{imageCacheFolderPath}{uniqueId}.webp", FileAccess.ModeFlags.Write);
-			imageFile.StoreBuffer(image.SaveWebpToBuffer());
-		}
+
+		if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
+			DirAccess.MakeDirAbsolute(imageCacheFolderPath);
+		using var imageFile = FileAccess.Open($"{imageCacheFolderPath}{uniqueId}.webp", FileAccess.ModeFlags.Write);
+		imageFile.StoreBuffer(image.SaveWebpToBuffer());
+
+		ResizeCosmeticImage(ref image, resolutionScale);
+
 		lock (activeResourceCache)
 		{
 			activeResourceCache[uniqueId] = GodotObject.WeakRef(image);
@@ -750,6 +750,11 @@ static class CatalogRequests
 			byte temp = imageFile.Get8();
 			imageFile.SeekEnd(-1);
 			imageFile.Store8(temp);
+		}
+
+		lock (activeResourceCache)
+		{
+			activeResourceCache[uniqueId] = GodotObject.WeakRef(resourceImage);
 		}
 
 		return resourceImage;

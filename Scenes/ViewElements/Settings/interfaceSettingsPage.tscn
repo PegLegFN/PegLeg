@@ -203,6 +203,15 @@ section = "notification"
 key = "on_minimised"
 defaultValue = true
 
+[node name="ObscureNames" type="CheckBox" parent="." unique_id=878228724]
+layout_direction = 3
+layout_mode = 2
+text = "Obscure Account Names"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "ui"
+key = "obscure_names"
+
 [node name="SimpleCosmetics" type="CheckBox" parent="." unique_id=1797446040]
 layout_direction = 3
 layout_mode = 2
@@ -295,6 +304,7 @@ key = "fast_animations"
 [connection signal="ConfigValueChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/HSlider" method="SetValue"]
 [connection signal="UnappliedLabelChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/Label2" method="set_text"]
 [connection signal="pressed" from="NotifSection/NotifScale/Button" to="NotifSection/NotifScale/HSlider" method="ApplyValue"]
+[connection signal="ConfigValueChanged" from="ObscureNames" to="SimpleCosmeticTiles" method="set_visible"]
 [connection signal="ConfigValueChanged" from="SimpleCosmetics" to="SimpleCosmeticTiles" method="set_visible"]
 [connection signal="ConfigValueChanged" from="SimpleShopbackgrounds" to="SimpleCosmeticTiles" method="set_visible"]
 [connection signal="AppliedChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/Button" method="set_disabled"]

@@ -419,17 +419,35 @@ public class GameItem
 			GD.Print(claimNotif);
 			return [.. claimNotif["loot"]["items"]
 				.AsArray()
-				.Select(n =>
-					profile.account
-						.GetProfile(n["itemProfile"].ToString())?
-						.GetItem(n["itemGuid"].ToString())?
-						.Clone(n["quantity"].GetValue<int>()) ??
-					GameItemTemplate.Get(n["itemType"].ToString())?.
-						CreateInstance(n["quantity"].GetValue<int>())
-				)
+				.Select(n =>GetClaimedReward(n, profile.account))
 			];
 		}
 		return [];
+	}
+
+	static GameItem GetClaimedReward(JsonNode itemRewardData, GameAccount account)
+	{
+		int quantity = itemRewardData["quantity"]?.GetValue<int>() ?? 1;
+
+		if (
+			itemRewardData["itemProfile"]?.ToString() is string profileId &&
+			account?.GetProfile(profileId) is GameProfile profile &&
+			itemRewardData["itemGuid"]?.ToString() is string itemId &&
+			profile.GetItem(itemId) is GameItem item
+		)
+		{
+			return item.Clone(quantity);
+		}
+		if(
+			itemRewardData["itemType"]?.ToString() is string templateId &&
+			GameItemTemplate.Get(templateId) is GameItemTemplate template
+		)
+		{
+			return template.CreateInstance(quantity);
+		}
+		if(GameItemTemplate.Get("Token:athena_unrevealedsummerquest") is GameItemTemplate ukTemplate)
+			return ukTemplate.CreateInstance(quantity);
+		return new GameItem(null, quantity);
 	}
 
 	public void SetRewardNotification(GameAccount account = null)

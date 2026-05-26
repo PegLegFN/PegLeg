@@ -53,7 +53,7 @@ public partial class AccountList : Control
 
 	public void PopulateAccounts()
 	{
-		var accounts = GameAccount.OwnedAccounts.Where(a => GameAccount.ActiveAccount != a).ToArray();
+		var accounts = GameAccount.OwnedAccounts.Where(a => !excludeActive || GameAccount.ActiveAccount != a).ToArray();
 		for (int i = 0; i < accounts.Length; i++)
 		{
 			if (pooledAccounts.Count <= i)
@@ -83,10 +83,14 @@ public partial class AccountList : Control
 	async void RemoveAccount(string accountId)
 	{
 		bool hasAuth = false;
+		var targetAccount = GameAccount.GetOrCreateAccount(accountId);
+		if (GameAccount.ActiveAccount == targetAccount)
+		{
+			await GenericConfirmationWindow.ShowError("Cannot remove active account");
+		}
 		using (LoadingOverlay.CreateToken())
 		{
-			var account = GameAccount.GetOrCreateAccount(accountId);
-			hasAuth = await account.Authenticate();
+			hasAuth = await targetAccount.Authenticate();
 		}
 
 		//show confirmation menu

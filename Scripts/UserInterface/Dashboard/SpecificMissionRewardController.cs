@@ -21,7 +21,11 @@ public partial class SpecificMissionRewardController : Control
 	bool configDefault = true;
 	[ExportGroup("Nodes")]
 	[Export]
+	Button filterPlayable;
+	[Export]
 	Label titleLabel;
+	[Export]
+	Label totalLabel;
 	[Export]
 	Label fallbackLabel;
 	[Export]
@@ -44,6 +48,11 @@ public partial class SpecificMissionRewardController : Control
 			var split = configDependancy.Split(':');
 			configSection = split[0];
 			configKey = split[1];
+		}
+		if (filterPlayable is not null)
+		{
+			filterPlayable.Pressed += UpdateMissions;
+			GameAccount.ActiveAccountChanged += UpdateMissions;
 		}
 		GameMission.OnMissionsInvalidated += ClearMissions;
 		GameMission.OnMissionsUpdated += UpdateMissions;
@@ -75,6 +84,8 @@ public partial class SpecificMissionRewardController : Control
 
 	public override void _ExitTree()
 	{
+		if (filterPlayable is not null)
+			GameAccount.ActiveAccountChanged -= UpdateMissions;
 		GameMission.OnMissionsInvalidated -= ClearMissions;
 		GameMission.OnMissionsUpdated -= UpdateMissions;
 		AppConfig.OnConfigChanged -= OnConfigChanged;
@@ -108,7 +119,11 @@ public partial class SpecificMissionRewardController : Control
 		loadingIndicator.Visible = false;
 		rewardParent.Visible = true;
 		var matchingMissions = GameMission.MissionList.Where(m => 
-			m.allItems.Any(MissionRewardValidator)
+			m.allItems.Any(MissionRewardValidator) &&
+			(
+				!(filterPlayable?.ButtonPressed ?? false) ||
+				m.PlayableBy(GameAccount.ActiveAccount)
+			)
 		).ToArray();
 
 		if (hideWhileEmpty)
@@ -118,6 +133,12 @@ public partial class SpecificMissionRewardController : Control
 		else
 		{
 			Visible = true;
+		}
+
+		if(totalLabel is not null)
+		{
+			var matchingItems = matchingMissions.SelectMany(m => m.allItems.Where(MissionRewardValidator));
+			totalLabel.Text = $"x{matchingItems.Sum(i => i.quantity)}";
 		}
 
 		for (int i = 0; i < matchingMissions.Length; i++)

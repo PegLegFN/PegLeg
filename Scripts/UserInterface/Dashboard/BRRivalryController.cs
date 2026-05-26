@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -19,7 +20,7 @@ public partial class BRRivalryController : Control
 	[Export]
 	Control foundationParent;
 	[Export]
-	Range foundationProgress;
+	Godot.Range foundationProgress;
 	[Export]
 	Label foundationValue;
 
@@ -28,9 +29,12 @@ public partial class BRRivalryController : Control
 	[Export]
 	Control iceKingParent;
 	[Export]
-	Range iceKingProgress;
+	Godot.Range iceKingProgress;
 	[Export]
 	Label iceKingValue;
+
+	[Export]
+	Label leaderText;
 
 	string rivalryURL;
 
@@ -126,6 +130,18 @@ public partial class BRRivalryController : Control
 			"Team Ice King: Dual Victories",
 			eventData.IceKing.Current.Notate(),
 			bannerCol: iceKingColor.ToHtml()
+		);
+
+		var diff = Math.Abs(eventData.Foundation.Current - eventData.IceKing.Current);
+		bool foundationLead = eventData.Foundation.Current > eventData.IceKing.Current;
+		var leadingTeam = foundationLead ? "Team Foundation" : "Team Ice King";
+		var leadingCol = foundationLead ? foundationColor : iceKingColor;
+
+		leaderText.Text = $"{leadingTeam} are leading by {diff.Compactify()} rivalry wins";
+		leaderText.TooltipText = CustomTooltip.GenerateSimpleTooltip(
+			$"{leadingTeam}: Leader",
+			diff.Notate(),
+			bannerCol: leadingCol.ToHtml()
 		);
 	}
 

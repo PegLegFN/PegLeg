@@ -564,19 +564,25 @@ public partial class GameAccount
 			if (offline)
 				return false;
 
-			NotificationManager.Push(
-				[
-					new()
-					{
-						header = "Login Failure",
-						icon = ProfileIcon,
-						itemColor = Color.FromHtml("#aa0000"),
-						body=$"""
-                        Could not Login to {DisplayName}, please Login again from the Account Selector
-                        Err: {loginFailureMessage}
-                        """
-					}
-				]
+			string displayName = DisplayName;
+			if (AppConfig.Get("ui", "obscure_names", false))
+			{
+				var idx = Array.IndexOf(OwnedAccounts, this);
+				if (idx >= 0)
+					displayName = $"Account #{idx + 1}";
+			}
+
+			NotificationManager.PushOne(
+				new()
+				{
+					header = "Login Failure",
+					icon = ProfileIcon,
+					itemColor = Color.FromHtml("#aa0000"),
+					body=$"""
+                    Could not Login to {displayName}, please Login again from the Account Selector
+                    Err: {loginFailureMessage}
+                    """
+				}
 			);
 		}
 

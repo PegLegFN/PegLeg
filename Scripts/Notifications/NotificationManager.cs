@@ -29,6 +29,7 @@ public partial class NotificationManager : Control
 	static Queue<NotificationData> notificationQueue = new();
 	static NotificationManager instance;
 
+	public static void PushOne(NotificationData data) => Push([data]);
 	public static void Push(IEnumerable<NotificationData> data)
 	{
 		foreach (var item in data)

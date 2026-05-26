@@ -457,6 +457,9 @@ public partial class Bootstrap : Node
 
 		if (isFirstBoot)
 		{
+			var oldMode = window.Mode;
+			window.Mode = Window.ModeEnum.Windowed;
+			await Helpers.WaitForFrame();
 			window.Size = targetSize;
 			window.ContentScaleSize = targetSize;
 			window.MoveToCenter();
@@ -464,6 +467,8 @@ public partial class Bootstrap : Node
 			window.TransparentBg = true;
 			window.Borderless = false;
 			window.Unfocusable = false;
+			await Helpers.WaitForFrame();
+			window.Mode = oldMode;
 		}
 
 		var iconPath = ProjectSettings.GetSettingWithOverride("application/config/icon").ToString();

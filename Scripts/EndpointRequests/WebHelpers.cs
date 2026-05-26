@@ -15,8 +15,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using XmppDotNet.Xmpp.XData;
 using HttpClient = System.Net.Http.HttpClient;
 
 public static class WebHelpers
@@ -182,7 +180,7 @@ public static class WebHelpers
 			errCode.FirstOrDefault() == "1031"
 		)
 		{
-			GD.Print("token invalid, exiring token and retrying with new token...");
+			GD.Print("token invalid, expiring token and retrying with new token...");
 			msg.BoundAccount.ForceExpireToken();
 			await msg.BoundAccount.Authenticate();
 			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
@@ -375,8 +373,7 @@ public static class WebHelpers
 			if (code == "1031")
 			{
 				GD.Print("token invalid, expiring token");
-				if (boundAccount is not null)
-					boundAccount?.ForceExpireToken();
+				boundAccount?.ForceExpireToken();
 			}
 			else if (code == "1012")
 			{

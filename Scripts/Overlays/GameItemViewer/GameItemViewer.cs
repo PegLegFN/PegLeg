@@ -458,6 +458,8 @@ public partial class GameItemViewer : ModalWindow
 	{
 		if (currentOffer is null)
 			return;
+		var targetOffer = currentOffer;
+		var targetQuantity = currentOfferEntry.currentPurchaseQuantity;
 		var template = currentOffer.itemGrants[0].templateId;
 		bool workaround = false;
 		//workaround |= template.Equals("Token:accountinventorybonus", StringComparison.OrdinalIgnoreCase);
@@ -465,7 +467,12 @@ public partial class GameItemViewer : ModalWindow
 		ShopPurchaseAnimation.PlayAnimation(
 			currentOffer.itemGrants[0].GetTexture(),
 			currentOfferEntry.currentPurchaseQuantity,
-			() => GameAccount.ActiveAccount.PurchaseOffer(currentOffer, workaround ? 1 : currentOfferEntry.currentPurchaseQuantity, workaround),
+			async () =>
+			{
+				var res = await GameAccount.ActiveAccount.PurchaseOffer(targetOffer, workaround ? 1 : targetQuantity, workaround);
+				//targetOffer.NotifyChanged();
+				return res;
+			},
 			workaround
 		);
 		SetWindowOpen(false);

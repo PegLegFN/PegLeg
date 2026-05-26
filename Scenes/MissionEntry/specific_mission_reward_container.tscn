@@ -17,12 +17,13 @@ fill_from = Vector2(1, 0.5)
 fill_to = Vector2(0.5, 0.5)
 metadata/_snap_enabled = true
 
-[node name="SpecificMissionRewardContainer" type="PanelContainer" unique_id=1333906878 node_paths=PackedStringArray("titleLabel", "fallbackLabel", "titleItem", "rewardParent", "loadingIndicator")]
+[node name="SpecificMissionRewardContainer" type="PanelContainer" unique_id=1333906878 node_paths=PackedStringArray("titleLabel", "totalLabel", "fallbackLabel", "titleItem", "rewardParent", "loadingIndicator")]
 custom_minimum_size = Vector2(350, 0)
 theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_ukikw")
 hideWhileEmpty = true
 titleLabel = NodePath("VBoxContainer/TitleItem/HBoxContainer/Title")
+totalLabel = NodePath("VBoxContainer/TitleItem/HBoxContainer/Total")
 fallbackLabel = NodePath("VBoxContainer/TitleItem/HBoxContainer/FallbackName")
 titleItem = NodePath("VBoxContainer/TitleItem")
 rewardEntryScene = ExtResource("2_ukikw")
@@ -100,6 +101,12 @@ theme_override_constants/outline_size = 8
 theme_override_constants/shadow_outline_size = 0
 theme_override_font_sizes/font_size = 20
 text = "Fallback"
+
+[node name="Total" type="Label" parent="VBoxContainer/TitleItem/HBoxContainer" unique_id=699577426]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 16
+text = "x10"
 
 [node name="HFlowContainer" type="Container" parent="VBoxContainer" unique_id=22627370]
 layout_mode = 2

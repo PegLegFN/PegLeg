@@ -433,9 +433,9 @@ public partial class NotificationDispatcher : Node
 
 	public void TestMissionNotif()
 	{
-		NotificationManager.Push([shopNotif with
+		NotificationManager.PushOne(shopNotif with
 		{
 			expires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Daily)
-		}]);
+		});
 	}
 }

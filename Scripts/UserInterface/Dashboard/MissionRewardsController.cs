@@ -373,6 +373,12 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		Func<GameItem, bool> itemPredicate = null;
 		if (notableMode)
 		{
+			missionPredicate = m =>
+			{
+				if (filterPower?.ButtonPressed == true && !m.PlayableBy(GameAccount.ActiveAccount))
+					return false;
+				return true;
+			};
 			itemPredicate = CreateNotableFilter();
 		}
 		else

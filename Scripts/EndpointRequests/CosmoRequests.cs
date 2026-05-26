@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HttpClient = System.Net.Http.HttpClient;
 
 public partial class CosmoRequests
 {
@@ -71,7 +70,7 @@ public partial class CosmoRequests
 		//Image image = await result.ReadDownloadImage(testStream);
 		if (image is null)
 			return null;
-		CatalogRequests.RegisterCosmeticImage(image, uniqueId);
-		return CatalogRequests.TryGetCosmeticImage(uniqueId, 128);
+		CatalogRequests.RegisterCosmeticImage(ref image, uniqueId, 128);
+		return CatalogRequests.TryGetCosmeticImage(uniqueId);
 	}
 }

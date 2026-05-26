@@ -438,13 +438,16 @@ public class PegLegResourceManager
 		{
 			try
 			{
-				jObj = JsonNode.Parse(standardFile.GetAsText()).AsObject();
+				if(standardFile is not null)
+				{
+					jObj = JsonNode.Parse(standardFile.GetAsText()).AsObject();
+				}
 			}
 			catch { }
 		}
-		jObj ??= [];
 		if (LoadResourceFile(resource, allowOverrides, true) is FileAccess overrideFile)
 		{
+			jObj ??= [];
 			using var file = overrideFile;
 			try
 			{
@@ -576,7 +579,7 @@ public class PegLegResourceManager
 	public static JsonObject ExpeditionCriteria => dataSources?["ExpeditionCriteria"];
 
 	static JsonObject magicNumbers;
-	public static JsonObject MagicNumbers => magicNumbers ??= LoadResourceObj("magicNumbers.json") ?? [];
+	public static JsonObject MagicNumbers => (magicNumbers ??= LoadResourceObj("magicNumbers.json")) ?? [];
 
 	//public static bool TryGetDataSource(string dataType, out JsonObject source)
 	//{
