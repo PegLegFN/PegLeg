@@ -66,11 +66,12 @@ public partial class CosmoRequests
 		if (await result.CheckForError())
 			return null;
 
-		Image image = await result.ReadImage();
+		(Image image, byte[] buffer, string type) = await result.ReadImageWithBuffer();
 		//Image image = await result.ReadDownloadImage(testStream);
 		if (image is null)
 			return null;
-		CatalogRequests.RegisterCosmeticImage(ref image, uniqueId, 128);
+
+		CatalogRequests.RegisterCosmeticImageWithBuffer(ref image, buffer, type, uniqueId, 128);
 		return CatalogRequests.TryGetCosmeticImage(uniqueId);
 	}
 }

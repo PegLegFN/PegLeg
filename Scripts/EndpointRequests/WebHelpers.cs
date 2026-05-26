@@ -317,11 +317,11 @@ public static class WebHelpers
 	}
 
 	public static async Task<Image> ReadImage(this HttpResponseMessage response) => (await response.ReadImageWithBuffer()).image;
-	public static async Task<(Image image, byte[] buffer)> ReadImageWithBuffer(this HttpResponseMessage response)
+	public static async Task<(Image image, byte[] buffer, string imageType)> ReadImageWithBuffer(this HttpResponseMessage response)
 	{
 		var mediaType = response.Content?.Headers?.ContentType?.MediaType;
 		if (!mediaType.StartsWith("image/"))
-			return (null, null);
+			return (null, null, null);
 		string subtype = mediaType.Split("/")[1];
 		Image image = new();
 		var buffer = await response.Content.ReadAsByteArrayAsync();
@@ -333,8 +333,8 @@ public static class WebHelpers
 			_ => Error.CantOpen
 		};
 		if (status != Error.Ok)
-			return (null, null);
-		return (image, buffer);
+			return (null, null, null);
+		return (image, buffer, subtype);
 	}
 	public static async Task<(Image image, byte[] buffer)> ReadDownloadImage(this HttpResponseMessage response, MemoryStream stream)
 	{

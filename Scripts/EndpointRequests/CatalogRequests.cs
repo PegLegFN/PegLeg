@@ -9,6 +9,7 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 static class CatalogRequests
 {
@@ -671,13 +672,13 @@ static class CatalogRequests
 		if (printSuccess)
 			GD.Print("remote file exists");
 
-		Image resourceImage = await result.ReadImage();
+		(Image resourceImage, byte[] buffer, string type) = await result.ReadImageWithBuffer();
 		if (resourceImage is null)
 			return null;
 		if (printSuccess)
 			GD.Print("remote file loaded");
 
-		RegisterCosmeticImage(ref resourceImage, uniqueId);
+		RegisterCosmeticImageWithBuffer(ref resourceImage, buffer, type, uniqueId, resolutionScale);
 
 		var imageTex = TryGetCosmeticTexture(uniqueId);
 		imageTex.ResourcePath = serverPath; 
@@ -704,15 +705,34 @@ static class CatalogRequests
 		}
 	}
 
-	public static void RegisterCosmeticImage(ref Image image, string uniqueId, float resolutionScale = 1)
+	public static void RegisterCosmeticImage(ref Image image, string uniqueId, float resolutionScale = 1, string format = "webp")
 	{
-		if(activeResourceCache.ContainsKey(uniqueId))
+		switch (format)
+		{
+			case "webp":
+				RegisterCosmeticImageWithBuffer(ref image, image.SaveWebpToBuffer(), "webp", uniqueId, resolutionScale);
+				break;
+			case "jpg":
+				RegisterCosmeticImageWithBuffer(ref image, image.SaveJpgToBuffer(), "jpg", uniqueId, resolutionScale);
+				break;
+			case "png":
+				RegisterCosmeticImageWithBuffer(ref image, image.SavePngToBuffer(), "png", uniqueId, resolutionScale);
+				break;
+		}
+	}
+
+	public static void RegisterCosmeticImageWithBuffer(ref Image image, byte[] buffer, string extension, string uniqueId, float resolutionScale = 1)
+	{
+		if (activeResourceCache.ContainsKey(uniqueId))
 			GD.PushWarning($"Overwriting cosmetic resource \"{uniqueId}\"");
 
 		if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
 			DirAccess.MakeDirAbsolute(imageCacheFolderPath);
-		using var imageFile = FileAccess.Open($"{imageCacheFolderPath}{uniqueId}.webp", FileAccess.ModeFlags.Write);
-		imageFile.StoreBuffer(image.SaveWebpToBuffer());
+
+		if (extension == "jpeg")
+			extension = "jpg";
+
+		WriteImage($"{imageCacheFolderPath}{uniqueId}.{extension}", buffer);
 
 		ResizeCosmeticImage(ref image, resolutionScale);
 
@@ -720,6 +740,12 @@ static class CatalogRequests
 		{
 			activeResourceCache[uniqueId] = GodotObject.WeakRef(image);
 		}
+	}
+
+	static void WriteImage(string path, byte[] buffer)
+	{
+		using var imageFile = FileAccess.Open(path, FileAccess.ModeFlags.Write);
+		imageFile.StoreBuffer(buffer);
 	}
 
 	public static Image TryGetCosmeticImage(string uniqueId, float resolutionScale = 1)
@@ -733,7 +759,11 @@ static class CatalogRequests
 		var localPath = $"{imageCacheFolderPath}{uniqueId}.webp";
 
 		if (!FileAccess.FileExists(localPath))
-			return null;
+		{
+			localPath = $"{imageCacheFolderPath}{uniqueId}.jpg";
+			if (!FileAccess.FileExists(localPath))
+				return null;
+		}
 
 		//GD.Print("file exists");
 		Image resourceImage = Image.LoadFromFile(localPath);
