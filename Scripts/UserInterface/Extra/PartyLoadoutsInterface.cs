@@ -32,26 +32,26 @@ public partial class PartyLoadoutsInterface : Control
 #pragma warning disable CS0649 //Field is never assigned to, and will always have its default value
 	struct MatchData
 	{
-		public MatchAttributes attributes;
-		public string[] publicPlayers;
-		public string[] privatePlayers;
+		public MatchAttributes attributes { get; init; }
+		public string[] publicPlayers { get; init; }
+		public string[] privatePlayers { get; init; }
 
 		public struct MatchAttributes
 		{
 			[JsonPropertyName("GAMEMODE_s")]
-			public string Gamemode;
+			public string Gamemode { get; init; }
 		}
 	}
 
 	struct DisplayNameData
 	{
-		public string id;
-		public string displayName;
-		public Dictionary<string, PlatformData> externalAuths;
+		public string id { get; init; }
+		public string displayName { get; init; }
+		public Dictionary<string, PlatformData> externalAuths { get; init; }
 
 		public struct PlatformData
 		{
-			public string externalDisplayName;
+			public string externalDisplayName { get; init; }
 		}
 	}
 #pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
@@ -68,53 +68,20 @@ public partial class PartyLoadoutsInterface : Control
 		try
 		{
 			GameAccount targetUser = GameAccount.ActiveAccount;
-			//if(targetFriendUsername?.Text is string targetUsername && !string.IsNullOrWhiteSpace(targetUsername))
-			//{
-			//    if(await GameAccount.SearchForAccount(targetUsername) is GameAccount potentialAccount)
-			//    {
-			//        var friendListResponse = await FnWebAddresses.friends
-			//            .MakeRequest($"/friends/api/v1/{GameAccount.activeAccount.accountId}/friends")
-			//            .SetAuthorisation(GameAccount.activeAccount.AuthHeader)
-			//            .Send();
-			//        if (friendListResponse.IsSuccessStatusCode)
-			//        {
-			//            var friendDataList = await friendListResponse.Content.ReadFromJsonAsync<FriendData[]>(Helpers.JsonOptions.Fields);
-			//            var friendsSet = friendDataList.Select(l => l.accountId).ToHashSet();
-			//            if (friendsSet.Contains(potentialAccount.accountId))
-			//            {
-			//                targetUser = potentialAccount;
-			//            }
-			//        }
-			//    }
-			//}
-
 			string[] teammateIds = [];
-			//if (targetUser != GameAccount.ActiveAccount)
-			//    teammateIds = [.. await GetTeammatesFromParty(targetUser)];
 
-			// Epic disabled findPlayer functionality :pensive:
-			//if (teammateIds.Length == 0)
-			//    teammateIds = [.. await GetTeammatesFromMatch()];
+			// Epic re-enabled findPlayer functionality!! :tada:
+			// Plus, with Hestia, its the only approach needed
 			if (teammateIds.Length == 0)
-				teammateIds = [.. await GetTeammatesFromParty()];
+				teammateIds = [.. await GetTeammatesFromMatch()];
+			//if (teammateIds.Length == 0)
+			//	teammateIds = [.. await GetTeammatesFromParty()];
 			if (teammateIds.Length == 0)
 			{
-				GD.Print("no players in match or party");
+				GD.Print("no players in match");
 				Clear();
 				return;
 			}
-			//var matchResponse = await FnWebAddresses.game
-			//    .MakeRequest($"/fortnite/api/matchmaking/session/findPlayer/{GameAccount.activeAccount.accountId}")
-			//    .SetAuthorisation(GameAccount.activeAccount.AuthHeader)
-			//    .Send();
-			//var matchData = (await matchResponse.Content.ReadFromJsonAsync<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault();
-			//if(matchData?.attributes.Gamemode != "FORTPVE")
-			//{
-			//    Clear();
-			//    return;
-			//}
-			//List<string> allPlayers = [.. matchData?.publicPlayers, .. matchData?.privatePlayers];
-			//allPlayers.Remove(GameAccount.activeAccount.accountId);
 			List<GameAccount> teammateAccounts = [];
 			foreach (var player in teammateIds)
 			{
@@ -135,27 +102,30 @@ public partial class PartyLoadoutsInterface : Control
 				}
 			}
 
-			try
+			var unknownUsers = teammateAccounts.Select(a => a.accountId).Union([targetUser.accountId]).Where(id => !knownUsernames.ContainsKey(id)).ToArray();
+			if (unknownUsers.Length > 0)
 			{
-				var unknownUsers = teammateAccounts.Select(a => a.accountId).Union([targetUser.accountId]).Where(id => !knownUsernames.ContainsKey(id));
 				var displayNameResponse = await FnWebAddresses.EpicAccount
 					.MakeRequest($"/account/api/public/account?{string.Join("&", unknownUsers.Select(id => $"accountId={id}"))}")
 					.SetAccount(GameAccount.ActiveAccount)
 					.Send();
 				if (!await displayNameResponse.CheckForError())
 				{
-					var newDisplayNames = await displayNameResponse.ReadJson<DisplayNameData[]>(Helpers.JsonOptions.Fields);
-					foreach (var nameData in newDisplayNames)
+					try
 					{
-						var username = nameData.externalAuths.Select(e => e.Value.externalDisplayName).FirstOrDefault(e => e is not null) ?? nameData.displayName;
-						if (username is not null)
-							knownUsernames.Add(nameData.id, username);
+						var newDisplayNames = await displayNameResponse.ReadJson<DisplayNameData[]>();
+						foreach (var nameData in newDisplayNames)
+						{
+							var username = nameData.externalAuths.Select(e => e.Value.externalDisplayName).FirstOrDefault(e => e is not null) ?? nameData.displayName;
+							if (username is not null)
+								knownUsernames.Add(nameData.id, username);
+						}
+					}
+					catch (Exception e)
+					{
+						GD.PushError(e);
 					}
 				}
-			}
-			catch (Exception e)
-			{
-				GD.PushError(e);
 			}
 
 			Clear();
@@ -214,12 +184,16 @@ public partial class PartyLoadoutsInterface : Control
 			.Send();
 		if (await matchResponse.CheckForError())
 			return [];
-		var matchJson = await matchResponse.ReadJson();
-		var matchData = ((matchJson.Deserialize<MatchData[]>(Helpers.JsonOptions.Fields))?.FirstOrDefault()).Value;
-		if (matchData.attributes.Gamemode != "FORTPVE")
-			return [];
-		matchData.publicPlayers ??= matchData.privatePlayers;
-		return matchData.publicPlayers?.Union(matchData.privatePlayers ?? []).Distinct() ?? [];
+		var matchDataList = await matchResponse.ReadJson<MatchData[]>();
+		var matchData = matchDataList.FirstOrDefault(m => m.attributes.Gamemode == "FORTPVE");
+		if(matchData.attributes.Gamemode != "FORTPVE")
+		{
+			matchData = matchDataList.FirstOrDefault(m => m.attributes.Gamemode == "FORTHESTIABEAUTY");
+			if (matchData.attributes.Gamemode != "FORTHESTIABEAUTY")
+				return [];
+		}
+
+		return matchData.publicPlayers.Union(matchData.privatePlayers).Distinct();
 	}
 
 	private async Task<IEnumerable<string>> GetTeammatesFromParty(GameAccount fromAccount = null)

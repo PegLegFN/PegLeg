@@ -42,7 +42,7 @@ public partial class CosmoRequests
 		return $"https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/{hashText}/png";
 	}
 
-	public static string GetCosmoURL(string templateId, string gameVer = null, string key = null)
+	public static string GetCosmoURL(string templateId, string gameVer = null, string key = null, string imageType = "locker_preview_image")
 	{
 		var splitTemplate = templateId.Split(':');
 		if (splitTemplate.Length < 2)
@@ -50,18 +50,18 @@ public partial class CosmoRequests
 		templateId = $"{splitTemplate[0]}:{splitTemplate[1].ToLower()}";
 		gameVer ??= PegLegResourceManager.MagicNumbers["cosmo"]?["version"]?.ToString() ?? "40.30";
 		key ??= PegLegResourceManager.MagicNumbers["cosmo"]?["key"]?.ToString() ?? "czhmP4D5JdqrFCrAM3bdrDRxHpxNJwUckrNbr+XeDHg=";
-		return GetCosmoURLFromPath($"fn/{gameVer}/{templateId}/locker_preview_image", key);
+		return GetCosmoURLFromPath($"fn/{gameVer}/{templateId}/{imageType}", key);
 	}
 
-	public static async Task<Image> FetchCosmoImage(string templateId, string gameVer = null, string key = null)
+	public static async Task<Image> FetchCosmoImage(string templateId, string gameVer = null, string key = null, string imageType = "locker_preview_image")
 	{
 		//template type might be needed for true uniqueness
 		//var uniqueId = templateId.Replace(":", "__");
-		var uniqueId = templateId.Split(':')[^1];
+		var uniqueId = $"{templateId.Split(':')[^1]}-{imageType}";
 		if (CatalogRequests.TryGetCosmeticImage(uniqueId, 128) is Image existingTexture)
 			return existingTexture;
 
-		var url = GetCosmoURL(templateId, gameVer, key);
+		var url = GetCosmoURL(templateId, gameVer, key, imageType);
 		using var result = await WebHelpers.MakeRequest(url).Accepts(WebMedia.Image.Any).Send();
 		if (await result.CheckForError())
 			return null;

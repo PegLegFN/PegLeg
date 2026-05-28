@@ -608,7 +608,20 @@ static class CatalogRequests
 	static readonly Dictionary<string, JsonObject> activeMetaCache = [];
 
 	public static string LocalCosmeticResourcePath(string serverPath) =>
-		$"{imageCacheFolderPath}{LocalCosmeticResourceId(serverPath)}.webp";
+		LocalCosmeticResourcePathFromId(LocalCosmeticResourceId(serverPath));
+	public static string LocalCosmeticResourcePathFromId(string uniqueId)
+	{
+		var localPath = $"{imageCacheFolderPath}{uniqueId}.webp";
+		if (FileAccess.FileExists(localPath))
+			return localPath;
+		localPath = $"{imageCacheFolderPath}{uniqueId}.jpg";
+		if (FileAccess.FileExists(localPath))
+			return localPath;
+		localPath = $"{imageCacheFolderPath}{uniqueId}.png";
+		if (FileAccess.FileExists(localPath))
+			return localPath;
+		return null;
+	}
 
 	public static string LocalCosmeticResourceId(string serverPath) => serverPath switch
 	{
@@ -756,14 +769,9 @@ static class CatalogRequests
 				return cachedImage;
 		}
 
-		var localPath = $"{imageCacheFolderPath}{uniqueId}.webp";
-
-		if (!FileAccess.FileExists(localPath))
-		{
-			localPath = $"{imageCacheFolderPath}{uniqueId}.jpg";
-			if (!FileAccess.FileExists(localPath))
-				return null;
-		}
+		var localPath = LocalCosmeticResourcePathFromId(uniqueId);
+		if (localPath is null)
+			return null;
 
 		//GD.Print("file exists");
 		Image resourceImage = Image.LoadFromFile(localPath);

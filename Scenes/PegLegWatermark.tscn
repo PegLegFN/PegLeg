@@ -9,7 +9,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8q6yo"]
 shader = ExtResource("1_sjo8y")
-shader_parameter/ControlSize = Vector2(103, 27)
+shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/ControlSizeScale = Vector2(1, 1)
 shader_parameter/Expo = true
 shader_parameter/AlphaStart = 0.0
@@ -30,20 +30,20 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=818777283]
+[node name="Background" type="MarginContainer" parent="." unique_id=818777283]
 layout_mode = 2
 theme_override_constants/margin_left = -10
 theme_override_constants/margin_top = -32
 theme_override_constants/margin_right = -10
 theme_override_constants/margin_bottom = -10
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer2" unique_id=757635141]
+[node name="TextureRect" type="TextureRect" parent="Background" unique_id=757635141]
 layout_mode = 2
 texture = ExtResource("1_8q6yo")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CheckButton" type="CheckButton" parent="MarginContainer2" unique_id=1995839270]
+[node name="CheckButton" type="CheckButton" parent="Background" unique_id=1995839270]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -51,21 +51,21 @@ script = ExtResource("2_482bb")
 section = "advanced"
 key = "share_bg"
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=433591908]
+[node name="Watermark" type="MarginContainer" parent="." unique_id=433591908]
 z_index = 1
 layout_mode = 2
 theme_override_constants/margin_top = -25
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1454191121]
+[node name="VBoxContainer" type="VBoxContainer" parent="Watermark" unique_id=1454191121]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=79907046]
+[node name="HBoxContainer" type="HBoxContainer" parent="Watermark/VBoxContainer" unique_id=79907046]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/separation = 4
 alignment = 2
 
-[node name="TextureRect2" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=764914480]
+[node name="TextureRect2" type="TextureRect" parent="Watermark/VBoxContainer/HBoxContainer" unique_id=764914480]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 2
@@ -73,12 +73,12 @@ size_flags_vertical = 0
 texture = ExtResource("1_3vg8i")
 expand_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1327967541]
+[node name="MarginContainer" type="MarginContainer" parent="Watermark/VBoxContainer/HBoxContainer" unique_id=1327967541]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_right = -15
 
-[node name="ColorRect" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer" unique_id=2000144504]
+[node name="ColorRect" type="ColorRect" parent="Watermark/VBoxContainer/HBoxContainer/MarginContainer" unique_id=2000144504]
 visible = false
 material = SubResource("ShaderMaterial_8q6yo")
 layout_mode = 2
@@ -86,44 +86,44 @@ color = Color(0, 0, 0, 1)
 script = ExtResource("2_sp15k")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer" unique_id=1622774183]
+[node name="MarginContainer" type="MarginContainer" parent="Watermark/VBoxContainer/HBoxContainer/MarginContainer" unique_id=1622774183]
 layout_mode = 2
 theme_override_constants/margin_left = 7
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 9
 theme_override_constants/margin_bottom = 7
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" unique_id=1108205504]
+[node name="Label" type="Label" parent="Watermark/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" unique_id=1108205504]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 1
 text = "Shared from "
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1307944477]
+[node name="TextureRect" type="TextureRect" parent="Watermark/VBoxContainer/HBoxContainer" unique_id=1307944477]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 texture = ExtResource("3_sjo8y")
 expand_mode = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=439667795]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Watermark/VBoxContainer" unique_id=439667795]
 visible = false
 layout_mode = 2
 size_flags_vertical = 10
 alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2082656396]
+[node name="Label" type="Label" parent="Watermark/VBoxContainer/HBoxContainer2" unique_id=2082656396]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Get PegLeg at"
 horizontal_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=730636966]
+[node name="PanelContainer" type="PanelContainer" parent="Watermark/VBoxContainer/HBoxContainer2" unique_id=730636966]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sp15k")
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer" unique_id=1505609686]
+[node name="Label2" type="Label" parent="Watermark/VBoxContainer/HBoxContainer2/PanelContainer" unique_id=1505609686]
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_constants/shadow_offset_x = 0
@@ -133,4 +133,4 @@ theme_override_constants/shadow_outline_size = 0
 text = " PegLegFN.com "
 horizontal_alignment = 1
 
-[connection signal="ConfigValueChanged" from="MarginContainer2/CheckButton" to="MarginContainer2" method="set_visible"]
+[connection signal="ConfigValueChanged" from="Background/CheckButton" to="Background" method="set_visible"]

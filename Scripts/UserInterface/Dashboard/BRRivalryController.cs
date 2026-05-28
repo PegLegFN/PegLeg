@@ -137,12 +137,20 @@ public partial class BRRivalryController : Control
 		var leadingTeam = foundationLead ? "Team Foundation" : "Team Ice King";
 		var leadingCol = foundationLead ? foundationColor : iceKingColor;
 
-		leaderText.Text = $"{leadingTeam} are leading by {diff.Compactify()} rivalry wins";
-		leaderText.TooltipText = CustomTooltip.GenerateSimpleTooltip(
-			$"{leadingTeam}: Leader",
-			diff.Notate(),
-			bannerCol: leadingCol.ToHtml()
-		);
+		if (diff == 0)
+		{
+			leaderText.Text = $"Teams are tied";
+			leaderText.TooltipText = null;
+		}
+		else
+		{
+			leaderText.Text = $"{leadingTeam} are leading by {diff.Compactify()} rivalry wins";
+			leaderText.TooltipText = CustomTooltip.GenerateSimpleTooltip(
+				$"{leadingTeam}: Leader",
+				diff.Notate(),
+				bannerCol: leadingCol.ToHtml()
+			);
+		}
 	}
 
 	struct EventData

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Frozen;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Threading;
 using System.Xml;
 using FileAccess = Godot.FileAccess;
@@ -101,10 +102,26 @@ public partial class Bootstrap : Node
 	static bool hasBooted = false;
 	static bool isFirstBoot = false;
 
-	static void PrintCosmo(string tid)
+	static void PrintCosmo(string tid, string imageType = "locker_preview_image")
 	{
-		var cosmoUrl = CosmoRequests.GetCosmoURL(tid);
-		GD.PrintRich($"Cosmo Test: [url={cosmoUrl}]\"{tid}\"[/url] ({cosmoUrl})");
+		var cosmoUrl = CosmoRequests.GetCosmoURL(tid, imageType: imageType);
+		GD.PrintRich($"Cosmo Test: [url={cosmoUrl}]\"{tid}\"[/url] ({imageType})");
+	}
+
+	static void PrintDistinctIconCount(params string[] types)
+	{
+		var templates = types.SelectMany(t => GameItemTemplate.GetTemplatesOfType(t)).ToArray();
+		var uniqueLarge = templates
+			.Select(t => t.TryGetTexturePath(out var path, out bool wasLarge, FnItemTextureType.Preview, true) && wasLarge ? path : null)
+			.Where(p => p is not null)
+			.Distinct()
+			.Count();
+		var uniqueNonLarge = templates
+			.Select(t => t.TryGetTexturePath(out var path, FnItemTextureType.Preview) ? path : null)
+			.Where(p => p is not null)
+			.Distinct()
+			.Count();
+		GD.Print($"Types: [{string.Join(", ", types)}], Large Icons: {uniqueLarge}, Small Icons: {uniqueNonLarge}");
 	}
 
 	public override void _Ready()
@@ -113,10 +130,6 @@ public partial class Bootstrap : Node
 		isFirstBoot = !hasBooted;
 		if (isFirstBoot)
 		{
-			//NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01
-			PrintCosmo("AthenaCharacter:character_glamclaws");
-			PrintCosmo("NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01");
-			//return;
 			window.Mode = Window.ModeEnum.Windowed;
 			window.ContentScaleSize = window.Size = bootSize;
 			window.Transparent = true;
@@ -294,6 +307,17 @@ public partial class Bootstrap : Node
 			progressBar.Visible = prog <= 1;
 			progressBar.Value = prog;
 		});
+		if (isFirstBoot)
+		{
+			PrintCosmo("AthenaCharacter:character_loosecreep");
+			//PrintCosmo("AthenaCharacter:character_loosecreep", "image");
+			//PrintCosmo("AthenaCharacter:character_glamclaws");
+			//PrintCosmo("NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01");
+
+			//PrintDistinctIconCount("Hero", "Defender");
+			//PrintDistinctIconCount("Schematic", "Weapon", "Trap");
+			//PrintDistinctIconCount("Worker", "WorkerPortrait");
+		}
 		downloadParticles.Emitting = false;
 
 
