@@ -42,8 +42,9 @@ public partial class UpdateChecker : Control
 
 			if (OS.HasFeature("editor"))
 			{
-				failMsg.Text = "Auto updates disabled in editor builds.";
-				return;
+				currentVer = currentVer with { patch = currentVer.patch - 2 };
+				//failMsg.Text = "Auto updates disabled in editor builds.";
+				//return;
 			}
 
 			//         using (var verFile = FileAccess.Open(Helpers.GlobalisePath("res://v.txt"), FileAccess.ModeFlags.Read))
@@ -142,11 +143,14 @@ public partial class UpdateChecker : Control
 		try
 		{
             var updatePath = Helpers.GlobalisePath($"user://Updates/Update-{latestRelease.Value.Version}.msi");
+			var updateFolder = Helpers.GlobalisePath("user://Updates");
 			try
 			{
 				using var overlay = LoadingOverlay.CreateToken();
 				if (!FileAccess.FileExists(updatePath))
 				{
+					if (!DirAccess.DirExistsAbsolute(updateFolder))
+						DirAccess.MakeDirAbsolute(updateFolder);
 					using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
 					{
 						await asset.DownloadTo(fileStream, overlay);
@@ -160,8 +164,9 @@ public partial class UpdateChecker : Control
 				await GenericConfirmationWindow.ShowError("An error occured when downloading the update");
 				return;
 			}
-			await GenericConfirmationWindow.ShowInfo("The Update has been downloaded. PegLeg will close, and the \"Updates\" folder will be opened. Run the .msi file to Install the Update", "Update Downloaded");
-			OS.ShellOpen(asset.browser_download_url);
+			//await GenericConfirmationWindow.ShowInfo("The Update has been downloaded. PegLeg will close, and the \"Updates\" folder will be opened. Run the .msi file to Install the Update", "Update Downloaded");
+			//await GenericConfirmationWindow.ShowInfo("The Update has been downloaded. PegLeg will close, and the Installer will be run", "Update Downloaded");
+			OS.ShellOpen(updatePath);
 			GetTree().Quit();
 			/* Disabled until I figure out how to run MSI installers from within PegLeg
             var batchPath = Helpers.GlobalisePath("user://update.bat");
