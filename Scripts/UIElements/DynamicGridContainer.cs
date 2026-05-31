@@ -70,7 +70,7 @@ public partial class DynamicGridContainer : Container
 			UpdateLayout();
 		}
 	}
-	Vector2 spacing;
+	Vector2 spacing = Vector2.One * 5;
 	[Export]
 	bool UseManualColumnCounts
 	{

@@ -40,6 +40,18 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 corner_detail = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q6jai"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(1, 0.37, 0.37, 1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [node name="DashboardBRRivalProgress" type="PanelContainer" unique_id=1546053 node_paths=PackedStringArray("rootControl", "loadingIcon", "currentTeamLabel", "switchButton", "foundationParent", "foundationProgress", "foundationValue", "iceKingParent", "iceKingProgress", "iceKingValue", "leaderText")]
 custom_minimum_size = Vector2(473.5, 0)
 mouse_filter = 1
@@ -186,6 +198,25 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_type_variation = &"LargeButton"
 text = "Choose Alliegence"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1166083596]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_q6jai")
+
+[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer" unique_id=885469826]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 16
+text = "Your team will affect your Live Event experience"
+horizontal_alignment = 1
+uppercase = true
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/RefreshBtn" to="." method="UpdateProgress"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Button" to="." method="TryChangeTeam"]

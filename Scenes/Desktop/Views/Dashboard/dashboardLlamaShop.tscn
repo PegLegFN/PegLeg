@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bpaceopmh5sqo" path="res://Scripts/UserInterface/Dashboard/DashboardLlamasController.cs" id="1_tvwas"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="2_b2tw5"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_2a2sa"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="3_b2tw5"]
 [ext_resource type="PackedScene" uid="uid://pcyuj0ewudy3" path="res://Scenes/ViewElements/Llamas/llama_highlight_db_style.tscn" id="4_47kpc"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_hikyq"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="6_j8kjp"]
@@ -33,10 +34,14 @@ theme_override_font_sizes/font_size = 24
 text = "Llama Shop"
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1517278566]
+visible = false
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("2_b2tw5")
 timerType = 1
+
+[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("3_b2tw5")]
+layout_mode = 2
 
 [node name="ShareBtn" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2021237232]
 visible = false

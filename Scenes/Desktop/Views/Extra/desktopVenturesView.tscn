@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bm216dwkg2p58"]
+[gd_scene format=3 uid="uid://bm216dwkg2p58"]
 
 [ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="1_c04xt"]
 [ext_resource type="Script" uid="uid://dw6254vnxbhxk" path="res://Scripts/UserInterface/Extra/VenturesInterface.cs" id="1_c34ni"]
@@ -6,9 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="3_7f6lk"]
 [ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="4_wsqb2"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="5_jxhgi"]
-[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="6_j35r5"]
-[ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="7_wnkow"]
-[ext_resource type="PackedScene" uid="uid://bky7r16i1cb1t" path="res://Scenes/Desktop/Views/Extra/venturesReward.tscn" id="9_1aj71"]
+[ext_resource type="PackedScene" uid="uid://bsecdrkeadxdb" path="res://Scenes/GameItemEntry/mission_alert_entry_large.tscn" id="8_c04xt"]
+[ext_resource type="PackedScene" uid="uid://bky7r16i1cb1t" path="res://Scenes/GameItemEntry/ventureLevelReward.tscn" id="9_1aj71"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rxilp"]
 bg_color = Color(0.184314, 0.184314, 0.184314, 1)
@@ -31,7 +30,7 @@ border_color = Color(0, 1, 0, 1)
 corner_radius_top_left = 7
 corner_radius_top_right = 7
 
-[node name="Ventures" type="MarginContainer" node_paths=PackedStringArray("statusBarRoot", "currentLevelLabel", "levelProgress", "nextLevelLabel", "nextReward", "majorLevelSection", "nextMajorLevelLabel", "nextMajorReward", "modifierEntries", "mainItems", "legendaryToggle", "extraItems")]
+[node name="Ventures" type="MarginContainer" unique_id=522803032 node_paths=PackedStringArray("statusBarRoot", "currentLevelLabel", "levelProgress", "nextLevelLabel", "nextReward", "majorLevelSection", "nextMajorLevelLabel", "nextMajorReward", "modifierEntries", "mainItems", "legendaryToggle", "extraItems")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -54,20 +53,20 @@ legendaryToggle = NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxCo
 extraItems = [NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward2"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward3"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward4"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward5"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward6"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward7"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward8"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward9"), NodePath("VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward10")]
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1923921000]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=669641859]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=737440351]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PowerLevel" type="MarginContainer" parent="VBoxContainer/PanelContainer/HBoxContainer" node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
+[node name="PowerLevel" type="MarginContainer" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=340666660 node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 script = ExtResource("1_c04xt")
@@ -76,22 +75,22 @@ homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelPr
 ventures = true
 tooltipColor = Color(0.596078, 0, 0.729412, 1)
 
-[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel"]
+[node name="Panel" type="Panel" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel" unique_id=127529801]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rxilp")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel" unique_id=1444187016]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer" unique_id=280766452]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer"]
+[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer" unique_id=477925501]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 size_flags_vertical = 4
@@ -106,7 +105,7 @@ texture_progress = ExtResource("2_c34ni")
 tint_under = Color(0.145098, 0.145098, 0.145098, 1)
 tint_progress = Color(0.596167, 0, 0.73, 1)
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer/PowerLevelProgressBar" unique_id=1304966514]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 1
 anchors_preset = -1
@@ -123,7 +122,7 @@ grow_vertical = 2
 texture = ExtResource("3_7f6lk")
 expand_mode = 1
 
-[node name="PowerLevelNumber" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer"]
+[node name="PowerLevelNumber" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/PowerLevel/MarginContainer/HBoxContainer" unique_id=1411891779]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
@@ -133,49 +132,49 @@ theme_override_font_sizes/font_size = 30
 text = "144"
 horizontal_alignment = 1
 
-[node name="CurLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="CurLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=862165176]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Lv ???"
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1498818694]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 max_value = 1.0
 value = 0.13
 
-[node name="NextLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="NextLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1394846084]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Lv ???"
 
-[node name="NextReward" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource("4_wsqb2")]
+[node name="NextReward" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1470817348 instance=ExtResource("4_wsqb2")]
 layout_mode = 2
 
-[node name="MajorLvSection" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="MajorLvSection" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=689072595]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection" unique_id=567450078]
 layout_mode = 2
 
-[node name="MajorLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection"]
+[node name="MajorLv" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection" unique_id=61155402]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Lv ???"
 
-[node name="MajorReward" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection" instance=ExtResource("4_wsqb2")]
+[node name="MajorReward" parent="VBoxContainer/PanelContainer/HBoxContainer/MajorLvSection" unique_id=748456766 instance=ExtResource("4_wsqb2")]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1482948686]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=358894643]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 5
@@ -183,216 +182,216 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=515181661]
 layout_mode = 2
 
-[node name="MainRewardPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer"]
+[node name="MainRewardPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer" unique_id=2070891928]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel" unique_id=342141575]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer" unique_id=375284460]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/HBoxContainer" unique_id=406070354]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Main Rewards"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/HBoxContainer" unique_id=1347459823]
 layout_mode = 2
 size_flags_vertical = 4
 button_pressed = true
 text = "Legendary Only"
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer" unique_id=1911546842]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Container" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer"]
+[node name="Container" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer" unique_id=307426629]
 layout_mode = 2
 script = ExtResource("5_jxhgi")
 CompressSpacing = true
 Spacing = Vector2(6, 6)
 
-[node name="VenturesReward" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=886357041 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward2" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward2" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=644501903 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward3" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward3" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1499600295 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward4" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward4" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1887850555 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward5" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward5" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=259943763 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward6" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward6" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=267893813 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward7" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward7" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1392702869 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward8" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward8" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1081388938 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward9" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward9" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1122268207 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward10" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward10" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1806111116 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward11" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward11" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=103116115 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward12" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward12" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=910945033 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward13" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward13" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=29511585 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward14" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward14" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=696527535 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward15" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward15" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=554120063 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward16" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward16" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1826759393 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward17" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward17" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1240143730 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward18" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward18" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1987521926 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward19" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward19" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1737608338 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward20" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward20" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=156626482 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward21" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward21" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1193654295 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward22" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward22" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1665809270 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward23" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward23" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1582947804 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward24" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward24" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1738663456 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward25" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward25" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1692387701 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward26" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward26" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1571211821 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward27" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward27" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=633059471 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward28" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward28" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1298380782 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward29" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward29" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1122520587 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward30" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward30" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=397433217 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward31" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward31" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=345498268 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward32" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward32" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1316764971 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward33" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward33" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1595944718 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward34" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward34" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1598661577 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward35" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward35" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=371654998 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward36" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward36" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=2073332459 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward37" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward37" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=2015749792 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward38" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward38" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=191765998 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward39" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward39" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=488488901 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward40" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward40" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1270725293 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward41" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward41" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1270271617 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward42" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward42" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=900487599 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward43" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward43" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1699526962 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward44" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward44" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=73947378 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward45" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward45" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=2064925931 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward46" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward46" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=2005601234 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward47" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward47" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=381803548 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward48" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward48" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1167990346 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward49" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward49" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1878858287 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward50" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward50" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=603370956 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer" unique_id=555468881]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="ExtraRewardPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="ExtraRewardPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1106172772]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel" unique_id=1869705741]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer" unique_id=378880395]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 32
 text = "Extra Rewards"
 vertical_alignment = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer" unique_id=2072475911]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
@@ -400,57 +399,57 @@ theme_override_font_sizes/font_size = 20
 text = "(Repeats every 10 Levels)"
 vertical_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer" unique_id=97501620]
 visible = false
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer" unique_id=1161237024]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Container" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer"]
+[node name="Container" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer" unique_id=39229425]
 layout_mode = 2
 script = ExtResource("5_jxhgi")
 CompressSpacing = true
 Spacing = Vector2(6, 6)
 
-[node name="VenturesReward" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1206236541 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward2" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward2" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=125156253 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward3" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward3" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1485312987 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward4" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward4" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1056142760 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward5" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward5" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1424713170 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward6" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward6" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=65639006 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward7" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward7" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=789607848 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward8" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward8" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=1256692603 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward9" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward9" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=555072431 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="VenturesReward10" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" instance=ExtResource("9_1aj71")]
+[node name="VenturesReward10" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container" unique_id=734514733 instance=ExtResource("9_1aj71")]
 layout_mode = 2
 
-[node name="ActiveRewardParent" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer"]
+[node name="ActiveRewardParent" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer" unique_id=2127816400]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent" unique_id=92436429]
 visible = false
 layout_mode = 0
 offset_left = 455.0
@@ -461,10 +460,10 @@ theme_override_constants/margin_top = -3
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -3
 
-[node name="Control" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer" unique_id=1202862230]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer/Control"]
+[node name="Panel" type="Panel" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer/Control" unique_id=1387682936]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -473,7 +472,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_c34ni")
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer/Control/Panel"]
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/ActiveRewardParent/MarginContainer/Control/Panel" unique_id=129900009]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -483,204 +482,39 @@ theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "Next Reward"
 horizontal_alignment = 1
 
-[node name="ModifierPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="ModifierPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1725568198]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel" unique_id=1659093911]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer" unique_id=721843495]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Active Modifiers"
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer" unique_id=741974836]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer" unique_id=2061498086]
 layout_mode = 2
 script = ExtResource("5_jxhgi")
 CompressSpacing = true
 Spacing = Vector2(10, 10)
 
-[node name="MissionAlertItemEntry" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-script = ExtResource("6_j35r5")
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry"]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-size_flags_vertical = 0
-texture = ExtResource("7_wnkow")
-expand_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Metal Corosion"
-text_overrun_behavior = 3
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer"]
+[node name="MissionAlertItemEntry" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1093655368 instance=ExtResource("8_c04xt")]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer"]
-custom_minimum_size = Vector2(0, 85)
-layout_mode = 2
-size_flags_vertical = 3
-text = "Description Test
-Description Test
-Description Test
-Description Test
-Description Test"
-autowrap_mode = 3
-text_overrun_behavior = 3
-
-[node name="MissionAlertItemEntry2" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-script = ExtResource("6_j35r5")
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2"]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-size_flags_vertical = 0
-texture = ExtResource("7_wnkow")
-expand_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Metal Corosion"
-text_overrun_behavior = 3
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer"]
+[node name="MissionAlertItemEntry2" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=772751998 instance=ExtResource("8_c04xt")]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer"]
-custom_minimum_size = Vector2(0, 85)
-layout_mode = 2
-size_flags_vertical = 3
-text = "Description Test
-Description Test
-Description Test
-Description Test
-Description Test"
-autowrap_mode = 3
-text_overrun_behavior = 3
-
-[node name="MissionAlertItemEntry3" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-script = ExtResource("6_j35r5")
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3"]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-size_flags_vertical = 0
-texture = ExtResource("7_wnkow")
-expand_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Metal Corosion"
-text_overrun_behavior = 3
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer"]
+[node name="MissionAlertItemEntry3" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=318218091 instance=ExtResource("8_c04xt")]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer"]
-custom_minimum_size = Vector2(0, 85)
+[node name="MissionAlertItemEntry4" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=137576861 instance=ExtResource("8_c04xt")]
 layout_mode = 2
-size_flags_vertical = 3
-text = "Description Test
-Description Test
-Description Test
-Description Test
-Description Test"
-autowrap_mode = 3
-text_overrun_behavior = 3
-
-[node name="MissionAlertItemEntry4" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-script = ExtResource("6_j35r5")
-
-[node name="TextureRect6" type="TextureRect" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4"]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-size_flags_vertical = 0
-texture = ExtResource("7_wnkow")
-expand_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Metal Corosion"
-text_overrun_behavior = 3
-
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer"]
-custom_minimum_size = Vector2(0, 85)
-layout_mode = 2
-size_flags_vertical = 3
-text = "Description Test
-Description Test
-Description Test
-Description Test
-Description Test"
-autowrap_mode = 3
-text_overrun_behavior = 3
-
-[connection signal="DescriptionChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/TextureRect6" method="set_texture"]
-[connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label" method="set_text"]
-[connection signal="TooltipChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" method="set_tooltip_text"]
-[connection signal="DescriptionChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/TextureRect6" method="set_texture"]
-[connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer/Label" method="set_text"]
-[connection signal="TooltipChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2" method="set_tooltip_text"]
-[connection signal="DescriptionChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/TextureRect6" method="set_texture"]
-[connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer/Label" method="set_text"]
-[connection signal="TooltipChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3" method="set_tooltip_text"]
-[connection signal="DescriptionChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/TextureRect6" method="set_texture"]
-[connection signal="NameChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer/Label" method="set_text"]
-[connection signal="TooltipChanged" from="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" method="set_tooltip_text"]

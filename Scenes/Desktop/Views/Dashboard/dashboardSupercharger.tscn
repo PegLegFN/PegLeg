@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bosi6o0a0u7eb" path="res://Scripts/UserInterface/Dashboard/DashboardSuperchargerController.cs" id="1_yrmkj"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="2_0qpvb"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="3_0qpvb"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="3_p3gr0"]
 [ext_resource type="Texture2D" uid="uid://c0n3kv5onb5c2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Items-Hero-PromotionCurrency-L.png" id="4_oshko"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="5_n0sua"]
@@ -57,9 +58,14 @@ theme_override_font_sizes/font_size = 24
 text = "Supercharger"
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1023995561]
+visible = false
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("2_0qpvb")
+timerType = 2
+
+[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("3_0qpvb")]
+layout_mode = 2
 timerType = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=103279688]

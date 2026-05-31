@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://bytcic4qvijqc"]
+
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="1_afrxp"]
+[ext_resource type="Script" uid="uid://dyamj784om2nv" path="res://Scripts/UserInterface/Dashboard/PowerHourAlert.cs" id="1_smp72"]
+[ext_resource type="PackedScene" uid="uid://3xbl5x8mbmjv" path="res://Scenes/GameItemEntry/mission_alert_entry_medium.tscn" id="2_0ofo2"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="3_0pbo2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smp72"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel")]
+offset_right = 298.0
+offset_bottom = 156.0
+theme_type_variation = &"Panel3PadB"
+script = ExtResource("1_smp72")
+incomingText = "Power Hour Incoming"
+activeText = "Power Hour Active"
+header = NodePath("VBoxContainer/HBoxContainer/PanelContainer/Label2")
+countdown = NodePath("VBoxContainer/HBoxContainer/RefreshTimer")
+modifierContainer = NodePath("VBoxContainer/VBoxContainer")
+modifierEntryList = [NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry2"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry3"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry4"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry5"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry6")]
+noModifiers = NodePath("VBoxContainer/Label")
+noModifiersLabel = NodePath("VBoxContainer/Label")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=73010128]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=267169212]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=485946737]
+self_modulate = Color(1, 0.61866665, 0.120000005, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer" unique_id=907435141]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "Power Hour Incoming"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("1_afrxp")]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+customCritTime = 300
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=451205499]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.51171875, 0.51171875, 0.51171875, 1)
+text = "Modifiers unknown"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="Container" parent="VBoxContainer" unique_id=679697045]
+layout_mode = 2
+script = ExtResource("3_0pbo2")
+CompressSpacing = true
+Spacing = Vector2(15, 5)
+UseLargestChild = true
+
+[node name="MissionAlertItemEntry" parent="VBoxContainer/VBoxContainer" unique_id=55775401 instance=ExtResource("2_0ofo2")]
+layout_mode = 2
+
+[node name="MissionAlertItemEntry2" parent="VBoxContainer/VBoxContainer" unique_id=1583837197 instance=ExtResource("2_0ofo2")]
+layout_mode = 2
+
+[node name="MissionAlertItemEntry3" parent="VBoxContainer/VBoxContainer" unique_id=1136343832 instance=ExtResource("2_0ofo2")]
+visible = false
+layout_mode = 2
+
+[node name="MissionAlertItemEntry4" parent="VBoxContainer/VBoxContainer" unique_id=1769395216 instance=ExtResource("2_0ofo2")]
+visible = false
+layout_mode = 2
+
+[node name="MissionAlertItemEntry5" parent="VBoxContainer/VBoxContainer" unique_id=959529323 instance=ExtResource("2_0ofo2")]
+visible = false
+layout_mode = 2
+
+[node name="MissionAlertItemEntry6" parent="VBoxContainer/VBoxContainer" unique_id=117480615 instance=ExtResource("2_0ofo2")]
+visible = false
+layout_mode = 2

@@ -588,10 +588,12 @@ public partial class GameMission
 			public string eventFlagName;
 			public string gameplayModifier;
 		}
-		public GameItemTemplate[] GetModifiers()
+		public Dictionary<string, GameItemTemplate> GetModifiers()
 		{
-			//for each pair, check if calender has event flag (or if event flag is empty) and get the modifier template 
-			return [];
+			//todo: for each pair, check if calender has event flag (or if event flag is empty) and get the modifier template 
+			return gameplayModifierList.Select(pair => {
+				return KeyValuePair.Create(pair.eventFlagName, GameItemTemplate.Get("GameplayModifier:" + pair.gameplayModifier.Split('.')[^1][..^1]));
+			}).DistinctBy(kvp => kvp.Key).ToDictionary();
 		}
 		public override string ToString() => JsonSerializer.Serialize(this, Helpers.JsonOptions.Fields);
 	}

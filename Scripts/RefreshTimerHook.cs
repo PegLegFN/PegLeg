@@ -106,7 +106,7 @@ public partial class RefreshTimerHook : Control
 	{
 		if (timerType == 5)
 		{
-			CustomTooltipText = refreshTime.ToString("g");
+			CustomTooltipText = refreshTime.ToLocalTime().ToString("g");
 			return;
 		}
 		var type = timerType switch
@@ -136,11 +136,11 @@ public partial class RefreshTimerHook : Control
 			return;
 		var remainingTime = refreshTime - RefreshTimerController.RightNow;
 		if (remainingTime.TotalMinutes < criticalCountdownTime)
-			SelfModulate = Colors.Red;
+			target.SelfModulate = Colors.Red;
 		else if (remainingTime.TotalMinutes < warningCountdownTime)
-			SelfModulate = Colors.Orange;
+			target.SelfModulate = Colors.Orange;
 		else
-			SelfModulate = Colors.White;
+			target.SelfModulate = Colors.White;
 		CustomText = remainingTime.FormatTime(formatType switch
 		{
 			2 => Helpers.TimeFormat.SigLong,

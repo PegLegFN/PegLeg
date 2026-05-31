@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://bsecdrkeadxdb"]
+
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_6fp01"]
+[ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="2_jaw51"]
+
+[node name="MissionAlertItemEntry" type="HBoxContainer" unique_id=1093655368]
+custom_minimum_size = Vector2(500, 0)
+size_flags_horizontal = 0
+script = ExtResource("1_6fp01")
+
+[node name="TextureRect6" type="TextureRect" parent="." unique_id=1936054474]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("2_jaw51")
+expand_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1602665601]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=187412061]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Metal Corosion"
+text_overrun_behavior = 3
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1399081099]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer" unique_id=442091765]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Description Test
+Description Test
+Description Test
+Description Test
+Description Test"
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[connection signal="DescriptionChanged" from="." to="VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="." to="TextureRect6" method="set_texture"]
+[connection signal="NameChanged" from="." to="VBoxContainer/Label" method="set_text"]
+[connection signal="TooltipChanged" from="." to="." method="set_tooltip_text"]

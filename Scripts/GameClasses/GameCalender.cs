@@ -190,13 +190,18 @@ public static class GameCalender
 	public static bool EventFlagActive(string flag) =>
 		hasCalender && flag is not null && currentState.GetLatestState().ActiveEvents.ContainsKey(flag);
 
+	public static string[] EventFlagsWithPrefix(string prefix) =>
+		hasCalender ? [.. currentState.KnownEvents.Keys.Where(k => k.StartsWith(prefix))] : [];
+
 	public static bool TryGetFlagRange(string flag, out DateTime activeSince, out DateTime activeUntil)
 	{
 		activeSince = default;
 		activeUntil = default;
 		if (!hasCalender || flag is null)
 			return false;
-		currentState.KnownEvents.TryGetValue(flag, out var timeRange);
+		var hasValue = currentState.KnownEvents.TryGetValue(flag, out var timeRange);
+		if (!hasValue)
+			return false;
 		activeSince = timeRange.activeSince;
 		activeUntil = timeRange.activeUntil;
 		return true;

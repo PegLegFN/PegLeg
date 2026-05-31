@@ -40,11 +40,8 @@ public partial class BRRivalryController : Control
 
 	public override void _Ready()
 	{
-		rivalryURL = "https://mesh-public-service-live.ol.epicgames.com/" +
-			(
-				PegLegResourceManager.MagicNumbers["rivalryURLPath"]?.ToString() ??
-				"mesh/Fortnite/Fortnite.Hera_Terrain.51618937/metadata"
-			);
+		//they changed the domain, and theres one more act, icba making it data driven
+		rivalryURL = "https://ds.svc.live.fngw.ol.epicgames.com/mesh/Fortnite/Fortnite.Hera_Terrain.52998544/metadata";
 		GameAccount.ActiveAccountChanged += ActiveAccountChanged;
 		RefreshTimerController.OnMinuteChanged += UpdateProgress;
 		UpdateProgress();
@@ -132,10 +129,10 @@ public partial class BRRivalryController : Control
 			bannerCol: iceKingColor.ToHtml()
 		);
 
-		var diff = Math.Abs(eventData.Foundation.Current - eventData.IceKing.Current);
+		long diff = Math.Abs(eventData.Foundation.Current - eventData.IceKing.Current);
 		bool foundationLead = eventData.Foundation.Current > eventData.IceKing.Current;
-		var leadingTeam = foundationLead ? "Team Foundation" : "Team Ice King";
-		var leadingCol = foundationLead ? foundationColor : iceKingColor;
+		string leadingTeam = foundationLead ? "Team Foundation" : "Team Ice King";
+		Color leadingCol = foundationLead ? foundationColor : iceKingColor;
 
 		if (diff == 0)
 		{
@@ -144,6 +141,10 @@ public partial class BRRivalryController : Control
 		}
 		else
 		{
+			//long losingVal = foundationLead ? eventData.IceKing.Current : eventData.Foundation.Current;
+			//long remainder = eventData.Foundation.metadataStructData.requiredValue - losingVal;
+			//double percent = ((double)diff / remainder) * 100;
+
 			leaderText.Text = $"{leadingTeam} are leading by {diff.Compactify()} rivalry wins";
 			leaderText.TooltipText = CustomTooltip.GenerateSimpleTooltip(
 				$"{leadingTeam}: Leader",

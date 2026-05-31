@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bqa4bddqjpu7q"]
 
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="1_03c78"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="2_tfkul"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="2_tjeuk"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_381en"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="3_koprm"]
@@ -28,10 +29,14 @@ theme_override_font_sizes/font_size = 24
 text = "Mission Rewards"
 
 [node name="Label2" type="Label" parent="VBoxContainer3/HBoxContainer" unique_id=1784471489]
+visible = false
 layout_mode = 2
 text = "xx:xx:xx"
 script = ExtResource("1_03c78")
 timerType = 1
+
+[node name="RefreshTimer" parent="VBoxContainer3/HBoxContainer" unique_id=112616027 instance=ExtResource("2_tfkul")]
+layout_mode = 2
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer" unique_id=1980086915]
 custom_minimum_size = Vector2(28, 0)
