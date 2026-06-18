@@ -70,6 +70,8 @@ public partial class DiscordWebhookProxy
 
 	public bool UsesSync => AppConfig.Get("webhooks", InternalName + "_useSync", false);
 
+	public bool IsEnabled => AppConfig.Get("advanced", "webhooks", false) && AppConfig.Get("webhooks", InternalName + "_enabled", false);
+
 	public async Task Execute(
 		Func<Task<string>> currentContentProvider = null,
 		Func<Task<string[]>> currentFilepathProvider = null,
@@ -83,10 +85,9 @@ public partial class DiscordWebhookProxy
 		Func<Task<Image[]>> currentImageProvider = null
 	)
 	{
-		if (!AppConfig.Get("advanced", "webhooks", false))
+		if (!IsEnabled)
 			return;
-		if (!AppConfig.Get("webhooks", InternalName + "_enabled", false))
-			return;
+
 		var urlEnding = AppConfig.Get("webhooks", InternalName + "_url", "");
 		if (urlEnding.StartsWith("https://discord.com/api/webhooks/"))
 		{
@@ -188,7 +189,7 @@ public partial class DiscordWebhookProxy
 			return;
 		}
 
-		var stringContent = await formContent.ReadAsStringAsync();
+		//var stringContent = await formContent.ReadAsStringAsync();
 
 		var executionResponse = await discordAddress
 			.MakeRequest($"/api/webhooks/{urlEnding}", HttpMethod.Post)

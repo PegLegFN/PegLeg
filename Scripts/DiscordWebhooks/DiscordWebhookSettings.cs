@@ -20,7 +20,7 @@ public partial class DiscordWebhookSettings : Node
 
 	public override void _Ready()
 	{
-		toggleEditor.Set("Text", displayName);
+		toggleEditor.Set("text", displayName);
 		toggleEditor.UpdateTargetSetting("webhooks", internalName + "_enabled");
 		urlEditor.UpdateTargetSetting("webhooks", internalName + "_url");
 		syncToggleEditor.UpdateTargetSetting("webhooks", internalName + "_useSync");

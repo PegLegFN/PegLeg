@@ -113,8 +113,8 @@ public partial class GameMission
 		using var st = await missionUpdateSemaphore.AwaitToken();
 		if (!st.wasImmediate)
 			return;
-		bool delayFirst = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
-		bool retryLiteMissions = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second < 30;
+		bool isExactlyReset = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
+		bool isWithin30sOfReset = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second < 30;
 
 		MissionDict = null;
 		MissionList = null;
@@ -125,7 +125,7 @@ public partial class GameMission
 
 		while (true)
 		{
-			if (delayFirst)
+			if (isExactlyReset)
 			{
 				//if request is made exactly on the hour, its likely for daily reset.
 				//requesting missions exactly at reset can cause consistancy issues, so
@@ -177,7 +177,7 @@ public partial class GameMission
 			//edge case where missions expire after being requested but before the response is returned
 			if (!ignoreExpiry && missionReset < DateTime.UtcNow)
 			{
-				if (totalRetries < 3 && retryLiteMissions)
+				if (totalRetries < 3 && isWithin30sOfReset)
 				{
 					totalRetries++;
 					missionData = null;

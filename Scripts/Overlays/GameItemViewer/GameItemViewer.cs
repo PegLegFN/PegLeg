@@ -10,7 +10,13 @@ public partial class GameItemViewer : ModalWindow
 	public static GameItemViewer Instance { get; private set; }
 
 	[Export]
+	LineEdit displayUUID;
+
+	[Export]
 	GameItemEntry displayItemEntry;
+
+	[Export]
+	GameItemEntry defenderEquipmentEntry;
 
 	[Export]
 	Control inventoryItemPanel;
@@ -75,7 +81,7 @@ public partial class GameItemViewer : ModalWindow
 	[Export]
 	GameItemEntry[] itemChoiceEntries;
 	[Export]
-	Control[] itemChoiceLayoutSections;
+	Control[] itemChoiceOrTextures;
 
 	[ExportGroup("Purchases")]
 	[Export]
@@ -181,9 +187,13 @@ public partial class GameItemViewer : ModalWindow
 		currentOfferEntry.Visible = false;
 		currentOfferEntry.ClearOffer();
 		currentOffer = null;
+		defenderEquipmentEntry.Visible = false;
 
 		if (!preserveUnseen && newItem.profile?.account.isOwned == true)
 			newItem.MarkItemSeen();
+
+		displayUUID.Visible = AppConfig.Get("advanced", "developer", false) && newItem.profile is not null;
+		displayUUID.Text = newItem.uuid;
 
 		upgrader.Visible = currentItem.attributes?["level"] is not null;
 		upgrader.SetItem(currentItem);
@@ -191,23 +201,16 @@ public partial class GameItemViewer : ModalWindow
 		//if choice cardpack, display choices instead
 		if (!rawInspect && currentItem.template?.Type == "CardPack" && currentItem.CardPackChoices is GameItem[] itemChoices)
 		{
-			itemChoiceParent.Visible = true;
-			choices = itemChoices;
-
-			for (int i = 0; i < choices.Length; i++)
-				itemChoiceEntries[i].SetItem(choices[i]);
-			for (int i = 0; i < choices.Length - 2; i++)
-				itemChoiceLayoutSections[i].Visible = true;
-			for (int i = choices.Length - 2; i < itemChoiceLayoutSections.Length; i++)
-				itemChoiceLayoutSections[i].Visible = false;
-			if (prioritiseChoice < 0 || prioritiseChoice >= choices.Length)
-				prioritiseChoice = 0;
-
-			SetDisplayItem(choices[prioritiseChoice]);
-			itemChoiceEntries[prioritiseChoice].EmitPressedSignal();
+			SetDisplayChoices(itemChoices, prioritiseChoice);
 		}
 		else
 		{
+			if(currentItem.template?.Type == "Defender" && currentItem.attributes["weapon_schematic"]?.ToString() is string weaponUUID)
+			{
+				var weapon = currentItem.profile?.GetItem(weaponUUID);
+				defenderEquipmentEntry.SetItem(weapon);
+				defenderEquipmentEntry.Visible = weapon is not null;
+			}
 			SetDisplayItem(currentItem);
 		}
 	}
@@ -216,6 +219,7 @@ public partial class GameItemViewer : ModalWindow
 	{
 		upgrader.Visible = false;
 		itemChoiceParent.Visible = false;
+		defenderEquipmentEntry.Visible = false;
 		currentOffer = offer;
 		currentItem = currentOffer.itemGrants[0];
 		SetDisplayItem(currentItem);
@@ -227,6 +231,32 @@ public partial class GameItemViewer : ModalWindow
 		purchaseSpinner.Value = 1;
 		SpinnerChanged(1);
 		currentOfferEntry.Visible = currentItem?.template is not null && !currentOffer.FakeOffer && GameAccount.ActiveAccount.isOwned;
+	}
+
+	void SetDisplayChoices(GameItem[] itemChoices, int prioritiseChoice = 0)
+	{
+		itemChoiceParent.Visible = true;
+		choices = itemChoices;
+
+		for (int i = 0; i < Mathf.Min(choices.Length, itemChoiceEntries.Length); i++)
+		{
+			itemChoiceEntries[i].SetItem(choices[i]);
+			itemChoiceEntries[i].Visible = true;
+			if (i > 0 && itemChoiceOrTextures.Length >= i)
+				itemChoiceOrTextures[i - 1].Visible = true;
+		}
+		for (int i = choices.Length; i < itemChoiceEntries.Length; i++)
+		{
+			itemChoiceEntries[i].ClearItem();
+			itemChoiceEntries[i].Visible = false;
+			if (i > 0 && itemChoiceOrTextures.Length >= i)
+				itemChoiceOrTextures[i - 1].Visible = false;
+		}
+		if (prioritiseChoice < 0 || prioritiseChoice >= choices.Length)
+			prioritiseChoice = 0;
+
+		SetDisplayItem(choices[prioritiseChoice]);
+		itemChoiceEntries[prioritiseChoice].EmitPressedSignal();
 	}
 
 	GameItem displayedItem = null;

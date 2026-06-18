@@ -277,7 +277,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 		inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
 
-		powerLevel?.SetAccountManual(account);
+		powerLevel?.SetAccount(account);
 
 		if (!account.isOwned)
 		{

@@ -7,14 +7,16 @@
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/Dashboard/dashboardNotableRewards.tscn" id="6_6qpji"]
 [ext_resource type="PackedScene" uid="uid://bytcic4qvijqc" path="res://Scenes/Desktop/Views/Dashboard/dashboardPowerHourAlert.tscn" id="6_ury42"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="6_xee71"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="7_6rsuw"]
 [ext_resource type="PackedScene" uid="uid://cl6kj5e8gsgda" path="res://Scenes/Desktop/Views/Dashboard/dashboardAllRewards.tscn" id="7_7he0n"]
 [ext_resource type="PackedScene" uid="uid://bi6d0s5f2iadi" path="res://Scenes/Desktop/Views/Dashboard/dashboardSupercharger.tscn" id="8_b8wcl"]
+[ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="8_k3a2q"]
 [ext_resource type="PackedScene" uid="uid://cqrhkmo2wovb1" path="res://Scenes/Desktop/Views/Dashboard/dashboardToDoList.tscn" id="8_xcujg"]
 [ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/dashboardLlamaShop.tscn" id="9_db4i7"]
 [ext_resource type="PackedScene" uid="uid://ito2u56pohnm" path="res://Scenes/Desktop/Views/Dashboard/dashboardXPProgress.tscn" id="10_gx2q3"]
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="11_21lf2"]
 [ext_resource type="PackedScene" uid="uid://bmm5phfkc6fou" path="res://Scenes/Desktop/Views/Dashboard/simplifiedDashboard.tscn" id="13_db4i7"]
-[ext_resource type="PackedScene" uid="uid://cl73yobkdxkue" path="res://Scenes/Desktop/Views/Dashboard/dashboardBRRivalProgress.tscn" id="14_gx2q3"]
+[ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="19_ury42"]
 [ext_resource type="PackedScene" uid="uid://cyyifj2tha4ri" path="res://Scenes/SharedImageGenerators/shareable_mission_summary.tscn" id="51_0op8k"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="52_q8xc3"]
 [ext_resource type="PackedScene" uid="uid://cschg8vgh0q5i" path="res://Scenes/SharedImageGenerators/shareable_llama_summary.tscn" id="53_pll84"]
@@ -56,11 +58,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="3" unique_id=1771145246]
+[node name="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="4" unique_id=1771145246]
 visible = true
 
-[node name="Button2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="4" unique_id=316163759]
+[node name="Button2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="5" unique_id=316163759]
 visible = true
+
+[node name="Button3" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="6" unique_id=798965087]
+tooltip_text = "Force Dispatches a Mission Summary "
 
 [node name="VirtualTabBar" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="1" unique_id=1243899430]
 visible = false
@@ -117,10 +122,6 @@ excludeRewards = [NodePath("../LegSurvivors"), NodePath("../VBucks")]
 [node name="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer" parent_id_path=PackedInt32Array(1099693610, 1661216227) index="1" unique_id=530096324]
 custom_minimum_size = Vector2(0, 0)
 
-[node name="ScrollContainer2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer/MarginContainer" index="0" unique_id=125549210]
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
-
 [node name="SmallLoadingIcon" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer/MarginContainer" index="1" unique_id=532557855]
 visible = false
 
@@ -156,6 +157,43 @@ layout_mode = 2
 [node name="PowerHourAlert" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=878248880 instance=ExtResource("6_ury42")]
 layout_mode = 2
 
+[node name="Label" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="1" unique_id=451205499]
+size_flags_horizontal = 3
+horizontal_alignment = 0
+
+[node name="Button3" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="3" unique_id=948893207]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Force Dispatches a Power Hour Heads Up "
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="CheckButton" type="CheckButton" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=647675203]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("7_6rsuw")
+section = "webhooks"
+key = "powerHour_enabled"
+
+[node name="TextureRect" type="TextureRect" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=2049702868]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_k3a2q")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=2107738049]
 layout_mode = 2
 alignment = 1
@@ -169,12 +207,8 @@ size_flags_vertical = 0
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="ShareBtn" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1829206076, 1192162583) index="2" unique_id=2021237232]
+[node name="ShareBtn" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1829206076, 1192162583) index="3" unique_id=2021237232]
 visible = true
-
-[node name="DashboardBRRivalProgress" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=1546053 instance=ExtResource("14_gx2q3")]
-custom_minimum_size = Vector2(471.5, 0)
-layout_mode = 2
 
 [node name="Container" type="HBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=1157462116]
 layout_mode = 2
@@ -383,9 +417,18 @@ layout_mode = 2
 [node name="XpSummaryViewport" parent="ShareableXpSummary" index="0" unique_id=363203782]
 render_target_update_mode = 0
 
+[node name="ShareablePowerHour" parent="." unique_id=1004627350 instance=ExtResource("19_ury42")]
+visible = false
+layout_mode = 2
+
+[node name="PowerHourViewport" parent="ShareablePowerHour" index="0" unique_id=424942682]
+render_target_update_mode = 0
+
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button" to="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All" method="ReloadMissions"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button2" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button3" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
+[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
+[connection signal="ConfigValueChanged" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3/CheckButton" to="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" method="set_visible"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="ShareableLlamaSummary/LlamaSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardXPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
@@ -396,6 +439,7 @@ render_target_update_mode = 0
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer/Hidden/MissionCollection"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All/VBoxContainer/VBoxContainer/To-Do List (0)"]
+[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/HBoxContainer/DashboardLlamaShop"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/Container/VBoxContainer/DoubleLegendary"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/Container/VBoxContainer/Stone"]
@@ -416,3 +460,17 @@ render_target_update_mode = 0
 [editable path="ShareableLlamaSummary"]
 [editable path="ShareableXpSummary"]
 [editable path="ShareableXpSummary/XpSummaryViewport/PegLegWatermark/DashboardXPProgress"]
+[editable path="ShareablePowerHour"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry2"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry3"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry4"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry5"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry6"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer2/MissionAlertItemEntry"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer2/MissionAlertItemEntry2"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer2/MissionAlertItemEntry3"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer2/MissionAlertItemEntry4"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer2/MissionAlertItemEntry5"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer2/MissionAlertItemEntry6"]

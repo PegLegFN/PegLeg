@@ -28,6 +28,8 @@ public partial class DailySummaryWebhookDispatcher : Node
 
 	async void ExecuteWebhookDelayed()
 	{
+		if (!webhook.IsEnabled)
+			return;
 		if (webhook.UsesSync)
 		{
 			//waits 9 seconds, abandons if missions arent fetched by then

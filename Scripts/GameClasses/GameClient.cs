@@ -126,6 +126,20 @@ public class GameClient
 			deviceDetails?["secret"]?.ToString()
 		);
 
+	public Task<HttpResponseMessage> EOSLogin(string authToken)
+	{
+		return WebHelpers.MakeRequest("https://api.epicgames.dev/auth/v1/oauth/token", HttpMethod.Post)
+			.SetAuthorisation(ClientHeader)
+			.SetFormContent(
+				$"grant_type=external_auth&" +
+				$"external_auth_type=epicgames_access_token&" +
+				$"external_auth_token={authToken}&" +
+				$"deployment_id=62a9473a2dca46b29ccf17577fcf42d7&" +
+				$"nonce={Guid.NewGuid()}"
+			)
+			.Send();
+	}
+
 	public Task<HttpResponseMessage> LoginWithDeviceAuth(string accountId, string deviceId, string deviceSecret)
 	{
 		if (string.IsNullOrWhiteSpace(accountId))

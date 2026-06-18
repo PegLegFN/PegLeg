@@ -12,100 +12,133 @@ public partial class HomebasePowerLevel : Control
 	[Export]
 	bool ventures;
 	[Export]
+	bool animate = true;
+	[Export]
 	Color tooltipColor = Colors.Aquamarine;
 
-	public override void _Ready()
+	public override async void _Ready()
 	{
+		ClearStats();
+		homebaseNumberLabel.Text = "";
+		if (useCurrent)
+			TooltipText = "Waiting for data...";
+
+		await Helpers.WaitForFrame();
+		await Helpers.WaitForFrame();
+		Size = Vector2.Zero;
+		await Helpers.WaitForFrame();
+		await Helpers.WaitForFrame();
+
+		ClearStats();
 		if (useCurrent)
 		{
-			GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
-			OnActiveAccountChanged();
+			TooltipText = "Waiting for data...";
 		}
 	}
 
-	//todo: move fort stat change detection logic to GameAccount and GameProfile, and subscribe to OnFortStatChanged
-	CancellationTokenSource accountChangeCts = new();
-	async void OnActiveAccountChanged()
+	void OnActiveAccountChanged() => SetAccount(GameAccount.ActiveAccount);
+
+	public void SetAccount(GameAccount account)
 	{
-		accountChangeCts = accountChangeCts.CancelAndRegenerate(out var ct);
-
-		if (currentProfile is not null)
+		if (currentAccount is not null)
 		{
-			currentProfile.OnItemAdded -= OnProfileItemChanged;
-			currentProfile.OnItemUpdated -= OnProfileItemChanged;
-			currentProfile.OnItemRemoved -= OnProfileItemChanged;
+			if (ventures)
+				currentAccount.OnVentureRatingDataChanged -= OnRatingChanged;
+			else
+				currentAccount.OnRatingDataChanged -= OnRatingChanged;
 
-			currentProfile.OnStatsChanged -= OnProfileStatChanged;
-
-			currentProfile = null;
+			currentAccount = null;
 		}
-		if (GameAccount.ActiveAccount.accountId == null)
+
+		if (account.accountId == null)
 		{
+			ClearStats();
 			return;
 		}
-		var newProfile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
-		if (ct.IsCancellationRequested)
-			return;
 
-		currentProfile = newProfile;
+		currentAccount = account;
 
-		currentProfile.OnItemAdded += OnProfileItemChanged;
-		currentProfile.OnItemUpdated += OnProfileItemChanged;
-		currentProfile.OnItemRemoved += OnProfileItemChanged;
-
-		currentProfile.OnStatsChanged += OnProfileStatChanged;
+		if (ventures)
+			currentAccount.OnVentureRatingDataChanged += OnRatingChanged;
+		else
+			currentAccount.OnRatingDataChanged += OnRatingChanged;
 
 		UpdateStatsVisuals();
 	}
 
-	public async void SetAccountManual(GameAccount account)
-	{
-		currentProfile = await account.GetProfile(FnProfileTypes.AccountItems).Query();
-		UpdateStatsVisuals();
-	}
+	GameAccount currentAccount;
 
-	GameProfile currentProfile;
+	void OnRatingChanged(GameAccount account) => UpdateStatsVisuals();
 
-	void OnProfileStatChanged()
-	{
-		UpdateStatsVisuals();
-	}
-
-	void OnProfileItemChanged(GameItem item)
-	{
-		if (ventures && item?.template?.Type == "Worker")
-			UpdateStatsVisuals();
-	}
-
+	Tween tintTween;
 	private void UpdateStatsVisuals()
 	{
-		if (currentProfile?.account is null)
+		if (currentAccount is null)
 			return;
-		RatingData stats = ventures ? currentProfile.account.GetVentureRatingData() : currentProfile.account.GetRatingData();
-		var powerLevel = stats.PowerLevel;
-		homebaseNumberLabel.Text = Mathf.Floor(powerLevel).ToString();
-		homebaseNumberProgressBar.Value = powerLevel % 1;
+		RatingData stats = ventures ? currentAccount.GetVentureRatingData() : currentAccount.GetRatingData();
+		var newPowerLevel = stats.PowerLevel;
 		TooltipText = CustomTooltip.GenerateSimpleTooltip(
 			"Power Level",
 			homebaseNumberLabel.Text,
 			[
-				$"{(ventures? "Venture" : "Homebase")} Power: {Mathf.Floor(powerLevel)}\n({Mathf.Floor((powerLevel % 1) * 100)}% progress to {Mathf.Floor(powerLevel) + 1})"
+				$"{(ventures? "Venture" : "Homebase")} Power: {Mathf.Floor(newPowerLevel)}\n({Mathf.Floor((newPowerLevel % 1) * 100)}% progress to {Mathf.Floor(newPowerLevel) + 1})"
 			],
 			tooltipColor.ToHtml()
 		);
+
+		if (!animate)
+		{
+			AnimatedPowerLevel = newPowerLevel;
+			return;
+		}
+
+		var targetColor = AnimatedPowerLevel < newPowerLevel ? Colors.Green : Colors.Red;
+		homebaseNumberLabel.SelfModulate = targetColor;
+		homebaseNumberProgressBar.SelfModulate = targetColor;
+		if (tintTween?.IsValid() == true)
+			tintTween.Kill();
+		tintTween = CreateTween().SetParallel();
+		tintTween.TweenProperty(homebaseNumberLabel, "self_modulate", Colors.White, 0.75);
+		tintTween.TweenProperty(homebaseNumberProgressBar, "self_modulate", Colors.White, 0.75);
+		tintTween.TweenProperty(this, "AnimatedPowerLevel", newPowerLevel, 0.75).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Cubic);
+	}
+
+	float latestPowerLevel = 0;
+	float AnimatedPowerLevel
+	{
+		get => latestPowerLevel;
+		set
+		{
+			latestPowerLevel = value;
+			homebaseNumberLabel.Text = Mathf.Floor(value).ToString();
+			homebaseNumberProgressBar.Value = value % 1;
+		}
+	}
+
+	void ClearStats()
+	{
+		if (animate)
+		{
+			if (tintTween?.IsValid() == true)
+				tintTween.Kill();
+			homebaseNumberLabel.SelfModulate = Colors.White;
+			homebaseNumberProgressBar.SelfModulate = Colors.White;
+		}
+
+		latestPowerLevel = 0;
+		homebaseNumberLabel.Text = "???";
+		homebaseNumberProgressBar.Value = 0;
+		TooltipText = "No Account";
 	}
 
 	public override void _ExitTree()
 	{
-		if (currentProfile is not null)
+		if (currentAccount is not null)
 		{
-			currentProfile.OnItemAdded -= OnProfileItemChanged;
-			currentProfile.OnItemUpdated -= OnProfileItemChanged;
-			currentProfile.OnItemRemoved -= OnProfileItemChanged;
-
-			currentProfile.OnStatsChanged -= OnProfileStatChanged;
-
-			currentProfile = null;
+			if (ventures)
+				currentAccount.OnVentureRatingDataChanged -= OnRatingChanged;
+			else
+				currentAccount.OnRatingDataChanged -= OnRatingChanged;
 		}
 		GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;
 	}

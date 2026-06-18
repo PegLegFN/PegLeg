@@ -1,22 +1,41 @@
-[gd_scene load_steps=3 format=3 uid="uid://3xbl5x8mbmjv"]
+[gd_scene format=3 uid="uid://3xbl5x8mbmjv"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_autpg"]
 [ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="2_2h86w"]
 
-[node name="MissionAlertItemEntry" type="HBoxContainer"]
+[node name="MissionAlertItemEntry" type="HBoxContainer" unique_id=1251423203]
+offset_right = 342.0
+offset_bottom = 48.0
 script = ExtResource("1_autpg")
 
-[node name="TextureRect6" type="TextureRect" parent="."]
+[node name="TextureRect6" type="TextureRect" parent="." unique_id=1336639648]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+size_flags_vertical = 0
 texture = ExtResource("2_2h86w")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=155602561]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=504899174]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Metal Corosion"
 
+[node name="Description" type="Label" parent="VBoxContainer" unique_id=603560537]
+visible = false
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 14
+text = "The metal gets corroded and stuff, idk"
+autowrap_mode = 3
+
+[connection signal="DescriptionChanged" from="." to="VBoxContainer/Description" method="set_text"]
 [connection signal="IconChanged" from="." to="TextureRect6" method="set_texture"]
-[connection signal="NameChanged" from="." to="Label" method="set_text"]
+[connection signal="NameChanged" from="." to="VBoxContainer/Label" method="set_text"]
 [connection signal="TooltipChanged" from="." to="." method="set_tooltip_text"]

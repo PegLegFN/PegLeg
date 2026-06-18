@@ -17,19 +17,21 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel")]
-offset_right = 298.0
-offset_bottom = 156.0
+[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel", "anecdoteParent")]
+offset_right = 437.0
+offset_bottom = 86.0
+size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_smp72")
-incomingText = "Power Hour Incoming"
+incomingText = "Power Hour Scheduled"
 activeText = "Power Hour Active"
 header = NodePath("VBoxContainer/HBoxContainer/PanelContainer/Label2")
 countdown = NodePath("VBoxContainer/HBoxContainer/RefreshTimer")
-modifierContainer = NodePath("VBoxContainer/VBoxContainer")
-modifierEntryList = [NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry2"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry3"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry4"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry5"), NodePath("VBoxContainer/VBoxContainer/MissionAlertItemEntry6")]
-noModifiers = NodePath("VBoxContainer/Label")
-noModifiersLabel = NodePath("VBoxContainer/Label")
+modifierContainer = NodePath("VBoxContainer/Modifiers")
+modifierEntryList = [NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry2"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry3"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry4"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry5"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry6")]
+noModifiers = NodePath("VBoxContainer/HBoxContainer/Label")
+noModifiersLabel = NodePath("VBoxContainer/HBoxContainer/Label")
+anecdoteParent = NodePath("VBoxContainer/Anecdotes")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=73010128]
 layout_mode = 2
@@ -57,42 +59,125 @@ text = "Power Hour Incoming"
 horizontal_alignment = 1
 uppercase = true
 
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=451205499]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.51171875, 0.51171875, 0.51171875, 1)
+text = "(Validation status)"
+horizontal_alignment = 1
+
 [node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("1_afrxp")]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 customCritTime = 300
 
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=451205499]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.51171875, 0.51171875, 0.51171875, 1)
-text = "Modifiers unknown"
-horizontal_alignment = 1
-
-[node name="VBoxContainer" type="Container" parent="VBoxContainer" unique_id=679697045]
+[node name="Modifiers" type="Container" parent="VBoxContainer" unique_id=679697045]
 layout_mode = 2
 script = ExtResource("3_0pbo2")
 CompressSpacing = true
 Spacing = Vector2(15, 5)
 UseLargestChild = true
 
-[node name="MissionAlertItemEntry" parent="VBoxContainer/VBoxContainer" unique_id=55775401 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry" parent="VBoxContainer/Modifiers" unique_id=55775401 instance=ExtResource("2_0ofo2")]
 layout_mode = 2
 
-[node name="MissionAlertItemEntry2" parent="VBoxContainer/VBoxContainer" unique_id=1583837197 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry2" parent="VBoxContainer/Modifiers" unique_id=1583837197 instance=ExtResource("2_0ofo2")]
 layout_mode = 2
 
-[node name="MissionAlertItemEntry3" parent="VBoxContainer/VBoxContainer" unique_id=1136343832 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry3" parent="VBoxContainer/Modifiers" unique_id=1136343832 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="MissionAlertItemEntry4" parent="VBoxContainer/VBoxContainer" unique_id=1769395216 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry4" parent="VBoxContainer/Modifiers" unique_id=1769395216 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="MissionAlertItemEntry5" parent="VBoxContainer/VBoxContainer" unique_id=959529323 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry5" parent="VBoxContainer/Modifiers" unique_id=959529323 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="MissionAlertItemEntry6" parent="VBoxContainer/VBoxContainer" unique_id=117480615 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry6" parent="VBoxContainer/Modifiers" unique_id=117480615 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
+
+[node name="Anecdotes" type="VBoxContainer" parent="VBoxContainer" unique_id=1516763206]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=866967817]
+self_modulate = Color(0.054141857, 0.8828125, 0.8432795, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
+metadata/requirement = "gm_phoenix_superoutlander"
+
+[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer" unique_id=1174201599]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+text = "Infinite punching = Best time for farming"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=1086231502]
+self_modulate = Color(0.88235295, 0.8261964, 0.05831259, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
+metadata/requirement = "gm_phoenix_superconstructor"
+
+[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer2" unique_id=501378164]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+text = "Reduced build cost = Best time to build endurances"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=1639378173]
+self_modulate = Color(0.88235295, 0.49367204, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
+metadata/requirement = "gm_phoenix_superheroic"
+
+[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer3" unique_id=1359297546]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+text = "Reduced cooldowns = great war cry builds"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="PanelContainer4" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=2056557416]
+self_modulate = Color(0.53515625, 0.52333087, 0.5321999, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
+metadata/requirement = "gm_phoenix_superninja"
+
+[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer4" unique_id=581335884]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+text = "increased damage & attack speed = very very fun"
+horizontal_alignment = 1
+uppercase = true

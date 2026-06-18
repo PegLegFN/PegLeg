@@ -176,7 +176,69 @@ section = "missions"
 key = "show_background"
 defaultValue = true
 
+[node name="PowerHourHeadsUp" type="HBoxContainer" parent="." unique_id=2095635053]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PowerHourHeadsUp" unique_id=498152369]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+text = "Power Hour
+Heads-up"
+
+[node name="HSlider" type="HSlider" parent="PowerHourHeadsUp" unique_id=1457914025]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 96.0
+value = 24.0
+rounded = true
+scrollable = false
+tick_count = 9
+ticks_on_borders = true
+script = ExtResource("3_qiwkn")
+section = "missions"
+key = "powerhour_headsup"
+asInt = true
+defaultValue = 24.0
+requireApply = false
+
+[node name="Label2" type="Label" parent="PowerHourHeadsUp" unique_id=825959451]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+text = "24"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="PowerHourHeadsUp" unique_id=828577248]
+layout_mode = 2
+text = "hrs"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="PowerHourHeadsUp" unique_id=1102707573]
+visible = false
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+text = "Apply"
+
+[node name="TextureRect" type="TextureRect" parent="PowerHourHeadsUp/Button" unique_id=136218284]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_n30m0")
+expand_mode = 1
+
 [connection signal="AppliedChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="NotableItemCap/HSlider" to="NotableItemCap/HSlider" method="SetValue"]
 [connection signal="UnappliedLabelChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Label2" method="set_text"]
 [connection signal="pressed" from="NotableItemCap/Button" to="NotableItemCap/HSlider" method="ApplyValue"]
+[connection signal="AppliedChanged" from="PowerHourHeadsUp/HSlider" to="PowerHourHeadsUp/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="PowerHourHeadsUp/HSlider" to="PowerHourHeadsUp/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="PowerHourHeadsUp/HSlider" to="PowerHourHeadsUp/Label2" method="set_text"]
+[connection signal="pressed" from="PowerHourHeadsUp/Button" to="PowerHourHeadsUp/HSlider" method="ApplyValue"]

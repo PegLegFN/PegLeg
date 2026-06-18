@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Linq;
-using System.Text.Json;
 
 public partial class PowerHourAlert : Control
 {
@@ -9,6 +8,8 @@ public partial class PowerHourAlert : Control
 	string incomingText;
 	[Export]
 	string activeText;
+	[Export]
+	bool useHeadsUpForVisibility = true;
 	[Export]
 	Label header;
 	[Export]
@@ -21,71 +22,83 @@ public partial class PowerHourAlert : Control
 	Control noModifiers;
 	[Export]
 	Label noModifiersLabel;
+	[Export]
+	Control anecdoteParent;
 
+	Control[] anecdotes = [];
 	public override void _Ready()
 	{
-		Visible = false;
-		GameCalender.OnCalenderUpdate += OnCalenderUpdate;
-		OnCalenderUpdate();
+		anecdotes = [.. anecdoteParent.GetChildren().OfType<Control>()];
+		if (useHeadsUpForVisibility)
+		{
+			Visible = false;
+			RefreshTimerController.OnMinuteChanged += CheckForHeadsUp;
+		}
+		PowerHourScheduleTracker.CurrentOrNextEventChanged += SetDetails;
+		SetDetails();
 	}
 
-	private async void OnCalenderUpdate()
+	public override void _ExitTree()
 	{
-		if (!GameCalender.HasCalender)
-		{
-			await GameCalender.Check();
-			return;
-		}
+		if (useHeadsUpForVisibility)
+			RefreshTimerController.OnMinuteChanged -= CheckForHeadsUp;
+		PowerHourScheduleTracker.CurrentOrNextEventChanged -= SetDetails;
+	}
+
+	private int HeadsUpHours =>
+		Mathf.Max(AppConfig.Get("missions", "powerhour_headsup", 24), 0);
+		//24 * 7;
+
+	private void CheckForHeadsUp()
+	{
+		var phEvent = PowerHourScheduleTracker.CurrentOrNextEvent;
 		var now = DateTime.UtcNow;
-		var flagActiveOrIncoming = GameCalender.TryGetFlagRange("EventFlag.PreChrysus", out var start, out var end) && now < end;
-		Visible = flagActiveOrIncoming;
-		if (!flagActiveOrIncoming)
-			return;
-		var realStart = start.AddMinutes(30);
-		bool active = realStart < now && now < end;
-		header.Text = active ? activeText : incomingText;
-		if (active)
-			countdown.SetCustomRefreshTime(end, realStart);
-		else
-			countdown.SetCustomRefreshTime(realStart, start);
-
-		var modifierFlags = GameCalender.EventFlagsWithPrefix("EventFlag.Chrysus");
-		noModifiers.Visible = modifierFlags.Length == 0;
-		if(modifierFlags.Length == 0)
-		{
-			var fallbackData = PegLegResourceManager.MagicNumbers["powerHourPrediction"]?.AsObject();
-			if (modifierFlags.Length == 0 && fallbackData is not null && fallbackData["expires"]?.Deserialize<DateTime>() is DateTime expires && expires > DateTime.UtcNow)
-			{
-				var possibleModifiers = fallbackData["modifiers"].Deserialize<string[]>().Select(GameItemTemplate.Get).ToArray();
-				SetModifiers(possibleModifiers);
-				noModifiersLabel.Text = "Expected modifiers, may be innacuate:";
-				return;
-			}
-			SetModifiers([]);
-			noModifiersLabel.Text = "Modifiers unknown";
-			return;
-		}
-
-		if (GameMission.MissionList is null)
-			await GameMission.UpdateMissions();
-		var modifiers = GameMission.MissionList.FirstOrDefault(m => m.TheaterCat != "v").theaterInfo.GetModifiers();
-		var activeModifiers = modifierFlags.Select(f => modifiers.TryGetValue(f, out var m) ? m : null).Where(m => m is not null).ToArray();
-		SetModifiers(activeModifiers);
+		int headsUpHours = HeadsUpHours;
+		Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
 	}
 
-	void SetModifiers(GameItemTemplate[] activeModifiers)
+	private void SetDetails()
 	{
-		modifierContainer.Visible = activeModifiers.Length > 0;
+		var phEvent = PowerHourScheduleTracker.CurrentOrNextEvent;
+		var now = DateTime.UtcNow;
+		int headsUpHours = HeadsUpHours;
+		if (useHeadsUpForVisibility)
+			Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
+
+		bool isActive = phEvent.start < now;
+		header.Text = isActive ? activeText : incomingText;
+		if (isActive)
+			countdown.SetCustomRefreshTime(phEvent.end, phEvent.start);
+		else
+			countdown.SetCustomRefreshTime(phEvent.start, phEvent.start.AddHours(-headsUpHours));
+
+		noModifiersLabel.Text = phEvent.confirmation switch
+		{
+			PowerHourScheduleTracker.ConfirmationState.InProgress => "(Confirming...)",
+			PowerHourScheduleTracker.ConfirmationState.OnlyTimeConfirmed => "(Modifiers Unconfirmed)",
+			PowerHourScheduleTracker.ConfirmationState.AllConfirmed => "",
+			_ => "(Unconfirmed)",
+		};
+
+		var modifiers = phEvent.modifiers ?? [];
+		modifierContainer.Visible = modifiers.Length > 0;
 		if (!modifierContainer.Visible)
 			return;
-		for (int i = 0; i < Mathf.Min(activeModifiers.Length, modifierEntryList.Length); i++)
+		for (int i = 0; i < Mathf.Min(modifiers.Length, modifierEntryList.Length); i++)
 		{
-			modifierEntryList[i].SetItem(activeModifiers[i].CreateInstance());
+			modifierEntryList[i].SetItem(modifiers[i].CreateInstance());
 			modifierEntryList[i].Visible = true;
 		}
-		for (int i = activeModifiers.Length; i < modifierEntryList.Length; i++)
+		for (int i = modifiers.Length; i < modifierEntryList.Length; i++)
 		{
 			modifierEntryList[i].Visible = false;
 		}
+
+		var modifierNames = modifiers.Select(t => t.Name.ToLower()).ToHashSet();
+		foreach (var item in anecdotes)
+		{
+			item.Visible = modifierNames.Contains(item.GetMeta("requirement").AsString()?.ToLower());
+		}
 	}
+
 }

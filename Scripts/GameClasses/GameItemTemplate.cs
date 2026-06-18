@@ -410,6 +410,9 @@ public partial class GameItemTemplate
 		return null;
 	}
 
+	//note when migrating to blakebeard: this returns the combined RECYCLE value (excluding manuals), since a Lv1 item has a
+	//base XP value. Prob worth subtracting the base XP value from the returned costs for clarity, and adding it back along
+	//with the manuals when calculating the recycle value of the template
 	public GameItem.ItemData[] GetCombinedUpgradeValue(int ofLevel)
 	{
 		if (Tier <= 1)

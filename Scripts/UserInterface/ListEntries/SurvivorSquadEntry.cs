@@ -1,5 +1,7 @@
 using Godot;
+using Polly;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -31,7 +33,12 @@ public partial class SurvivorSquadEntry : Control
 	[Export(PropertyHint.ArrayType)]
 	InventoryItemSlot[] survivorSlots;
 
-	bool statUpdateQueued = false;
+	[Export]
+	Control summaryParent;
+
+	Control[] summaryNodes = [];
+
+	bool squadUpdateQueued = false;
 	GameAccount overrideAccount;
 
 	public override void _Ready()
@@ -41,35 +48,37 @@ public partial class SurvivorSquadEntry : Control
 		squadIcon.Texture = PegLegResourceManager.supplimentaryData.SquadIcons[synergy];
 		fortPointsIcon.Texture = PegLegResourceManager.supplimentaryData.SquadFortIcons[synergy];
 
+		summaryNodes = summaryParent?.GetChildren().OfType<Control>().ToArray() ?? summaryNodes;
+
 		leadSurvivorSlot.OnItemChangeRequested += slot => HandleChangeRequest(slot, 0);
 		leadSurvivorSlot.OnSlotItemChanged += _ =>
 		{
 			for (int i = 0; i < survivorSlots.Length; i++)
 				survivorSlots[i].UpdateItem();
-			statUpdateQueued = true;
+			squadUpdateQueued = true;
 		};
 		leadSurvivorSlot.SetSlotData(
-				FnProfileTypes.AccountItems,
-				"Worker",
-				PegLegResourceManager.supplimentaryData.SynergyToSquadId[synergy],
-				0,
-				"HomebaseNode:questreward_" + slotRequirements[0].ToLower()
-			);
+			FnProfileTypes.AccountItems,
+			"Worker",
+			PegLegResourceManager.supplimentaryData.SynergyToSquadId[synergy],
+			0,
+			"HomebaseNode:questreward_" + slotRequirements[0].ToLower()
+		);
 
 		for (int i = 0; i < survivorSlots.Length; i++)
 		{
 			int slotIndex = i + 1;
 
 			survivorSlots[i].OnItemChangeRequested += slot => HandleChangeRequest(slot, slotIndex);
-			survivorSlots[i].OnSlotItemChanged += handle => statUpdateQueued = true;
+			survivorSlots[i].OnSlotItemChanged += _ => squadUpdateQueued = true;
 
 			survivorSlots[i].SetSlotData(
-					FnProfileTypes.AccountItems,
-					"Worker",
-					PegLegResourceManager.supplimentaryData.SynergyToSquadId[synergy],
-					slotIndex,
-					"HomebaseNode:questreward_" + slotRequirements[slotIndex].ToLower()
-				);
+				FnProfileTypes.AccountItems,
+				"Worker",
+				PegLegResourceManager.supplimentaryData.SynergyToSquadId[synergy],
+				slotIndex,
+				"HomebaseNode:questreward_" + slotRequirements[slotIndex].ToLower()
+			);
 		}
 
 		SetOverrideAccount();
@@ -121,24 +130,102 @@ public partial class SurvivorSquadEntry : Control
 		if (hasAnySlot)
 			Visible = true;
 
-		UpdateFortStat();
+		UpdateSquadSummary();
 	}
-
 
 	public override void _Process(double delta)
 	{
-		if (statUpdateQueued)
-			UpdateFortStat();
-		statUpdateQueued = false;
+		if (squadUpdateQueued)
+			UpdateSquadSummary();
+		squadUpdateQueued = false;
 	}
 
-	void UpdateFortStat()
+	void UpdateSquadSummary()
 	{
-		int summedValue = leadSurvivorSlot.slottedItem?.CalculateSurvivorRating(true) ?? 0;
-		summedValue += survivorSlots.Select(slot => slot.slottedItem?.CalculateSurvivorRating(true) ?? 0).Sum();
+		if (!IsInstanceValid(fortPointsLabel))
+			return;
+		int statValue = leadSurvivorSlot.slottedItem?.CalculateSurvivorRating(true) ?? 0;
+		statValue += survivorSlots.Sum(slot => slot.slottedItem?.CalculateSurvivorRating(true) ?? 0);
+		fortPointsLabel.Text = $"+{statValue}";
+		summaryParent.Visible = false;
 
-		if (IsInstanceValid(fortPointsLabel))
-			fortPointsLabel.Text = $"+{summedValue}";
+		if (leadSurvivorSlot.slottedItem is GameItem item)
+		{
+			var targetPersonality = item.Personality;
+			var matchingCount = survivorSlots.Count(slot => slot.slottedItem?.Personality == targetPersonality);
+			SetSummaryCount(
+				0,
+				true,
+				item.GetTexture(FnItemTextureType.Personality),
+				$"{matchingCount}/7",
+				matchingCount == 7 ? Colors.Yellow : Colors.White,
+				null,
+				$"Leader Personality Match\n{matchingCount}/7"
+			);
+		}
+		else
+		{
+			SetSummaryCount(0, false);
+		}
+		var distinctSetBonuses = survivorSlots
+			.Select(slot => slot.slottedItem?.SetBonus)
+			.Where(s => s is not null)
+			.Distinct()
+			.ToArray();
+		for (int i = 0; i < distinctSetBonuses.Length; i++)
+		{
+			var setBonus = distinctSetBonuses[i];
+			var matching = survivorSlots.Where(slot => slot.slottedItem?.SetBonus == setBonus).ToArray();
+			var baseRequiredCount = setBonus switch
+			{
+				"Ability Damage" or "Melee Damage" or
+				"Ranged Damage" or "Trap Damage" => 3,
+				_ => 2
+			};
+			var boostCount = matching.Length / baseRequiredCount;
+			var boostPercent = setBonus == "Trap Durability" ? 8 : 5;
+			var countText = $"{matching.Length}/{baseRequiredCount}{(boostCount > 1 ? $" (x{boostCount})" : "")}";
+			SetSummaryCount(
+				i + 1,
+				true,
+				matching[0].slottedItem.GetTexture(FnItemTextureType.SetBonus),
+				countText,
+				matching.Length >= baseRequiredCount ? Colors.Yellow : Colors.White,
+				matching.Length >= baseRequiredCount ? $"+{boostPercent*boostCount}%" : null,
+				$"{setBonus}\n{countText}"
+			);
+		}
+		for (int i = distinctSetBonuses.Length + 1; i < summaryNodes.Length; i++)
+		{
+			SetSummaryCount(i, false);
+		}
+	}
+
+	void SetSummaryCount(int idx, bool visible) =>
+		SetSummaryCount(idx, visible, null, null, default, null, null);
+
+	void SetSummaryCount(int idx, bool visible, Texture2D icon, string countText, Color countTint, string bonusText, string tooltip)
+	{
+		if (summaryNodes.Length <= idx || summaryNodes.Length == 0)
+			return;
+		var node = summaryNodes[idx];
+		node.Visible = visible;
+		if (!visible)
+			return;
+		summaryParent.Visible = true;
+		node.TooltipText = tooltip;
+		if (node.GetNodeOrNull<TextureRect>("%Icon") is TextureRect iconRect)
+			iconRect.Texture = icon;
+		if (node.GetNodeOrNull<Label>("%Counter") is Label countLabel)
+		{
+			countLabel.Text = countText;
+			countLabel.SelfModulate = countTint;
+		}
+		if (node.GetNodeOrNull<Label>("%BonusText") is Label bonusLabel)
+		{
+			bonusLabel.Text = bonusText;
+			bonusLabel.Visible = bonusText is not null;
+		}
 	}
 
 	static readonly Predicate<GameItem> standardFilter = item =>
@@ -161,7 +248,7 @@ public partial class SurvivorSquadEntry : Control
 
 		var selectedItem = await SimpleItemSelector.OpenSelector(profile.GetItems("Worker", filter), SimpleItemSelector.DefaultConfig with
 		{
-			titleText = "Select a Survivor",
+			title = "Select a Survivor",
 			overrideSurvivorSquad = squadID,
 			allowEmptySelection = true,
 			showSurvivorFilters = true,

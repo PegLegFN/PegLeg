@@ -1,22 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbpdgupjy1ovb"]
+[gd_scene format=3 uid="uid://bbpdgupjy1ovb"]
 
 [ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_1r0px"]
 [ext_resource type="Script" uid="uid://dupwia0rjs5o2" path="res://Scripts/Overlays/DevTextOverlay.cs" id="2_dbisq"]
 
-[node name="DevText" node_paths=PackedStringArray("textEdit", "tabBar", "windowControl") instance=ExtResource("1_1r0px")]
+[node name="DevText" unique_id=133300043 node_paths=PackedStringArray("textEdit", "tabBar", "windowControl") instance=ExtResource("1_1r0px")]
+z_index = 2
 script = ExtResource("2_dbisq")
 textEdit = NodePath("Control/MarginContainer/VBoxContainer/PanelContainer/CodeEdit")
 tabBar = NodePath("Control/MarginContainer/VBoxContainer/MarginContainer/TabBar")
 windowControl = NodePath("Control")
 
-[node name="Control" parent="." index="2"]
+[node name="Control" parent="." index="2" unique_id=2057559241]
 anchors_preset = 15
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Control" index="1"]
+[node name="MarginContainer" type="MarginContainer" parent="Control" index="1" unique_id=1071906082]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,28 +30,28 @@ theme_override_constants/margin_top = 75
 theme_override_constants/margin_right = 75
 theme_override_constants/margin_bottom = 75
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" index="0" unique_id=1185511894]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="0"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer" index="0" unique_id=568959365]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 10
 
-[node name="TabBar" type="TabBar" parent="Control/MarginContainer/VBoxContainer/MarginContainer" index="0"]
+[node name="TabBar" type="TabBar" parent="Control/MarginContainer/VBoxContainer/MarginContainer" index="0" unique_id=1812861914]
 layout_mode = 2
 current_tab = 0
 tab_count = 2
 tab_0/title = "Item"
 tab_1/title = "Template"
 
-[node name="PanelContainer" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer" index="1"]
+[node name="PanelContainer" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer" index="1" unique_id=1402804858]
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Panel3Pad"
 
-[node name="CodeEdit" type="CodeEdit" parent="Control/MarginContainer/VBoxContainer/PanelContainer" index="0"]
+[node name="CodeEdit" type="CodeEdit" parent="Control/MarginContainer/VBoxContainer/PanelContainer" index="0" unique_id=693482291]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/line_spacing = 2

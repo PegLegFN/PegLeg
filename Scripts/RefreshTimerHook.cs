@@ -135,12 +135,13 @@ public partial class RefreshTimerHook : Control
 		if (!force && !IsVisibleInTree())
 			return;
 		var remainingTime = refreshTime - RefreshTimerController.RightNow;
+		var colorTarget = (Control)target ?? this;
 		if (remainingTime.TotalMinutes < criticalCountdownTime)
-			target.SelfModulate = Colors.Red;
+			colorTarget.SelfModulate = Colors.Red;
 		else if (remainingTime.TotalMinutes < warningCountdownTime)
-			target.SelfModulate = Colors.Orange;
+			colorTarget.SelfModulate = Colors.Orange;
 		else
-			target.SelfModulate = Colors.White;
+			colorTarget.SelfModulate = Colors.White;
 		CustomText = remainingTime.FormatTime(formatType switch
 		{
 			2 => Helpers.TimeFormat.SigLong,

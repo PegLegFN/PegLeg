@@ -1,14 +1,15 @@
 [gd_scene format=3 uid="uid://dnvstx6j6x0fp"]
 
-[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_otp6n"]
+[ext_resource type="Script" uid="uid://cr0ksm76v72eh" path="res://Scripts/UserInterface/ListEntries/DefenderEntry.cs" id="1_gwp5v"]
 [ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_hjcq4"]
-[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_m683y"]
+[ext_resource type="StyleBox" uid="uid://b0e2hq5ol08wl" path="res://GodotThemes/Styleboxes/HeroLoadout/HLBackground.tres" id="3_ot1w6"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_f8hmt"]
 [ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="5_d704d"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="6_qcpxm"]
 [ext_resource type="Texture2D" uid="uid://dllvnb5xtdqk1" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Gadget-AdrenalineRush-bg-128.png" id="7_iowlb"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="7_ipnqa"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="8_s8ojh"]
+[ext_resource type="PackedScene" uid="uid://cg2qqkx3wm41t" path="res://Scenes/GameItemEntry/reward_entry_tiny.tscn" id="10_gwp5v"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="15_g5375"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="16_fhwb1"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="17_fw7i8"]
@@ -22,11 +23,12 @@ bg_color = Color(0.3111, 0.3111, 0.51, 0.4509804)
 corner_radius_top_left = 5
 corner_radius_bottom_left = 5
 
-[node name="DefenderListItem" type="MarginContainer" unique_id=1541840474]
+[node name="DefenderListItem" type="MarginContainer" unique_id=1541840474 node_paths=PackedStringArray("equippedItemEntry", "emptyItem")]
 offset_right = 302.0
 offset_bottom = 44.0
-script = ExtResource("1_otp6n")
-interactableWhenEmpty = true
+script = ExtResource("1_gwp5v")
+equippedItemEntry = NodePath("HBoxContainer/MarginContainer/RewardEntry")
+emptyItem = NodePath("HBoxContainer/MarginContainer/TextureRect")
 autoLinkToViewer = false
 autoLinkToRecycleSelection = true
 
@@ -34,7 +36,7 @@ autoLinkToRecycleSelection = true
 unique_name_in_owner = true
 material = ExtResource("2_hjcq4")
 layout_mode = 2
-theme_override_styles/panel = ExtResource("3_m683y")
+theme_override_styles/panel = ExtResource("3_ot1w6")
 script = ExtResource("4_f8hmt")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1295952962]
@@ -81,7 +83,25 @@ theme_override_font_sizes/font_size = 20
 text = "Clear"
 text_overrun_behavior = 3
 
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=1728464463]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="RewardEntry" parent="HBoxContainer/MarginContainer" unique_id=1679564155 instance=ExtResource("10_gwp5v")]
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 6
+ignoreCollectable = true
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer" unique_id=1880261925]
+layout_mode = 2
+texture = ExtResource("8_s8ojh")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Label3" type="Label" parent="HBoxContainer" unique_id=269449785]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Lv 00"

@@ -550,6 +550,28 @@ public static partial class Helpers
 		_ => default,
 	};
 
+	public static string Discordify(this DateTime date, DiscordTimeFormat format = DiscordTimeFormat.Relative) => $"<t:{((DateTimeOffset)date).ToUnixTimeSeconds()}:{format switch
+	{
+		DiscordTimeFormat.ShortTime => 't',
+		DiscordTimeFormat.LongTime => 'T',
+		DiscordTimeFormat.ShortDate => 'd',
+		DiscordTimeFormat.LongDate => 'D',
+		DiscordTimeFormat.LongDateShortTime => 'f',
+		DiscordTimeFormat.DayNameLongDateShortTime => 'F',
+		_ => 'R'
+	}}>";
+
+	public enum DiscordTimeFormat
+	{
+		Relative,
+		ShortTime,
+		LongTime,
+		ShortDate,
+		LongDate,
+		LongDateShortTime,
+		DayNameLongDateShortTime,
+	}
+
 	public static string FixNewlines(this string toPrint) => toPrint.Replace("\r\n", "\n");
 
 	public static Func<T, bool> ToFunc<T>(this Predicate<T> predicate, bool defaultResult = true) => t => predicate.Try(t, defaultResult);

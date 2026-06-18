@@ -15,6 +15,11 @@ public static partial class Helpers
 			IncludeFields = true,
 			WriteIndented = true
 		};
+		public static JsonSerializerOptions FieldsCompact { get; private set; } = new()
+		{
+			IncludeFields = true,
+			WriteIndented = false
+		};
 		public static JsonSerializerOptions CamelCase { get; private set; } = new()
 		{
 			IncludeFields = true,

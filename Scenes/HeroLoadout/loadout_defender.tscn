@@ -1,24 +1,23 @@
 [gd_scene format=3 uid="uid://p1itgg61rypj"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_rggsi"]
+[ext_resource type="Script" uid="uid://cr0ksm76v72eh" path="res://Scripts/UserInterface/ListEntries/DefenderEntry.cs" id="1_vex60"]
 [ext_resource type="Shader" uid="uid://l02ho3o5c4rd" path="res://Shaders/HeroLoadoutBGPulse.gdshader" id="2_25jjo"]
-[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="3_bv1uj"]
+[ext_resource type="StyleBox" uid="uid://b0e2hq5ol08wl" path="res://GodotThemes/Styleboxes/HeroLoadout/HLBackground.tres" id="3_rggsi"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_3tir6"]
-[ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="5_63ci2"]
-[ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="6_0jkfn"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="7_o1l34"]
-[ext_resource type="Texture2D" uid="uid://b1sw8i0wgit2b" path="res://Images/InterfaceIcons/BanjoPlaceholders/Icon-Constructor-PlasmaOverdrive-128.png" id="8_w2s0p"]
 [ext_resource type="Texture2D" uid="uid://mv7ibkfn58qo" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Defenders-Defender-Pistol-L.png" id="10_rggsi"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="10_ywqut"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="12_fhgs4"]
 [ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="13_7nhti"]
 [ext_resource type="Texture2D" uid="uid://bimg0dt1ksn23" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-Pistol-CARD.png" id="13_vex60"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="15_23wao"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="15_rggsi"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="16_25jjo"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="16_sxfjf"]
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="16_vex60"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="17_6f7kv"]
 [ext_resource type="Resource" uid="uid://brxldc0n32230" path="res://Scripts/ContextMenu/ComponentLists/InventorySlotCtxList.tres" id="18_25jjo"]
-[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="18_n65nb"]
+[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="18_vex60"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vpt60"]
 resource_local_to_scene = true
@@ -32,7 +31,7 @@ shader_parameter/period = 1.25
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6iioa"]
 resource_local_to_scene = true
 shader = ExtResource("10_ywqut")
-shader_parameter/ControlSize = Vector2(260, 27)
+shader_parameter/ControlSize = Vector2(52, 27)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -68,13 +67,73 @@ shader = ExtResource("13_7nhti")
 shader_parameter/inset = 0.1
 shader_parameter/shade = 0.2
 shader_parameter/shadeAlpha = 0.8
+shader_parameter/base = 0.0
+shader_parameter/scalar = 2.0
+shader_parameter/power = 2.0
 
-[node name="LoadoutDefender" type="MarginContainer" unique_id=2040792206]
-offset_right = 277.0
-offset_bottom = 44.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ccmms"]
+resource_local_to_scene = true
+shader = ExtResource("10_ywqut")
+shader_parameter/ControlSize = Vector2(51, 27)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 3.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bv1uj"]
+resource_local_to_scene = true
+shader = ExtResource("15_rggsi")
+shader_parameter/ControlSize = Vector2(51, 51)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("16_25jjo")
+shader_parameter/AltRarity = Color(0, 0, 0, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+shader_parameter/HideBar = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_25jjo"]
+resource_local_to_scene = true
+shader = ExtResource("15_rggsi")
+shader_parameter/ControlSize = Vector2(51, 51)
+shader_parameter/CornerRadius = 3.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("18_vex60")
+shader_parameter/AltRarity = Color(0, 0, 0, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+shader_parameter/HideBar = false
+
+[node name="LoadoutDefender" type="MarginContainer" unique_id=2040792206 node_paths=PackedStringArray("equippedItemEntry", "emptyItem")]
+offset_right = 122.0
+offset_bottom = 47.0
 size_flags_horizontal = 3
-script = ExtResource("1_rggsi")
-interactableWhenEmpty = true
+script = ExtResource("1_vex60")
+equippedItemEntry = NodePath("HBoxContainer2/Schematic")
+emptyItem = NodePath("HBoxContainer2/EmptySchematic")
 autoLinkToViewer = false
 defaultClearIconToNull = true
 
@@ -82,66 +141,57 @@ defaultClearIconToNull = true
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_vpt60")
 layout_mode = 2
-theme_override_styles/panel = ExtResource("3_bv1uj")
+theme_override_styles/panel = ExtResource("3_rggsi")
 script = ExtResource("4_3tir6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1687389302]
+[node name="TooltipFallback" type="Control" parent="." unique_id=1876321207]
 layout_mode = 2
 
-[node name="HeroPerk" type="PanelContainer" parent="HBoxContainer" unique_id=1191671083]
-visible = false
-layout_mode = 2
-theme_override_styles/panel = ExtResource("5_63ci2")
-script = ExtResource("6_0jkfn")
-defaultClearIconToNull = true
+[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1998018455]
+script = ExtResource("15_23wao")
+componentList = ExtResource("16_sxfjf")
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/HeroPerk" unique_id=206811912]
-material = ExtResource("7_o1l34")
-custom_minimum_size = Vector2(32, 32)
+[node name="Responsive Button Area" parent="." unique_id=1997860144 instance=ExtResource("17_6f7kv")]
 layout_mode = 2
-texture = ExtResource("8_w2s0p")
-expand_mode = 3
 
-[node name="Content" type="MarginContainer" parent="HBoxContainer" unique_id=42228520]
-visible = false
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=865508840 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("15_23wao")
+itemSource = NodePath("../..")
+componentList = ExtResource("18_25jjo")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1095831555]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Defender" type="MarginContainer" parent="HBoxContainer2" unique_id=1699935801]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Content" unique_id=1064277433]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="HBoxContainer/Content/VBoxContainer" unique_id=1204797202]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
-text = "Plasma Overdrive"
-text_overrun_behavior = 3
-
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1699935801]
-layout_mode = 2
-size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+mouse_filter = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 2
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2" unique_id=1997049101]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer2/Defender" unique_id=1997049101]
 self_modulate = Color(1, 0.633333, 0, 1)
 material = SubResource("ShaderMaterial_6iioa")
 layout_mode = 2
+mouse_filter = 2
 texture = SubResource("GradientTexture2D_a4oe6")
 expand_mode = 1
 script = ExtResource("4_3tir6")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2" unique_id=769431662]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer2/Defender" unique_id=769431662]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme_override_constants/margin_top = -25
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer2/MarginContainer" unique_id=1314746219]
+[node name="Icon" type="TextureRect" parent="HBoxContainer2/Defender/MarginContainer" unique_id=1314746219]
 material = SubResource("ShaderMaterial_mpin5")
 layout_mode = 2
 size_flags_horizontal = 4
@@ -151,10 +201,11 @@ expand_mode = 3
 script = ExtResource("4_3tir6")
 syncControlSize = true
 
-[node name="Control" type="Control" parent="HBoxContainer/MarginContainer2" unique_id=961055175]
+[node name="Control" type="Control" parent="HBoxContainer2/Defender" unique_id=961055175]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control" unique_id=242177730]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer2/Defender/Control" unique_id=242177730]
 self_modulate = Color(1, 0.633333, 0, 1)
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 1
@@ -167,10 +218,11 @@ offset_right = 10.0
 offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("12_fhgs4")
 expand_mode = 3
 
-[node name="Subtype" type="TextureRect" parent="HBoxContainer/MarginContainer2/Control/TextureRect" unique_id=32063342]
+[node name="Subtype" type="TextureRect" parent="HBoxContainer2/Defender/Control/TextureRect" unique_id=32063342]
 material = SubResource("ShaderMaterial_w14yl")
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 1
@@ -179,22 +231,126 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("13_vex60")
 expand_mode = 1
 
-[node name="TooltipFallback" type="Control" parent="." unique_id=1876321207]
+[node name="Schematic" type="MarginContainer" parent="HBoxContainer2" unique_id=2013867163]
+visible = false
 layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+script = ExtResource("1_rggsi")
 
-[node name="Ctx" type="Node" parent="TooltipFallback" unique_id=1998018455]
-script = ExtResource("15_23wao")
-componentList = ExtResource("16_sxfjf")
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer2/Schematic" unique_id=716072767]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="PLIndicator" parent="." unique_id=123897073 instance=ExtResource("16_vex60")]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer2/Schematic/MarginContainer2" unique_id=658204814]
+self_modulate = Color(1, 0.633333, 0, 1)
+material = SubResource("ShaderMaterial_ccmms")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_a4oe6")
+expand_mode = 1
+script = ExtResource("4_3tir6")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer2/Schematic/MarginContainer2" unique_id=1962065065]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_top = -24
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer2/Schematic/MarginContainer2/MarginContainer" unique_id=904997404]
+self_modulate = Color(1, 0.633333, 0, 1)
+material = SubResource("ShaderMaterial_bv1uj")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("16_25jjo")
+expand_mode = 3
+script = ExtResource("4_3tir6")
+syncControlSize = true
+
+[node name="PLIndicator" parent="HBoxContainer2/Schematic" unique_id=123897073 instance=ExtResource("16_vex60")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_bottom = 6
+
+[node name="MarginContainer" parent="HBoxContainer2/Schematic/PLIndicator" index="0" unique_id=383205245]
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = -2
+theme_override_constants/margin_bottom = -2
+
+[node name="HBoxContainer" parent="HBoxContainer2/Schematic/PLIndicator" index="2" unique_id=530720272]
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_bottom = 1
+
+[node name="PowerLevelLabel" parent="HBoxContainer2/Schematic/PLIndicator/HBoxContainer" index="0" unique_id=1940135083]
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 10
+
+[node name="Responsive Button Area" parent="HBoxContainer2/Schematic" unique_id=1210854400 instance=ExtResource("17_6f7kv")]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="HBoxContainer2/Schematic/Responsive Button Area" unique_id=370931221 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("15_23wao")
+itemSource = NodePath("../..")
+componentList = ExtResource("18_25jjo")
+
+[node name="EmptySchematic" type="MarginContainer" parent="HBoxContainer2" unique_id=982331884]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer2/EmptySchematic" unique_id=1175352512]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 16
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer2/EmptySchematic/MarginContainer2" unique_id=1627642639]
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+material = SubResource("ShaderMaterial_ccmms")
+layout_mode = 2
+texture = SubResource("GradientTexture2D_a4oe6")
+expand_mode = 1
+script = ExtResource("4_3tir6")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer2/EmptySchematic/MarginContainer2" unique_id=1681687864]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_top = -24
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer2/EmptySchematic/MarginContainer2/MarginContainer" unique_id=124632404]
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+material = SubResource("ShaderMaterial_25jjo")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("18_vex60")
+expand_mode = 3
+script = ExtResource("4_3tir6")
+syncControlSize = true
+
+[node name="Responsive Button Area" parent="HBoxContainer2/EmptySchematic" unique_id=1281777562 instance=ExtResource("17_6f7kv")]
+layout_mode = 2
+
+[node name="PLIndicator" parent="." unique_id=669642453 instance=ExtResource("16_vex60")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_top = 5
 
 [node name="MarginContainer" parent="PLIndicator" index="0" unique_id=383205245]
 theme_override_constants/margin_top = 2
@@ -206,58 +362,27 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_bottom = 1
 
 [node name="PowerLevelLabel" parent="PLIndicator/HBoxContainer" index="0" unique_id=1940135083]
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
 theme_override_font_sizes/font_size = 10
 
-[node name="Responsive Button Area" parent="." unique_id=1997860144 instance=ExtResource("17_6f7kv")]
-layout_mode = 2
-
-[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=865508840 node_paths=PackedStringArray("itemSource")]
-script = ExtResource("15_23wao")
-itemSource = NodePath("../..")
-componentList = ExtResource("18_25jjo")
-
-[node name="Overlay" type="Control" parent="." unique_id=717118593]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="PerkWarning" type="TextureRect" parent="Overlay" unique_id=466982141]
-visible = false
-self_modulate = Color(1, 0.9, 0, 1)
-custom_minimum_size = Vector2(16, 16)
-layout_mode = 1
-anchors_preset = -1
-offset_left = 4.0
-offset_top = 4.0
-texture = ExtResource("12_fhgs4")
-expand_mode = 1
-
-[node name="TextureRect2" type="TextureRect" parent="Overlay/PerkWarning" unique_id=1606780400]
-self_modulate = Color(0, 0, 0, 1)
-custom_minimum_size = Vector2(12, 12)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_top = -1.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("18_n65nb")
-expand_mode = 1
-
-[connection signal="IconChanged" from="." to="HBoxContainer/MarginContainer2/MarginContainer/Icon" method="set_texture"]
-[connection signal="ItemDoesExist" from="." to="HBoxContainer/MarginContainer2/Control" method="set_visible"]
-[connection signal="RarityChanged" from="." to="HBoxContainer/MarginContainer2/TextureRect" method="set_self_modulate"]
-[connection signal="RarityChanged" from="." to="HBoxContainer/MarginContainer2/Control/TextureRect" method="set_self_modulate"]
+[connection signal="IconChanged" from="." to="HBoxContainer2/Defender/MarginContainer/Icon" method="set_texture"]
+[connection signal="ItemDoesExist" from="." to="HBoxContainer2/Defender/Control" method="set_visible"]
+[connection signal="RarityChanged" from="." to="HBoxContainer2/Defender/TextureRect" method="set_self_modulate"]
+[connection signal="RarityChanged" from="." to="HBoxContainer2/Defender/Control/TextureRect" method="set_self_modulate"]
 [connection signal="RatingChanged" from="." to="PLIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
 [connection signal="RatingVisibility" from="." to="PLIndicator" method="set_visible"]
-[connection signal="SubtypeIconChanged" from="." to="HBoxContainer/MarginContainer2/Control/TextureRect/Subtype" method="set_texture"]
+[connection signal="SubtypeIconChanged" from="." to="HBoxContainer2/Defender/Control/TextureRect/Subtype" method="set_texture"]
 [connection signal="TooltipChanged" from="." to="TooltipFallback" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="." to="Responsive Button Area" method="set_tooltip_text"]
-[connection signal="IconChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/HeroPerk/TextureRect" method="set_texture"]
-[connection signal="NameChanged" from="HBoxContainer/HeroPerk" to="HBoxContainer/Content/VBoxContainer/Label" method="set_text"]
 [connection signal="pressed" from="Responsive Button Area" to="." method="EmitPressedSignal"]
+[connection signal="IconChanged" from="HBoxContainer2/Schematic" to="HBoxContainer2/Schematic/MarginContainer2/MarginContainer/Icon" method="SetShaderTexture" binds= ["MainIcon"]]
+[connection signal="RarityChanged" from="HBoxContainer2/Schematic" to="HBoxContainer2/Schematic/MarginContainer2/TextureRect" method="set_self_modulate"]
+[connection signal="RarityChanged" from="HBoxContainer2/Schematic" to="HBoxContainer2/Schematic/MarginContainer2/MarginContainer/Icon" method="set_self_modulate"]
+[connection signal="TooltipChanged" from="HBoxContainer2/Schematic" to="HBoxContainer2/Schematic/Responsive Button Area" method="set_tooltip_text"]
+[connection signal="pressed" from="HBoxContainer2/Schematic/Responsive Button Area" to="." method="PressWeapon"]
+[connection signal="pressed" from="HBoxContainer2/EmptySchematic/Responsive Button Area" to="." method="PressWeapon"]
 
+[editable path="HBoxContainer2/Schematic/PLIndicator"]
 [editable path="PLIndicator"]

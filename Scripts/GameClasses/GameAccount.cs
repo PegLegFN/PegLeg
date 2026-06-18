@@ -85,20 +85,20 @@ public readonly record struct RatingData(float fortitude, float offense, float r
 		var accountProfile = account.GetProfile(FnProfileTypes.AccountItems);
 		var accountItems = accountProfile.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged");
 
-		//if (!account.isOwned)
-		//{
-		//	//since the highest schematic can make 2x copies of the weapon, assume the highest schematic PL is the highest obtained Weapon Power
-		//	return accountItems
-		//		.Select(item => item.CalculateRating())
-		//		.OrderDescending()
-		//		.FirstOrDefault();
-		//}
+		if (!account.isOwned)
+		{
+			//since the highest schematic can make 2x copies of the weapon, assume the highest schematic PL is the highest obtained Weapon Power
+			return accountItems
+				.Select(item => item.CalculateRating())
+				.OrderDescending()
+				.FirstOrDefault();
+		}
 
-		//var backpackProfile = account.GetProfile(FnProfileTypes.Backpack);
-		//var backpackItems = backpackProfile?.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [];
+		var backpackProfile = account.GetProfile(FnProfileTypes.Backpack);
+		var backpackItems = backpackProfile?.GetItems(i => i.template?.Category == "Melee" || i.template?.Category == "Ranged") ?? [];
 
-		//var backpackPowerLevels = backpackItems.Union(accountItems)
-		var backpackPowerLevels = accountItems
+		var backpackPowerLevels = backpackItems.Union(accountItems)
+		//var backpackPowerLevels = accountItems
 			.Select(item => item.CalculateRating())
 			.OrderDescending()
 			.ToArray();
@@ -589,7 +589,47 @@ public partial class GameAccount
 		return false;
 	}
 
-	public void ForceExpireToken() => authExpiresAt = 0;
+	string eosToken;
+	int eosExpiresAt = -999;
+	AuthenticationHeaderValue eosHeader;
+	//fails 60 seconds before it would actualy expire
+	public bool EOSTokenExpired => eosExpiresAt <= (Time.GetTicksMsec() * 0.001) + 60;
+	public string EOSToken => eosToken;
+	public AuthenticationHeaderValue EOSHeader => eosHeader;
+	public async Task<bool> AuthenticateEOS(bool loadingOverlay = false, bool assumeValid = true)
+	{
+		if (!EOSTokenExpired && assumeValid)
+			return true;
+		if (!isOwned)
+			return false;
+
+		using var loadToken = LoadingOverlay.CreateToken("Authenticating...");
+		if (!loadingOverlay)
+			loadToken.Dispose();
+
+		if (!await Authenticate(false, assumeValid))
+			return false;
+
+		var response = await TargetClient.EOSLogin(AuthToken);
+		if (await response.CheckForError())
+		{
+			GD.Print("Failed to auth EOS");
+			return false;
+		}
+
+		var json = await response.ReadJson();
+		eosToken = json["access_token"].ToString();
+		eosHeader = new("Bearer", eosToken);
+		eosExpiresAt = Mathf.FloorToInt(Time.GetTicksMsec() * 0.001) + json["expires_in"].GetValue<int>();
+
+		return true;
+	}
+
+	public void ForceExpireToken()
+	{
+		authExpiresAt = 0;
+		eosExpiresAt = 0;
+	}
 
 	public async Task<string> GenerateExchangeCode()
 	{
@@ -882,7 +922,6 @@ public partial class GameAccount
 	public event Action<GameAccount> OnRatingDataChanged;
 	RatingData? ratingData;
 	public RatingData RatingData => GetRatingData();
-	public void MarkFortStatsDirty() => ratingData = null;
 	public RatingData GetRatingData(bool force = false)
 	{
 		if (!force && ratingData is not null)
@@ -931,7 +970,6 @@ public partial class GameAccount
 	public event Action<GameAccount> OnVentureRatingDataChanged;
 	RatingData? ventureRatingData;
 	public RatingData VentureRatingData => GetVentureRatingData();
-	public void MarkVentureFortStatsDirty() => ventureRatingData = null;
 	public RatingData GetVentureRatingData(bool force = false)
 	{
 		if (!force && ventureRatingData is not null)

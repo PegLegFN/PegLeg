@@ -20,7 +20,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
 	[Export]
 	GameItemEntry[] gadgets;
 	[Export]
-	GameItemEntry[] defenders;
+	DefenderEntry[] defenders;
 	[Export]
 	Control defenderLayout;
 	[Export]
@@ -38,8 +38,11 @@ public partial class HeroLoadoutEntry : GameItemEntry
 	[Export]
 	bool addNumberToName = false;
 
+	bool allowDefenderSMGs = false;
+
 	public override void _Ready()
 	{
+		allowDefenderSMGs = PegLegResourceManager.MagicNumbers["allowDefenderSMGs"]?.GetValue<bool>() == true;
 		//if (PegLegResourceManager.MagicNumbers["showDefenders"]?.GetValue<bool>() != true)
 		//{
 		//	if (defenderLayout is not null)
@@ -70,6 +73,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
 		{
 			int idx = i;
 			defenders[i].Pressed += () => InteractDefender(idx);
+			defenders[i].WeaponPressed += () => InteractDefenderWeapon(idx);
 		}
 	}
 
@@ -532,6 +536,60 @@ public partial class HeroLoadoutEntry : GameItemEntry
             "slotName": "DefenderSlot{{idx + 1}}"
         }
         """);
+	}
+
+	async void InteractDefenderWeapon(int idx)
+	{
+		if (defenders.Length == 0 || defenders.Length <= idx)
+		{
+			GD.PushWarning($"Defender {idx} out of range of {defenders.Length}");
+			return;
+		}
+		string displayIdx = idx == 0 ? "" : (idx + 1).ToString();
+		if (currentItem.profile.GetFirstTemplateItem($"HomebaseNode:questreward_mission_defender{displayIdx}") is null)
+		{
+			//GD.Print("noDefenderPerms");
+			return;
+		}
+		if (Input.IsKeyPressed(Key.Shift) || !editable || currentItem?.profile?.account.isOwned != true)
+		{
+			defenders[idx].InspectWeapon();
+			return;
+		}
+
+		var defSubtype = defenders[idx].currentItem.template.SubType;
+		string constrainedCategory = defSubtype=="Melee Defender" ? "Melee" : "Ranged";
+		string constrainedSubtype = defSubtype switch
+		{
+			"Melee Defender" => null,
+			_ => defSubtype.Split(" ")[0]
+		};
+		var newDefenderWeapon = await SimpleItemSelector.OpenSelector(currentItem.profile.GetItems("Schematic").Where(item =>
+		{
+			if (constrainedCategory is not null && item.template?.Category != constrainedCategory)
+				return false;
+			//once game bug is fixed, allow SMG subtype for Pistol/Assault defenders. enabled with a magicNumbers flag
+			if (allowDefenderSMGs && (constrainedSubtype == "Pistol" || constrainedSubtype == "Assault") && item.template?.SubType == "SMG")
+				return true;
+			if (constrainedSubtype is not null && item.template?.SubType != constrainedSubtype)
+				return false;
+			return true;
+		}), SimpleItemSelector.DefaultConfig with
+		{
+			title = "Select Weapon",
+			allowEmptySelection = true
+		});
+		if (newDefenderWeapon is null)
+			return;
+		if (newDefenderWeapon == GameItem.Empty)
+			newDefenderWeapon = null;
+		//does this need a different profile operation when weapon is empty?
+		await currentItem.profile.PerformOperation("AssignWeaponToDefender", $$"""
+		{
+			"weaponSchematicId": "{{newDefenderWeapon?.uuid}}",
+			"defenderId": "{{defenders[idx].currentItem.uuid}}"
+		}
+		""");
 	}
 
 	protected override void UpdateSelectionVisuals()

@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 public partial class GameItemUpgrader : Control
@@ -343,23 +345,11 @@ public partial class GameItemUpgrader : Control
 
 		if (canSupercharge)
 		{
-			string superchargeType = currentItem.template.Type switch
-			{
-				"Schematic" when currentItem.template.Category == "Melee" || currentItem.template.Category == "Ranged" => "AccountResource:reagent_promotion_weapons",
-				"Schematic" when currentItem.template.Category == "Trap" => "AccountResource:reagent_promotion_traps",
-				"Hero" => "AccountResource:reagent_promotion_heroes",
-				"Worker" => "AccountResource:reagent_promotion_survivors",
-				_ => null,
-			};
-			costItems[0].SetItem(GameItemTemplate.Get(superchargeType)?.CreateInstance());
-			costItems[0].Visible = true;
-			for (int i = 1; i < costItems.Length; i++)
-			{
-				costItems[i].ClearItem();
-				costItems[i].Visible = false;
-			}
+			var currentSuperchargeStage = (level - 50) / 2;
+			var costDict = currentItem.template["PromotionCosts"]?[currentSuperchargeStage].Deserialize<Dictionary<string, int>>();
+			var promotionCosts = GameItem.ItemData.FromDict(costDict);
 
-			canAfford = campaignProfile.GetFirstTemplateItem(superchargeType) is not null;
+			SetUpgradeCostItems(promotionCosts, campaignProfile, out canAfford);
 
 			SetButtonEnabled(canAfford);
 			confirmLabel.Text = canAfford ? "Supercharge" : "Can't Afford";
@@ -382,27 +372,9 @@ public partial class GameItemUpgrader : Control
 
 		var currentCosts = currentItem.template.GetCombinedUpgradeValue(level);
 		var nextCosts = nextTier.GetCombinedUpgradeValue(targetLevel);
-		GameItem[] resultCostItems =
-		[
-			..GameItem.ItemData
-				.Subtract(nextCosts, currentCosts)
-				.Select(i => i.ToItem())
-				.OrderBy(i => i.template.RarityLevel)
-		];
+		var diffCosts = GameItem.ItemData.Subtract(nextCosts, currentCosts);
 
-		for (int i = 0; i < Mathf.Min(resultCostItems.Length, costItems.Length); i++)
-		{
-			costItems[i].SetItem(resultCostItems[i]);
-			costItems[i].Visible = true;
-		}
-		for (int i = resultCostItems.Length; i < costItems.Length; i++)
-		{
-			costItems[i].ClearItem();
-			costItems[i].Visible = false;
-		}
-
-		if (resultCostItems.Any(cost => campaignProfile.SumTemplateItems(cost.templateId) < cost.quantity))
-			canAfford = false;
+		SetUpgradeCostItems(diffCosts, campaignProfile, out canAfford);
 
 		SetButtonEnabled(canAfford);
 		confirmLabel.Text = canAfford ? (tier == targetTier ? "Level Up" : "Evolve") : "Can't Afford";
@@ -426,42 +398,77 @@ public partial class GameItemUpgrader : Control
 		bool success = currentItem.template.TryGetRarityUpCost(out var recipeCosts);
 
 		int level = currentItem.attributes?["level"]?.GetValue<int>() ?? 0;
+
+		/*
+		var currentBaseCosts = currentItem.template.GetCombinedUpgradeValue(minLevel);
+		var currentLevelCosts = currentItem.template.GetCombinedUpgradeValue(Mathf.Min(level, 50));
+		var currentLevelupOnlyCosts = GameItem.ItemData.Subtract(currentLevelCosts, currentBaseCosts);
+
+		var nextBaseCosts = nextRarity.GetCombinedUpgradeValue(minLevel);
+		var nextLevelCosts = nextRarity.GetCombinedUpgradeValue(Mathf.Min(level, 50));
+		var nextLevelupOnlyCosts = GameItem.ItemData.Subtract(nextLevelCosts, nextBaseCosts);
+
+		var resultCosts = GameItem.ItemData.Subtract(nextLevelupOnlyCosts, currentLevelupOnlyCosts);
+		*/
+
+		/*
+		currentItem.template.TryGetCombinedLevelUpCost(level, out var currentLevelCost);
+		currentItem.template.TryGetCombinedLevelUpCost(minLevel, out var currentDefaultXP);
+		nextRarity.TryGetCombinedLevelUpCost(level, out var nextLevelCost);
+		nextRarity.TryGetCombinedLevelUpCost(minLevel, out var nextDefaultXP);
+		var diffCost = nextLevelCost with { quantity = (nextLevelCost.quantity - nextDefaultXP.quantity) - (currentLevelCost.quantity - currentDefaultXP.quantity) };
+		*/
+
+		//Man this was stupid to figure out.
+		//Turns out that although Epic integrated evolution material costs from previous evolutions into the recipe costs, they
+		//didn't integrate the XP costs of evolutions, meaning that the total xp difference needs to include the levelup XP difference PLUS
+		//the evolution xp difference. At that point, its easier to just do a total upgrade cost difference, then exclude evo mats from the
+		//standard recipe costs
+
 		var currentCosts = currentItem.template.GetCombinedUpgradeValue(level);
+		currentItem.template.TryGetCombinedLevelUpCost(1, out var currentDefaultXP);
+		currentCosts = GameItem.ItemData.Subtract(currentCosts, [currentDefaultXP]);
+
 		var nextCosts = nextRarity.GetCombinedUpgradeValue(level);
-		var resultCosts = GameItem.ItemData.Subtract(nextCosts, currentCosts);
-		resultCosts = GameItem.ItemData.Add(resultCosts, recipeCosts);
-		GameItem[] resultCostItems =
+		nextRarity.TryGetCombinedLevelUpCost(1, out var nextDefaultXP);
+		nextCosts = GameItem.ItemData.Subtract(nextCosts, [nextDefaultXP]);
+
+		var diffCosts = GameItem.ItemData.Subtract(nextCosts, currentCosts);
+		var diffCostTypes = diffCosts.Select(i => i.templateId).ToHashSet();
+
+		var resultCosts = GameItem.ItemData.Add(diffCosts, [.. recipeCosts.Where(i => !diffCostTypes.Contains(i.templateId))]);
+		var campaignProfile = currentItem.profile.account.GetProfile(FnProfileTypes.AccountItems);
+
+		SetUpgradeCostItems(resultCosts, campaignProfile, out var canAfford);
+
+		SetButtonEnabled(canAfford);
+		confirmLabel.Text = canAfford ? "Increase Rarity" : "Can't Afford";
+	}
+
+	private void SetUpgradeCostItems(GameItem.ItemData[] costs, GameProfile compareProfile, out bool canAfford)
+	{
+		GameItem[] costInstances =
 		[
-			..resultCosts
+			..costs
 				.Select(i => i.ToItem())
-				.OrderBy(i => i.template.DisplayName.Contains("Flux", StringComparison.OrdinalIgnoreCase))
-				.ThenBy(i => i.template.RarityLevel)
+				.OrderBy(i => !i.template.DisplayName.Contains("Flux", StringComparison.OrdinalIgnoreCase))
+				//.ThenBy(i => !i.template.DisplayName.Contains("Supercharger", StringComparison.OrdinalIgnoreCase))
+				.ThenBy(i => -i.template.RarityLevel)
 		];
 
-		for (int i = 0; i < Mathf.Min(resultCostItems.Length, costItems.Length); i++)
+		for (int i = 0; i < Mathf.Min(costInstances.Length, costItems.Length); i++)
 		{
-			costItems[i].SetItem(resultCostItems[i], currentItem.profile.account);
+			costItems[i].SetItem(costInstances[i], currentItem.profile.account);
 			costItems[i].Visible = true;
 		}
 
-		for (int i = resultCosts.Length; i < costItems.Length; i++)
+		for (int i = costInstances.Length; i < costItems.Length; i++)
 		{
 			costItems[i].ClearItem();
 			costItems[i].Visible = false;
 		}
 
-		var campaignProfile = currentItem.profile.account.GetProfile(FnProfileTypes.AccountItems);
-		bool canAfford = true;
-		for (int i = 0; i < resultCostItems.Length; i++)
-		{
-			if (campaignProfile.SumTemplateItems(resultCostItems[i].templateId) > resultCostItems[i].quantity)
-				continue;
-			canAfford = false;
-			break;
-		}
-
-		SetButtonEnabled(canAfford);
-		confirmLabel.Text = canAfford ? "Increase Rarity" : "Can't Afford";
+		canAfford = costs.All(i => compareProfile.SumTemplateItems(i.templateId) >= i.quantity);
 	}
 
 	private void AttemptUpgrade()

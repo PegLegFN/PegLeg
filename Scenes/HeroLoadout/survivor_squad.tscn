@@ -1,260 +1,161 @@
-[gd_scene load_steps=4 format=3 uid="uid://bje4f7reoc8da"]
+[gd_scene format=3 uid="uid://bje4f7reoc8da"]
 
 [ext_resource type="Script" uid="uid://c7cb1eb577pjg" path="res://Scripts/UserInterface/ListEntries/SurvivorSquadEntry.cs" id="1_crhol"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="1_i6sy6"]
 [ext_resource type="PackedScene" uid="uid://dljot1ntapg7q" path="res://Scenes/GameItemEntry/inventory_slot.tscn" id="2_0x38l"]
+[ext_resource type="PackedScene" uid="uid://cruryctcuag16" path="res://Scenes/HeroLoadout/survivor_perk_counter.tscn" id="4_ipcl3"]
 
-[node name="SurvivorSquad" type="MarginContainer" node_paths=PackedStringArray("squadNameLabel", "squadIcon", "fortPointsLabel", "fortPointsIcon", "leadSurvivorSlot", "survivorSlots")]
-offset_right = 640.0
-offset_bottom = 179.0
+[node name="SurvivorSquad" type="MarginContainer" unique_id=171572197 node_paths=PackedStringArray("squadNameLabel", "squadIcon", "fortPointsLabel", "fortPointsIcon", "leadSurvivorSlot", "survivorSlots", "summaryParent")]
+offset_right = 656.0
+offset_bottom = 176.0
 script = ExtResource("1_crhol")
 synergy = "Doctor"
 slotRequirements = PackedStringArray("", "", "", "", "", "", "", "")
-squadNameLabel = NodePath("MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer/SquadNameLabel")
-squadIcon = NodePath("MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer/SquadIcon")
-fortPointsLabel = NodePath("MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer/FortLabel")
-fortPointsIcon = NodePath("MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer/FortIcon")
+squadNameLabel = NodePath("MarginContainer/VBoxContainer/NameAndStat/SquadNameLabel")
+squadIcon = NodePath("MarginContainer/VBoxContainer/NameAndStat/SquadIcon")
+fortPointsLabel = NodePath("MarginContainer/VBoxContainer/NameAndStat/FortLabel")
+fortPointsIcon = NodePath("MarginContainer/VBoxContainer/NameAndStat/FortIcon")
 leadSurvivorSlot = NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot")
 survivorSlots = [NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot2"), NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot3"), NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot4"), NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot5"), NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot6"), NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot7"), NodePath("MarginContainer/VBoxContainer/Slots/InventorySlot8")]
+summaryParent = NodePath("MarginContainer/VBoxContainer/PerkTotals")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=2051344920]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2086099662]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=475685241]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 5
 
-[node name="NameAndFortStat" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/NameAndFortStat"]
+[node name="NameAndStat" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=633134714]
 layout_mode = 2
 
-[node name="SquadIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer"]
+[node name="SquadIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/NameAndStat" unique_id=941093035]
 layout_mode = 2
 texture = ExtResource("1_i6sy6")
 expand_mode = 3
 
-[node name="SquadNameLabel" type="Label" parent="MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer"]
+[node name="SquadNameLabel" type="Label" parent="MarginContainer/VBoxContainer/NameAndStat" unique_id=1308588625]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Survivor Squad Name Here"
 vertical_alignment = 1
 
-[node name="FortIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer"]
+[node name="FortIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/NameAndStat" unique_id=632244415]
 layout_mode = 2
 texture = ExtResource("1_i6sy6")
 expand_mode = 3
 
-[node name="FortLabel" type="Label" parent="MarginContainer/VBoxContainer/NameAndFortStat/HBoxContainer"]
+[node name="FortLabel" type="Label" parent="MarginContainer/VBoxContainer/NameAndStat" unique_id=423958854]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "+0"
 
-[node name="Slots" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Slots" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1030289712]
 layout_mode = 2
 
-[node name="InventorySlot" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot" parent="MarginContainer/VBoxContainer/Slots" unique_id=1053371650 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Slots"]
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Slots" unique_id=1952771099]
 layout_mode = 2
 
-[node name="InventorySlot2" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot2" parent="MarginContainer/VBoxContainer/Slots" unique_id=238608361 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="InventorySlot3" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot3" parent="MarginContainer/VBoxContainer/Slots" unique_id=759377726 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="InventorySlot4" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot4" parent="MarginContainer/VBoxContainer/Slots" unique_id=844336356 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="InventorySlot5" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot5" parent="MarginContainer/VBoxContainer/Slots" unique_id=910972900 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="InventorySlot6" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot6" parent="MarginContainer/VBoxContainer/Slots" unique_id=1994109369 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="InventorySlot7" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot7" parent="MarginContainer/VBoxContainer/Slots" unique_id=1125158782 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="InventorySlot8" parent="MarginContainer/VBoxContainer/Slots" instance=ExtResource("2_0x38l")]
+[node name="InventorySlot8" parent="MarginContainer/VBoxContainer/Slots" unique_id=1388966669 instance=ExtResource("2_0x38l")]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 size_flags_vertical = 8
 showInspector = true
 isSurvivorSlot = true
 
-[node name="Perks" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_top = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks"]
+[node name="PerkTotals" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=428241433]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
+[node name="HBoxContainer" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=1238556626 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-theme_override_constants/separation = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
+[node name="VSeparator" parent="MarginContainer/VBoxContainer/PerkTotals/HBoxContainer" index="0" unique_id=227516283]
+visible = false
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
+[node name="BonusText" parent="MarginContainer/VBoxContainer/PerkTotals/HBoxContainer" index="2" unique_id=1926518752]
+visible = false
+
+[node name="Counter" parent="MarginContainer/VBoxContainer/PerkTotals/HBoxContainer" index="3" unique_id=635822649]
 text = "7/7"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
+[node name="HBoxContainer2" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=1900671352 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-theme_override_constants/separation = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer3" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=979712603 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer4" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=1191071564 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
+[node name="HBoxContainer5" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=1503201695 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-theme_override_constants/separation = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer3"]
+[node name="HBoxContainer6" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=276127170 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer3"]
+[node name="HBoxContainer7" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=300194551 instance=ExtResource("4_ipcl3")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
+[node name="HBoxContainer8" parent="MarginContainer/VBoxContainer/PerkTotals" unique_id=1490378932 instance=ExtResource("4_ipcl3")]
+visible = false
 layout_mode = 2
-theme_override_constants/separation = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer4"]
-layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer4"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
-
-[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer5"]
-layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer5"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
-
-[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer6"]
-layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer6"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
-
-[node name="HBoxContainer7" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer7"]
-layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer7"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
-
-[node name="HBoxContainer8" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer"]
-modulate = Color(0.25098, 1, 0.25098, 1)
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer8"]
-layout_mode = 2
-texture = ExtResource("1_i6sy6")
-expand_mode = 3
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Perks/HBoxContainer/HBoxContainer8"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "7/7"
+[editable path="MarginContainer/VBoxContainer/PerkTotals/HBoxContainer"]

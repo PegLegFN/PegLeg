@@ -14,9 +14,9 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 		public bool showSurvivorFilters = false;
 		public bool smallItems = true;
 
-		public string titleText = "Select an Item";
-		public string confirmButtonText = "Confirm";
-		public string skipButtonText = "Continue";
+		public string title = "Select an Item";
+		public string confirmText = "Confirm";
+		public string skipText = "Continue";
 		public Texture2D autoselectButtonTex;
 
 		public Color unselectableTintColor = Color.FromHtml("#303030");
@@ -97,8 +97,8 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 
 		smallItems = false,
 
-		titleText = "Recycle",
-		confirmButtonText = "Confirm Recycle",
+		title = "Recycle",
+		confirmText = "Confirm Recycle",
 		autoselectButtonTex = instance.recycleIcon,
 
 		selectedTintColor = Colors.Red,
@@ -120,8 +120,8 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 
 		smallItems = false,
 
-		titleText = "Dismantle",
-		confirmButtonText = "Confirm Dismantle",
+		title = "Dismantle",
+		confirmText = "Confirm Dismantle",
 		autoselectButtonTex = instance.recycleIcon,
 
 		selectedTintColor = Colors.Red,
@@ -131,8 +131,13 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 
 	public string OverriddeSurvivorSquad => CurrentConfig.overrideSurvivorSquad;
 
-	public static async Task<GameItem> OpenSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
-		(await instance.OpenSelectorInternal(itemOptions, config) ?? []).FirstOrDefault().Key;
+	public static async Task<GameItem> OpenSelector(IEnumerable<GameItem> itemOptions, Config config = null)
+	{
+		var res = await instance.OpenSelectorInternal(itemOptions, config);
+		if (res is null)
+			return null;
+		return res.FirstOrDefault().Key ?? GameItem.Empty;
+	}
 	public static async Task<GameItem[]> OpenMultiSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
 		[.. (await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true }) ?? []).Select(kvp => kvp.Key)];
 	public static async Task<KeyValuePair<GameItem, int>> OpenQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
@@ -142,9 +147,9 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 
 	protected override void InitialiseSelector(IEnumerable<GameItem> itemOptions)
 	{
-		EmitSignalTitleChanged(CurrentConfig.titleText);
-		EmitSignalConfirmButtonChanged(CurrentConfig.confirmButtonText);
-		EmitSignalSkipButtonChanged(CurrentConfig.skipButtonText);
+		EmitSignalTitleChanged(CurrentConfig.title);
+		EmitSignalConfirmButtonChanged(CurrentConfig.confirmText);
+		EmitSignalSkipButtonChanged(CurrentConfig.skipText);
 		EmitSignalAutoselectChanged(CurrentConfig.autoselectButtonTex);
 
 		container.Visible = !CurrentConfig.smallItems;

@@ -41,6 +41,18 @@ public static class WebHelpers
 		}
 		public HttpClient BoundClient { get; set; }
 		public GameAccount BoundAccount { get; set; }
+		public bool EOSMode { get; set; }
+		public void SetAuthFromAccount() =>
+			Headers.Authorization = EOSMode ? BoundAccount?.EOSHeader : BoundAccount?.AuthHeader;
+
+		public async Task AuthenticateAccount()
+		{
+			if (EOSMode)
+				await BoundAccount.AuthenticateEOS();
+			else
+				await BoundAccount.Authenticate();
+			SetAuthFromAccount();
+		}
 	}
 
 	public static async Task<bool> Ping(string hostnameOrAddress)
@@ -71,11 +83,12 @@ public static class WebHelpers
 		return msg;
 	}
 
-	public static T SetAccount<T>(this T msg, GameAccount account = null) where T : BoundHttpsRequestMessage
+	public static T SetAccount<T>(this T msg, GameAccount account = null, bool useEOS = false) where T : BoundHttpsRequestMessage
 	{
 		account ??= GameAccount.ActiveAccount;
 		msg.BoundAccount = account;
-		msg.Headers.Authorization = account.AuthHeader;
+		msg.EOSMode = useEOS;
+		msg.SetAuthFromAccount();
 		return msg;
 	}
 
@@ -158,8 +171,7 @@ public static class WebHelpers
 	{
 		if (msg.BoundAccount is not null)
 		{
-			await msg.BoundAccount.Authenticate();
-			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
+			await msg.AuthenticateAccount();
 		}
 		var response = await CloneAndSend(msg, disposeMsg);
 
@@ -182,8 +194,7 @@ public static class WebHelpers
 		{
 			GD.Print("token invalid, expiring token and retrying with new token...");
 			msg.BoundAccount.ForceExpireToken();
-			await msg.BoundAccount.Authenticate();
-			msg.Headers.Authorization = msg.BoundAccount.AuthHeader;
+			await msg.AuthenticateAccount();
 			response = await CloneAndSend(msg, disposeMsg);
 		}
 		msg.Dispose();

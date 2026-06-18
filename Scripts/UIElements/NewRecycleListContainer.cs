@@ -322,7 +322,7 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	{
 		public override Vector2 GetMinSize(LayoutInfo layoutInfo, Rect2 totalRect, bool compressed)
 		{
-			if (layoutInfo.basisEntry is null)
+			if (layoutInfo.basisEntry is null || layoutInfo.listProvider is null)
 				return Vector2.Zero;
 			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
 
@@ -338,7 +338,7 @@ public partial class NewRecycleListContainer : Container, IListHandler
 
 		public override EntryLayout[] GetVisibleEntryLayouts(LayoutInfo layoutInfo, Rect2 visibleRect, Rect2 totalRect)
 		{
-			var itemCount = layoutInfo.listProvider.ListItemCount;
+			var itemCount = layoutInfo.listProvider?.ListItemCount ?? 0;
 			if (itemCount == 0)
 				return [];
 			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();

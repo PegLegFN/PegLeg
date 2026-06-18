@@ -22,6 +22,7 @@ uniform sampler2D AltPackIcon: hint_default_transparent;
 uniform bool HeroBeamsOnly;
 uniform float ChoiceShift : hint_range(0.0, 1.0);
 uniform bool HideRarity;
+uniform bool HideBar;
 
 varying vec4 modulate;
 void vertex() {
@@ -116,7 +117,7 @@ void fragment() {
 		COLOR = renderItem(fitUV, MainIcon, modulate, IsSchematic, IsHero, IsFancy, IsPack, MainPackIcon);
 	}
 
-	if(controlSpace.y>(ControlSize.y-CornerRadius))
+	if(controlSpace.y>(ControlSize.y-CornerRadius) && !HideBar)
 	{
 		COLOR = mix(COLOR, barColor, modulate.a);
 		COLOR.a *= cornerMask(UV, CornerRadius, ControlSize);

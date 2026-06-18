@@ -4,8 +4,8 @@
 [ext_resource type="Material" uid="uid://j4s8gsa5dq1x" path="res://Shaders/Materials/HeroLoadoutBGPulse.tres" id="2_mxnn5"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="3_38f6u"]
 [ext_resource type="StyleBox" uid="uid://co7uma3nnbp50" path="res://GodotThemes/Styleboxes/HeroLoadout/HLPerkBackground.tres" id="3_a4oe6"]
+[ext_resource type="StyleBox" uid="uid://b0e2hq5ol08wl" path="res://GodotThemes/Styleboxes/HeroLoadout/HLBackground.tres" id="3_eupxs"]
 [ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_3grrh"]
-[ext_resource type="StyleBox" uid="uid://bu0ejysjk5y5g" path="res://GodotThemes/Styleboxes/HeroLoadout/HLCommanderBackground.tres" id="4_qs3o8"]
 [ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="5_1i3si"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="6_hrb6a"]
 [ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="7_fcb05"]
@@ -67,6 +67,9 @@ shader = ExtResource("7_fcb05")
 shader_parameter/inset = 0.1
 shader_parameter/shade = 0.2
 shader_parameter/shadeAlpha = 0.8
+shader_parameter/base = 0.0
+shader_parameter/scalar = 2.0
+shader_parameter/power = 2.0
 
 [node name="SupportHero" type="MarginContainer" unique_id=1541840474 node_paths=PackedStringArray("heroAbilityEntries", "heroPerkEntry")]
 offset_right = 302.0
@@ -83,7 +86,7 @@ defaultClearIconToNull = true
 unique_name_in_owner = true
 material = ExtResource("2_mxnn5")
 layout_mode = 2
-theme_override_styles/panel = ExtResource("4_qs3o8")
+theme_override_styles/panel = ExtResource("3_eupxs")
 script = ExtResource("3_38f6u")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1295952962]

@@ -82,6 +82,13 @@ public class PegLegResourceManager
 		public override string ToString() => version.ToString();
 	}
 
+	public static async Task AwaitResourceLoad()
+	{
+		//is there a better way to wait for a bool to become true than checking it every frame?
+		while (!hasLoadedResources)
+			await Helpers.WaitForFrame();
+	}
+
 	static bool hasLoadedResources = false;
 	public static async Task FetchAndLoadPackages(int targetMajor, int targetMinor, Action<string, float> onProgress = null)
 	{

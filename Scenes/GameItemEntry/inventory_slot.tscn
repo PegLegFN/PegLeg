@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dljot1ntapg7q"]
+[gd_scene format=3 uid="uid://dljot1ntapg7q"]
 
 [ext_resource type="Texture2D" uid="uid://3atkm5dd5sh1" path="res://Images/AspectRatios/2x3Aspect.png" id="1_gryht"]
 [ext_resource type="Script" uid="uid://dwe8uvqinb63r" path="res://Scripts/UserInterface/ListEntries/InventoryItemSlot.cs" id="1_t20bs"]
@@ -19,7 +19,7 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 
-[node name="InventorySlot" type="MarginContainer" node_paths=PackedStringArray("entry", "inspectArea", "open", "locked", "buttonControl", "ctxMenuHook")]
+[node name="InventorySlot" type="MarginContainer" unique_id=433971006 node_paths=PackedStringArray("entry", "inspectArea", "open", "locked", "buttonControl", "ctxMenuHook")]
 custom_minimum_size = Vector2(100, 0)
 offset_right = 100.0
 offset_bottom = 150.0
@@ -33,77 +33,77 @@ buttonControl = NodePath("Responsive Button Area")
 ctxMenuHook = NodePath("Responsive Button Area/InvSlotCtx")
 itemCtx = ExtResource("9_c6qth")
 
-[node name="AspectTexture" type="TextureRect" parent="."]
+[node name="AspectTexture" type="TextureRect" parent="." unique_id=1640118597]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("1_gryht")
 expand_mode = 5
 
-[node name="OpenEntry" type="MarginContainer" parent="."]
+[node name="OpenEntry" type="MarginContainer" parent="." unique_id=658654568]
 visible = false
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="OpenEntry"]
+[node name="Panel" type="Panel" parent="OpenEntry" unique_id=1133482086]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0uapl")
 
-[node name="MarginContainer" type="MarginContainer" parent="OpenEntry"]
+[node name="MarginContainer" type="MarginContainer" parent="OpenEntry" unique_id=1478515565]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TextureRect" type="TextureRect" parent="OpenEntry/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="OpenEntry/MarginContainer" unique_id=523097942]
 layout_mode = 2
 texture = ExtResource("3_424rb")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LockedEntry" type="MarginContainer" parent="."]
+[node name="LockedEntry" type="MarginContainer" parent="." unique_id=938769041]
 visible = false
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="LockedEntry"]
+[node name="Panel" type="Panel" parent="LockedEntry" unique_id=13763898]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0uapl")
 
-[node name="MarginContainer" type="MarginContainer" parent="LockedEntry"]
+[node name="MarginContainer" type="MarginContainer" parent="LockedEntry" unique_id=1241973798]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TextureRect" type="TextureRect" parent="LockedEntry/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="LockedEntry/MarginContainer" unique_id=1587304571]
 layout_mode = 2
 texture = ExtResource("2_1ato0")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="InventoryEntry" parent="." instance=ExtResource("3_2k13d")]
+[node name="InventoryEntry" parent="." unique_id=1126785528 instance=ExtResource("3_2k13d")]
 custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 useLargePreview = true
 preventInteractability = true
 autoLinkToRecycleSelection = false
 
-[node name="ClickBlocker" type="Control" parent="."]
+[node name="ClickBlocker" type="Control" parent="." unique_id=719271916]
 layout_mode = 2
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("4_poxbv")]
+[node name="Responsive Button Area" parent="." unique_id=1080521900 instance=ExtResource("4_poxbv")]
 layout_mode = 2
 outlinePadding = 0.0
 
-[node name="InvSlotCtx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource")]
+[node name="InvSlotCtx" type="Node" parent="Responsive Button Area" unique_id=1362565081 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("7_s27a0")
 itemSource = NodePath("../../InventoryEntry")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=741394743]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="InspectArea" type="Control" parent="Control"]
+[node name="InspectArea" type="Control" parent="Control" unique_id=68810423]
 visible = false
 custom_minimum_size = Vector2(29, 28)
 layout_mode = 1
@@ -113,7 +113,7 @@ anchor_right = 1.0
 grow_horizontal = 0
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control/InspectArea"]
+[node name="TextureRect" type="TextureRect" parent="Control/InspectArea" unique_id=1542952563]
 self_modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 1
 anchors_preset = 14
@@ -126,7 +126,7 @@ mouse_filter = 2
 texture = ExtResource("7_aq3yn")
 expand_mode = 5
 
-[node name="Label" type="Label" parent="Control/InspectArea/TextureRect"]
+[node name="Label" type="Label" parent="Control/InspectArea/TextureRect" unique_id=279906446]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -143,7 +143,7 @@ text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/InspectArea/TextureRect"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/InspectArea/TextureRect" unique_id=593809556]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -155,13 +155,13 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="TextureRect" type="TextureRect" parent="Control/InspectArea/TextureRect/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="Control/InspectArea/TextureRect/MarginContainer" unique_id=303288783]
 self_modulate = Color(0, 0, 0, 0.501961)
 layout_mode = 2
 texture = ExtResource("8_1c0uy")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="Control/InspectArea/TextureRect/MarginContainer/TextureRect"]
+[node name="TextureRect2" type="TextureRect" parent="Control/InspectArea/TextureRect/MarginContainer/TextureRect" unique_id=153774667]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -175,11 +175,11 @@ grow_vertical = 2
 texture = ExtResource("8_1c0uy")
 expand_mode = 1
 
-[node name="Responsive Button Circle" parent="Control/InspectArea/TextureRect" instance=ExtResource("9_xjln0")]
+[node name="Responsive Button Circle" parent="Control/InspectArea/TextureRect" unique_id=1885482493 instance=ExtResource("9_xjln0")]
 layout_mode = 1
 outlinePadding = 0.0
 
-[node name="FakeInspector" type="Control" parent="Control"]
+[node name="FakeInspector" type="Control" parent="Control" unique_id=1849155905]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0

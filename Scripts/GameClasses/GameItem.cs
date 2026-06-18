@@ -93,28 +93,31 @@ public class GameItem
 		//assumes that item types are distinct
 		public static ItemData[] Add(ItemData[] first, ItemData[] second)
 		{
+			ItemData[] result = [.. first];
 			var secondDict = second.ToDictionary(i => i.templateId, i => i.quantity);
-			for (int i = 0; i < first.Length; i++)
+			for (int i = 0; i < result.Length; i++)
 			{
-				if (!secondDict.TryGetValue(first[i].templateId, out int amount))
+				if (!secondDict.TryGetValue(result[i].templateId, out int amount))
 					continue;
-				first[i].quantity += amount;
-				secondDict.Remove(first[i].templateId);
+				result[i].quantity += amount;
+				secondDict.Remove(result[i].templateId);
 			}
-			return [.. first.Where(i => i.quantity >= 1), .. second.Where(i => secondDict.ContainsKey(i.templateId))];
+			return [.. result.Where(i => i.quantity >= 1), .. second.Where(i => secondDict.ContainsKey(i.templateId))];
 		}
 
 		public static ItemData[] Subtract(ItemData[] first, ItemData[] second)
 		{
+			ItemData[] result = [.. first];
 			var secondDict = second.ToDictionary(i => i.templateId, i => i.quantity);
-			for (int i = 0; i < first.Length; i++)
+			for (int i = 0; i < result.Length; i++)
 			{
-				if (!secondDict.TryGetValue(first[i].templateId, out int amount))
+				if (!secondDict.TryGetValue(result[i].templateId, out int amount))
 					continue;
-				first[i].quantity -= amount;
+				result[i].quantity -= amount;
 			}
-			return [.. first.Where(i => i.quantity >= 1)];
+			return [.. result.Where(i => i.quantity >= 1)];
 		}
+		public static ItemData[] FromDict(Dictionary<string, int> dict) => [.. dict.Select(kvp => new ItemData(kvp.Key, kvp.Value))];
 	}
 
 	public record struct ItemReward()

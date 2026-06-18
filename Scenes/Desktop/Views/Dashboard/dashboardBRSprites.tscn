@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://b3a7yyn2575kf"]
+
+[ext_resource type="Script" uid="uid://cdul6lfsu3xt2" path="res://Scripts/UserInterface/Dashboard/BRSpriteController.cs" id="1_avxq7"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="1_qxmb0"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="2_avxq7"]
+[ext_resource type="PackedScene" uid="uid://cg2qqkx3wm41t" path="res://Scenes/GameItemEntry/reward_entry_tiny.tscn" id="4_avxq7"]
+
+[node name="BRSprites" type="PanelContainer" unique_id=661204817 node_paths=PackedStringArray("spriteDustLayout", "spriteDustCount", "activeSpriteContainer", "lostSpriteContainer")]
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("1_avxq7")
+spriteDustLayout = NodePath("VBoxContainer/HBoxContainer/HBoxContainer")
+spriteDustCount = NodePath("VBoxContainer/HBoxContainer/HBoxContainer/Label3")
+activeSpriteContainer = NodePath("VBoxContainer/Active")
+lostSpriteContainer = NodePath("VBoxContainer/Lost")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2126480779]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=288492092]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=382451135]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "BR Sprite Collection"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=706835503]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=42461470]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Dust:"
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=46625610]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "9,999"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=279505372]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/Button" unique_id=195327673]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qxmb0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Active" type="Container" parent="VBoxContainer" unique_id=322642588]
+layout_mode = 2
+script = ExtResource("2_avxq7")
+recycleEntryScene = ExtResource("4_avxq7")
+layoutMode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1869539170]
+layout_mode = 2
+
+[node name="Lost" type="Container" parent="VBoxContainer" unique_id=1767506320]
+layout_mode = 2
+script = ExtResource("2_avxq7")
+recycleEntryScene = ExtResource("4_avxq7")
+layoutMode = 2
