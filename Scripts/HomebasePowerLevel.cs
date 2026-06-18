@@ -33,6 +33,8 @@ public partial class HomebasePowerLevel : Control
 		if (useCurrent)
 		{
 			TooltipText = "Waiting for data...";
+			GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
+			OnActiveAccountChanged();
 		}
 	}
 
@@ -140,6 +142,7 @@ public partial class HomebasePowerLevel : Control
 			else
 				currentAccount.OnRatingDataChanged -= OnRatingChanged;
 		}
-		GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;
+		if (useCurrent)
+			GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;
 	}
 }
