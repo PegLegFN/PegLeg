@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using ReleaseData = GithubHelper.ReleaseData;
 
 public partial class UpdateChecker : Control
 {
@@ -25,7 +27,8 @@ public partial class UpdateChecker : Control
 	}
 
 	bool isChecking = false;
-	GithubHelper.ReleaseData? latestRelease;
+	ReleaseData? possibleLatestRelease;
+	bool latestIsBreakpoint = false;
 	public async void CheckForUpdates()
 	{
 		if (isChecking)
@@ -37,7 +40,7 @@ public partial class UpdateChecker : Control
 			failMsg.Visible = true;
 			releaseParent.Visible = false;
 			updateBtn.Visible = false;
-			latestRelease = null;
+			possibleLatestRelease = null;
 			var currentVer = AppConfig.PegLegVersion;
 
 			if (OS.HasFeature("editor"))
@@ -91,7 +94,13 @@ public partial class UpdateChecker : Control
 					return;
 				}
 				UpdateNotificationHook.SetNotifVisible();
-				latestRelease = filteredReleases[0];
+				possibleLatestRelease = filteredReleases[0];
+				latestIsBreakpoint = false;
+				if (filteredReleases.LastOrDefault(r => r.body.Contains("BREAKPOINT")) is ReleaseData breakpointRelease)
+				{
+					latestIsBreakpoint = possibleLatestRelease == breakpointRelease;
+					possibleLatestRelease = breakpointRelease;
+				}
 				//show filtered releases
 				for (int i = 0; i < filteredReleases.Length; i++)
 				{
@@ -107,7 +116,7 @@ public partial class UpdateChecker : Control
 					//curReleaseEntry.GetNode<Label>("%Tag").Text = filteredReleases[i].tag_name;
 					var link = curReleaseEntry.GetNode<LinkButton>("%TagAndLink");
 					link.Text = filteredReleases[i].tag_name;
-					link.Uri = filteredReleases[i].url;
+					link.Uri = filteredReleases[i].html_url;
 					curReleaseEntry.GetNode<Label>("%Body").Text = filteredReleases[i].body.FixNewlines();
 					curReleaseEntry.GetNode<Control>("%Separator").Visible = i != (filteredReleases.Length - 1);
 				}
@@ -132,12 +141,48 @@ public partial class UpdateChecker : Control
 		}
 	}
 
+	[GeneratedRegex("`Flags:\\[(?:(\\w+(?:=\\w+)?),?)*\\]`")]
+	private static partial Regex FlagParser();
+
+	Dictionary<string, string> ReadReleaseFlags(string description)
+	{
+		var match = FlagParser().Match(description);
+		if (!match.Success)
+			return [];
+		Dictionary<string, string> results = [];
+		foreach (var group in match.Groups.Values)
+		{
+			if (group.Value.Contains('='))
+			{
+				var split = group.Value.Split('=');
+				results.Add(split[0], split[1]);
+			}
+			else
+				results.Add(group.Value, null);
+		}
+		return results;
+	}
+
 	public async void DownloadAndRunInstaller()
 	{
-		if (latestRelease is null)
+		if (possibleLatestRelease is not ReleaseData release)
 			return;
+
+		var flags = ReadReleaseFlags(release.body);
+		if (flags.ContainsKey("BREAKPOINT") && !latestIsBreakpoint)
+		{
+			await GenericConfirmationWindow.ShowInfo("Due to some breaking changes made in these updates, you will need to update multiple times to be fully up-to-date");
+		}
+		if (flags.ContainsKey("ForceManual"))
+		{
+			var goToURL = await GenericConfirmationWindow.ShowConfirmation("Manual Update Required", contextText: "This update must be installed manually from the Releases Page", postiveText: "Open");
+			if (goToURL == true)
+				OS.ShellOpen(release.html_url);
+			return;
+		}
+
 #if GODOT_WINDOWS
-		var asset = latestRelease.Value.assets.FirstOrDefault(a => a.name.EndsWith(".msi"));
+		var asset = release.assets.FirstOrDefault(a => a.name.EndsWith(".msi"));
 		if (asset == default)
 		{
 			await GenericConfirmationWindow.ShowError("No installer file found");
@@ -145,7 +190,7 @@ public partial class UpdateChecker : Control
 		}
 		try
 		{
-            var updatePath = Helpers.GlobalisePath($"user://Updates/Update-{latestRelease.Value.Version}.msi");
+            var updatePath = Helpers.GlobalisePath($"user://Updates/Update-{release.Version}.msi");
 			var updateFolder = Helpers.GlobalisePath("user://Updates");
 			try
 			{
@@ -203,7 +248,7 @@ public partial class UpdateChecker : Control
 			await GenericConfirmationWindow.ShowError("Update failed");
 		}
 #elif GODOT_ANDROID
-        var asset = latestRelease.Value.assets.FirstOrDefault(a => a.name.EndsWith(".apk"));
+        var asset = release.assets.FirstOrDefault(a => a.name.EndsWith(".apk"));
 		if (asset == default)
         {
             await GenericConfirmationWindow.ShowError("No App Package (.apk file) found");
@@ -223,4 +268,5 @@ public partial class UpdateChecker : Control
         await GenericConfirmationWindow.ShowError("Update unavailable on this platform", "Error     ");
 #endif
 	}
+
 }

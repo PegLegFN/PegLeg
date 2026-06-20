@@ -28,6 +28,7 @@ public static class GithubHelper
 	public record struct ReleaseData
 	{
 		public string url;
+		public string html_url;
 		public string name;
 		public string tag_name;
 		public string body;
