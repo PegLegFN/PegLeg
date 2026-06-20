@@ -104,7 +104,10 @@ public partial class UpdateChecker : Control
 					var curReleaseEntry = releaseEntries[i];
 					curReleaseEntry.Visible = true;
 					curReleaseEntry.GetNode<Label>("%Name").Text = filteredReleases[i].name;
-					curReleaseEntry.GetNode<Label>("%Tag").Text = filteredReleases[i].tag_name;
+					//curReleaseEntry.GetNode<Label>("%Tag").Text = filteredReleases[i].tag_name;
+					var link = curReleaseEntry.GetNode<LinkButton>("%TagAndLink");
+					link.Text = filteredReleases[i].tag_name;
+					link.Uri = filteredReleases[i].url;
 					curReleaseEntry.GetNode<Label>("%Body").Text = filteredReleases[i].body.FixNewlines();
 					curReleaseEntry.GetNode<Control>("%Separator").Visible = i != (filteredReleases.Length - 1);
 				}

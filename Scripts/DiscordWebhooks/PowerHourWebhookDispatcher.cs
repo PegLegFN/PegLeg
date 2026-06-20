@@ -88,7 +88,11 @@ public partial class PowerHourWebhookDispatcher : Node
 	public static async void AttemptHeadsup()
 	{
 		var now = DateTime.UtcNow;
-		if (inst is null || inst.hasDispatchedEventHeadsup || (now - GameMission.missionReset.AddHours(-24)).TotalSeconds < 60) //return if inst is null, heads up has already been sent, or is more than 60 seconds since reset
+		if (inst is null)
+			return;
+		if (inst.hasDispatchedEventHeadsup) //heads up has already been sent
+			return;
+		if ((now - GameMission.missionReset.AddHours(-24)).TotalSeconds > 60) //its been more than 60 seconds since reset
 			return;
 
 		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
