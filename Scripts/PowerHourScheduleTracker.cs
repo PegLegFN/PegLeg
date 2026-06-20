@@ -42,14 +42,19 @@ public partial class PowerHourScheduleTracker : Node
 
 	public static PowerHourEvent CurrentOrNextEvent { get; private set; }
 
-	public override async void _Ready()
+	public override void _Ready()
 	{
 		Instance = this;
-		await PegLegResourceManager.AwaitResourceLoad();
+		Bootstrap.OnBootComplete += OnFirstBoot;
+	}
+
+	void OnFirstBoot()
+	{
 		if (PegLegResourceManager.MagicNumbers["powerHourSchedule"] is JsonNode scheduleNode)
 			schedule = scheduleNode.Deserialize<PowerHourSchedule>();
 		RefreshTimerController.OnMinuteChanged += TryCheckSchedule;
 		TryCheckSchedule();
+		Bootstrap.OnBootComplete -= OnFirstBoot;
 	}
 
 	const int calendarOffset = 115;//slightly under 2 hours just in case
@@ -177,6 +182,6 @@ public partial class PowerHourScheduleTracker : Node
 			nextCheck = newEvent.start;
 
 		if (prevNextCheck != nextCheck)
-			GD.Print("Next Power Hour Check will occur at " + nextCheck);
+			GD.Print("Next Power Hour Check will occur at " + nextCheck.ToLocalTime());
 	}
 }

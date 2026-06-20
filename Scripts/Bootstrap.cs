@@ -16,6 +16,8 @@ public partial class Bootstrap : Node
 	const int majorPackageVersion = 3;
 	const int minorPackageVersion = 0;
 
+	public static event Action OnBootComplete;
+
 	[Export]
 	Vector2I bootSize = new(300, 300);
 	[Export]
@@ -421,7 +423,6 @@ public partial class Bootstrap : Node
 			showCachingProgress = true;
 			await preloadTexturesTask;
 		}
-
 		LoadSceneWithPrefs();
 	}
 
@@ -445,6 +446,7 @@ public partial class Bootstrap : Node
 
 	async void LoadScene(bool lite)
 	{
+		OnBootComplete?.Invoke();
 		loadingContent.Visible = true;
 		Window window = GetWindow();
 		curtain.Visible = true;
