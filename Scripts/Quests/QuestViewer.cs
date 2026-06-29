@@ -105,12 +105,14 @@ public partial class QuestViewer : Control
 			)
 			return;
 
-		using var _ = LoadingOverlay.CreateToken();
+		GameItem[] rewards = [];
+		using (LoadingOverlay.CreateToken())
+		{
+			int idx = claimRewardSelector.Visible ? claimRewardSelector.Selected - 2 : 0;
+			rewards = await currentQuest.questItem.ClaimQuest(idx);
 
-		int idx = claimRewardSelector.Visible ? claimRewardSelector.Selected - 2 : 0;
-		var rewards = await currentQuest.questItem.ClaimQuest(idx);
-
-		SetupQuest(currentQuest);
+			SetupQuest(currentQuest);
+		}
 
 		if (rewards.Length > 0)
 		{
