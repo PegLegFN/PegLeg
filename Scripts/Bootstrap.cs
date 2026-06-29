@@ -312,6 +312,7 @@ public partial class Bootstrap : Node
 		if (isFirstBoot)
 		{
 			PrintCosmo("AthenaCharacter:character_loosecreep");
+			PrintCosmo("AthenaCharacter:character_loosecreep", "locker_icon");
 			//PrintCosmo("AthenaCharacter:character_loosecreep", "image");
 			//PrintCosmo("AthenaCharacter:character_glamclaws");
 			//PrintCosmo("NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01");

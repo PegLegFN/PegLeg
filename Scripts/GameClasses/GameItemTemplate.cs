@@ -557,6 +557,8 @@ public partial class GameItemTemplate
 			return tid;
 		foreach (var rarity in rarityIds)
 		{
+			if (rarity is null)
+				continue;
 			if (tid.EndsWith($"_{rarity.ToLower()}_"))
 			{
 				tid = tid[..^(rarity.Length)];

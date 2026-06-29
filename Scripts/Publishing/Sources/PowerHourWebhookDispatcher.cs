@@ -59,13 +59,13 @@ public partial class PowerHourWebhookDispatcher : Node
 			if (now > curEvt.start.AddHours(-24))
 			{
 				//event ended + headsup for next event
-				await webhook.Execute(currentContentProvider: async () => $"The Power Hour has ended, but another one should be active {curEvt.start.Discordify()}.\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
+				await webhook.Execute(currentContentProvider: async () => $"The Power Hour has ended, but another one should be active {curEvt.start.Discordify()}.\n(Ongoing missions will keep the modifiers until they end)\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
 				hasDispatchedEventHeadsup = true;
 			}
 			else
 			{
 				//event ended
-				await webhook.Execute(currentContentProvider: async () => "The Power Hour has ended", currentImageProvider: async () => []);
+				await webhook.Execute(currentContentProvider: async () => "The Power Hour has ended. (Ongoing missions will keep the modifiers until they end)", currentImageProvider: async () => []);
 			}
 		}
 		else

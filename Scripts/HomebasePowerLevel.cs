@@ -1,4 +1,9 @@
 using Godot;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 
 public partial class HomebasePowerLevel : Control
@@ -15,9 +20,13 @@ public partial class HomebasePowerLevel : Control
 	bool animate = true;
 	[Export]
 	Color tooltipColor = Colors.Aquamarine;
+	[Export]
+	Control tempClaimContent;
 
 	public override async void _Ready()
 	{
+		if (tempClaimContent is not null)
+			tempClaimContent.Visible = false;
 		ClearStats();
 		homebaseNumberLabel.Text = "";
 		if (useCurrent)
@@ -47,7 +56,10 @@ public partial class HomebasePowerLevel : Control
 			if (ventures)
 				currentAccount.OnVentureRatingDataChanged -= OnRatingChanged;
 			else
+			{
 				currentAccount.OnRatingDataChanged -= OnRatingChanged;
+				currentAccount.GetProfile("campaign").OnProfileChanged -= TempCheckForClaim;
+			}
 
 			currentAccount = null;
 		}
@@ -63,7 +75,11 @@ public partial class HomebasePowerLevel : Control
 		if (ventures)
 			currentAccount.OnVentureRatingDataChanged += OnRatingChanged;
 		else
+		{
 			currentAccount.OnRatingDataChanged += OnRatingChanged;
+			currentAccount.GetProfile("campaign").OnProfileChanged += TempCheckForClaim;
+			TempCheckForClaim();
+		}
 
 		UpdateStatsVisuals();
 	}
@@ -133,6 +149,109 @@ public partial class HomebasePowerLevel : Control
 		TooltipText = "No Account";
 	}
 
+	public void TempCheckForClaim()
+	{
+		if (tempClaimContent is null)
+			return;
+		tempClaimContent.Visible = false;
+		if (!currentAccount.isOwned)
+			return;
+		var profile = currentAccount.GetProfile("campaign");
+		tempClaimContent.Visible = profile.GetFirstItem("Quest", QuestPredicate) is not null;
+		tempClaimContent.Visible |= profile.GetFirstItem("CardPack", PackPredicate) is not null;
+		tempClaimContent.Visible |= profile.statAttributes?["mission_alert_redemption_record"]?.AsObject().ContainsKey("pendingMissionAlertRewards") == true;
+	}
+
+	static bool QuestPredicate(GameItem q) => q.QuestComplete && !q.QuestClaimed && !q.template.GetQuestRewards().Any(r => r.attributes?.ContainsKey("options") == true);
+	static bool PackPredicate(GameItem p) => p.templateId.StartsWith("CardPack:zcp_") || p.templateId.StartsWith("CardPack:cardpack_cache_");
+
+	public async void TempClaimRewards()
+	{
+		if (
+			await GenericConfirmationWindow.ShowConfirmation(
+				"Claim Rewards?", 
+				contextText: "Claim Mission Alert Rewards and all non-choice quests?", 
+				warningText: "Quests with Choice Rewards can only be claimed from the Quests tab", 
+				postiveText: "Claim"
+			) != true
+		)
+			return;
+		using var loadingToken = LoadingOverlay.CreateToken();
+		var profile = currentAccount.GetProfile("campaign");
+		await profile.Query(true);
+
+		var questsToClaim = profile.GetItems("Quest", QuestPredicate);
+		var packsToClaim = profile.GetItems("CardPack", PackPredicate);
+		bool unclaimedAlert = profile.statAttributes?["mission_alert_redemption_record"]?.AsObject().ContainsKey("pendingMissionAlertRewards") == true;
+		var total = questsToClaim.Length + (packsToClaim.Length > 0 ? 1 : 0) + (unclaimedAlert ? 1 : 0);
+		int progress = 0;
+
+		List<GameItem> rewards = [];
+
+		for (int i = 0; i < questsToClaim.Length; i++)
+		{
+			rewards.AddRange(await questsToClaim[i].ClaimQuest() ?? []);
+			progress++;
+			loadingToken.SetLoadingProgress(progress, total);
+		}
+
+		if (packsToClaim.Length > 0)
+		{
+			string[] cardpacksToOpen = [.. packsToClaim.Select(item => item.uuid)];
+			JsonObject body = new()
+			{
+				["cardPackItemIds"] = new JsonArray([..cardpacksToOpen])
+			};
+			var notifs = await profile.PerformOperation("OpenCardPackBatch", body.ToString());
+			if (notifs.FirstOrDefault() is JsonObject packRewards)
+			{
+				var rewardData = packRewards["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
+				var grouped = rewardData.GroupBy(r => r.itemType).Select(g => g.FirstOrDefault() with { quantity = g.Sum(r => r.quantity) });
+				rewards.AddRange(grouped.Select(r => r.FindOrCreateReward(currentAccount)));
+			}
+			progress++;
+			loadingToken.SetLoadingProgress(progress, total);
+		}
+
+		if (unclaimedAlert)
+		{
+			var notifs = await profile.PerformOperation("ClaimMissionAlertRewards");
+			if (notifs.FirstOrDefault() is JsonObject alertRewards)
+			{
+				var rewardData = alertRewards["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
+				rewards.AddRange(rewardData.Select(r => r.FindOrCreateReward(currentAccount)));
+			}
+			progress++;
+			loadingToken.SetLoadingProgress(progress, total);
+		}
+		loadingToken.Dispose();
+
+		if (rewards.Count > 0)
+		{
+			foreach (var item in rewards)
+			{
+				item.GetSearchTags();
+				item.GenerateRawData();
+			}
+			var toRecycle = await SimpleItemSelector.OpenMultiSelector(rewards, SimpleItemSelector.RecycleConfig with
+			{
+				allowCancel = false,
+				allowEmptySelection = true,
+				unselectableMarkerTex = null,
+				unselectableTintColor = Colors.Transparent,
+			});
+			var recycleIds = toRecycle.Select(item => (JsonNode)item.uuid).Where(id => id is not null).ToArray();
+			if (toRecycle.Length > 0)
+			{
+				JsonObject content = new()
+				{
+					["targetItemIds"] = new JsonArray(recycleIds)
+				};
+				GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content).StartTask();
+			}
+		}
+	}
+
 	public override void _ExitTree()
 	{
 		if (currentAccount is not null)
@@ -140,7 +259,10 @@ public partial class HomebasePowerLevel : Control
 			if (ventures)
 				currentAccount.OnVentureRatingDataChanged -= OnRatingChanged;
 			else
+			{
 				currentAccount.OnRatingDataChanged -= OnRatingChanged;
+				currentAccount.GetProfile("campaign").OnProfileChanged -= TempCheckForClaim;
+			}
 		}
 		if (useCurrent)
 			GameAccount.ActiveAccountChanged -= OnActiveAccountChanged;

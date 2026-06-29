@@ -179,9 +179,13 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
 	protected void FilterItems()
 	{
-		filteredItems = FilterFunction is null ? items : [.. items.Where(item => item.profile is null || IsSelected(item) || FilterFunction(item))];
+		filteredItems = FilterFunction is null ? items : [.. items.Where(item => item.profile is null || (IncludeSelectionWhenFiltering && IsSelected(item)) || FilterFunction(item))];
+		OnItemsFiltered();
 		activeContainer?.UpdateList(true);
 	}
+
+	protected virtual bool IncludeSelectionWhenFiltering => true;
+	protected virtual void OnItemsFiltered() { }
 
 	protected void AutoselectItems(bool filteredOnly)
 	{
@@ -193,8 +197,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 			..fromItems
 			.Where(CurrentConfig.selectableFilter)
 			.Where(msConfig.autoselectFilter)
-			.ToDictionary(i=>i, i=>i.quantity),
-			..selectedItems
+			.ToDictionary(i=>i, i=>i.quantity)
 		];
 		selectedItems = selectedKVPs.ToDictionary();
 		SelectionChanged();
@@ -217,6 +220,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 		if (!multiselectMode)
 			return;
 		selectedItems.Clear();
+		SelectionChanged();
 		SortItems();
 	}
 

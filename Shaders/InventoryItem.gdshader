@@ -1,5 +1,6 @@
 shader_type canvas_item;
 #include "Includes/AdaptToAspect.gdshaderinc"
+#include "Includes/CardPackIcon.gdshaderinc"
 
 uniform vec2 ControlSize = vec2(100.0, 100.0);
 uniform bool Fit;
@@ -8,6 +9,8 @@ uniform bool IsHero;
 uniform bool IsSchematic;
 uniform sampler2D Noise;
 uniform sampler2D HeroTriangles : hint_default_white;
+uniform bool UsePack;
+uniform sampler2D PackIcon;
 
 varying vec4 modulate;
 
@@ -39,6 +42,9 @@ void fragment() {
 	vec4 texCol = texture(TEXTURE, adaptedUV);
 	if(adaptedUV.y > 1.0 || adaptedUV.y < 0.0){
 		texCol.a = 0.0;
+	}
+	if(UsePack) {
+		texCol = MixPackIcon(texCol, adaptedUV, PackIcon);
 	}
 	vec4 backgroundCol = modulate;
 

@@ -434,43 +434,26 @@ public partial class GameAccount
 
 	public async Task QueryAllProfiles(bool force = false)
 	{
-		await profileOperationSemaphore.WaitAsync();
-		try
+		if (!isOwned)
 		{
-			if (!isOwned)
-			{
-				if (ActiveAccount is null)
-					return;
-				await Task.WhenAll(
-					GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.Common).QueryUnsafe(force)
-				);
-			}
-			else
-			{
-				await Task.WhenAll(
-					GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.Common).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.CosmeticInventory).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.PeopleCollection).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.SchematicCollection).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.Backpack).QueryUnsafe(force),
-					GetProfile(FnProfileTypes.Storage).QueryUnsafe(force)
-				);
-
-				//await GetProfile(FnProfileTypes.AccountItems).QueryUnsafe(force);
-				//await GetProfile(FnProfileTypes.Common).QueryUnsafe(force);
-				//await GetProfile(FnProfileTypes.CosmeticInventory).QueryUnsafe(force);
-				//await GetProfile(FnProfileTypes.PeopleCollection).QueryUnsafe(force);
-				//await GetProfile(FnProfileTypes.SchematicCollection).QueryUnsafe(force);
-				//await GetProfile(FnProfileTypes.Backpack).QueryUnsafe(force);
-				//await GetProfile(FnProfileTypes.Storage).QueryUnsafe(force);
-			}
-
+			if (ActiveAccount is null)
+				return;
+			await Task.WhenAll(
+				GetProfile(FnProfileTypes.AccountItems).Query(force),
+				GetProfile(FnProfileTypes.Common).Query(force)
+			);
 		}
-		finally
+		else
 		{
-			profileOperationSemaphore.Release();
+			await Task.WhenAll(
+				GetProfile(FnProfileTypes.AccountItems).Query(force),
+				GetProfile(FnProfileTypes.Common).Query(force),
+				GetProfile(FnProfileTypes.CosmeticInventory).Query(force),
+				GetProfile(FnProfileTypes.PeopleCollection).Query(force),
+				GetProfile(FnProfileTypes.SchematicCollection).Query(force),
+				GetProfile(FnProfileTypes.Backpack).Query(force),
+				GetProfile(FnProfileTypes.Storage).Query(force)
+			);
 		}
 	}
 
@@ -940,10 +923,27 @@ public partial class GameAccount
 
 		float LookupWorkers(string squadId)
 		{
-			var matchingWorkers = equippedWorkerItems.Where(item => item.attributes["squad_id"].ToString() == squadId);
-			var stat = matchingWorkers.Sum(item => item?.CalculateSurvivorRating() ?? 0);
-			//GD.Print($"Squad:{squadId}:{stat}");
-			return stat;
+			try
+			{
+				var matchingWorkers = equippedWorkerItems.Where(item => item.attributes["squad_id"].ToString() == squadId);
+				var stat = matchingWorkers.Sum(item => item.CalculateSurvivorRating());
+				//GD.Print($"Squad:{squadId}:{stat}");
+				return stat;
+			}
+			catch(Exception e)
+			{
+				GD.Print("SquadErrorCTX: (" +
+					$"equippedArrayIsNull:{equippedWorkerItems is null}, " +
+					$"equippedArrayLen:{equippedWorkerItems?.Length}, " +
+					$"equippedWhereNull:{equippedWorkerItems?.Count(item => item?.attributes?["squad_id"]?.ToString() == null)}, " +
+					$"matchingLen:{equippedWorkerItems?.Count(item => item?.attributes?["squad_id"]?.ToString() == squadId)}, " +
+					$"matchingSum:{equippedWorkerItems?.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId).Sum(item => item?.CalculateSurvivorRating() ?? 0)}, " +
+					$"matchingWhereRatingNull:{equippedWorkerItems?.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId).Count(item => item?.CalculateSurvivorRating() == null)}, " +
+					")"
+				);
+				GD.PushError($"ERROR with squad power for {squadId}\n{e}");
+			}
+			return 0;
 		}
 
 		double backpackPower = RatingData.GetWeaponPower(this);

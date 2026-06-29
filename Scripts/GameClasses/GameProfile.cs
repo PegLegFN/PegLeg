@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
+using static Godot.Variant;
 
 static class FnProfileTypes
 {
@@ -114,6 +116,8 @@ public class GameProfile
 		}
 	}
 
+	SemaphoreSlim profileQuerySemaphore = new(1);
+
 	public async Task<GameProfile> Query(bool ignoreCache = false, bool ignoreRevision = false, bool silent = false) =>
 		(await TryQuery(ignoreCache, ignoreRevision, silent)) ? this : null;
 	public async Task<bool> TryQuery(bool ignoreCache = false, bool ignoreRevision = false, bool silent = false)
@@ -122,31 +126,23 @@ public class GameProfile
 		if (account is null)
 			return false;
 
-		await account.profileOperationSemaphore.WaitAsync();
-		try
-		{
-			if (hasProfile && !ignoreCache)
-				return true;
-			if (ignoreRevision)
-				rvn = -1;
-			var res = await PerformOperationUnsafe("QueryProfile", silent: silent);
-			return res is not null;
-		}
-		finally
-		{
-			account.profileOperationSemaphore.Release();
-		}
+		using var _ = await profileQuerySemaphore.AwaitToken();
+		//GD.Print($"permitting query of {profileId} of {account.DisplayName}");
+		if (hasProfile && !ignoreCache)
+			return true;
+		if (ignoreRevision)
+			rvn = -1;
+		var res = await PerformOperationUnsafe("QueryProfile", silent: silent);
+		return res is not null;
 	}
 
-	//should only be used after manually entering the profileOperationSemaphore (and validating account existance), such as in GameAccount.QueryAllProfiles()
-	public async Task<GameProfile> QueryUnsafe(bool forceFetch = false)
-	{
-		if (!hasProfile || forceFetch)
-		{
-			await PerformOperationUnsafe("QueryProfile");
-		}
-		return this;
-	}
+	//previously used after manually entering the profileOperationSemaphore (and validating account existance), such as in GameAccount.QueryAllProfiles(). Not needed now that queries use a separate semaphore
+	//public async Task<GameProfile> QueryUnsafe(bool forceFetch = false)
+	//{
+	//	if (!hasProfile || forceFetch)
+	//		await PerformOperationUnsafe("QueryProfile");
+	//	return this;
+	//}
 
 	public async Task<JsonArray> PerformOperation(string operation, JsonNode content, bool silent = false) =>
 		await PerformOperation(operation, content.ToString(), silent);
@@ -155,15 +151,9 @@ public class GameProfile
 	{
 		if (account is null)
 			return null;
-		await account.profileOperationSemaphore.WaitAsync();
-		try
-		{
-			return await PerformOperationUnsafe(operation, content, silent);
-		}
-		finally
-		{
-			account.profileOperationSemaphore.Release();
-		}
+		using var _ = await account.profileOperationSemaphore.AwaitToken();
+		//GD.Print($"permitting operation {operation} on {profileId} of {account.DisplayName}");
+		return await PerformOperationUnsafe(operation, content, silent);
 	}
 
 	public void MarkItemsSeen(GameItem[] items)

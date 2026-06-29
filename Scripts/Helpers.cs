@@ -121,6 +121,14 @@ public static partial class Helpers
 		action?.Invoke();
 	}
 
+	public static async void DeferTimer(Action action, float time, CancellationToken ct = default)
+	{
+		await WaitForTimer(time);
+		if (ct.IsCancellationRequested)
+			return;
+		action?.Invoke();
+	}
+
 	public static async Task ChangeSceneAsync(this SceneTree tree, string path, Action<float> onProgress = null)
 	{
 		var reqErr = ResourceLoader.LoadThreadedRequest(path, useSubThreads: true);

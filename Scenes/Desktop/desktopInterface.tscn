@@ -56,7 +56,7 @@
 [ext_resource type="PackedScene" uid="uid://bm216dwkg2p58" path="res://Scenes/Desktop/Views/Extra/desktopVenturesView.tscn" id="35_s7yuu"]
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/AppIcons/PegLegIcon256.png" id="37_5b0rm"]
 [ext_resource type="PackedScene" uid="uid://b8cv7fnnprix6" path="res://Scenes/Desktop/Views/Extra/desktopWeaponStatView.tscn" id="37_c6nfh"]
-[ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/card_pack_opener_window.tscn" id="41_alhak"]
+[ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/cardpack_opener_window.tscn" id="41_alhak"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="41_kf5nt"]
 [ext_resource type="PackedScene" uid="uid://cr3cku76polyu" path="res://Scenes/Desktop/Views/Extra/desktopPartyLoadoutsView.tscn" id="42_i2466"]
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="43_4gcek"]
@@ -558,8 +558,16 @@ texture = ExtResource("31_retv3")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PowerLevelIndicatorV2" parent="Content/StatusBar/Left" unique_id=1952626507 instance=ExtResource("52_csww2")]
+[node name="PowerLevelIndicatorV2" parent="Content/StatusBar/Left" unique_id=1952626507 node_paths=PackedStringArray("tempClaimContent") instance=ExtResource("52_csww2")]
 layout_mode = 2
+tempClaimContent = NodePath("../Button")
+
+[node name="Button" type="Button" parent="Content/StatusBar/Left" unique_id=1534175427]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 12
+text = "!! Rewards !!"
 
 [node name="Right" type="HBoxContainer" parent="Content/StatusBar" unique_id=1749668514]
 layout_mode = 2
@@ -740,18 +748,9 @@ layout_mode = 1
 visible = false
 layout_mode = 1
 
-[node name="GameItemSelector" parent="OverlayWindows" unique_id=1292242426 instance=ExtResource("44_m211x")]
-visible = false
-layout_mode = 1
-
 [node name="HeroItemSelector" parent="OverlayWindows" unique_id=324941650 instance=ExtResource("64_buut1")]
 visible = false
 layout_mode = 1
-
-[node name="GameItemViewer" parent="OverlayWindows" unique_id=1064404739 instance=ExtResource("25_r7yrq")]
-visible = false
-layout_mode = 1
-anchors_preset = -1
 
 [node name="SettingsWindow" parent="OverlayWindows" unique_id=1858987398 instance=ExtResource("99_hfy7e")]
 visible = false
@@ -761,35 +760,50 @@ layout_mode = 1
 visible = false
 layout_mode = 1
 
-[node name="CopyImage" parent="OverlayWindows" unique_id=1254622451 instance=ExtResource("62_wqw3e")]
+[node name="GameItemSelector" parent="OverlayWindows" unique_id=1292242426 instance=ExtResource("44_m211x")]
 visible = false
-layout_mode = 1
-
-[node name="DevText" parent="OverlayWindows" unique_id=925296971 instance=ExtResource("60_o7hny")]
-visible = false
+z_index = 2
 layout_mode = 1
 
 [node name="GenericLineEditWindow" parent="OverlayWindows" unique_id=1582895842 instance=ExtResource("45_vujc8")]
 visible = false
+z_index = 2
 layout_mode = 1
 
 [node name="GenericConfirmationWindow" parent="OverlayWindows" unique_id=648579163 instance=ExtResource("46_fbpme")]
 visible = false
+z_index = 2
+layout_mode = 1
+
+[node name="GameItemViewer" parent="OverlayWindows" unique_id=1064404739 instance=ExtResource("25_r7yrq")]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = -1
+
+[node name="CopyImage" parent="OverlayWindows" unique_id=1254622451 instance=ExtResource("62_wqw3e")]
+visible = false
+z_index = 2
+layout_mode = 1
+
+[node name="DevText" parent="OverlayWindows" unique_id=925296971 instance=ExtResource("60_o7hny")]
+visible = false
+z_index = 4
 layout_mode = 1
 
 [node name="ShopPurchaseAnimation" parent="OverlayWindows" unique_id=217372107 instance=ExtResource("96_2bhmt")]
 visible = false
-z_index = 2
+z_index = 4
 layout_mode = 1
 
 [node name="ItemUpgradeAnimation" parent="OverlayWindows" unique_id=1631981925 instance=ExtResource("73_jacmh")]
 visible = false
-z_index = 2
+z_index = 4
 layout_mode = 1
 
 [node name="LoadingOverlay" parent="OverlayWindows" unique_id=1534828838 instance=ExtResource("31_v6low")]
 visible = false
-z_index = 3
+z_index = 5
 layout_mode = 1
 startOpen = false
 isUserClosable = true
@@ -818,6 +832,7 @@ curtain = NodePath("..")
 [connection signal="IconChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="OverlayWindows/AccountSwitcher" method="OpenWindow"]
+[connection signal="pressed" from="Content/StatusBar/Left/Button" to="Content/StatusBar/Left/PowerLevelIndicatorV2" method="TempClaimRewards"]
 [connection signal="pressed" from="Content/StatusBar/Right/RefreshBtn" to="Content/StatusBar/Right/RefreshBtn" method="RefreshAccount"]
 [connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindow" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]

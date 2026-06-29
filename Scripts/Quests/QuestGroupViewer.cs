@@ -102,8 +102,11 @@ public partial class QuestGroupViewer : Control
 		useArrows = groupData.Sequence;
 
 		questDataList = [.. questGroup.questSlotList.Where(q => forceShowAll || ((q.isUnlocked || groupData.ShowLocked) && (!q.isClaimed || groupData.ShowComplete)))];
-		if (questDataList.FirstOrDefault()?.questTemplate.DisplayName.Contains("Endurance") ?? false)
-			questDataList = [.. questDataList.OrderBy(q => int.Parse(q.questTemplate.DisplayName.Split(" ")[^1]))];
+
+		//only intended for endurance dailies
+		if (questDataList.Count > 0 && questDataList.All(q => q.questTemplate.DisplayName.Contains("Endurance")))
+			questDataList = [.. questDataList.OrderBy(q => int.TryParse(q.questTemplate.DisplayName.Split(" ")[^1], out var order) ? order : 9999)];
+
 		firstUnlocked = questDataList.FirstOrDefault(q => q.isUnlocked && !q.isClaimed);
 
 		nodesPerPage = maxNodesPerPage;

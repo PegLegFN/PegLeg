@@ -1,6 +1,6 @@
 const float EPSILON = 0.0001f;
 
-vec2 flipbookSlice(vec2 uv, vec2 sliceAmount, float cellCount, float currentIndex, bool repeat)
+vec2 flipbookSlice(vec2 uv, vec2 sliceAmount, float cellCount, float currentIndex, bool repeat, bool pingPong)
 {
 	float sliceCount = floor(cellCount>0.0 ? cellCount : ((sliceAmount.x*sliceAmount.y)+cellCount));
 	float sliceIndex = floor(mod(currentIndex, sliceCount));
@@ -14,4 +14,8 @@ vec2 flipbookSlice(vec2 uv, vec2 sliceAmount, float cellCount, float currentInde
 	slicedUV = slicedUnit+(sliceOffset/sliceAmount);
 	bool isNotRepeating = (slicedIndex-sliceIndex<=EPSILON && slicedIndex-sliceIndex>=-EPSILON);
 	return (repeat || isNotRepeating) ? slicedUV : vec2(-1);
+}
+
+vec2 flipbookSlice(vec2 uv, vec2 sliceAmount, float cellCount, float currentIndex, bool repeat){
+	return flipbookSlice(uv, sliceAmount, cellCount, currentIndex, repeat, false);
 }

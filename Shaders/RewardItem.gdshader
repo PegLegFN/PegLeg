@@ -1,6 +1,7 @@
 shader_type canvas_item;
 #include "Includes/AdaptToAspect.gdshaderinc"
 #include "Includes/CornerMask.gdshaderinc"
+#include "Includes/CardPackIcon.gdshaderinc"
 
 uniform vec2 ControlSize = vec2(100.0, 100.0);
 uniform float CornerRadius = 5.0;
@@ -81,11 +82,12 @@ vec4 renderItem(vec2 uv, sampler2D tex, vec4 rarity, bool schematic, bool hero, 
 	}
 	vec4 fitTex = texture(tex, uv);
 	if (pack) {
-		vec2 packUV=(uv-vec2(0.336,0.54))*7.5;
-		packUV.y+=packUV.x*-0.05;
-		packUV.y*=1.0-(packUV.x*0.1);
-		vec4 packCol=texture(packTex, packUV);
-		fitTex.rgb=mix(fitTex.rgb,vec3(0.2890625,0.2578125,0.2265625),packCol.r*packCol.a);
+		fitTex = MixPackIcon(fitTex, uv, packTex);
+		//vec2 packUV=(uv-vec2(0.336,0.54))*7.5;
+		//packUV.y+=packUV.x*-0.05;
+		//packUV.y*=1.0-(packUV.x*0.1);
+		//vec4 packCol=texture(packTex, packUV);
+		//fitTex.rgb=mix(fitTex.rgb,vec3(0.2890625,0.2578125,0.2265625),packCol.r*packCol.a);
 	}
 	return mix(backgroundCol, fitTex, fitTex.a);
 }

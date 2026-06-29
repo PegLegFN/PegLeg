@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cm6qlfwgk148o"]
+[gd_scene format=3 uid="uid://cm6qlfwgk148o"]
 
 [ext_resource type="Texture2D" uid="uid://bbqb2ns66gsfp" path="res://Images/InterfaceIcons/T_QuestNode_Generic.png" id="1_e6ctj"]
 [ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="2_3mdch"]
@@ -26,6 +26,18 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
+[sub_resource type="Gradient" id="Gradient_k2hp4"]
+offsets = PackedFloat32Array(0.84070796, 0.86946905, 0.970075, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cue63"]
+gradient = SubResource("Gradient_k2hp4")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [sub_resource type="Gradient" id="Gradient_3xjum"]
 offsets = PackedFloat32Array(0.881657, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -48,7 +60,7 @@ corner_radius_top_right = 19
 corner_radius_bottom_right = 19
 corner_radius_bottom_left = 19
 
-[node name="QuestNode" type="TextureRect" node_paths=PackedStringArray("flagParent", "flags", "selectedToggle", "questItemEntry")]
+[node name="QuestNode" type="TextureRect" unique_id=1022485393 node_paths=PackedStringArray("flagParent", "flags", "selectedToggle", "questItemEntry", "progressDisplay")]
 self_modulate = Color(0.141176, 0.164706, 0.247059, 1)
 custom_minimum_size = Vector2(0, 128)
 texture = ExtResource("1_e6ctj")
@@ -59,8 +71,9 @@ flagParent = NodePath("PanelContainer")
 flags = [NodePath("PanelContainer/HBoxContainer/Pin"), NodePath("PanelContainer/HBoxContainer/Reperk"), NodePath("PanelContainer/HBoxContainer/Supercharger"), NodePath("PanelContainer/HBoxContainer/Ticket"), NodePath("PanelContainer/HBoxContainer/Schematic"), NodePath("PanelContainer/HBoxContainer/Hero")]
 selectedToggle = NodePath("Overlays/SelectedToggle")
 questItemEntry = NodePath("TextureRect")
+progressDisplay = NodePath("Overlays/TextureProgressBar")
 
-[node name="BG" type="TextureRect" parent="."]
+[node name="BG" type="TextureRect" parent="." unique_id=1688576415]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1
@@ -72,7 +85,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_w4hs8")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2020934633]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
@@ -85,7 +98,7 @@ texture = ExtResource("3_c6yyq")
 expand_mode = 1
 script = ExtResource("4_fk868")
 
-[node name="Overlays" type="Control" parent="."]
+[node name="Overlays" type="Control" parent="." unique_id=82521995]
 layout_mode = 1
 anchor_left = 0.1
 anchor_top = 0.1
@@ -95,16 +108,36 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="SelectedToggle" type="CheckButton" parent="Overlays"]
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Overlays" unique_id=1742192336]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+max_value = 1.0
+step = 0.0
+value = 0.7
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = SubResource("GradientTexture2D_cue63")
+tint_progress = Color(0.005600393, 0.15378249, 1, 1)
+
+[node name="SelectedToggle" type="CheckButton" parent="Overlays" unique_id=580457902]
 self_modulate = Color(1, 1, 1, 0)
-layout_mode = 2
+layout_mode = 0
 offset_left = 31.0001
 offset_top = -25.0
 offset_right = 71.0001
 offset_bottom = -2.99996
 mouse_filter = 2
 
-[node name="SelectionOutline" type="TextureRect" parent="Overlays"]
+[node name="SelectionOutline" type="TextureRect" parent="Overlays" unique_id=534541449]
 visible = false
 self_modulate = Color(1, 0, 0, 1)
 layout_mode = 1
@@ -118,7 +151,7 @@ grow_vertical = 2
 texture = ExtResource("4_6n47o")
 expand_mode = 1
 
-[node name="NotificationLabel" type="Label" parent="Overlays"]
+[node name="NotificationLabel" type="Label" parent="Overlays" unique_id=1200060234]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -136,7 +169,7 @@ text = " ! "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PinBG" type="TextureRect" parent="Overlays"]
+[node name="PinBG" type="TextureRect" parent="Overlays" unique_id=759441357]
 visible = false
 self_modulate = Color(0.12549, 0.313726, 0.498039, 1)
 layout_mode = 1
@@ -151,7 +184,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_8ycl4")
 expand_mode = 1
 
-[node name="PinIcon" type="TextureRect" parent="Overlays/PinBG"]
+[node name="PinIcon" type="TextureRect" parent="Overlays/PinBG" unique_id=813717730]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
@@ -164,7 +197,7 @@ mouse_filter = 2
 texture = ExtResource("4_a24oo")
 expand_mode = 1
 
-[node name="KeyIcon" type="TextureRect" parent="Overlays"]
+[node name="KeyIcon" type="TextureRect" parent="Overlays" unique_id=12031182]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -177,7 +210,7 @@ mouse_filter = 2
 texture = ExtResource("6_ax8dp")
 expand_mode = 1
 
-[node name="Responsive Button Circle" parent="." instance=ExtResource("2_3mdch")]
+[node name="Responsive Button Circle" parent="." unique_id=1469002663 instance=ExtResource("2_3mdch")]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 8.0
@@ -187,12 +220,12 @@ offset_bottom = -8.0
 outlinePadding = 0.0
 hoverTime = 0.05
 
-[node name="Ctx" type="Node" parent="Responsive Button Circle" node_paths=PackedStringArray("itemSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Circle" unique_id=1508165546 node_paths=PackedStringArray("itemSource")]
 script = ExtResource("9_1c6qk")
 itemSource = NodePath("../../TextureRect")
 componentList = ExtResource("10_1c6qk")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1335146141]
 z_index = 2
 layout_mode = 1
 anchors_preset = -1
@@ -200,57 +233,53 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1c6qk")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=1688889374]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 1
 
-[node name="Pin" type="TextureRect" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+[node name="Pin" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=1018748535]
 layout_mode = 2
 tooltip_text = "Pinned"
 texture = ExtResource("4_a24oo")
-expand_mode = 1
+expand_mode = 3
 
-[node name="Reperk" type="TextureRect" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+[node name="Reperk" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=506369077]
 layout_mode = 2
 tooltip_text = "Core Reperk"
 texture = ExtResource("8_fk868")
-expand_mode = 1
+expand_mode = 3
 
-[node name="Supercharger" type="TextureRect" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+[node name="Supercharger" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=247251148]
 layout_mode = 2
 tooltip_text = "Supercharger"
 texture = ExtResource("8_7wyke")
-expand_mode = 1
+expand_mode = 3
 
-[node name="Ticket" type="TextureRect" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+[node name="Ticket" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=1959439611]
 layout_mode = 2
 tooltip_text = "Weapon/Hero Voucher"
 texture = ExtResource("10_7wyke")
-expand_mode = 1
+expand_mode = 3
 
-[node name="Schematic" type="TextureRect" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+[node name="Schematic" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=498916125]
 layout_mode = 2
 tooltip_text = "Schematic"
 texture = ExtResource("11_7wyke")
-expand_mode = 1
+expand_mode = 3
 
-[node name="Hero" type="TextureRect" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+[node name="Hero" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=1442129827]
 layout_mode = 2
 tooltip_text = "Hero"
 texture = ExtResource("8_guso7")
-expand_mode = 1
+expand_mode = 3
 
 [connection signal="ColorChanged" from="." to="." method="set_self_modulate"]
 [connection signal="KeyItemVisible" from="." to="PanelContainer" method="set_visible"]

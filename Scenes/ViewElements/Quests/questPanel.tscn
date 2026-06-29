@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="6_n7evw"]
 [ext_resource type="Texture2D" uid="uid://lhe8ded54hsv" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Pin_128.png" id="7_b1vfe"]
 
-
 [sub_resource type="Gradient" id="Gradient_hyobt"]
 offsets = PackedFloat32Array(0.902367, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -20,7 +19,7 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
-[node name="QuestViewer" type="MarginContainer" node_paths=PackedStringArray("objectiveParent", "pinButton", "rerollButton", "rewardParent")]
+[node name="QuestViewer" type="MarginContainer" unique_id=635250585 node_paths=PackedStringArray("objectiveParent", "pinButton", "rerollButton", "rewardParent", "claimButton", "claimRewardSelector")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,50 +33,52 @@ pinButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginConta
 rerollButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/RerollButton")
 rewardParent = NodePath("MarginContainer/HSplitContainer/Rewards/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer")
 rewardScene = ExtResource("3_q0o1l")
+claimButton = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/ClaimButton")
+claimRewardSelector = NodePath("MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/RewardSelector")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1969276149]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2073726398]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer" unique_id=593580289]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HSplitContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HSplitContainer" unique_id=728195130]
 custom_minimum_size = Vector2(175, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2" unique_id=609979428]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer"]
+[node name="Panel" type="Panel" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer" unique_id=645875926]
 layout_mode = 2
 theme_type_variation = &"SecondaryPanel"
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer" unique_id=1280980901]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer" unique_id=870425443]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer" unique_id=753196082]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 texture = ExtResource("4_6x6uw")
 expand_mode = 5
 
-[node name="CompleteIcon" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Icon"]
+[node name="CompleteIcon" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Icon" unique_id=1087690956]
 self_modulate = Color(0, 1, 0, 1)
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 1
@@ -93,7 +94,7 @@ grow_vertical = 0
 texture = SubResource("GradientTexture2D_ueara")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Icon/CompleteIcon"]
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/Icon/CompleteIcon" unique_id=1814198928]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
@@ -105,12 +106,12 @@ grow_vertical = 2
 texture = ExtResource("5_oqt08")
 expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer" unique_id=521521659]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=74638083]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -122,19 +123,40 @@ autowrap_mode = 3
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1125700471]
 layout_mode = 2
 alignment = 2
 
-[node name="RerollButton" type="Button" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="ClaimButton" type="Button" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1030568582]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 8
 tooltip_text = "Reroll"
-theme_type_variation = &"SlantedButton"
+theme_type_variation = &"ActionButton"
+disabled = true
+text = "Claim Quest"
+
+[node name="RewardSelector" type="OptionButton" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1717119574]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "Select Reward"
+popup/item_0/id = 2
+popup/item_1/id = 3
+popup/item_1/separator = true
+popup/item_2/text = "First Option x100"
+popup/item_2/id = 0
+popup/item_3/text = "Second Option x100"
+popup/item_3/id = 1
+
+[node name="RerollButton" type="Button" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=635013491]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 8
+tooltip_text = "Reroll"
 text = "Replace Quest"
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/RerollButton"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/RerollButton" unique_id=1780815489]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -149,7 +171,7 @@ grow_vertical = 2
 texture = ExtResource("6_n7evw")
 expand_mode = 1
 
-[node name="PinButton" type="CheckButton" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="PinButton" type="CheckButton" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2109547310]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 8
@@ -157,7 +179,7 @@ tooltip_text = "Pinned"
 theme_type_variation = &"EmptyCheckButton"
 button_pressed = true
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/PinButton"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HSplitContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/PinButton" unique_id=1326223980]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -171,56 +193,56 @@ grow_vertical = 2
 texture = ExtResource("7_b1vfe")
 expand_mode = 1
 
-[node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2"]
+[node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2" unique_id=1754603829]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Description" type="RichTextLabel" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer"]
+[node name="Description" type="RichTextLabel" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer" unique_id=2095419562]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 20
 text = "This is a Daily Quest. You can have up to three Daily Quests at a time. You can swap out one Daily Quest per day using the Replace Quest button."
 
-[node name="Objectives" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer"]
+[node name="Objectives" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer" unique_id=1362260542]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives"]
+[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives" unique_id=1470161029]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Objectives:"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives" unique_id=106065793]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives/ScrollContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HSplitContainer/VBoxContainer2/VSplitContainer/Objectives/ScrollContainer" unique_id=890268922]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Rewards" type="MarginContainer" parent="MarginContainer/HSplitContainer"]
+[node name="Rewards" type="MarginContainer" parent="MarginContainer/HSplitContainer" unique_id=454011838]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/Rewards"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer/Rewards" unique_id=402975772]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer" unique_id=1699745677]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Rewards:   "
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer" unique_id=1244820978]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer/ScrollContainer" unique_id=2022809845]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
@@ -229,7 +251,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="HFlowContainer" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="HFlowContainer" parent="MarginContainer/HSplitContainer/Rewards/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1792117460]
 layout_mode = 2
 alignment = 1
 

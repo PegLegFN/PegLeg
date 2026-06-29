@@ -1,84 +1,142 @@
-[gd_scene load_steps=16 format=3 uid="uid://tso3qs0wxppc"]
+[gd_scene format=3 uid="uid://tso3qs0wxppc"]
 
-[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_j3td7"]
-[ext_resource type="Shader" uid="uid://dabk0fuxvn2ch" path="res://Shaders/ChoiceCard.tres" id="2_op652"]
-[ext_resource type="Texture2D" uid="uid://bu7y4624c7w51" path="res://Images/InterfaceIcons/o5hq54xvrat91.png" id="3_5abd1"]
+[ext_resource type="Script" uid="uid://cmio4dr6ko65n" path="res://Scripts/UserInterface/ListEntries/ChoiceCardEntry.cs" id="1_mthcg"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="3_5n11l"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="4_e2vqj"]
 [ext_resource type="Texture2D" uid="uid://ds6dqlkqc47j5" path="res://Images/Flipbook/ChoiceCardV2/LabelUV-sheet.png" id="5_do3oc"]
 [ext_resource type="Texture2D" uid="uid://datfcfaym8so5" path="res://Images/Flipbook/ChoiceCardV2/Base-sheet.png" id="6_m1h2m"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="7_65gaw"]
+[ext_resource type="Shader" uid="uid://bxh78876odhfa" path="res://Shaders/ChoiceCard.gdshader" id="8_5n11l"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="8_hciuj"]
 [ext_resource type="Shader" uid="uid://c1cu5jabwr16n" path="res://Shaders/ButtonOutlineShader.gdshader" id="9_mthcg"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="9_r1kfb"]
-[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="9_tm7mh"]
-[ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="10_pu46j"]
-[ext_resource type="Texture2D" uid="uid://csbd78stcd271" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Magnifier_128.png" id="11_oobe8"]
+[ext_resource type="PackedScene" uid="uid://bgr0eeg3fek2e" path="res://Scenes/GameItemEntry/reward_entry_xl.tscn" id="10_6kvwy"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="11_vjjbf"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="12_k3sbm"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="13_mfu3d"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_86ebe"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0g5kn"]
+seed = 1
+frequency = 0.015
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eoib3"]
+width = 420
+noise = SubResource("FastNoiseLite_0g5kn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gdr7p"]
 resource_local_to_scene = true
-shader = ExtResource("2_op652")
-shader_parameter/SliceAmount = Vector2(4, 4)
-shader_parameter/UseManual = true
-shader_parameter/ManualControl = 0
-shader_parameter/time = 2480.29
-shader_parameter/StartTime = 2480.0
-shader_parameter/Started = true
-shader_parameter/RarityColour = Color(1, 0.266667, 0, 1)
+shader = ExtResource("8_5n11l")
+shader_parameter/IconTexture = ExtResource("3_5n11l")
 shader_parameter/UVTexture = ExtResource("5_do3oc")
-shader_parameter/PatternTexture = ExtResource("4_e2vqj")
-shader_parameter/IconTexture = ExtResource("3_5abd1")
+shader_parameter/NoiseTexture = SubResource("NoiseTexture2D_eoib3")
+shader_parameter/FireColor = Color(1, 0.33333337, 0, 1)
+shader_parameter/ZTileGrid = 0
+shader_parameter/FlipUV_Y = true
+shader_parameter/SliceAmount = Vector2i(4, 4)
+shader_parameter/Reverse = false
+shader_parameter/PingPong = false
+shader_parameter/ManualControl = -1
+shader_parameter/NormalisedManual = 0.0
+shader_parameter/BurnProgress = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mthcg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5n11l"]
+resource_local_to_scene = true
+shader = ExtResource("11_vjjbf")
+shader_parameter/ControlSize = Vector2(128, 128)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = true
+shader_parameter/MainIcon = ExtResource("13_mfu3d")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("12_k3sbm")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+shader_parameter/HideBar = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xi8xm"]
 resource_local_to_scene = true
 shader = ExtResource("9_mthcg")
 shader_parameter/ControlSize = Vector2(154, 219)
 shader_parameter/TargetSize = Vector2(1200, 675)
 shader_parameter/LineSize = 3.0
-shader_parameter/ProgressFade = 0.02
 shader_parameter/Progress = 0.0
+shader_parameter/ProgressFade = 0.02
 shader_parameter/Circle = false
 shader_parameter/VerticalHold = true
 
-[node name="ChoiceEntryCard" type="MarginContainer"]
+[node name="ChoiceEntryCard" type="MarginContainer" unique_id=1335813169 node_paths=PackedStringArray("displayEntry", "cardShader", "cardViewport", "ownedLabel")]
 custom_minimum_size = Vector2(0, 256)
 offset_right = 82.0313
 offset_bottom = 200.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+offset_transform_enabled = true
 mouse_filter = 2
-script = ExtResource("1_j3td7")
+script = ExtResource("1_mthcg")
+displayEntry = NodePath("CardShader/SubViewport/MarginContainer/ItemEntry")
+cardShader = NodePath("CardShader")
+cardViewport = NodePath("CardShader/SubViewport")
+ownedLabel = NodePath("CardShader/Responsive Button Area/OwnedLabel")
 autoLinkToViewer = false
 
-[node name="ChoiceCardTexture" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_86ebe")
+[node name="CardShader" type="TextureRect" parent="." unique_id=769590511 node_paths=PackedStringArray("autoViewportTextureLink")]
+material = SubResource("ShaderMaterial_gdr7p")
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("6_m1h2m")
 expand_mode = 3
 script = ExtResource("7_65gaw")
+autoViewportTextureLink = NodePath("SubViewport")
+viewportTexturePropName = "IconTexture"
 
-[node name="Control" type="Control" parent="."]
+[node name="SubViewport" type="SubViewport" parent="CardShader" unique_id=805369510]
+size = Vector2i(256, 256)
+render_target_update_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CardShader/SubViewport" unique_id=1742227850]
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+
+[node name="ColorRect" type="ColorRect" parent="CardShader/SubViewport/MarginContainer" unique_id=1747897429]
+modulate = Color(0.901961, 0.509804, 0, 1)
+layout_mode = 2
+color = Color(0.30078125, 0.30078125, 0.30078125, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CardShader/SubViewport/MarginContainer" unique_id=876834174]
+modulate = Color(0.901961, 0.509804, 0, 1)
+self_modulate = Color(0.64453125, 0.64453125, 0.64453125, 1)
+layout_mode = 2
+texture = ExtResource("4_e2vqj")
+expand_mode = 1
+
+[node name="ItemEntry" parent="CardShader/SubViewport/MarginContainer" unique_id=2049989955 instance=ExtResource("10_6kvwy")]
+layout_mode = 2
+size_flags_horizontal = 1
+preventInteractability = true
+
+[node name="TextureRect" parent="CardShader/SubViewport/MarginContainer/ItemEntry" index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_5n11l")
+
+[node name="InteractableIcon" parent="CardShader/SubViewport/MarginContainer/ItemEntry/Overlays" parent_id_path=PackedInt32Array(2049989955, 894561848) index="3" unique_id=51579903]
+visible = false
+
+[node name="Control" type="Control" parent="CardShader/SubViewport/MarginContainer" unique_id=1960632938]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_right = -10.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = 0
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 24
-text = "Name Name Name"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Responsive Button Area" parent="Control" instance=ExtResource("8_hciuj")]
+[node name="Responsive Button Area" parent="CardShader" unique_id=1750874590 instance=ExtResource("8_hciuj")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.155
@@ -89,97 +147,36 @@ useHold = true
 holdTime = 1.0
 holdRecoverTime = 0.5
 
-[node name="TextureRect" parent="Control/Responsive Button Area/MarginContainer" index="0"]
-material = SubResource("ShaderMaterial_mthcg")
+[node name="TextureRect" parent="CardShader/Responsive Button Area/MarginContainer" index="0"]
+material = SubResource("ShaderMaterial_xi8xm")
 
-[node name="CtxMenu" type="Node" parent="Control/Responsive Button Area"]
+[node name="CtxMenu" type="Node" parent="CardShader/Responsive Button Area" unique_id=73113709]
 script = ExtResource("9_r1kfb")
 
-[node name="InspectArea" type="Control" parent="Control"]
-visible = false
-layout_mode = 1
-anchor_left = 0.6
-anchor_top = 0.15
-anchor_right = 0.8
-anchor_bottom = 0.3
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="TextureRect" type="TextureRect" parent="Control/InspectArea"]
-self_modulate = Color(0.4, 0.4, 0.4, 1)
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("9_tm7mh")
-expand_mode = 5
-
-[node name="Label" type="Label" parent="Control/InspectArea/TextureRect"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 24
-text = "?"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/InspectArea/TextureRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="TextureRect" type="TextureRect" parent="Control/InspectArea/TextureRect/MarginContainer"]
-self_modulate = Color(0, 0, 0, 0.501961)
-layout_mode = 2
-texture = ExtResource("11_oobe8")
-expand_mode = 1
-
-[node name="TextureRect2" type="TextureRect" parent="Control/InspectArea/TextureRect/MarginContainer/TextureRect"]
+[node name="OwnedLabel" type="Label" parent="CardShader/Responsive Button Area" unique_id=657758000]
+custom_minimum_size = Vector2(1, 0)
 layout_mode = 1
 anchors_preset = -1
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -2.0
-offset_right = -2.0
-offset_bottom = -2.0
 grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("11_oobe8")
-expand_mode = 1
+theme_override_constants/line_spacing = -2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 32
+text = "You own {0} of equal or better rarity"
+horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="Responsive Button Circle" parent="Control/InspectArea/TextureRect" instance=ExtResource("10_pu46j")]
-layout_mode = 1
-outlinePadding = 0.0
+[connection signal="InteractableChanged" from="." to="CardShader/Responsive Button Area" method="set_visible"]
+[connection signal="TooltipChanged" from="." to="CardShader/Responsive Button Area" method="set_tooltip_text"]
+[connection signal="RarityChanged" from="CardShader/SubViewport/MarginContainer/ItemEntry" to="CardShader/SubViewport/MarginContainer/ColorRect" method="set_modulate"]
+[connection signal="RarityChanged" from="CardShader/SubViewport/MarginContainer/ItemEntry" to="CardShader/SubViewport/MarginContainer/TextureRect" method="set_modulate"]
+[connection signal="HoldPressed" from="CardShader/Responsive Button Area" to="." method="EmitPressedSignal"]
+[connection signal="ContextMenuTriggered" from="CardShader/Responsive Button Area/CtxMenu" to="." method="Inspect" unbinds=1]
 
-[connection signal="IconChanged" from="." to="ChoiceCardTexture" method="SetShaderTexture" binds= ["IconTexture"]]
-[connection signal="InteractableChanged" from="." to="Control/Responsive Button Area" method="set_visible"]
-[connection signal="InteractableChanged" from="." to="Control/InspectArea/TextureRect/Responsive Button Circle" method="set_visible"]
-[connection signal="NameChanged" from="." to="Control/Label" method="set_text"]
-[connection signal="RarityChanged" from="." to="ChoiceCardTexture" method="SetShaderColor" binds= ["RarityColour"]]
-[connection signal="TooltipChanged" from="." to="Control/Responsive Button Area" method="set_tooltip_text"]
-[connection signal="HoldPressed" from="Control/Responsive Button Area" to="." method="EmitPressedSignal"]
-[connection signal="ContextMenuTriggered" from="Control/Responsive Button Area/CtxMenu" to="." method="Inspect" unbinds=1]
-[connection signal="pressed" from="Control/InspectArea/TextureRect/Responsive Button Circle" to="." method="Inspect"]
-
-[editable path="Control/Responsive Button Area"]
+[editable path="CardShader/SubViewport/MarginContainer/ItemEntry"]
+[editable path="CardShader/SubViewport/MarginContainer/ItemEntry/Overlays/PowerLevelIndicator"]
+[editable path="CardShader/Responsive Button Area"]

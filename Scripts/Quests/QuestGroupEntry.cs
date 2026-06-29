@@ -35,6 +35,7 @@ public class QuestSlot
 	public bool isUnlocked => questItem?.profile is not null;
 	public bool isNew => !(questItem?.IsSeen ?? true);
 	public bool isPinned => questItem?.QuestPinned ?? false;
+	public bool isActive => questItem?.QuestState == "Active";
 	public bool isCompleted => questItem?.QuestState == "Completed";
 	public bool isClaimed => questItem?.QuestState == "Claimed";
 	public bool isRerollable => isUnlocked && questTemplate.Category == "DailyQuests" && questItem.profile.account.CanRerollQuest();

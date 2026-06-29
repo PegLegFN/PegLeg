@@ -22,7 +22,7 @@ public partial class ConfigTextHook : Control
 	bool accountMode = false;
 
 	[Export]
-	double cooldown = 1;
+	double cooldown = 0.5;
 
 
 	public void UpdateTargetSetting(string section, string key)
@@ -93,15 +93,11 @@ public partial class ConfigTextHook : Control
 	bool editingValue = false;
 	public void TrySetValue(string newValue)
 	{
+		currentCooldown = cooldown;
 		if (currentCooldown <= 0)
-		{
 			SetValue(newValue);
-		}
 		else
-		{
-			currentCooldown = cooldown;
 			nextValue = newValue;
-		}
 	}
 
 	string GetCurrentValue()
@@ -115,7 +111,10 @@ public partial class ConfigTextHook : Control
 	{
 		editingValue = true;
 		if (accountMode)
+		{
+			GD.Print($"Set Account Data ({key}={newValue})");
 			GameAccount.ActiveAccount.SetLocalData(key, newValue);
+		}
 		else
 			AppConfig.Set(section, key, newValue);
 		editingValue = false;

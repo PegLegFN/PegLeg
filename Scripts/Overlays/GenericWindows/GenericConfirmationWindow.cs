@@ -46,7 +46,7 @@ public partial class GenericConfirmationWindow : ModalWindow
 			await instance.ShowConfirmationInst(header, null, "Close", description, "", false, headerSpace, true);
 	}
 
-	public static async Task<bool?> ShowConfirmation(string headerText, string postiveText = "Confirm", string negativeText = "", string contextText = "", string warningText = "", bool allowCancel = true, int headerSpace = 8, bool highlightConfirm = true) =>
+	public static async Task<bool?> ShowConfirmation(string headerText, string postiveText = "Confirm", string negativeText = "", string contextText = "", string warningText = "", bool allowCancel = true, int headerSpace = 20, bool highlightConfirm = true) =>
 		instance is null ? null : await instance.ShowConfirmationInst(headerText, postiveText, negativeText, contextText, warningText, allowCancel, headerSpace, highlightConfirm);
 
 	SemaphoreSlim msgSemaphone = new(1);

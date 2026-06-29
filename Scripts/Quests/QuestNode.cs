@@ -25,6 +25,8 @@ public partial class QuestNode : Control
 	CheckButton selectedToggle;
 	[Export]
 	GameItemEntry questItemEntry;
+	[Export]
+	Godot.Range progressDisplay;
 	QuestSlot questData;
 	bool displayAsLocked;
 
@@ -59,58 +61,33 @@ public partial class QuestNode : Control
 		questItemEntry.SetItem(questData.isUnlocked ? questData.questItem : questData.questTemplate.CreateInstance());
 		EmitSignal(SignalName.NotificationVisible, questData.isNew && !questData.isClaimed);
 
-		flagParent.Visible = false;
-		flags[0].Visible = false;
-		bool showFlags = false;
+		if(progressDisplay is not null)
+		{
+			progressDisplay.Visible = questData.isActive;
+			if (questData.isActive)
+			{
+				var objectives = questData.questTemplate["Objectives"]?.AsArray() ?? [];
+				double progress = 0;
+				foreach (var objective in objectives)
+				{
+					var name = objective["BackendName"].ToString();
+					var target = objective["Count"]?.GetValue<int>() ?? 1;
+					var objProgress = questData.questItem?.attributes?["completion_" + name]?.GetValue<int>() ?? 0;
+					progress += ((float)objProgress / target) / objectives.Count;
+				}
+				progressDisplay.Value = progress;
+			}
+		}
+
 		var rewards = questData.questTemplate.GetQuestRewards().Select(r => r.templateId);
-		if (questData.isPinned)
-		{
-			showFlags = true;
-			flags[0].Visible = true;
-		}
-		if (rewards.Contains("AccountResource:reagent_alteration_gameplay_generic"))
-		{
-			showFlags = true;
-			flags[1].Visible = true;
-		}
-		if (rewards.Any(r => r.StartsWith("AccountResource:reagent_promotion", StringComparison.InvariantCultureIgnoreCase)))
-		{
-			showFlags = true;
-			flags[2].Visible = true;
-		}
-		if (rewards.Contains("AccountResource:voucher_herobuyback"))
-		{
-			showFlags = true;
-			flags[3].Visible = true;
-		}
-		if (rewards.Contains("AccountResource:voucher_item_buyback"))
-		{
-			showFlags = true;
-			flags[3].Visible = true;
-		}
-		if (rewards.Any(r => r.StartsWith("schematic:", StringComparison.InvariantCultureIgnoreCase)))
-		{
-			showFlags = true;
-			flags[4].Visible = true;
-		}
-		if (rewards.Any(r => r.StartsWith("hero:", StringComparison.InvariantCultureIgnoreCase)))
-		{
-			showFlags = true;
-			flags[5].Visible = true;
-		}
-
-		if (showFlags)
-			ShowFlagParent();
-
-		//EmitSignal(SignalName.PinnedVisible, questData.isPinned);
-		//EmitSignal(SignalName.KeyItemVisible, questData.questTemplate
-		//    .GetQuestRewards()
-		//    .Any(r =>
-		//        r.templateId.StartsWith("hero:", StringComparison.InvariantCultureIgnoreCase) ||
-		//        r.templateId.StartsWith("schematic:", StringComparison.InvariantCultureIgnoreCase) ||
-		//        keyItemTemplates.Contains(r.templateId)
-		//    )
-		//);
+		SetFlags(
+			questData.isPinned,
+			rewards.Contains("AccountResource:reagent_alteration_gameplay_generic"),
+			rewards.Any(r => r.StartsWith("AccountResource:reagent_promotion", StringComparison.InvariantCultureIgnoreCase)),
+			rewards.Contains("AccountResource:voucher_herobuyback") || rewards.Contains("AccountResource:voucher_item_buyback"),
+			rewards.Any(r => r.StartsWith("schematic:", StringComparison.InvariantCultureIgnoreCase)),
+			rewards.Any(r => r.StartsWith("hero:", StringComparison.InvariantCultureIgnoreCase))
+		);
 
 		int colorIndex = 0;
 		if (questData.isClaimed)
@@ -123,12 +100,17 @@ public partial class QuestNode : Control
 			colorIndex = 1;
 		EmitSignal(SignalName.ColorChanged, colorStages[colorIndex]);
 	}
-
-	async void ShowFlagParent()
+	
+	void SetFlags(params bool[] flagConditions)
 	{
-		await Helpers.WaitForFrame();
-		flagParent.Visible = true;
-
+		flagParent.Visible = false;
+		if (!flagConditions.Any(b => b))
+			return;
+		for (int i = 0; i < flagConditions.Length; i++)
+		{
+			flags[i].Visible = flagConditions[i];
+		}
+		Helpers.Defer(() => flagParent.Visible = true);
 	}
 
 	public void Press()

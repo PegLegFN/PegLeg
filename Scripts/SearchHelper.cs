@@ -57,7 +57,7 @@ public static partial class PLSearch
 	}
 	public record Instruction(int index, InstructionOperation operation, JsonNode meta = null, int endIndex = -1, bool inverted = false);
 
-	public static JsonObject CreateSearchObject(string[] searchTags) => new JsonObject() { ["searchTags"] = new JsonArray([.. searchTags]) };
+	public static JsonObject CreateSearchObject(string[] searchTags) => new() { ["searchTags"] = new JsonArray([.. searchTags]) };
 	public static Instruction[] GenerateSearchInstructions(string fromText) =>
 		GenerateSearchInstructions(fromText, out var _);
 	public static Instruction[] GenerateSearchInstructions(string fromText, out string failureText)

@@ -4,6 +4,8 @@ using Godot;
 public partial class ShaderHook : Control
 {
 	[Export]
+	string primaryTextureName;
+	[Export]
 	bool syncTimeProperty = false;
 	[Export]
 	bool syncControlSize = false;
@@ -11,6 +13,12 @@ public partial class ShaderHook : Control
 	bool syncParallax = false;
 	[Export]
 	double modTime = 0;
+	[Export]
+	SubViewport autoViewportTextureLink;
+	[Export]
+	string viewportTexturePropName;
+
+	string realPrimaryTexturePropName;
 
 	//for Labels
 	public string Text
@@ -22,8 +30,8 @@ public partial class ShaderHook : Control
 	//for TextureRects
 	public Texture2D Texture
 	{
-		get => Get("texture").As<Texture2D>();
-		set => Set("texture", value);
+		get => Get(realPrimaryTexturePropName).As<Texture2D>();
+		set => Set(realPrimaryTexturePropName, value);
 	}
 
 	public override Variant _Get(StringName property)
@@ -45,10 +53,22 @@ public partial class ShaderHook : Control
 
 	public override void _Ready()
 	{
+		if (string.IsNullOrWhiteSpace(primaryTextureName))
+			realPrimaryTexturePropName = "texture";
+		else
+			realPrimaryTexturePropName = "SH_" + primaryTextureName;
 		ItemRectChanged += OnRectUpdated;
 		OnRectUpdated();
 		//Helpers.Defer(OnRectUpdated);
 		SetShaderFloat(GD.Randf(), "Rand");
+		if(autoViewportTextureLink is not null && !Engine.IsEditorHint())
+		{
+			var tex = autoViewportTextureLink.GetTexture();
+			if (!string.IsNullOrWhiteSpace(viewportTexturePropName))
+				SetShaderTexture(tex, viewportTexturePropName);
+			else
+				Texture = tex;
+		}
 	}
 
 	private void OnRectUpdated()

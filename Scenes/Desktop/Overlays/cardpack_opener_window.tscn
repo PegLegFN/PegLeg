@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://b5elx1mhn5ahk"]
+[gd_scene format=3 uid="uid://b5elx1mhn5ahk"]
 
 [ext_resource type="PackedScene" uid="uid://c47svw0ruq2i3" path="res://Scenes/GameItemEntry/reward_entry_card.tscn" id="1_4na64"]
 [ext_resource type="Script" uid="uid://dt5hhni1vcm6w" path="res://Scripts/Overlays/CardPackOpener.cs" id="1_7ayxj"]
@@ -22,25 +22,29 @@
 [ext_resource type="AudioStream" uid="uid://bd8s0vbm0dx5t" path="res://Audio/SFX/LlamaSounds/Open/OpenVoice/LlamaOpenVoice.tres" id="15_lqidj"]
 [ext_resource type="PackedScene" uid="uid://tso3qs0wxppc" path="res://Scenes/GameItemEntry/choice_entry_card.tscn" id="16_cms4w"]
 [ext_resource type="AudioStream" uid="uid://dgqxarrgjrwxd" path="res://Audio/SFX/LlamaSounds/Open/MiniOpenVoice/MiniLlamaOpenVoice.tres" id="16_iycih"]
-[ext_resource type="Shader" uid="uid://dabk0fuxvn2ch" path="res://Shaders/ChoiceCard.tres" id="16_x2r4a"]
 [ext_resource type="AudioStream" uid="uid://divk7fb2gdm8x" path="res://Audio/SFX/LlamaSounds/Greet/StandardPinataGreetingFX.tres" id="17_eaptb"]
-[ext_resource type="Texture2D" uid="uid://d3ivhm85bwic4" path="res://Images/InterfaceIcons/Icon-Gadget-SupplyDrop-128.png" id="17_knkpm"]
 [ext_resource type="Texture2D" uid="uid://ds6dqlkqc47j5" path="res://Images/Flipbook/ChoiceCardV2/LabelUV-sheet.png" id="18_5uyrt"]
 [ext_resource type="AudioStream" uid="uid://badp2x0yvoic8" path="res://Audio/SFX/LlamaSounds/Hover/PinataHoverFX.tres" id="19_0w7mr"]
 [ext_resource type="Texture2D" uid="uid://datfcfaym8so5" path="res://Images/Flipbook/ChoiceCardV2/Base-sheet.png" id="19_fhj62"]
+[ext_resource type="Shader" uid="uid://bxh78876odhfa" path="res://Shaders/ChoiceCard.gdshader" id="25_0g5kn"]
 [ext_resource type="Shader" uid="uid://dmt1xhf6kra1d" path="res://Shaders/LlamaPinata.gdshader" id="25_8mpme"]
 [ext_resource type="Texture2D" uid="uid://dufn5f0er7tu7" path="res://Images/Llamas/PinataStandardPack.png" id="25_gyuod"]
 [ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="26_1f0i3"]
 [ext_resource type="Texture2D" uid="uid://cikdoiqiwiy7l" path="res://Images/Llamas/LargeLlamaShardA.png" id="28_jp8y5"]
 [ext_resource type="Texture2D" uid="uid://bx1gxyv8f3oni" path="res://Images/Llamas/LargeLlamaShardB.png" id="29_acj7o"]
 [ext_resource type="Texture2D" uid="uid://ckrxgyharb8l8" path="res://Images/Llamas/LargeLlamaShardC.png" id="30_b8dtl"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="30_eoib3"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="31_2a5s6"]
 [ext_resource type="Texture2D" uid="uid://c4q6enu503qhr" path="res://Images/Llamas/PinataMini.png" id="31_48aas"]
 [ext_resource type="Texture2D" uid="uid://u144bqlinqk5" path="res://Images/Llamas/MiniLlamaShardA.png" id="31_nrmqe"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="32_0g5kn"]
 [ext_resource type="Texture2D" uid="uid://d1005gacryxso" path="res://Images/Llamas/MiniLlamaShardB.png" id="33_lifae"]
 [ext_resource type="Texture2D" uid="uid://bkau1e81gdd03" path="res://Images/Llamas/MiniLlamaShardC.png" id="34_awixe"]
 [ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="36_3qbti"]
 [ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="36_7l4e4"]
 [ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="37_fgxvp"]
+[ext_resource type="Texture2D" uid="uid://ba0gumek5jrs1" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-Scythe-L.png" id="47_2a5s6"]
+[ext_resource type="Shader" uid="uid://c1cu5jabwr16n" path="res://Shaders/ButtonOutlineShader.gdshader" id="48_e650f"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="52_c8cd4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_walck"]
@@ -80,20 +84,6 @@ shader_parameter/ClipOOB = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3v02c"]
 shader = ExtResource("36_3qbti")
 shader_parameter/rotationSpeed = 0.5
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j1mqq"]
-resource_local_to_scene = true
-shader = ExtResource("16_x2r4a")
-shader_parameter/SliceAmount = Vector2(4, 4)
-shader_parameter/UseManual = false
-shader_parameter/ManualControl = 0
-shader_parameter/time = 132209.0
-shader_parameter/StartTime = 0.0
-shader_parameter/Started = true
-shader_parameter/RarityColour = Color(0.915194, 0.464606, 0, 1)
-shader_parameter/UVTexture = ExtResource("18_5uyrt")
-shader_parameter/PatternTexture = ExtResource("14_8eotn")
-shader_parameter/IconTexture = ExtResource("17_knkpm")
 
 [sub_resource type="Curve" id="Curve_fjmi8"]
 _limits = [0.0, 100.0, 0.0, 1.0]
@@ -150,10 +140,96 @@ shader = ExtResource("25_8mpme")
 shader_parameter/packIcon = ExtResource("26_1f0i3")
 shader_parameter/useMask = false
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xi8xm"]
+seed = 1
+frequency = 0.015
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gdr7p"]
+width = 420
+noise = SubResource("FastNoiseLite_xi8xm")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2a5s6"]
+resource_local_to_scene = true
+shader = ExtResource("25_0g5kn")
+shader_parameter/IconTexture = ExtResource("32_0g5kn")
+shader_parameter/UVTexture = ExtResource("18_5uyrt")
+shader_parameter/NoiseTexture = SubResource("NoiseTexture2D_gdr7p")
+shader_parameter/FireColor = Color(1, 0.33333337, 0, 1)
+shader_parameter/ZTileGrid = 0
+shader_parameter/FlipUV_Y = true
+shader_parameter/SliceAmount = Vector2i(4, 4)
+shader_parameter/Reverse = false
+shader_parameter/PingPong = false
+shader_parameter/ManualControl = -1
+shader_parameter/NormalisedManual = 1.0
+shader_parameter/BurnProgress = 0.0
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iness"]
 shader = ExtResource("52_c8cd4")
+shader_parameter/scalar = 2.0
+shader_parameter/base = 1.0
 
-[node name="CardPackOpenerWindow" type="Control" node_paths=PackedStringArray("displayPanel", "music", "stacheButton", "pullButton", "skipAllButton", "glowFlare", "greetingEffects", "greetingVoices", "hoverEffect", "impactEffect", "impactVoice", "miniImpactVoice", "burstEffect", "burstVoice", "miniBurstVoice", "impactParticleParent", "llamaGlow", "standardLlamaButton", "confettiParticles", "llamaEntry", "fullLlama", "standardLlamaPartParent", "smallLlamaPartParent", "topCard", "prevCard", "mainCardsParent", "smallCardsOffset", "smallCardParent", "smallCards", "choiceCanvas", "choiceCards", "choiceResultCard", "choiceResultFGParent", "choiceResultBGParent", "skipChoiceButton")]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0g5kn"]
+seed = 1
+frequency = 0.015
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eoib3"]
+width = 420
+noise = SubResource("FastNoiseLite_0g5kn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0g5kn"]
+resource_local_to_scene = true
+shader = ExtResource("25_0g5kn")
+shader_parameter/IconTexture = ExtResource("32_0g5kn")
+shader_parameter/UVTexture = ExtResource("18_5uyrt")
+shader_parameter/NoiseTexture = SubResource("NoiseTexture2D_eoib3")
+shader_parameter/FireColor = Color(1, 0.33333337, 0, 1)
+shader_parameter/ZTileGrid = 0
+shader_parameter/FlipUV_Y = true
+shader_parameter/SliceAmount = Vector2i(4, 4)
+shader_parameter/Reverse = false
+shader_parameter/PingPong = false
+shader_parameter/ManualControl = -1
+shader_parameter/NormalisedManual = 0.342000016245
+shader_parameter/BurnProgress = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eoib3"]
+resource_local_to_scene = true
+shader = ExtResource("30_eoib3")
+shader_parameter/ControlSize = Vector2(128, 128)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = false
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = true
+shader_parameter/MainIcon = ExtResource("47_2a5s6")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("31_2a5s6")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+shader_parameter/HideBar = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e650f"]
+resource_local_to_scene = true
+shader = ExtResource("48_e650f")
+shader_parameter/ControlSize = Vector2(154, 219)
+shader_parameter/TargetSize = Vector2(1200, 675)
+shader_parameter/LineSize = 3.0
+shader_parameter/Progress = 0.0
+shader_parameter/ProgressFade = 0.02
+shader_parameter/Circle = false
+shader_parameter/VerticalHold = true
+
+[node name="CardPackOpenerWindow" type="Control" unique_id=473734964 node_paths=PackedStringArray("displayPanel", "music", "stacheButton", "pullButton", "skipAllButton", "glowFlare", "greetingEffects", "greetingVoices", "hoverEffect", "impactEffect", "impactVoice", "miniImpactVoice", "burstEffect", "burstVoice", "miniBurstVoice", "impactParticleParent", "llamaGlow", "standardLlamaButton", "confettiParticles", "llamaEntry", "fullLlama", "standardLlamaPartParent", "smallLlamaPartParent", "topCard", "prevCard", "mainCardsParent", "smallCardsOffset", "smallCardParent", "smallCards", "choiceCardEntries", "resultDestination", "skipChoiceButton", "cancelChoiceButton", "singleChoiceEndContent")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -166,9 +242,9 @@ pullTime = 0.5
 sortByRarity = true
 displayPanel = NodePath("Panel")
 music = NodePath("Audio/Music")
-stacheButton = NodePath("Panel/StacheButton")
-pullButton = NodePath("Panel/PullButton")
-skipAllButton = NodePath("Panel/SkipAllButton")
+stacheButton = NodePath("Panel/Buttons/StacheButton")
+pullButton = NodePath("Panel/Buttons/PullButton")
+skipAllButton = NodePath("Panel/Buttons/SkipAllButton")
 defaultBackgroundColor = Color(0.101961, 0.419608, 1, 1)
 glowFlare = NodePath("Panel/Glow")
 impactParticlePool = 4
@@ -196,87 +272,86 @@ mainCardsParent = NodePath("Panel/Cards")
 smallCardsOffset = NodePath("Panel/Cards/CardPullAnchor/Control/Offset")
 smallCardParent = NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack")
 smallCards = [NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack/RewardEntryCard"), NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack/RewardEntryCard2"), NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack/RewardEntryCard3"), NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack/RewardEntryCard4"), NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack/RewardEntryCard5"), NodePath("Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack/RewardEntryCard6")]
-choiceCanvas = NodePath("Panel/ChoiceArea/ChoiceCanvas")
-choiceCards = [NodePath("Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer/Choices/ChoiceEntryCard"), NodePath("Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer/Choices/ChoiceEntryCard2")]
-choiceResultCard = NodePath("Panel/ChoiceResultBackgroundLayer/ChoiceResultCardTexture")
-choiceResultFGParent = NodePath("Panel/ChoiceResultForegroundLayer")
-choiceResultBGParent = NodePath("Panel/ChoiceResultBackgroundLayer")
-skipChoiceButton = NodePath("Panel/SkipChoiceButton")
+choiceCardEntries = [NodePath("Panel/Choices/ChoiceEntryCard"), NodePath("Panel/Choices/ChoiceEntryCard2"), NodePath("Panel/Choices/ChoiceEntryCard3"), NodePath("Panel/Choices/ChoiceEntryCard4")]
+resultDestination = NodePath("Panel/Choices/ResultDestination")
+skipChoiceButton = NodePath("Panel/Buttons/SkipChoiceButton")
+cancelChoiceButton = NodePath("Panel/Buttons/SkipChoiceButton2")
+singleChoiceEndContent = NodePath("Panel/Buttons/VBoxContainer")
 
-[node name="Audio" type="Node" parent="."]
+[node name="Audio" type="Node" parent="." unique_id=2099347794]
 
-[node name="Music" type="AudioStreamPlayer" parent="Audio"]
+[node name="Music" type="AudioStreamPlayer" parent="Audio" unique_id=1240456919]
 stream = ExtResource("7_lttgo")
 volume_db = 5.0
 bus = &"MusicOvr"
 
-[node name="Voices" type="Node" parent="Audio"]
+[node name="Voices" type="Node" parent="Audio" unique_id=237366133]
 
-[node name="StandardGreetingV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="StandardGreetingV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=1718510193]
 stream = ExtResource("9_01w3s")
 bus = &"SFX"
 
-[node name="SilverGreetingV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="SilverGreetingV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=2110776397]
 stream = ExtResource("10_53pq8")
 bus = &"SFX"
 
-[node name="GoldGreetingV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="GoldGreetingV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=370018940]
 stream = ExtResource("11_td5ti")
 bus = &"SFX"
 
-[node name="MiniGreetingV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="MiniGreetingV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=1453680995]
 stream = ExtResource("12_an5i4")
 bus = &"SFX"
 
-[node name="ImpactV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="ImpactV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=725579676]
 stream = ExtResource("13_gf4i8")
 bus = &"SFX"
 
-[node name="MiniImpactV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="MiniImpactV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=687786302]
 stream = ExtResource("14_v6cqy")
 bus = &"SFX"
 
-[node name="OpenV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="OpenV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=1207974181]
 stream = ExtResource("15_lqidj")
 bus = &"SFX"
 
-[node name="MiniOpenV" type="AudioStreamPlayer" parent="Audio/Voices"]
+[node name="MiniOpenV" type="AudioStreamPlayer" parent="Audio/Voices" unique_id=1662621442]
 stream = ExtResource("16_iycih")
 bus = &"SFX"
 
-[node name="Effects" type="Node" parent="Audio"]
+[node name="Effects" type="Node" parent="Audio" unique_id=268481207]
 
-[node name="StandardGreetingFX" type="AudioStreamPlayer" parent="Audio/Effects"]
+[node name="StandardGreetingFX" type="AudioStreamPlayer" parent="Audio/Effects" unique_id=1911414279]
 stream = ExtResource("17_eaptb")
 bus = &"SFX"
 
-[node name="SilverGreetingFX" type="AudioStreamPlayer" parent="Audio/Effects"]
+[node name="SilverGreetingFX" type="AudioStreamPlayer" parent="Audio/Effects" unique_id=652236785]
 stream = ExtResource("13_vqexb")
 volume_db = 5.0
 bus = &"SFX"
 
-[node name="GoldGreetingFX" type="AudioStreamPlayer" parent="Audio/Effects"]
+[node name="GoldGreetingFX" type="AudioStreamPlayer" parent="Audio/Effects" unique_id=1974045872]
 stream = ExtResource("14_y8dlj")
 volume_db = 5.0
 bus = &"SFX"
 
-[node name="HoverFX" type="AudioStreamPlayer" parent="Audio/Effects"]
+[node name="HoverFX" type="AudioStreamPlayer" parent="Audio/Effects" unique_id=32902068]
 stream = ExtResource("19_0w7mr")
 volume_db = -5.0
 bus = &"SFX"
 
-[node name="ImpactFX" type="AudioStreamPlayer" parent="Audio/Effects"]
+[node name="ImpactFX" type="AudioStreamPlayer" parent="Audio/Effects" unique_id=2056086977]
 stream = ExtResource("14_yug88")
 volume_db = -10.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="OpenFX" type="AudioStreamPlayer" parent="Audio/Effects"]
+[node name="OpenFX" type="AudioStreamPlayer" parent="Audio/Effects" unique_id=1033500777]
 stream = ExtResource("15_lpagr")
 volume_db = -10.0
 bus = &"SFX"
 
-[node name="OldBG" type="Control" parent="."]
+[node name="OldBG" type="Control" parent="." unique_id=973522854]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -286,7 +361,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="Panel" parent="OldBG"]
+[node name="TextureRect" type="Panel" parent="OldBG" unique_id=323705625]
 visible = false
 modulate = Color(0.643137, 0.643137, 0.643137, 1)
 self_modulate = Color(0.101961, 0.419608, 1, 1)
@@ -301,7 +376,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dtboe")
 script = ExtResource("11_jtcf2")
 
-[node name="Panel" type="Control" parent="."]
+[node name="Panel" type="Control" parent="." unique_id=729180879]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -314,7 +389,7 @@ offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BG" type="TextureRect" parent="Panel"]
+[node name="BG" type="TextureRect" parent="Panel" unique_id=536028257]
 material = SubResource("ShaderMaterial_5b1iw")
 layout_mode = 1
 anchors_preset = 15
@@ -327,7 +402,7 @@ expand_mode = 1
 script = ExtResource("11_jtcf2")
 syncControlSize = true
 
-[node name="Glow" type="TextureRect" parent="Panel"]
+[node name="Glow" type="TextureRect" parent="Panel" unique_id=395507748]
 material = SubResource("ShaderMaterial_3v02c")
 custom_minimum_size = Vector2(1500, 1500)
 layout_mode = 1
@@ -347,7 +422,7 @@ mouse_filter = 2
 texture = ExtResource("37_fgxvp")
 expand_mode = 1
 
-[node name="ChoiceResultBackgroundLayer" type="Control" parent="Panel"]
+[node name="ChoiceResultBackgroundLayer" type="Control" parent="Panel" unique_id=186504105]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -356,30 +431,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ChoiceResultCardTexture" type="TextureRect" parent="Panel/ChoiceResultBackgroundLayer"]
-material = SubResource("ShaderMaterial_j1mqq")
-custom_minimum_size = Vector2(0, 256)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 7.5
-offset_top = -179.0
-offset_right = 217.5
-offset_bottom = 77.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-pivot_offset = Vector2(105, 128)
-mouse_filter = 2
-texture = ExtResource("19_fhj62")
-expand_mode = 3
-script = ExtResource("11_jtcf2")
-syncTimeProperty = true
-
-[node name="Cards" type="Control" parent="Panel"]
+[node name="Cards" type="Control" parent="Panel" unique_id=443795136]
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -387,7 +440,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RewardEntryCardPrev" parent="Panel/Cards" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCardPrev" parent="Panel/Cards" unique_id=248456022 instance=ExtResource("1_4na64")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -400,7 +453,7 @@ rotation = -0.785398
 scale = Vector2(1e-05, 1e-05)
 unlinkOnInvalidHandle = false
 
-[node name="RewardEntryCardTop" parent="Panel/Cards" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCardTop" parent="Panel/Cards" unique_id=210283797 instance=ExtResource("1_4na64")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -412,7 +465,7 @@ grow_vertical = 2
 scale = Vector2(1.5, 1.5)
 unlinkOnInvalidHandle = false
 
-[node name="CardPullAnchor" type="Control" parent="Panel/Cards"]
+[node name="CardPullAnchor" type="Control" parent="Panel/Cards" unique_id=1703968070]
 layout_mode = 1
 anchor_left = 0.675
 anchor_top = 1.0
@@ -421,7 +474,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Control" type="Control" parent="Panel/Cards/CardPullAnchor"]
+[node name="Control" type="Control" parent="Panel/Cards/CardPullAnchor" unique_id=1292127428]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -430,7 +483,7 @@ offset_top = 240.0
 offset_bottom = 240.0
 grow_horizontal = 2
 
-[node name="Offset" type="Control" parent="Panel/Cards/CardPullAnchor/Control"]
+[node name="Offset" type="Control" parent="Panel/Cards/CardPullAnchor/Control" unique_id=396189707]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -440,7 +493,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/Cards/CardPullAnchor/Control/Offset"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/Cards/CardPullAnchor/Control/Offset" unique_id=822537538]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -454,29 +507,30 @@ grow_horizontal = 2
 grow_vertical = 0
 alignment = 2
 
-[node name="CardStack" type="VBoxContainer" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2"]
+[node name="CardStack" type="VBoxContainer" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2" unique_id=62584026]
 layout_mode = 2
 theme_override_constants/separation = -234
 
-[node name="RewardEntryCard" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCard" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" unique_id=86210204 instance=ExtResource("1_4na64")]
 layout_mode = 2
 
-[node name="RewardEntryCard2" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCard2" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" unique_id=156983124 instance=ExtResource("1_4na64")]
 layout_mode = 2
 
-[node name="RewardEntryCard3" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCard3" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" unique_id=245478608 instance=ExtResource("1_4na64")]
 layout_mode = 2
 
-[node name="RewardEntryCard4" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCard4" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" unique_id=1587469738 instance=ExtResource("1_4na64")]
 layout_mode = 2
 
-[node name="RewardEntryCard5" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCard5" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" unique_id=781376998 instance=ExtResource("1_4na64")]
 layout_mode = 2
 
-[node name="RewardEntryCard6" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" instance=ExtResource("1_4na64")]
+[node name="RewardEntryCard6" parent="Panel/Cards/CardPullAnchor/Control/Offset/VBoxContainer2/CardStack" unique_id=1568210831 instance=ExtResource("1_4na64")]
 layout_mode = 2
 
-[node name="Llama" type="Control" parent="Panel"]
+[node name="Llama" type="Control" parent="Panel" unique_id=1482973348]
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -485,9 +539,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("36_7l4e4")
-debug = true
 
-[node name="BurstParticles" type="Control" parent="Panel/Llama"]
+[node name="BurstParticles" type="Control" parent="Panel/Llama" unique_id=1827686651]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -502,7 +555,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="Panel/Llama/BurstParticles"]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Panel/Llama/BurstParticles" unique_id=2096641416]
 emitting = false
 amount = 100
 lifetime = 2.0
@@ -530,7 +583,7 @@ scale_amount_curve = SubResource("Curve_uoomx")
 color_ramp = SubResource("Gradient_vmhvw")
 color_initial_ramp = SubResource("Gradient_q3qjt")
 
-[node name="LargeShards" type="Control" parent="Panel/Llama"]
+[node name="LargeShards" type="Control" parent="Panel/Llama" unique_id=1411670154]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -541,7 +594,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="StandardShard" type="TextureRect" parent="Panel/Llama/LargeShards"]
+[node name="StandardShard" type="TextureRect" parent="Panel/Llama/LargeShards" unique_id=1238741427]
 material = SubResource("ShaderMaterial_3cjvi")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -561,7 +614,7 @@ texture = ExtResource("25_gyuod")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="StandardShard2" type="TextureRect" parent="Panel/Llama/LargeShards"]
+[node name="StandardShard2" type="TextureRect" parent="Panel/Llama/LargeShards" unique_id=102040641]
 material = SubResource("ShaderMaterial_w1mgr")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -581,7 +634,7 @@ texture = ExtResource("25_gyuod")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="StandardShard3" type="TextureRect" parent="Panel/Llama/LargeShards"]
+[node name="StandardShard3" type="TextureRect" parent="Panel/Llama/LargeShards" unique_id=1548831842]
 material = SubResource("ShaderMaterial_pvxi8")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -601,7 +654,7 @@ texture = ExtResource("25_gyuod")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="SmallShards" type="Control" parent="Panel/Llama"]
+[node name="SmallShards" type="Control" parent="Panel/Llama" unique_id=818029470]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -612,7 +665,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="SmallShard" type="TextureRect" parent="Panel/Llama/SmallShards"]
+[node name="SmallShard" type="TextureRect" parent="Panel/Llama/SmallShards" unique_id=927523479]
 material = SubResource("ShaderMaterial_tluvn")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -628,7 +681,7 @@ texture = ExtResource("31_48aas")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="SmallShard2" type="TextureRect" parent="Panel/Llama/SmallShards"]
+[node name="SmallShard2" type="TextureRect" parent="Panel/Llama/SmallShards" unique_id=1527330135]
 material = SubResource("ShaderMaterial_idgxg")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -648,7 +701,7 @@ texture = ExtResource("31_48aas")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="SmallShard3" type="TextureRect" parent="Panel/Llama/SmallShards"]
+[node name="SmallShard3" type="TextureRect" parent="Panel/Llama/SmallShards" unique_id=702889391]
 material = SubResource("ShaderMaterial_0ncjf")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -668,7 +721,7 @@ texture = ExtResource("31_48aas")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="FullLlama" type="Control" parent="Panel/Llama"]
+[node name="FullLlama" type="Control" parent="Panel/Llama" unique_id=12334978]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -677,7 +730,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="Panel/Llama/FullLlama"]
+[node name="TextureRect" type="TextureRect" parent="Panel/Llama/FullLlama" unique_id=261004877]
 material = SubResource("ShaderMaterial_10562")
 custom_minimum_size = Vector2(512, 512)
 layout_mode = 1
@@ -698,7 +751,7 @@ texture = ExtResource("25_gyuod")
 expand_mode = 1
 script = ExtResource("11_jtcf2")
 
-[node name="Button" type="Button" parent="Panel/Llama/FullLlama" groups=["ExcludeButtonSounds"]]
+[node name="Button" type="Button" parent="Panel/Llama/FullLlama" unique_id=142114513 groups=["ExcludeButtonSounds"]]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -713,7 +766,7 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ImpactParticles" type="Control" parent="Panel/Llama"]
+[node name="ImpactParticles" type="Control" parent="Panel/Llama" unique_id=954750493]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -722,56 +775,171 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ChoiceArea" type="Control" parent="Panel"]
+[node name="Choices" type="Control" parent="Panel" unique_id=1236642972]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ResultDestination" type="Control" parent="Panel/Choices" unique_id=560230872]
+z_index = -1
+custom_minimum_size = Vector2(210, 256)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -38.0
+offset_top = -360.0
+offset_right = 172.0
+offset_bottom = -104.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ChoiceCanvas" type="CanvasGroup" parent="Panel/ChoiceArea"]
-
-[node name="CenterContainer" type="CenterContainer" parent="Panel/ChoiceArea/ChoiceCanvas"]
+[node name="Preview" type="TextureRect" parent="Panel/Choices/ResultDestination" unique_id=1676571864]
+visible = false
+self_modulate = Color(1, 1, 1, 0.5019608)
+material = SubResource("ShaderMaterial_2a5s6")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(0.5, 0.5)
 mouse_filter = 2
-use_top_left = true
+texture = ExtResource("19_fhj62")
+expand_mode = 3
+script = ExtResource("11_jtcf2")
+viewportTexturePropName = "IconTexture"
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer"]
-layout_mode = 2
-mouse_filter = 0
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_bottom = 50
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer"]
-layout_mode = 2
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Choices" unique_id=139126339]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -128.0
+offset_right = 215.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/margin_left = -50
 theme_override_constants/margin_top = -50
 theme_override_constants/margin_right = -50
 theme_override_constants/margin_bottom = -50
 
-[node name="TextureRect" type="ColorRect" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer/MarginContainer"]
+[node name="TextureRect" type="ColorRect" parent="Panel/Choices/MarginContainer" unique_id=662500985]
 self_modulate = Color(0, 0, 0, 1)
 material = SubResource("ShaderMaterial_iness")
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Choices" type="HBoxContainer" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer"]
-custom_minimum_size = Vector2(0, 256)
-layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
+[node name="ChoiceEntryCard" parent="Panel/Choices" unique_id=1028309854 instance=ExtResource("16_cms4w")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -128.0
+offset_right = 105.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_position = Vector2(-100, 0)
+offset_transform_rotation = -0.08726646
+offset_transform_visual_only = false
 
-[node name="ChoiceEntryCard" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer/Choices" instance=ExtResource("16_cms4w")]
-layout_mode = 2
+[node name="ChoiceEntryCard2" parent="Panel/Choices" unique_id=2009614849 instance=ExtResource("16_cms4w")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -128.0
+offset_right = 105.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_position = Vector2(100, 0)
+offset_transform_rotation = 0.08726646
+offset_transform_visual_only = false
+metadata/_edit_group_ = true
 
-[node name="ChoiceEntryCard2" parent="Panel/ChoiceArea/ChoiceCanvas/CenterContainer/MarginContainer/Choices" instance=ExtResource("16_cms4w")]
-layout_mode = 2
+[node name="CardShader" parent="Panel/Choices/ChoiceEntryCard2" index="0" unique_id=769590511]
+material = SubResource("ShaderMaterial_0g5kn")
 
-[node name="ChoiceResultForegroundLayer" type="Control" parent="Panel"]
+[node name="TextureRect" parent="Panel/Choices/ChoiceEntryCard2/CardShader/SubViewport/MarginContainer/ItemEntry" parent_id_path=PackedInt32Array(2009614849, 2049989955) index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_eoib3")
+
+[node name="TextureRect" parent="Panel/Choices/ChoiceEntryCard2/CardShader/Responsive Button Area/MarginContainer" index="0"]
+material = SubResource("ShaderMaterial_e650f")
+
+[node name="ChoiceEntryCard3" parent="Panel/Choices" unique_id=1335813169 instance=ExtResource("16_cms4w")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -128.0
+offset_right = 105.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_position = Vector2(-300, 0)
+offset_transform_rotation = -0.17453292
+offset_transform_visual_only = false
+
+[node name="ChoiceEntryCard4" parent="Panel/Choices" unique_id=1925858926 instance=ExtResource("16_cms4w")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -128.0
+offset_right = 105.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_transform_position = Vector2(300, 0)
+offset_transform_rotation = 0.17453292
+offset_transform_visual_only = false
+
+[node name="CardContextBlocker" type="Control" parent="Panel" unique_id=984352008]
+custom_minimum_size = Vector2(140, 125)
+layout_mode = 1
+anchor_left = 0.675
+anchor_top = 1.0
+anchor_right = 0.675
+anchor_bottom = 1.0
+offset_left = -70.0
+offset_top = -125.0
+offset_right = 70.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"LargeButton"
+
+[node name="Buttons" type="Control" parent="Panel" unique_id=389596860]
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -780,18 +948,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="CardContextBlocker" type="Control" parent="Panel"]
-custom_minimum_size = Vector2(140, 125)
-layout_mode = 1
-anchor_left = 0.675
-anchor_top = 1.0
-anchor_right = 0.675
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_type_variation = &"LargeButton"
-
-[node name="PullButton" type="Button" parent="Panel"]
+[node name="PullButton" type="Button" parent="Panel/Buttons" unique_id=323168369]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 1
 anchors_preset = -1
@@ -809,7 +966,7 @@ theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 24
 text = "Pull"
 
-[node name="SkipAllButton" type="Button" parent="Panel"]
+[node name="SkipAllButton" type="Button" parent="Panel/Buttons" unique_id=718168386]
 custom_minimum_size = Vector2(85, 35)
 layout_mode = 1
 anchors_preset = -1
@@ -817,7 +974,9 @@ anchor_left = 0.675
 anchor_top = 1.0
 anchor_right = 0.675
 anchor_bottom = 1.0
-offset_left = 170.0
+offset_left = 42.49994
+offset_top = -45.0
+offset_right = 127.49994
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -825,7 +984,7 @@ theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 24
 text = "Skip All"
 
-[node name="StacheButton" type="Button" parent="Panel"]
+[node name="StacheButton" type="Button" parent="Panel/Buttons" unique_id=1718842585]
 custom_minimum_size = Vector2(85, 35)
 layout_mode = 1
 anchors_preset = -1
@@ -833,6 +992,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -45.0
+offset_right = 74.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -840,7 +1002,7 @@ theme_type_variation = &"LargeButton"
 theme_override_font_sizes/font_size = 24
 text = "Save For Later"
 
-[node name="SkipChoiceButton" type="Button" parent="Panel"]
+[node name="SkipChoiceButton" type="Button" parent="Panel/Buttons" unique_id=522761467]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -848,14 +1010,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = 460.0
+offset_left = -69.0
+offset_top = 214.0
+offset_right = 69.0
+offset_bottom = 246.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 24
 text = " Skip Choice "
 
-[node name="Label" type="Label" parent="Panel/SkipChoiceButton"]
-visible = false
+[node name="Label" type="Label" parent="Panel/Buttons/SkipChoiceButton" unique_id=1684393259]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -865,16 +1029,68 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Right-Click to inspect choices"
 
-[node name="Button" type="Button" parent="Panel"]
+[node name="SkipChoiceButton2" type="Button" parent="Panel/Buttons" unique_id=2028976087]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = 214.0
+offset_right = 69.0
+offset_bottom = 246.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = " Cancel Choice "
+
+[node name="Label" type="Label" parent="Panel/Buttons/SkipChoiceButton2" unique_id=1703847171]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Right-Click to inspect choices"
+
+[node name="Button" type="Button" parent="Panel/Buttons" unique_id=737154300]
 visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -6.0
-offset_right = 10.0
+offset_top = -24.0
+offset_right = 92.0
 grow_vertical = 0
 text = "Debug Close"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Buttons" unique_id=1522448533]
+visible = false
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 412.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Continue" type="Button" parent="Panel/Buttons/VBoxContainer" unique_id=1220087532]
+layout_mode = 2
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 32
+text = "Continue"
+
+[node name="Recycle" type="Button" parent="Panel/Buttons/VBoxContainer" unique_id=1378216661]
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+theme_override_font_sizes/font_size = 32
+text = "Recycle"
 
 [connection signal="GradientChanged" from="Panel/Llama" to="Panel/Llama/BurstParticles/CPUParticles2D" method="set_color_initial_ramp"]
 [connection signal="IconChanged" from="Panel/Llama" to="Panel/Llama/LargeShards/StandardShard" method="set_texture"]
@@ -882,12 +1098,24 @@ text = "Debug Close"
 [connection signal="IconChanged" from="Panel/Llama" to="Panel/Llama/LargeShards/StandardShard3" method="set_texture"]
 [connection signal="IconChanged" from="Panel/Llama" to="Panel/Llama/FullLlama/TextureRect" method="set_texture"]
 [connection signal="RarityChanged" from="Panel/Llama" to="Panel/Glow" method="set_self_modulate"]
+[connection signal="SubtypeIconChanged" from="Panel/Llama" to="Panel/Llama/LargeShards/StandardShard" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="SubtypeIconChanged" from="Panel/Llama" to="Panel/Llama/LargeShards/StandardShard2" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="SubtypeIconChanged" from="Panel/Llama" to="Panel/Llama/LargeShards/StandardShard3" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="SubtypeIconChanged" from="Panel/Llama" to="Panel/Llama/FullLlama/TextureRect" method="SetShaderTexture" binds= ["packIcon"]]
 [connection signal="mouse_entered" from="Panel/Llama/FullLlama/Button" to="." method="SetLlamaHover" binds= [true]]
 [connection signal="mouse_exited" from="Panel/Llama/FullLlama/Button" to="." method="SetLlamaHover" binds= [false]]
 [connection signal="pressed" from="Panel/Llama/FullLlama/Button" to="." method="HitLlama"]
-[connection signal="button_down" from="Panel/PullButton" to="." method="StartPullCard"]
-[connection signal="button_up" from="Panel/PullButton" to="." method="EndPullCard"]
-[connection signal="button_down" from="Panel/SkipAllButton" to="." method="EndImmediate"]
-[connection signal="button_down" from="Panel/StacheButton" to="." method="StacheLlama"]
-[connection signal="pressed" from="Panel/SkipChoiceButton" to="." method="SkipChoice"]
-[connection signal="pressed" from="Panel/Button" to="." method="CloseMenu"]
+[connection signal="button_down" from="Panel/Buttons/PullButton" to="." method="StartPullCard"]
+[connection signal="button_up" from="Panel/Buttons/PullButton" to="." method="EndPullCard"]
+[connection signal="button_down" from="Panel/Buttons/SkipAllButton" to="." method="EndImmediate"]
+[connection signal="button_down" from="Panel/Buttons/StacheButton" to="." method="StacheLlama"]
+[connection signal="pressed" from="Panel/Buttons/SkipChoiceButton" to="." method="SkipChoice"]
+[connection signal="pressed" from="Panel/Buttons/SkipChoiceButton2" to="." method="SkipChoice"]
+[connection signal="pressed" from="Panel/Buttons/Button" to="." method="CloseMenu"]
+[connection signal="pressed" from="Panel/Buttons/VBoxContainer/Continue" to="." method="CloseMenu"]
+[connection signal="pressed" from="Panel/Buttons/VBoxContainer/Recycle" to="." method="RecycleSingleChoiceAndEnd"]
+
+[editable path="Panel/Choices/ChoiceEntryCard2"]
+[editable path="Panel/Choices/ChoiceEntryCard2/CardShader/SubViewport/MarginContainer/ItemEntry"]
+[editable path="Panel/Choices/ChoiceEntryCard2/CardShader/SubViewport/MarginContainer/ItemEntry/Overlays/PowerLevelIndicator"]
+[editable path="Panel/Choices/ChoiceEntryCard2/CardShader/Responsive Button Area"]

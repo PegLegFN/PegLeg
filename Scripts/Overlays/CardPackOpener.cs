@@ -2,8 +2,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using XmppDotNet.Xmpp.Delay;
+using XmppDotNet.Xmpp.Vcard;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public partial class CardPackOpener : Control
 {
@@ -95,22 +99,22 @@ public partial class CardPackOpener : Control
 
 	[ExportGroup("Choices")]
 	[Export]
-	CanvasGroup choiceCanvas;
+	ChoiceCardEntry[] choiceCardEntries = [];
 	[Export]
-	GameItemEntry[] choiceCards = [];
-	[Export]
-	ShaderHook choiceResultCard;
-	[Export]
-	Control choiceResultFGParent;
-	[Export]
-	Control choiceResultBGParent;
+	Control resultDestination;
 	[Export]
 	Control skipChoiceButton;
+	[Export]
+	Control cancelChoiceButton;
+	[Export]
+	Control singleChoiceEndContent;
+
 
 	ShaderHook cardChangeEffect;
 	bool isOpen;
 	bool isSmall;
 	bool cardPacksPrepared;
+	bool singleChoiceMode;
 	bool llamaBurstComplate;
 	int llamaHits;
 	Control fromPanel;
@@ -138,10 +142,12 @@ public partial class CardPackOpener : Control
 		cardChangeEffect = topCard.GetNode<ShaderHook>("%ChangeEffect");
 		Visible = true;
 		displayPanel.Visible = false;
-		choiceResultCard.Visible = false;
-		displayPanel.Visible = false;
-		choiceCanvas.Scale = Vector2.Zero;
-		choiceCanvas.SelfModulate = Colors.Transparent;
+		for (int i = 0; i < choiceCardEntries.Length; i++)
+		{
+			var index = i;
+			choiceCardEntries[i].Visible = false;
+			choiceCardEntries[i].Pressed += () => ApplyChoice(index);
+		}
 		ProcessMode = ProcessModeEnum.Disabled;
 
 		impactParticlePool = Mathf.Max(impactParticlePool, 1);
@@ -209,6 +215,7 @@ public partial class CardPackOpener : Control
 			displayPanel.Visible = true;
 			pullButton.Visible = false;
 			skipAllButton.Visible = false;
+			singleChoiceEndContent.Visible = false;
 			cardPacksPrepared = false;
 			llamaBurstComplate = false;
 			this.fromPanel = fromPanel;
@@ -334,9 +341,15 @@ public partial class CardPackOpener : Control
 
 				var exceptions = resultItemData
 					.Where(val => !val.AsObject().ContainsKey("itemGuid"))
-					.ToArray();
-				if (exceptions.Length > 0)
-					GD.Print("Exception: " + exceptions[0]);
+					.ToList();
+				if (exceptions.Where(i => i["itemType"]?.ToString().StartsWith("Accolades:")==true)?.ToArray() is JsonNode[] accoladeNodes)
+				{
+					exceptions.RemoveAll(i => i["itemType"]?.ToString().StartsWith("Accolades:") == true);
+					var total = accoladeNodes.Sum(i => i["quantity"]?.GetValue<int>() ?? 0);
+					GD.Print("Accolade XP: " + total);
+				}
+				if (exceptions.Count > 0)
+					GD.Print("Exceptions: " + string.Join(",", exceptions));
 
 				queuedChoices.AddRange(resultCardPacks);
 				queuedItems.AddRange(resultItems);
@@ -345,6 +358,15 @@ public partial class CardPackOpener : Control
 			queuedChoices.AddRange(extraCardPacks);
 			queuedItems.AddRange(extraItems);
 			cardPacksPrepared = true;
+			singleChoiceMode = queuedChoices.Count == 1 && queuedItems.Count == 0;
+
+			if (singleChoiceMode)
+			{
+				await WaitForCardPackBurstStart();
+				await Helpers.WaitForTimer(0.2);
+				StartSingleChoice();
+				return;
+			}
 
 			//step 2.5: wait for user to proceed
 			await WaitForCardPackBurst();
@@ -380,12 +402,6 @@ public partial class CardPackOpener : Control
 			smallCardParent.Visible = true;
 			var cardsUnfold = GetTree().CreateTween().SetParallel().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quart);
 			cardsUnfold.TweenProperty(this, "CurrentCardSeparation", gapBetweenCards, 0.25f);
-
-			for (int i = 0; i < choiceCards.Length; i++)
-			{
-				var index = i;
-				choiceCards[i].Pressed += () => ApplyChoice(index);
-			}
 
 			pullButton.Visible = true;
 			skipAllButton.Visible = true;
@@ -544,6 +560,14 @@ public partial class CardPackOpener : Control
 		{
 			llamaBurstComplate = true;
 		};
+	}
+
+	async Task WaitForCardPackBurstStart()
+	{
+		while (IsInsideTree() && isOpen && fullLlama.Visible)
+		{
+			await Helpers.WaitForFrame();
+		}
 	}
 
 	async Task WaitForCardPackBurst()
@@ -801,14 +825,31 @@ public partial class CardPackOpener : Control
 
 	}
 
+	async void StartSingleChoice()
+	{
+		topCard.Scale = Vector2.Zero;
+		topCard.ResetOffsets();
+		topCard.Rotation = 0;
+		topCard.SetItem(queuedChoices[0]);
+		var tweener = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quart);
+		tweener.TweenProperty(topCard, "scale", Vector2.One*1.5f, pullTime)
+			.SetEase(Tween.EaseType.Out)
+			.SetTrans(Tween.TransitionType.Back);
+		tweener.Finished += () =>
+		{
+			GlowScale(true);
+			OpenChoices();
+		};
+	}
+
 	bool isChosing = false;
-	void OpenChoices()
+	async void OpenChoices()
 	{
 		isChosing = true;
-		skipChoiceButton.Visible = true;
-		var choiceOpen = GetTree().CreateTween().SetParallel();
-		choiceOpen.TweenProperty(choiceCanvas, "scale", Vector2.One, 0.25f).SetEase(Tween.EaseType.Out);
-		choiceOpen.TweenProperty(choiceCanvas, "self_modulate", Colors.White, 0.25f);
+		if (singleChoiceMode)
+			cancelChoiceButton.Visible = true;
+		else
+			skipChoiceButton.Visible = true;
 
 		int nextChoiceIndex = choicesOnly ? nextPullIndex - 1 : nextPullIndex - (queuedItems.Count + 1);
 		GD.Print(nextChoiceIndex);
@@ -820,19 +861,57 @@ public partial class CardPackOpener : Control
 			currentChoices = choices;
 		if (currentChoices is null)
 		{
-			choiceOpen.Kill();
 			SkipChoice(false);
 			return;
 		}
-		for (int i = 0; i < currentChoices.Count; i++)
+		List<Task> cardAnims = [];
+		for (int i = currentChoices.Count; i < choiceCardEntries.Length; i++)
+		{
+			choiceCardEntries[i].Visible = false;
+		}
+		for (int i = 0; i < Mathf.Min(currentChoices.Count, choiceCardEntries.Length); i++)
 		{
 			var thisChoice = currentChoices[i];
 			var choiceTemplate = GameItemTemplate.Get(thisChoice["itemType"].ToString());
 			var choiceItem = choiceTemplate.CreateInstance(thisChoice["quantity"].GetValue<int>(), thisChoice["attributes"]?.AsObject().SafeDeepClone());
-			choiceCards[i].SetItem(choiceItem);
-			choiceCards[i].GetChild<Control>(0).SelfModulate = Colors.White;
-			choiceCards[i].SetInteractable(true);
+			choiceCardEntries[i].SetItem(choiceItem);
+			choiceCardEntries[i].SetInteractable(false);
+			choiceCardEntries[i].Visible = true;
+			choiceCardEntries[i].Modulate = Colors.White;
+			cardAnims.Add(ChoiceCardIntroAnim(i));
+			await Helpers.WaitForTimer(0.1);
 		}
+		await Task.WhenAll(cardAnims);
+		for (int i = 0; i < choiceCardEntries.Length; i++)
+		{
+			choiceCardEntries[i].SetInteractable(true);
+		}
+	}
+
+	const float stepAmt = 200;
+	async Task ChoiceCardIntroAnim(int index)
+	{
+		bool left = index % 2 == 0;
+		int step = index / 2;
+
+		choiceCardEntries[index].OffsetTransformPosition = Vector2.Zero;
+		choiceCardEntries[index].OffsetTransformRotation = Mathf.DegToRad((left ? -5 : 5) * (step+1));
+		choiceCardEntries[index].OffsetTransformScale = Vector2.Zero;
+		choiceCardEntries[index].FlipProgress = 1;
+		choiceCardEntries[index].BurnProgress = 0;
+		choiceCardEntries[index].LabelOpacity = 0;
+		choiceCardEntries[index].ZIndex = -1;
+
+		var choicePullOut = GetTree().CreateTween().SetParallel();
+		var resultPos = stepAmt * 0.5f + stepAmt * step;
+		choicePullOut.TweenProperty(choiceCardEntries[index], "offset_transform_position", Vector2.Left * (resultPos + stepAmt * 0.5f) * (left ? 1 : -1), 0.2).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Circ);
+		choicePullOut.TweenProperty(choiceCardEntries[index], "offset_transform_position", Vector2.Left * resultPos * (left ? 1 : -1), 0.2).SetDelay(0.2).SetEase(Tween.EaseType.In).SetTrans(Tween.TransitionType.Circ);
+		choicePullOut.TweenProperty(choiceCardEntries[index], "offset_transform_scale", Vector2.One, 0.4);
+		choicePullOut.TweenProperty(choiceCardEntries[index], "FlipProgress", 0, 0.2).SetDelay(0.45);
+		choicePullOut.TweenProperty(choiceCardEntries[index], "LabelOpacity", 1, 0.1).SetDelay(0.55);
+		await Helpers.WaitForTimer(0.2);
+		choiceCardEntries[index].ZIndex = 0;
+		await Helpers.WaitForTimer(0.45);
 	}
 
 	async void ApplyChoice(int index)
@@ -844,6 +923,7 @@ public partial class CardPackOpener : Control
 			isChosing = false;
 
 			skipChoiceButton.Visible = false;
+			cancelChoiceButton.Visible = false;
 
 			int nextChoiceIndex = choicesOnly ? nextPullIndex - 1 : nextPullIndex - (queuedItems.Count + 1);
 			//start the request now and await later, asynchronism baby!
@@ -853,49 +933,64 @@ public partial class CardPackOpener : Control
 				["selectionIdx"] = index
 			};
 			var operationTask = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPack", body.ToString());
-
-			for (int i = 0; i < choiceCards.Length; i++)
+			//var operationTask = Task.FromResult<JsonArray>(null);
+			for (int i = 0; i < choiceCardEntries.Length; i++)
 			{
-				choiceCards[i].SetInteractable(false);
+				choiceCardEntries[i].SetInteractable(false);
 			}
 
 			var currentChoices = queuedChoices[nextChoiceIndex].attributes["options"].AsArray();
-			var resultChoice = currentChoices[index];
-			var itemTemplate = GameItemTemplate.Get(resultChoice["itemType"].ToString());
-			var itemInstance = itemTemplate.CreateInstance((int?)resultChoice["quantity"] ?? 1, resultChoice["attributes"]?.AsObject().SafeDeepClone() ?? null);
+			var resultChoiceData = currentChoices[index];
+			var itemTemplate = GameItemTemplate.Get(resultChoiceData["itemType"].ToString());
+			var itemInstance = itemTemplate.CreateInstance((int?)resultChoiceData["quantity"] ?? 1, resultChoiceData["attributes"]?.AsObject().SafeDeepClone() ?? null);
 
-			var resultChild = choiceCards[index].GetChild<Control>(0);
-			resultChild.SelfModulate = Colors.Transparent;
+			var resultTarget = choiceCardEntries[index];
+			var discardTargets = choiceCardEntries.Except([resultTarget]).ToArray();
 
-			choiceResultCard.Visible = true;
-			choiceResultCard.Reparent(choiceResultFGParent);
-			choiceResultCard.Scale = Vector2.One;
-			choiceResultCard.GlobalPosition = resultChild.GlobalPosition;
-			choiceResultCard.OffsetLeft += choiceResultCard.Size.X * 0.5f;
-			choiceResultCard.OffsetRight = choiceResultCard.OffsetLeft;
-			choiceResultCard.OffsetTop += choiceResultCard.Size.Y * 0.5f;
-			choiceResultCard.OffsetBottom = choiceResultCard.OffsetTop;
-			choiceResultCard.SetShaderTexture(itemInstance.GetTexture(), "IconTexture");
-			choiceResultCard.SetShaderColor(itemTemplate.RarityColor, "RarityColour");
-			choiceResultCard.SetShaderBool(false, "Started");
+			//choiceResultShader.Visible = true;
+			//choiceResultShader.Reparent(choiceResultFGParent);
+			//choiceResultShader.Scale = Vector2.One;
+			//choiceResultShader.GlobalPosition = resultEntry.GlobalPosition;
+			//choiceResultShader.OffsetLeft += choiceResultShader.Size.X * 0.5f;
+			//choiceResultShader.OffsetRight = choiceResultShader.OffsetLeft;
+			//choiceResultShader.OffsetTop += choiceResultShader.Size.Y * 0.5f;
+			//choiceResultShader.OffsetBottom = choiceResultShader.OffsetTop;
+			//choiceResultShader.SetShaderTexture(itemInstance.GetTexture(), "IconTexture");
+			//choiceResultShader.SetShaderColor(itemTemplate.RarityColor, "RarityColour");
+			//choiceResultShader.SetShaderBool(false, "Started");
 
 
-			var choiceClose = GetTree().CreateTween().SetParallel();
-			choiceClose.TweenProperty(choiceCanvas, "self_modulate", Colors.Transparent, 0.25);
-			choiceClose.TweenProperty(choiceCanvas, "scale", Vector2.Zero, 0.25).SetEase(Tween.EaseType.In);
+			//var choiceClose = GetTree().CreateTween().SetParallel();
+			//choiceClose.TweenProperty(choiceCanvas, "self_modulate", Colors.Transparent, 0.25);
+			//choiceClose.TweenProperty(choiceCanvas, "scale", Vector2.Zero, 0.25).SetEase(Tween.EaseType.In);
+
+			if (discardTargets.Length > 0)
+			{
+				var cardBurn = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad);
+				foreach (var discard in discardTargets)
+				{
+					cardBurn.TweenProperty(discard, "offset_transform_position", discard.OffsetTransformPosition + Vector2.Down * Mathf.Abs(discard.OffsetTransformPosition.X * 0.5f), 1);
+					cardBurn.TweenProperty(discard, "offset_transform_rotation", Mathf.DegToRad((discard.OffsetTransformPosition.X > 0 ? 15 : -15) + (discard.OffsetTransformPosition.X * 0.1)), 1);
+					cardBurn.TweenProperty(discard, "BurnProgress", 1, 1).SetTrans(Tween.TransitionType.Linear);
+					cardBurn.TweenProperty(discard, "LabelOpacity", 0, 0.1);
+				}
+				cardBurn.Finished += () =>
+				{
+					foreach (var discard in discardTargets)
+						discard.Visible = false;
+				};
+			}
 
 			var cardSlideUp = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad);
-			cardSlideUp.TweenProperty(choiceResultCard, "offset_left", 60, 0.3);
-			cardSlideUp.TweenProperty(choiceResultCard, "offset_right", 60, 0.3);
-			cardSlideUp.TweenProperty(choiceResultCard, "offset_top", -250, 0.3);
-			cardSlideUp.TweenProperty(choiceResultCard, "offset_bottom", -250, 0.3);
-			cardSlideUp.TweenProperty(choiceResultCard, "scale", Vector2.One * 0.5f, 0.3);
+			var relOffset = resultDestination.Position - resultTarget.Position;
+			cardSlideUp.TweenProperty(resultTarget, "offset_transform_position", relOffset, 0.3);
+			cardSlideUp.TweenProperty(resultTarget, "offset_transform_rotation", 0, 0.1);
+			cardSlideUp.TweenProperty(resultTarget, "offset_transform_scale", Vector2.One * 0.5f, 0.3);
+			cardSlideUp.TweenProperty(resultTarget, "FlipProgress", 1, 0.15).SetDelay(0.15).SetTrans(Tween.TransitionType.Linear);
+			cardSlideUp.TweenProperty(resultTarget, "LabelOpacity", 0, 0.05);
 
-			choiceResultCard.SetShaderBool(true, "Started");
-			choiceResultCard.SetShaderFloat((float)(Time.GetTicksMsec() * 0.001) + 0.1f, "StartTime");
-
-			GD.Print(choiceResultCard.GetShaderFloat("time"));
-			GD.Print(choiceResultCard.GetShaderFloat("StartTime"));
+			//GD.Print(choiceResultCard.GetShaderFloat("time"));
+			//GD.Print(choiceResultCard.GetShaderFloat("StartTime"));
 
 			await Helpers.WaitForTimer(0.4f);
 
@@ -908,17 +1003,11 @@ public partial class CardPackOpener : Control
 			{
 				await GenericConfirmationWindow.ShowError("Failed to make choice");
 			}
-
-			choiceResultCard.Reparent(choiceResultBGParent);
-			choiceResultCard.OffsetLeft = 60;
-			choiceResultCard.OffsetRight = choiceResultCard.OffsetLeft;
-			choiceResultCard.OffsetTop = -250;
-			choiceResultCard.OffsetBottom = choiceResultCard.OffsetTop;
+			resultTarget.ZIndex = -1;
 
 
 			var cardSlideDown = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In);
-			cardSlideDown.TweenProperty(choiceResultCard, "offset_top", -115, 0.25);
-			cardSlideDown.TweenProperty(choiceResultCard, "offset_bottom", -115, 0.25);
+			cardSlideDown.TweenProperty(resultTarget, "offset_transform_position", resultTarget.OffsetTransformPosition + Vector2.Down * 115, 0.25);
 
 			await Helpers.WaitForTimer(0.2f);
 			if (cardChangeEffect is not null)
@@ -929,8 +1018,7 @@ public partial class CardPackOpener : Control
 			changeEffectTween.TweenProperty(this, "CardChangeEffectLevel", 2, 1);
 
 			await Helpers.WaitForTimer(1f);
-
-			choiceResultCard.Visible = false;
+			resultTarget.Visible = false;
 
 			GameItem resultItem = null;
 			if (resultNotification is not null)
@@ -948,15 +1036,23 @@ public partial class CardPackOpener : Control
 			//reopen choices if the result is another cardpack
 			if (resultItem?.template.Type == "CardPack")
 				OpenChoices();
+			else if (singleChoiceMode)
+				singleChoiceEndContent.Visible = true;
 			else
 				pullButton.Visible = true;
 		}
 		catch
 		{
-			//if anything weird goes wrong, try to recover
-			pullButton.Visible = true;
-			choiceResultCard.Visible = false;
-			choiceCanvas.Scale = Vector2.Zero;
+			//if anything weird goes wrong, try to recover, but still throw
+			if (singleChoiceMode)
+				singleChoiceEndContent.Visible = true;
+			else
+				pullButton.Visible = true;
+			for (int i = 0; i < choiceCardEntries.Length; i++)
+			{
+				choiceCardEntries[i].Visible = false;
+			}
+			throw;
 		}
 	}
 
@@ -973,31 +1069,55 @@ public partial class CardPackOpener : Control
 			return;
 		isChosing = false;
 
-		for (int i = 0; i < choiceCards.Length; i++)
+		var choiceClose = GetTree().CreateTween().SetParallel().SetEase(Tween.EaseType.In);
+		foreach (var choice in choiceCardEntries)
 		{
-			choiceCards[i].SetInteractable(false);
+			choice.SetInteractable(false);
+			int dir = choice.OffsetTransformPosition.X > 0 ? 1 : -1;
+			choiceClose.TweenProperty(choice, "offset_transform_position:x", choice.OffsetTransformPosition.X + 75 * dir, 0.2).SetEase(Tween.EaseType.Out);
+			choiceClose.TweenProperty(choice, "offset_transform_position:y", 150, 0.2).SetTrans(Tween.TransitionType.Back);
+			choiceClose.TweenProperty(choice, "offset_transform_rotation", Mathf.DegToRad(10 * dir), 0.2);
+			choiceClose.TweenProperty(choice, "modulate", Colors.Transparent, 0.2);
 		}
 
-		var choiceClose = GetTree().CreateTween().SetParallel();
-		choiceClose.TweenProperty(choiceCanvas, "self_modulate", Colors.Transparent, 0.25);
-		choiceClose.TweenProperty(choiceCanvas, "scale", Vector2.Zero, 0.25).SetEase(Tween.EaseType.In);
-
 		skipChoiceButton.Visible = false;
-		pullButton.Visible = true;
-		if (withContinue)
-			PullCard();
+		cancelChoiceButton.Visible = false;
+		if (singleChoiceMode)
+		{
+			choiceClose.Finished += () => CloseMenu();
+		}
+		else
+		{
+			pullButton.Visible = true;
+			if (withContinue)
+				PullCard();
+		}
+	}
+
+	async void RecycleSingleChoiceAndEnd()
+	{
+		if (queuedChoices[0].template?.Unrecyclable == false)
+		{
+			JsonObject content = new()
+			{
+				["targetItemIds"] = new JsonArray([queuedChoices[0].uuid])
+			};
+			GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content).StartTask();
+		}
+		CloseMenu();
 	}
 
 	async Task ShowRecyclePopup()
 	{
 		var resultItems = queuedChoices
 					.Union(queuedItems)
-					.Select(item => item.template.IsCollectable ? (item.inspectorOverride ?? item) : item);
+					.Select(item => item.template.IsCollectable ? (item.inspectorOverride ?? item) : item)
+					.ToArray();
 
 		if (queuedChoices.Count == 1 && queuedItems.Count == 0)
 			return;
 
-		if (resultItems.Any())
+		if (resultItems.Length>0)
 		{
 			foreach (var item in resultItems)
 			{
@@ -1018,7 +1138,7 @@ public partial class CardPackOpener : Control
 				{
 					["targetItemIds"] = new JsonArray(recycleIds)
 				};
-				await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content);
+				GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content).StartTask();
 			}
 		}
 	}

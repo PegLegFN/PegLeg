@@ -1,5 +1,8 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 public partial class QuestViewer : Control
 {
@@ -31,8 +34,18 @@ public partial class QuestViewer : Control
 	PackedScene rewardScene;
 	List<GameItemEntry> rewardEntries = [];
 
+	[Export]
+	Button claimButton;
+	[Export]
+	OptionButton claimRewardSelector;
+
 	public override void _Ready()
 	{
+		claimButton.Visible = false;
+		claimRewardSelector.Visible = false;
+
+		claimButton.Pressed += ClaimQuest;
+		claimRewardSelector.ItemSelected += _ => claimButton.Disabled = claimRewardSelector.Selected <= 1;
 		pinButton.Pressed += UpdatePinnedState;
 		rerollButton.Pressed += RerollQuest;
 	}
@@ -83,6 +96,48 @@ public partial class QuestViewer : Control
 		rerollButton.Visible = account.CanRerollQuest();
 	}
 
+	async void ClaimQuest()
+	{
+		var account = GameAccount.ActiveAccount;
+		if (currentQuest is null ||
+			!currentQuest.isCompleted ||
+			currentQuest.questItem?.profile?.account != account
+			)
+			return;
+
+		using var _ = LoadingOverlay.CreateToken();
+
+		int idx = claimRewardSelector.Visible ? claimRewardSelector.Selected - 2 : 0;
+		var rewards = await currentQuest.questItem.ClaimQuest(idx);
+
+		SetupQuest(currentQuest);
+
+		if (rewards.Length > 0)
+		{
+			foreach (var item in rewards)
+			{
+				item.GetSearchTags();
+				item.GenerateRawData();
+			}
+			var toRecycle = await SimpleItemSelector.OpenMultiSelector(rewards, SimpleItemSelector.RecycleConfig with
+			{
+				allowCancel = false,
+				allowEmptySelection = true,
+				unselectableMarkerTex = null,
+				unselectableTintColor = Colors.Transparent,
+			});
+			var recycleIds = toRecycle.Select(item => (JsonNode)item.uuid).Where(id => id is not null).ToArray();
+			if (toRecycle.Length > 0)
+			{
+				JsonObject content = new()
+				{
+					["targetItemIds"] = new JsonArray(recycleIds)
+				};
+				GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content).StartTask();
+			}
+		}
+	}
+
 	public void SetupQuest(QuestSlot quest)
 	{
 		currentQuest = quest;
@@ -116,6 +171,25 @@ public partial class QuestViewer : Control
 			rewardEntries[i].Visible = false;
 		}
 		rewardParent.Visible = true;
+
+		claimButton.Visible = quest.isCompleted;
+		claimButton.Disabled = false;
+		claimRewardSelector.Visible = false;
+		if (quest.isCompleted && rewards.FirstOrDefault(i => i.templateId.StartsWith("CardPack:") && i.attributes?.ContainsKey("options") == true) is GameItem choicePack)
+		{
+			var options = choicePack.attributes["options"].Deserialize<GameItem.ItemReward[]>();
+			claimRewardSelector.Visible = true;
+			claimButton.Disabled = true;
+			claimRewardSelector.Clear();
+			claimRewardSelector.AddItem("Select Reward");
+			claimRewardSelector.AddSeparator();
+			foreach (var item in options)
+			{
+				var template = GameItemTemplate.Get(item.itemType);
+				var name = template?.DisplayName ?? item.itemType;
+				claimRewardSelector.AddItem($"{name}{(item.quantity <= 1 ? "" : $" x{item.quantity}")}");
+			}
+		}
 
 		var objectives = quest.questTemplate["Objectives"].AsArray();
 		for (int i = 0; i < objectives.Count; i++)

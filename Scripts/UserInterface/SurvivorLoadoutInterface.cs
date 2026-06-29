@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json.Nodes;
 
 public partial class SurvivorLoadoutInterface : Node
@@ -76,6 +77,7 @@ public partial class SurvivorLoadoutInterface : Node
 		{
 			GenerateOptions();
 			loadoutSelector.Selected = 0;
+			OnLoadoutChanged(0);
 		}
 	}
 
@@ -158,9 +160,7 @@ public partial class SurvivorLoadoutInterface : Node
 		loadouts[loadoutName] = squadsMappings;
 
 		account.SetLocalData(LoadoutKey, loadouts);
-		GenerateOptions();
-		loadoutSelector.Selected = loadouts.Select(kvp => kvp.Key).ToList().IndexOf(loadoutName) + 2;
-		OnLoadoutChanged(loadoutSelector.Selected);
+		GenerateOptions(loadouts.Select(kvp => kvp.Key).ToList().IndexOf(loadoutName));
 	}
 
 	float eggTimer = 0;
@@ -256,9 +256,7 @@ public partial class SurvivorLoadoutInterface : Node
 		loadoutName = newLoadoutName;
 
 		account.SetLocalData(LoadoutKey, loadouts);
-		GenerateOptions();
-		loadoutSelector.Selected = loadouts.Select(kvp => kvp.Key).ToList().IndexOf(loadoutName) + 2;
-		OnLoadoutChanged(loadoutSelector.Selected);
+		GenerateOptions(loadouts.Select(kvp => kvp.Key).ToList().IndexOf(loadoutName));
 	}
 
 	private async void OnLoadoutDelete()
@@ -278,9 +276,6 @@ public partial class SurvivorLoadoutInterface : Node
 
 		account.SetLocalData(LoadoutKey, loadouts);
 		GenerateOptions();
-
-		loadoutSelector.Selected = 0;
-		OnLoadoutChanged(loadoutSelector.Selected);
 	}
 
 	static readonly string[] survivorSquadIds =
@@ -308,7 +303,7 @@ public partial class SurvivorLoadoutInterface : Node
 		await accountItems.PerformOperation("UnassignAllSquads", new JsonObject() { ["squadIds"] = new JsonArray([.. survivorSquadIds.Select(s => (JsonNode)s)]) });
 	}
 
-	void GenerateOptions()
+	void GenerateOptions(int selectedIndex = -1)
 	{
 		loadoutSelector.Clear();
 		loadoutSelector.AddItem("[Create New Loadout]");
@@ -318,6 +313,9 @@ public partial class SurvivorLoadoutInterface : Node
 		{
 			loadoutSelector.AddItem(kvp.Key);
 		}
+		selectedIndex = selectedIndex < 0 ? 0 : selectedIndex + 2;
+		loadoutSelector.Selected = selectedIndex;
+		OnLoadoutChanged(selectedIndex);
 	}
 
 	[Export]

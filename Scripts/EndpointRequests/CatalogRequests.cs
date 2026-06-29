@@ -720,24 +720,29 @@ static class CatalogRequests
 
 	public static void RegisterCosmeticImage(ref Image image, string uniqueId, float resolutionScale = 1, string format = "webp")
 	{
-		switch (format)
-		{
-			case "webp":
-				RegisterCosmeticImageWithBuffer(ref image, image.SaveWebpToBuffer(), "webp", uniqueId, resolutionScale);
-				break;
-			case "jpg":
-				RegisterCosmeticImageWithBuffer(ref image, image.SaveJpgToBuffer(), "jpg", uniqueId, resolutionScale);
-				break;
-			case "png":
-				RegisterCosmeticImageWithBuffer(ref image, image.SavePngToBuffer(), "png", uniqueId, resolutionScale);
-				break;
-		}
+		RegisterCosmeticImageWithBuffer(
+			ref image, 
+			format switch
+			{
+				"webp"=> image.SaveWebpToBuffer(),
+				"jpeg" or "jpg" => image.SaveJpgToBuffer(),
+				"png" => image.SavePngToBuffer(),
+				_ => []
+			}, 
+			format, 
+			uniqueId, 
+			resolutionScale
+		);
 	}
 
 	public static void RegisterCosmeticImageWithBuffer(ref Image image, byte[] buffer, string extension, string uniqueId, float resolutionScale = 1)
 	{
+		if (buffer.Length == 0)
+			return;
+		//todo: its currently possible for a missing icon to be requested multiple simultanious times, causing an overwrite.
+		//To mitigate this, consider reserving the local name of a cosmetic while it is being requested
 		if (activeResourceCache.ContainsKey(uniqueId))
-			GD.PushWarning($"Overwriting cosmetic resource \"{uniqueId}\"");
+			GD.Print($"Overwriting cosmetic resource \"{uniqueId}\"");
 
 		if (!DirAccess.DirExistsAbsolute(imageCacheFolderPath))
 			DirAccess.MakeDirAbsolute(imageCacheFolderPath);

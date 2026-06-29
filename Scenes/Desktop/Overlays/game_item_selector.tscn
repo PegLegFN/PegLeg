@@ -33,7 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://ci5xktxr3q4re" path="res://Images/BanjoSuppliments/SetBonusIcons/T-Icon-HealthBattery-64.png" id="22_8tyk0"]
 [ext_resource type="PackedScene" uid="uid://wy0yh5wkf4u4" path="res://Scenes/GameItemEntry/inventory_entry.tscn" id="26_kejyc"]
 
-[node name="GameItemSelector" unique_id=809701910 node_paths=PackedStringArray("autoSelectButton", "container", "smallContainer", "multiselectControls", "confirmButton", "skipButton", "searchInput", "survivorFilters", "personalityFilter", "trapDuraFilter", "windowControl") instance=ExtResource("1_bjivd")]
+[node name="GameItemSelector" unique_id=809701910 node_paths=PackedStringArray("autoSelectButton", "container", "smallContainer", "multiselectControls", "confirmButton", "skipButton", "searchInput", "survivorFilters", "personalityFilter", "trapDuraFilter", "hiddenSelectionText", "addToSelectionBtn", "removeFromSelectionBtn", "windowControl") instance=ExtResource("1_bjivd")]
 script = ExtResource("2_msbn1")
 defaultSelectionMarker = ExtResource("3_4tm4g")
 recycleIcon = ExtResource("7_j13lo")
@@ -49,6 +49,9 @@ searchInput = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContaine
 survivorFilters = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters")
 personalityFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities")
 trapDuraFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura")
+hiddenSelectionText = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/HiddenCount")
+addToSelectionBtn = NodePath("Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AddFiltered")
+removeFromSelectionBtn = NodePath("Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/RemoveFiltered")
 windowControl = NodePath("Control")
 isUserClosable = true
 
@@ -119,7 +122,11 @@ placeholder_text = "Search items"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="SurvivorFilters" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="1" unique_id=1783568109]
+[node name="HiddenCount" type="Label" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="1" unique_id=297807842]
+visible = false
+layout_mode = 2
+
+[node name="SurvivorFilters" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="2" unique_id=1783568109]
 layout_mode = 2
 
 [node name="Personalities" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="0" unique_id=73696586 instance=ExtResource("7_6tduj")]
@@ -402,7 +409,7 @@ size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/LargeItems/MarginContainer" index="0" unique_id=103954723]
 layout_mode = 2
@@ -442,7 +449,7 @@ size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer" index="0" unique_id=1343126879]
 layout_mode = 2
@@ -465,14 +472,14 @@ layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items" index="1" unique_id=1497196998]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 size_flags_vertical = 8
 
 [node name="ClearSelected" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="0" unique_id=2106194831]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Clear Selected"
+text = "Clear Selection"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/ClearSelected" index="0" unique_id=213354014]
 visible = false
@@ -485,10 +492,11 @@ texture = ExtResource("6_bnyal")
 expand_mode = 3
 
 [node name="AutoSelect" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="1" unique_id=1820602365]
+visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Auto Select from Filtered"
+text = "Reset Selection"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" index="0" unique_id=818886907]
 visible = false
@@ -500,7 +508,39 @@ offset_bottom = 37.0
 texture = ExtResource("7_j13lo")
 expand_mode = 3
 
-[node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="2" unique_id=1923112185]
+[node name="AddFiltered" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="2" unique_id=2068938014]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Add Filtered Items To Selection"
+
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AddFiltered" index="0" unique_id=1540341369]
+visible = false
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture = ExtResource("7_j13lo")
+expand_mode = 3
+
+[node name="RemoveFiltered" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="3" unique_id=739622810]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Remove Filtered Items From Selection"
+
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/RemoveFiltered" index="0" unique_id=1715426733]
+visible = false
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 37.0
+offset_bottom = 37.0
+texture = ExtResource("7_j13lo")
+expand_mode = 3
+
+[node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="4" unique_id=1923112185]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
@@ -515,7 +555,7 @@ offset_bottom = 37.0
 texture = ExtResource("9_yrbk2")
 expand_mode = 3
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="3" unique_id=1901490935]
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="5" unique_id=1901490935]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -638,7 +678,7 @@ text = "Hidden Items Selected: ??"
 [connection signal="SortTypeChanged" from="." to="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/Label" method="set_text"]
 [connection signal="TitleChanged" from="." to="Control/MarginContainer/VBoxContainer/Header/MarginContainer/Label" method="set_text"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/ClearSelected" to="." method="ClearSelection"]
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" to="." method="AutoselectItems" binds= [true]]
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" to="." method="AutoselectItems" binds= [false]]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/Sort" to="." method="CycleSort"]
 [connection signal="HoldPressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm/Responsive Button Area" to="." method="ConfirmSelection"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip/Responsive Button Area" to="." method="ConfirmSelection"]

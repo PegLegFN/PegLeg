@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://c47svw0ruq2i3"]
+[gd_scene format=3 uid="uid://c47svw0ruq2i3"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_hrn5h"]
 [ext_resource type="Texture2D" uid="uid://lqhr4kxok8jm" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Hero-Soldier-CARD.png" id="1_w7bnd"]
@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="7_kfuyv"]
 [ext_resource type="Shader" uid="uid://bcjttgof1a18i" path="res://Shaders/ChoiceCardChangeEffect.gdshader" id="11_xnoem"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="12_abtl2"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="12_jhjyb"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="12_jhjyb"]
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="13_t03b0"]
 
 [sub_resource type="Gradient" id="Gradient_tpqxe"]
@@ -45,6 +45,7 @@ shader_parameter/IsHero = true
 shader_parameter/IsSchematic = false
 shader_parameter/Noise = ExtResource("7_kfuyv")
 shader_parameter/HeroTriangles = ExtResource("6_jhjyb")
+shader_parameter/UsePack = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_irr70"]
 content_margin_left = 3.0
@@ -76,16 +77,16 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0, 1)
 metadata/_snap_enabled = true
 
-[node name="RewardEntryCard" type="MarginContainer"]
+[node name="RewardEntryCard" type="MarginContainer" unique_id=1467477137]
 custom_minimum_size = Vector2(150, 0)
 pivot_offset = Vector2(75, 117.293)
 script = ExtResource("1_hrn5h")
 addXToAmount = true
 
-[node name="ContentParent" type="Control" parent="."]
+[node name="ContentParent" type="Control" parent="." unique_id=246347845]
 layout_mode = 2
 
-[node name="Content" type="Control" parent="ContentParent"]
+[node name="Content" type="Control" parent="ContentParent" unique_id=543513365]
 clip_contents = true
 layout_mode = 1
 anchor_left = 0.11
@@ -96,7 +97,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="RarityGradient" type="TextureRect" parent="ContentParent/Content"]
+[node name="RarityGradient" type="TextureRect" parent="ContentParent/Content" unique_id=45639215]
 visible = false
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 1
@@ -107,7 +108,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_rdiui")
 
-[node name="Triangles" type="TextureRect" parent="ContentParent/Content"]
+[node name="Triangles" type="TextureRect" parent="ContentParent/Content" unique_id=1268507557]
 visible = false
 texture_repeat = 2
 material = SubResource("ShaderMaterial_8i204")
@@ -122,7 +123,7 @@ texture = ExtResource("2_b6m2m")
 expand_mode = 1
 script = ExtResource("4_w04mt")
 
-[node name="ItemIcon" type="TextureRect" parent="ContentParent/Content"]
+[node name="ItemIcon" type="TextureRect" parent="ContentParent/Content" unique_id=1167914256]
 self_modulate = Color(0.9, 0.51, 0, 1)
 material = SubResource("ShaderMaterial_oq1lj")
 layout_mode = 1
@@ -137,7 +138,7 @@ expand_mode = 1
 stretch_mode = 6
 script = ExtResource("4_w04mt")
 
-[node name="DetailsArea" type="VBoxContainer" parent="ContentParent/Content"]
+[node name="DetailsArea" type="VBoxContainer" parent="ContentParent/Content" unique_id=699540565]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -145,11 +146,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Space" type="Control" parent="ContentParent/Content/DetailsArea"]
+[node name="Space" type="Control" parent="ContentParent/Content/DetailsArea" unique_id=1885493926]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="InspectArea" type="Control" parent="ContentParent/Content/DetailsArea/Space"]
+[node name="InspectArea" type="Control" parent="ContentParent/Content/DetailsArea/Space" unique_id=1256308997]
 visible = false
 layout_mode = 1
 anchors_preset = 1
@@ -163,7 +164,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="ContentParent/Content/DetailsArea/Space/InspectArea"]
+[node name="TextureRect" type="TextureRect" parent="ContentParent/Content/DetailsArea/Space/InspectArea" unique_id=2144818399]
 self_modulate = Color(0.4, 0.4, 0.4, 1)
 layout_mode = 1
 anchors_preset = 14
@@ -176,7 +177,7 @@ mouse_filter = 2
 texture = ExtResource("6_p6e2l")
 expand_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect"]
+[node name="MarginContainer" type="MarginContainer" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect" unique_id=488419641]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,13 +189,13 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="TextureRect" type="TextureRect" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/MarginContainer" unique_id=2127903767]
 self_modulate = Color(0, 0, 0, 0.501961)
 layout_mode = 2
 texture = ExtResource("7_af580")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/MarginContainer/TextureRect"]
+[node name="TextureRect2" type="TextureRect" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/MarginContainer/TextureRect" unique_id=640218516]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -208,7 +209,7 @@ grow_vertical = 2
 texture = ExtResource("7_af580")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect"]
+[node name="Label" type="Label" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect" unique_id=667182332]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -225,14 +226,14 @@ text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Responsive Button Circle" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect" instance=ExtResource("7_dc4uf")]
+[node name="Responsive Button Circle" parent="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect" unique_id=1750431044 instance=ExtResource("7_dc4uf")]
 layout_mode = 1
 
-[node name="NameBox" type="PanelContainer" parent="ContentParent/Content/DetailsArea"]
+[node name="NameBox" type="PanelContainer" parent="ContentParent/Content/DetailsArea" unique_id=1967296569]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_irr70")
 
-[node name="NameLabel" type="Label" parent="ContentParent/Content/DetailsArea/NameBox"]
+[node name="NameLabel" type="Label" parent="ContentParent/Content/DetailsArea/NameBox" unique_id=1829835981]
 visible = false
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
@@ -242,54 +243,54 @@ theme_override_constants/shadow_offset_y = 1
 text = "This is a Hero Name"
 autowrap_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="ContentParent/Content/DetailsArea/NameBox"]
+[node name="MarginContainer" type="MarginContainer" parent="ContentParent/Content/DetailsArea/NameBox" unique_id=1163226046]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer" unique_id=794639131]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 alignment = 2
 
-[node name="AmountLabel" type="Label" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer"]
+[node name="AmountLabel" type="Label" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer" unique_id=1769479031]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TersiatyIcon" type="TextureRect" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer"]
+[node name="TersiatyIcon" type="TextureRect" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer" unique_id=1140021958]
 material = ExtResource("12_jhjyb")
 layout_mode = 2
 texture = ExtResource("5_w6pnj")
 expand_mode = 3
 
-[node name="SecondaryIocn" type="TextureRect" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer"]
+[node name="SecondaryIocn" type="TextureRect" parent="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer" unique_id=837457718]
 material = ExtResource("12_jhjyb")
 layout_mode = 2
 texture = ExtResource("5_w6pnj")
 expand_mode = 3
 
-[node name="TypeBox" type="PanelContainer" parent="ContentParent/Content/DetailsArea"]
+[node name="TypeBox" type="PanelContainer" parent="ContentParent/Content/DetailsArea" unique_id=1845791256]
 self_modulate = Color(0.9, 0.51, 0, 1)
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_p4dys")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ContentParent/Content/DetailsArea/TypeBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ContentParent/Content/DetailsArea/TypeBox" unique_id=788977374]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer" unique_id=1410337901]
 layout_mode = 2
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="SubtypeIcon" type="TextureRect" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer/MarginContainer"]
+[node name="SubtypeIcon" type="TextureRect" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer/MarginContainer" unique_id=1044796728]
 material = ExtResource("12_jhjyb")
 layout_mode = 2
 texture = ExtResource("1_w7bnd")
 expand_mode = 3
 
-[node name="TypeLabel" type="Label" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer"]
+[node name="TypeLabel" type="Label" parent="ContentParent/Content/DetailsArea/TypeBox/HBoxContainer" unique_id=1012323232]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -302,7 +303,7 @@ autowrap_mode = 1
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="ChangeEffect" type="TextureRect" parent="ContentParent/Content"]
+[node name="ChangeEffect" type="TextureRect" parent="ContentParent/Content" unique_id=1176483738]
 unique_name_in_owner = true
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 material = SubResource("ShaderMaterial_kpy8b")
@@ -320,7 +321,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_lib66")
 script = ExtResource("4_w04mt")
 
-[node name="ContextInput" type="Button" parent="ContentParent/Content"]
+[node name="ContextInput" type="Button" parent="ContentParent/Content" unique_id=1857942686]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -329,10 +330,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Ctx" type="Node" parent="ContentParent/Content/ContextInput"]
+[node name="Ctx" type="Node" parent="ContentParent/Content/ContextInput" unique_id=781192874]
 script = ExtResource("13_t03b0")
 
-[node name="CardOverlay" type="TextureRect" parent="."]
+[node name="CardOverlay" type="TextureRect" parent="." unique_id=269865844]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("2_645cs")
@@ -345,9 +346,11 @@ expand_mode = 5
 [connection signal="IconFit" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["Fit"]]
 [connection signal="InteractableChanged" from="." to="ContentParent/Content/DetailsArea/Space/InspectArea/TextureRect/Responsive Button Circle" method="set_visible"]
 [connection signal="IsHero" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsPack" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["UsePack"]]
 [connection signal="IsSchematic" from="." to="ContentParent/Content/ItemIcon" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="NameChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/NameLabel" method="set_text"]
 [connection signal="NameRelevant" from="." to="ContentParent/Content/DetailsArea/NameBox/NameLabel" method="set_visible"]
+[connection signal="PackIconChanged" from="." to="ContentParent/Content/ItemIcon" method="SetShaderTexture" binds= ["PackIcon"]]
 [connection signal="PersonalityIconChanged" from="." to="ContentParent/Content/DetailsArea/NameBox/MarginContainer/HBoxContainer/SecondaryIocn" method="set_texture"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/ItemIcon" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="ContentParent/Content/DetailsArea/TypeBox" method="set_self_modulate"]

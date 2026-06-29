@@ -122,12 +122,31 @@ public class GameItem
 
 	public record struct ItemReward()
 	{
-		public string name;
-		public string itemType;
-		public JsonElement? attributes;
-		public int quantity = 1;
-		public GameItem ToItem() => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>(), templateId: itemType);
-		public GameItem CreateItem() => GameItemTemplate.Get(itemType)?.CreateInstance(quantity, attributes?.Deserialize<JsonObject>());
+		public string name { get; set; }
+		public string itemType { get; init; }
+		public string itemGuid { get; init; }
+		public string itemProfile { get; init; }
+		public JsonElement? attributes { get; init; }
+		public int quantity { get; init; } = 1;
+
+		public GameItem CreateItem() => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>(), templateId: itemType);
+		public GameItem TryCreateItem() => GameItemTemplate.Get(itemType)?.CreateInstance(quantity, attributes?.Deserialize<JsonObject>());
+		public GameItem FindItem(GameAccount account)
+		{
+			if (itemGuid is null || itemProfile is null)
+				return null;
+			return account?.GetProfile(itemProfile).GetItem(itemGuid);
+		}
+		public GameItem FindItemAsReward(GameAccount account)
+		{
+			if (FindItem(account) is not GameItem realItem)
+				return null;
+			if (realItem.quantity == quantity)
+				return realItem;
+			return realItem.Clone(quantity);
+		}
+		public GameItem FindOrCreateReward(GameAccount account) =>
+			FindItemAsReward(account) ?? CreateItem();
 	}
 
 	public GameItem SetUUID(string customUUID = null)
@@ -417,40 +436,8 @@ public class GameItem
 		string altcontent = @$"{{""questId"": ""{uuid}"", ""selectedRewardIndex"": {index}}}";
 		var notifs = await profile.PerformOperation("ClaimQuestReward", altcontent);
 		var claimNotif = notifs?.FirstOrDefault(n => n["type"]?.ToString() == "questClaim");
-		if (claimNotif is not null)
-		{
-			GD.Print(claimNotif);
-			return [.. claimNotif["loot"]["items"]
-				.AsArray()
-				.Select(n =>GetClaimedReward(n, profile.account))
-			];
-		}
-		return [];
-	}
-
-	static GameItem GetClaimedReward(JsonNode itemRewardData, GameAccount account)
-	{
-		int quantity = itemRewardData["quantity"]?.GetValue<int>() ?? 1;
-
-		if (
-			itemRewardData["itemProfile"]?.ToString() is string profileId &&
-			account?.GetProfile(profileId) is GameProfile profile &&
-			itemRewardData["itemGuid"]?.ToString() is string itemId &&
-			profile.GetItem(itemId) is GameItem item
-		)
-		{
-			return item.Clone(quantity);
-		}
-		if(
-			itemRewardData["itemType"]?.ToString() is string templateId &&
-			GameItemTemplate.Get(templateId) is GameItemTemplate template
-		)
-		{
-			return template.CreateInstance(quantity);
-		}
-		if(GameItemTemplate.Get("Token:athena_unrevealedsummerquest") is GameItemTemplate ukTemplate)
-			return ukTemplate.CreateInstance(quantity);
-		return new GameItem(null, quantity);
+		var rewards = claimNotif?["loot"]?["items"]?.Deserialize<ItemReward[]>() ?? [];
+		return [.. rewards.Select(r => r.FindOrCreateReward(profile.account))];
 	}
 
 	public void SetRewardNotification(GameAccount account = null)
@@ -620,6 +607,7 @@ public class GameItem
 		if (template.Type == "Schematic" && tier == 0)
 			tier = 1;
 		if (tier == 0)
+		if (tier == 0)
 			return 0;
 
 		var level = attributes?["level"]?.GetValue<int>() ?? -1;
@@ -631,7 +619,7 @@ public class GameItem
 			bonusMax = 10;
 		if (template.Type == "Weapon" || template.Type == "Trap")
 			bonusMax = Mathf.Max(0, level - (tier * 10));
-		level = Mathf.Clamp(level, Mathf.Max(1, (tier * 10) - 10), (tier * 10) + bonusMax);
+		var debugClampedLevel = Mathf.Clamp(level, Mathf.Max(1, (tier * 10) - 10), (tier * 10) + bonusMax);
 		string ratingCategory = template.Type == "Worker" ? (template.SubType is null ? "Survivor" : "LeadSurvivor") : "Default";
 
 		int rarityLevel = template.RarityLevel;
@@ -651,11 +639,16 @@ public class GameItem
 		int ratingsLength = ratingSet["Ratings"]?.AsArray().Count ?? 0;
 		int subLevel = level - ratingSet["FirstLevel"].GetValue<int>();
 		if (subLevel < 0)
-			return 0;
+		{
+			GD.Print($"{template.TemplateId} sublevel below zero. Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			subLevel = 0;
+			//return 0;
+		}
 		if (subLevel >= ratingsLength)
 		{
-			GD.PushWarning($"{template.TemplateId} above range of ratings array ({subLevel}>={ratingsLength})");
-			return 0;
+			GD.Print($"{template.TemplateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			subLevel = ratingsLength - 1;
+			//return 0;
 		}
 		var resultRating = (int)ratingSet["Ratings"][subLevel].GetValue<float>();
 		return resultRating;

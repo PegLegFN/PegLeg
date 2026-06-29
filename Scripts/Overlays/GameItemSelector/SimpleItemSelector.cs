@@ -67,6 +67,12 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 	VirtualTabBar personalityFilter;
 	[Export]
 	Button trapDuraFilter;
+	[Export]
+	Label hiddenSelectionText;
+	[Export]
+	Button addToSelectionBtn;
+	[Export]
+	Button removeFromSelectionBtn;
 
 	public override void _Ready()
 	{
@@ -75,6 +81,12 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 		smallContainer.SetProvider(this);
 		container.Visible = false;
 		smallContainer.Visible = false;
+		hiddenSelectionText.Visible = false;
+		addToSelectionBtn.Disabled = true;
+		removeFromSelectionBtn.Disabled = true;
+
+		addToSelectionBtn.Pressed += AddFilteredToSelection;
+		removeFromSelectionBtn.Pressed += RemoveFilteredFromSelection;
 		searchInput.TextChanged += UpdateSearchFilters;
 		personalityFilter.LatestTabChanged += UpdateFilters;
 		trapDuraFilter.Pressed += () => UpdateFilters();
@@ -228,6 +240,46 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 		if (setBonusRequirement is not null && item.SetBonus?.EndsWith(setBonusRequirement) != true)
 			return false;
 		return PLSearch.EvaluateInstructions(searchInstructions, item.RawData);
+	}
+
+	protected override bool IncludeSelectionWhenFiltering => false;
+	protected override void OnItemsFiltered()
+	{
+		var unfilteredItemCount = items.Except(filteredItems).Count(IsSelected);
+		hiddenSelectionText.Visible = unfilteredItemCount > 0;
+		hiddenSelectionText.Text = $"{unfilteredItemCount.Notate()} hidden items are selected";
+
+		bool filterSelectors = items.Count(IsSelectable) != filteredItems.Count(IsSelectable);
+		addToSelectionBtn.Disabled = !filterSelectors;
+		removeFromSelectionBtn.Disabled = !filterSelectors;
+	}
+
+	void AddFilteredToSelection()
+	{
+		var toSelect = filteredItems.Where(i => IsSelectable(i) && !IsSelected(i)).ToArray();
+		foreach (var item in toSelect)
+		{
+			selectedItems.Add(item, item.quantity);
+		}
+		if (toSelect.Length>0)
+		{
+			SelectionChanged();
+			SortItems();
+		}
+	}
+
+	void RemoveFilteredFromSelection()
+	{
+		var toDeselect = filteredItems.Where(IsSelected).ToArray();
+		foreach (var item in toDeselect)
+		{
+			selectedItems.Remove(item);
+		}
+		if (toDeselect.Length>0)
+		{
+			SelectionChanged();
+			SortItems();
+		}
 	}
 
 	void CycleSort()

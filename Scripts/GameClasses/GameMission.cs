@@ -268,7 +268,7 @@ public partial class GameMission
 		var catImage = await catResponse.ReadImage();
 		if (catImage is null)
 			return;
-		if (DailyCat is null || DailyCat.GetFormat() != catImage.GetFormat())
+		if (DailyCat is null || DailyCat?.GetFormat() != catImage.GetFormat())
 			DailyCat = ImageTexture.CreateFromImage(catImage);
 		else
 			DailyCat.Update(catImage);
@@ -912,7 +912,7 @@ public partial class GameMission
 		Dictionary<string, GameItem> rewardItemDict = [];
 		foreach (var itemData in rewards ?? [])
 		{
-			GameItem item = itemData.CreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
+			GameItem item = itemData.TryCreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
 			if (item is null)
 				continue;
 			if (isFools)
@@ -936,7 +936,7 @@ public partial class GameMission
 		List<GameItem> alertModifierList = [];
 		foreach (var itemData in modifiers ?? [])
 		{
-			GameItem modifier = itemData.ToItem();
+			GameItem modifier = itemData.CreateItem();
 			modifier.SetSeenLocal();
 			modifier.GetSearchTags();
 			alertModifierList.Add(modifier);
@@ -1009,7 +1009,7 @@ public partial class GameMission
 					GD.PushWarning($"missing reward type for fulfillment \"{fid}\" in mission \"{missionData?.missionGuid}\"");
 				continue;
 			}
-			GameItem item = itemData.CreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
+			GameItem item = itemData.TryCreateItem() ?? (genericFallback ??= GameItemTemplate.Get("Token:athena_unrevealedsummerquest"))?.CreateInstance();
 			if (item is null)
 				continue;
 			item.GetSearchTags();

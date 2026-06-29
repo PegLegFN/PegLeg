@@ -29,7 +29,7 @@ public partial class CosmoRequests
 	[GeneratedRegex("=+$")]
 	private static partial Regex B64Ending();
 
-	static string GetCosmoURLFromPath(string cosmoPath, string key)
+	static string GetCosmoURLFromPath(string cosmoPath, string key, string baseURL)
 	{
 		byte[] pathBytes = cosmoPath.ToUtf8Buffer();
 		byte[] keyBytes = B64ToBytes(key);
@@ -39,10 +39,10 @@ public partial class CosmoRequests
 		byte[] hashedBytes = SHA256.HashData(byteStream);
 		var hashText = BytesToB64(hashedBytes);
 
-		return $"https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/{hashText}/png";
+		return $"{baseURL}{hashText}/png";
 	}
 
-	public static string GetCosmoURL(string templateId, string gameVer = null, string key = null, string imageType = "locker_preview_image")
+	public static string GetCosmoURL(string templateId, string imageType = "locker_preview_image", string gameVer = null, string key = null, string baseURL = null)
 	{
 		var splitTemplate = templateId.Split(':');
 		if (splitTemplate.Length < 2)
@@ -50,10 +50,11 @@ public partial class CosmoRequests
 		templateId = $"{splitTemplate[0]}:{splitTemplate[1].ToLower()}";
 		gameVer ??= PegLegResourceManager.MagicNumbers["cosmo"]?["version"]?.ToString() ?? "40.30";
 		key ??= PegLegResourceManager.MagicNumbers["cosmo"]?["key"]?.ToString() ?? "czhmP4D5JdqrFCrAM3bdrDRxHpxNJwUckrNbr+XeDHg=";
-		return GetCosmoURLFromPath($"fn/{gameVer}/{templateId}/{imageType}", key);
+		baseURL ??= PegLegResourceManager.MagicNumbers["cosmo"]?["baseUrl"]?.ToString() ?? "https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/";
+		return GetCosmoURLFromPath($"fn/{gameVer}/{templateId}/{imageType}", key, baseURL);
 	}
 
-	public static async Task<Image> FetchCosmoImage(string templateId, string gameVer = null, string key = null, string imageType = "locker_preview_image")
+	public static async Task<Image> FetchCosmoImage(string templateId, string imageType = "locker_preview_image", string gameVer = null, string key = null, string baseURL = null)
 	{
 		//template type might be needed for true uniqueness
 		//var uniqueId = templateId.Replace(":", "__");
@@ -61,7 +62,7 @@ public partial class CosmoRequests
 		if (CatalogRequests.TryGetCosmeticImage(uniqueId, 128) is Image existingTexture)
 			return existingTexture;
 
-		var url = GetCosmoURL(templateId, gameVer, key, imageType);
+		var url = GetCosmoURL(templateId, imageType, gameVer, key, baseURL);
 		using var result = await WebHelpers.MakeRequest(url).Accepts(WebMedia.Image.Any).Send();
 		if (await result.CheckForError())
 			return null;
