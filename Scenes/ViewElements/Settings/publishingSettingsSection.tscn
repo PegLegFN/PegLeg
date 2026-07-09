@@ -1,0 +1,173 @@
+[gd_scene format=3 uid="uid://lhmn6p5qhpbw"]
+
+[ext_resource type="Script" uid="uid://5vl7w6ycnlft" path="res://Scripts/Publishing/PublishSettings.cs" id="1_wjrjx"]
+[ext_resource type="Script" uid="uid://cddr668av6e55" path="res://Scripts/Publishing/Outputs/DiscordWebhooks/DiscordWebhookSettings.cs" id="1_x5pee"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_u30qh"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="3_un4jc"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="4_wjrjx"]
+[ext_resource type="Script" uid="uid://bsee8ye4allkm" path="res://Scripts/UIElements/PopupMenuHook.cs" id="5_nkdei"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="6_8fix3"]
+[ext_resource type="Script" uid="uid://bojoe20ioi08y" path="res://Scripts/Publishing/Outputs/Buffer/BufferPublishSettings.cs" id="6_cu2b4"]
+
+[sub_resource type="DPITexture" id="DPITexture_nkdei"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
+"
+
+[node name="PublishSettings" type="VBoxContainer" unique_id=533445945 node_paths=PackedStringArray("toggleEditor", "discordSettings", "bufferSettings")]
+theme_override_constants/separation = 3
+script = ExtResource("1_wjrjx")
+toggleEditor = NodePath("CheckButton")
+discordSettings = NodePath("MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord")
+bufferSettings = NodePath("MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer")
+
+[node name="CheckButton" type="CheckButton" parent="." unique_id=790854862]
+layout_mode = 2
+button_pressed = true
+text = "Display Name"
+script = ExtResource("2_u30qh")
+section = "webhooks"
+key = "summary_enabled"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1132935368]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer" unique_id=1075218155]
+layout_mode = 2
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer" unique_id=1885079189]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="VirtualTabBar" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=879055063 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("3_un4jc")]
+layout_mode = 2
+useAsTabContainer = NodePath("../MarginContainer")
+
+[node name="Tab" parent="MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("4_wjrjx")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = " Discord "
+IsPressed = true
+
+[node name="Tab2" parent="MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=331075993 instance=ExtResource("4_wjrjx")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = " Buffer "
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer" unique_id=1528180802]
+custom_minimum_size = Vector2(195, 0)
+layout_mode = 2
+theme_override_constants/margin_top = 2
+
+[node name="Discord" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=2096262545 node_paths=PackedStringArray("toggleEditor", "urlEditor")]
+process_priority = -1
+layout_mode = 2
+script = ExtResource("1_x5pee")
+toggleEditor = NodePath("CheckButton")
+urlEditor = NodePath("HBoxContainer/WH-URL")
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord" unique_id=688167097]
+layout_mode = 2
+text = "Enabled"
+script = ExtResource("2_u30qh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord" unique_id=1827423396]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/HBoxContainer" unique_id=912241085]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "URL:"
+
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/HBoxContainer" unique_id=1657682836]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = ".../webhooks/"
+
+[node name="WH-URL" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/HBoxContainer" unique_id=227784454]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "webhookId/webhookToken"
+secret = true
+script = ExtResource("6_8fix3")
+
+[node name="Buffer" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=193068881 node_paths=PackedStringArray("toggleEditor", "orgSelector", "channelMenuButton", "channelMenu")]
+visible = false
+layout_mode = 2
+script = ExtResource("6_cu2b4")
+toggleEditor = NodePath("CheckButton")
+orgSelector = NodePath("OptionButton")
+channelMenuButton = NodePath("Button")
+channelMenu = NodePath("Button/PopupMenu")
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=1043562743]
+layout_mode = 2
+text = "Enabled"
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=837441096]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Select Organization"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Not Initialised..?"
+popup/item_2/id = 2
+popup/item_2/disabled = true
+
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=446027617]
+layout_mode = 2
+theme_override_icons/icon = SubResource("DPITexture_nkdei")
+text = "0/3 Channels"
+alignment = 0
+icon_alignment = 2
+
+[node name="PopupMenu" type="PopupMenu" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=708017248]
+oversampling_override = 1.0
+size = Vector2i(90, 72)
+hide_on_item_selection = false
+hide_on_checkable_item_selection = false
+allow_search = false
+shrink_width = false
+item_count = 3
+item_0/text = "Twitter"
+item_0/checkable = 1
+item_0/id = 0
+item_1/text = "Bluesky"
+item_1/checkable = 1
+item_1/id = 1
+item_2/text = "Skibidi"
+item_2/checkable = 1
+item_2/id = 2
+
+[node name="PopupHook" type="Node" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=71945011 node_paths=PackedStringArray("menu", "hookPoint", "hookEndPoint")]
+script = ExtResource("5_nkdei")
+menu = NodePath("../PopupMenu")
+hookPoint = NodePath("../HookPoint")
+hookEndPoint = NodePath("../HookPoint2")
+
+[node name="HookPoint" type="Control" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=473008937]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[node name="HookPoint2" type="Control" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=1228672664]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[connection signal="toggled" from="CheckButton" to="MarginContainer" method="set_visible"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button/PopupHook" method="OpenMenuOnHook"]
+
+[editable path="MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar"]

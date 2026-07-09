@@ -14,7 +14,7 @@ public partial class Bootstrap : Node
 	public const string processLockPath = "user://pid";
 	const string pipeName = "PegLegPipe";
 	const int majorPackageVersion = 3;
-	const int minorPackageVersion = 0;
+	const int minorPackageVersion = 1;
 
 	public static event Action OnBootComplete;
 
@@ -139,7 +139,7 @@ public partial class Bootstrap : Node
 			window.Borderless = true;
 			window.Unfocusable = false;
 
-			AppConfig.PreloadConfig();
+			AppConfig.MigrateAndPreloadConfig();
 			var preferredScreen = AppConfig.Get("ui", "preferred_screen", -1);
 			GD.Print($"Preferred Screen: {preferredScreen}");
 			if (preferredScreen <= -1)
@@ -154,6 +154,7 @@ public partial class Bootstrap : Node
 			}
 			window.CurrentScreen = preferredScreen;
 			window.MoveToCenter();
+			BufferKeySetting.LoadLocalOrgsAndChannels();
 		}
 
 #if GODOT_ANDROID
@@ -231,43 +232,8 @@ public partial class Bootstrap : Node
 #endif
 
 #if GODOT_WINDOWS
-		/* still no workey
-		var updatePath = Helpers.GlobalisePath("user://updateTest.msi");
-		if (FileAccess.FileExists(updatePath))
-		{
-			//var batchPath = Helpers.GlobalisePath("user://update.bat");
-			//using (var batFile = FileAccess.Open(batchPath, FileAccess.ModeFlags.Write))
-			//{
-			//    batFile.StoreString("""
-			//    rem Batch script to elevate permissions for installing updates to work
-			//    rem checks if permissions 
-			//    %SystemRoot%\System32\net.exe file 1>NUL 2>NUL
-			//    if errorlevel 1 (
-			//        %SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe Start-Process -FilePath "%0" -ArgumentList "%cd%" -verb runas >NUL 2>&1
-			//        exit /b
-			//    )
-			//    cd /d %1
-			//    msiexec /i update.msi
-			//    pause
-			//    """);
-			//}
-			//int pid = OS.CreateProcess(batchPath, [], true);
-			Godot.Collections.Array output = [];
-			var aList = $"'/i \"{updatePath}\"'";
-			GD.Print(aList);
-			GD.Print("");
-			OS.Execute("powershell.exe", ["-Command", "Start-Process", "msiexec", "-ArgumentList", aList], output);
-			foreach (var a in output)
-			{
-				GD.Print(a.AsString());
-			}
-
-		}
-		*/
-		if (FileAccess.FileExists("user://update.msi"))
-			DirAccess.RemoveAbsolute("user://update.msi");
-		if (FileAccess.FileExists("user://update.bat"))
-			DirAccess.RemoveAbsolute("user://update.bat");
+		//todo: remove any update files from the update download folder that are less than or equal to the current version.
+		//Also show a notice if an update was downloaded but not installed, prompting users to install it
 #endif
 
 		try
@@ -352,17 +318,6 @@ public partial class Bootstrap : Node
 			}
 			LoadSceneWithPrefs();
 			return;
-		}
-
-		//migrate notable filter to accounts
-		if (AppConfig.TryGet<string>("missions", "notable_filter", out var filter))
-		{
-			foreach (var a in GameAccount.OwnedAccounts)
-			{
-				a.SetLocalData("notable_mission_filter", filter);
-			}
-			AppConfig.Set("missions", "lite_notable_filter", filter);
-			AppConfig.Clear("missions", "notable_filter");
 		}
 
 		progressBar.Indeterminate = true;

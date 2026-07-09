@@ -63,15 +63,20 @@ public partial class ConfigRangeHook : Node
 		AppConfig.OnConfigChanged -= UpdateValue;
 	}
 
-	private void UpdateValue(string section, string key, JsonValue val)
+	private void UpdateValue(string section, string key, JsonNode node)
 	{
 		if (section != this.section || key != this.key)
 			return;
 		valueIsChanging = true;
-		if (val.TryGetValue(out int intVal))
-			EmitSignal(SignalName.ConfigValueChanged, intVal);
-		else if (val.TryGetValue(out double doubleVal))
-			EmitSignal(SignalName.ConfigValueChanged, doubleVal);
+		if(node is JsonValue val)
+		{
+			if (val.TryGetValue(out int intVal))
+				EmitSignal(SignalName.ConfigValueChanged, intVal);
+			else if (val.TryGetValue(out double doubleVal))
+				EmitSignal(SignalName.ConfigValueChanged, doubleVal);
+			else
+				GD.PushWarning($"Could not get number from config {section}:{key}");
+		}
 		else
 			GD.PushWarning($"Could not get number from config {section}:{key}");
 		valueIsChanging = false;

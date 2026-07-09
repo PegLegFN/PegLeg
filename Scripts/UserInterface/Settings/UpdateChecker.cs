@@ -146,6 +146,8 @@ public partial class UpdateChecker : Control
 
 	Dictionary<string, string> ReadReleaseFlags(string description)
 	{
+		if (description is null)
+			return [];
 		var match = FlagParser().Match(description);
 		if (!match.Success)
 			return [];
@@ -182,7 +184,7 @@ public partial class UpdateChecker : Control
 		}
 
 #if GODOT_WINDOWS
-		var asset = release.assets.FirstOrDefault(a => a.name.EndsWith(".msi"));
+		var asset = release.assets?.FirstOrDefault(a => a.name.EndsWith(".msi")) ?? default;
 		if (asset == default)
 		{
 			await GenericConfirmationWindow.ShowError("No installer file found");

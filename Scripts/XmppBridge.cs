@@ -26,7 +26,7 @@ public partial class XmppBridge : Control
 		win.ContentScaleSize = (Vector2I)Size;
 		win.Borderless = false;
 		XmppManager.OnUserStatusChanged += TryAddAccount;
-		AppConfig.PreloadConfig();
+		AppConfig.MigrateAndPreloadConfig();
 		var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
 		account = GameAccount.GetOrCreateAccount(lastUsedId);
 		account.XmppManager.OnPartyUpdated += UpdatePartyData;

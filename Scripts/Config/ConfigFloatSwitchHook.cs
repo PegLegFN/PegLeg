@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 public partial class ConfigFloatSwitchHook : SwitchController
@@ -39,13 +40,13 @@ public partial class ConfigFloatSwitchHook : SwitchController
 			AppConfig.Set(section, key, values[storedIndex]);
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue val)
+	private void OnConfigChanged(string section, string key, JsonNode val)
 	{
 		if (this.section == section && this.key == key)
 		{
 			valueIsChanging = true;
-			var idx = Array.IndexOf(values, val.TryGetValue(out float floatVal) ? floatVal : -999);
-			if (idx == -1)
+			var idx = Array.IndexOf(values, val?.Deserialize<float>() ?? -999);
+			if (idx <= -1)
 				idx = 0;
 			SetIndex(idx);
 			valueIsChanging = false;

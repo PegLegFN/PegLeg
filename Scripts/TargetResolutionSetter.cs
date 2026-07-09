@@ -101,9 +101,9 @@ public partial class TargetResolutionSetter : Node
 		curWindow.SizeChanged -= WindowSizeChanged;
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue property)
+	private void OnConfigChanged(string section, string key, JsonNode node)
 	{
-		if (section != "ui" || key != "scale")
+		if (section != "ui" || key != "scale" || node is not JsonValue property)
 			return;
 
 		SetSize((float)property.GetValue<double>());

@@ -72,9 +72,9 @@ void fragment() {
 	burnInvis = clamp(burnInvis*20.0,0,1);
 	burnFire = clamp(burnFire*20.0,0,1);
 	
-	COLOR.rgb = mix(COLOR.rgb,FireColor.rgb,burnFire);
+	COLOR.rgb = mix(COLOR.rgb, FireColor.rgb, burnFire);
 	COLOR.a = mix(COLOR.a, 0, burnInvis);
-	COLOR*=Modulate;
+	COLOR *= Modulate;
 }
 
 //void light() {

@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using XmppDotNet.Xmpp.PubSub;
 using static GameItem;
 
 public partial class GameMission
@@ -281,7 +282,8 @@ public partial class GameMission
 		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 	};
 
-	static DiscordWebhookProxy archiveWebhook;
+	//static DiscordWebhookProxy archiveWebhook;
+	static PublisherProxy publisher;
 	static void ArchiveMissions()
 	{
 		if (!AppConfig.Get("advanced", "archive_missions", false))
@@ -290,11 +292,16 @@ public partial class GameMission
 		if (!didArchive)
 			return;
 		//optionally post a webhook message for each new file generated
-		archiveWebhook ??= new("PegLeg Mission Archive", "missionArchive");
-		archiveWebhook.Execute(
-			() => Task.FromResult(archiveName),
-			() => Task.FromResult<string[]>([archivePath])
-		).StartTask();
+		publisher ??= PublisherProxy.GetOrCreatePublisher(new("missionArchive", "PegLeg Mission Archive"));
+		publisher.AttemptPublish(platform => platform switch
+		{
+			"Discord" => new(archiveName, [archivePath]),
+			_ => null
+		}).StartTask();
+		//archiveWebhook.Execute(
+		//	() => Task.FromResult(archiveName),
+		//	() => Task.FromResult<string[]>([archivePath])
+		//).StartTask();
 	}
 
 	public static void ManuallyCreateArchive(JsonNode missionData)

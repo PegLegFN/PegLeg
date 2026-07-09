@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 public partial class MissionCollection : Control, IMissionHighlightProvider, IRecyclableElementProvider<GameMission>, IListProvider<MissionRewardSet>
 {
@@ -72,7 +73,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		SetMissionsDirty();
 	}
 
-	private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (section != "missions")
 			return;
@@ -121,7 +122,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	{
 		var searchText = testSearch;
 		if (!ignoreLargeXPSetting) //XP is now always excluded 
-			searchText = searchText.Trim() + " !XP !Gold";
+			searchText = searchText.Trim() + " !(AccountResource | CardPack XP | Gold)";
 		if (AppConfig.Get("missions", "excludeLargeEvo", true) && !ignoreLargeXPSetting)
 			searchText = searchText.Trim() + " !(templateId='reagent_c_')";
 		if (AppConfig.Get("missions", "excludeLargeReperk", false) && !ignoreLargeXPSetting)

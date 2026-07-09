@@ -72,7 +72,7 @@ public partial class ConfigTextHook : Control
 		Set("text", newVal);
 	}
 
-	private void UpdateConfigValue(string section, string key, JsonValue val)
+	private void UpdateConfigValue(string section, string key, JsonNode val)
 	{
 		if (section != this.section || key != this.key || editingValue)
 			return;

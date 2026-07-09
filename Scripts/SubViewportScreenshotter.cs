@@ -74,4 +74,19 @@ public partial class SubViewportScreenshotter : SubViewport
 		await Helpers.WaitForFrame();
 		return GetTexture().GetImage();
 	}
+
+	public async Task<(Image[] standard, Image[] opaque)> CapturePublishingScreenshots()
+	{
+		Image[] standard = [await CaptureScreenshot()];
+		Image[] opaque;
+		if (AppConfig.Get("advanced", "share_bg", false))
+			opaque = standard;
+		else
+		{
+			AppConfig.Set("advanced", "share_bg", true);
+			opaque = [await CaptureScreenshot()];
+			AppConfig.Set("advanced", "share_bg", false);
+		}
+		return (standard, opaque);
+	}
 }

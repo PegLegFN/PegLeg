@@ -93,8 +93,10 @@ public partial class TrayIcon : StatusIndicator
 
 	static int runtimeFPS = 60;
 
-	private void OnConfigChanged(string section, string key, JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode node)
 	{
+		if (node is not JsonValue value)
+			return;
 		if (section == "notification" && key == "on_minimised" && value.TryGetValue(out bool showTutoriel))
 			hasShownTutorial = !showTutoriel;
 		if (section == "ui" && key == "fps" && value.TryGetValue(out float fps))

@@ -185,29 +185,29 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Advanced"
 
-[node name="Webhooks" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" unique_id=187348734 groups=["HideTab"]]
+[node name="Publishing" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" unique_id=187348734 groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
-[node name="WebhookTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" index="0" unique_id=1194858583]
+[node name="PublishingTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" index="0" unique_id=1194858583]
 visible = false
-layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+layout_direction = 3
 button_pressed = true
 text = "
 "
 alignment = 2
 script = ExtResource("11_mv5ol")
 section = "advanced"
-key = "webhooks"
+key = "publishing"
 logChanges = true
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" index="1" unique_id=139789950]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" index="1" unique_id=139789950]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Discord Webhooks"
+text = "Publishing"
 
 [node name="Archive" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="8" unique_id=108618715 groups=["HideTab"]]
 visible = false
@@ -215,10 +215,10 @@ layout_mode = 2
 
 [node name="ArchiveTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="0" unique_id=303293712]
 visible = false
-layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+layout_direction = 3
 button_pressed = true
 text = "
 "
@@ -251,10 +251,21 @@ theme_override_font_sizes/font_size = 20
 text = "Core"
 
 [connection signal="WindowOpened" from="." to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="UpdateActiveTheme"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" method="add_to_group" binds= ["HideTab"]]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks/WebhookTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Webhooks" method="remove_from_group" binds= ["HideTab"]]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ThemeTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ThemeTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AudioTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AudioTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MissionsTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MissionsTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab/MarginContainer/Control" method="set_visible"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" method="add_to_group" binds= ["HideTab"]]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" method="remove_from_group" binds= ["HideTab"]]
 [connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
 [connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="add_to_group" binds= ["HideTab"]]
 [connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]

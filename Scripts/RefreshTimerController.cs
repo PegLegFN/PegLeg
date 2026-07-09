@@ -59,7 +59,7 @@ public partial class RefreshTimerController : Node
 	}
 	double targetDelayedOffset = 5;
 	double offset = 5;
-	private void OnConfigChanged(string section, string key, JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (section == "advanced")
 		{

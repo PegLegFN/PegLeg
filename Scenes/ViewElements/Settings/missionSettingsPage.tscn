@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="2_s2kuj"]
 [ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="3_qiwkn"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="4_n30m0"]
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="5_83ys4"]
+[ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="6_4u2l4"]
 
 [node name="MissionPage" type="VBoxContainer" unique_id=2081319794]
 offset_right = 334.0
@@ -14,8 +16,8 @@ visible = false
 layout_mode = 2
 
 [node name="HideMissionLock" type="CheckBox" parent="." unique_id=1387671364]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Hide Lock icon on Missions"
 alignment = 2
 script = ExtResource("1_p4q3c")
@@ -24,8 +26,8 @@ key = "hide_lock"
 
 [node name="Hide4xXP" type="CheckBox" parent="." unique_id=303758349]
 visible = false
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Exclude XP from 4x Rewards"
 alignment = 2
 script = ExtResource("1_p4q3c")
@@ -33,8 +35,8 @@ section = "missions"
 key = "excludeLargeXP"
 
 [node name="HideEvoMats" type="CheckBox" parent="." unique_id=832708809]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Exclude Evolution Mats from 4x Rewards"
 alignment = 2
 script = ExtResource("1_p4q3c")
@@ -43,8 +45,8 @@ key = "excludeLargeEvo"
 defaultValue = true
 
 [node name="HideReperk" type="CheckBox" parent="." unique_id=1960580171]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Exclude RE-PERK from 4x Rewards"
 alignment = 2
 script = ExtResource("1_p4q3c")
@@ -52,8 +54,8 @@ section = "missions"
 key = "excludeLargeReperk"
 
 [node name="GroupVBucks" type="CheckBox" parent="." unique_id=1911846529]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 button_pressed = true
 text = "Group V-Bucks & X-Ray Tickets as Notable"
 alignment = 2
@@ -63,8 +65,8 @@ key = "groupVBucks"
 defaultValue = true
 
 [node name="GroupLegSurvivors" type="CheckBox" parent="." unique_id=1509784846]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 button_pressed = true
 text = "Group Legendary Survivors as Notable"
 alignment = 2
@@ -84,8 +86,8 @@ layout_mode = 2
 
 [node name="GroupVBucks" type="CheckBox" parent="FoldableContainer/VBoxContainer" unique_id=1185557558]
 visible = false
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Simple Filter Mode"
 alignment = 2
 script = ExtResource("1_p4q3c")
@@ -166,8 +168,8 @@ texture = ExtResource("4_n30m0")
 expand_mode = 1
 
 [node name="ShowMissionBackgrounds" type="CheckBox" parent="." unique_id=546791083]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 button_pressed = true
 text = "Show mission background images"
 alignment = 2
@@ -233,6 +235,43 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_n30m0")
 expand_mode = 1
+
+[node name="TodoListSort" type="HBoxContainer" parent="." unique_id=341289366]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TodoListSort" unique_id=884856865]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Auto sort To-Do list"
+
+[node name="OptionButton" type="OptionButton" parent="TodoListSort" unique_id=370605026]
+custom_minimum_size = Vector2(165, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+theme_override_constants/outline_size = 0
+theme_override_constants/icon_max_width = 20
+theme_override_icons/icon = ExtResource("5_83ys4")
+selected = 0
+item_count = 8
+popup/item_0/text = "Manual"
+popup/item_0/id = 0
+popup/item_1/text = "Match Missions"
+popup/item_1/id = 1
+popup/item_2/id = 3
+popup/item_2/separator = true
+popup/item_3/text = "Standard"
+popup/item_3/id = 1337
+popup/item_4/text = "FortniteDB"
+popup/item_4/id = 465
+popup/item_5/text = "Power"
+popup/item_5/id = 160
+popup/item_6/text = "FNDB Power"
+popup/item_6/id = 333
+popup/item_7/text = "FNDB Zone Power"
+popup/item_7/id = 127
+script = ExtResource("6_4u2l4")
+section = "missions"
+key = "todo_sort_mode"
 
 [connection signal="AppliedChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="NotableItemCap/HSlider" to="NotableItemCap/HSlider" method="SetValue"]

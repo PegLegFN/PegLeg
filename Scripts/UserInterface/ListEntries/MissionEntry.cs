@@ -83,12 +83,12 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 		EmitSignalBackgroundVisible(AppConfig.Get("missions", "show_background", true));
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue val)
+	private void OnConfigChanged(string section, string key, JsonNode val)
 	{
 		if (section != "missions")
 			return;
 		if (key == "show_background")
-			EmitSignalBackgroundVisible(!val.TryGetValue(out bool show) || show);
+			EmitSignalBackgroundVisible(val.GetValue<bool?>() ?? true);
 		if (key == "hide_lock")
 			EmitSignalMissionLocked(
 				!AppConfig.Get("missions", "hide_lock", false) &&

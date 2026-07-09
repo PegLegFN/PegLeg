@@ -162,7 +162,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		}
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue val)
+	private void OnConfigChanged(string section, string key, JsonNode val)
 	{
 		if (!(section == "advanced" && key == "developer") && !(section == "inventory" && key == "customUser"))
 			return;
@@ -185,6 +185,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 	public override void _ExitTree()
 	{
 		GameAccount.ActiveAccountChanged -= UpdateAccount;
+		AppConfig.OnConfigChanged -= OnConfigChanged;
 		if (currentProfile is not null)
 			currentProfile.OnProfileChanged -= UpdateProfile;
 	}
@@ -551,7 +552,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			return;
 		var idx = Array.IndexOf(possibleItems, resultItem);
 
-		using var _ = LoadingOverlay.CreateToken();
+		//using var _ = LoadingOverlay.CreateToken();
 
 		if (!await currentProfile.TryQuery(true))
 			return;

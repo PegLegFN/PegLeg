@@ -1,11 +1,19 @@
-<Project Sdk="Godot.NET.Sdk/4.7.0">
+﻿<Project Sdk="Godot.NET.Sdk/4.7.0">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="android\**" />
+    <EmbeddedResource Remove="android\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="4.0.3.9" />
     <PackageReference Include="AWSSDK.S3" Version="4.0.17.2" />
+    <PackageReference Include="GraphQL.Client" Version="6.1.0" />
+    <PackageReference Include="GraphQL.Client.Serializer.SystemTextJson" Version="6.1.0" />
+    <PackageReference Include="JsonPath.Net" Version="3.0.2" />
+    <PackageReference Include="TimeZoneNames" Version="7.0.0" />
     <PackageReference Include="XmppDotNet" Version="3.2.6" />
     <PackageReference Include="XmppDotNet.Transport.WebSocket" Version="3.2.6" />
   </ItemGroup>

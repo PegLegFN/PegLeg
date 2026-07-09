@@ -164,7 +164,7 @@ public partial class CosmeticShopInterface : Control
 		sacButton.Text = currentSACCode;
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (section != "item_shop")
 			return;
@@ -539,60 +539,63 @@ public partial class CosmeticShopInterface : Control
 	}
 	int baseFilterValue = 0;
 	bool[] typeMasks;
-	static readonly string[] filterTypes = new string[]
-	{
-		"AthenaCharacter",
-		"AthenaCharacter",
-		"AthenaBackpack",
-		"AthenaBackpack",
-		"CosmeticShoes",
-		"AthenaPickaxe",
-		"AthenaGlider",
-		"AthenaSkyDiveContrail",
-		"AthenaDance",
-		"AthenaSpray",
-		"AthenaItemWrap",
-		"AthenaMusicPack",
-		"SparksSong",
-		"SparksGuitar",
-		"SparksMic",
-		"SparksDrum",
-		"SparksBass",
-		"SparksKeyboard",
-		"VehicleCosmetics_Wheel",
-		"VehicleCosmetics_Wheel",
-		"VehicleCosmetics_Body",
-		"VehicleCosmetics_Body",
-		"VehicleCosmetics_Skin",
-		"VehicleCosmetics_Skin",
-		"VehicleCosmetics_Booster",
-		"VehicleCosmetics_Booster",
-		"VehicleCosmetics_DriftTrail",
-		"CosmeticMimosa",
-		"UnknownLegoType",
-		"UnknownLegoType",
-		"UnknownLegoType",
-	};
-
-	static bool MatchAnyFilterIndex(List<string> toCheck, int startIndex, int length = 1)
-	{
-		for (int i = startIndex; i < startIndex + length; i++)
-		{
-			if (toCheck.Contains(filterTypes[i]))
-				return true;
-		}
-		return false;
-	}
-
-	static bool MatchAnyFilter(List<string> toCheck)
-	{
-		foreach (var filter in filterTypes)
-		{
-			if (toCheck.Contains(filter))
-				return true;
-		}
-		return false;
-	}
+	static readonly HashSet<string>[] filterTypes = 
+	[
+		[
+			"AthenaCharacter",
+			"AthenaBackpack"
+		],
+		[
+			"CosmeticShoes"
+		],
+		[
+			"AthenaPickaxe"
+		],
+		[
+			"AthenaGlider",
+			"AthenaSkyDiveContrail",
+		],
+		[
+			"AthenaDance",
+			"AthenaSpray",
+		],
+		[
+			"AthenaItemWrap",
+		],
+		[
+			"AthenaMusicPack",
+			"SparksSong",
+		],
+		[
+			"SparksGuitar",
+			"SparksMic",
+			"SparksDrum",
+			"SparksBass",
+			"SparksKeyboard",
+		],
+		[
+			"VehicleCosmetics_Wheel",
+			"VehicleCosmetics_Wheel",
+			"VehicleCosmetics_Body",
+			"VehicleCosmetics_Body",
+			"VehicleCosmetics_Skin",
+			"VehicleCosmetics_Skin",
+			"VehicleCosmetics_Booster",
+			"VehicleCosmetics_Booster",
+			"VehicleCosmetics_DriftTrail",
+		],
+		[
+			"CosmeticMimosa",
+			"CosmeticCompanion",
+			"Sidekick",
+		],
+		[
+			"UnknownLegoType",
+			"UnknownLegoType",
+			"UnknownLegoType",
+		],
+	];
+	static readonly HashSet<string> allFilterTypes = [.. filterTypes.SelectMany(f => f)];
 
 	bool IsValidEntry(CosmeticShopOfferEntry entry)
 	{
@@ -614,37 +617,21 @@ public partial class CosmeticShopInterface : Control
 			return false;
 
 		var types = entry.itemTypes;
+		bool anyFilterEnabled = false;
+		for (int i = 0; i < Mathf.Min(typeMasks.Length-1, filterTypes.Length); i++)
+		{
+			if (!typeMasks[i])
+				continue;
+			anyFilterEnabled = true;
+			if (types.Any(filterTypes[i].Contains))
+				return true;
+		}
 
-
-		if (typeMasks[0] && MatchAnyFilterIndex(types, 0, 4))
-			return true;
-		if (typeMasks[1] && MatchAnyFilterIndex(types, 4))
-			return true;
-		if (typeMasks[2] && MatchAnyFilterIndex(types, 5))
-			return true;
-		if (typeMasks[3] && MatchAnyFilterIndex(types, 6, 2))
-			return true;
-		if (typeMasks[4] && MatchAnyFilterIndex(types, 8, 2))
-			return true;
-		if (typeMasks[5] && MatchAnyFilterIndex(types, 10))
-			return true;
-		if (typeMasks[6] && MatchAnyFilterIndex(types, 11, 2))
-			return true;
-		if (typeMasks[7] && MatchAnyFilterIndex(types, 13, 5))
-			return true;
-		if (typeMasks[8] && MatchAnyFilterIndex(types, 18, 10))
-			return true;
-		if (typeMasks[9] && MatchAnyFilterIndex(types, 28))
-			return true;
-		if (typeMasks[10] && MatchAnyFilterIndex(types, 29))
-			return true;
-		if (typeMasks[11] && !MatchAnyFilter(types))
+		anyFilterEnabled |= typeMasks[^1];
+		if (typeMasks[^1] && !types.Any(allFilterTypes.Contains))
 			return true;
 
-		if (typeMasks.Any(m => m))
-			return false;
-
-		return true;
+		return !anyFilterEnabled;
 	}
 
 }

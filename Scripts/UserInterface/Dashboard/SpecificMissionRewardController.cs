@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 public partial class SpecificMissionRewardController : Control
 {
@@ -70,7 +71,7 @@ public partial class SpecificMissionRewardController : Control
 			UpdateMissions();
 	}
 
-	private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (configDependancy is null)
 			return;

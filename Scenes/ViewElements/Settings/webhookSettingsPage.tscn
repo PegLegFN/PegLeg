@@ -1,31 +1,60 @@
 [gd_scene format=3 uid="uid://clfdh2vd0pwmp"]
 
-[ext_resource type="PackedScene" uid="uid://dojyge3yqiou" path="res://Scenes/ViewElements/Settings/webhookSettingsSection.tscn" id="1_fcpwu"]
+[ext_resource type="Script" uid="uid://d18enx5oig8gc" path="res://Scripts/Publishing/Outputs/Buffer/BufferKeySetting.cs" id="1_0xmb5"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_1rwmd"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="2_mgyb4"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="3_mgyb4"]
+[ext_resource type="PackedScene" uid="uid://lhmn6p5qhpbw" path="res://Scenes/ViewElements/Settings/publishingSettingsSection.tscn" id="3_tpr6t"]
 
 [node name="WebhookPage" type="VBoxContainer" unique_id=980400473]
 
-[node name="DailySummary" parent="." unique_id=1626722277 instance=ExtResource("1_fcpwu")]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1327289792]
+layout_mode = 2
+script = ExtResource("1_0xmb5")
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1037820086]
+layout_mode = 2
+text = "Buffer API Key  "
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer" unique_id=1176463611]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Paste key here"
+secret = true
+script = ExtResource("2_mgyb4")
+section = "buffer_publish"
+key = "key"
+
+[node name="Button" type="Button" parent="HBoxContainer" unique_id=587190808]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+icon = ExtResource("3_mgyb4")
+expand_icon = true
+
+[node name="DailySummary" parent="." unique_id=2039443806 instance=ExtResource("3_tpr6t")]
 layout_mode = 2
 internalName = "dailySummary"
 displayName = "Daily Summary"
 
-[node name="PowerHour" parent="." unique_id=533445945 instance=ExtResource("1_fcpwu")]
+[node name="PowerHour" parent="." unique_id=859276681 instance=ExtResource("3_tpr6t")]
 layout_mode = 2
 internalName = "powerHour"
 displayName = "Power Hour"
 
-[node name="MissionArchive" parent="." unique_id=1281352047 instance=ExtResource("1_fcpwu")]
+[node name="MissionArchive" parent="." unique_id=159257432 instance=ExtResource("3_tpr6t")]
 layout_mode = 2
 internalName = "missionArchive"
 displayName = "Mission Archive"
 
+[node name="Tab2" parent="MissionArchive/MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=331075993]
+Disabled = true
+
 [node name="ArchiveWhVisibility" type="CheckBox" parent="MissionArchive" unique_id=1746713360]
 visible = false
-layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+layout_direction = 3
 button_pressed = true
 text = "
 "
@@ -35,4 +64,8 @@ section = "advanced"
 key = "archive_missions"
 logChanges = true
 
+[connection signal="pressed" from="HBoxContainer/Button" to="HBoxContainer" method="FetchOrgsAndChannels"]
 [connection signal="ConfigValueChanged" from="MissionArchive/ArchiveWhVisibility" to="MissionArchive" method="set_visible"]
+
+[editable path="MissionArchive"]
+[editable path="MissionArchive/MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar"]

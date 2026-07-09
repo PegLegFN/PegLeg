@@ -119,6 +119,12 @@ public static class WebHelpers
 		msg.Content = new StringContent(formContent, Encoding.UTF8, "application/x-www-form-urlencoded");
 		return msg;
 	}
+	public static T BuildFormContent<T>(this T msg, Func<MultipartFormDataContent, MultipartFormDataContent> formBuilder) where T : HttpRequestMessage
+	{
+		msg.Content?.Dispose();
+		msg.Content = formBuilder([]);
+		return msg;
+	}
 
 	public static T SetContent<T>(this T msg, HttpContent content) where T : HttpRequestMessage
 	{

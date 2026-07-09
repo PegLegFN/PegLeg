@@ -29,7 +29,7 @@ public partial class ProcessSwitchingTabContainer : TabContainer
 			CurrentTab = defaultTab;
 	}
 
-	private void ConfigChange(string section, string key, JsonValue value)
+	private void ConfigChange(string section, string key, JsonNode value)
 	{
 		if (section != "advanced" && key != "developer")
 			return;

@@ -23,7 +23,7 @@ public partial class ConfigOptionHook : OptionButton
 		ReadFromConfig();
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue val)
+	private void OnConfigChanged(string section, string key, JsonNode val)
 	{
 		if (this.section == section && this.key == key)
 			ReadFromConfig();

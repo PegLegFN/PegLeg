@@ -1,4 +1,6 @@
 using Godot;
+using Json.Path;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 public partial class AppConfig
@@ -14,7 +16,7 @@ public partial class AppConfig
 	public ExperimentalConfig experimental = new();
 	public partial class ExperimentalConfig { }
 
-	public delegate void ConfigChangeHandler(string section, string key, JsonValue value);
+	public delegate void ConfigChangeHandler(string section, string key, JsonNode value);
 	public static event ConfigChangeHandler OnConfigChanged;
 
 	//static ConfigFile configFile;
@@ -45,15 +47,48 @@ public partial class AppConfig
 		}
 	}
 
+	static bool TryGetNodeNew(string path, out JsonNode node)
+	{
+		node = null;
+
+		if (!JsonPath.TryParse(path, out var pathData) || !pathData.IsSingular)
+			return false;
+		var results = pathData.Evaluate(ConfigData);
+		if (!results.Matches.TryGetSingleValue(out var result))
+			return false;
+
+		node = result;
+		return true;
+	}
+
 	public static bool TryRead<T>(string path, out T value)
 	{
-		//reflection or source generation?...
 		value = default;
-		return false;
+		//reflection or source generation?...
+
+		if (!TryGetNodeNew(path, out var node))
+			return false;
+
+		if (node is T tNode)
+		{
+			value = tNode;
+			return true;
+		}
+
+		if (node.Deserialize<T>() is not T result)
+			return false;
+
+		value = result;
+		return true;
 	}
+
 	public static bool TryWrite<T>(string path, T value)
 	{
 		//reflection or source generation?...
+
+		if (!JsonPath.TryParse(path, out var pathData) || !pathData.IsSingular)
+			return false;
+
 		return false;
 	}
 
@@ -90,19 +125,37 @@ public partial class AppConfig
 	{
 		value = default;
 		LoadConfig();
-		var possibleVal = ConfigData[section]?[key]?.AsValue();
-		if (possibleVal is JsonValue val && val.TryGetValue<T>(out var typedVal))
+		var possibleNode = ConfigData[section ?? ""]?[key ?? ""];
+		if (possibleNode is not JsonValue val || val.TryGetValue<T>(out var typedVal) != true)
+			return false;
+		value = typedVal;
+		return true;
+	}
+
+	public static bool TryDeserialise<T>(string section, string key, out T value)
+	{
+		value = default;
+		LoadConfig();
+		var possibleNode = ConfigData[section ?? ""]?[key ?? ""];
+		if (possibleNode is null)
+			return false;
+		try
 		{
-			value = typedVal;
+			value = possibleNode.Deserialize<T>();
 			return true;
 		}
-		return false;
+		catch
+		{
+			return false;
+		}
 	}
 
 	public static T Get<T>(string section, string key, T fallback = default)
 	{
 		if (TryGet<T>(section, key, out var val))
 			return val;
+		if (TryDeserialise<T>(section, key, out var deserialised))
+			return deserialised;
 		return fallback;
 	}
 
@@ -110,9 +163,21 @@ public partial class AppConfig
 	{
 		ConfigData[section] ??= new JsonObject();
 		ConfigData[section][key] = value.JsonValue;
-		OnConfigChanged?.Invoke(section, key, ConfigData[section][key].AsValue());
+		OnConfigChanged?.Invoke(section, key, ConfigData[section][key]);
 		if (print)
 			GD.Print($"Set Config ({section}:{key} = {value.JsonValue})");
+		using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Write);
+		configFile.StoreString(ConfigData.ToString());
+	}
+
+	public static void SetSerialised<T>(string section, string key, T value, bool print = true, bool printValue = false)
+	{
+		var serialisedValue = JsonSerializer.SerializeToNode(value);
+		ConfigData[section] ??= new JsonObject();
+		ConfigData[section][key] = serialisedValue;
+		OnConfigChanged?.Invoke(section, key, ConfigData[section][key]);
+		if (print)
+			GD.Print($"Set Config ({section}:{key} = {(printValue ? serialisedValue : "<Object>")})");
 		using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Write);
 		configFile.StoreString(ConfigData.ToString());
 	}
@@ -130,7 +195,57 @@ public partial class AppConfig
 		configFile.StoreString(ConfigData.ToString());
 	}
 
-	public static void PreloadConfig() => _configData ??= LoadConfig();
+	static readonly string[] webhookMigrations = ["dailySummary", "missionArchive", "powerHour"];
+	public static void MigrateAndPreloadConfig()
+	{
+		_configData ??= LoadConfig();
+		if (_configData is null)
+			return;
+
+		//migrate notable mission filter
+		if (TryGet("missions", "notable_filter", out string notableFilter))
+		{
+			foreach (var a in GameAccount.OwnedAccounts)
+			{
+				if (a.GetLocalData("notable_mission_filter") is null)
+					a.SetLocalData("notable_mission_filter", notableFilter);
+			}
+			Set("missions", "lite_notable_filter", notableFilter);
+			Clear("missions", "notable_filter");
+		}
+
+		//migrate auto recycle filter
+		if (TryGet("automation", "recycle_filter", out string recycleFilter))
+		{
+			foreach (var a in GameAccount.OwnedAccounts)
+			{
+				if (a.GetLocalData("RecycleFilter") is null)
+					a.SetLocalData("RecycleFilter", recycleFilter);
+			}
+			Clear("automation", "recycle_filter");
+		}
+
+		if(TryGet("advanced", "webhooks", out bool oldWebhookState))
+		{
+			foreach (var shareType in webhookMigrations)
+			{
+				//enable publishing if webhooks were previously enabled for that type
+				if (Get("webhooks", $"{shareType}_enabled", false))
+				{
+					Set("publishing", $"{shareType}_enabled", true);
+
+					//disable the webhook portion if useSync was previously active
+					if(Get("webhooks", $"{shareType}_useSync", false))
+						Set("webhooks", $"{shareType}_enabled", false);
+				}
+
+				Clear("webhooks", $"{shareType}_useSync");
+				Clear("webhooks", $"{shareType}_sync");
+			}
+			Set("advanced", "publishing", oldWebhookState);
+			Clear("advanced", "webhooks");
+		}
+	}
 
 	static JsonObject LoadConfig()
 	{

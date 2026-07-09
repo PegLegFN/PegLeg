@@ -145,7 +145,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		FilterMissions();
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (section != "missions")
 			return;
@@ -281,10 +281,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		return pairs
 			//.Reverse()
 			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
-			.ThenBy(r => -r.mission.TheaterIdx)
-			.ThenBy(r => !r.item.sortingTemplate.VBucksOrXRayTickets)
-			.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
-			.ThenBy(r => -r.mission.PowerLevel)
+			.ThenByDescending(r => r.mission.TheaterIdx)
+			.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
+			.ThenByDescending(r => r.item.sortingTemplate.RarityLevel)
+			.ThenByDescending(r => r.mission.PowerLevel)
 			.ThenBy(r => r.mission.missionData.missionGenerator)
 			//.ThenBy(r => r.mission.Guid)
 			//.Reverse().OrderBy(_=>true)
@@ -296,13 +296,40 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		return pairs
 			//.Reverse()
 			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
-			.ThenBy(r => -r.mission.PowerLevel)
-			.ThenBy(r => -r.mission.TheaterIdx)
-			.ThenBy(r => -r.item.sortingTemplate.RarityLevel)
+			.ThenByDescending(r => r.mission.PowerLevel)
+			.ThenByDescending(r => r.mission.TheaterIdx)
+			.ThenByDescending(r => r.item.sortingTemplate.RarityLevel)
 			.ThenBy(r => OrderByMissionNameDB(r.mission.missionGenerator), StringComparer.InvariantCultureIgnoreCase)
 			//.ThenBy(r => r.mission.Guid)
 			//.Reverse().OrderBy(_=>true)
 			;
+	}
+
+	public static IOrderedEnumerable<MissionRewardPair> OrderByTheaterThenInversePower(IEnumerable<MissionRewardPair> pairs)
+	{
+		return pairs
+			//.Reverse()
+			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+			.ThenByDescending(r => r.mission.TheaterIdx)
+			.ThenBy(r => r.mission.PowerLevel)
+			.ThenBy(r => r.item.sortingTemplate.RarityLevel)
+			.ThenByDescending(r => OrderByMissionNameDB(r.mission.missionGenerator), StringComparer.InvariantCultureIgnoreCase)
+			//.ThenBy(r => r.mission.Guid)
+			//.Reverse().OrderBy(_=>true)
+			;
+	}
+
+	public static IEnumerable<MissionRewardPair> OrderByMode(IEnumerable<MissionRewardPair> pairs, int mode)
+	{
+		return mode switch
+		{
+			1337 => OrderByNotable(pairs),
+			160 => OrderByPower(pairs),
+			465 => OrderByDB(pairs),
+			333 => OrderByDBPower(pairs),
+			127 => OrderByTheaterThenInversePower(pairs),
+			_ => pairs,
+		};
 	}
 
 	static GameItem StandardItemSelector(GameItem item) => item;
@@ -310,42 +337,42 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	static IOrderedEnumerable<T> OrderByNotableGen<T>(IEnumerable<T> rewards, Func<T, GameItem> itemSelector)
 	{
-		var initialOrder = rewards.OrderBy(r => NotablePriority(itemSelector(r).sortingTemplate));
+		var initialOrder = rewards.OrderByDescending(r => NotablePriority(itemSelector(r).sortingTemplate));
 		return ThenByRewardPriority(initialOrder, itemSelector);
 	}
 
 	static int NotablePriority(GameItemTemplate template)
 	{
 		if (GameAccount.ActiveAccount.HasReminder(template))
-			return -25; // reminder items
+			return 25; // reminder items
 		if (template.RarityLevel == 6)
-			return -20; // mythics
+			return 20; // mythics
 		if (template.VBucksOrXRayTickets)
-			return -19; // v-bucks
+			return 19; // v-bucks
 						//if (template.TemplateId == "AccountResource:voucher_cardpack_bronze")
 						//    return -18; // upgrade llamas
 		if (template.RarityLevel == 5 && template.Type == "Worker" && template.SubType is null)
-			return -17; // legendary survivor (excl. leads)
+			return 17; // legendary survivor (excl. leads)
 		return 0;
 	}
 
 	static IOrderedEnumerable<T> ThenByRewardPriority<T>(IOrderedEnumerable<T> items, Func<T, GameItem> itemSelector)
 	{
 		return items
-			.ThenBy(r => !GameAccount.ActiveAccount.HasReminder(itemSelector(r).templateId))
-			.ThenBy(r => !(
+			.ThenByDescending(r => GameAccount.ActiveAccount.HasReminder(itemSelector(r).templateId))
+			.ThenByDescending(r => 
 				itemSelector(r).template.VBucksOrXRayTickets //||
 															 //r.item.sortingTemplate.HasLevel ||
 															 //r.item.template.DisplayName.Contains("Llama", StringComparison.InvariantCultureIgnoreCase)
-			))
+			)
 			.ThenBy(r => itemSelector(r).sortingTemplate?.Type == "AccountResource")
-			.ThenBy(r => -itemSelector(r).sortingTemplate.RarityLevel)
+			.ThenByDescending(r => itemSelector(r).sortingTemplate.RarityLevel)
 			.ThenBy(r => OrderByItemType(itemSelector(r).sortingTemplate), StringComparer.InvariantCultureIgnoreCase)
-			.ThenBy(r => -itemSelector(r).DesiredLevel)
+			.ThenByDescending(r => itemSelector(r).DesiredLevel)
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
 			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName)
 			.ThenBy(r => itemSelector(r).sortingTemplate != itemSelector(r).template)
-			.ThenBy(r => -itemSelector(r).quantity);
+			.ThenByDescending(r => itemSelector(r).quantity);
 	}
 
 
@@ -508,17 +535,18 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		if (notableMode)
 			EmitSignalHasVBucks(filteredRewards.Any(r => r.item.template.VBucksOrXRayTickets));
 
-		IOrderedEnumerable<MissionRewardPair> sortedRewards;
+		//IOrderedEnumerable<MissionRewardPair> sortedRewards;
 
-		sortedRewards = sortMode?.GetSelectedId() switch
-		{
-			160 => OrderByPower(filteredRewards),
-			465 => OrderByDB(filteredRewards),
-			333 => OrderByDBPower(filteredRewards),
-			_ => OrderByNotable(filteredRewards),
-		};
+		//sortedRewards = sortMode?.GetSelectedId() switch
+		//{
+		//	160 => OrderByPower(filteredRewards),
+		//	465 => OrderByDB(filteredRewards),
+		//	333 => OrderByDBPower(filteredRewards),
+		//	127 => OrderByTheaterThenPower(filteredRewards),
+		//	_ => OrderByNotable(filteredRewards),
+		//};
 
-		rewards = [.. sortedRewards];
+		rewards = [.. OrderByMode(filteredRewards, sortMode?.GetSelectedId() ?? 1337)];
 		int limit = AppConfig.Get("missions", "notable_count", 20);
 		if (notableMode && rewards.Count > limit)
 			rewards = rewards[..limit];

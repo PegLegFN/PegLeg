@@ -22,7 +22,7 @@ public partial class ConfigConditionalBoolPassthrough : Node
 		AppConfig.OnConfigChanged += UpdateValue;
 	}
 
-	private void UpdateValue(string section, string key, JsonValue val)
+	private void UpdateValue(string section, string key, JsonNode val)
 	{
 		if (section != this.section || key != this.key)
 			return;

@@ -232,7 +232,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	}
 
 
-	private void OnConfigChanged(string section, string key, JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		SetInteractable();
 	}
@@ -383,11 +383,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		int level = Mathf.Max(displayItem.Level, 1);
 		if (displayItem.DesiredLevel > 0)
 		{
-			int desiredLevel = displayItem.DesiredLevel;
-			level = ignoreLevelCap ? desiredLevel : displayItem.ResolveDesiredLevel();
-			tier = ((level - 1) / 10) + 1;
-			EmitSignalUncappedVisible(level < desiredLevel);
-			EmitSignalUncappedLevelTextChanged($"{levelTextPrefix}{desiredLevel}");
+			(level, tier, bool capped) = displayItem.ResolveDesiredLevelAndTier(ignoreLevelCap: ignoreLevelCap);
+			EmitSignalUncappedVisible(capped);
+			EmitSignalUncappedLevelTextChanged($"{levelTextPrefix}{displayItem.DesiredLevel}");
 		}
 		else
 		{

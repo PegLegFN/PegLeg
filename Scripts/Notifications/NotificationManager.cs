@@ -102,8 +102,10 @@ public partial class NotificationManager : Control
 		UpdateWindowTangibility();
 	}
 
-	private void OnConfigChanged(string section, string key, JsonValue value)
+	private void OnConfigChanged(string section, string key, JsonNode node)
 	{
+		if (node is not JsonValue value)
+			return;
 		if (section == "experimental" && key == "notifications" && value.TryGetValue(out bool notifsVisible))
 			window.Visible = notifsVisible;
 		if (section == "notification" && key == "scale")

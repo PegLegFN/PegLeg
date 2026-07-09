@@ -264,6 +264,11 @@ public class GameItem
 		forAccount ??= GameAccount.ActiveAccount;
 		return Mathf.Min(DesiredLevel, forAccount.GetItemLevelCap());
 	}
+	public (int level, int tier, bool capped) ResolveDesiredLevelAndTier(GameAccount forAccount = null, bool ignoreLevelCap = false)
+	{
+		var level = ignoreLevelCap ? DesiredLevel : ResolveDesiredLevel(forAccount);
+		return (level, ((level - 1) / 10) + 1, level < DesiredLevel);
+	}
 
 	GameItem[] cardPackChoices;
 	public GameItem[] CardPackChoices => cardPackChoices ??= attributes?["options"]?
@@ -603,15 +608,18 @@ public class GameItem
 			template.Type == "Ammo"
 			)
 			return 0;
+
 		var tier = template.Tier;
 		if (template.Type == "Schematic" && tier == 0)
 			tier = 1;
-		if (tier == 0)
+		var level = Level;
+
+		if (level <= 0 && DesiredLevel > 0)
+			(level, tier, _) = ResolveDesiredLevelAndTier();
+
 		if (tier == 0)
 			return 0;
-
-		var level = attributes?["level"]?.GetValue<int>() ?? -1;
-		if (level < 0)
+		if (level <= 0)
 			return 0;
 
 		var bonusMax = attributes?["max_level_bonus"]?.GetValue<int>() ?? 0;

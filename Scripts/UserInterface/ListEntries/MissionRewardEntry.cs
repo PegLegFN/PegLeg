@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Text.Json.Nodes;
+using static System.Collections.Specialized.BitVector32;
 
 public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<MissionRewardPair>
 {
@@ -19,6 +21,8 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	Label levelLabel;
 	[Export]
 	Label missionPowerLabel;
+	[Export]
+	Control todoReorderContent;
 	public Control node => this;
 
 	int _ListEntryIndex;
@@ -28,13 +32,23 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 
 	public override void _Ready()
 	{
+		if (todoReorderContent is not null)
+			todoReorderContent.Visible = AppConfig.Get("missions", "todo_sort_mode", 0) == 0;
+		AppConfig.OnConfigChanged += OnConfigChanged;
 		MissionToDoListController.OnToDoListChanged += UpdateTodoState;
 		missionEntry.MissionComplete += TryEmitComplete;
 	}
 
 	public override void _ExitTree()
 	{
+		AppConfig.OnConfigChanged -= OnConfigChanged;
 		MissionToDoListController.OnToDoListChanged -= UpdateTodoState;
+	}
+
+	private void OnConfigChanged(string section, string key, JsonNode value)
+	{
+		if (section == "missions" && key == "todo_sort_mode" && todoReorderContent is not null)
+			todoReorderContent.Visible = AppConfig.Get("missions", "todo_sort_mode", 0) == 0;
 	}
 
 	private void UpdateTodoState()

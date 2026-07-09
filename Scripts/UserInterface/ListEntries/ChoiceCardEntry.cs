@@ -15,9 +15,18 @@ public partial class ChoiceCardEntry : GameItemEntry
 
 	protected override void UpdateItem(GameItem updatedItem)
 	{
+		if (updatedItem is null)
+		{
+			ClearItem();
+			return;
+		}
 		displayEntry.SetItem(updatedItem);
 		cardViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
-
+		if (updatedItem.templateId.StartsWith("CardPack:"))
+		{
+			ownedLabel.Text = "";
+			return;
+		}
 		var prefix = updatedItem.template.GetTemplatePrefix();
 		var rarityLevel = updatedItem.template.RarityLevel;
 		var matchCount = GameAccount.ActiveAccount.GetProfile("campaign").GetItems(updatedItem.template.Type, i =>

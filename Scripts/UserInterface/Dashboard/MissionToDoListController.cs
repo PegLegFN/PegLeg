@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 public partial class MissionToDoListController : Control, IRecyclableElementProvider<MissionRewardPair>, IListProvider<MissionRewardPair>
 {
@@ -43,6 +44,7 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		GameMission.OnMissionsUpdated += GenerateRewards;
 		GameMission.OnMissionsInvalidated += ClearRewards;
 		GameAccount.ActiveAccountChanged += LoadMissions;
+		AppConfig.OnConfigChanged += OnConfigChanged;
 		LoadMissions();
 	}
 
@@ -51,7 +53,16 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		GameMission.OnMissionsUpdated -= GenerateRewards;
 		GameMission.OnMissionsInvalidated -= ClearRewards;
 		GameAccount.ActiveAccountChanged -= LoadMissions;
+		AppConfig.OnConfigChanged -= OnConfigChanged;
 		inst = null;
+	}
+
+	private void OnConfigChanged(string section, string key, JsonNode value)
+	{
+		if (section != "missions")
+			return;
+		if (key == "todo_sort_mode" || key == "sort_mode")
+			UpdateList();
 	}
 
 	bool TrimMissions()
@@ -114,11 +125,11 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	void GenerateRewards()
 	{
 		var lookup = GameMission.MissionDict ?? [];
-		targetMissionRewards = [.. targetMissionRewardData.Select<MissionRewardDataPair,MissionRewardPair>(data =>
+		targetMissionRewards = [.. targetMissionRewardData.Select(data =>
 		{
 			if (data.indexOfReward < 0 || !lookup.TryGetValue(data.missionGUID, out var mission) || mission.allItems.Length <= data.indexOfReward)
 				return default;
-			return new(mission, mission.allItems[data.indexOfReward]);
+			return new MissionRewardPair(mission, mission.allItems[data.indexOfReward]);
 		}).Where(r => r.item is not null)];
 		if (TrimMissions())
 			SaveMissions();
@@ -126,11 +137,29 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		OnToDoListChanged?.Invoke();
 	}
 
+
+	int prevSort = 0;
 	void UpdateList()
 	{
 		CheckForNewDay();
 		if (tab is not null)
 			tab.Text = $"To-Do List ({targetMissionRewards.Count})";
+
+		var todoSort = AppConfig.Get("missions", "todo_sort_mode", 0);
+		if (todoSort == 1)
+			todoSort = AppConfig.Get("missions", "sort_mode", 0);
+
+		if (prevSort != 0 && todoSort == 0)
+		{
+			prevSort = 0;
+			GenerateRewards();
+			return;
+		}
+		prevSort = todoSort;
+
+		if (todoSort != 0)
+			targetMissionRewards = [.. MissionRewardsController.OrderByMode(targetMissionRewards, todoSort)];
+
 		missionList?.UpdateList(true);
 		newMissionList?.UpdateList();
 	}

@@ -36,7 +36,7 @@ public partial class VolumeHook : Node
 		EmitSignal(SignalName.UpdateVolumeState, VolumeController.GetBusVolume(targetBusName));
 	}
 
-	void CheckConfigUpdate(string section, string key, JsonValue value)
+	void CheckConfigUpdate(string section, string key, JsonNode value)
 	{
 		if (section != "audio")
 			return;
