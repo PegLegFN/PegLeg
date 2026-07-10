@@ -151,7 +151,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 		return res.FirstOrDefault().Key ?? GameItem.Empty;
 	}
 	public static async Task<GameItem[]> OpenMultiSelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
-		[.. (await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true }) ?? []).Select(kvp => kvp.Key)];
+		[.. (await instance.OpenSelectorInternal(itemOptions, config with { multiselectMode = true }) ?? []).Select(kvp => kvp.Key)];//does not differentiate between cancellation and an empty selection
 	public static async Task<KeyValuePair<GameItem, int>> OpenQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>
 		(await instance.OpenSelectorInternal(itemOptions, config with { quantitySelection = true }) ?? []).FirstOrDefault();
 	public static async Task<KeyValuePair<GameItem, int>[]> OpenMultiQuantitySelector(IEnumerable<GameItem> itemOptions, Config config = null) =>

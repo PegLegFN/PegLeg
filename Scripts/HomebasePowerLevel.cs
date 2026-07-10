@@ -167,24 +167,29 @@ public partial class HomebasePowerLevel : Control
 
 	public async void TempClaimRewards()
 	{
-		if (
-			await GenericConfirmationWindow.ShowConfirmation(
-				"Claim Rewards?", 
-				contextText: "Claim Mission Alert Rewards and all non-choice quests?", 
-				warningText: "Quests with Choice Rewards can only be claimed from the Quests tab", 
-				postiveText: "Claim"
-			) != true
-		)
+		var confirmation = await GenericConfirmationWindow.ShowConfirmation(
+			"Claim Rewards?",
+			contextText: "Claim Mission Alert Rewards and all non-choice quests?",
+			warningText: "Quests with Choice Rewards can only be claimed from the Quests tab",
+			postiveText: "Claim",
+			negativeText: "Alert Only"
+		);
+		if (confirmation is null)
 			return;
 		using var loadingToken = LoadingOverlay.CreateToken();
 		var profile = currentAccount.GetProfile("campaign");
 		await profile.Query(true);
 
-		var questsToClaim = profile.GetItems("Quest", QuestPredicate);
-		var packsToClaim = profile.GetItems("CardPack", PackPredicate);
+		var questsToClaim = confirmation == true ? profile.GetItems("Quest", QuestPredicate) : [];
+		var packsToClaim = confirmation == true ? profile.GetItems("CardPack", PackPredicate) : [];
 		bool unclaimedAlert = profile.statAttributes?["mission_alert_redemption_record"]?.AsObject().ContainsKey("pendingMissionAlertRewards") == true;
 		var total = questsToClaim.Length + (packsToClaim.Length > 0 ? 1 : 0) + (unclaimedAlert ? 1 : 0);
 		int progress = 0;
+
+		if (questsToClaim.Length == 0 && packsToClaim.Length == 0 && unclaimedAlert)
+			GD.Print("Claiming alert only");
+		else if(questsToClaim.Length > 0 || packsToClaim.Length > 0)
+			GD.Print($"Claiming {questsToClaim.Length} quests and {packsToClaim.Length} packs{(unclaimedAlert ? " plus alert rewards" : "")}");
 
 		List<GameItem> rewards = [];
 
@@ -226,30 +231,36 @@ public partial class HomebasePowerLevel : Control
 		}
 		loadingToken.Dispose();
 
-		if (rewards.Count > 0)
+		if (rewards.Count == 0)
 		{
-			foreach (var item in rewards)
-			{
-				item.GetSearchTags();
-				item.GenerateRawData();
-			}
-			var toRecycle = await SimpleItemSelector.OpenMultiSelector(rewards, SimpleItemSelector.RecycleConfig with
-			{
-				allowCancel = false,
-				allowEmptySelection = true,
-				unselectableMarkerTex = null,
-				unselectableTintColor = Colors.Transparent,
-			});
-			var recycleIds = toRecycle.Select(item => (JsonNode)item.uuid).Where(id => id is not null).ToArray();
-			if (toRecycle.Length > 0)
-			{
-				JsonObject content = new()
-				{
-					["targetItemIds"] = new JsonArray(recycleIds)
-				};
-				GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", content).StartTask();
-			}
+			GD.Print("No rewards claimed");
+			return;
 		}
+
+		GD.Print($"Claimed {rewards.Count} rewards");
+		foreach (var item in rewards)
+		{
+			item.GetSearchTags();
+			item.GenerateRawData();
+		}
+		var toRecycle = await SimpleItemSelector.OpenMultiSelector(rewards, SimpleItemSelector.RecycleConfig with
+		{
+			title = "Mission/Quest Rewards",
+			allowCancel = false,
+			allowEmptySelection = true,
+			unselectableMarkerTex = null,
+			unselectableTintColor = Colors.Transparent,
+		});
+		var recycleIds = toRecycle.Select(item => item.uuid).Where(id => id is not null).ToArray();
+		if (toRecycle.Length == 0)
+			return;
+
+		JsonObject recycleContent = new()
+		{
+			["targetItemIds"] = new JsonArray([..recycleIds])
+		};
+		GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).PerformOperation("RecycleItemBatch", recycleContent).StartTask();
+		GD.Print($"Recycled {recycleIds.Length} rewards");
 	}
 
 	public override void _ExitTree()

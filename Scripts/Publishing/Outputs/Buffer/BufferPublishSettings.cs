@@ -5,6 +5,8 @@ using System.Text.Json.Nodes;
 
 public partial class BufferPublishSettings : Control
 {
+	[Signal]
+	public delegate void EnabledChangedEventHandler(bool newValue);
 	[Export]
 	string internalName;
 	[ExportGroup("Nodes")]
@@ -49,10 +51,12 @@ public partial class BufferPublishSettings : Control
 			toggleEditor.Disabled = true;
 			toggleEditor.Text = "Buffer Key Missing";
 			toggleEditor.ButtonPressed = false;
+			EmitSignalEnabledChanged(false);
 			return;
 		}
 		toggleEditor.Text = "Enabled";
 		toggleEditor.ButtonPressed = AppConfig.Get("buffer_publish", internalName + "_enabled", false);
+		EmitSignalEnabledChanged(toggleEditor.ButtonPressed);
 		toggleEditor.Disabled = false;
 		orgSelector.Visible = true;
 		orgSelector.Visible = true;
@@ -109,6 +113,7 @@ public partial class BufferPublishSettings : Control
 		if (currentlyEnabled == toggledOn)
 			return;
 		AppConfig.Set("buffer_publish", internalName + "_enabled", toggledOn);
+		EmitSignalEnabledChanged(toggledOn);
 	}
 
 	private void OnOrgSelected(long index)

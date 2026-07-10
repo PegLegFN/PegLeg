@@ -8,6 +8,19 @@
 [ext_resource type="Script" uid="uid://bsee8ye4allkm" path="res://Scripts/UIElements/PopupMenuHook.cs" id="5_nkdei"]
 [ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="6_8fix3"]
 [ext_resource type="Script" uid="uid://bojoe20ioi08y" path="res://Scripts/Publishing/Outputs/Buffer/BufferPublishSettings.cs" id="6_cu2b4"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="6_i51hb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7suju"]
+resource_name = "Blocker"
+bg_color = Color(0.1, 0.1, 0.1, 0.6784314)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
 
 [sub_resource type="DPITexture" id="DPITexture_nkdei"]
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
@@ -67,47 +80,70 @@ process_priority = -1
 layout_mode = 2
 script = ExtResource("1_x5pee")
 toggleEditor = NodePath("CheckButton")
-urlEditor = NodePath("HBoxContainer/WH-URL")
+urlEditor = NodePath("MarginContainer/DiscordSettings/HBoxContainer/WH-URL")
 
 [node name="CheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord" unique_id=688167097]
 layout_mode = 2
 text = "Enabled"
 script = ExtResource("2_u30qh")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord" unique_id=1827423396]
+[node name="BlockerLogic" type="Node" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/CheckButton" unique_id=855182146]
+script = ExtResource("6_i51hb")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord" unique_id=1247829552]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/HBoxContainer" unique_id=912241085]
+[node name="DiscordSettings" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer" unique_id=950325899]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer/DiscordSettings" unique_id=1827423396]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer/DiscordSettings/HBoxContainer" unique_id=912241085]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "URL:"
 
-[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/HBoxContainer" unique_id=1657682836]
+[node name="Label2" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer/DiscordSettings/HBoxContainer" unique_id=1657682836]
 layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = ".../webhooks/"
 
-[node name="WH-URL" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/HBoxContainer" unique_id=227784454]
+[node name="WH-URL" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer/DiscordSettings/HBoxContainer" unique_id=227784454]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "webhookId/webhookToken"
 secret = true
 script = ExtResource("6_8fix3")
 
+[node name="Blocker" type="Panel" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer" unique_id=719644386]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7suju")
+
 [node name="Buffer" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=193068881 node_paths=PackedStringArray("toggleEditor", "orgSelector", "channelMenuButton", "channelMenu")]
 visible = false
 layout_mode = 2
 script = ExtResource("6_cu2b4")
 toggleEditor = NodePath("CheckButton")
-orgSelector = NodePath("OptionButton")
-channelMenuButton = NodePath("Button")
-channelMenu = NodePath("Button/PopupMenu")
+orgSelector = NodePath("MarginContainer/BufferSettings/OptionButton")
+channelMenuButton = NodePath("MarginContainer/BufferSettings/Button")
+channelMenu = NodePath("MarginContainer/BufferSettings/Button/PopupMenu")
+
+[node name="BlockerLogic" type="Node" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=409643134]
+script = ExtResource("6_i51hb")
 
 [node name="CheckButton" type="CheckButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=1043562743]
 layout_mode = 2
 text = "Enabled"
 
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=837441096]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=777930041]
+layout_mode = 2
+
+[node name="BufferSettings" type="VBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer" unique_id=728097688]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings" unique_id=837441096]
 layout_mode = 2
 selected = 0
 item_count = 3
@@ -119,14 +155,14 @@ popup/item_2/text = "Not Initialised..?"
 popup/item_2/id = 2
 popup/item_2/disabled = true
 
-[node name="Button" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" unique_id=446027617]
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings" unique_id=446027617]
 layout_mode = 2
 theme_override_icons/icon = SubResource("DPITexture_nkdei")
 text = "0/3 Channels"
 alignment = 0
 icon_alignment = 2
 
-[node name="PopupMenu" type="PopupMenu" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=708017248]
+[node name="PopupMenu" type="PopupMenu" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings/Button" unique_id=708017248]
 oversampling_override = 1.0
 size = Vector2i(90, 72)
 hide_on_item_selection = false
@@ -144,20 +180,20 @@ item_2/text = "Skibidi"
 item_2/checkable = 1
 item_2/id = 2
 
-[node name="PopupHook" type="Node" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=71945011 node_paths=PackedStringArray("menu", "hookPoint", "hookEndPoint")]
+[node name="PopupHook" type="Node" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings/Button" unique_id=71945011 node_paths=PackedStringArray("menu", "hookPoint", "hookEndPoint")]
 script = ExtResource("5_nkdei")
 menu = NodePath("../PopupMenu")
 hookPoint = NodePath("../HookPoint")
 hookEndPoint = NodePath("../HookPoint2")
 
-[node name="HookPoint" type="Control" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=473008937]
+[node name="HookPoint" type="Control" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings/Button" unique_id=473008937]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
 
-[node name="HookPoint2" type="Control" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" unique_id=1228672664]
+[node name="HookPoint2" type="Control" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings/Button" unique_id=1228672664]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -167,7 +203,15 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 
+[node name="Blocker" type="Panel" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer" unique_id=415523023]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7suju")
+
 [connection signal="toggled" from="CheckButton" to="MarginContainer" method="set_visible"]
-[connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/Button/PopupHook" method="OpenMenuOnHook"]
+[connection signal="ConfigValueChanged" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/CheckButton" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/CheckButton/BlockerLogic" method="EmitInverted"]
+[connection signal="InvertedValue" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/CheckButton/BlockerLogic" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Discord/MarginContainer/Blocker" method="set_visible"]
+[connection signal="EnabledChanged" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/BlockerLogic" method="EmitInverted"]
+[connection signal="InvertedValue" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/BlockerLogic" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/Blocker" method="set_visible"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings/Button" to="MarginContainer/PanelContainer/VBoxContainer/MarginContainer/Buffer/MarginContainer/BufferSettings/Button/PopupHook" method="OpenMenuOnHook"]
 
 [editable path="MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar"]

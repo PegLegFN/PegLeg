@@ -22,8 +22,7 @@ public partial class UpdateChecker : Control
 	public override void _Ready()
 	{
 		CheckForUpdates();
-		if (currentVersionLabel is not null)
-			currentVersionLabel.Text = AppConfig.PegLegVersion.ToString();
+		currentVersionLabel?.Text = AppConfig.PegLegVersion.ToString();
 	}
 
 	bool isChecking = false;
@@ -46,6 +45,7 @@ public partial class UpdateChecker : Control
 			if (OS.HasFeature("editor"))
 			{
 				currentVer = currentVer with { patch = currentVer.patch - 2 };
+				GD.Print($"For testing purposes, the updater considers itself as {currentVer}");
 				//failMsg.Text = "Auto updates disabled in editor builds.";
 				//return;
 			}
@@ -95,12 +95,11 @@ public partial class UpdateChecker : Control
 				}
 				UpdateNotificationHook.SetNotifVisible();
 				possibleLatestRelease = filteredReleases[0];
-				latestIsBreakpoint = false;
-				if (filteredReleases.LastOrDefault(r => r.body.Contains("BREAKPOINT")) is ReleaseData breakpointRelease)
-				{
-					latestIsBreakpoint = possibleLatestRelease == breakpointRelease;
+				var breakpointRelease = filteredReleases.LastOrDefault(r => r.body.Contains("BREAKPOINT"));
+				latestIsBreakpoint = breakpointRelease != default && breakpointRelease == possibleLatestRelease;
+				if (breakpointRelease != default)
 					possibleLatestRelease = breakpointRelease;
-				}
+
 				//show filtered releases
 				for (int i = 0; i < filteredReleases.Length; i++)
 				{
