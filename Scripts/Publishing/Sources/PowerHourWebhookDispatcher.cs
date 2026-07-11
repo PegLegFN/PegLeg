@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TimeZoneNames;
 
@@ -91,6 +92,9 @@ public partial class PowerHourWebhookDispatcher : Node
 
 	public async void ForceExecuteHeadsup()
 	{
+		var confirm = await GenericConfirmationWindow.ShowConfirmation("Publish Power Hour Headsup?", warningText: "This will immediately publish onto all enabled platforms");
+		if (confirm != true)
+			return;
 		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
 		//await inst.webhook.Execute(true, currentContentProvider: async () => $"A Power Hour is scheduled to occur {curEvt.start.Discordify()}.\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
 		await Publish(headsup, curEvt.start);
@@ -115,8 +119,9 @@ public partial class PowerHourWebhookDispatcher : Node
 		}
 	}
 
-	static TimeZoneInfo displayTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time\\Dynamic DST");
-	static TimeZoneValues displayTimeZoneShorthand = TZNames.GetAbbreviationsForTimeZone(displayTimeZone.Id, "en-GB");
+	static TimeZoneInfo displayTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+	static TimeZoneValues displayTimeZoneShorthand = TZNames.GetAbbreviationsForTimeZone(displayTimeZone.Id, "en-US");
+	//static string[] timezones = [.. TimeZoneInfo.GetSystemTimeZones().Select(i => i.Id)];
 	async Task Publish(string template, DateTime timestamp, bool noImage = false)
 	{
 		var utcTime = timestamp.ToUniversalTime();
@@ -128,7 +133,7 @@ public partial class PowerHourWebhookDispatcher : Node
 		await publisher.AttemptPublish(platform => platform switch
 		{
 			"Discord" => new(template.Replace("{timestamp}", timestamp.Discordify()) + discordSuffix, images: standard),
-			_ => new(template.Replace("{timestamp}", $"at {displayTime:H:mm} {displayZone} ({utcTime:H:mm} UTC)"), images: opaque)
+			_ => new(template.Replace("{timestamp}", $"at {displayTime:h:mm tt} {displayZone} ({utcTime:H:mm} UTC)"), images: opaque)
 		});
 	}
 

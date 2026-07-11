@@ -160,11 +160,7 @@ layout_mode = 2
 [node name="PowerHourAlert" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=878248880 instance=ExtResource("6_ury42")]
 layout_mode = 2
 
-[node name="Label" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="1" unique_id=451205499]
-size_flags_horizontal = 3
-horizontal_alignment = 0
-
-[node name="Button3" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="3" unique_id=948893207]
+[node name="Button3" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="5" unique_id=948893207]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -179,7 +175,7 @@ offset_right = 40.0
 offset_bottom = 22.0
 mouse_filter = 2
 script = ExtResource("7_6rsuw")
-section = "webhooks"
+section = "publishing"
 key = "powerHour_enabled"
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=2049702868]
@@ -430,6 +426,7 @@ render_target_update_mode = 0
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button" to="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All" method="ReloadMissions"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button2" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button3" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
+[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
 [connection signal="ConfigValueChanged" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3/CheckButton" to="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" method="set_visible"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/HBoxContainer/DashboardLlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="ShareableLlamaSummary/LlamaSummaryViewport" method="CopyScreenshot"]

@@ -24,10 +24,13 @@ public partial class PowerHourAlert : Control
 	Label noModifiersLabel;
 	[Export]
 	Control anecdoteParent;
+	[Export]
+	Label timeText;
 
 	Control[] anecdotes = [];
 	public override void _Ready()
 	{
+		timeText.Text = "";
 		anecdotes = [.. anecdoteParent.GetChildren().OfType<Control>()];
 		if (useHeadsUpForVisibility)
 		{
@@ -66,6 +69,7 @@ public partial class PowerHourAlert : Control
 			Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
 
 		bool isActive = phEvent.start < now;
+		timeText.Text = isActive ? "Ends in" : "Starts in";
 		header.Text = isActive ? activeText : incomingText;
 		if (isActive)
 			countdown.SetCustomRefreshTime(phEvent.end, phEvent.start);

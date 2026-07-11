@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dyamj784om2nv" path="res://Scripts/UserInterface/Dashboard/PowerHourAlert.cs" id="1_smp72"]
 [ext_resource type="PackedScene" uid="uid://3xbl5x8mbmjv" path="res://Scenes/GameItemEntry/mission_alert_entry_medium.tscn" id="2_0ofo2"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="3_0pbo2"]
+[ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_bejgr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smp72"]
 content_margin_left = 5.0
@@ -17,9 +18,9 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel", "anecdoteParent")]
-offset_right = 437.0
-offset_bottom = 86.0
+[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel", "anecdoteParent", "timeText")]
+offset_right = 714.0
+offset_bottom = 182.0
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_smp72")
@@ -32,6 +33,7 @@ modifierEntryList = [NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry"), 
 noModifiers = NodePath("VBoxContainer/HBoxContainer/Label")
 noModifiersLabel = NodePath("VBoxContainer/HBoxContainer/Label")
 anecdoteParent = NodePath("VBoxContainer/Anecdotes")
+timeText = NodePath("VBoxContainer/HBoxContainer/Label2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=73010128]
 layout_mode = 2
@@ -61,14 +63,40 @@ uppercase = true
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=451205499]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.51171875, 0.51171875, 0.51171875, 1)
 text = "(Validation status)"
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1929342216]
+layout_mode = 2
+text = "Starts in"
 horizontal_alignment = 1
 
 [node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("1_afrxp")]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 customCritTime = 300
+
+[node name="ShareBtn" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1655011011]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ShareBtn" unique_id=213720266]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bejgr")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Modifiers" type="Container" parent="VBoxContainer" unique_id=679697045]
 layout_mode = 2
