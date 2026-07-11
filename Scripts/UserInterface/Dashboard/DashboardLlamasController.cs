@@ -14,13 +14,17 @@ public partial class DashboardLlamasController : Control
 	Control llamaEntryContainer;
 
 	GameOfferEntry[] llamaEntries;
+	Label[] llamaPriorities;
 
 	public override void _Ready()
 	{
-		llamaEntries = [.. llamaEntryContainer
-			.GetChildren()
-			.Select(c => c is GameOfferEntry offerEntry ? offerEntry : null)
-			.Where(oe => oe is not null)];
+		llamaEntries = [.. 
+			llamaEntryContainer
+				.GetChildren()
+				.Select(c => c is GameOfferEntry offerEntry ? offerEntry : null)
+				.Where(oe => oe is not null)
+		];
+		llamaPriorities = [..llamaEntries.Select(l => l.GetNode<Label>("%LlamaPriority"))];
 		VisibilityChanged += LoadShopLlamas;
 		RefreshTimerController.OnHourChanged += UpdateShopLlamas;
 		GameAccount.ActiveAccountChanged += UpdateShopLlamas;
@@ -72,6 +76,21 @@ public partial class DashboardLlamasController : Control
 
 			await GameAccount.ActiveAccount.GenerateXRayLlamaResults(offers.Any(o => o.Price.quantity == 0));
 
+			var priorityGroups = offers
+				.Where(o => o.rawData["catalogGroup"]?.ToString() == "Shared")
+				.GroupBy(o => o.rawData["catalogGroupPriority"]?.GetValue<int>() ?? 0)
+				.OrderByDescending(g=>g.Key)
+				.ToList();
+
+			var priorityMap = priorityGroups
+				.SelectMany(group => group.Select(offer => (offer, group)))
+				.ToDictionary(
+					pair => pair.offer.OfferId,
+					pair => priorityGroups.IndexOf(pair.group)
+				);
+			if (priorityMap.Count == 1)
+				priorityMap.Clear();
+
 			for (int i = 0; i < llamaEntries.Length; i++)
 			{
 				var thisEntry = llamaEntries[i];
@@ -82,6 +101,18 @@ public partial class DashboardLlamasController : Control
 				}
 				thisEntry.Visible = true;
 				thisEntry.SetOffer(offers[i]).StartTask();
+				var id = offers[i].OfferId;
+				if (!priorityMap.TryGetValue(id, out int groupIndex))
+					continue;
+				llamaPriorities[i].Text = groupIndex switch
+				{
+					0 => "First",
+					1 => "Second",
+					2 => "Third",
+					3 => "Fourth",
+					4 => "Fifth",
+					_ => ""
+				};
 			}
 			success = true;
 		}

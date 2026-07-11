@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://pcyuj0ewudy3"]
+[gd_scene format=3 uid="uid://pcyuj0ewudy3"]
 
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="1_bf3l3"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="2_m35jj"]
@@ -16,12 +16,12 @@ shader = ExtResource("2_sdxsh")
 shader_parameter/packIcon = ExtResource("3_kd85f")
 shader_parameter/useMask = false
 
-[node name="LlamaHighlightDBStyle" type="HBoxContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+[node name="LlamaHighlightDBStyle" type="HBoxContainer" unique_id=911756334 node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
 script = ExtResource("1_bf3l3")
 grantedItemEntry = NodePath("Llama")
 priceEntry = NodePath("Llama/Price")
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="Icon" type="TextureRect" parent="." unique_id=1611596503]
 material = SubResource("ShaderMaterial_efhpm")
 custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
@@ -29,7 +29,8 @@ texture = ExtResource("4_f43w7")
 expand_mode = 1
 script = ExtResource("4_iopkv")
 
-[node name="LlamaStock" type="Label" parent="Icon"]
+[node name="LlamaStock" type="Label" parent="Icon" unique_id=2841525]
+custom_minimum_size = Vector2(1, 0)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -46,18 +47,35 @@ horizontal_alignment = 2
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="IsFree" type="Node" parent="."]
+[node name="LlamaPriority" type="Label" parent="Icon" unique_id=2030139195]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -19.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 12
+vertical_alignment = 2
+autowrap_mode = 3
+
+[node name="IsFree" type="Node" parent="." unique_id=1614923312]
 script = ExtResource("2_m35jj")
 
-[node name="Llama" type="VBoxContainer" parent="."]
+[node name="Llama" type="VBoxContainer" parent="." unique_id=1991489026]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource("3_jueem")
 
-[node name="Name" type="Label" parent="Llama"]
-custom_minimum_size = Vector2(0, 40)
+[node name="Name" type="Label" parent="Llama" unique_id=262577709]
+custom_minimum_size = Vector2(1, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = -2
@@ -67,22 +85,22 @@ vertical_alignment = 1
 autowrap_mode = 2
 text_overrun_behavior = 3
 
-[node name="Price" type="HBoxContainer" parent="Llama"]
+[node name="Price" type="HBoxContainer" parent="Llama" unique_id=781018642]
 layout_mode = 2
 alignment = 1
 script = ExtResource("3_c5s7e")
 
-[node name="TextureRect" type="TextureRect" parent="Llama/Price"]
+[node name="TextureRect" type="TextureRect" parent="Llama/Price" unique_id=1836153273]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("4_f00de")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Llama/Price"]
+[node name="Label" type="Label" parent="Llama/Price" unique_id=737408167]
 layout_mode = 2
 text = "1000"
 
-[node name="FreeMarker" type="Label" parent="Llama"]
+[node name="FreeMarker" type="Label" parent="Llama" unique_id=1549217280]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.929412, 1, 1, 1)
