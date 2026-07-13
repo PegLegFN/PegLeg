@@ -305,8 +305,7 @@ public partial class PartyLoadoutsInterface : Control
 	private void Clear() => Clear(false);
 	private void Clear(bool animated)
 	{
-		if (primaryUsername is not null)
-			primaryUsername.Text = "";
+		primaryUsername?.Text = "";
 		primaryLoadoutPanel?.ClearLoadout(animated);
 		for (int i = 0; i < 3; i++)
 		{

@@ -43,8 +43,7 @@ public partial class QuestNode : Control
 	{
 		this.displayAsLocked = displayAsLocked;
 		selectedToggle.ButtonGroup = buttonGroup;
-		if (questData is not null)
-			questData.OnPropertiesUpdated -= RefreshQuestNode;
+		questData?.OnPropertiesUpdated -= RefreshQuestNode;
 		questData = newQuestData;
 		questData.OnPropertiesUpdated += RefreshQuestNode;
 
@@ -122,7 +121,6 @@ public partial class QuestNode : Control
 
 	public override void _ExitTree()
 	{
-		if (questData is not null)
-			questData.OnPropertiesUpdated -= RefreshQuestNode;
+		questData?.OnPropertiesUpdated -= RefreshQuestNode;
 	}
 }

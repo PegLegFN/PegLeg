@@ -61,36 +61,26 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		{
 			item.Visible = false;
 		}
-		if (heavySearchWarning is not null)
-			heavySearchWarning.Visible = false;
+		heavySearchWarning?.Visible = false;
 		GameAccount.ActiveAccountChanged += UpdateAccount;
 		itemList.SetProvider(this);
 		searchBox.TextChanged += _ => LightweithtApplyFilters();
 		searchBox.TextSubmitted += _ => ApplyFilters();
 		var dev = AppConfig.Get("advanced", "developer", false) && allowDevMode;
-		if (targetUser is not null)
+		targetUser?.TextSubmitted += t =>
 		{
-			targetUser.TextSubmitted += t =>
-			{
-				AppConfig.Set("inventory", "customUser", t);
-				UpdateAccount();
-			};
-			targetUser.Visible = dev;
-			targetUser.Text = dev ? AppConfig.Get("inventory", "customUser", "") : "";
-		}
-		if (devAllPanel is not null)
-			devAllPanel.Visible = dev;
-		if (devAllButton is not null)
-			devAllButton.Toggled += SetTypeFilter;
-		if (researchTokenButton is not null)
-			researchTokenButton.Pressed += ShowResearchTokenMenu;
-		if (researchTokenArea is not null)
-			researchTokenArea.Visible = false;
+			AppConfig.Set("inventory", "customUser", t);
+			UpdateAccount();
+		};
+		targetUser?.Visible = dev;
+		targetUser?.Text = dev ? AppConfig.Get("inventory", "customUser", "") : "";
+		devAllPanel?.Visible = dev;
+		devAllButton?.Toggled += SetTypeFilter;
+		researchTokenButton?.Pressed += ShowResearchTokenMenu;
+		researchTokenArea?.Visible = false;
 
 		if (!string.IsNullOrWhiteSpace(autoDismantleRules))
-		{
 			autoDismantleInstructions = PLSearch.GenerateSearchInstructions(autoDismantleRules);
-		}
 
 		tabBar.SetTabPressed(0);
 		tabBar.TabsChanged += SetTypeFilter;
@@ -168,8 +158,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			return;
 
 		bool dev = AppConfig.Get("advanced", "developer", false) && allowDevMode;
-		if (devAllPanel is not null)
-			devAllPanel.Visible = dev;
+		devAllPanel?.Visible = dev;
 		if (targetUser is not null)
 		{
 			targetUser.Visible = dev;
@@ -186,8 +175,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 	{
 		GameAccount.ActiveAccountChanged -= UpdateAccount;
 		AppConfig.OnConfigChanged -= OnConfigChanged;
-		if (currentProfile is not null)
-			currentProfile.OnProfileChanged -= UpdateProfile;
+		currentProfile?.OnProfileChanged -= UpdateProfile;
 	}
 
 	bool filterNew;
@@ -401,8 +389,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		totalItemCount ??= currentProfile?.GetItems().Length;
 		if ((totalItemCount ?? 0) < 3500)
 			ApplyFilters();
-		else if (heavySearchWarning is not null)
-			heavySearchWarning.Visible = true;
+		else
+			heavySearchWarning?.Visible = true;
 	}
 
 	static bool EvaluateTypeFilter(GameItem item, string filter)

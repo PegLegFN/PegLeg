@@ -173,10 +173,7 @@ public partial class XpLimitController : Control
 			superchargedContent.Visible = true;
 		}
 		else
-		{
-			if (superchargedContent is not null)
-				superchargedContent.Visible = false;
-		}
+			superchargedContent?.Visible = false;
 
 		var currentXP = brProfile.statAttributes["xp"]?.GetValue<int>() ?? 0;
 		var currentLV = brProfile.statAttributes["level"]?.GetValue<int>() ?? 0;

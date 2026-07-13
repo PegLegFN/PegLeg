@@ -15,14 +15,11 @@ public class QuestSlot
 	{
 		if (newQuestItem == questItem)
 			return;
-		if (questItem is not null)
-			questItem.OnChanged -= ProfileItemChanged;
+		questItem?.OnChanged -= ProfileItemChanged;
 		questItem = newQuestItem;
-		if (questItem is null)
-			return;
-		questTemplate = questItem.template;
+		questItem?.OnChanged += ProfileItemChanged;
+		//questTemplate = questItem?.template ?? questTemplate;
 		ProfileItemChanged();
-		questItem.OnChanged += ProfileItemChanged;
 	}
 
 	public string questId => questItem?.templateId ?? questTemplate.TemplateId;
@@ -180,13 +177,10 @@ public partial class QuestGroupEntry : Control
 	public void UpdateNotificationAndIcon()
 	{
 		var notif = questSlotList.Any(questData => questData.isNew && !questData.isClaimed);
-		if (notification is not null)
-			notification.Visible = notif;
+		notification?.Visible = notif;
 		EmitSignalNotificationVisible(notif);
-		if (pinnedIcon is not null)
-			pinnedIcon.Visible = questSlotList.Any(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isPinned);
-		if (completeIcon is not null)
-			completeIcon.Visible = questSlotList.All(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isClaimed);
+		pinnedIcon?.Visible = questSlotList.Any(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isPinned);
+		completeIcon?.Visible = questSlotList.All(q => (!questGroupData.ShowLocked || q.isUnlocked) && q.isClaimed);
 	}
 
 	public void LinkButtonGroup(ButtonGroup buttonGroup)

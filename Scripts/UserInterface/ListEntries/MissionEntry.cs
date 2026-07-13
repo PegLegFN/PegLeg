@@ -123,8 +123,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 		);
 
 		currentMission?.UpdateRewardNotifications();
-		if (toDoListContent is not null)
-			toDoListContent.Visible = !ignoreAccountStatus && GameAccount.ActiveAccount.isOwned;
+		toDoListContent?.Visible = !ignoreAccountStatus && GameAccount.ActiveAccount.isOwned;
 	}
 
 	IRecyclableElementProvider<GameMission> missionProvider;
@@ -319,15 +318,9 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 
 	public void SetHighlightProvider(IMissionHighlightProvider provider)
 	{
-		if (highlightedItemProvider is not null)
-		{
-			highlightedItemProvider.OnHighlightedItemFilterChanged -= UpdateHighlightedItems;
-		}
+		highlightedItemProvider?.OnHighlightedItemFilterChanged -= UpdateHighlightedItems;
 		highlightedItemProvider = provider;
-		if (highlightedItemProvider is not null)
-		{
-			highlightedItemProvider.OnHighlightedItemFilterChanged += UpdateHighlightedItems;
-		}
+		highlightedItemProvider?.OnHighlightedItemFilterChanged += UpdateHighlightedItems;
 		UpdateHighlightedItems();
 	}
 

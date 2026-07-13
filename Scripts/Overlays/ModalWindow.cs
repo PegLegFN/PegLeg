@@ -68,17 +68,13 @@ public partial class ModalWindow : Control
 
 	public override void _ExitTree()
 	{
-		if (linkedWindow is not null)
-			linkedWindow.GoBackRequested -= TryCloseWindowViaInput;
+		linkedWindow?.GoBackRequested -= TryCloseWindowViaInput;
 	}
 
 	public override void _Process(double delta)
 	{
 		openedThisFrame = false;
-		if (windowControl is not null)
-		{
-			windowControl.PivotOffset = windowControl.Size * 0.5f;
-		}
+		windowControl?.PivotOffset = windowControl.Size * 0.5f;
 	}
 
 	public override void _UnhandledKeyInput(InputEvent @event)
@@ -170,8 +166,7 @@ public partial class ModalWindow : Control
 			MouseFilter = MouseFilterEnum.Stop;
 			Visible = true;
 			ProcessMode = ProcessModeEnum.Inherit;
-			if (windowControl is not null)
-				windowControl.PivotOffset = windowControl.Size * 0.5f;
+			windowControl?.PivotOffset = windowControl.Size * 0.5f;
 			EmitSignal(SignalName.WindowOpened);
 		}
 		else

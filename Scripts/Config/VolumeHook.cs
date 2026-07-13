@@ -31,8 +31,7 @@ public partial class VolumeHook : Node
 		AppConfig.OnConfigChanged += CheckConfigUpdate;
 
 		EmitSignal(SignalName.UpdateMuteIcon, VolumeController.GetBusMuted(targetBusName) ? soundOffTexture : soundOnTexture);
-		if (volSlider is not null)
-			volSlider.SetValueNoSignal(VolumeController.GetBusVolume(targetBusName));
+		volSlider?.SetValueNoSignal(VolumeController.GetBusVolume(targetBusName));
 		EmitSignal(SignalName.UpdateVolumeState, VolumeController.GetBusVolume(targetBusName));
 	}
 

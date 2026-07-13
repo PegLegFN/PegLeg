@@ -85,7 +85,6 @@ public partial class TimelineContentContainer : Control
 		var parentRect = parentSC.GetGlobalRect();
 
 		firstChild.OffsetLeft = Mathf.Clamp((parentRect.Position.X + 5) - rect.Position.X, 0, availableSpace);
-		if (secondChild is not null)
-			secondChild.OffsetRight = -Mathf.Clamp(rect.End.X - (parentRect.End.X - 5), 0, availableSpace);
+		secondChild?.OffsetRight = -Mathf.Clamp(rect.End.X - (parentRect.End.X - 5), 0, availableSpace);
 	}
 }

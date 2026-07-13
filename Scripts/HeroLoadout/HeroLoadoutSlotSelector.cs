@@ -56,8 +56,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 	public override void _ExitTree()
 	{
 		GameAccount.ActiveAccountChanged -= SetActiveAccount;
-		if (currentAccount is not null)
-			currentAccount.OnAccountUpdated -= UpdateAccount;
+		currentAccount?.OnAccountUpdated -= UpdateAccount;
 	}
 
 	void SetActiveAccount() => SetAccount(GameAccount.ActiveAccount);
@@ -80,18 +79,12 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 
 	public void SetAccount(GameAccount account)
 	{
-		if (currentAccount is not null)
-		{
-			currentAccount.OnAccountUpdated -= UpdateAccount;
-		}
+		currentAccount?.OnAccountUpdated -= UpdateAccount;
 		currentAccount = account;
-		if (currentAccount is not null)
-		{
-			currentAccount.OnAccountUpdated += UpdateAccount;
-		}
+		currentAccount?.OnAccountUpdated += UpdateAccount;
 		UpdateAccount();
 	}
-	//
+	
 	void UpdateAccount()
 	{
 		if (selectionMode == SelectionMode.LoadBlueprint)
@@ -199,8 +192,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 	public void CompleteSelectedBlueprintLoading()
 	{
 		listMode.Visible = true;
-		if (blueprintPreview is not null)
-			blueprintPreview.Visible = false;
+		blueprintPreview?.Visible = false;
 		selectionMode = SelectionMode.None;
 		UpdateMode();
 		cancelLoadBlueprintButton.Visible = false;

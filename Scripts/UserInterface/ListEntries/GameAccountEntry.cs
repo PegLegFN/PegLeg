@@ -72,11 +72,9 @@ public partial class GameAccountEntry : Control
 			currentAccount.UpdateIcon();
 			return;
 		}
-		if (currentAccount is not null)
-			currentAccount.OnAccountUpdated -= UpdateAccount;
+		currentAccount?.OnAccountUpdated -= UpdateAccount;
 		currentAccount = account;
-		if (currentAccount is not null)
-			currentAccount.OnAccountUpdated += UpdateAccount;
+		currentAccount?.OnAccountUpdated += UpdateAccount;
 		UpdateAccount();
 		currentAccount.UpdateIcon();
 	}
@@ -130,7 +128,6 @@ public partial class GameAccountEntry : Control
 	{
 		if (useActiveAccount)
 			GameAccount.ActiveAccountChanged -= SetActiveAccount;
-		if (currentAccount is not null)
-			currentAccount.OnAccountUpdated -= UpdateAccount;
+		currentAccount?.OnAccountUpdated -= UpdateAccount;
 	}
 }

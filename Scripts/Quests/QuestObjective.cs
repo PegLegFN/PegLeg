@@ -48,8 +48,7 @@ public partial class QuestObjective : Control
 		bool isComplete = currentProgress == maxProgress;
 		EmitSignal(SignalName.IsComplete, isComplete);
 
-		if (progressBarStyle is not null)
-			progressBarStyle.BgColor = isComplete ? completeColor : incompleteBarColor;
+		progressBarStyle?.BgColor = isComplete ? completeColor : incompleteBarColor;
 		EmitSignal(SignalName.TextColorChanged, isComplete ? completeColor : incompleteTextColor);
 	}
 }

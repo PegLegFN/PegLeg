@@ -58,8 +58,7 @@ public partial class LoadingOverlay : ModalWindow
 		float totalMaxProgress = loadingTokens.Select(t => t.maxProgress).Sum();
 		float progressPercent = totalProgress / totalMaxProgress;
 		EmitSignal(SignalName.ProgressChanged, progressPercent);
-		if (progressLabel is not null)
-			progressLabel.Text = string.Join("\n", loadingTokens.Where(t => !t.disposed).Select(t => t.ProgressText));
+		progressLabel?.Text = string.Join("\n", loadingTokens.Where(t => !t.disposed).Select(t => t.ProgressText));
 	}
 
 	public static TaskToken CreateToken(string taskName = null, float maxProgress = 1, float initialProgress = 0) =>

@@ -70,8 +70,7 @@ public partial class VerticalTab : Control
 
 	private void UpdatePageName()
 	{
-		if (triggerButton is not null)
-			triggerButton.Text = pageNode?.Name ?? "";
+		triggerButton?.Text = pageNode?.Name ?? "";
 		EmitSignalIsUpdate(triggerButton.Text == "Updates");
 		Visible = pageNode?.IsInGroup("HideTab") == false;
 		Name = (pageNode?.Name ?? "Blank") + "Tab";
@@ -84,8 +83,7 @@ public partial class VerticalTab : Control
 			marginContainer.AddThemeConstantOverride("margin_left", pressed ? 0 : margin);
 			marginContainer.AddThemeConstantOverride("margin_right", pressed ? margin : 0);
 		}
-		if (triggerButton is not null)
-			triggerButton.ButtonPressed = pressed;
+		triggerButton?.ButtonPressed = pressed;
 		if (pageNode is not null && pageNode.IsInsideTree())
 		{
 			visibilityLocked = true;

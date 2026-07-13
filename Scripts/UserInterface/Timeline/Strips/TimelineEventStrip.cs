@@ -28,8 +28,7 @@ public partial class TimelineEventStrip : Control
 
 		displayName.Visible = !string.IsNullOrWhiteSpace(marker.DisplayName);
 		displayName.Text = marker.DisplayName;
-		if (freeMarker is not null)
-			freeMarker.Visible = marker.Free;
+		freeMarker?.Visible = marker.Free;
 		if (styleTarget is not null)
 		{
 			styles.TryGetValue(marker.style, out var tex);

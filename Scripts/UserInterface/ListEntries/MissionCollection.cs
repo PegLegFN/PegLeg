@@ -159,8 +159,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		loadingIcon.Visible = true;
 		rewardSets = [];
 		newMissionList?.UpdateList();
-		if (missionList is not null)
-			missionList.Visible = false;
+		missionList?.Visible = false;
 		if (requireAnyUnlockedForVisibility)
 			Visible = false;
 	}
@@ -183,8 +182,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		missionsDirty = false;
 
 		loadingIcon.Visible = false;
-		if (missionList is not null)
-			missionList.Visible = true;
+		missionList?.Visible = true;
 
 		var sortedMissions =
 			(GameMission.MissionList?

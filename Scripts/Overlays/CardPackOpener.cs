@@ -1010,8 +1010,7 @@ public partial class CardPackOpener : Control
 			cardSlideDown.TweenProperty(resultTarget, "offset_transform_position", resultTarget.OffsetTransformPosition + Vector2.Down * 115, 0.25);
 
 			await Helpers.WaitForTimer(0.2f);
-			if (cardChangeEffect is not null)
-				cardChangeEffect.Visible = true;
+			cardChangeEffect?.Visible = true;
 			CardChangeEffectLevel = 0;
 			var changeEffectTween = GetTree().CreateTween();
 			changeEffectTween.TweenProperty(this, "CardChangeEffectLevel", 1, 1);
@@ -1030,8 +1029,7 @@ public partial class CardPackOpener : Control
 			}
 
 			await Helpers.WaitForTimer(1f);
-			if (cardChangeEffect is not null)
-				cardChangeEffect.Visible = true;
+			cardChangeEffect?.Visible = true;
 
 			//reopen choices if the result is another cardpack
 			if (resultItem?.template.Type == "CardPack")

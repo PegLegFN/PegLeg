@@ -131,8 +131,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	private void OnAccountChanged()
 	{
-		if (filterPowerContainer is not null)
-			filterPowerContainer.Visible = GameAccount.ActiveAccount.isOwned;
+		filterPowerContainer?.Visible = GameAccount.ActiveAccount.isOwned;
 		FilterMissions();
 	}
 
@@ -375,8 +374,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		var missions = GameMission.MissionList;
 		if (lockFilter || missions is null)
 			return;
-		if (emptyIcon is not null)
-			emptyIcon.Texture = GameMission.DailyCat;
+		emptyIcon?.Texture = GameMission.DailyCat;
 		loadingIcon.Visible = false;
 		rewards = [];
 		if (!IsVisibleInTree())
@@ -543,8 +541,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		if (notableMode && rewards.Count > limit)
 			rewards = rewards[..limit];
 
-		if (emptyContent is not null)
-			emptyContent.Visible = rewards.Count == 0;
+		emptyContent?.Visible = rewards.Count == 0;
 
 		newMissionList?.UpdateList();
 		if (missionList is null)

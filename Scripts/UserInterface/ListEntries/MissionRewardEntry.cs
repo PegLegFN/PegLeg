@@ -32,8 +32,7 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 
 	public override void _Ready()
 	{
-		if (todoReorderContent is not null)
-			todoReorderContent.Visible = AppConfig.Get("missions", "todo_sort_mode", 0) == 0;
+		todoReorderContent?.Visible = AppConfig.Get("missions", "todo_sort_mode", 0) == 0;
 		AppConfig.OnConfigChanged += OnConfigChanged;
 		MissionToDoListController.OnToDoListChanged += UpdateTodoState;
 		missionEntry.MissionComplete += TryEmitComplete;

@@ -90,8 +90,7 @@ public partial class Foldout : Control
 		var cms = foldoutTarget.CustomMinimumSize;
 		cms.Y = foldoutInteractionPanel.Size.Y + (value ? extraSpace + elementContainer.Size.Y : 0);
 		foldoutTarget.CustomMinimumSize = cms;
-		if (rotationTarget is not null)
-			rotationTarget.Rotation = Mathf.DegToRad(value ? openRotation : closedRotation);
+		rotationTarget?.Rotation = Mathf.DegToRad(value ? openRotation : closedRotation);
 	}
 
 	public void SetFoldoutName(string name) => EmitSignal(SignalName.NameChanged, name);

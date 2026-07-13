@@ -85,8 +85,7 @@ public partial class ProcessSwitchingTabContainer : TabContainer
 	private void UpdateProcessingTab(long tab)
 	{
 		var tabChild = GetChild((int)tab);
-		if (activeTab is not null)
-			activeTab.ProcessMode = ProcessModeEnum.Disabled;
+		activeTab?.ProcessMode = ProcessModeEnum.Disabled;
 		activeTab = tabChild;
 		activeTab.ProcessMode = ProcessModeEnum.Inherit;
 	}

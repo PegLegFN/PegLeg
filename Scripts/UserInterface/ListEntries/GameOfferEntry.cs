@@ -313,8 +313,7 @@ public partial class GameOfferEntry : Control
 	{
 		if (currentOffer is null)
 			return;
-		if (selectionGraphics is not null)
-			selectionGraphics.ButtonPressed = true;
+		selectionGraphics?.ButtonPressed = true;
 		EmitSignal(SignalName.Pressed, currentOffer.OfferId);
 	}
 

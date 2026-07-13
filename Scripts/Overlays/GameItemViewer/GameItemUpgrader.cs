@@ -124,8 +124,7 @@ public partial class GameItemUpgrader : Control
 			return;
 		}
 
-		if (currentItem is not null)
-			currentItem.OnChanged -= UpdateItem;
+		currentItem?.OnChanged -= UpdateItem;
 
 		currentItem = item;
 		if (currentItem?.template is null)
@@ -135,15 +134,10 @@ public partial class GameItemUpgrader : Control
 		if (currentItem?.profile?.profileId != FnProfileTypes.AccountItems)
 			currentItem = null; ;//todo: support collection book profiles
 
-		if (currentItem is not null)
-		{
-			currentItem.OnChanged += UpdateItem;
+		currentItem?.OnChanged += UpdateItem;
+		Visible = currentItem is not null;
+		if (Visible)
 			UpdateItem();
-		}
-		else
-		{
-			Visible = false;
-		}
 	}
 
 	void UpdateItem()

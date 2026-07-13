@@ -25,8 +25,7 @@ public partial class HomebasePowerLevel : Control
 
 	public override async void _Ready()
 	{
-		if (tempClaimContent is not null)
-			tempClaimContent.Visible = false;
+		tempClaimContent?.Visible = false;
 		ClearStats();
 		homebaseNumberLabel.Text = "";
 		if (useCurrent)

@@ -151,8 +151,7 @@ public partial class CardPackEntry : GameItemEntry
 
 	public override void EmitPressedSignal()
 	{
-		if (selectionGraphics is not null)
-			selectionGraphics.ButtonPressed = true;
+		selectionGraphics?.ButtonPressed = true;
 		if (currentItem?.uuid is not null)
 			EmitSignal(SignalName.LlamaPressed, currentItem.uuid);
 	}

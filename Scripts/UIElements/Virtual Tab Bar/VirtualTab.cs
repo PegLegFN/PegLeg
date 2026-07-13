@@ -36,8 +36,7 @@ public partial class VirtualTab : Control
 				return;
 			label.Text = Text;
 			label.Visible = !string.IsNullOrWhiteSpace(Text);
-			if (labelPadding is not null)
-				labelPadding.Visible = (iconRect?.Visible ?? false) && label.Visible;
+			labelPadding?.Visible = (iconRect?.Visible ?? false) && label.Visible;
 		}
 	}
 	[Export(PropertyHint.MultilineText)]
@@ -47,8 +46,7 @@ public partial class VirtualTab : Control
 		set
 		{
 			_tooltip = value;
-			if (button is not null)
-				button.TooltipText = Tooltip;
+			button?.TooltipText = Tooltip;
 		}
 	}
 	[Export]
@@ -62,10 +60,8 @@ public partial class VirtualTab : Control
 				return;
 			iconRect.Visible = Icon is not null;
 			iconRect.Texture = Icon;
-			if (label is not null)
-				label.Visible = !string.IsNullOrWhiteSpace(Text);
-			if (labelPadding is not null)
-				labelPadding.Visible = (iconRect?.Visible ?? false) && label.Visible;
+			label?.Visible = !string.IsNullOrWhiteSpace(Text);
+			labelPadding?.Visible = (iconRect?.Visible ?? false) && label.Visible;
 		}
 	}
 	[Export]
@@ -74,8 +70,7 @@ public partial class VirtualTab : Control
 		get => button?.ButtonPressed ?? false;
 		set
 		{
-			if (button is not null)
-				button.ButtonPressed = value;
+			button?.ButtonPressed = value;
 		}
 	}
 	[Export]
@@ -84,8 +79,7 @@ public partial class VirtualTab : Control
 		get => button?.Disabled ?? false;
 		set
 		{
-			if (button is not null)
-				button.Disabled = value;
+			button?.Disabled = value;
 		}
 	}
 	[Export]
@@ -94,8 +88,7 @@ public partial class VirtualTab : Control
 		get => iconRect?.SelfModulate ?? Colors.White;
 		set
 		{
-			if (iconRect is not null)
-				iconRect.SelfModulate = value;
+			iconRect?.SelfModulate = value;
 		}
 	}
 
