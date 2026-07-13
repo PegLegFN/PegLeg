@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://fxae8lbjmmsd"]
 
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewards.tscn" id="1_gxuuy"]
+[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="1_hdipl"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="2_nbel3"]
 [ext_resource type="PackedScene" uid="uid://bytcic4qvijqc" path="res://Scenes/Desktop/Views/Dashboard/dashboardPowerHourAlert.tscn" id="2_x306q"]
 [ext_resource type="PackedScene" uid="uid://bvwsqi0jrxlg6" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers_large.tscn" id="3_x306q"]
@@ -33,8 +34,26 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Notable Mission Rewards"
 
-[node name="Notable" parent="VBoxContainer/Notable/VBoxContainer" unique_id=650228639 instance=ExtResource("1_gxuuy")]
+[node name="VBucks" parent="VBoxContainer/Notable/VBoxContainer" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("1_hdipl")]
 layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+targetTemplateId = "AccountResource:currency_hybrid_mtx_xrayllama"
+targetTemplatePrefix = "AccountResource:currency_hybrid_mtx_xrayllama"
+configDependancy = "missions:groupVBucks"
+filterPlayable = NodePath("")
+
+[node name="LegSurvivors" parent="VBoxContainer/Notable/VBoxContainer" unique_id=2061670357 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("1_hdipl")]
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+targetTemplateId = "Worker:workerbasic_sr_t01"
+targetTemplatePrefix = "Worker:workerbasic_sr_t0"
+titleText = "Legendary Survivors"
+configDependancy = "missions:groupLegSurvivors"
+filterPlayable = NodePath("")
+
+[node name="Notable" parent="VBoxContainer/Notable/VBoxContainer" unique_id=650228639 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("1_gxuuy")]
+layout_mode = 2
+excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
 
 [node name="PowerHourAlert" parent="VBoxContainer" unique_id=878248880 instance=ExtResource("2_x306q")]
 layout_mode = 2

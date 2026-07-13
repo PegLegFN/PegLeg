@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://ckofose8g22n1"]
 
+[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="1_1ws6e"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="1_l1jdo"]
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewards.tscn" id="1_r8nc6"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="2_8cocd"]
@@ -39,8 +40,26 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Notable Mission Rewards"
 
-[node name="Notable" parent="VBoxContainer/Notable/VBoxContainer" unique_id=650228639 instance=ExtResource("1_r8nc6")]
+[node name="VBucks" parent="VBoxContainer/Notable/VBoxContainer" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("1_1ws6e")]
 layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+targetTemplateId = "AccountResource:currency_hybrid_mtx_xrayllama"
+targetTemplatePrefix = "AccountResource:currency_hybrid_mtx_xrayllama"
+configDependancy = "missions:groupVBucks"
+filterPlayable = NodePath("")
+
+[node name="LegSurvivors" parent="VBoxContainer/Notable/VBoxContainer" unique_id=801626076 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("1_1ws6e")]
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+targetTemplateId = "Worker:workerbasic_sr_t01"
+targetTemplatePrefix = "Worker:workerbasic_sr_t0"
+titleText = "Legendary Survivors"
+configDependancy = "missions:groupLegSurvivors"
+filterPlayable = NodePath("")
+
+[node name="Notable" parent="VBoxContainer/Notable/VBoxContainer" unique_id=650228639 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("1_r8nc6")]
+layout_mode = 2
+excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
 
 [node name="PowerHourAlert" parent="VBoxContainer" unique_id=878248880 instance=ExtResource("2_r8nc6")]
 layout_mode = 2

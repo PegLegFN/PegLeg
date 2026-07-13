@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bqaf4782i1jnq"]
 
 [ext_resource type="PackedScene" uid="uid://cl6kj5e8gsgda" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewards.tscn" id="1_vmt3o"]
-[ext_resource type="PackedScene" uid="uid://dh6eujun4cbty" path="res://Scenes/MissionEntry/mission_reward_entry_large.tscn" id="2_jiu2a"]
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="2_j4kb0"]
 [ext_resource type="PackedScene" uid="uid://cqrhkmo2wovb1" path="res://Scenes/Desktop/Views/MissionRewards/missionToDoList.tscn" id="3_fuvb8"]
+[ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="3_gnm8f"]
 [ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="3_iknkm"]
 [ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="4_fuvb8"]
-[ext_resource type="PackedScene" uid="uid://c177xe08uufqj" path="res://Scenes/MissionEntry/mission_reward_entry_todo_large.tscn" id="4_j4kb0"]
 [ext_resource type="Texture2D" uid="uid://dc6umid5fw8b3" path="res://Images/InterfaceIcons/T-Icon-Manage-All-512.png" id="5_j4kb0"]
 [ext_resource type="Texture2D" uid="uid://bashr5wthp5vk" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_List_128.png" id="6_gnm8f"]
 
@@ -139,7 +139,8 @@ custom_minimum_size = Vector2(28, 0)
 
 [node name="OptionButton" parent="PanelContainer/MarginContainer/AllMissions/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" index="4" unique_id=1711726904]
 custom_minimum_size = Vector2(140, 0)
-theme_override_font_sizes/font_size = 20
+theme_override_constants/icon_max_width = 18
+theme_override_font_sizes/font_size = 18
 
 [node name="CheckButton" parent="PanelContainer/MarginContainer/AllMissions/All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel" parent_id_path=PackedInt32Array(887790858, 1064630199) index="0" unique_id=305862933]
 custom_minimum_size = Vector2(100, 0)
@@ -155,25 +156,53 @@ custom_minimum_size = Vector2(32, 32)
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="ScrollContainer" parent="PanelContainer/MarginContainer/AllMissions/All/VBoxContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(887790858, 1513377394) index="0" unique_id=1982009328]
-elementScene = ExtResource("2_jiu2a")
-
 [node name="ToDoList" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=392495354]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ToDoList" unique_id=721958167]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/ToDoList" unique_id=958131402]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/ToDoList/HBoxContainer" unique_id=721958167]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "To-Do List"
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/MarginContainer/ToDoList/HBoxContainer" unique_id=265961867]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+theme_override_constants/outline_size = 0
+theme_override_constants/icon_max_width = 32
+theme_override_font_sizes/font_size = 24
+theme_override_icons/icon = ExtResource("2_j4kb0")
+selected = 0
+item_count = 8
+popup/item_0/text = "Manual"
+popup/item_0/id = 0
+popup/item_1/text = "Match Missions"
+popup/item_1/id = 1
+popup/item_2/id = 3
+popup/item_2/separator = true
+popup/item_3/text = "Standard"
+popup/item_3/id = 1337
+popup/item_4/text = "FortniteDB"
+popup/item_4/id = 465
+popup/item_5/text = "Power"
+popup/item_5/id = 160
+popup/item_6/text = "FNDB Power"
+popup/item_6/id = 333
+popup/item_7/text = "Beast Zone Power"
+popup/item_7/id = 127
+script = ExtResource("3_gnm8f")
+section = "missions"
+key = "todo_sort_mode"
 
 [node name="To-Do List (0)" parent="PanelContainer/MarginContainer/ToDoList" unique_id=1998254745 node_paths=PackedStringArray("tab") instance=ExtResource("3_fuvb8")]
 layout_mode = 2
 size_flags_vertical = 3
 tab = NodePath("../../../VirtualTabBar/HBoxContainer/Tab2")
-
-[node name="ScrollContainer" parent="PanelContainer/MarginContainer/ToDoList/To-Do List (0)" index="0" unique_id=194545143]
-elementScene = ExtResource("4_j4kb0")
 
 [node name="VirtualTabBar" parent="PanelContainer" unique_id=1464370482 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("3_iknkm")]
 custom_minimum_size = Vector2(14, 32)
