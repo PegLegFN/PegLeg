@@ -1,0 +1,988 @@
+[gd_scene format=3 uid="uid://cl6kj5e8gsgda"]
+
+[ext_resource type="Script" uid="uid://ce73kldw4p5yw" path="res://Scripts/UserInterface/Dashboard/MissionRewardsController.cs" id="1_3jaku"]
+[ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="2_5wxrf"]
+[ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="3_hd8iq"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="3_yip6p"]
+[ext_resource type="Texture2D" uid="uid://dw4hobglon36k" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Clock_128.png" id="4_yip6p"]
+[ext_resource type="Texture2D" uid="uid://con6bkc8e5wf6" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Repeat_128.png" id="5_1dkya"]
+[ext_resource type="Texture2D" uid="uid://cdbip8w04ra2u" path="res://Images/InterfaceIcons/T-Icon-Quest-Journal-64.png" id="6_i7g1k"]
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="7_h4lof"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="8_7ldir"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="9_xpto6"]
+[ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="10_caexb"]
+[ext_resource type="Texture2D" uid="uid://bsopcpbc1h78o" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-Leader-CARD.png" id="11_hbp54"]
+[ext_resource type="Texture2D" uid="uid://c2xw0pe7rfdry" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Heroes-128.png" id="12_qtkbc"]
+[ext_resource type="Texture2D" uid="uid://bewg41cqw7grb" path="res://Images/InterfaceIcons/PureDropFlat.png" id="13_3jaku"]
+[ext_resource type="Texture2D" uid="uid://bufu4bggy6lrs" path="res://Images/InterfaceIcons/T-Icon-Defenders_-CARD.png" id="13_5wxrf"]
+[ext_resource type="Texture2D" uid="uid://bps0ujc1hhb0g" path="res://Images/InterfaceIcons/PerkUpFlat.png" id="14_5wxrf"]
+[ext_resource type="Texture2D" uid="uid://dkohawuamcrkf" path="res://Images/InterfaceIcons/RePerkFlat.png" id="15_hd8iq"]
+[ext_resource type="Texture2D" uid="uid://b2mw2ilvuudsu" path="res://Images/InterfaceIcons/T_UI_Challenge_MysteryReward.png" id="17_3jaku"]
+[ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="17_5wxrf"]
+[ext_resource type="Texture2D" uid="uid://b50pdjevad7c6" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Traps-CARD.png" id="18_vbf3x"]
+[ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="19_s5xqb"]
+[ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="21_myk2v"]
+[ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="22_1fh4v"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="24_yip6p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6d4a"]
+shader = ExtResource("3_hd8iq")
+shader_parameter/scalar = 3.0
+shader_parameter/base = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3jaku"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_asvga"]
+resource_local_to_scene = false
+resource_name = "RewardType"
+allow_unpress = true
+
+[node name="AllRewards" type="MarginContainer" unique_id=887790858 node_paths=PackedStringArray("newMissionListNode", "loadingIcon", "searchBar", "itemSearchBar", "sortMode", "filterNotable", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(370, 0)
+size_flags_vertical = 3
+size_flags_stretch_ratio = 5.0
+theme_type_variation = &"Panel5PadB"
+script = ExtResource("1_3jaku")
+newMissionListNode = NodePath("VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2/RecycleContainer")
+loadingIcon = NodePath("VBoxContainer/VBoxContainer/MarginContainer/SmallLoadingIcon")
+searchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox")
+itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox2")
+sortMode = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/OptionButton")
+filterNotable = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/NotableFilter/CheckButton")
+filterPower = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton")
+filterPowerContainer = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel")
+filterStory = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton")
+rarityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common")]
+zoneFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures")]
+typeFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Lead Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Heroes"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Evo Mats"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Perk Up"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Re Perk"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Ranged Weapons"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Random"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Traps")]
+excludeRewards = []
+repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer/4x")]
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2044151659]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=797083087]
+visible = false
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer" unique_id=1619997948]
+layout_mode = 2
+button_pressed = true
+
+[node name="Node" type="Node" parent="VBoxContainer/HBoxContainer/CheckButton" unique_id=1855030127]
+script = ExtResource("2_5wxrf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1364284326]
+custom_minimum_size = Vector2(0, 210)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/VBoxContainer" unique_id=1657085929]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2" unique_id=1164165274]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=2007388593]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SearchBox" type="LineEdit" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=88566526]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search missions"
+context_menu_enabled = false
+clear_button_enabled = true
+
+[node name="SearchBox2" type="LineEdit" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1531152992]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+placeholder_text = "Search items"
+context_menu_enabled = false
+clear_button_enabled = true
+
+[node name="HBoxContainer2" type="HFlowContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=145397223]
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+alignment = 1
+
+[node name="RarityFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=1442786464]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters" unique_id=1530477692]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Mythic" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=154354491]
+visible = false
+custom_minimum_size = Vector2(53, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Mythic"
+theme_type_variation = &"LeftCheckButton"
+text = " "
+metadata/rarity = "Mythic"
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic" unique_id=1069451816]
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 0.28, 1)
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Mythic" unique_id=1315154307]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "Mythic"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Common" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=1682730759]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Common"
+theme_type_variation = &"LeftCheckButton"
+text = " "
+metadata/rarity = "Common"
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common" unique_id=61119608]
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Common" unique_id=1334374334]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Uncommon" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=86269458]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Uncommon"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/rarity = "Uncommon"
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon" unique_id=2096658024]
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0166667, 1, 0, 1)
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Uncommon" unique_id=1505761652]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "UC"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rare" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=1227604692]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Rare"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/rarity = "Rare"
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare" unique_id=335386923]
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0.366667, 1, 1)
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Rare" unique_id=226933082]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Epic" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=1999994621]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Epic"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/rarity = "Epic"
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic" unique_id=87704649]
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.816667, 0, 1, 1)
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Epic" unique_id=711900581]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Legendary" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer" unique_id=142085291]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Legendary"
+theme_type_variation = &"RightCheckButton"
+text = " "
+metadata/rarity = "Legendary,Mythic"
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary" unique_id=729467587]
+material = SubResource("ShaderMaterial_w6d4a")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.683333, 0, 1)
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/RarityFilters/HBoxContainer/Legendary" unique_id=2141807625]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "L/M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ZoneFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=1084519212]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters" unique_id=57700396]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Stonewood" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=2064830287]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Stonewood"
+theme_type_variation = &"LeftCheckButton"
+text = " "
+metadata/zone = "s"
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood" unique_id=359549788]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "S"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect2" type="Panel" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Stonewood/Label" unique_id=1443363847]
+self_modulate = Color(0.13333334, 0.2784314, 0.40392157, 1)
+show_behind_parent = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3jaku")
+
+[node name="Plankerton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=422720111]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Plankerton"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/zone = "p"
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton" unique_id=273357412]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "P"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect2" type="Panel" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Plankerton/Label" unique_id=1428759341]
+self_modulate = Color(0.1764706, 0.5764706, 0.31764707, 1)
+show_behind_parent = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3jaku")
+
+[node name="Canny Valley" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=1977715316]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Canny Valley"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/zone = "c"
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley" unique_id=140062798]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect2" type="Panel" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Canny Valley/Label" unique_id=444696791]
+self_modulate = Color(0.7529412, 0.5019608, 0.30980393, 1)
+show_behind_parent = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3jaku")
+
+[node name="Twine Peaks" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=1131557196]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Twine Peaks"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/zone = "t"
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks" unique_id=1297550183]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "T"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect2" type="Panel" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Twine Peaks/Label" unique_id=859559623]
+self_modulate = Color(0.688, 0.28, 1, 1)
+show_behind_parent = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3jaku")
+
+[node name="Ventures" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer" unique_id=793749072]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Ventures"
+theme_type_variation = &"RightCheckButton"
+text = " "
+metadata/zone = "v"
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures" unique_id=874977190]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"Outline6"
+text = "V"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect2" type="Panel" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/ZoneFilters/HBoxContainer/Ventures/Label" unique_id=1867015236]
+self_modulate = Color(0.007843138, 0.5254902, 0.89411765, 1)
+show_behind_parent = true
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3jaku")
+
+[node name="TypeFilters" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=1653661881]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters" unique_id=390892881]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Survivors" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=134987812]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Survivors"
+theme_type_variation = &"LeftCheckButton"
+text = " "
+metadata/type = "Worker@_"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Survivors" unique_id=945831150]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_caexb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Lead Survivors" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=1924008920]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Lead Survivors"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/type = "Worker:manager"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Lead Survivors" unique_id=352732417]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_hbp54")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heroes" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=2013352012]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Heroes"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/type = "Hero"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Heroes" unique_id=2766829]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_qtkbc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ranged Weapons" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=129996040]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Defenders"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/type = "Defender"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Ranged Weapons" unique_id=599347871]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_5wxrf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Evo Mats" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=173202480]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Evolution Materials"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/type = "AccountResource:reagent_c_t01,AccountResource:reagent_c_t02,AccountResource:reagent_c_t03,AccountResource:reagent_c_t04"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Evo Mats" unique_id=1016880518]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_3jaku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Perk Up" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=1666668143]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "PERK-UP Materials"
+theme_type_variation = &"MiddleCheckButton"
+text = " "
+metadata/type = "AccountResource:reagent_alteration_upgrade_uc,AccountResource:reagent_alteration_upgrade_r,AccountResource:reagent_alteration_upgrade_vr,AccountResource:reagent_alteration_upgrade_sr"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Perk Up" unique_id=1977898767]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("14_5wxrf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Re Perk" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=1641706549]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "RE-PERK Materials"
+theme_type_variation = &"RightCheckButton"
+text = " "
+metadata/type = "AccountResource:reagent_alteration_generic,AccountResource:reagent_alteration_ele_fire,AccountResource:reagent_alteration_ele_water,AccountResource:reagent_alteration_ele_nature"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Re Perk" unique_id=1730554580]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_hd8iq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Random" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=1266272647]
+visible = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Random Rewards (Excludes Unknown)"
+theme_type_variation = &"RightCheckButton"
+text = " "
+metadata/type = "CardPack"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Random" unique_id=1345655170]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_3jaku")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Traps" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer" unique_id=657277536]
+visible = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Traps"
+theme_type_variation = &"RightCheckButton"
+text = " "
+metadata/type = "Schematic>Trap"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/TypeFilters/HBoxContainer/Traps" unique_id=380678178]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_vbf3x")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2" unique_id=60944725]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.01
+theme_override_constants/separation = 2
+
+[node name="NotableFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=83267647]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/NotableFilter" unique_id=1790393393]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Filter Notable Items"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/NotableFilter/CheckButton" unique_id=69125295]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("3_yip6p")
+expand_mode = 3
+
+[node name="RewardTypeFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1228440926]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter" unique_id=1179755440]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Alert" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer" unique_id=939802002]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Alert Rewards"
+theme_type_variation = &"LeftCheckButton"
+button_group = SubResource("ButtonGroup_asvga")
+text = " "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer/Alert" unique_id=1428468965]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_yip6p")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Repeatable" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer" unique_id=1795322515]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Repeatable Rewards"
+theme_type_variation = &"MiddleCheckButton"
+button_group = SubResource("ButtonGroup_asvga")
+text = " "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer/Repeatable" unique_id=362793876]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_1dkya")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="4x" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer" unique_id=1182313242]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "x4 Alert Rewards"
+theme_type_variation = &"RightCheckButton"
+button_group = SubResource("ButtonGroup_asvga")
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/RewardTypeFilter/HBoxContainer/4x" unique_id=712735251]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "x4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StoryFilter" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=208328889]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter" unique_id=2115246747]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Include Story Missions"
+theme_type_variation = &"EmptyCheckButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/StoryFilter/CheckButton" unique_id=1660566728]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("6_i7g1k")
+expand_mode = 3
+
+[node name="PLSort" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1993752179]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort" unique_id=128584210]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Sort items by Mission Power"
+theme_type_variation = &"EmptyCheckButton"
+text = "                 "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton" unique_id=1736943395]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("7_h4lof")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PLSort/CheckButton" unique_id=859720406]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Power  "
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1711726904]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/outline_size = 0
+theme_override_constants/icon_max_width = 20
+theme_override_icons/icon = ExtResource("7_h4lof")
+selected = 4
+item_count = 5
+popup/item_0/text = "Standard"
+popup/item_0/id = 1337
+popup/item_1/text = "FortniteDB"
+popup/item_1/id = 465
+popup/item_2/text = "Power"
+popup/item_2/id = 160
+popup/item_3/text = "FNDB Power"
+popup/item_3/id = 333
+popup/item_4/text = "Beast Zone Power"
+popup/item_4/id = 127
+script = ExtResource("17_5wxrf")
+section = "missions"
+key = "sort_mode"
+
+[node name="PowerLevel" type="PanelContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1064630199]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"CheckContainer"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel" unique_id=305862933]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+theme_type_variation = &"EmptyCheckButton"
+button_pressed = true
+text = "                    "
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" unique_id=1156115000]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+texture = ExtResource("8_7ldir")
+expand_mode = 3
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" unique_id=539614101]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("9_xpto6")
+section = "missions"
+key = "filter_power_default"
+defaultValue = true
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" unique_id=602208966]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Playable "
+vertical_alignment = 1
+
+[node name="Reset" type="Button" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=2048246065]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Reset Filters"
+theme_type_variation = &"SlantedButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" unique_id=758152649]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset/MarginContainer" unique_id=533019747]
+layout_mode = 2
+texture = ExtResource("19_s5xqb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/VBoxContainer" unique_id=1513377394]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=749997421]
+layout_mode = 2
+
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2" unique_id=1155007216 node_paths=PackedStringArray("blinkRect")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("24_yip6p")
+recycleEntryScene = ExtResource("21_myk2v")
+blinkRect = NodePath("../../ColorRect")
+
+[node name="SmallLoadingIcon" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1686755788 instance=ExtResource("22_1fh4v")]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/VBoxContainer/MarginContainer" unique_id=1331413839]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/CheckButton" to="VBoxContainer/VBoxContainer" method="set_visible"]
+[connection signal="OnFalse" from="VBoxContainer/HBoxContainer/CheckButton/Node" to="." method="set_stretch_ratio"]
+[connection signal="OnTrue" from="VBoxContainer/HBoxContainer/CheckButton/Node" to="." method="set_stretch_ratio"]
+[connection signal="toggled" from="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton/CheckButton" to="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" method="set_pressed"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/Reset" to="." method="TurnOffFilters"]

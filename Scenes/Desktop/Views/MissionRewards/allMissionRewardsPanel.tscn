@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://dwkncmg0uq77i"]
+
+[ext_resource type="PackedScene" uid="uid://cl6kj5e8gsgda" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewards.tscn" id="1_klgrd"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="2_omxse"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="3_qvb47"]
+
+[node name="AllRewards" type="PanelContainer" unique_id=454438386]
+theme_type_variation = &"Panel3PadB"
+
+[node name="All" parent="." unique_id=887790858 node_paths=PackedStringArray("filterPower", "filterPowerContainer") instance=ExtResource("1_klgrd")]
+layout_mode = 2
+excludeTodo = true
+filterPower = NodePath("VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel")
+filterPowerContainer = NodePath("VBoxContainer/HBoxContainer2/PlayableContainer")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="All/VBoxContainer" parent_id_path=PackedInt32Array(887790858, 2044151659) index="0" unique_id=1059635475]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="All/VBoxContainer/HBoxContainer2" unique_id=1615946587]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "All Rewards"
+
+[node name="PlayableContainer" type="MarginContainer" parent="All/VBoxContainer/HBoxContainer2" unique_id=2011059894]
+layout_mode = 2
+
+[node name="FilterPlayable-Panel" type="CheckButton" parent="All/VBoxContainer/HBoxContainer2/PlayableContainer" unique_id=953321111]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+mouse_filter = 1
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+
+[node name="TextureRect" type="TextureRect" parent="All/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel" unique_id=1356284951]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_omxse")
+expand_mode = 3
+
+[node name="CheckButton" type="CheckButton" parent="All/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel" unique_id=1601408952]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("3_qvb47")
+section = "missions"
+key = "filter_power_default"
+defaultValue = true
+
+[node name="PowerLevel" parent="All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer" parent_id_path=PackedInt32Array(887790858, 60944725) index="5" unique_id=1064630199]
+visible = false
+
+[node name="CheckButton" parent="All/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/PowerLevel/CheckButton" parent_id_path=PackedInt32Array(887790858, 305862933) index="1" unique_id=539614101]
+disabled = true
+disabled = true
+
+[node name="ScrollContainer2" parent="All/VBoxContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(887790858, 1513377394) index="0" unique_id=749997421]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+
+[connection signal="toggled" from="All/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel/CheckButton" to="All/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel" method="set_pressed"]
+
+[editable path="All"]

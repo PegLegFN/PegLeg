@@ -1,21 +1,18 @@
 [gd_scene format=3 uid="uid://bqp7ax1fjc306"]
 
-[ext_resource type="PackedScene" uid="uid://bqa4bddqjpu7q" path="res://Scenes/Desktop/Views/Dashboard/dashboardMissionRewardsPanel.tscn" id="1_1vtlv"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="1_a6luq"]
 [ext_resource type="Script" uid="uid://c0cofkbc1dx20" path="res://Scripts/UIElements/ColumnStackContainer.cs" id="1_ac3k7"]
-[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="2_b8wcl"]
-[ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/Dashboard/dashboardNotableRewards.tscn" id="6_6qpji"]
+[ext_resource type="PackedScene" uid="uid://bx77yhl4rdcno" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewardsPanel.tscn" id="1_k3a2q"]
+[ext_resource type="PackedScene" uid="uid://mocwxx3hkrl3" path="res://Scenes/Desktop/Views/MissionRewards/missionToDoListPanel.tscn" id="2_21lf2"]
+[ext_resource type="PackedScene" uid="uid://dwkncmg0uq77i" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewardsPanel.tscn" id="3_ury42"]
 [ext_resource type="PackedScene" uid="uid://bytcic4qvijqc" path="res://Scenes/Desktop/Views/Dashboard/dashboardPowerHourAlert.tscn" id="6_ury42"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="6_xee71"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="7_6rsuw"]
-[ext_resource type="PackedScene" uid="uid://cl6kj5e8gsgda" path="res://Scenes/Desktop/Views/Dashboard/dashboardAllRewards.tscn" id="7_7he0n"]
 [ext_resource type="PackedScene" uid="uid://bi6d0s5f2iadi" path="res://Scenes/Desktop/Views/Dashboard/dashboardSupercharger.tscn" id="8_b8wcl"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="8_k3a2q"]
-[ext_resource type="PackedScene" uid="uid://cqrhkmo2wovb1" path="res://Scenes/Desktop/Views/Dashboard/dashboardToDoList.tscn" id="8_xcujg"]
 [ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/dashboardLlamaShop.tscn" id="9_db4i7"]
 [ext_resource type="PackedScene" uid="uid://ito2u56pohnm" path="res://Scenes/Desktop/Views/Dashboard/dashboardXPProgress.tscn" id="10_gx2q3"]
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="11_21lf2"]
-[ext_resource type="PackedScene" uid="uid://bmm5phfkc6fou" path="res://Scenes/Desktop/Views/Dashboard/simplifiedDashboard.tscn" id="13_db4i7"]
 [ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="19_ury42"]
 [ext_resource type="PackedScene" uid="uid://cyyifj2tha4ri" path="res://Scenes/SharedImageGenerators/shareable_mission_summary.tscn" id="51_0op8k"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="52_q8xc3"]
@@ -53,102 +50,20 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MissionRewards" parent="ScrollContainer/HSplitContainer/BeastDashboard" unique_id=1977093584 instance=ExtResource("1_1vtlv")]
+[node name="MissionRewards" type="VBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard" unique_id=531826651]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
 
-[node name="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="4" unique_id=1771145246]
+[node name="NotableRewards" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards" unique_id=936518577 instance=ExtResource("1_k3a2q")]
+layout_mode = 2
+
+[node name="ShareMissions" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="4" unique_id=667966702]
 visible = true
 
-[node name="Button2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="5" unique_id=316163759]
-visible = true
-
-[node name="Button3" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(1977093584, 1168126100) index="6" unique_id=798965087]
-tooltip_text = "Force Dispatches a Mission Summary "
-
-[node name="CheckButton" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button3" index="0" unique_id=622625741]
-section = "publishing"
-
-[node name="VirtualTabBar" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="1" unique_id=1243899430]
-visible = false
-
-[node name="Tab2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VirtualTabBar/HBoxContainer" index="1" unique_id=759243380]
-Mode = 1
-
-[node name="Tab3" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VirtualTabBar/HBoxContainer" index="2" unique_id=27329300]
-visible = false
-Text = "To-Do List"
-
-[node name="TabContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="2" unique_id=1431888005]
-visible = false
-
-[node name="Tabs" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="3" unique_id=798859068]
-visible = false
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="4" unique_id=930526431]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 2
-
-[node name="VBucks" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("2_b8wcl")]
-layout_mode = 2
-theme_type_variation = &"Panel5Pad"
-targetTemplateId = "AccountResource:currency_hybrid_mtx_xrayllama"
-targetTemplatePrefix = "AccountResource:currency_hybrid_mtx_xrayllama"
-configDependancy = "missions:groupVBucks"
-filterPlayable = NodePath("../../HBoxContainer/CheckButton")
-
-[node name="LegSurvivors" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1954780742 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("2_b8wcl")]
-layout_mode = 2
-theme_type_variation = &"Panel5Pad"
-targetTemplateId = "Worker:workerbasic_sr_t01"
-targetTemplatePrefix = "Worker:workerbasic_sr_t0"
-titleText = "Legendary Survivors"
-configDependancy = "missions:groupLegSurvivors"
-filterPlayable = NodePath("../../HBoxContainer/CheckButton")
-
-[node name="Control" type="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=2077097802]
-visible = false
-layout_mode = 2
-mouse_filter = 2
-
-[node name="HSeparator" type="HSeparator" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Control" unique_id=1626285031]
+[node name="ToDoList" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards" unique_id=1403873334 instance=ExtResource("2_21lf2")]
 layout_mode = 2
 
-[node name="Notable" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer" unique_id=1099693610 node_paths=PackedStringArray("filterPower", "excludeRewards") instance=ExtResource("6_6qpji")]
+[node name="AllRewards" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards" unique_id=454438386 instance=ExtResource("3_ury42")]
 layout_mode = 2
-filterPower = NodePath("../../HBoxContainer/CheckButton")
-excludeRewards = [NodePath("../LegSurvivors"), NodePath("../VBucks")]
-
-[node name="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer" parent_id_path=PackedInt32Array(1099693610, 1661216227) index="1" unique_id=530096324]
-custom_minimum_size = Vector2(0, 0)
-
-[node name="SmallLoadingIcon" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer/MarginContainer" index="1" unique_id=532557855]
-visible = false
-
-[node name="HSeparator" type="HSeparator" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="5" unique_id=783695274]
-layout_mode = 2
-
-[node name="All" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3" parent_id_path=PackedInt32Array(1977093584, 1412053505) index="6" unique_id=1850280008 instance=ExtResource("7_7he0n")]
-layout_mode = 2
-excludeTodo = true
-
-[node name="To-Do List (0)" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1850280008, 1364284326) index="1" unique_id=1588741757 node_paths=PackedStringArray("tab") instance=ExtResource("8_xcujg")]
-layout_mode = 2
-tab = NodePath("../../../../VirtualTabBar/HBoxContainer/Tab3")
-
-[node name="ScrollContainer2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All/VBoxContainer/VBoxContainer/To-Do List (0)" index="0" unique_id=975515670]
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
-
-[node name="HSeparator" type="HSeparator" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1850280008, 1364284326) index="2" unique_id=1386493756]
-layout_mode = 2
-
-[node name="ScrollContainer2" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All/VBoxContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1850280008, 1513377394) index="0" unique_id=749997421]
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard" unique_id=1432899150]
 layout_mode = 2
@@ -381,10 +296,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SimplifiedDashboard" parent="." unique_id=934024320 instance=ExtResource("13_db4i7")]
-visible = false
-layout_mode = 2
-
 [node name="ShareableMissionSummary" parent="." unique_id=594364409 instance=ExtResource("51_0op8k")]
 visible = false
 layout_mode = 2
@@ -423,9 +334,8 @@ layout_mode = 2
 [node name="PowerHourViewport" parent="ShareablePowerHour" index="0" unique_id=424942682]
 render_target_update_mode = 0
 
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button" to="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All" method="ReloadMissions"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button2" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/HBoxContainer/Button3" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
+[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer/ShareMissions" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer/PublishMissions" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
 [connection signal="ConfigValueChanged" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3/CheckButton" to="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" method="set_visible"]
@@ -433,12 +343,7 @@ render_target_update_mode = 0
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardXPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
 
-[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards"]
-[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VirtualTabBar"]
-[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable"]
-[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/VBoxContainer/Notable/VBoxContainer/Hidden/MissionCollection"]
-[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All"]
-[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/VBoxContainer3/All/VBoxContainer/VBoxContainer/To-Do List (0)"]
+[editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/HBoxContainer/DashboardLlamaShop"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/Container/VBoxContainer/DoubleLegendary"]

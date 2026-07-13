@@ -2,40 +2,42 @@
   "htr": {
     "displayName": "Hit The Road",
     "eventFlag": "EventFlag.Mayday",
+    "showComplete":true,
     "predicate": {
       "category": "ltr_mayday2019",
       "exclude": [
-        "Quest:MaydayQuest_2019_CollectCasettes_Repeatable",
         "Quest:MaydayQuest_2019_Daily_Complete",
+        "Quest:MaydayQuest_2019_Strangelands",
+        "Quest:maydayquest_2019_novehicledamage",
+        "Quest:maydayquest_2019_novehicledamage_endgame",
         {
-          "startsWith": "maydayquest_2019_complete"
+          "startsWith": "maydayquest_2019_complete",
+          "exclude": "Quest:maydayquest_2019_completesubmissions"
         }
       ]
     }
   },
   "htr_daily": {
-    "displayName": "Hit The Road",
-    "timer": "Weekly",
+    "displayName": "Daily Hit The Road",
+    "timer": "Daily",
     "eventFlag": "EventFlag.Mayday",
     "predicate": "Quest:MaydayQuest_2019_Daily_Complete"
   },
   "htr_weekly": {
-    "displayName": "Hit The Road",
+    "displayName": "Weekly Hit The Road",
     "timer": "Weekly",
+    "showComplete":true,
     "eventFlag": "EventFlag.Mayday",
     "predicate": {
-      "startsWith": "maydayquest_2019_complete"
+      "startsWith": "maydayquest_2019_complete",
+      "exclude": "Quest:maydayquest_2019_completesubmissions"
     }
-  },
-  "htr_repeatable": {
-    "displayName": "Hit The Road",
-    "timer": "Weekly",
-    "eventFlag": "EventFlag.Mayday",
-    "predicate": "Quest:MaydayQuest_2019_CollectCasettes_Repeatable"
   },
   "dungeon": {
     "displayName": "Dungeons",
+    "shortName": "Standard",
     "eventFlag": "EventFlag.Starlight",
+    "showComplete":true,
     "predicate": {
       "category": "lte_starlight",
       "exclude": {
@@ -44,10 +46,13 @@
             "startsWith": "starlightquest_daily_complete"
           },
           {
-            "startsWith": "starlightquest_complete_dailies"
+            "startsWith": "starlightquest_complete"
           },
           {
-            "endsWith": "_hard"
+            "startsWith": "starlightquest_dungeoneer"
+          },
+          {
+            "startsWith": "starlightquest_hidden"
           }
         ]
       }
@@ -71,17 +76,100 @@
       ]
     }
   },
-  "dungeon_elite": {
-    "displayName": "Elite Dungeons",
+  "dungeon_crypts": {
+    "displayName": "Crypts Capers",
+    "shortName": "Crypts",
     "eventFlag": "EventFlag.Starlight",
+    "sequence": true,
     "predicate": {
-      "category": "lte_starlight",
-      "endsWith": "_hard"
+      "union": [
+        "Quest:starlightquest_complete_d1_a",
+        "Quest:starlightquest_complete_d1_b",
+        "Quest:starlightquest_complete_d1_c"
+      ]
+    }
+  },
+  "dungeon_lab": {
+    "displayName": "Lab Looting",
+    "shortName": "Lab",
+    "eventFlag": "EventFlag.Starlight",
+    "sequence": true,
+    "predicate": {
+      "union": [
+        "Quest:starlightquest_complete_d5science_a",
+        "Quest:starlightquest_complete_d5science_b",
+        "Quest:starlightquest_complete_d5science_c"
+      ]
+    }
+  },
+  "dungeon_inferno": {
+    "displayName": "Inferno Infiltration",
+    "shortName": "Inferno",
+    "eventFlag": "EventFlag.Starlight",
+    "sequence": true,
+    "predicate": {
+      "union": [
+        "Quest:starlightquest_complete_d2_a",
+        "Quest:starlightquest_complete_d2_b",
+        "Quest:starlightquest_complete_d2_c"
+      ]
+    }
+  },
+  "dungeon_grotto": {
+    "displayName": "Grotto Grabbing",
+    "shortName": "Grotto",
+    "eventFlag": "EventFlag.Starlight",
+    "sequence": true,
+    "predicate": {
+      "union": [
+        "Quest:starlightquest_complete_d3_a",
+        "Quest:starlightquest_complete_d3_b",
+        "Quest:starlightquest_complete_d3_c"
+      ]
+    }
+  },
+  "dungeon_labrynth": {
+    "displayName": "Labrynth Larceny",
+    "shortName": "Labrynth",
+    "eventFlag": "EventFlag.Starlight",
+    "sequence": true,
+    "predicate": {
+      "union": [
+        "Quest:starlightquest_complete_d4_a",
+        "Quest:starlightquest_complete_d4_b",
+        "Quest:starlightquest_complete_d4_c"
+      ]
+    }
+  },
+  "dungeon_class": {
+    "displayName": "Dungeoneers",
+    "eventFlag": "EventFlag.Starlight",
+    "chain":true,
+    "predicate": "Quest:starlightquest_dungeoneer_soldier"
+  },
+  "dungeon_challenge": {
+    "displayName": "Challenges",
+    "eventFlag": "EventFlag.Starlight",
+    "chain":true,
+    "predicate": "Quest:starlightquest_complete_melee_d1"
+  },
+  "dungeon_elite": {
+    "displayName": "Dungeon Checklist",
+    "shortName": "Elite",
+    "eventFlag": "EventFlag.Starlight",
+    "showComplete":true,
+    "predicate": {
+      "union":[
+        "Quest:starlightquest_complete_all",
+        "Quest:starlightquest_complete_all_hard"
+      ]
     }
   },
   "sth": {
     "displayName": "Survive The Horde",
+    "shortName": "Standard",
     "eventFlag": "EventFlag.HordeV3",
+    "showComplete":true,
     "predicate": {
       "union": [
         "Quest:hordev3_quest_event_a01",
@@ -94,6 +182,7 @@
   },
   "sth_daily": {
     "displayName": "Daily Survive The Horde",
+    "shortName": "Daily",
     "timer": "Daily",
     "eventFlag": "EventFlag.HordeV3",
     "sequence": true,
@@ -108,6 +197,7 @@
   "sth_weekly": {
     "displayName": "Weekly Survive The Horde",
     "timer": "Weekly",
+    "showComplete":true,
     "predicate": {
       "eventFlag": "EventFlag.HordeV3",
       "startsWith": "hordev3_quest_weekly"
@@ -115,6 +205,7 @@
   },
   "sth_15": {
     "displayName": "Survive The Horde: Wave 15",
+    "shortName": "Wave 15",
     "eventFlag": "EventFlag.HordeV3",
     "predicate": {
       "chain": true,
@@ -125,6 +216,7 @@
   },
   "sth_modifier": {
     "displayName": "Survive The Horde: Modifiers",
+    "shortName": "Modifiers",
     "eventFlag": "EventFlag.HordeV3",
     "sequence": true,
     "predicate": {
@@ -137,6 +229,7 @@
   },
   "sth_challenge": {
     "displayName": "Survive The Horde: Challenges",
+    "shortName": "Challenges",
     "eventFlag": "EventFlag.HordeV3",
     "sequence": true,
     "predicate": {
@@ -151,6 +244,7 @@
   "frostnite": {
     "displayName": "Frostnite",
     "eventFlag": "EventFlag.Season11.Frostnite",
+    "showComplete":true,
     "predicate": {
       "startsWith": "s11_holdfastquest",
       "exclude": {
@@ -185,9 +279,10 @@
       ]
     }
   },
-  "forstnite_elite": {
+  "frostnite_elite": {
     "displayName": "Elite Frostnite",
     "eventFlag": "EventFlag.Season11.Frostnite",
+    "showComplete":true,
     "predicate": {
       "prefilter": {
         "startsWith": "s11_holdfastquest"

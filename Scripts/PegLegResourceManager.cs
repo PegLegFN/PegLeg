@@ -70,6 +70,19 @@ public class PegLegResourceManager
 			}
 		}
 
+		public PackageVersion GetLatestLocalPatch()
+		{
+			using DirAccess packageDir = DirAccess.Open(globalPackageFolderPath);
+			var prefix = $"PegLegResources-v{version.major}.{version.minor}";
+			var latestPatchNum = packageDir
+				.GetFiles()
+				.Where(f => f.StartsWith(prefix) && f.EndsWith(".pck"))
+				.Select(f => int.TryParse(f[prefix.Length..^4], out var patchVer) ? patchVer : -1)
+				.OrderByDescending(p => p)
+				.FirstOrDefault();
+			return latestPatchNum < 0 ? this : new PackageVersion(version with { patch = latestPatchNum });
+		}
+
 		public void LoadAllPackages()
 		{
 			ProjectSettings.LoadResourcePack(LocalPackagePath, false);
@@ -110,11 +123,18 @@ public class PegLegResourceManager
 						else
 							return r.assets.FirstOrDefault(a => a.name.StartsWith("PegLegResources-v"));
 					}
-				);
+				) ?? [];
+			if (releases.Count == 0)
+			{
+				GD.PushWarning("Failed to fetch resource versions, resources may fail to load or be out of date");
+				await FallbackLoadLocalResources(targetMajor, targetMinor, onProgress);
+				return;
+			}
 		}
 		catch
 		{
 			GD.PushWarning("Failed to fetch resource versions, resources may fail to load or be out of date");
+			await FallbackLoadLocalResources(targetMajor, targetMinor, onProgress);
 			return;
 		}
 
@@ -129,6 +149,7 @@ public class PegLegResourceManager
 		if (latestVersion == default)
 		{
 			GD.PushWarning("No compatible versions found, did I time travel?");
+			await FallbackLoadLocalResources(targetMajor, targetMinor, onProgress);
 			return;
 		}
 		GD.Print("Latest Pack Ver: " + latestVersion);
@@ -149,11 +170,28 @@ public class PegLegResourceManager
 			await asset.DownloadTo(fileStream, downloadProgress);
 		}
 		await Helpers.WaitForFrame();
-		if (FileAccess.FileExists(globalPackageFolderPath + "ExtraPatch.pck"))
-			ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
+		onProgress?.Invoke("Applying Resource Packs", -1);
+		ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
 		latestVersion.LoadAllPackages();
 		latestVersion.ClearOutdatedPackages();
 		onProgress?.Invoke("Loading Resources", -1);
+		await Task.WhenAll(
+			LoadDataSources(),
+			LoadNamedItems()
+		);
+		hasLoadedResources = true;
+		OnResourcesLoaded?.Invoke();
+	}
+
+	static async Task FallbackLoadLocalResources(int targetMajor, int targetMinor, Action<string, float> onProgress = null)
+	{
+		onProgress?.Invoke("Applying Local Resource Packs", -1);
+		ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
+		PackageVersion targetVersion = new(new(targetMajor, targetMinor, 0));
+		targetVersion = targetVersion.GetLatestLocalPatch();
+		targetVersion.LoadAllPackages();
+
+		onProgress?.Invoke("Loading Local Resources", -1);
 		await Task.WhenAll(
 			LoadDataSources(),
 			LoadNamedItems()
@@ -187,6 +225,7 @@ public class PegLegResourceManager
 		"DifficultyInfo",
 		"EventQuestLines",
 		"ExpeditionCriteria",
+		"MiscData",
 	];
 	static async Task LoadDataSources()
 	{
@@ -584,6 +623,7 @@ public class PegLegResourceManager
 	public static JsonObject DifficultyInfo => dataSources?["DifficultyInfo"];
 	public static JsonObject EventQuestLines => dataSources?["EventQuestLines"];
 	public static JsonObject ExpeditionCriteria => dataSources?["ExpeditionCriteria"];
+	public static JsonObject MiscData => dataSources?["MiscData"];
 
 	static JsonObject magicNumbers;
 	public static JsonObject MagicNumbers => (magicNumbers ??= LoadResourceObj("magicNumbers.json")) ?? [];

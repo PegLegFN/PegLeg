@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://mocwxx3hkrl3"]
+
+[ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="1_sp833"]
+[ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="2_663fw"]
+[ext_resource type="Script" uid="uid://b5p17hdo00lc6" path="res://Scripts/UserInterface/Dashboard/MissionToDoListController.cs" id="3_u8by4"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="4_mj0j4"]
+[ext_resource type="PackedScene" uid="uid://bo5ikr32xssoo" path="res://Scenes/MissionEntry/mission_reward_entry_todo.tscn" id="5_8m7pj"]
+
+[node name="ToDoList" type="PanelContainer" unique_id=1403873334]
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1793652095]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=986725128]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=128343244]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "To-Do List"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer" unique_id=43889889]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+theme_override_constants/outline_size = 0
+theme_override_constants/icon_max_width = 20
+theme_override_icons/icon = ExtResource("1_sp833")
+selected = 0
+item_count = 8
+popup/item_0/text = "Manual"
+popup/item_0/id = 0
+popup/item_1/text = "Match Missions"
+popup/item_1/id = 1
+popup/item_2/id = 3
+popup/item_2/separator = true
+popup/item_3/text = "Standard"
+popup/item_3/id = 1337
+popup/item_4/text = "FortniteDB"
+popup/item_4/id = 465
+popup/item_5/text = "Power"
+popup/item_5/id = 160
+popup/item_6/text = "FNDB Power"
+popup/item_6/id = 333
+popup/item_7/text = "Beast Zone Power"
+popup/item_7/id = 127
+script = ExtResource("2_663fw")
+section = "missions"
+key = "todo_sort_mode"
+
+[node name="To-Do List (0)" type="MarginContainer" parent="VBoxContainer" unique_id=1998254745 node_paths=PackedStringArray("newMissionListNode", "rootPanel")]
+layout_mode = 2
+script = ExtResource("3_u8by4")
+newMissionListNode = NodePath("RecycleContainer")
+rootPanel = NodePath("../..")
+metadata/_tab_index = 2
+
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/To-Do List (0)" unique_id=1605804328 node_paths=PackedStringArray("viewportParent")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_mj0j4")
+viewportParent = NodePath("")
+recycleEntryScene = ExtResource("5_8m7pj")

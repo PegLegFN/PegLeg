@@ -20,6 +20,9 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	[Export]
 	VirtualTab tab;
 
+	[Export]
+	Control rootPanel;
+
 	DateTime lastKnownReset;
 	List<MissionRewardDataPair> targetMissionRewardData = [];
 	List<MissionRewardPair> targetMissionRewards = [];
@@ -35,6 +38,7 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	public override void _Ready()
 	{
 		inst = this;
+		rootPanel?.Visible = false;
 		missionList?.SetProvider(this);
 		if(newMissionListNode is IListHandler listHandler)
 		{
@@ -142,8 +146,8 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	void UpdateList()
 	{
 		CheckForNewDay();
-		if (tab is not null)
-			tab.Text = $"To-Do List ({targetMissionRewards.Count})";
+		tab?.Text = $"To-Do List ({targetMissionRewards.Count})";
+		rootPanel?.Visible = targetMissionRewards.Count > 0;
 
 		var todoSort = AppConfig.Get("missions", "todo_sort_mode", 0);
 		if (todoSort == 1)

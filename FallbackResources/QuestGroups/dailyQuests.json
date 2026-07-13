@@ -1,0 +1,109 @@
+{
+  "birthday": {
+    "displayName": "Daily Birthday Llamas",
+    "sequence": true,
+    "showProgress": false,
+    "predicate": {
+      "union":[
+        "Quest:birthday_quest_collectflamingos",
+        "Quest:birthday_quest_lightfireworks",
+        "Quest:birthday_quest_rescuesurvivors",
+        "Quest:birthday_quest_mistmonsters",
+        "Quest:birthday_quest_collectice",
+        "Quest:birthday_quest_collecttowels",
+        "Quest:birthday_quest_harvestac"
+      ]
+    }
+  },
+  "daily": {
+    "displayName": "Daily Quests",
+    "predicate": {
+      "startsWith": "daily_"
+    }
+  },
+  "htr_daily": {
+    "displayName": "Daily Hit The Road",
+    "eventFlag": "EventFlag.Mayday",
+    "predicate": "Quest:MaydayQuest_2019_Daily_Complete"
+  },
+  "frostnite_daily": {
+    "displayName": "Daily Frostnite",
+    "eventFlag": "EventFlag.Season11.Frostnite",
+    "predicate": {
+      "prefilter": {
+        "startsWith": "s11_holdfastquest_d"
+      },
+      "union": [
+        {
+          "startsWith": "s11_holdfastquest_d1"
+        },
+        {
+          "startsWith": "s11_holdfastquest_d2"
+        }
+      ]
+    }
+  },
+  "dungeon_daily": {
+    "displayName": "Daily Dungeons",
+    "eventFlag": "EventFlag.Starlight",
+    "predicate": {
+      "union": [
+        {
+          "category": "lte_starlight",
+          "startsWith": "starlightquest_daily_complete"
+        },
+        {
+          "category": "lte_starlight",
+          "startsWith": "starlightquest_complete_dailies"
+        }
+      ]
+    }
+  },
+  "sth_daily": {
+    "displayName": "Daily Survive The Horde",
+    "eventFlag": "EventFlag.HordeV3",
+    "sequence": true,
+    "predicate": {
+      "union": [
+        "Quest:hordev3_quest_daily_a01",
+        "Quest:hordev3_quest_daily_a02",
+        "Quest:hordev3_quest_daily_a03"
+      ]
+    }
+  },
+  "wargames": {
+    "displayName": "Daily Wargames",
+    "predicate": {
+      "union": [
+        {
+          "startsWith": "wargames_dailyquest"
+        },
+        "Quest:wargames_completedailyquest"
+      ]
+    }
+  },
+  "endurance": {
+    "displayName": "Daily Endurance",
+    "sequence": true,
+    "showLocked": false,
+    "predicate": {
+      "prefilter": {
+        "startsWith": "endurancedaily_"
+      },
+      "union": [
+        {
+          "startsWith": "endurancedaily_t01"
+        },
+        {
+          "startsWith": "endurancedaily_t02"
+        },
+        {
+          "startsWith": "endurancedaily_t03"
+        },
+        {
+          "startsWith": "endurancedaily_t04"
+        }
+      ]
+    }
+  }
+}

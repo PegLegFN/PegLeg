@@ -8,6 +8,7 @@ uniform bool Fit;
 uniform float Scale = 2.0f;
 uniform float Speed = 0.2f;
 uniform float Progress :hint_range(0.0, 1.0, 0.01) = 0;
+uniform float Rotate :hint_range(0.0, 100.0, 0.01) = 30.0;
 uniform bool ClipOOB;
 global uniform bool GlobalCorners;
 
@@ -18,11 +19,20 @@ void vertex()
 	modulate=COLOR;
 }
 
+//src: sixrobin
+vec2 rotateVector2(vec2 v, float theta, vec2 pivot)
+{
+    float c = cos(radians(theta));
+    float s = sin(radians(theta));
+    return vec2(c * (v.x - pivot.x) + s * (v.y - pivot.y) + pivot.x, c * (v.y - pivot.y) - s * (v.x - pivot.x) + pivot.y);
+}
+
 void fragment() {
 	vec2 texRes=1.0/TEXTURE_PIXEL_SIZE;
+	
 	vec2 adaptedUV = adaptToAspect(ControlSize, ShiftDirection, texRes, UV, Fit)*Scale;
 	//adaptedUV+=vec2(mod(TIME*-(Speed), Scale));
-	COLOR = texture(TEXTURE, adaptedUV);
+	COLOR = texture(TEXTURE, rotateVector2(adaptedUV, Rotate, vec2(1)));
 
 	if(Fit && ClipOOB)
 	{

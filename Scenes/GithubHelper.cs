@@ -1,6 +1,9 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -114,11 +117,42 @@ public static class GithubHelper
 		public override readonly string ToString() => $"v{major}.{minor}.{patch}";
 	}
 
+	record struct RatelimitData(int used, int total, DateTime reset)
+	{
+		public bool SurpassedRatelimit => used >= total && reset > DateTime.UtcNow;
+	}
+
+	static Dictionary<string, RatelimitData> rateLimits = [];
+	static bool SurpassedLimit(string resource) => rateLimits.TryGetValue(resource, out var limits) ? limits.SurpassedRatelimit : false;
+	delegate bool TryParser<T>(string text, out T result);
+	static bool TryParseHeader<T>(HttpHeadersNonValidated headers, string name, TryParser<T> tryParser, out T result)
+	{
+		result = default;
+		return headers.TryGetValues("x-ratelimit-limit", out var text) && tryParser(text.FirstOrDefault(), out result);
+	}
+	static bool StringParser(string input, out string output)
+	{
+		output = input;
+		return input is not null;
+	}
+
 	public static async Task<ReleaseData[]> FetchReleases(string user, string repo)
 	{
+		if (SurpassedLimit("core"))
+			return [];
 		using var releasesResponse = await githubApi
 			.MakeRequest($"/repos/{user}/{repo}/releases")
 			.Send();
+
+		var nvHeaders = releasesResponse.Headers.NonValidated;
+		bool hasRateLimitInfo = true;
+		hasRateLimitInfo &= TryParseHeader(nvHeaders, "x-ratelimit-limit", int.TryParse, out int limitTotal);
+		hasRateLimitInfo &= TryParseHeader(nvHeaders, "x-ratelimit-used", int.TryParse, out int limitUsed);
+		hasRateLimitInfo &= TryParseHeader(nvHeaders, "x-ratelimit-reset", int.TryParse, out int limitReset);
+		hasRateLimitInfo &= TryParseHeader(nvHeaders, "x-ratelimit-resource", StringParser, out string resource);
+		if (hasRateLimitInfo)
+			rateLimits[resource] = new(limitUsed, limitTotal, DateTimeOffset.FromUnixTimeSeconds(limitReset).UtcDateTime);
+
 		if (await releasesResponse.CheckForError())
 			return [];
 		return await releasesResponse

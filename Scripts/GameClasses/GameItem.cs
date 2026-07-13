@@ -52,11 +52,11 @@ public class GameItem
 			return null;
 		foreach (var equivelent in zcpEquivelents)
 		{
-			if (Regex.Match(templateId.ToLower(), equivelent.Key).Success)
+			if (Regex.IsMatch(templateId.ToLower(), equivelent.Key))
 			{
-				GameItem equivelentItem = GameItemTemplate.Get(equivelent.Value).CreateInstance();
-				equivelentItem.SetSeenLocal();
-				equivelentItem.GetSearchTags();
+				GameItem equivelentItem = GameItemTemplate.Get(equivelent.Value)?.CreateInstance();
+				equivelentItem?.SetSeenLocal();
+				equivelentItem?.GetSearchTags();
 				return equivelentItem;
 			}
 		}

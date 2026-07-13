@@ -86,24 +86,15 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		SetupFilters(rarityFilters);
 		SetupFilters(zoneFilters);
 		SetupFilters(typeFilters);
-		if (sortMode is not null)
-			sortMode.ItemSelected += _ => FilterMissions();
-		if (filterPower is not null)
-			filterPower.Toggled += _ => FilterMissions();
-		if (filterNotable is not null)
-			filterNotable.Toggled += _ => FilterMissions();
-		if (filterPowerContainer is not null)
-			filterPowerContainer.Visible = GameAccount.ActiveAccount.isOwned;
-		if (filterStory is not null)
-			filterStory.Toggled += _ => FilterMissions();
-		if (searchBar is not null)
-		{
-			searchBar.TextChanged += _ => UpdateSearch();
-		}
-		if (itemSearchBar is not null)
-		{
-			itemSearchBar.TextChanged += _ => UpdateSearch();
-		}
+
+		sortMode?.ItemSelected += _ => FilterMissions();
+		filterPower?.Toggled += _ => FilterMissions();
+		filterNotable?.Toggled += _ => FilterMissions();
+		filterPowerContainer?.Visible = GameAccount.ActiveAccount.isOwned;
+		filterStory?.Toggled += _ => FilterMissions();
+		searchBar?.TextChanged += _ => UpdateSearch();
+		itemSearchBar?.TextChanged += _ => UpdateSearch();
+
 		foreach (var filter in repeatabilityFilters)
 		{
 			if (lockFilter)
@@ -310,6 +301,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		return pairs
 			//.Reverse()
 			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+			.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenByDescending(r => r.mission.TheaterIdx)
 			.ThenBy(r => r.mission.PowerLevel)
 			.ThenBy(r => r.item.sortingTemplate.RarityLevel)
@@ -594,10 +586,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		loadingIcon.Visible = true;
 		rewards.Clear();
 		newMissionList?.UpdateList();
-		if (missionList is not null)
-			missionList.Visible = false;
-		if (emptyContent is not null)
-			emptyContent.Visible = false;
+		missionList?.Visible = false;
+		emptyContent?.Visible = false;
 	}
 }
 

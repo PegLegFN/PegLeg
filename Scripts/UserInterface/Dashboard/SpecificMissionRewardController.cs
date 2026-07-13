@@ -75,9 +75,10 @@ public partial class SpecificMissionRewardController : Control
 	{
 		if (configDependancy is null)
 			return;
-		if (section != configSection)
-			return;
-		if (key != configKey)
+		if (!(
+			(section != configSection || key != configKey) ||
+			(section != "missions" || key != "split_grouped_stacks")
+			))
 			return;
 		if (GameMission.MissionList is not null)
 			UpdateMissions();
@@ -142,19 +143,31 @@ public partial class SpecificMissionRewardController : Control
 			totalLabel.Text = $"x{matchingItems.Sum(i => i.quantity)}";
 		}
 
+		bool splitStacks = AppConfig.Get("missions", "split_grouped_stacks", false);
+		int rewardTotal = 0;
+
 		for (int i = 0; i < matchingMissions.Length; i++)
 		{
-			if (i >= rewards.Count)
-			{
-				var newEntry = rewardEntryScene.Instantiate<MissionRewardEntry>();
-				rewards.Add(newEntry);
-				rewardParent.AddChild(newEntry);
-			}
 			var m = matchingMissions[i];
-			rewards[i].SetRewardInfoManually(m, [.. m.allItems.Where(MissionRewardValidator)]);
-			rewards[i].Visible = true;
+			GameItem[] missionRewards = [.. m.allItems.Where(MissionRewardValidator)];
+
+			//kinda jank way to enable/disable stack splitting
+			GameItem[][] rewardSets = splitStacks ? [.. missionRewards.Select<GameItem, GameItem[]>(m => [m])] : [missionRewards];
+
+			foreach (var rewardSet in rewardSets)
+			{
+				if (rewardTotal >= rewards.Count)
+				{
+					var newEntry = rewardEntryScene.Instantiate<MissionRewardEntry>();
+					rewards.Add(newEntry);
+					rewardParent.AddChild(newEntry);
+				}
+				rewards[rewardTotal].SetRewardInfoManually(m, rewardSet);
+				rewards[rewardTotal].Visible = true;
+				rewardTotal++;
+			}
 		}
-		for (int i = matchingMissions.Length; i < rewards.Count; i++)
+		for (int i = rewardTotal; i < rewards.Count; i++)
 		{
 			rewards[i].Visible = false;
 			rewards[i].ClearReward();

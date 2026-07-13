@@ -1,0 +1,188 @@
+[gd_scene format=3 uid="uid://bqa4bddqjpu7q"]
+
+[ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="1_03c78"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="2_tfkul"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="2_tjeuk"]
+[ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_381en"]
+[ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="3_koprm"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_koprm"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="5_tfkul"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="6_47w4d"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="7_03c78"]
+[ext_resource type="Texture2D" uid="uid://1l04r0a5boqq" path="res://Images/InterfaceIcons/Stars-Full-128.png" id="8_381en"]
+[ext_resource type="Texture2D" uid="uid://dc6umid5fw8b3" path="res://Images/InterfaceIcons/T-Icon-Manage-All-512.png" id="9_koprm"]
+[ext_resource type="Texture2D" uid="uid://bashr5wthp5vk" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_List_128.png" id="10_tfkul"]
+
+[node name="MissionRewards" type="PanelContainer" unique_id=1036371064]
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1412053505]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer3" unique_id=1168126100]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer3/HBoxContainer" unique_id=1757746236]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Mission Rewards"
+
+[node name="Label2" type="Label" parent="VBoxContainer3/HBoxContainer" unique_id=1784471489]
+visible = false
+layout_mode = 2
+text = "xx:xx:xx"
+script = ExtResource("1_03c78")
+timerType = 1
+
+[node name="RefreshTimer" parent="VBoxContainer3/HBoxContainer" unique_id=112616027 instance=ExtResource("2_tfkul")]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer" unique_id=1980086915]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+mouse_filter = 1
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/CheckButton" unique_id=1499968416]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_tfkul")
+expand_mode = 3
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/CheckButton" unique_id=481565494]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("4_koprm")
+section = "missions"
+key = "filter_power_default"
+defaultValue = true
+
+[node name="Button" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=1771145246]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button" unique_id=1379644798]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_tjeuk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Button2" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=316163759]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button2" unique_id=896569767]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_381en")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Button3" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=798965087]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/Button3" unique_id=622625741]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("4_koprm")
+section = "webhooks"
+key = "dailySummary_enabled"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/Button3" unique_id=2049114806]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_koprm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VirtualTabBar" parent="VBoxContainer3" unique_id=1243899430 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("6_47w4d")]
+layout_mode = 2
+useAsTabContainer = NodePath("../Tabs")
+
+[node name="Tab" parent="VBoxContainer3/VirtualTabBar/HBoxContainer" index="0" unique_id=1466007698 instance=ExtResource("7_03c78")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = "Notable"
+Icon = ExtResource("8_381en")
+
+[node name="Tab2" parent="VBoxContainer3/VirtualTabBar/HBoxContainer" index="1" unique_id=759243380 instance=ExtResource("7_03c78")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "All"
+Icon = ExtResource("9_koprm")
+IsPressed = true
+
+[node name="Tab3" parent="VBoxContainer3/VirtualTabBar/HBoxContainer" index="2" unique_id=27329300 instance=ExtResource("7_03c78")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = "To-Do"
+Icon = ExtResource("10_tfkul")
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer3" unique_id=1431888005]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tabs" type="MarginContainer" parent="VBoxContainer3" unique_id=798859068]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="toggled" from="VBoxContainer3/HBoxContainer/CheckButton/CheckButton" to="VBoxContainer3/HBoxContainer/CheckButton" method="set_pressed"]
+[connection signal="ConfigValueChanged" from="VBoxContainer3/HBoxContainer/Button3/CheckButton" to="VBoxContainer3/HBoxContainer/Button3" method="set_visible"]
+
+[editable path="VBoxContainer3/VirtualTabBar"]

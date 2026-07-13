@@ -907,64 +907,77 @@ public partial class GameAccount
 	public RatingData RatingData => GetRatingData();
 	public RatingData GetRatingData(bool force = false)
 	{
-		if (!force && ratingData is not null)
-			return ratingData.Value;
-
-		var accountItems = GetProfile(FnProfileTypes.AccountItems);
-		var statItems = accountItems.GetItems("Stat");
-		var equippedWorkerItems = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
-
-		int LookupStatItem(string statId)
+		try
 		{
-			var stat = statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
-			//GD.Print($"Stat:{statId}:{stat}");
-			return stat;
-		}
+			if (!force && ratingData is not null)
+				return ratingData.Value;
 
-		float LookupWorkers(string squadId)
-		{
-			try
+			var accountItems = GetProfile(FnProfileTypes.AccountItems);
+			var statItems = accountItems.GetItems("Stat");
+			var equippedWorkerItems = accountItems.GetItems("Worker", item => item.attributes.ContainsKey("squad_id"));
+
+			var equippedWhereNull = equippedWorkerItems.Where(item => item?.attributes?["squad_id"]?.ToString() == null).ToArray();
+			if (equippedWhereNull.Length > 0)
+				GD.Print($"Equipped Survivors Where Null {{aid:{accountId}}}:[\n{string.Join(",\n", equippedWhereNull.Select(i => i?.GameItemData))}\n]");
+
+			int LookupStatItem(string statId)
 			{
-				var matchingWorkers = equippedWorkerItems.Where(item => item.attributes["squad_id"].ToString() == squadId);
-				var stat = matchingWorkers.Sum(item => item.CalculateSurvivorRating());
-				//GD.Print($"Squad:{squadId}:{stat}");
+				var stat = statItems.FirstOrDefault(item => item.templateId == statId)?.quantity ?? 0;
+				//GD.Print($"Stat:{statId}:{stat}");
 				return stat;
 			}
-			catch(Exception e)
+
+			float LookupWorkers(string squadId)
 			{
-				GD.Print("SquadErrorCTX: (" +
-					$"equippedArrayIsNull:{equippedWorkerItems is null}, " +
-					$"equippedArrayLen:{equippedWorkerItems?.Length}, " +
-					$"equippedWhereNull:{equippedWorkerItems?.Count(item => item?.attributes?["squad_id"]?.ToString() == null)}, " +
-					$"matchingLen:{equippedWorkerItems?.Count(item => item?.attributes?["squad_id"]?.ToString() == squadId)}, " +
-					$"matchingSum:{equippedWorkerItems?.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId).Sum(item => item?.CalculateSurvivorRating() ?? 0)}, " +
-					$"matchingWhereRatingNull:{equippedWorkerItems?.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId).Count(item => item?.CalculateSurvivorRating() == null)}, " +
-					")"
-				);
-				GD.PushError($"ERROR with squad power for {squadId}\n{e}");
+				var matchingWorkersSafe = equippedWorkerItems.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId);
+				var statSafe = matchingWorkersSafe.Sum(item => item?.CalculateSurvivorRating() ?? 0);
+				return statSafe;
+				/*
+				try
+				{
+					var matchingWorkers = equippedWorkerItems.Where(item => item.attributes["squad_id"].ToString() == squadId);
+					var stat = matchingWorkers.Sum(item => item.CalculateSurvivorRating());
+					//GD.Print($"Squad:{squadId}:{stat}");
+					return stat;
+				}
+				catch(NullReferenceException e)
+				{
+					GD.Print("SquadNullRefErrorCTX: (" +
+						$"equippedArrayIsNull:{equippedWorkerItems is null}, " +
+						$"equippedArrayLen:{equippedWorkerItems?.Length}, " +
+						$"equippedWhereNull:{equippedWorkerItems?.Count(item => item?.attributes?["squad_id"]?.ToString() == null)}, " +
+						$"matchingLen:{equippedWorkerItems?.Count(item => item?.attributes?["squad_id"]?.ToString() == squadId)}, " +
+						$"matchingSum:{equippedWorkerItems?.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId).Sum(item => item?.CalculateSurvivorRating() ?? 0)}, " +
+						$"matchingWhereRatingNull:{equippedWorkerItems?.Where(item => item?.attributes?["squad_id"]?.ToString() == squadId).Count(item => item?.CalculateSurvivorRating() == null)}, " +
+						")"
+					);
+				}*/
 			}
-			return 0;
+
+			double backpackPower = RatingData.GetWeaponPower(this);
+			double loadoutPower = RatingData.GetLoadoutPower(this);
+
+			//+ profileStats["fortitude"].GetValue<int>()
+			float fortitude = LookupStatItem("Stat:fortitude") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
+			float offense = LookupStatItem("Stat:offense") + LookupWorkers("squad_attribute_arms_fireteamalpha") + LookupWorkers("squad_attribute_arms_closeassaultsquad");
+			float resistance = LookupStatItem("Stat:resistance") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
+			float technology = LookupStatItem("Stat:technology") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
+
+
+			RatingData newFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
+			if (ratingData != newFortStats)
+			{
+				if (isOwned)
+					newFortStats.Print("Main");
+				ratingData = newFortStats;
+				OnRatingDataChanged?.Invoke(this);
+			}
+			return newFortStats;
 		}
-
-		double backpackPower = RatingData.GetWeaponPower(this);
-		double loadoutPower = RatingData.GetLoadoutPower(this);
-
-		//+ profileStats["fortitude"].GetValue<int>()
-		float fortitude = LookupStatItem("Stat:fortitude") + LookupWorkers("squad_attribute_medicine_trainingteam") + LookupWorkers("squad_attribute_medicine_emtsquad");
-		float offense = LookupStatItem("Stat:offense") + LookupWorkers("squad_attribute_arms_fireteamalpha") + LookupWorkers("squad_attribute_arms_closeassaultsquad");
-		float resistance = LookupStatItem("Stat:resistance") + LookupWorkers("squad_attribute_scavenging_scoutingparty") + LookupWorkers("squad_attribute_scavenging_gadgeteers");
-		float technology = LookupStatItem("Stat:technology") + LookupWorkers("squad_attribute_synthesis_corpsofengineering") + LookupWorkers("squad_attribute_synthesis_thethinktank");
-
-
-		RatingData newFortStats = new(fortitude, offense, resistance, technology, loadoutPower, backpackPower);
-		if (ratingData != newFortStats)
+		catch
 		{
-			if (isOwned)
-				newFortStats.Print("Main");
-			ratingData = newFortStats;
-			OnRatingDataChanged?.Invoke(this);
+			return ratingData.Value;
 		}
-		return newFortStats;
 	}
 
 	public event Action<GameAccount> OnVentureRatingDataChanged;

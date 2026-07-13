@@ -254,13 +254,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		if (targetProfile != FnProfileTypes.AccountItems && !await account.Authenticate())
 			return;
 
-		if (researchTokenArea is not null)
-			researchTokenArea.Visible = false;
+		researchTokenArea?.Visible = false;
 
-		if (currentCreatorImage is not null)
-		{
-			currentCreatorImage.Visible = false;
-		}
+		currentCreatorImage?.Visible = false;
 		creatorAnimations.Stop();
 		if (creatorImages.TryGetValue(account.accountId, out var image))
 		{
@@ -270,10 +266,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 				creatorAnimations.Play(account.accountId);
 		}
 
-		if (currentProfile is not null)
-		{
-			currentProfile.OnProfileChanged -= UpdateProfile;
-		}
+		currentProfile?.OnProfileChanged -= UpdateProfile;
 		currentProfile = await account.GetProfile(targetProfile).Query();
 
 		inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
@@ -298,8 +291,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 	void UpdateProfile()
 	{
-		if (researchTokenArea is not null)
-			researchTokenArea.Visible = false;
+		researchTokenArea?.Visible = false;
 		ApplyFilters();
 		if (researchTokenArea is null || targetProfile != FnProfileTypes.AccountItems || currentProfile?.hasProfile != true || !currentProfile.account.isOwned)
 			return;
@@ -432,8 +424,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		totalItemCount = null;
 		itemsDirty = false;
 
-		if (heavySearchWarning is not null)
-			heavySearchWarning.Visible = false;
+		heavySearchWarning?.Visible = false;
 
 		var possibleTypes =
 			currentTypeFilter
@@ -450,15 +441,15 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		itemList.UpdateList(true);
 		GameItem[] resultItems = [];
 		GameItem[] FilterFunc() =>
-			[.. allItems
-				.Where(item =>
-					(item.template is not null || AppConfig.Get("advanced", "developer", false)) &&
-					(!filterNew || !item.IsSeen) &&
-					(!filterFavorite || item.IsFavourited) &&
-					(possibleTypes?.Any(f=>EvaluateTypeFilter(item,f)) ?? true) &&
-					PLSearch.EvaluateInstructions(instructions, item.RawData)
-				)
-			];
+		[.. allItems
+			.Where(item =>
+				(item.template is not null || AppConfig.Get("advanced", "developer", false)) &&
+				(!filterNew || !item.IsSeen) &&
+				(!filterFavorite || item.IsFavourited) &&
+				(possibleTypes?.Any(f=>EvaluateTypeFilter(item,f)) ?? true) &&
+				PLSearch.EvaluateInstructions(instructions, item.RawData)
+			)
+		];
 		isFiltering = true;
 		if ((totalItemCount ?? 0) < 3500)
 			resultItems = FilterFunc();

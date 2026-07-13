@@ -48,9 +48,9 @@ public partial class CosmoRequests
 		if (splitTemplate.Length < 2)
 			return null;
 		templateId = $"{splitTemplate[0]}:{splitTemplate[1].ToLower()}";
-		gameVer ??= PegLegResourceManager.MagicNumbers["cosmo"]?["version"]?.ToString() ?? "40.30";
-		key ??= PegLegResourceManager.MagicNumbers["cosmo"]?["key"]?.ToString() ?? "czhmP4D5JdqrFCrAM3bdrDRxHpxNJwUckrNbr+XeDHg=";
-		baseURL ??= PegLegResourceManager.MagicNumbers["cosmo"]?["baseUrl"]?.ToString() ?? "https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/";
+		gameVer ??= PegLegResourceManager.MiscData["Cosmo"]?["Version"]?.ToString() ?? "41.10";
+		key ??= PegLegResourceManager.MiscData["Cosmo"]?["Key"]?.ToString() ?? "vHckCP9oI+pW5prHTYaMbXiC1YVJ2w4yRBtGUQzmYMY=";
+		baseURL ??= PegLegResourceManager.MiscData["Cosmo"]?["BaseURL"]?.ToString() ?? "https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/";
 		return GetCosmoURLFromPath($"fn/{gameVer}/{templateId}/{imageType}", key, baseURL);
 	}
 
