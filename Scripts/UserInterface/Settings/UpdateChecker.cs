@@ -87,6 +87,12 @@ public partial class UpdateChecker : Control
 			try
 			{
 				var releases = await GithubHelper.FetchReleases("TomatechGames", "PegLeg");
+				if (releases.Length == 0)
+				{
+					failMsg.Text = "Problem when fetching releases\n(likely GitHub related)\nPlease wait a few minutes and try again";
+					return;
+				}
+
 				var filteredReleases = releases.Where(r => r.Version > currentVer && (useBeta || !r.Version.IsBeta)).ToArray();
 				if (filteredReleases.Length == 0)
 				{

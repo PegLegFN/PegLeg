@@ -1,0 +1,396 @@
+[gd_scene format=3 uid="uid://dlwhcudhi4qp4"]
+
+[ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="1_lurxh"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="2_essgc"]
+[ext_resource type="Texture2D" uid="uid://3atkm5dd5sh1" path="res://Images/AspectRatios/2x3Aspect.png" id="3_16g1h"]
+[ext_resource type="Shader" uid="uid://cypncf62qx5bc" path="res://Shaders/CardTriangleEffect.tres" id="4_hrxf0"]
+[ext_resource type="Texture2D" uid="uid://bkqoyh11npn7c" path="res://Images/InterfaceIcons/TriangleScroll.png" id="5_eskv6"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="6_qs86h"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="7_d65ye"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="8_05rx6"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="9_n770n"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="10_qat1i"]
+[ext_resource type="Script" uid="uid://cgfl3ltqqutdv" path="res://Scripts/Config/ConfigConditionalBoolPassthrough.cs" id="11_dp0c5"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="12_xtsuc"]
+[ext_resource type="Texture2D" uid="uid://hskfanlp03l8" path="res://Images/InterfaceIcons/T-UI-SoldOut.png" id="13_81pnm"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="14_dr3b7"]
+[ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="15_2kvry"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="16_8yd80"]
+[ext_resource type="Texture2D" uid="uid://bkj1uu2syehgg" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Item-GoldBars.png" id="17_sc7v1"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="18_0p6gd"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="19_h1w8j"]
+[ext_resource type="Resource" uid="uid://7km1btwc7syu" path="res://Scripts/ContextMenu/ComponentLists/ShopOfferCtxList.tres" id="20_r5f0y"]
+
+[sub_resource type="Gradient" id="Gradient_rxla7"]
+colors = PackedColorArray(0.9, 0.9, 0.9, 1, 0.6, 0.6, 0.6, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cgiwg"]
+gradient = SubResource("Gradient_rxla7")
+fill = 1
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ya7jx"]
+resource_local_to_scene = true
+shader = ExtResource("4_hrxf0")
+shader_parameter/TriangleTint = Color(0.9, 0.51, 0, 1)
+shader_parameter/TimeOffset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sgac5"]
+resource_local_to_scene = true
+shader = ExtResource("8_05rx6")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/Fit = false
+shader_parameter/VerticalShift = 0.5
+shader_parameter/IsHero = true
+shader_parameter/IsSchematic = false
+shader_parameter/Noise = ExtResource("10_qat1i")
+shader_parameter/HeroTriangles = ExtResource("9_n770n")
+shader_parameter/UsePack = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nb4if"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0, 0, 0, 0.392157)
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ynyt"]
+content_margin_left = 2.0
+content_margin_top = 5.0
+content_margin_right = 2.0
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0, -0.05)
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pt1cr"]
+content_margin_left = 2.0
+content_margin_top = 0.0
+content_margin_right = 3.0
+content_margin_bottom = 2.0
+bg_color = Color(0.6, 0.6, 0.6, 0.752941)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3n3on"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[node name="GameOfferEntry" type="MarginContainer" unique_id=29912537 node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "releaseDateTimer")]
+custom_minimum_size = Vector2(100, 0)
+offset_right = 75.0
+offset_bottom = 75.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_lurxh")
+grantedItemEntry = NodePath("DetailsArea")
+priceEntry = NodePath("DetailsArea/PriceBox")
+releaseDateTimer = NodePath("ItemIcon2/Upcoming")
+
+[node name="AspectTexture" type="TextureRect" parent="." unique_id=441910874]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+texture = ExtResource("2_essgc")
+expand_mode = 5
+
+[node name="RarityGradient" type="TextureRect" parent="." unique_id=1277427846]
+visible = false
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+layout_mode = 2
+texture = SubResource("GradientTexture2D_cgiwg")
+expand_mode = 1
+
+[node name="Control" type="Control" parent="." unique_id=1802083919]
+visible = false
+clip_contents = true
+layout_mode = 2
+
+[node name="AspectTexture" type="TextureRect" parent="Control" unique_id=1928893311]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_16g1h")
+expand_mode = 5
+
+[node name="Triangles" type="TextureRect" parent="Control/AspectTexture" unique_id=670709386]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_ya7jx")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_eskv6")
+expand_mode = 1
+script = ExtResource("6_qs86h")
+
+[node name="ItemIcon" type="TextureRect" parent="." unique_id=712715336]
+visible = false
+layout_mode = 2
+texture = ExtResource("7_d65ye")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ItemIcon2" type="TextureRect" parent="." unique_id=385483486]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+material = SubResource("ShaderMaterial_sgac5")
+layout_mode = 2
+texture = ExtResource("7_d65ye")
+expand_mode = 1
+script = ExtResource("6_qs86h")
+syncControlSize = true
+
+[node name="IsHero" type="Node" parent="ItemIcon2" unique_id=1885032471]
+script = ExtResource("11_dp0c5")
+section = "item_shop"
+key = "simple_backgrounds"
+requiredState = false
+
+[node name="IsSchematic" type="Node" parent="ItemIcon2" unique_id=486529043]
+script = ExtResource("11_dp0c5")
+section = "item_shop"
+key = "simple_backgrounds"
+requiredState = false
+
+[node name="Upcoming" type="MarginContainer" parent="ItemIcon2" unique_id=111732590 node_paths=PackedStringArray("target")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15_2kvry")
+target = NodePath("TextureRect/VBoxContainer/Label2")
+timerType = 5
+formatType = 2
+useWeeks = true
+useDecimalDaysAndWeeks = false
+
+[node name="TextureRect" type="TextureRect" parent="ItemIcon2/Upcoming" unique_id=1972597776]
+material = ExtResource("12_xtsuc")
+layout_mode = 2
+texture = ExtResource("13_81pnm")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ItemIcon2/Upcoming/TextureRect" unique_id=1535303240]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = -19.0
+offset_right = 34.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ItemIcon2/Upcoming/TextureRect/VBoxContainer" unique_id=289575429]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 16
+text = "Returns in"
+
+[node name="Label2" type="Label" parent="ItemIcon2/Upcoming/TextureRect/VBoxContainer" unique_id=509179777]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 16
+text = "3 weeks"
+
+[node name="SoldOut" type="MarginContainer" parent="." unique_id=127512606]
+visible = false
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="SoldOut" unique_id=98828249]
+material = ExtResource("12_xtsuc")
+layout_mode = 2
+texture = ExtResource("13_81pnm")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="SoldOut/TextureRect" unique_id=1300208721]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.523599
+pivot_offset = Vector2(63.5, 19)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 36
+text = "Sold Out"
+
+[node name="InStock" type="Node" parent="SoldOut/TextureRect" unique_id=1662673300]
+script = ExtResource("14_dr3b7")
+
+[node name="DetailsArea" type="VBoxContainer" parent="." unique_id=435479180]
+clip_contents = true
+layout_mode = 2
+theme_override_constants/separation = 0
+script = ExtResource("16_8yd80")
+useLargePreview = true
+
+[node name="Space" type="Control" parent="DetailsArea" unique_id=1791513463]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NameBox" type="PanelContainer" parent="DetailsArea" unique_id=1606253411]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nb4if")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailsArea/NameBox" unique_id=822844501]
+layout_mode = 2
+theme_override_constants/separation = -3
+
+[node name="TypeLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer" unique_id=374947091]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
+text = "Hero
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="NameLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer" unique_id=1824557833]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+theme_override_constants/line_spacing = -3
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 11
+text = "Legendary Shotgun Defender"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Space2" type="Control" parent="DetailsArea" unique_id=1101757051]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="PriceBox" type="PanelContainer" parent="DetailsArea" unique_id=545866216]
+self_modulate = Color(0, 0.0705882, 0.231373, 1)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2ynyt")
+script = ExtResource("16_8yd80")
+
+[node name="MarginContainer" type="MarginContainer" parent="DetailsArea/PriceBox" unique_id=303691063]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = -5
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DetailsArea/PriceBox/MarginContainer" unique_id=159791785]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="CurrencyIcon" type="TextureRect" parent="DetailsArea/PriceBox/MarginContainer/HBoxContainer" unique_id=341901860]
+layout_mode = 2
+texture = ExtResource("17_sc7v1")
+expand_mode = 3
+
+[node name="PriceAmount" type="Label" parent="DetailsArea/PriceBox/MarginContainer/HBoxContainer" unique_id=49567060]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 12
+text = "10000"
+text_overrun_behavior = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=204058470]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="StockPanel" type="PanelContainer" parent="MarginContainer" unique_id=568118738]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
+
+[node name="Stock" type="Label" parent="MarginContainer/StockPanel" unique_id=1369020929]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 8
+text = "x999"
+
+[node name="Outline" type="Panel" parent="." unique_id=1370516872]
+self_modulate = Color(0.901961, 0.509804, 0, 1)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3n3on")
+
+[node name="Responsive Button Area" parent="." unique_id=44204616 instance=ExtResource("18_0p6gd")]
+layout_mode = 2
+outlinePadding = 0.0
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=683656363 node_paths=PackedStringArray("itemSource", "offerSource")]
+script = ExtResource("19_h1w8j")
+itemSource = NodePath("../../DetailsArea")
+offerSource = NodePath("../..")
+componentList = ExtResource("20_r5f0y")
+
+[node name="TODO make this inherited" type="Node" parent="." unique_id=1001841156]
+
+[connection signal="IsInStockChanged" from="." to="SoldOut/TextureRect/InStock" method="EmitInverted"]
+[connection signal="IsLimitedStockChanged" from="." to="MarginContainer/StockPanel" method="set_visible"]
+[connection signal="NameChanged" from="." to="DetailsArea/NameBox/VBoxContainer/NameLabel" method="set_text"]
+[connection signal="StockChanged" from="." to="MarginContainer/StockPanel/Stock" method="set_text"]
+[connection signal="OutputChanged" from="ItemIcon2/IsHero" to="ItemIcon2" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="OutputChanged" from="ItemIcon2/IsSchematic" to="ItemIcon2" method="SetShaderBool" binds= ["IsSchematic"]]
+[connection signal="InvertedValue" from="SoldOut/TextureRect/InStock" to="SoldOut/TextureRect" method="set_visible"]
+[connection signal="IconChanged" from="DetailsArea" to="ItemIcon" method="set_texture"]
+[connection signal="IconChanged" from="DetailsArea" to="ItemIcon2" method="set_texture"]
+[connection signal="IconFit" from="DetailsArea" to="ItemIcon2" method="SetShaderBool" binds= ["Fit"]]
+[connection signal="IsHero" from="DetailsArea" to="ItemIcon2/IsHero" method="Output"]
+[connection signal="IsSchematic" from="DetailsArea" to="ItemIcon2/IsSchematic" method="Output"]
+[connection signal="RarityChanged" from="DetailsArea" to="RarityGradient" method="set_self_modulate"]
+[connection signal="RarityChanged" from="DetailsArea" to="ItemIcon2" method="set_self_modulate"]
+[connection signal="RarityChanged" from="DetailsArea" to="Outline" method="set_self_modulate"]
+[connection signal="RarityChanged" from="DetailsArea" to="Control/AspectTexture/Triangles" method="SetShaderColor" binds= ["TriangleTint"]]
+[connection signal="TooltipChanged" from="DetailsArea" to="Responsive Button Area" method="set_tooltip_text"]
+[connection signal="TypeChanged" from="DetailsArea" to="DetailsArea/NameBox/VBoxContainer/TypeLabel" method="set_text"]
+[connection signal="AmountChanged" from="DetailsArea/PriceBox" to="DetailsArea/PriceBox/MarginContainer/HBoxContainer/PriceAmount" method="set_text"]
+[connection signal="IconChanged" from="DetailsArea/PriceBox" to="DetailsArea/PriceBox/MarginContainer/HBoxContainer/CurrencyIcon" method="set_texture"]
+[connection signal="pressed" from="Responsive Button Area" to="." method="Inspect"]

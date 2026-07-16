@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://wb5ukb74fot1"]
+[gd_scene format=3 uid="uid://wb5ukb74fot1"]
 
 [ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="1_hvr15"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="1_io7lf"]
@@ -47,6 +47,7 @@ shader_parameter/IsHero = true
 shader_parameter/IsSchematic = false
 shader_parameter/Noise = ExtResource("10_cxs4q")
 shader_parameter/HeroTriangles = ExtResource("9_g50ko")
+shader_parameter/UsePack = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nb4if"]
 content_margin_left = 3.0
@@ -80,10 +81,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 
-[node name="GameOfferEntry" type="MarginContainer" node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "releaseDateTimer")]
+[node name="GameOfferEntry" type="MarginContainer" unique_id=457751591 node_paths=PackedStringArray("grantedItemEntry", "priceEntry", "releaseDateTimer")]
 custom_minimum_size = Vector2(175, 0)
-offset_right = 75.0
-offset_bottom = 75.0
+offset_right = 175.0
+offset_bottom = 175.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_hvr15")
@@ -91,25 +92,25 @@ grantedItemEntry = NodePath("DetailsArea")
 priceEntry = NodePath("DetailsArea/PriceBox")
 releaseDateTimer = NodePath("Upcoming")
 
-[node name="AspectTexture" type="TextureRect" parent="."]
+[node name="AspectTexture" type="TextureRect" parent="." unique_id=71591285]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 texture = ExtResource("1_io7lf")
 expand_mode = 5
 
-[node name="RarityGradient" type="TextureRect" parent="."]
+[node name="RarityGradient" type="TextureRect" parent="." unique_id=1876681605]
 visible = false
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 2
 texture = SubResource("GradientTexture2D_cgiwg")
 expand_mode = 1
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1602759461]
 visible = false
 clip_contents = true
 layout_mode = 2
 
-[node name="AspectTexture" type="TextureRect" parent="Control"]
+[node name="AspectTexture" type="TextureRect" parent="Control" unique_id=2030130082]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 12
@@ -121,7 +122,7 @@ grow_vertical = 0
 texture = ExtResource("2_rx7yy")
 expand_mode = 5
 
-[node name="Triangles" type="TextureRect" parent="Control/AspectTexture"]
+[node name="Triangles" type="TextureRect" parent="Control/AspectTexture" unique_id=1475036590]
 texture_repeat = 2
 material = SubResource("ShaderMaterial_ya7jx")
 layout_mode = 1
@@ -134,14 +135,14 @@ texture = ExtResource("3_c82yr")
 expand_mode = 1
 script = ExtResource("4_qji8a")
 
-[node name="ItemIcon" type="TextureRect" parent="."]
+[node name="ItemIcon" type="TextureRect" parent="." unique_id=693996991]
 visible = false
 layout_mode = 2
 texture = ExtResource("5_wjuhi")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ItemIcon2" type="TextureRect" parent="."]
+[node name="ItemIcon2" type="TextureRect" parent="." unique_id=969399818]
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 material = SubResource("ShaderMaterial_sgac5")
 layout_mode = 2
@@ -150,32 +151,32 @@ expand_mode = 1
 script = ExtResource("4_qji8a")
 syncControlSize = true
 
-[node name="IsHero" type="Node" parent="ItemIcon2"]
+[node name="IsHero" type="Node" parent="ItemIcon2" unique_id=138082285]
 script = ExtResource("11_cxs4q")
 section = "item_shop"
 key = "simple_backgrounds"
 requiredState = false
 
-[node name="IsSchematic" type="Node" parent="ItemIcon2"]
+[node name="IsSchematic" type="Node" parent="ItemIcon2" unique_id=1859948963]
 script = ExtResource("11_cxs4q")
 section = "item_shop"
 key = "simple_backgrounds"
 requiredState = false
 
-[node name="SoldOut" type="MarginContainer" parent="."]
+[node name="SoldOut" type="MarginContainer" parent="." unique_id=1664636025]
 visible = false
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="TextureRect" type="TextureRect" parent="SoldOut"]
+[node name="TextureRect" type="TextureRect" parent="SoldOut" unique_id=956206867]
 material = ExtResource("8_gu5mh")
 layout_mode = 2
 texture = ExtResource("8_e6bid")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="SoldOut/TextureRect"]
+[node name="Label" type="Label" parent="SoldOut/TextureRect" unique_id=589884202]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -194,10 +195,10 @@ theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 36
 text = "Sold Out"
 
-[node name="InStock" type="Node" parent="SoldOut/TextureRect"]
+[node name="InStock" type="Node" parent="SoldOut/TextureRect" unique_id=1447175276]
 script = ExtResource("9_2uptj")
 
-[node name="Upcoming" type="MarginContainer" parent="." node_paths=PackedStringArray("target")]
+[node name="Upcoming" type="MarginContainer" parent="." unique_id=984934216 node_paths=PackedStringArray("target")]
 custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -209,13 +210,13 @@ formatType = 2
 useWeeks = true
 useDecimalDaysAndWeeks = false
 
-[node name="TextureRect" type="TextureRect" parent="Upcoming"]
+[node name="TextureRect" type="TextureRect" parent="Upcoming" unique_id=1897277058]
 material = ExtResource("8_gu5mh")
 layout_mode = 2
 texture = ExtResource("8_e6bid")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Upcoming/TextureRect"]
+[node name="Label" type="Label" parent="Upcoming/TextureRect" unique_id=1898696091]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -230,7 +231,7 @@ theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 24
 text = "Returns in"
 
-[node name="Label2" type="Label" parent="Upcoming/TextureRect"]
+[node name="Label2" type="Label" parent="Upcoming/TextureRect" unique_id=661925880]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -245,25 +246,25 @@ theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 24
 text = "3 weeks"
 
-[node name="DetailsArea" type="VBoxContainer" parent="."]
+[node name="DetailsArea" type="VBoxContainer" parent="." unique_id=890526236]
 clip_contents = true
 layout_mode = 2
 script = ExtResource("8_ocl4j")
 useLargePreview = true
 
-[node name="Space" type="Control" parent="DetailsArea"]
+[node name="Space" type="Control" parent="DetailsArea" unique_id=2060883242]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NameBox" type="PanelContainer" parent="DetailsArea"]
+[node name="NameBox" type="PanelContainer" parent="DetailsArea" unique_id=523615115]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nb4if")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DetailsArea/NameBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailsArea/NameBox" unique_id=2020041111]
 layout_mode = 2
 theme_override_constants/separation = -3
 
-[node name="TypeLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer"]
+[node name="TypeLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer" unique_id=2017520606]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -277,7 +278,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="NameLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer"]
+[node name="NameLabel" type="Label" parent="DetailsArea/NameBox/VBoxContainer" unique_id=260017092]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 theme_override_constants/line_spacing = 0
@@ -289,29 +290,29 @@ horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="PriceBox" type="PanelContainer" parent="DetailsArea"]
+[node name="PriceBox" type="PanelContainer" parent="DetailsArea" unique_id=936779202]
 self_modulate = Color(0, 0.0705882, 0.231373, 1)
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2ynyt")
 script = ExtResource("8_ocl4j")
 
-[node name="MarginContainer" type="MarginContainer" parent="DetailsArea/PriceBox"]
+[node name="MarginContainer" type="MarginContainer" parent="DetailsArea/PriceBox" unique_id=1238462940]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = -5
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="DetailsArea/PriceBox/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="DetailsArea/PriceBox/MarginContainer" unique_id=1151472584]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="CurrencyIcon" type="TextureRect" parent="DetailsArea/PriceBox/MarginContainer/HBoxContainer"]
+[node name="CurrencyIcon" type="TextureRect" parent="DetailsArea/PriceBox/MarginContainer/HBoxContainer" unique_id=1574239399]
 layout_mode = 2
 texture = ExtResource("7_bv0ye")
 expand_mode = 3
 
-[node name="PriceAmount" type="Label" parent="DetailsArea/PriceBox/MarginContainer/HBoxContainer"]
+[node name="PriceAmount" type="Label" parent="DetailsArea/PriceBox/MarginContainer/HBoxContainer" unique_id=9616411]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/line_spacing = 0
@@ -321,7 +322,7 @@ theme_override_font_sizes/font_size = 15
 text = "10000"
 text_overrun_behavior = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1334538617]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 5
@@ -329,29 +330,29 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="StockPanel" type="PanelContainer" parent="MarginContainer"]
+[node name="StockPanel" type="PanelContainer" parent="MarginContainer" unique_id=1871761719]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
 
-[node name="Stock" type="Label" parent="MarginContainer/StockPanel"]
+[node name="Stock" type="Label" parent="MarginContainer/StockPanel" unique_id=1573733947]
 layout_mode = 2
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 10
 text = "x999"
 
-[node name="Outline" type="Panel" parent="."]
+[node name="Outline" type="Panel" parent="." unique_id=791750971]
 self_modulate = Color(0.901961, 0.509804, 0, 1)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3n3on")
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("8_ahbeu")]
+[node name="Responsive Button Area" parent="." unique_id=285474982 instance=ExtResource("8_ahbeu")]
 layout_mode = 2
 outlinePadding = 0.0
 
-[node name="Ctx" type="Node" parent="Responsive Button Area" node_paths=PackedStringArray("itemSource", "offerSource")]
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=274755688 node_paths=PackedStringArray("itemSource", "offerSource")]
 script = ExtResource("11_mgblp")
 itemSource = NodePath("../../DetailsArea")
 offerSource = NodePath("../..")

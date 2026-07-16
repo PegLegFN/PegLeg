@@ -139,15 +139,23 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	{
 		if (section != "missions")
 			return;
-		if (notableMode && 
-			(
+		if (notableMode)
+		{
+			if (
 				key == "lite_notable_filter" ||
 				key == "notable_count" ||
 				key == "groupVBucks" ||
 				key == "groupLegSurvivors"
 			)
-		)
-			FilterMissions();
+				FilterMissions();
+		}
+		else
+		{
+			if(
+				key== "excludeAccountResourceAll"
+			)
+				FilterMissions();
+		}
 	}
 
 	void SetupFilters(CheckButton[] filters)
@@ -434,6 +442,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 				)
 			];
 			Func<GameItem, bool> notableItemFilter = null;
+
+			bool excludeAccountResources = AppConfig.Get("missions", "excludeAccountResourceAll", false);
+
 			bool TypeFilter(GameItem i)
 			{
 				if (requiredTypes.Any(t => i.sortingTemplate.TemplateId.StartsWith(t)))
@@ -454,6 +465,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 					return true;
 				return false;
 			}
+
 			bool StandardFilter(GameItem i)
 			{
 				if (repeatabilityFilters[0].ButtonPressed && i.zcpEquivelent is not null)
@@ -461,6 +473,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 				else if (repeatabilityFilters[1].ButtonPressed && i.zcpEquivelent is null)
 					return false;
 				else if (repeatabilityFilters[2].ButtonPressed && (i.zcpEquivelent is null || i.quantity < 4))
+					return false;
+
+				if (excludeAccountResources && i.sortingTemplate?.Type == "AccountResource")
 					return false;
 
 				if (requiredRarities.Count > 0 && !requiredRarities.Contains(i.sortingTemplate.Rarity ?? "Uncommon"))
