@@ -104,10 +104,9 @@ public partial class Bootstrap : Node
 	static bool hasBooted = false;
 	static bool isFirstBoot = false;
 
-	static void PrintCosmo(string tid, string imageType = "locker_preview_image")
+	static void PrintCosmo(CosmoRequests.CosmoImageData imageData)
 	{
-		var cosmoUrl = CosmoRequests.GetCosmoURL(tid, imageType: imageType);
-		GD.PrintRich($"Cosmo Test: [url={cosmoUrl}]\"{tid}\"[/url] ({imageType})");
+		GD.PrintRich($"Cosmo Test: [url={imageData.url}]\"{imageData.uniqueName}\"[/url]");
 	}
 
 	static void PrintDistinctIconCount(params string[] types)
@@ -155,6 +154,7 @@ public partial class Bootstrap : Node
 			window.CurrentScreen = preferredScreen;
 			window.MoveToCenter();
 			BufferKeySetting.LoadLocalOrgsAndChannels();
+			CatalogRequests.CleanCosmeticResourceCache();
 		}
 
 #if GODOT_ANDROID
@@ -277,11 +277,17 @@ public partial class Bootstrap : Node
 		});
 		if (isFirstBoot)
 		{
-			PrintCosmo("AthenaCharacter:character_loosecreep");
-			PrintCosmo("AthenaCharacter:character_loosecreep", "locker_icon");
-			//PrintCosmo("AthenaCharacter:character_loosecreep", "image");
-			//PrintCosmo("AthenaCharacter:character_glamclaws");
-			//PrintCosmo("NewDisplayAsset:DAv2_Bundle_Featured_Wheel_EvilOrnament01");
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_character_hammervice", "store_image", [0], "2048x2048"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "preview_image"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
+			PrintCosmo(CosmoRequests.GetItemPreview("AthenaCharacter:character_glamclaws"));
+			PrintCosmo(CosmoRequests.GetItemPreview("AthenaCharacter:character_loosecreep"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image", [1,0]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "locker_preview_image", [1, 0]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_817_m_dirtydocks", "preview_image", [1]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "store_image"));
 
 			//PrintDistinctIconCount("Hero", "Defender");
 			//PrintDistinctIconCount("Schematic", "Weapon", "Trap");

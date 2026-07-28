@@ -196,62 +196,105 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		AddToList(target.mission, target.item, atTop);
 	}
 
-	public static void AddToList(GameMission mission, GameItem reward, bool atTop = false) => AddToList(mission, Array.IndexOf(mission.allItems, reward), atTop);
 	public static void AddToList(GameMission mission, int rewardIndex, bool atTop = false)
 	{
 		if (inst is null)
 			return;
 		if (mission?.Guid is not string guid)
 		{
-			GD.Print("mission or GUID is null");
+			//GD.Print("mission or GUID is null");
 			return;
 		}
 		if (mission.allItems.Length <= rewardIndex || rewardIndex < 0)
 		{
-			GD.Print("item index out of range: " + rewardIndex);
+			//GD.Print("item index out of range: " + rewardIndex);
 			return;
 		}
-		var item = mission.allItems[rewardIndex];
-		if (
-			AppConfig.Get("missions", "todo_trim_complete", false) &&
-			mission.alertRewardItems.Contains(item) &&
-			mission.AlertIsCompleteFor(GameAccount.ActiveAccount)
-		)
-		{
-			GD.Print("mission alert already claimed");
-			//show popup notif
-			return;
-		}
+		AddToList(new(mission, mission?.allItems[rewardIndex]), atTop);
+	}
+	public static void AddToList(GameMission mission, GameItem reward, bool atTop = false) => AddToList(new(mission, reward), atTop);
+	public static void AddToList(MissionRewardPair pair, bool atTop = false)
+	{
 		bool update = false;
-		var pair = new MissionRewardPair(mission, item);
 		if (inst.CheckForNewDay())
 		{
 			GD.Print("todo list addition aborted, new day");
 			update = true;
 		}
-		else if (!inst.targetMissionRewards.Contains(pair))
+		if (!update)
 		{
-			if (atTop)
+			update = AddToListInternal(pair, atTop);
+			if (!update)
 			{
-				inst.targetMissionRewards.Insert(0, pair);
-				inst.targetMissionRewardData.Insert(0, new(guid, rewardIndex));
-			}
-			else
-			{
-				inst.targetMissionRewards.Add(pair);
-				inst.targetMissionRewardData.Add(new(guid, rewardIndex));
+				//GD.Print("list already contains pair");
+				return;
 			}
 			inst.SaveMissions();
+		}
+		inst.UpdateList();
+		OnToDoListChanged?.Invoke();
+	}
+
+	public static void BulkAddToList(MissionRewardPair[] pairs)
+	{
+		bool update = false;
+		if (inst.CheckForNewDay())
+		{
+			GD.Print("todo list addition aborted, new day");
 			update = true;
+		}
+		if (!update)
+		{
+			foreach (var item in pairs)
+			{
+				update |= AddToListInternal(item, true);
+			}
+			if (!update)
+			{
+				//GD.Print("list already contains pair");
+				return;
+			}
+			inst.SaveMissions();
+		}
+		inst.UpdateList();
+		OnToDoListChanged?.Invoke();
+	}
+
+	static bool AddToListInternal(MissionRewardPair pair, bool atTop)
+	{
+		if (inst.targetMissionRewards.Contains(pair))
+			return false;
+		if (pair.mission?.Guid is not string guid)
+		{
+			//GD.Print("mission or GUID is null");
+			return false;
+		}
+		if (
+			AppConfig.Get("missions", "todo_trim_complete", false) &&
+			pair.mission.alertRewardItems.Contains(pair.item) &&
+			pair.mission.AlertIsCompleteFor(GameAccount.ActiveAccount)
+		)
+		{
+			//GD.Print("mission alert already claimed");
+			return false;
+		}
+		int rewardIndex = Array.IndexOf(pair.mission.allItems, pair.item);
+		if (rewardIndex == -1)
+		{
+			//GD.Print("item not in mission");
+			return false;
+		}
+		if (atTop)
+		{
+			inst.targetMissionRewards.Insert(0, pair);
+			inst.targetMissionRewardData.Insert(0, new(pair.mission.Guid, rewardIndex));
 		}
 		else
 		{
-			GD.Print("list already contains pair");
+			inst.targetMissionRewards.Add(pair);
+			inst.targetMissionRewardData.Add(new(pair.mission.Guid, rewardIndex));
 		}
-		if (!update)
-			return;
-		inst.UpdateList();
-		OnToDoListChanged?.Invoke();
+		return true;
 	}
 
 	public static bool IsOnToDoList(GameItem item) =>

@@ -21,7 +21,7 @@ public partial class GameOfferEntry : Control
 	[Signal]
 	public delegate void TotalGrantAmountChangedEventHandler(string amount);
 	[Signal]
-	public delegate void IsLimitedTimeChangedEventHandler(bool isLimitedTime);
+	public delegate void IsLimitedTimeChangedEventHandler(bool isLimitedTimeLlama);
 	[Signal]
 	public delegate void IsLimitedStockChangedEventHandler(bool isLimitedStock);
 	[Signal]
@@ -95,7 +95,7 @@ public partial class GameOfferEntry : Control
 	}
 
 	CancellationTokenSource cts;
-	public async Task SetOffer(GameOffer shopOffer)
+	public virtual async Task SetOffer(GameOffer shopOffer)
 	{
 		cts?.Cancel();
 		if (shopOffer is null)
@@ -219,15 +219,15 @@ public partial class GameOfferEntry : Control
 		currentPriceInInventory = -1;
 		currentStockLimit = -1;
 
-		EmitSignal(SignalName.NameChanged, "");
-		EmitSignal(SignalName.StockChanged, "");
-		EmitSignal(SignalName.IsLimitedStockChanged, false);
-		EmitSignal(SignalName.IsFreeChanged, false);
-		EmitSignal(SignalName.IsInStockChanged, false);
-		EmitSignal(SignalName.IsAffordableChanged, false);
-		EmitSignal(SignalName.IsLimitedTimeChanged, false);
-		EmitSignal(SignalName.TotalGrantAmountChanged, "");
-		EmitSignal(SignalName.IsErrored, false);
+		EmitSignalNameChanged("");
+		EmitSignalStockChanged("");
+		EmitSignalIsLimitedStockChanged(false);
+		EmitSignalIsFreeChanged(false);
+		EmitSignalIsInStockChanged(false);
+		EmitSignalIsAffordableChanged(false);
+		EmitSignalIsLimitedTimeChanged(false);
+		EmitSignalTotalGrantAmountChanged("");
+		EmitSignalIsErrored(false);
 		grantedItemEntry?.ClearItem(null);
 		priceInInventoryEntry?.ClearItem(null);
 		priceEntry?.ClearItem(null);
@@ -239,19 +239,18 @@ public partial class GameOfferEntry : Control
 		UpdateQuantityAndItems();
 	}
 
-	void UpdateVisuals()
+	protected virtual void UpdateVisuals()
 	{
 		UpdateQuantityAndItems();
 
 		var price = (pricePerPurchase?.quantity ?? 0) * currentPurchaseQuantity;
 		var grantedQuantity = grantedItem.quantity * currentPurchaseQuantity;
 
-		EmitSignal(SignalName.IsInStockChanged, currentStockLimit != 0);
-		EmitSignal(SignalName.IsLimitedStockChanged, currentStockLimit > -1);
-		EmitSignal(SignalName.IsFreeChanged, price == 0);
-		EmitSignal(SignalName.IsAffordableChanged, price == 0 || (pricePerPurchase?.quantity ?? 0) <= currentPriceInInventory);
-		EmitSignal(SignalName.IsLimitedTimeChanged, currentOffer.OfferId == "D46EC225FA1149ADB00B4B17B2ABAB70"); //offerId of random free llamas which only last 1 hour
-																												 //8339003D26B24F70878EE280B70C340D: offerId of Winter free llamas that restock daily for (14?) days
+		EmitSignalIsInStockChanged(currentStockLimit != 0);
+		EmitSignalIsLimitedStockChanged(currentStockLimit > -1);
+		EmitSignalIsFreeChanged(price == 0);
+		EmitSignalIsAffordableChanged(price == 0 || (pricePerPurchase?.quantity ?? 0) <= currentPriceInInventory);
+		EmitSignalIsLimitedTimeChanged(currentOffer.OfferId == "D46EC225FA1149ADB00B4B17B2ABAB70"); //offerId of random free llamas which only last 1 hour
 																												 //8339003D26B24F70878EE280B70C340D: offerId of Winter free llamas that restock daily for (14?) days
 
 		if (currentStockLimit >= (showSoldOutAmount ? 0 : 1))
@@ -261,11 +260,11 @@ public partial class GameOfferEntry : Control
 				stockText = "Sold Out";
 			if (grantedQuantity > 1 && currentStockLimit != 0)
 				stockText = grantedQuantity + stockText;
-			EmitSignal(SignalName.StockChanged, stockText);
+			EmitSignalStockChanged(stockText);
 		}
 		else
 		{
-			EmitSignal(SignalName.StockChanged, "");
+			EmitSignalStockChanged("");
 		}
 
 		var name = currentOffer.Title ??

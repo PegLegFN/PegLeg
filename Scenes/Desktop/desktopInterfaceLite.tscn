@@ -33,6 +33,7 @@
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="26_ilmvy"]
 [ext_resource type="PackedScene" uid="uid://outqvmv6p0pm" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_line_edit_window.tscn" id="27_v726o"]
 [ext_resource type="PackedScene" uid="uid://2okdom0nii2b" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_confirmation_window.tscn" id="28_x4ly8"]
+[ext_resource type="PackedScene" uid="uid://cnrvmeve5u3rr" path="res://Scenes/Desktop/Views/desktopCosmeticShopNewView.tscn" id="29_h2p2r"]
 [ext_resource type="PackedScene" uid="uid://c4lt6qwfc4cou" path="res://Scenes/Desktop/Overlays/loading_overlay.tscn" id="29_llww6"]
 [ext_resource type="Script" uid="uid://c2hxn6v6r3mvf" path="res://Scripts/BackgroundController.cs" id="30_gwx6v"]
 [ext_resource type="Script" uid="uid://840dnd45qqla" path="res://Scripts/UIElements/MobilePadding.cs" id="30_pkwxh"]
@@ -40,6 +41,7 @@
 [ext_resource type="Script" uid="uid://cu5f8smruq3v0" path="res://Scripts/UIElements/ProcessSwitchingTabContainer.cs" id="31_082wr"]
 [ext_resource type="PackedScene" uid="uid://bgs7wpcqmkgvo" path="res://Scenes/update_notif.tscn" id="31_dcbu2"]
 [ext_resource type="PackedScene" uid="uid://dr02ht35ldsgb" path="res://Scenes/Desktop/Overlays/settings_window_lite.tscn" id="31_fu1xu"]
+[ext_resource type="Script" uid="uid://dpxc7niau51tw" path="res://Scripts/TempCosmeticFallback.cs" id="32_3l2jb"]
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="32_aqo04"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="33_llww6"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="33_xs1ek"]
@@ -98,6 +100,7 @@ shader_parameter/Fit = true
 shader_parameter/Scale = 2.0
 shader_parameter/Speed = 0.05
 shader_parameter/Progress = 0.0
+shader_parameter/Rotate = 30.0
 shader_parameter/ClipOOB = false
 
 [node name="DesktopInterfaceLite" type="Control" unique_id=1619626686]
@@ -249,6 +252,8 @@ layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
 current_tab = 0
+tab_3/title = "Cosmetic Shop"
+tab_3/hidden = true
 script = ExtResource("31_082wr")
 metadata/_tab_index = 1
 
@@ -269,37 +274,50 @@ metadata/_tab_index = 1
 visible = false
 disable = true
 
-[node name="Cosmetic Shop" parent="Content/MainTabs/Item Shop" unique_id=1968674659 instance=ExtResource("25_dcbu2")]
+[node name="Cosmetic Shop" parent="Content/MainTabs/Item Shop" unique_id=199424013 instance=ExtResource("29_h2p2r")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Label3" parent="Content/MainTabs/Item Shop/Cosmetic Shop/TimerAndSAC/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 1555708531) index="5" unique_id=790977925]
+[node name="Cosmetic Shop OLD" parent="Content/MainTabs/Item Shop" unique_id=1968674659 instance=ExtResource("25_dcbu2")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+metadata/_tab_name = "Cosmetic Shop"
+
+[node name="Label3" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/TimerAndSAC/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 1555708531) index="5" unique_id=790977925]
 visible = false
 
-[node name="SACButton" parent="Content/MainTabs/Item Shop/Cosmetic Shop/TimerAndSAC/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 1555708531) index="6" unique_id=1696064943]
+[node name="SACButton" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/TimerAndSAC/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 1555708531) index="6" unique_id=1696064943]
 visible = false
 
-[node name="LoadingIcon6" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/BigScrollContainer/MarginContainer/NewLoadingIcon" parent_id_path=PackedInt32Array(1968674659, 244303536) index="1" unique_id=285240235]
+[node name="LoadingIcon6" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/BigScrollContainer/MarginContainer/NewLoadingIcon" parent_id_path=PackedInt32Array(1968674659, 244303536) index="1" unique_id=285240235]
 material = SubResource("ShaderMaterial_36vak")
 
-[node name="VeryNew" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="0" unique_id=2050379603]
+[node name="VeryNew" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="0" unique_id=2050379603]
 button_group = SubResource("ButtonGroup_6ysvb")
 
-[node name="New" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="1" unique_id=1886976013]
+[node name="New" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="1" unique_id=1886976013]
 button_group = SubResource("ButtonGroup_6ysvb")
 
-[node name="Any" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="2" unique_id=1457088269]
+[node name="Any" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="2" unique_id=1457088269]
 button_group = SubResource("ButtonGroup_6ysvb")
 
-[node name="Old" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="3" unique_id=423896336]
+[node name="Old" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="3" unique_id=423896336]
 button_group = SubResource("ButtonGroup_6ysvb")
 
-[node name="Popular" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="4" unique_id=34668795]
+[node name="Popular" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="4" unique_id=34668795]
 button_group = SubResource("ButtonGroup_6ysvb")
 
-[node name="LoadingIcon5" parent="Content/MainTabs/Item Shop/Cosmetic Shop/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/FilterBlocker" parent_id_path=PackedInt32Array(1968674659, 1161231320) index="0" unique_id=1782587914]
+[node name="LoadingIcon5" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/FilterBlocker" parent_id_path=PackedInt32Array(1968674659, 1161231320) index="0" unique_id=1782587914]
 material = SubResource("ShaderMaterial_wt277")
+
+[node name="CosmeticFallbackCheck" type="Node" parent="Content/MainTabs/Item Shop" unique_id=742926138 node_paths=PackedStringArray("tabs")]
+script = ExtResource("32_3l2jb")
+tabs = NodePath("..")
+standardIndex = 2
+fallbackIndex = 3
+requiredMagicBool = "revertCosmeticShop"
 
 [node name="Timeline" parent="Content/MainTabs" unique_id=692063504 instance=ExtResource("32_aqo04")]
 visible = false
@@ -483,4 +501,4 @@ curtain = NodePath("..")
 
 [editable path="Content/MainTabs/Item Shop/Weekly Shop"]
 [editable path="Content/MainTabs/Item Shop/Event Shop"]
-[editable path="Content/MainTabs/Item Shop/Cosmetic Shop"]
+[editable path="Content/MainTabs/Item Shop/Cosmetic Shop OLD"]

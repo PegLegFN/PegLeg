@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://b7k5yahx0piit"]
+
+[ext_resource type="PackedScene" uid="uid://khtmsxilpw3n" path="res://Scenes/OfferEntries/cosmetic_offer_entry.tscn" id="1_vpy0a"]
+[ext_resource type="Shader" uid="uid://dwr30ie6yoste" path="res://Shaders/AdaptivePanel.tres" id="2_4mf0t"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="3_du2y3"]
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="4_pf60k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vpy0a"]
+resource_local_to_scene = true
+shader = ExtResource("2_4mf0t")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/Fit = false
+shader_parameter/shiftDirection = Vector2(0.5, 0.5)
+shader_parameter/UseCorners = true
+shader_parameter/CornerRadius = 10.0
+
+[sub_resource type="Gradient" id="Gradient_4mf0t"]
+resource_local_to_scene = true
+colors = PackedColorArray(0, 0.196078, 0.501961, 1, 0, 0.745098, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_du2y3"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_4mf0t")
+fill = 1
+fill_from = Vector2(0.5, 0.7)
+fill_to = Vector2(0, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pf60k"]
+resource_local_to_scene = true
+shader = ExtResource("3_du2y3")
+shader_parameter/ControlSize = Vector2(100, 95)
+shader_parameter/ShiftDirection = Vector2(0.5, 1)
+shader_parameter/Fit = true
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = true
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0lkfk"]
+resource_local_to_scene = true
+shader = ExtResource("4_pf60k")
+shader_parameter/ControlSize = Vector2(90, 70)
+shader_parameter/SliceAmount = Vector2(8, 8)
+shader_parameter/FPS = 24.0
+shader_parameter/CellCount = -4
+shader_parameter/Fit = true
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vpy0a"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0, 0, 0, 0.392157)
+border_width_left = 1
+border_width_right = 1
+border_color = Color(0, 0, 0, 0)
+expand_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qefax"]
+bg_color = Color(1, 0.470588, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="CosmeticOfferEntry" unique_id=1963553576 instance=ExtResource("1_vpy0a")]
+custom_minimum_size = Vector2(100, 100)
+offset_right = 100.0
+offset_bottom = 100.0
+
+[node name="ItemBG" parent="." index="0" unique_id=1198445779]
+material = SubResource("ShaderMaterial_vpy0a")
+texture = SubResource("GradientTexture2D_du2y3")
+
+[node name="ItemIcon" parent="ItemBG" index="1" unique_id=1211284356]
+material = SubResource("ShaderMaterial_pf60k")
+
+[node name="CosmeticLoadingIcon" parent="ItemBG" index="2" unique_id=1550021752]
+material = SubResource("ShaderMaterial_0lkfk")
+
+[node name="DetailsArea" parent="." index="1" unique_id=1825829364]
+theme_override_constants/separation = 2
+
+[node name="NameBox" parent="DetailsArea" index="1" unique_id=1146250184]
+theme_override_styles/panel = SubResource("StyleBoxFlat_vpy0a")
+
+[node name="TypeLabel" parent="DetailsArea/NameBox/VBoxContainer" parent_id_path=PackedInt32Array(168275394) index="0" unique_id=1707707102]
+visible = false
+
+[node name="NameLabel" parent="DetailsArea/NameBox/VBoxContainer" parent_id_path=PackedInt32Array(168275394) index="1" unique_id=550291052]
+theme_override_font_sizes/font_size = 12
+
+[node name="PriceBox" parent="DetailsArea/MarginContainer" parent_id_path=PackedInt32Array(810646573) index="0" unique_id=1119836036]
+custom_minimum_size = Vector2(0, 16)
+
+[node name="Control" parent="DetailsArea/MarginContainer/PriceBox/Control" parent_id_path=PackedInt32Array(1356692602) index="0" unique_id=560468819]
+anchors_preset = -1
+offset_top = -1.0
+offset_bottom = -7.0
+
+[node name="FinalPrice" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(831002838) index="1" unique_id=628113499]
+theme_override_font_sizes/font_size = 12
+
+[node name="OriginalPrice" parent="DetailsArea/MarginContainer/PriceBox/MarginContainer/HBoxContainer/FinalPrice" index="0" unique_id=798303853]
+visible = false
+modulate = Color(1, 1, 1, 0)
+
+[node name="VBoxContainer" parent="Overlays" parent_id_path=PackedInt32Array(2136210566) index="0" unique_id=839283881]
+offset_right = -3.0
+offset_bottom = -34.0
+
+[node name="Panel" parent="Overlays/VBoxContainer/LastSeenPanel/LastSeenAlert" parent_id_path=PackedInt32Array(256512533) index="0" unique_id=619443712]
+theme_override_styles/panel = SubResource("StyleBoxFlat_qefax")
+
+[node name="LastSeenLabel" parent="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer" parent_id_path=PackedInt32Array(922294911) index="1" unique_id=1546786789]
+theme_override_font_sizes/font_size = 10
+
+[node name="Panel" parent="Overlays/VBoxContainer/LeavingTimer/LeavingSoonAlert" parent_id_path=PackedInt32Array(714371069) index="0" unique_id=1438835707]
+theme_override_styles/panel = SubResource("StyleBoxFlat_qefax")
+
+[node name="LeavingLabel" parent="Overlays/VBoxContainer/LeavingTimer/HBoxContainer" parent_id_path=PackedInt32Array(1644348748) index="1" unique_id=750389805]
+theme_override_font_sizes/font_size = 10
+text = "99d"
+
+[node name="HeadlinePanel" parent="Overlays" parent_id_path=PackedInt32Array(2136210566) index="1" unique_id=1251169943]
+offset_left = 2.0
+offset_bottom = -34.0
+
+[node name="MarginContainer" parent="Overlays/HeadlinePanel" index="0" unique_id=1091787935]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="HeadlineLabel" parent="Overlays/HeadlinePanel/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(822271329) index="1" unique_id=1350383139]
+theme_override_font_sizes/font_size = 10
+
+[node name="AlmostAYear" parent="Overlays" parent_id_path=PackedInt32Array(2136210566) index="2" unique_id=1776421360]
+modulate = Color(1, 1, 1, 0)
+
+[node name="BestsellerStar" parent="Overlays" parent_id_path=PackedInt32Array(2136210566) index="3" unique_id=806499072]
+modulate = Color(1, 1, 1, 0)
+mouse_filter = 2

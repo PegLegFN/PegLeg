@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://c70qnky0xyx4w"]
 
 [ext_resource type="Script" uid="uid://bj4gqyg63bw8" path="res://Scripts/UserInterface/ListEntries/MissionCollection.cs" id="1_4v5fq"]
-[ext_resource type="Texture2D" uid="uid://dj7i2q6htu5st" path="res://Images/InterfaceIcons/T_UI_IconLibrary_Pencil_128.png" id="1_p305g"]
 [ext_resource type="Texture2D" uid="uid://dl05qp6bcrs5c" path="res://Images/InterfaceIcons/T_UI_Icon_Search.png" id="2_ma4gr"]
 [ext_resource type="PackedScene" uid="uid://bekssnfes28vf" path="res://Scenes/MissionEntry/mission_collection_entry.tscn" id="3_2dnay"]
+[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="3_neet1"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="4_27twl"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_xict5"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="5_neet1"]
 [ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="9_r6w6s"]
 
-[node name="MissionCollection" type="PanelContainer" unique_id=1352265404 node_paths=PackedStringArray("newMissionListNode", "loadingIcon", "playableFilter")]
+[node name="MissionCollection" type="PanelContainer" unique_id=1352265404 node_paths=PackedStringArray("newMissionListNode", "loadingIcon", "playableFilter", "bulkTodoBtn")]
 custom_minimum_size = Vector2(235, 40)
 offset_right = 235.0
 offset_bottom = 97.0
@@ -21,6 +21,7 @@ testSearch = "///worker leg !lead"
 newMissionListNode = NodePath("VBoxContainer/Body/RecycleContainer")
 loadingIcon = NodePath("VBoxContainer/Body/SmallLoadingIcon")
 playableFilter = NodePath("VBoxContainer/Header/HBoxContainer/CheckButton")
+bulkTodoBtn = NodePath("VBoxContainer/Header/HBoxContainer/AddToDoBtn")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=595817290]
 layout_mode = 2
@@ -61,13 +62,14 @@ grow_vertical = 2
 texture = ExtResource("2_ma4gr")
 expand_mode = 1
 
-[node name="EditBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=356092187]
+[node name="AddToDoBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=356092187]
 visible = false
-custom_minimum_size = Vector2(18, 0)
+custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
-theme_type_variation = &"TinyButton"
+tooltip_text = "Add all visible rewards to To-Do List"
+theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/EditBtn" unique_id=1306305845]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Header/HBoxContainer/AddToDoBtn" unique_id=1306305845]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -78,7 +80,7 @@ offset_right = -2.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_p305g")
+texture = ExtResource("3_neet1")
 expand_mode = 1
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/Header/HBoxContainer" unique_id=1160045743]

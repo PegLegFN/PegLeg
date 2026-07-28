@@ -766,7 +766,7 @@ static class CatalogRequests
 		imageFile.StoreBuffer(buffer);
 	}
 
-	public static Image TryGetCosmeticImage(string uniqueId, float resolutionScale = 1)
+	public static Image TryGetCosmeticImage(string uniqueId, float resolutionScale = 1, bool cacheOnly = false)
 	{
 		lock (activeResourceCache)
 		{
@@ -774,11 +774,15 @@ static class CatalogRequests
 				return cachedImage;
 		}
 
+		if (cacheOnly)
+			return null;
+
 		var localPath = LocalCosmeticResourcePathFromId(uniqueId);
 		if (localPath is null)
 			return null;
 
 		//GD.Print("file exists");
+		//todo: load local files asynchronously
 		Image resourceImage = Image.LoadFromFile(localPath);
 		if (resourceImage is null)
 			return null;
@@ -803,7 +807,7 @@ static class CatalogRequests
 		return resourceImage;
 	}
 
-	public static ImageTexture TryGetCosmeticTexture(string uniqueId, float resolutionScale = 1)
+	public static ImageTexture TryGetCosmeticTexture(string uniqueId, float resolutionScale = 1, bool cacheOnly = false)
 	{
 		var textureUniqueId = $"{uniqueId}_TEXTURE";
 		lock (activeResourceCache)
@@ -812,7 +816,7 @@ static class CatalogRequests
 				return cachedImageTexture;
 		}
 
-		var image = TryGetCosmeticImage(uniqueId, resolutionScale);
+		var image = TryGetCosmeticImage(uniqueId, resolutionScale, cacheOnly);
 		if (image is null)
 			return null;
 

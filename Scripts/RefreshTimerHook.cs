@@ -3,6 +3,10 @@ using System;
 
 public partial class RefreshTimerHook : Control
 {
+	[Signal]
+	public delegate void IsWarningEventHandler(bool visible);
+	[Signal]
+	public delegate void IsCriticalEventHandler(bool visible);
 	[Export]
 	Label target;
 	[Export]
@@ -16,35 +20,23 @@ public partial class RefreshTimerHook : Control
 	[Export]
 	int customCritTime;
 	[Export]
+	bool useColours = true;
+	[Export]
 	bool useWeeks;
 	[Export]
 	bool useDecimalDaysAndWeeks = true;
+	[Export]
+	string tooltipPrefix;
 	[Export]
 	ProgressBar progressBar;
 
 	string CustomText
 	{
-		set
-		{
-			if (target is not null)
-			{
-				target.Text = value;
-				return;
-			}
-			Set("text", value);
-		}
+		set => ((Control)target ?? this).Set("text", value);
 	}
 	string CustomTooltipText
 	{
-		set
-		{
-			if (tooltipTarget is not null)
-			{
-				tooltipTarget.TooltipText = value;
-				return;
-			}
-			Set("tooltip_text", value);
-		}
+		set => (tooltipTarget ?? this).TooltipText = string.IsNullOrWhiteSpace(tooltipPrefix) ? value : $"{tooltipPrefix}\n{value}";
 	}
 
 	public override void _Ready()
@@ -135,34 +127,36 @@ public partial class RefreshTimerHook : Control
 		if (!force && !IsVisibleInTree())
 			return;
 		var remainingTime = refreshTime - RefreshTimerController.RightNow;
-		var colorTarget = (Control)target ?? this;
-		if (remainingTime.TotalMinutes < criticalCountdownTime)
-			colorTarget.SelfModulate = Colors.Red;
-		else if (remainingTime.TotalMinutes < warningCountdownTime)
-			colorTarget.SelfModulate = Colors.Orange;
-		else
-			colorTarget.SelfModulate = Colors.White;
+		if (useColours)
+		{
+			var colorTarget = (Control)target ?? this;
+			if (remainingTime.TotalMinutes < criticalCountdownTime)
+				colorTarget.SelfModulate = Colors.Red;
+			else if (remainingTime.TotalMinutes < warningCountdownTime)
+				colorTarget.SelfModulate = Colors.Orange;
+			else
+				colorTarget.SelfModulate = Colors.White;
+		}
+		EmitSignalIsWarning(remainingTime.TotalMinutes < warningCountdownTime);
+		EmitSignalIsCritical(remainingTime.TotalMinutes < criticalCountdownTime);
 		CustomText = remainingTime.FormatTime(formatType switch
 		{
 			2 => Helpers.TimeFormat.SigLong,
 			1 => Helpers.TimeFormat.SigShort,
 			_ => Helpers.TimeFormat.Full,
 		}, useWeeks, useDecimalDaysAndWeeks);
-		if (progressBar is not null)
-		{
-			if (lastRefreshTime is DateTime realLastRefresh)
-			{
-				var duration = (refreshTime - realLastRefresh).TotalDays;
-				var progress = (RefreshTimerController.RightNow - realLastRefresh).TotalDays;
-				progressBar.Value = progress / duration;
-			}
-			else
-			{
-				progressBar.Value = 0;
-			}
-		}
+		progressBar?.Value = ProgressBarValue();
 		if (DateTime.UtcNow.CompareTo(refreshTime) >= 0)
 			UpdateRefreshTime();
+	}
+
+	double ProgressBarValue()
+	{
+		if (lastRefreshTime is not DateTime realLastRefresh)
+			return 0;
+		var duration = (refreshTime - realLastRefresh).TotalDays;
+		var progress = (RefreshTimerController.RightNow - realLastRefresh).TotalDays;
+		return progress / duration;
 	}
 
 	public override void _ExitTree()

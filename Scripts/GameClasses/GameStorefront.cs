@@ -1,11 +1,15 @@
+using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using XmppDotNet.Xmpp.XHtmlIM;
+using static GameStorefront.CosmeticSectionData;
 
 public class GameStorefront
 {
@@ -192,6 +196,71 @@ public class GameStorefront
 			.FirstOrDefault(o => o is not null);
 	}
 
+	public static DateTime cosmeticSectionsExpires { get; private set; } = DateTime.MinValue;
+	public static Dictionary<string, CosmeticSectionData> cosmeticSectionsCache { get; private set; } = [];
+	public static bool TryGetCosmeticSection(string templateId, out CosmeticSectionData result) => cosmeticSectionsCache.TryGetValue(templateId??"", out result);
+	public static async Task<Dictionary<string, CosmeticSectionData>> FetchCosmeticSections()
+	{
+		if (cosmeticSectionsExpires > DateTime.UtcNow)
+			return cosmeticSectionsCache;
+
+		var response = await FnWebAddresses.FortContent
+			.MakeRequest("/content/api/pages/fortnite-game/mp-item-shop")
+			.Send();
+		if (await response.CheckForError())
+			return cosmeticSectionsCache;
+
+		cosmeticSectionsExpires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Hourly);
+
+		var root = await response.ReadJson();
+		return cosmeticSectionsCache = root["shopData"]["sections"].Deserialize<CosmeticSectionData[]>().ToDictionary(s => s.sectionID);
+	}
+	public static DateTime jamTracksExpire { get; private set; } = DateTime.MinValue;
+	public static Dictionary<string, JamTrackMeta> jamTracksCache { get; private set; } = [];
+	public static bool TryGetJamTrack(string templateId, out JamTrackMeta result) => jamTracksCache.TryGetValue(templateId??"", out result);
+	public static async Task FetchJamTracks()
+	{
+		if (jamTracksExpire > DateTime.UtcNow)
+			return;
+
+		var response = await FnWebAddresses.FortContent
+			.MakeRequest("/content/api/pages/fortnite-game/spark-tracks")
+			.Send();
+		if (await response.CheckForError())
+			return;
+
+		jamTracksExpire = RefreshTimerController.GetRefreshTime(RefreshTimeType.Hourly);
+
+		var root = await response.ReadJson<JsonObject>();
+		root.Remove("_title");
+		root.Remove("_noIndex");
+		root.Remove("_activeDate");
+		root.Remove("lastModified");
+		root.Remove("_locale");
+		root.Remove("_templateName");
+		root.Remove("_suggestedPrefetch");
+
+		var containerDict = root.Deserialize<Dictionary<string, JamTrackContainer>>();
+		jamTracksCache = containerDict.ToDictionary(kvp => kvp.Value.track.templateId, kvp => kvp.Value.track);
+	}
+
+	public static async Task FetchCosmeticDependancies(bool withExternal=true)
+	{
+		await Task.WhenAll([
+			FetchCosmeticSections(),
+			FetchJamTracks(),
+			CosmeticDaily.Fetch(),
+			CosmeticWeekly.Fetch()
+		]);
+		if (!withExternal)
+			return;
+		try
+		{
+			await ExternalCosmetics.LoadCosmeticShopData();
+		}
+		catch { }
+	}
+
 	#endregion
 
 	public event Action<GameOffer> OnOfferAdded;
@@ -282,5 +351,147 @@ public class GameStorefront
 				group => group.OrderBy(o => -o.SortPriority).ToArray()
 			)
 		);
+
+	public record struct CosmeticSectionData : IStackRankElement
+	{
+		public string displayName { get; init; }
+		public string category { get; init; }
+		public Meta metadata { get; init; }
+		public string sectionID { get; init; }
+		public string subtitle { get; init; }
+
+		[JsonIgnore]
+		Rank[] IStackRankElement.StackRanks => metadata.stackRanks;
+
+		public record struct Meta
+		{
+			public Background background { get; init; }
+			public Row[] offerGroups { get; init; }
+			public string showIneligibleOffers { get; init; }
+			public Rank[] stackRanks { get; init; }
+		}
+
+		public record struct Background
+		{
+			public string cookedAssetKey { get; init; }
+			public string customTexture { get; init; }
+			public string type { get; init; }
+		}
+
+		public record struct Row: IStackRankElement
+		{
+			[JsonPropertyName("bUseWidePreview")]
+			public bool useWidePreview { get; init; }
+			public string displayType { get; init; }
+			public string offerGroupId { get; init; }
+			public Rank[] stackRanks { get; init; }
+			[JsonIgnore]
+			Rank[] IStackRankElement.StackRanks => stackRanks;
+		}
+
+		public record struct Rank
+		{
+			public string context { get; init; }
+			public string productTag { get; init; }
+			public int stackRankValue { get; init; }
+			public DateTime startDate { get; init; }
+		}
+	}
+	public interface IStackRankElement
+	{
+		public Rank[] StackRanks { get; }
+	}
+	record struct JamTrackContainer
+	{
+		public JamTrackMeta track { get; init; }
+	}
+	public record struct JamTrackMeta
+	{
+		[JsonPropertyName("tt")]
+		public string title { get; init; }
+		[JsonPropertyName("ab")]
+		public string album { get; init; }
+		[JsonPropertyName("an")]
+		public string artist { get; init; }
+		[JsonPropertyName("au")]
+		public string albumArtURL { get; init; }
+		[JsonPropertyName("ry")]
+		public int releaseYear { get; init; }
+		[JsonPropertyName("dn")]
+		public int durationSeconds { get; init; }
+		[JsonPropertyName("mt")]
+		public int beatsPerMinute { get; init; }
+		[JsonPropertyName("su")]
+		public string songUUID { get; init; }
+		[JsonIgnore]
+		public string DurationText => $"{durationSeconds / 60}:{durationSeconds % 60:00}";
+		[JsonPropertyName("ti")]
+		public string templateId { get; init; }
+
+		[JsonIgnore]
+		string uniqueName => templateId.Replace(":","__");
+
+		public ImageTexture GetCachedTexture()
+		{
+			if (CatalogRequests.TryGetCosmeticTexture(uniqueName, cacheOnly: true) is ImageTexture existingTexture)
+				return existingTexture;
+			return null;
+		}
+
+		public ImageTexture GetLocalTexture(float resolutionScale = 1)
+		{
+			if (CatalogRequests.TryGetCosmeticTexture(uniqueName, resolutionScale) is ImageTexture existingTexture)
+				return existingTexture;
+			return null;
+		}
+
+		public async Task<ImageTexture> FetchTexture(float resolutionScale = 1)
+		{
+			if (CatalogRequests.TryGetCosmeticTexture(uniqueName, resolutionScale) is ImageTexture existingTexture)
+				return existingTexture;
+			await FetchImage();
+			return CatalogRequests.TryGetCosmeticTexture(uniqueName);
+		}
+
+		public async Task<Image> FetchImage(float resolutionScale = 1)
+		{
+			if (albumArtURL is null)
+				return null;
+			if (CatalogRequests.TryGetCosmeticImage(uniqueName, resolutionScale) is Image existingTexture)
+				return existingTexture;
+
+			using var result = await WebHelpers.MakeRequest(albumArtURL).Accepts(WebMedia.Image.Any).Send();
+			if (await result.CheckForError())
+				return null;
+
+			(Image image, byte[] buffer, string type) = await result.ReadImageWithBuffer();
+			//Image image = await result.ReadDownloadImage(testStream);
+			if (image is null)
+				return null;
+
+			CatalogRequests.RegisterCosmeticImageWithBuffer(ref image, buffer, type, uniqueName, resolutionScale);
+			return CatalogRequests.TryGetCosmeticImage(uniqueName);
+		}
+	}
+}
+
+public static class GameStorefrontExtensions
+{
+	extension(GameStorefront.IStackRankElement stackRankElement)
+	{
+		public int RankValue
+		{
+			get 
+			{
+				var ranks = stackRankElement.StackRanks;
+				if ((ranks?.Length ?? 0) == 0)
+					return 0;
+				var rankData = ranks.FirstOrDefault(rank => rank.productTag == "Product.BR");
+				if (rankData == default)
+					rankData = ranks[0];
+				return rankData.stackRankValue;
+			}
+		}
+	}
 }
 

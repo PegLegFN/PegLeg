@@ -15,12 +15,13 @@ public partial class FetchCosmeticPreviewCtx : AbstractContextComponent
 		if (currentCosmetic?.primaryTemplate is not string primaryTemplate)
 			return;
 		menu.CloseMenu();
+		var cosmoImgData = CosmoRequests.GetItemPreview(primaryTemplate);
 		GD.Print(primaryTemplate);
-		GD.Print(CosmoRequests.GetCosmoURL(primaryTemplate));
+		GD.Print(cosmoImgData.url);
 		Image img = null;
 		using (var _ = LoadingOverlay.CreateToken())
 		{
-			img = await CosmoRequests.FetchCosmoImage(primaryTemplate);
+			img = await cosmoImgData.FetchImage();
 		}
 		if (img is not null)
 			ShareImagePopup.ShowImage(img);

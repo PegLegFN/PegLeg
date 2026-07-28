@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Linq;
 using System.Text.Json.Nodes;
-using static System.Collections.Specialized.BitVector32;
 
 public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<MissionRewardPair>
 {
@@ -25,10 +24,8 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	Control todoReorderContent;
 	public Control node => this;
 
-	int _ListEntryIndex;
-	IListProvider<MissionRewardPair> _ListEntryItemProvider;
-	int IListEntry<MissionRewardPair>.CurrentIndexTarget { get => _ListEntryIndex; set => _ListEntryIndex = value; }
-	IListProvider<MissionRewardPair> IListEntry<MissionRewardPair>.CurrentListProvider { get => _ListEntryItemProvider; set => _ListEntryItemProvider = value; }
+	int IListEntry<MissionRewardPair>.CurrentIndexTarget { get; set; }
+	IListProvider<MissionRewardPair> IListEntry<MissionRewardPair>.CurrentListProvider { get; set; }
 
 	public override void _Ready()
 	{
@@ -129,10 +126,7 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 
 	public void AddToList()
 	{
-		foreach (var item in currentItems)
-		{
-			MissionToDoListController.AddToList(missionEntry.currentMission, item);
-		}
+		MissionToDoListController.BulkAddToList([.. currentItems.Select(item => new MissionRewardPair(missionEntry.currentMission, item))]);
 	}
 
 	public void MoveToTop() => MissionToDoListController.MoveToTop(itemEntry.currentItem);

@@ -304,7 +304,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 		if (
 			!forceShowVBucks &&
-			displayItem.templateId == "AccountResource:currency_hybrid_mtx_xrayllama" &&
+			displayItem.templateId == "AccountResource:currency_mtxswap" &&
 			(
 				(
 					GameAccount.ActiveAccount.isOwned &&
@@ -321,6 +321,11 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		{
 			displayItem = GameItemTemplate.Get("AccountResource:currency_xrayllama").CreateInstance(amount);
 		}
+
+		if (displayItem.templateId == "AccountResource:currency_mtxswap")
+			displayItem = GameItemTemplate.Get("AccountResource:currency_hybrid_mtx_xrayllama").CreateInstance(amount);
+		if (displayItem.templateId== "Currency:mtxpurchased")
+			displayItem = GameItemTemplate.Get("Token:receivemtxcurrency").CreateInstance(amount);
 		//substitute generic event tickets for current event tickets
 
 		inspectorOverride = displayItem.inspectorOverride;

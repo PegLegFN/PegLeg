@@ -1,0 +1,178 @@
+[gd_scene format=3 uid="uid://c1doenh4cpmcv"]
+
+[ext_resource type="PackedScene" uid="uid://dcx80phwfyua0" path="res://Scenes/OfferEntries/cosmetic_offer_entry_new.tscn" id="1_arynh"]
+[ext_resource type="Shader" uid="uid://c1wby5d34ekir" path="res://Shaders/GradientPanel.gdshader" id="2_hh1at"]
+[ext_resource type="Shader" uid="uid://cht7xm52dybcv" path="res://Shaders/CosmeticOfferIcon.gdshader" id="4_3th2c"]
+[ext_resource type="Texture2D" uid="uid://bqhlvb70hrgro" path="res://Images/TextureResources/JamTrackRadial.tres" id="5_7wh5u"]
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="8_jyoqb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihkkw"]
+resource_local_to_scene = true
+shader = ExtResource("2_hh1at")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/UseCorners = true
+shader_parameter/Fit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ThreeColourGradient = false
+shader_parameter/FirstCol = Color(0, 0.74509805, 1, 1)
+shader_parameter/SecondCol = Color(0, 0.19607843, 0.5019608, 1)
+shader_parameter/ThirdCol = Color(0, 0.74509805, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lma21"]
+resource_local_to_scene = true
+shader = ExtResource("4_3th2c")
+shader_parameter/ControlSize = Vector2(100, 130)
+shader_parameter/Shift = 0.0
+shader_parameter/Fit = true
+shader_parameter/IsJamTrack = false
+shader_parameter/CosmeticZoom = 1.0
+shader_parameter/CornerRadius = 10.0
+shader_parameter/JamRadius = 3.0
+shader_parameter/JamTexture = ExtResource("5_7wh5u")
+shader_parameter/time = 4.022
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkyau"]
+resource_local_to_scene = true
+shader = ExtResource("4_3th2c")
+shader_parameter/ControlSize = Vector2(150, 150)
+shader_parameter/Shift = 0.0
+shader_parameter/Fit = true
+shader_parameter/IsJamTrack = false
+shader_parameter/CosmeticZoom = 1.0
+shader_parameter/CornerRadius = 10.0
+shader_parameter/JamRadius = 3.0
+shader_parameter/JamTexture = ExtResource("5_7wh5u")
+shader_parameter/time = 4.022
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0r0jl"]
+resource_local_to_scene = true
+shader = ExtResource("8_jyoqb")
+shader_parameter/ControlSize = Vector2(90, 70)
+shader_parameter/SliceAmount = Vector2(8, 8)
+shader_parameter/FPS = 24.0
+shader_parameter/CellCount = -4
+shader_parameter/Fit = true
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = false
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tor1b"]
+resource_local_to_scene = true
+shader = ExtResource("2_hh1at")
+shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/ShiftDirection = Vector2(0.5, 1)
+shader_parameter/UseCorners = true
+shader_parameter/Fit = true
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ThreeColourGradient = false
+shader_parameter/FirstCol = Color(1, 1, 1, 1)
+shader_parameter/SecondCol = Color(1, 1, 1, 0)
+shader_parameter/ThirdCol = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arynh"]
+bg_color = Color(1, 0.470588, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0, 0, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="CosmeticOfferEntry" unique_id=1963553576 instance=ExtResource("1_arynh")]
+custom_minimum_size = Vector2(100, 100)
+offset_right = 100.0
+offset_bottom = 100.0
+hoverTypeSize = 13.0
+skipLastSeen = true
+
+[node name="RadialBG" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="0" unique_id=1198445779]
+material = SubResource("ShaderMaterial_ihkkw")
+
+[node name="LinearBG" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="1" unique_id=31677866]
+material = SubResource("ShaderMaterial_ihkkw")
+
+[node name="ItemIcon" parent="ImageContent/IconContainer" parent_id_path=PackedInt32Array(1447103009) index="0" unique_id=1494506969]
+material = SubResource("ShaderMaterial_lma21")
+custom_minimum_size = Vector2(90, 90)
+
+[node name="ItemIcon2" parent="ImageContent/IconContainer/ItemIcon" index="0" unique_id=1165155485]
+material = SubResource("ShaderMaterial_gkyau")
+
+[node name="CosmeticLoadingIcon" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="3" unique_id=1550021752]
+material = SubResource("ShaderMaterial_0r0jl")
+
+[node name="TextBG" parent="." index="1" unique_id=1916871813]
+material = SubResource("ShaderMaterial_tor1b")
+
+[node name="MarginContainer" parent="DetailsArea" parent_id_path=PackedInt32Array(1825829364) index="0" unique_id=141096685]
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HeadlineLabel" parent="DetailsArea/MarginContainer/VBoxContainer/HeadlinePanel/MarginContainer" parent_id_path=PackedInt32Array(1091787935) index="0" unique_id=1350383139]
+theme_override_font_sizes/font_size = 9
+
+[node name="NameContainer" parent="DetailsArea/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1261555340) index="1" unique_id=1723313365]
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="NameLabel" parent="DetailsArea/MarginContainer/VBoxContainer/NameContainer" index="0" unique_id=550291052]
+theme_override_font_sizes/font_size = 14
+
+[node name="PriceArea" parent="DetailsArea/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1261555340) index="2" unique_id=218047454]
+custom_minimum_size = Vector2(0, 12)
+
+[node name="PriceContent" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned" parent_id_path=PackedInt32Array(2085425483) index="0" unique_id=831002838]
+custom_minimum_size = Vector2(0, 10)
+
+[node name="FinalPrice" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/PriceContent" index="1" unique_id=628113499]
+theme_override_font_sizes/font_size = 10
+
+[node name="DiscountContent" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/PriceContent" index="2" unique_id=2028504198]
+modulate = Color(1, 1, 1, 0)
+mouse_filter = 2
+
+[node name="HBoxContainer" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/PriceContent/DiscountContent" index="0" unique_id=2066364876]
+visible = false
+
+[node name="HoverInfo" parent="DetailsArea" parent_id_path=PackedInt32Array(1825829364) index="1" unique_id=1811839138]
+custom_minimum_size = Vector2(0, 13)
+
+[node name="SpecialType" parent="DetailsArea/HoverInfo" index="1" unique_id=670033275]
+theme_override_font_sizes/font_size = 10
+
+[node name="StandardType" parent="DetailsArea/HoverInfo" index="3" unique_id=1229785293]
+theme_override_font_sizes/font_size = 10
+
+[node name="AlmostAYear" parent="VBoxContainer/Overlays" parent_id_path=PackedInt32Array(2136210566) index="0" unique_id=1776421360]
+modulate = Color(1, 1, 1, 0)
+
+[node name="HBoxContainer" parent="VBoxContainer/Overlays" parent_id_path=PackedInt32Array(2136210566) index="1" unique_id=1291098870]
+offset_bottom = -1.0
+
+[node name="Panel" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer/LeavingSoonAlert" parent_id_path=PackedInt32Array(714371069) index="0" unique_id=1438835707]
+theme_override_styles/panel = SubResource("StyleBoxFlat_arynh")
+
+[node name="LeavingLabel" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer/HBoxContainer" parent_id_path=PackedInt32Array(1644348748) index="1" unique_id=750389805]
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_outline_size = 1
+theme_override_font_sizes/font_size = 8
+vertical_alignment = 2
+
+[node name="LastSeenPanel" parent="VBoxContainer/Overlays/HBoxContainer" index="1" unique_id=1121278558]
+visible = false
+
+[node name="TypeSpacer" parent="VBoxContainer" parent_id_path=PackedInt32Array(1098215444) index="1" unique_id=133146277]
+custom_minimum_size = Vector2(0, 13)

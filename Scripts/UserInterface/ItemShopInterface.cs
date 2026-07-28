@@ -17,90 +17,70 @@ public partial class ItemShopInterface : Control
 
 	public override void _Ready()
 	{
-		VisibilityChanged += async () =>
-		{
-			if (IsVisibleInTree())
-			{
-				await LoadShop();
-				//CurrencyHighlight.Instance?.SetCurrencyTemplate(GameItemTemplate.Get("AccountResource:eventcurrency_scaling"));
-			}
-		};
-
-		RefreshTimerController.OnDayChanged += OnDayChanged;
+		VisibilityChanged += LoadShop;
+		RefreshTimerController.OnDayChanged += MarkDirty;
 	}
 
 	public override void _ExitTree()
 	{
-		RefreshTimerController.OnDayChanged -= OnDayChanged;
-		if (linkedStorefront is not null)
-		{
-			linkedStorefront.OnOfferAdded -= AddShopOffer;
-			linkedStorefront.OnOfferRemoved -= RemoveShopOffer;
-		}
+		RefreshTimerController.OnDayChanged -= MarkDirty;
+		//if (linkedStorefront is not null)
+		//{
+		//	linkedStorefront.OnOfferAdded -= AddShopOffer;
+		//	linkedStorefront.OnOfferRemoved -= RemoveShopOffer;
+		//}
 	}
 
-	private async void OnDayChanged()
+	private void MarkDirty()
 	{
-		if (IsVisibleInTree())
-			await LoadShop();
+		shopDirty = true;
+		LoadShop();
 	}
 
+	bool shopDirty = true;
 	List<GameOfferEntry> inactiveEntries = [];
 	Dictionary<string, GameOfferEntry> activeEntries = [];
-	GameStorefront linkedStorefront = null;
-	static SemaphoreSlim itemShopSemaphore = new(1);
-	public async Task LoadShop(bool force = false)
+	public async void LoadShop()
 	{
-		await itemShopSemaphore.WaitAsync();
-		try
+		if (!shopDirty || !IsVisibleInTree())
+			return;
+		shopDirty = false;
+
+		var storefront = useEventShop ? GameStorefront.CampaignEvent : GameStorefront.CampaignWeekly;
+		await storefront.Fetch();
+		var offers = storefront.Offers;
+
+		if (useEventShop)
 		{
-			var timerType = useEventShop ? RefreshTimeType.Weekly : RefreshTimeType.Event;
-			if (linkedStorefront is not null)
-			{
-				await linkedStorefront.Fetch(force);
-				return;
-			}
-
-			linkedStorefront = useEventShop ? GameStorefront.CampaignEvent : GameStorefront.CampaignWeekly;
-			await linkedStorefront.Fetch();
-
-			var offers = linkedStorefront.Offers;
-			if (useEventShop)
-			{
-				var futureItems = Timeline.GetCurrentUpcomingItems();
-				offers =
-				[
-					..offers.OrderBy(o => -o.SortPriority),
+			var futureItems = Timeline.GetCurrentUpcomingShopItems();
+			offers =
+			[
+				..offers.OrderBy(o => -o.SortPriority),
 					..futureItems.Select(tuple=>
 						GameItemTemplate
 							.Get(tuple.templateId)
 							.CreateOffer(rawData:new(){["releaseDate"]=tuple.releaseDate})
 					)
-				];
-			}
-			else
-			{
-				offers = [..offers
+			];
+		}
+		else
+		{
+			offers = [..offers
 					.OrderBy(o => -o.itemGrants?.FirstOrDefault()?.template?.RarityLevel ?? 999)
 					.ThenBy(o => -o.BasePrice.quantity)
 					.ThenBy(o => -o.WeeklyLimit)
-				];
-			}
-
-			foreach (var entry in activeEntries.Values)
-			{
-				entry.Visible = false;
-				inactiveEntries.Add(entry);
-			}
-			activeEntries.Clear();
-			for (int i = 0; i < offers.Length; i++)
-			{
-				AddShopOffer(offers[i]);
-			}
+			];
 		}
-		finally
+
+		foreach (var entry in activeEntries.Values)
 		{
-			itemShopSemaphore.Release();
+			entry.Visible = false;
+			inactiveEntries.Add(entry);
+		}
+		activeEntries.Clear();
+		for (int i = 0; i < offers.Length; i++)
+		{
+			AddShopOffer(offers[i]);
 		}
 	}
 

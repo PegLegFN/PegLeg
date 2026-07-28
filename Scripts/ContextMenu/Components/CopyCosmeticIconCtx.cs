@@ -5,18 +5,27 @@ public partial class CopyCosmeticIconCtx : AbstractContextComponent
 {
 	public override string Id => "CopyCosmeticIcon";
 	CosmeticShopOfferEntry currentCosmetic;
+	CosmeticOfferEntryNew currentCosmeticNew;
 	public override void Update(ContextMenuHook hook)
 	{
 		currentCosmetic = hook?.cosmeticSource;
-		SetDisabled(currentCosmetic?.imageUrl is null || !Win64Helpers.isWindows);
+		currentCosmeticNew = hook?.newCosmeticSource;
+		SetDisabled((currentCosmetic?.imageUrl is null && currentCosmeticNew?.currentOffer?.CosmeticDAV2Image is null) || !Win64Helpers.isWindows);
 	}
 
 	public void Copy()
 	{
-		if (currentCosmetic is null)
-			return;
-		Image cosmeticImage = Image.LoadFromFile(CatalogRequests.LocalCosmeticResourcePath(currentCosmetic.imageUrl));
-		Win64Helpers.ClipboardSetImage(cosmeticImage);
+		Image cosmeticImage = null;
+		if (currentCosmetic is not null)
+		{
+			cosmeticImage = Image.LoadFromFile(CatalogRequests.LocalCosmeticResourcePath(currentCosmetic.imageUrl));
+		}
+		else if (currentCosmeticNew is not null)
+		{
+			cosmeticImage = currentCosmeticNew?.currentOffer?.CosmeticDAV2Image?.ReadLocalImageDirect();
+		}
+		if (cosmeticImage is not null)
+			Win64Helpers.ClipboardSetImage(cosmeticImage);
 		menu.CloseMenu();
 	}
 }

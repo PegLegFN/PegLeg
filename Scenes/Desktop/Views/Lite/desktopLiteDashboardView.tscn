@@ -3,16 +3,81 @@
 [ext_resource type="PackedScene" uid="uid://bx77yhl4rdcno" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewardsPanel.tscn" id="1_qts83"]
 [ext_resource type="PackedScene" uid="uid://mocwxx3hkrl3" path="res://Scenes/Desktop/Views/MissionRewards/missionToDoListPanel.tscn" id="2_p1mgl"]
 [ext_resource type="PackedScene" uid="uid://dwkncmg0uq77i" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewardsPanel.tscn" id="3_5ma0n"]
+[ext_resource type="Shader" uid="uid://c15e8ayssfx4d" path="res://Shaders/ClickbaitGlow.gdshader" id="5_1rpsu"]
 [ext_resource type="PackedScene" uid="uid://bytcic4qvijqc" path="res://Scenes/Desktop/Views/Dashboard/dashboardPowerHourAlert.tscn" id="6_6eljq"]
-[ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/dashboardLlamaShop.tscn" id="6_p1mgl"]
+[ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="6_nnwiv"]
+[ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardLlamaShop.tscn" id="6_p1mgl"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="6_rt5en"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="7_5ma0n"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/mission_collection.tscn" id="7_31yqt"]
+[ext_resource type="Script" uid="uid://gssdxmp35yfg" path="res://Scripts/ClickbaitTransform.cs" id="7_ty34v"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="8_1rpsu"]
+[ext_resource type="PackedScene" uid="uid://8nnn83fa7ib4" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardWeeklyShop.tscn" id="8_5ma0n"]
+[ext_resource type="PackedScene" uid="uid://c2fllevac3o74" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardEventShop.tscn" id="9_1rpsu"]
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/mission_collection_entry_modifiers.tscn" id="9_p1mgl"]
+[ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="9_wlnwa"]
+[ext_resource type="PackedScene" uid="uid://send81rsbg0r" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardCosmeticShop.tscn" id="10_nnwiv"]
+[ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="10_ty34v"]
 [ext_resource type="PackedScene" uid="uid://cyyifj2tha4ri" path="res://Scenes/SharedImageGenerators/shareable_mission_summary.tscn" id="11_a1an6"]
+[ext_resource type="Texture2D" uid="uid://0rekh58vwqge" path="res://Images/InterfaceIcons/ClickbaitOswald.png" id="12_vnrjy"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="12_yr1bg"]
 [ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="14_qts83"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51cgl"]
+shader = ExtResource("5_1rpsu")
+shader_parameter/from = Color(1, 0, 0, 1)
+shader_parameter/to = Color(1, 1, 0, 1)
+shader_parameter/speed = 7.000000285
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51cgl"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+expand_margin_left = 16.0
+expand_margin_top = 9.0
+expand_margin_right = 16.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_evgyu"]
+shader = ExtResource("9_wlnwa")
+shader_parameter/rotationSpeed = 0.5
+
+[sub_resource type="Curve" id="Curve_7ddr8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.26640418, 1), 0.0, 0.0, 0, 0, Vector2(0.78215224, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_vc53c"]
+curve = SubResource("Curve_7ddr8")
+
+[sub_resource type="Curve" id="Curve_vnrjy"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.49868768, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xexr3"]
+curve = SubResource("Curve_vnrjy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_51cgl"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(300, 50, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.75
+scale_curve = SubResource("CurveTexture_xexr3")
+alpha_curve = SubResource("CurveTexture_vc53c")
+hue_variation_min = -0.020000022
+hue_variation_max = 0.019999977
 
 [node name="Dashboard" type="MarginContainer" unique_id=353733326]
 custom_minimum_size = Vector2(720, 0)
@@ -53,11 +118,11 @@ layout_mode = 2
 [node name="NotableRewards" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer" unique_id=936518577 instance=ExtResource("1_qts83")]
 layout_mode = 2
 
-[node name="PlayableFilter" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="2" unique_id=485339679]
-visible = false
-
-[node name="ShareMissions" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="4" unique_id=667966702]
+[node name="ShareMissions" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="3" unique_id=667966702]
 visible = true
+
+[node name="PlayableFilter" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="6" unique_id=485339679]
+visible = false
 
 [node name="ToDoList" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer" unique_id=1403873334 instance=ExtResource("2_p1mgl")]
 layout_mode = 2
@@ -75,8 +140,60 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PowerHourAlert" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=878248880 instance=ExtResource("6_6eljq")]
+[node name="ClickbaitSpace" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=758103730]
 layout_mode = 2
+
+[node name="Control" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace" unique_id=1775621346]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control" unique_id=783272661]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+button_pressed = true
+script = ExtResource("7_5ma0n")
+section = "ui"
+key = "show_ph_clickbait"
+defaultValue = true
+
+[node name="PowerHourAlert" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=878248880 node_paths=PackedStringArray("secondaryVisibility") instance=ExtResource("6_6eljq")]
+layout_mode = 2
+secondaryVisibility = NodePath("../ClickbaitSpace")
+
+[node name="ClickbaitPanel" type="Panel" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/PanelContainer" parent_id_path=PackedInt32Array(878248880, 485946737) index="1" unique_id=1959021830]
+material = SubResource("ShaderMaterial_51cgl")
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" unique_id=793547761]
+z_index = 1
+material = SubResource("ShaderMaterial_51cgl")
+custom_minimum_size = Vector2(50, 100)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 0
+rotation = 0.7853982
+pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -20)
+mouse_filter = 2
+texture = ExtResource("6_nnwiv")
+expand_mode = 1
+flip_v = true
+script = ExtResource("7_ty34v")
+rotationOffset = 45.0
+rotationSpeed = 2.0
+heightOffset = -20.0
+heightSpeed = 6.0
 
 [node name="Button3" type="Button" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="5" unique_id=1146439963]
 visible = false
@@ -111,6 +228,111 @@ texture = ExtResource("8_1rpsu")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="ClickbaitParticles" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert" unique_id=2074138936]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitParticles" unique_id=1696239540]
+self_modulate = Color(1, 0.9935, 0.61, 0.3529412)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_evgyu")
+amount = 50
+texture = ExtResource("10_ty34v")
+lifetime = 3.0
+process_material = SubResource("ParticleProcessMaterial_51cgl")
+
+[node name="ClickbaitArrows" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert" unique_id=1987976886]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=954946675]
+z_index = 1
+material = SubResource("ShaderMaterial_51cgl")
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+mouse_filter = 2
+texture = ExtResource("6_nnwiv")
+expand_mode = 1
+script = ExtResource("7_ty34v")
+heightOffset = 20.0
+heightSpeed = 15.0
+
+[node name="TextureRect2" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=325667025]
+z_index = 1
+material = SubResource("ShaderMaterial_51cgl")
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+mouse_filter = 2
+texture = ExtResource("6_nnwiv")
+expand_mode = 1
+script = ExtResource("7_ty34v")
+heightOffset = 20.0
+heightSpeed = 15.0
+
+[node name="TextureRect3" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=576278501]
+z_index = 1
+material = SubResource("ShaderMaterial_51cgl")
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 1
+anchors_preset = -1
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+mouse_filter = 2
+texture = ExtResource("6_nnwiv")
+expand_mode = 1
+flip_v = true
+script = ExtResource("7_ty34v")
+heightOffset = -20.0
+heightSpeed = 15.0
+
+[node name="TextureRect4" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=288957932]
+z_index = 1
+material = SubResource("ShaderMaterial_51cgl")
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 1)
+offset_transform_enabled = true
+mouse_filter = 2
+texture = ExtResource("6_nnwiv")
+expand_mode = 1
+flip_v = true
+script = ExtResource("7_ty34v")
+heightOffset = -20.0
+heightSpeed = 15.0
+
+[node name="TextureRect5" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=943843055]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_right = 89.84615
+grow_vertical = 0
+texture = ExtResource("12_vnrjy")
+expand_mode = 3
+
 [node name="DashboardLlamaShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=1726684701 instance=ExtResource("6_p1mgl")]
 layout_mode = 2
 
@@ -136,6 +358,27 @@ size_flags_horizontal = 6
 [node name="LlamaHighlightDBStyle4" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardLlamaShop/VBoxContainer/PanelContainer/VBoxContainer" index="3" unique_id=753806901]
 custom_minimum_size = Vector2(200, 0)
 size_flags_horizontal = 4
+
+[node name="FoldableContainer" type="FoldableContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=155677086]
+layout_mode = 2
+title = "Item Shops"
+title_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer" unique_id=607049738]
+layout_mode = 2
+
+[node name="Gameplay Shops" type="HBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer" unique_id=2049174298]
+layout_mode = 2
+alignment = 1
+
+[node name="WeeklyShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer/Gameplay Shops" unique_id=944500429 instance=ExtResource("8_5ma0n")]
+layout_mode = 2
+
+[node name="EventShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer/Gameplay Shops" unique_id=1061525120 instance=ExtResource("9_1rpsu")]
+layout_mode = 2
+
+[node name="CosmeticShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer" unique_id=719990971 instance=ExtResource("10_nnwiv")]
+layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=1210819099]
 custom_minimum_size = Vector2(469, 0)
@@ -313,6 +556,10 @@ render_target_update_mode = 0
 
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer/ShareMissions" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer/PublishMissions" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitParticles" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" method="set_visible"]
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" method="set_visible"]

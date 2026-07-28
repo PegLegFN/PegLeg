@@ -25,6 +25,8 @@ public partial class PowerHourAlert : Control
 	[Export]
 	Control anecdoteParent;
 	[Export]
+	Control secondaryVisibility;
+	[Export]
 	Label timeText;
 
 	Control[] anecdotes = [];
@@ -35,6 +37,7 @@ public partial class PowerHourAlert : Control
 		if (useHeadsUpForVisibility)
 		{
 			Visible = false;
+			secondaryVisibility?.Visible = Visible;
 			RefreshTimerController.OnMinuteChanged += CheckForHeadsUp;
 		}
 		PowerHourScheduleTracker.CurrentOrNextEventChanged += SetDetails;
@@ -58,6 +61,7 @@ public partial class PowerHourAlert : Control
 		var now = DateTime.UtcNow;
 		int headsUpHours = HeadsUpHours;
 		Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
+		secondaryVisibility?.Visible = Visible;
 	}
 
 	private void SetDetails()
@@ -66,7 +70,10 @@ public partial class PowerHourAlert : Control
 		var now = DateTime.UtcNow;
 		int headsUpHours = HeadsUpHours;
 		if (useHeadsUpForVisibility)
+		{
 			Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
+			secondaryVisibility?.Visible = Visible;
+		}
 
 		bool isActive = phEvent.start < now;
 		timeText.Text = isActive ? "Ends in" : "Starts in";

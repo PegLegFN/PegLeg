@@ -139,11 +139,11 @@ public partial class CosmeticShopOfferEntry : Control, IRecyclableEntry
 			return;
 		}
 		resourceLoadStarted = true;
-		if (currentOffer?.CosmeticImage is ImageTexture img)
-		{
-			ApplyResource(img);
-			return;
-		}
+		//if (currentOffer?.LegacyCosmeticImage is ImageTexture img)
+		//{
+		//	ApplyResource(img);
+		//	return;
+		//}
 
 		TryFetchResource();
 	}

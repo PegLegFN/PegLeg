@@ -22,6 +22,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	[Export]
 	CheckButton playableFilter;
 	[Export]
+	Button bulkTodoBtn;
+	[Export]
 	bool sortByPower;
 	[Export]
 	bool sortByZoneCat;
@@ -62,6 +64,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		GameMission.OnMissionsInvalidated += ClearMissions;
 		AppConfig.OnConfigChanged += OnConfigChanged;
 		CtrlParent.VisibilityChanged += FilterMissions;
+		MissionToDoListController.OnToDoListChanged += FilterMissions;
+		bulkTodoBtn?.Pressed += BulkAddToDoList;
 		if (playableFilter?.IsInsideTree() == true)
 		{
 			playableFilter.Pressed += SetMissionsDirty;
@@ -90,6 +94,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 		GameMission.OnMissionsUpdated -= SetMissionsDirty;
 		GameMission.OnMissionsInvalidated -= ClearMissions;
 		AppConfig.OnConfigChanged -= OnConfigChanged;
+		MissionToDoListController.OnToDoListChanged -= FilterMissions;
 	}
 
 	void UpdateAccount()
@@ -108,6 +113,12 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	{
 		sortByPower = val;
 		FilterMissions();
+	}
+
+	void BulkAddToDoList()
+	{
+		MissionToDoListController.BulkAddToList([.. rewardSets.SelectMany(s => s.items.Select(i => new MissionRewardPair(s.mission, i)))]);
+		bulkTodoBtn?.Disabled = true;
 	}
 
 	public void OnElementSpawned(IRecyclableEntry entry)
@@ -236,10 +247,14 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 					.ThenBy(r => -r.quantity)
 			]))
 		];
-
+		bulkTodoBtn?.Disabled = rewardSets.All(s => s.AllToDo);
 		newMissionList?.UpdateList();
 		missionList?.UpdateList(true);
 	}
 }
 
-public record struct MissionRewardSet(GameMission mission, GameItem[] items);
+public record struct MissionRewardSet(GameMission mission, GameItem[] items)
+{
+	public bool AnyToDo => items.Any(MissionToDoListController.IsOnToDoList);
+	public bool AllToDo => items.All(MissionToDoListController.IsOnToDoList);
+}

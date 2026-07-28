@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using XmppDotNet.Xmpp.XData;
 
 public partial class VirtualTabBar : Control
 {
@@ -27,6 +29,8 @@ public partial class VirtualTabBar : Control
 	Control useAsTabContainer;
 	[Export]
 	bool singleTabMode = true;
+	[Export]
+	bool preferSingleTab = true;
 
 	List<VirtualTab> allTabs;
 	List<VirtualTab> activeTabs = [];
@@ -34,6 +38,8 @@ public partial class VirtualTabBar : Control
 	public int LatestTab { get; private set; } = -1;
 	public int TabCount => activeTabs.Count;
 	public bool AnyTabsPressed => singleTabMode || activeTabs.Any(t => t.IsPressed);
+	public int[] PressedTabIndexes => [.. activeTabs.Where(t => t.IsPressed).Select(t => allTabs.IndexOf(t))];
+	public VirtualTab[] PressedTabs => [.. activeTabs.Where(t => t.IsPressed)];
 
 	public override void _Ready()
 	{
@@ -133,6 +139,23 @@ public partial class VirtualTabBar : Control
 		visibleTabs[^1].SetMode(1);
 	}
 
+	public void ClearTabs()
+	{
+		if (singleTabMode || !AnyTabsPressed)
+			return;
+
+		lockTabPresses = true;
+		for (int i = 0; i < activeTabs.Count; i++)
+		{
+			activeTabs[i].IsPressed = false;
+		}
+		lockTabPresses = false;
+
+		LatestTab = -1;
+		EmitSignalLatestTabChanged(-1);
+		EmitSignalTabsChanged();
+	}
+
 	public void PressTab(VirtualTab tab, bool newVal)
 	{
 		int index = activeTabs.IndexOf(tab);
@@ -141,10 +164,41 @@ public partial class VirtualTabBar : Control
 		if (singleTabMode)
 			newVal = true;
 
-		if (!singleTabMode && Input.IsKeyPressed(Key.Alt) && activeTabs.Where(t => t.IsPressed).Count() <= 1)
-			GD.Print("bleh");
-		else
-			SetTabPressed(index, newVal);
+		int totalPressed = activeTabs.Count(t => t.IsPressed);
+
+		if (!newVal)
+		{
+			//in multi tab mode, turn off tab
+			if (!singleTabMode)
+			{
+				if (totalPressed > 1 && preferSingleTab != Input.IsKeyPressed(Key.Shift))
+				{
+					SetTabPressed(index, true, true);
+					return;
+				}
+				SetTabPressed(index, false);
+			}
+			//otherwise, do nothing
+			return;
+		}
+
+		if (!singleTabMode)
+		{
+			//when holding alt in multitab mode, turn on all tabs except this
+			if (Input.IsKeyPressed(Key.Alt))
+			{
+				SetTabPressed(index, false, true);
+				return;
+			}
+			//otherwise, when holding shift equals prefer single tab in multitab, just turn on tab
+			if (preferSingleTab == Input.IsKeyPressed(Key.Shift))
+			{
+				SetTabPressed(index, true);
+				return;
+			}
+		}
+		//otherwise, turn on tab and turn off others
+		SetTabPressed(index, true, true);
 	}
 
 	public void SetTabHidden(VirtualTab tab, bool hidden = true)
@@ -196,7 +250,7 @@ public partial class VirtualTabBar : Control
 	}
 
 	bool lockTabPresses = false;
-	public void SetTabPressed(int index, bool value = true)
+	public void SetTabPressed(int index, bool value = true, bool invertOthers = false)
 	{
 		if (lockTabPresses)
 			return;
@@ -210,11 +264,11 @@ public partial class VirtualTabBar : Control
 
 		lockTabPresses = true;
 		tab.IsPressed = value;
-		if (singleTabMode)
+		if (singleTabMode || invertOthers)
 		{
 			for (int i = 0; i < activeTabs.Count; i++)
 			{
-				activeTabs[i].IsPressed = i == index;
+				activeTabs[i].IsPressed = singleTabMode ? (i == index) : ((i == index) == value);
 			}
 		}
 		lockTabPresses = false;

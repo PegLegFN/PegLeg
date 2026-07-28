@@ -110,10 +110,6 @@ public partial class GameItemTemplate
 		if (templateId.StartsWith("STWAccoladeReward"))
 			templateId = templateId.Replace("STWAccoladeReward:stwaccolade_", "Accolades:accoladeid_stw_");
 
-		//todo: move to gameitementry
-		if (templateId == "AccountResource:currency_mtxswap")
-			templateId = "AccountResource:currency_hybrid_mtx_xrayllama";
-
 		if (customTemplates.TryGetValue(templateId, out var custom))
 			return custom;
 

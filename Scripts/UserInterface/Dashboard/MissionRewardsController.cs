@@ -38,6 +38,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	TextureRect emptyIcon;
 	[Export]
 	Button multiFilterToggle;
+	[Export]
+	Button bulkTodoBtn;
 
 	[Export]
 	CheckButton[] rarityFilters;
@@ -53,6 +55,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	CheckButton[] allFilters;
 
+	List<MissionRewardPair> todoRewards = [];
 	List<MissionRewardPair> rewards = [];
 
 	IList<MissionRewardPair> IListProvider<MissionRewardPair>.List => rewards;
@@ -94,6 +97,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		filterStory?.Toggled += _ => FilterMissions();
 		searchBar?.TextChanged += _ => UpdateSearch();
 		itemSearchBar?.TextChanged += _ => UpdateSearch();
+		bulkTodoBtn?.Pressed += BulkAddToDoList;
 
 		foreach (var filter in repeatabilityFilters)
 		{
@@ -283,6 +287,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenByDescending(r => r.item.sortingTemplate.RarityLevel)
 			.ThenByDescending(r => r.mission.PowerLevel)
+			.ThenByDescending(r => r.mission.IsFourPlayer)
 			.ThenBy(r => r.mission.missionData.missionGenerator)
 			//.ThenBy(r => r.mission.Guid)
 			//.Reverse().OrderBy(_=>true)
@@ -295,6 +300,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			//.Reverse()
 			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenByDescending(r => r.mission.PowerLevel)
+			.ThenByDescending(r => r.mission.IsFourPlayer)
 			.ThenByDescending(r => r.mission.TheaterIdx)
 			.ThenByDescending(r => r.item.sortingTemplate.RarityLevel)
 			.ThenBy(r => OrderByMissionNameDB(r.mission.missionGenerator), StringComparer.InvariantCultureIgnoreCase)
@@ -311,6 +317,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenByDescending(r => r.mission.TheaterIdx)
 			.ThenBy(r => r.mission.PowerLevel)
+			.ThenBy(r => r.mission.IsFourPlayer)
 			.ThenBy(r => r.item.sortingTemplate.RarityLevel)
 			.ThenByDescending(r => OrderByMissionNameDB(r.mission.missionGenerator), StringComparer.InvariantCultureIgnoreCase)
 			//.ThenBy(r => r.mission.Guid)
@@ -500,7 +507,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		}
 
 		List<MissionRewardPair> filteredRewards = [];
-		string[] ignorePrefixes = [.. excludeRewards.Select(e => e.TargetTemplatePrefix).Where(p => p is not null)];
 
 		foreach (var mission in missions)
 		{
@@ -509,8 +515,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			foreach (var item in mission.alertRewardItems ?? [])
 			{
 				if (item.template.DisplayName == "Venture XP")
-					continue;
-				if (ignorePrefixes.Any(p => item.templateId.StartsWith(p)))
 					continue;
 				if (itemPredicate?.Invoke(item) == false)
 					continue;
@@ -527,8 +531,6 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 					item.template.DisplayName == "Schematic XP"
 					)
 					continue;
-				if (ignorePrefixes.Any(p => item.templateId.StartsWith(p)))
-					continue;
 				if (itemPredicate?.Invoke(item) == false)
 					continue;
 				if (excludeTodo && MissionToDoListController.IsOnToDoList(item))
@@ -537,21 +539,11 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			}
 		}
 
-		if (notableMode)
-			EmitSignalHasVBucks(filteredRewards.Any(r => r.item.template.VBucksOrXRayTickets));
+		string[] ignorePrefixes = [.. excludeRewards.Select(e => e.TargetTemplatePrefix).Where(p => p is not null)];
+		todoRewards = [.. filteredRewards];
+		bulkTodoBtn?.Disabled = todoRewards.All(r => MissionToDoListController.IsOnToDoList(r.item));
 
-		//IOrderedEnumerable<MissionRewardPair> sortedRewards;
-
-		//sortedRewards = sortMode?.GetSelectedId() switch
-		//{
-		//	160 => OrderByPower(filteredRewards),
-		//	465 => OrderByDB(filteredRewards),
-		//	333 => OrderByDBPower(filteredRewards),
-		//	127 => OrderByTheaterThenPower(filteredRewards),
-		//	_ => OrderByNotable(filteredRewards),
-		//};
-
-		rewards = [.. OrderByMode(filteredRewards, sortMode?.GetSelectedId() ?? 1337)];
+		rewards = [.. OrderByMode(todoRewards.Where(r=>!ignorePrefixes.Any(p => r.item.templateId.StartsWith(p))), sortMode?.GetSelectedId() ?? 1337)];
 		int limit = AppConfig.Get("missions", "notable_count", 20);
 		if (notableMode && rewards.Count > limit)
 			rewards = rewards[..limit];
@@ -563,6 +555,12 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			return;
 		missionList.UpdateList(true);
 		missionList.Visible = true;
+	}
+
+	void BulkAddToDoList()
+	{
+		MissionToDoListController.BulkAddToList([.. todoRewards]);
+		bulkTodoBtn?.Disabled = true;
 	}
 
 	//todo: user configurable sorting rules

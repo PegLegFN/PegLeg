@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://8nnn83fa7ib4"]
+
+[ext_resource type="Script" uid="uid://fmirkr2a80g1" path="res://Scripts/UserInterface/Dashboard/DashboardItemShop.cs" id="1_8kixi"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="1_g2o8x"]
+[ext_resource type="PackedScene" uid="uid://dlwhcudhi4qp4" path="res://Scenes/OfferEntries/game_offer_entry_small.tscn" id="1_rj0lm"]
+
+[node name="WeeklyShop" type="PanelContainer" unique_id=944500429 node_paths=PackedStringArray("offerEntries")]
+offset_right = 211.0
+offset_bottom = 136.0
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+script = ExtResource("1_8kixi")
+offerEntries = [NodePath("VBoxContainer/HBoxContainer/GameOfferEntry"), NodePath("VBoxContainer/HBoxContainer/GameOfferEntry2")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=996609203]
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1081862374]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=537153845]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Weekly Shop"
+
+[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer2" unique_id=112616027 instance=ExtResource("1_g2o8x")]
+layout_mode = 2
+timerType = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=458277969]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Highlights of the Week"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="GridContainer" parent="VBoxContainer" unique_id=589002965]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 5
+theme_override_constants/v_separation = 5
+columns = 3
+
+[node name="GameOfferEntry" parent="VBoxContainer/HBoxContainer" unique_id=29912537 instance=ExtResource("1_rj0lm")]
+layout_mode = 2
+
+[node name="GameOfferEntry2" parent="VBoxContainer/HBoxContainer" unique_id=1394721767 instance=ExtResource("1_rj0lm")]
+layout_mode = 2

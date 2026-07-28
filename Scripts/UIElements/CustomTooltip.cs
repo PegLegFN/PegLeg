@@ -124,7 +124,7 @@ public partial class CustomTooltip : Control
 					continue;
 				}
 				descriptionLayers[i].Visible = true;
-				descriptionLayers[i].Text = descText;
+				descriptionLayers[i].Text = descText.FixNewlines();
 
 				descriptionLayers[i].AutowrapMode = TextServer.AutowrapMode.Off;
 				descriptionLayers[i].CustomMinimumSize = Vector2.Zero;
@@ -169,7 +169,9 @@ public partial class CustomTooltip : Control
 				var offer = GameStorefront.GetExistingOffer(offerId);
 				offerCostEntry.SetItem(offer.Price);
 				offerInventoryEntry.SetItem(await offer.GetCurrencyItem());
-				offerStockLabel.Text = (await acc.GetStockLimit(offer)).ToString();
+				var limit = await acc.GetStockLimit(offer);
+				offerStockLabel.Text = $"In Stock: {limit}";
+				offerStockLabel.Visible = limit < 999;
 				offerContent.Visible = true;
 			}
 		}

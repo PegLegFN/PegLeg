@@ -73,6 +73,10 @@ public partial class DashboardLlamasController : Control
 				return;
 
 			var offers = xrayStorefront?.Offers?.Where(o => o is not null && (o.DailyLimit > 0 || o.EventLimit > 0) && o.OfferId != "B9B0CE758A5049F898773C1A47A69ED4")?.ToArray() ?? [];
+			offers = [.. offers
+				.OrderBy(o => o.rawData["catalogGroup"]?.ToString() == "Shared")
+				.ThenByDescending(o => o.rawData["catalogGroupPriority"]?.GetValue<int>() ?? 0)
+			];
 
 			await GameAccount.ActiveAccount.GenerateXRayLlamaResults(offers.Any(o => o.Price.quantity == 0));
 

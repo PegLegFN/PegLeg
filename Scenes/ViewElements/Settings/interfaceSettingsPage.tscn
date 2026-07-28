@@ -193,8 +193,8 @@ texture = ExtResource("3_e7whk")
 expand_mode = 1
 
 [node name="MinimiseNotif" type="CheckBox" parent="NotifSection" unique_id=1751452698]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 button_pressed = true
 text = "Notify when Minimised to Tray"
 alignment = 2
@@ -204,41 +204,36 @@ key = "on_minimised"
 defaultValue = true
 
 [node name="ObscureNames" type="CheckBox" parent="." unique_id=878228724]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Obscure Account Names"
 alignment = 2
 script = ExtResource("4_dnpv7")
 section = "ui"
 key = "obscure_names"
 
-[node name="SimpleCosmetics" type="CheckBox" parent="." unique_id=1797446040]
-layout_direction = 3
+[node name="OldCompactCosmetics" type="VBoxContainer" parent="." unique_id=95441496]
+visible = false
 layout_mode = 2
+
+[node name="SimpleCosmetics" type="CheckBox" parent="OldCompactCosmetics" unique_id=1797446040]
+layout_mode = 2
+layout_direction = 3
 text = "Compact cosmetic shop"
 alignment = 2
 script = ExtResource("4_dnpv7")
 section = "item_shop"
 key = "simple_cosmetics"
 
-[node name="SimpleShopbackgrounds" type="CheckBox" parent="." unique_id=176070206]
-layout_direction = 3
-layout_mode = 2
-text = "Simple Event/Weekly shop backgrounds"
-alignment = 2
-script = ExtResource("4_dnpv7")
-section = "item_shop"
-key = "simple_backgrounds"
-
-[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="." unique_id=1088053044]
+[node name="SimpleCosmeticTiles" type="HBoxContainer" parent="OldCompactCosmetics" unique_id=1088053044]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="SimpleCosmeticTiles" unique_id=882460342]
+[node name="Label" type="Label" parent="OldCompactCosmetics/SimpleCosmeticTiles" unique_id=882460342]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Compact Tiles "
 
-[node name="HSlider" type="HSlider" parent="SimpleCosmeticTiles" unique_id=1209372572]
+[node name="HSlider" type="HSlider" parent="OldCompactCosmetics/SimpleCosmeticTiles" unique_id=1209372572]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 100.0
@@ -254,20 +249,20 @@ key = "simple_cosmetic_tilesize"
 asInt = true
 defaultValue = 150.0
 
-[node name="Label2" type="Label" parent="SimpleCosmeticTiles" unique_id=2010866883]
+[node name="Label2" type="Label" parent="OldCompactCosmetics/SimpleCosmeticTiles" unique_id=2010866883]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 2
 text = "150"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="SimpleCosmeticTiles" unique_id=1517180975]
+[node name="Button" type="Button" parent="OldCompactCosmetics/SimpleCosmeticTiles" unique_id=1517180975]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 text = "Apply"
 
-[node name="TextureRect" type="TextureRect" parent="SimpleCosmeticTiles/Button" unique_id=430715876]
+[node name="TextureRect" type="TextureRect" parent="OldCompactCosmetics/SimpleCosmeticTiles/Button" unique_id=430715876]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -278,9 +273,18 @@ grow_vertical = 2
 texture = ExtResource("3_e7whk")
 expand_mode = 1
 
-[node name="DisableParallax" type="CheckBox" parent="." unique_id=957876785]
-layout_direction = 3
+[node name="SimpleShopbackgrounds" type="CheckBox" parent="." unique_id=176070206]
 layout_mode = 2
+layout_direction = 3
+text = "Simple Event/Weekly shop backgrounds"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "item_shop"
+key = "simple_backgrounds"
+
+[node name="DisableParallax" type="CheckBox" parent="." unique_id=957876785]
+layout_mode = 2
+layout_direction = 3
 text = "Disable Parallax effect"
 alignment = 2
 script = ExtResource("4_dnpv7")
@@ -288,8 +292,8 @@ section = "ui"
 key = "disable_parallax"
 
 [node name="FastAnims" type="CheckBox" parent="." unique_id=37953238]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Fast purchase animation"
 alignment = 2
 script = ExtResource("4_dnpv7")
@@ -304,10 +308,10 @@ key = "fast_animations"
 [connection signal="ConfigValueChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/HSlider" method="SetValue"]
 [connection signal="UnappliedLabelChanged" from="NotifSection/NotifScale/HSlider" to="NotifSection/NotifScale/Label2" method="set_text"]
 [connection signal="pressed" from="NotifSection/NotifScale/Button" to="NotifSection/NotifScale/HSlider" method="ApplyValue"]
-[connection signal="ConfigValueChanged" from="ObscureNames" to="SimpleCosmeticTiles" method="set_visible"]
-[connection signal="ConfigValueChanged" from="SimpleCosmetics" to="SimpleCosmeticTiles" method="set_visible"]
-[connection signal="ConfigValueChanged" from="SimpleShopbackgrounds" to="SimpleCosmeticTiles" method="set_visible"]
-[connection signal="AppliedChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/Button" method="set_disabled"]
-[connection signal="ConfigValueChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/HSlider" method="SetValue"]
-[connection signal="UnappliedLabelChanged" from="SimpleCosmeticTiles/HSlider" to="SimpleCosmeticTiles/Label2" method="set_text"]
-[connection signal="pressed" from="SimpleCosmeticTiles/Button" to="SimpleCosmeticTiles/HSlider" method="ApplyValue"]
+[connection signal="ConfigValueChanged" from="ObscureNames" to="OldCompactCosmetics/SimpleCosmeticTiles" method="set_visible"]
+[connection signal="ConfigValueChanged" from="OldCompactCosmetics/SimpleCosmetics" to="OldCompactCosmetics/SimpleCosmeticTiles" method="set_visible"]
+[connection signal="AppliedChanged" from="OldCompactCosmetics/SimpleCosmeticTiles/HSlider" to="OldCompactCosmetics/SimpleCosmeticTiles/Button" method="set_disabled"]
+[connection signal="ConfigValueChanged" from="OldCompactCosmetics/SimpleCosmeticTiles/HSlider" to="OldCompactCosmetics/SimpleCosmeticTiles/HSlider" method="SetValue"]
+[connection signal="UnappliedLabelChanged" from="OldCompactCosmetics/SimpleCosmeticTiles/HSlider" to="OldCompactCosmetics/SimpleCosmeticTiles/Label2" method="set_text"]
+[connection signal="pressed" from="OldCompactCosmetics/SimpleCosmeticTiles/Button" to="OldCompactCosmetics/SimpleCosmeticTiles/HSlider" method="ApplyValue"]
+[connection signal="ConfigValueChanged" from="SimpleShopbackgrounds" to="OldCompactCosmetics/SimpleCosmeticTiles" method="set_visible"]

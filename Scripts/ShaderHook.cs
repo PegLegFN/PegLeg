@@ -18,7 +18,7 @@ public partial class ShaderHook : Control
 	[Export]
 	string viewportTexturePropName;
 
-	string realPrimaryTexturePropName;
+	string RealPrimaryTexturePropName => field ??= string.IsNullOrWhiteSpace(primaryTextureName) ? "texture" : "SH_" + primaryTextureName;
 
 	//for Labels
 	public string Text
@@ -30,8 +30,8 @@ public partial class ShaderHook : Control
 	//for TextureRects
 	public Texture2D Texture
 	{
-		get => Get(realPrimaryTexturePropName).As<Texture2D>();
-		set => Set(realPrimaryTexturePropName, value);
+		get => Get(RealPrimaryTexturePropName).As<Texture2D>();
+		set => Set(RealPrimaryTexturePropName, value);
 	}
 
 	public override Variant _Get(StringName property)
@@ -53,10 +53,6 @@ public partial class ShaderHook : Control
 
 	public override void _Ready()
 	{
-		if (string.IsNullOrWhiteSpace(primaryTextureName))
-			realPrimaryTexturePropName = "texture";
-		else
-			realPrimaryTexturePropName = "SH_" + primaryTextureName;
 		ItemRectChanged += OnRectUpdated;
 		OnRectUpdated();
 		//Helpers.Defer(OnRectUpdated);

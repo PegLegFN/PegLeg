@@ -13,6 +13,8 @@ public partial class ContextMenuHook : Node
 	[Export]
 	public CosmeticShopOfferEntry cosmeticSource;
 	[Export]
+	public CosmeticOfferEntryNew newCosmeticSource;
+	[Export]
 	public Control attachTo;
 	[Export]
 	public bool attachHorizontally;

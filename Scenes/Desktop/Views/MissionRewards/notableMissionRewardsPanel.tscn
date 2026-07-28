@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="4_xtkaj"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="5_ildms"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="6_xbiu1"]
+[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="7_dl0dj"]
 [ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="7_huo06"]
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewards.tscn" id="8_51wbn"]
 
@@ -28,39 +29,6 @@ text = "Notable Rewards"
 
 [node name="RefreshTimer" parent="VBoxContainer3/HBoxContainer" unique_id=112616027 instance=ExtResource("1_r4l81")]
 layout_mode = 2
-
-[node name="PlayableFilter" type="CheckButton" parent="VBoxContainer3/HBoxContainer" unique_id=485339679]
-custom_minimum_size = Vector2(28, 0)
-layout_mode = 2
-tooltip_text = "Only show Missions that can be accessed on this account"
-mouse_filter = 1
-theme_type_variation = &"EmptySquareCheckButton"
-button_pressed = true
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/PlayableFilter" unique_id=367611334]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 1.0
-offset_top = 3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_e83rq")
-expand_mode = 3
-
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/PlayableFilter" unique_id=937955093]
-self_modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 22.0
-mouse_filter = 2
-script = ExtResource("3_pr8mp")
-section = "missions"
-key = "filter_power_default"
-defaultValue = true
 
 [node name="RefreshMissions" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=474531533]
 custom_minimum_size = Vector2(28, 28)
@@ -138,6 +106,61 @@ texture = ExtResource("6_xbiu1")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="AddAllTodo" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=488150027]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Add all visible rewards to To-Do List"
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/AddAllTodo" unique_id=1776106807]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_dl0dj")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayableFilter" type="CheckButton" parent="VBoxContainer3/HBoxContainer" unique_id=485339679]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+tooltip_text = "Only show Missions that can be accessed on this account"
+mouse_filter = 1
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/PlayableFilter" unique_id=367611334]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_e83rq")
+expand_mode = 3
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/PlayableFilter" unique_id=937955093]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 22.0
+mouse_filter = 2
+script = ExtResource("3_pr8mp")
+section = "missions"
+key = "filter_power_default"
+defaultValue = true
+
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer3" unique_id=603283463]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -161,11 +184,12 @@ titleText = "Legendary Survivors"
 configDependancy = "missions:groupLegSurvivors"
 filterPlayable = NodePath("../../HBoxContainer/PlayableFilter")
 
-[node name="Notable" parent="VBoxContainer3/VBoxContainer" unique_id=650228639 node_paths=PackedStringArray("filterPower", "excludeRewards") instance=ExtResource("8_51wbn")]
+[node name="Notable" parent="VBoxContainer3/VBoxContainer" unique_id=650228639 node_paths=PackedStringArray("filterPower", "bulkTodoBtn", "excludeRewards") instance=ExtResource("8_51wbn")]
 layout_mode = 2
 filterPower = NodePath("../../HBoxContainer/PlayableFilter")
+bulkTodoBtn = NodePath("../../HBoxContainer/AddAllTodo")
 excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
 
-[connection signal="toggled" from="VBoxContainer3/HBoxContainer/PlayableFilter/CheckButton" to="VBoxContainer3/HBoxContainer/PlayableFilter" method="set_pressed"]
 [connection signal="pressed" from="VBoxContainer3/HBoxContainer/RefreshMissions" to="VBoxContainer3/VBoxContainer/Notable" method="ReloadMissions"]
 [connection signal="ConfigValueChanged" from="VBoxContainer3/HBoxContainer/PublishMissions/CheckButton" to="VBoxContainer3/HBoxContainer/PublishMissions" method="set_visible"]
+[connection signal="toggled" from="VBoxContainer3/HBoxContainer/PlayableFilter/CheckButton" to="VBoxContainer3/HBoxContainer/PlayableFilter" method="set_pressed"]

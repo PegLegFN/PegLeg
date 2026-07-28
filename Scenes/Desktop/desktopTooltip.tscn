@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bsbgxpgoycn6r"]
+[gd_scene format=3 uid="uid://bsbgxpgoycn6r"]
 
 [ext_resource type="Script" uid="uid://bopbvms3knj0g" path="res://Scripts/UIElements/CustomTooltip.cs" id="1_a0dpu"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="1_n7kv3"]
@@ -17,7 +17,7 @@ shader_parameter/ShiftDirection = Vector2(0, 0.5)
 shader_parameter/CornerRadius = 4.0
 shader_parameter/ColorMode = true
 shader_parameter/Color = Color(0, 1, 1, 1)
-shader_parameter/time = 11.587
+shader_parameter/time = 65.695
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lhx3n"]
 bg_color = Color(0.184314, 0.184314, 0.184314, 1)
@@ -31,11 +31,11 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="Tooltip" type="MarginContainer" node_paths=PackedStringArray("titleContent", "titleBanner", "titleTextLabel", "titleQuantityLayout", "titleQuantityLabel", "descriptionContent", "descriptionLayers", "offerContent", "offerCostEntry", "offerInventoryEntry", "offerStockLabel")]
-layout_direction = 2
+[node name="Tooltip" type="MarginContainer" unique_id=1237028000 node_paths=PackedStringArray("titleContent", "titleBanner", "titleTextLabel", "titleQuantityLayout", "titleQuantityLabel", "descriptionContent", "descriptionLayers", "offerContent", "offerCostEntry", "offerInventoryEntry", "offerStockLabel")]
 offset_top = 1.0
 offset_right = 246.0
 offset_bottom = 80.0
+layout_direction = 2
 script = ExtResource("1_a0dpu")
 titleContent = NodePath("Content/MarginContainer/VBoxContainer/TitleContent")
 titleBanner = NodePath("Content/MarginContainer/VBoxContainer/TitleContent/MarginContainer/TitleBanner")
@@ -48,9 +48,9 @@ descriptionLayers = [NodePath("Content/MarginContainer/VBoxContainer/Description
 offerContent = NodePath("Content/MarginContainer/VBoxContainer/OfferContent")
 offerCostEntry = NodePath("Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price")
 offerInventoryEntry = NodePath("Content/MarginContainer/VBoxContainer/OfferContent/In Inventory")
-offerStockLabel = NodePath("Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/HBoxContainer/Label2")
+offerStockLabel = NodePath("Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Label2")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1882789680]
 layout_mode = 2
 texture = ExtResource("1_n7kv3")
 patch_margin_left = 12
@@ -58,38 +58,38 @@ patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="Content" type="MarginContainer" parent="."]
+[node name="Content" type="MarginContainer" parent="." unique_id=1515616591]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 7
 
-[node name="Panel" type="Panel" parent="Content"]
+[node name="Panel" type="Panel" parent="Content" unique_id=620249735]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Content"]
+[node name="MarginContainer" type="MarginContainer" parent="Content" unique_id=1218341721]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer" unique_id=1400020262]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="TitleContent" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer"]
+[node name="TitleContent" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=1491083476]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent" unique_id=1021556451]
 layout_mode = 2
 theme_override_constants/margin_left = -2
 theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -2
 theme_override_constants/margin_bottom = -2
 
-[node name="TitleBanner" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/TitleContent/MarginContainer"]
+[node name="TitleBanner" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/TitleContent/MarginContainer" unique_id=477804076]
 material = SubResource("ShaderMaterial_642tc")
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -100,15 +100,15 @@ syncTimeProperty = true
 syncControlSize = true
 modTime = 80.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent" unique_id=383449645]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Title" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer"]
+[node name="Title" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer" unique_id=1182465390]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="TextureRect" type="NinePatchRect" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/Title"]
+[node name="TextureRect" type="NinePatchRect" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/Title" unique_id=399318240]
 self_modulate = Color(1, 1, 1, 0.690196)
 layout_mode = 2
 texture = ExtResource("1_n7kv3")
@@ -116,29 +116,29 @@ region_rect = Rect2(0, 0, 24, 24)
 patch_margin_left = 12
 patch_margin_right = 12
 
-[node name="TitleLabel" type="Label" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/Title"]
+[node name="TitleLabel" type="Label" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/Title" unique_id=849932382]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "Tooltip"
 
-[node name="QuantityLayout" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer"]
+[node name="QuantityLayout" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer" unique_id=2138060060]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 theme_override_constants/separation = 0
 alignment = 2
 
-[node name="Control" type="Control" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout"]
+[node name="Control" type="Control" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout" unique_id=603327658]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout" unique_id=1096163341]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/margin_right = 2
 
-[node name="TextureRect" type="NinePatchRect" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout/MarginContainer"]
+[node name="TextureRect" type="NinePatchRect" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout/MarginContainer" unique_id=1363869453]
 self_modulate = Color(1, 1, 1, 0.690196)
 layout_mode = 2
 texture = ExtResource("1_n7kv3")
@@ -146,24 +146,24 @@ region_rect = Rect2(0, 0, 24, 24)
 patch_margin_left = 12
 patch_margin_right = 12
 
-[node name="QuantityLabel" type="Label" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout/MarginContainer"]
+[node name="QuantityLabel" type="Label" parent="Content/MarginContainer/VBoxContainer/TitleContent/HBoxContainer/QuantityLayout/MarginContainer" unique_id=1567818121]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "x256"
 
-[node name="DescriptionContent" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer"]
+[node name="DescriptionContent" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=477991600]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="Body Text" type="Label" parent="Content/MarginContainer/VBoxContainer/DescriptionContent"]
+[node name="Body Text" type="Label" parent="Content/MarginContainer/VBoxContainer/DescriptionContent" unique_id=1904199019]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = -1
 text = "Description label which can be incredibly verbose"
 autowrap_mode = 3
 
-[node name="Body Text2" type="Label" parent="Content/MarginContainer/VBoxContainer/DescriptionContent"]
+[node name="Body Text2" type="Label" parent="Content/MarginContainer/VBoxContainer/DescriptionContent" unique_id=1122596136]
 self_modulate = Color(0.6, 0.6, 0.6, 1)
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -171,77 +171,68 @@ theme_override_constants/line_spacing = -1
 text = "Search Tags: First, Second, Third, Fourth"
 autowrap_mode = 3
 
-[node name="OfferContent" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer"]
+[node name="OfferContent" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=1343853465]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent" unique_id=1736219428]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Price" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer"]
+[node name="Price" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer" unique_id=1704157314]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 script = ExtResource("13_b5rng")
-compactifyAmount = true
 showSingleItemAmount = true
 
-[node name="Panel" type="Panel" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price"]
+[node name="Panel" type="Panel" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" unique_id=332466914]
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lhx3n")
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" unique_id=1904791324]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer" unique_id=2126027862]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer" unique_id=1711171547]
 visible = false
 layout_mode = 2
 text = " You have: "
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer" unique_id=247847]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Icon" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer/MarginContainer" unique_id=332564157]
 layout_mode = 2
 texture = ExtResource("14_b5rng")
 expand_mode = 3
 
-[node name="AmountText" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer"]
+[node name="AmountText" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer" unique_id=2125625581]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer" unique_id=229346688]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "In Stock: "
+text = "In Stock: XX"
 
-[node name="Label2" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "XX"
-
-[node name="Control" type="Control" parent="Content/MarginContainer/VBoxContainer/OfferContent"]
+[node name="Control" type="Control" parent="Content/MarginContainer/VBoxContainer/OfferContent" unique_id=1110476771]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="In Inventory" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent"]
+[node name="In Inventory" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent" unique_id=1430373669]
+visible = false
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_vertical = 8
@@ -250,35 +241,35 @@ script = ExtResource("13_b5rng")
 compactifyAmount = true
 showSingleItemAmount = true
 
-[node name="Panel" type="Panel" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory"]
+[node name="Panel" type="Panel" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" unique_id=704648971]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lhx3n")
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" unique_id=1279865062]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_right = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer" unique_id=401721619]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer" unique_id=1445129463]
 layout_mode = 2
 text = " You have: "
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer" unique_id=307731664]
 layout_mode = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Icon" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer/MarginContainer" unique_id=1201483581]
 layout_mode = 2
 texture = ExtResource("14_b5rng")
 expand_mode = 3
 
-[node name="AmountText" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer"]
+[node name="AmountText" type="Label" parent="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer" unique_id=1446918391]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "???"
@@ -286,6 +277,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="AmountChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" to="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer/AmountText" method="set_text"]
+[connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" to="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" to="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" method="set_tooltip_text"]
 [connection signal="AmountChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
+[connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
+[connection signal="ItemDoesExist" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" method="set_visible"]
 [connection signal="TooltipChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" method="set_tooltip_text"]

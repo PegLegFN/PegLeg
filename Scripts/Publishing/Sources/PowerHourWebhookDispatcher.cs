@@ -69,7 +69,7 @@ public partial class PowerHourWebhookDispatcher : Node
 				//event ended + headsup for next event
 				//await webhook.Execute(currentContentProvider: async () => $"The Power Hour has ended, but another one should be active {curEvt.start.Discordify()}.\n(Ongoing missions will keep the modifiers until they end)\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
 				hasDispatchedEventHeadsup = true;
-				await Publish(firstEnd, curEvt.end);
+				await Publish(firstEnd, curEvt.start);
 			}
 			else
 			{

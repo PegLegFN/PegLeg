@@ -32,16 +32,27 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	[Export]
 	bool debug;
 
-	Queue<IListEntry> pooledEntries = [];
+	Queue<IListEntry> pooledEntries = null;
 	Dictionary<int, IListEntry> activeEntries = [];
 	IListProvider currentListProvider;
 	IListEntry basisEntry;
 	LayoutProvider currentLayoutProvider;
 	LayoutProvider.LayoutInfo currentLayoutInfo;
+	Action<IListEntry> entryConfigurer;
 
 	public override void _Ready()
 	{
+		ProcessPriority = 2;
 		CheckItems();
+	}
+
+	public void SetCustomPool(ref Queue<IListEntry> customPool)
+	{
+		pooledEntries = customPool;
+	}
+	public void SetEntryConfigurer(Action<IListEntry> configurer)
+	{
+		entryConfigurer = configurer;
 	}
 
 	void Setup()
@@ -56,7 +67,6 @@ public partial class NewRecycleListContainer : Container, IListHandler
 			_ => new VListLayoutProvider(),
 		};
 
-		ProcessPriority = 2;
 		if (viewportParent is not null && !viewportParent.IsAncestorOf(this))
 			viewportParent = null;
 		if (viewportParent is null)
@@ -75,6 +85,7 @@ public partial class NewRecycleListContainer : Container, IListHandler
 			}
 		}
 		ItemRectChanged += MarkListDirty;
+		viewportParent.ItemRectChanged += MarkListDirty;
 
 		basisEntry = recycleEntryScene.Instantiate<IListEntry>();
 		var basisNode = basisEntry.Node;
@@ -82,8 +93,6 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		basisNode.Visible = false;
 		basisNode.Size = Vector2.Zero;
 		basisNode.Name = $"{Name}.BasisNode";
-
-		viewportParent.ItemRectChanged += MarkListDirty;
 	}
 
 	public void LinkListProvider(IListProvider newProvider)
@@ -98,14 +107,8 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	}
 
 	bool listDirty = false;
-
 	public void MarkListDirty() => listDirty = true;
-
-	Vector2 prevRelativePos;
-	public override void _Process(double delta)
-	{
-		CheckItems();
-	}
+	public override void _Process(double delta) => CheckItems();
 
 	public override Vector2 _GetMinimumSize() => currentLayoutProvider?.GetMinSize(currentLayoutInfo, GetGlobalRect(), true) ?? Vector2.Zero;
 
@@ -123,7 +126,8 @@ public partial class NewRecycleListContainer : Container, IListHandler
 	int lastCount = 0;
 
 	void IListHandler.UpdateList() => CheckItems(true);
-
+	
+	Vector2 prevRelativePos;
 	void CheckItems() => CheckItems(false);
 	void ForceCheckItems() => CheckItems(true);
 	void CheckItems(bool force)
@@ -134,31 +138,32 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		Vector2 relativePos = GlobalPosition - viewportParent.GlobalPosition;
 		if (!force)
 		{
-			if (!IsVisibleInTree() && !force)
+			if (!IsVisibleInTree())
 				return;
 			if (!listDirty && relativePos == prevRelativePos)
 				return;
 		}
 		prevRelativePos = relativePos;
 		listDirty = false;
-		
-		var viewportRect = viewportParent.GetGlobalRect();
-		var listRect = GetGlobalRect();
-
-		Vector2 sizeScale = Vector2.One;
-		if (listRect.Size.X > 0)
-			sizeScale.X = Size.X / listRect.Size.X;
-		if (listRect.Size.Y > 0)
-			sizeScale.Y = Size.Y / listRect.Size.Y;
-
-		viewportRect.Size *= sizeScale;
-		listRect.Size *= sizeScale;
-
-		viewportRect.Size += extendViewportBounds;
-		viewportRect.Position -= extendViewportBounds / 2;
 
 		CustomMinimumSize += Vector2.One * 0.1f;
 		CustomMinimumSize -= Vector2.One * 0.1f;
+
+		var viewportRect = viewportParent.GetGlobalRect();
+		var listRect = GetGlobalRect();
+
+		//havent tested this yet, should work for padding tho i think
+		listRect.Position = listRect.Position + new Vector2(padding.X, padding.Y);
+		listRect.Size = listRect.Size - new Vector2(padding.X + padding.Z, padding.Y + padding.W);
+
+		//Vector2 sizeScale = Vector2.One;
+		//if (listRect.Size.X > 0)
+		//	sizeScale.X = Size.X / listRect.Size.X;
+		//if (listRect.Size.Y > 0)
+		//	sizeScale.Y = Size.Y / listRect.Size.Y;
+		//viewportRect.Size *= sizeScale;
+		//listRect.Size *= sizeScale;
+		ScaleRects(ref listRect, ref viewportRect, Size);
 
 		if (currentLayoutInfo.listProvider != currentListProvider)
 			currentLayoutInfo = CreateLayoutInfo();
@@ -166,26 +171,22 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		//update list rect using layout provider min size
 		listRect.Size = currentLayoutProvider.GetMinSize(currentLayoutInfo, listRect, false);
 
-		//saves computation when the list is fully within the viewport (such as small lists in big viewports)
-		//bool isEnclosed = viewportRect.Encloses(listRect);
-		//if (wasEnclosed && isEnclosed && lastCount == currentListProvider.ListItemCount && !force)
-		//	return;
-		//wasEnclosed = isEnclosed;
-		//lastCount = currentListProvider.ListItemCount;
+		//viewportRect.Size += extendViewportBounds;
+		//viewportRect.Position -= extendViewportBounds / 2;
 
-		Vector2 relativeViewportPos = viewportRect.Position - listRect.Position;
-		Vector2 clampedViewportPos = new(
-			Mathf.Max(relativeViewportPos.X, 0),
-			Mathf.Max(relativeViewportPos.Y, 0)
-		);
-		Rect2 relativeVisibleRect = new(
-			clampedViewportPos,
-			new(
-				Mathf.Max(Mathf.Min(relativeViewportPos.X + viewportRect.Size.X, listRect.Size.X) - clampedViewportPos.X, 0),
-				Mathf.Max(Mathf.Min(relativeViewportPos.Y + viewportRect.Size.Y, listRect.Size.Y) - clampedViewportPos.Y, 0)
-			)
-		);
-
+		//Vector2 relativeViewportPos = viewportRect.Position - listRect.Position;
+		//Vector2 clampedViewportPos = new(
+		//	Mathf.Max(relativeViewportPos.X, 0),
+		//	Mathf.Max(relativeViewportPos.Y, 0)
+		//);
+		//Rect2 relativeVisibleRect = new(
+		//	clampedViewportPos,
+		//	new(
+		//		Mathf.Max(Mathf.Min(relativeViewportPos.X + viewportRect.Size.X, listRect.Size.X) - clampedViewportPos.X, 0),
+		//		Mathf.Max(Mathf.Min(relativeViewportPos.Y + viewportRect.Size.Y, listRect.Size.Y) - clampedViewportPos.Y, 0)
+		//	)
+		//);
+		Rect2 relativeVisibleRect = GetRelativeRect(listRect, viewportRect, extendViewportBounds);
 
 		LayoutProvider.EntryLayout[] entriesToUse =
 			(relativeVisibleRect.Size.X == 0 || relativeVisibleRect.Size.Y == 0) ? [] :
@@ -197,15 +198,15 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		if (!force && listRect.Size == lastListSize && indicesMatch)
 			return;
 
-		//if (listRect.Size != lastListSize)
 		if (debug)
 			GD.Print($"Size: {lastListSize}=>{listRect.Size}");
-			//if (!indicesMatch)
 		if (debug)
 			GD.Print($"Indices: \n{string.Join(", ", lastIndices)}\n=>\n{string.Join(", ", currentIndexes)}");
 
 		lastListSize = listRect.Size;
 		lastIndices = currentIndexes;
+
+		pooledEntries ??= [];
 
 		var lostIndexes = activeEntries.Keys.Except(entriesToUse.Select(e => e.index)).ToArray();
 		for (int i = 0; i < lostIndexes.Length; i++)
@@ -220,15 +221,12 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		{
 			if (!activeEntries.TryGetValue(layoutEntry.index, out var listEntry))
 			{
-				if (pooledEntries.TryDequeue(out var pooledEntry))
-				{
-					listEntry = pooledEntry;
-				}
-				else
+				if (!pooledEntries.TryDequeue(out listEntry))
 				{
 					var instantiatedEntry = recycleEntryScene.Instantiate<IListEntry>();
 					AddChild(instantiatedEntry.Node);
 					instantiatedEntry.SetListProvider(currentListProvider);
+					entryConfigurer?.Invoke(instantiatedEntry);
 					listEntry = instantiatedEntry;
 				}
 				activeEntries.Add(layoutEntry.index, listEntry);
@@ -240,6 +238,40 @@ public partial class NewRecycleListContainer : Container, IListHandler
 		PerformBlink();
 		//GD.Print("active: " + activeEntries.Count);
 		//FitChildInRect(demoRect, relativeVisibleRect);
+	}
+
+	//this accounts for differences in scale between the local size and global rect size
+	public static void ScaleRects(ref Rect2 baseGlobalRect, ref Rect2 viewportGlobalRect, Vector2 baseLocalSize)
+	{
+		Vector2 sizeScale = Vector2.One;
+		if (baseGlobalRect.Size.X > 0)
+			sizeScale.X = baseLocalSize.X / baseGlobalRect.Size.X;
+		if (baseGlobalRect.Size.Y > 0)
+			sizeScale.Y = baseLocalSize.Y / baseGlobalRect.Size.Y;
+
+		viewportGlobalRect.Size *= sizeScale;
+		baseGlobalRect.Size *= sizeScale;
+	}
+
+	public static Rect2 GetRelativeRect(Rect2 baseGlobalRect, Rect2 viewportGlobalRect, Vector2 extendBounds = default)
+	{
+		if (extendBounds.X > 0 && extendBounds.Y > 0)
+		{
+			viewportGlobalRect.Size += extendBounds;
+			viewportGlobalRect.Position -= extendBounds / 2;
+		}
+		Vector2 relativeViewportPos = viewportGlobalRect.Position - baseGlobalRect.Position;
+		Vector2 clampedViewportPos = new(
+			Mathf.Max(relativeViewportPos.X, 0),
+			Mathf.Max(relativeViewportPos.Y, 0)
+		);
+		return new(
+			clampedViewportPos,
+			new(
+				Mathf.Max(Mathf.Min(relativeViewportPos.X + viewportGlobalRect.Size.X, baseGlobalRect.Size.X) - clampedViewportPos.X, 0),
+				Mathf.Max(Mathf.Min(relativeViewportPos.Y + viewportGlobalRect.Size.Y, baseGlobalRect.Size.Y) - clampedViewportPos.Y, 0)
+			)
+		);
 	}
 
 	SemaphoreSlim blinkSemaphore = new(1);
@@ -393,66 +425,4 @@ public partial class NewRecycleListContainer : Container, IListHandler
 			return [.. layouts];
 		}
 	}
-
-	/*
-	public class VListLayoutProvider : LayoutProvider
-	{
-		public override Vector2 GetMinSize(LayoutInfo layoutInfo)
-		{
-			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
-			var nodeCount = layoutInfo.listProvider.ListItemCount;
-			return new(nodeSize.X, Mathf.Max((nodeCount * nodeSize.Y) + ((nodeCount - 1) * layoutInfo.spacing.Y), 0));
-		}
-
-		public override Rect2 GetRelativeRectForItem(LayoutInfo layoutInfo, int itemIndex)
-		{
-			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
-			float offset = (nodeSize.Y + layoutInfo.spacing.Y) * itemIndex;
-			return new(
-				Vector2.Up * offset,
-				nodeSize
-			);
-		}
-
-		public override int[] GetIndicesForRect(LayoutInfo layoutInfo, Rect2 visibleRect, Rect2 totalRect)
-		{
-			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
-			int startingIndex = Mathf.FloorToInt((visibleRect.Position.Y + layoutInfo.spacing.Y) / (nodeSize.Y + layoutInfo.spacing.Y));
-			int endingIndex = Mathf.CeilToInt((visibleRect.Position.Y + visibleRect.Size.Y + layoutInfo.spacing.Y) / (nodeSize.Y + layoutInfo.spacing.Y));
-			if (startingIndex == endingIndex)
-				return [];
-			return [.. Enumerable.Range(startingIndex, endingIndex)];
-		}
-	}
-
-	public class HListLayoutProvider : LayoutProvider
-	{
-		public override Vector2 GetMinSize(LayoutInfo layoutInfo)
-		{
-			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
-			var nodeCount = layoutInfo.listProvider.ListItemCount;
-			return new(Mathf.Max((nodeCount * nodeSize.X) + ((nodeCount - 1) * layoutInfo.spacing.X), 0), nodeSize.Y);
-		}
-
-		public override Rect2 GetRelativeRectForItem(LayoutInfo layoutInfo, int itemIndex)
-		{
-			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
-			float offset = (nodeSize.X + layoutInfo.spacing.X) * itemIndex;
-			return new(
-				Vector2.Right * offset,
-				nodeSize
-			);
-		}
-
-		public override int[] GetIndicesForRect(LayoutInfo layoutInfo, Rect2 visibleRect, Rect2 totalRect)
-		{
-			var nodeSize = layoutInfo.basisEntry.Node.GetCombinedMinimumSize();
-			int startingIndex = Mathf.FloorToInt((visibleRect.Position.X + layoutInfo.spacing.X) / (nodeSize.X + layoutInfo.spacing.X));
-			int endingIndex = Mathf.CeilToInt((visibleRect.Position.X + visibleRect.Size.X + layoutInfo.spacing.X) / (nodeSize.X + layoutInfo.spacing.X));
-			if (startingIndex == endingIndex)
-				return [];
-			return [.. Enumerable.Range(startingIndex, endingIndex)];
-		}
-	}
-	*/
 }

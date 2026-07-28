@@ -1,13 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxeel4f7ncwoi"]
+[gd_scene format=3 uid="uid://cxeel4f7ncwoi"]
 
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_b78nm"]
-[ext_resource type="Material" uid="uid://cxd71emn05wt3" path="res://Sh_Materials/MissionHexMat.tres" id="2_8x3w4"]
-[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="3_8x3w4"]
+[ext_resource type="Material" uid="uid://cxd71emn05wt3" path="res://Shaders/Materials/MissionHexMat.tres" id="2_8x3w4"]
+[ext_resource type="Texture2D" uid="uid://b0xsnmot53y1w" path="res://Images/AppIcons/PegLegIcon432BG.png" id="3_g48d7"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="5_8x3w4"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="5_g48d7"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="5_g48d7"]
 [ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="6_g48d7"]
 
-[node name="MissionEntryHex" type="MarginContainer"]
+[node name="MissionEntryHex" type="MarginContainer" unique_id=649549700]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -17,21 +17,21 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_b78nm")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1620881004]
 layout_mode = 2
 theme_override_constants/margin_left = -9
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = -9
 theme_override_constants/margin_bottom = -1
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=1643664327]
 material = ExtResource("2_8x3w4")
 custom_minimum_size = Vector2(128, 128)
 layout_mode = 2
-texture = ExtResource("3_8x3w4")
+texture = ExtResource("3_g48d7")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="."]
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=1609328616]
 material = ExtResource("5_g48d7")
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -41,7 +41,7 @@ texture = ExtResource("5_8x3w4")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="TextureRect2"]
+[node name="TextureRect3" type="TextureRect" parent="TextureRect2" unique_id=1248927642]
 material = ExtResource("5_g48d7")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 1

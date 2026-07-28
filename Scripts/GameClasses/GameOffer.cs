@@ -1,17 +1,22 @@
+using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
+using Amazon.Runtime.Telemetry;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using XmppDotNet.Xmpp.HttpUpload;
 using static ExternalCosmetics;
 
-public class GameOffer
+public partial class GameOffer
 {
 	public event Action OnChanged;
 	public event Action OnRemoving;
 	public event Action OnRemoved;
+	public event Action<ImageTexture> OnCosmeticImageRecieved;
 
 	public GameStorefront storefront { get; private set; }
 	public JsonObject rawData { get; private set; }
@@ -74,7 +79,7 @@ public class GameOffer
 	int discountAmount = 0;
 	int discountMin = 0;
 	public bool IsFree => discountMin == 0 && discountAmount >= basePrice.quantity;
-	public bool IsDiscountBundle => conditionalDiscounts?.Count > 0;
+	public bool IsDynamicBundle => conditionalDiscounts?.Count > 0;
 
 	Dictionary<string, int> conditionalDiscounts;
 	GameItem price;
@@ -128,6 +133,11 @@ public class GameOffer
 		itemGrants = [.. rawData["itemGrants"].AsArray().Select(n => new GameItem(null, null, n.AsObject()))];
 		metadata = rawData["meta"]?.AsObject() ?? [];
 
+		if(OfferId== "v2:/2cc86f652a3db4537279b78c1ff60458a441c5113a3245d356c14a25b0645c11")
+		{
+			GD.Print("testing price stuff");
+		}
+
 		if (rawData["dynamicBundleInfo"] is JsonObject dynamicBundleInfo)
 		{
 			var priceTemplateId = dynamicBundleInfo["currencyType"].ToString() == "MtxCurrency" ? "Currency:mtxpurchased" : dynamicBundleInfo["currencySubType"].ToString();
@@ -147,7 +157,7 @@ public class GameOffer
 					))
 			);
 
-			basePrice = priceTemplate?.CreateInstance(basePriceAmount);
+			basePrice = new(GameItemTemplate.Get(priceTemplateId), basePriceAmount, templateId: priceTemplateId);
 		}
 		else if (rawData["prices"][0]?.AsObject() is JsonObject priceData)
 		{
@@ -157,7 +167,7 @@ public class GameOffer
 			conditionalDiscounts = null;
 			discountAmount = basePriceAmount - priceData["finalPrice"].GetValue<int>();
 			discountMin = 0;
-			basePrice = priceTemplate?.CreateInstance(basePriceAmount);
+			basePrice = new(GameItemTemplate.Get(priceTemplateId), basePriceAmount, templateId: priceTemplateId);
 		}
 
 		price = null;
@@ -168,7 +178,7 @@ public class GameOffer
 		int price = basePrice?.quantity ?? 0;
 		price -= discountAmount;
 		price = Mathf.Max(price, discountMin);
-		var newPriceItem = basePrice?.template?.CreateInstance(price);
+		var newPriceItem = basePrice?.Clone(price);
 
 		return newPriceItem;
 	}
@@ -194,7 +204,7 @@ public class GameOffer
 
 		//if dynamic bundle, generate discount based on owned items
 		account ??= GameAccount.ActiveAccount;
-		if (IsDiscountBundle && await account.Authenticate())
+		if (IsDynamicBundle && await account.Authenticate())
 		{
 			var cosmeticItems = await account.GetProfile(FnProfileTypes.CosmeticInventory).Query(ignoreCache: forceCosmetics);
 			foreach (var kvp in conditionalDiscounts)
@@ -241,8 +251,50 @@ public class GameOffer
 	}
 
 	#region Cosmetic Stuff
+
+	[GeneratedRegex("""\[VIRTUAL](?:\d+ x ([^,]+),?)(?: \d+ x [^,]+,?)*for -?\d+ MtxCurrency""")]
+	private static partial Regex DevNameParser();
+	public string ParseCosmeticOfferName()
+	{
+		var parseMatch = DevNameParser().Match(rawData["devName"]?.ToString());
+		if (parseMatch.Success && parseMatch.Groups.Count > 1)
+			return parseMatch.Groups[1].Value;
+		return null;
+	}
 	public string CosmeticDisplayAssetPath => rawData["displayAssetPath"]?.ToString();
 	public string CosmeticNewDisplayAssetPath => GetMeta("NewDisplayAssetPath");
+	public string CosmeticOfferMainType => GetMeta("OfferMainType");
+	public string CosmeticPrimaryTemplate => GetMeta("PrimaryTemplateId");
+	public string CosmeticTagline => GetMeta("ViolatorTag");
+	public CosmoRequests.CosmoImageData? CosmeticDAV2Image
+	{
+		get
+		{
+			if (CosmeticNewDisplayAssetPath is not string path)
+				return null;
+			var split = path.Split('.');
+			if (split.Length != 2)
+				return null;
+			return CosmoRequests.GetDisplayAsset(split[^1]);
+		}
+	}
+	public Color[] CosmeticBGColours
+	{
+		get
+		{
+			Color[] result = [
+				Color.FromHtml(GetMeta("color1")),
+				Color.FromHtml(GetMeta("color2")),
+			];
+			if(GetMeta("color3") is string third)
+			{
+				Array.Resize(ref result, result.Length + 1);
+				result[^1]= Color.FromHtml(third);
+			}
+			return result;
+		}
+	}
+	public Color CosmeticTextBGColour => GetMeta("textBackgroundColor") is string textCol ? Color.FromHtml(textCol) : Colors.Black;
 	public string CosmeticLayoutId => GetMeta("LayoutId");
 	public string CosmeticSectionId
 	{
@@ -250,11 +302,11 @@ public class GameOffer
 		{
 			var layout = CosmeticLayoutId;
 			if (!layout.Contains('.'))
-				return null;
+				return layout;
 			return layout.Split('.')[0];
 		}
 	}
-	public string CosmeticGroupId
+	public string CosmeticRowGroupId
 	{
 		get
 		{
@@ -264,107 +316,129 @@ public class GameOffer
 			return layout.Split('.')[1];
 		}
 	}
-
-	public FNDashOffer FNDashOffer => fnDashOffer?.Valid == true ? FNDashOffer : (fnDashOffer = GetFNDashOffer(OfferId));
-	FNDashOffer fnDashOffer;
-	public FNDotDisplayAsset FNDotDisplayAsset => fnDotDisplayAsset ??= GetFNDotDisplayAsset(CosmeticNewDisplayAssetPath);
-	FNDotDisplayAsset fnDotDisplayAsset;
-	public RawDisplayAsset RawDisplayAsset => rawDisplayAsset ??= LoadLocalRawDisplayAsset(CosmeticDisplayAssetPath);
-	RawDisplayAsset rawDisplayAsset;
-	public RawCosmetic[] RawCosmetics => rawCosmetics ?? [];
-	RawCosmetic[] rawCosmetics;
-
-	public void LoadLocalCosmetics()
+	public Vector2I CosmeticTileSize
 	{
-		rawCosmetics = new RawCosmetic[itemGrants.Length];
-		for (int i = 0; i < itemGrants.Length; i++)
+		get
 		{
-			rawCosmetics[i] = LoadLocalRawCosmetic(itemGrants[i].templateId);
+			var tileSizeString = GetMeta("TileSize");
+			if (!tileSizeString.StartsWith("Size_"))
+				return Vector2I.One;
+			tileSizeString = tileSizeString[5..];
+			if (!tileSizeString.Contains("_x_"))
+				return Vector2I.One;
+			var split = tileSizeString.Split("_x_");
+			if(split.Length!=2 || !int.TryParse(split[0], out var xSize) || !int.TryParse(split[1], out var ySize))
+				return Vector2I.One;
+			return new(xSize, ySize);
 		}
 	}
 
-	public async Task LoadCosmetics()
+	public string CosmeticURL
 	{
-		rawCosmetics = new RawCosmetic[itemGrants.Length];
-		List<Task> loadTask = [];
-		for (int i = 0; i < itemGrants.Length; i++)
+		get
 		{
-			int index = i;
-			async Task CosmeticSubtask()
+			if (GetMeta("webURL") is not string extraWebURL)
+				return null;
+
+			var splitURLEnding = extraWebURL.Split('/')[^1].Split('-');
+			if (extraWebURL.StartsWith("/item-shop/jam-tracks/") && GameStorefront.TryGetJamTrack(CosmeticPrimaryTemplate, out var jamMeta))
 			{
-				rawCosmetics[index] = await LoadRawCosmetic(itemGrants[index].templateId);
+				var firstItemName = Regex.Replace(jamMeta.title.ToLower(), "[^ \\w]+", "");
+				firstItemName = Regex.Replace(firstItemName, "[ ]+", " ");
+				firstItemName = firstItemName.Replace(" ", "-");
+				var urlId = jamMeta.songUUID.Split('-')[^1];
+				extraWebURL = $"/item-shop/jam-tracks/{firstItemName}-{urlId}";
 			}
-			loadTask.Add(CosmeticSubtask());
+			else
+			{
+				//either figure out how to generate the URL hash out of car offers, or hope epic fixes their stuff
+				extraWebURL = splitURLEnding[^2] switch
+				{
+					"wheels" or "boost" or "trail" => null,
+					//"wheels" => $"/item-shop/wheels/{string.Join("-", splitURLEnding[..^2])}-{splitURLEnding[^1]}",
+					//"boost" => $"/item-shop/boosts/{string.Join("-", splitURLEnding[..^2])}-{splitURLEnding[^1]}",
+					//"trail" => $"/item-shop/trails/{string.Join("-", splitURLEnding[..^2])}-{splitURLEnding[^1]}",
+					_ => extraWebURL
+				};
+			}
+			if (extraWebURL is null)
+				return null;
+			return "https://www.fortnite.com" + extraWebURL;
 		}
-		await Task.WhenAll(loadTask);
 	}
-
-	public async Task LoadFirstCosmetic()
+	float imageResolution => CosmeticTileSize.X; // switch
+	//{
+	//	4 => 4,
+	//	3 => 3,
+	//	2 => 2,
+	//	_ => 1
+	//};
+	public ImageTexture CosmeticCachedDisplayImage => CosmeticDAV2Image?.GetCachedTexture();
+	public ImageTexture CosmeticLocalDisplayImage => CosmeticDAV2Image?.GetLocalTexture(imageResolution);
+	public async void FetchDisplayAssetImage()
 	{
-		rawCosmetics = new RawCosmetic[itemGrants.Length];
-		if (itemGrants.Length > 0)
-			rawCosmetics[0] = await LoadRawCosmetic(itemGrants[0].templateId);
+		if (CosmeticDAV2Image is not { } realImage)
+			return;
+		var result = await realImage.FetchTexture(imageResolution);
+		OnCosmeticImageRecieved?.Invoke(result);
 	}
-
-	ImageTexture cosmeticImage;
-	public ImageTexture CosmeticImage => cosmeticImage ??=
-		FNDashOffer?.GetLocalOfferImage() ??
-		FNDotDisplayAsset?.GetLocalOfferImage();
-
-	public string CosmeticName
+	public ImageTexture CosmeticCachedJamImage
 	{
 		get
 		{
-			if (FNDashOffer is not null)
-				return FNDashOffer.DisplayName;
-			if (RawDisplayAsset is not null)
-				return RawDisplayAsset.properties.DisplayName;
-			if ((RawCosmetics?.Length ?? 0) > 0)
-				return RawCosmetics[0].properties.ItemName;
-			return "<Unknown>";
+			if (CosmeticPrimaryTemplate is not string primaryTemplate || !GameStorefront.TryGetJamTrack(primaryTemplate, out var jamMeta))
+				return null;
+			return jamMeta.GetCachedTexture();
 		}
 	}
-
-	public string CosmeticType
+	public ImageTexture CosmeticLocalJamImage
 	{
 		get
 		{
-			if (FNDashOffer is not null)
-				return FNDashOffer.DisplayType;
-			if ((RawCosmetics?.Length ?? 0) > 0)
-				return RawCosmetics[0].properties.ItemShortDescription + (RawCosmetics.Length > 1 ? $" (+{RawCosmetics.Length - 1})" : "");
-			return "<Unknown>";
+			if (CosmeticPrimaryTemplate is not string primaryTemplate || !GameStorefront.TryGetJamTrack(primaryTemplate, out var jamMeta))
+				return null;
+			return jamMeta.GetLocalTexture();
 		}
 	}
+	public async void FetchJamTrackImage()
+	{
+		if (CosmeticPrimaryTemplate is not string primaryTemplate || !GameStorefront.TryGetJamTrack(primaryTemplate, out var jamMeta))
+			return;
+		var result = await jamMeta.FetchTexture();
+		OnCosmeticImageRecieved?.Invoke(result);
+	}
 
-	CosmeticMeta? cosmeticMetaData;
-	public CosmeticMeta CosmeticMetaData
+	#endregion
+
+	#region Third Party Cosmetic Stuff
+	public FNDashOffer FNDashOffer => fnDashOffer?.Valid == true ? fnDashOffer : (fnDashOffer = GetFNDashOffer(OfferId));
+	FNDashOffer fnDashOffer;
+
+	public string CosmeticDisplayName => FNDashOffer?.DisplayName.Replace("\\\"", "\"") ?? ParseCosmeticOfferName();
+	public string CosmeticDisplayType => FNDashOffer?.DisplayType;
+
+	CosmeticTimeData? cosmeticTimeData;
+	CosmeticTimeData? estimateCosmeticTimeData;
+	public CosmeticTimeData CosmeticTimeData
 	{
 		get
 		{
-			if (cosmeticMetaData is not null)
-				return (cosmeticMetaData).Value;
+			if (cosmeticTimeData is not null)
+				return cosmeticTimeData.Value;
 			if (FNDashOffer is not null)
-				return (cosmeticMetaData = FNDashOffer.GenerateCosmeticMeta()).Value;
-			return (cosmeticMetaData = new()
+				return cosmeticTimeData ??= FNDashOffer.GenerateCosmeticTimeData();
+
+			if (estimateCosmeticTimeData is not null)
+				return estimateCosmeticTimeData.Value;
+			return estimateCosmeticTimeData ??= new()
 			{
 				lastSeenDaysAgo = 0,
-				isRecentlyNew = GetMeta("ViolatorTag") == "New",
+				isRecentlyNew = CosmeticTagline == "New",
 				isAddedToday = InDate.Value == DateTime.UtcNow.Date,
 				isLeavingSoon = (OutDate.Value - DateTime.UtcNow.Date).TotalHours < 24,
 				lastAddedDate = DateTime.UtcNow.Date
-			}).Value;
+			};
 		}
-	}
-
-	public async Task LoadDisplayAssetData()
-	{
-		if (FNDashOffer is not null)
-			cosmeticImage = await FNDashOffer.LoadOfferImage();
-		else
-			rawDisplayAsset = await LoadRawDisplayAsset(CosmeticDisplayAssetPath);
-		if (FNDotDisplayAsset is not null)
-			cosmeticImage = await FNDotDisplayAsset.LoadOfferImage();
 	}
 	#endregion
 }

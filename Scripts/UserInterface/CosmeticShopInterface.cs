@@ -216,7 +216,6 @@ public partial class CosmeticShopInterface : Control
 
 		await GameAccount.ActiveAccount.SetSACCode(newCode);
 		sacButton.Text = await GameAccount.ActiveAccount.IsSACExpired() ? "None" : (await GameAccount.ActiveAccount.GetSACCode());
-
 	}
 
 	private void OnNavSelected()
@@ -268,11 +267,8 @@ public partial class CosmeticShopInterface : Control
 			}
 			else
 			{
-				if (onScreenOffers.Contains(item))
-				{
-					onScreenOffers.Remove(item);
+				if (onScreenOffers.Remove(item))
 					item.CancelResourceLoadTimer();
-				}
 			}
 		}
 	}

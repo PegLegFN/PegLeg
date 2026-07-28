@@ -63,10 +63,8 @@ public partial class MissionCollectionEntry : Control, IListEntry<MissionRewardS
 		}
 	}
 
-	int _RewardSetListEntryIndexTarget;
-	IListProvider<MissionRewardSet> _RewardSetListEntryItemProvider;
-	int IListEntry<MissionRewardSet>.CurrentIndexTarget { get => _RewardSetListEntryIndexTarget; set => _RewardSetListEntryIndexTarget = value; }
-	IListProvider<MissionRewardSet> IListEntry<MissionRewardSet>.CurrentListProvider { get => _RewardSetListEntryItemProvider; set => _RewardSetListEntryItemProvider = value; }
+	int IListEntry<MissionRewardSet>.CurrentIndexTarget { get; set; }
+	IListProvider<MissionRewardSet> IListEntry<MissionRewardSet>.CurrentListProvider { get; set; }
 	void IListEntry<MissionRewardSet>.SetListEntryValue(MissionRewardSet newValue)
 	{
 		currentSet = newValue;

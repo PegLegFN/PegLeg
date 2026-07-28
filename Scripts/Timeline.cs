@@ -92,11 +92,18 @@ public static class Timeline
 	public static int GetCurrentSeasonWeek(DateTime seasonStartDate) =>
 		((int)(StartOfCurrentWeek - seasonStartDate).TotalDays) / 7;
 
-	public static ShopItemTuple[] GetCurrentUpcomingItems()
+	public static ShopItemTuple[] GetCurrentUpcomingShopItems()
 	{
 		var season = GetCurrentSeason(out var seasonStartDate);
 		var week = GetCurrentSeasonWeek(seasonStartDate);
 		return season.GetUpcomingItems(seasonStartDate, week);
+	}
+
+	public static string[] GetLatestShopItems()
+	{
+		var season = GetCurrentSeason(out var seasonStartDate);
+		var week = GetCurrentSeasonWeek(seasonStartDate);
+		return season.eventShop[week];
 	}
 
 	public static DateTime StartOfCurrentWeek => EndOfCurrentWeek.AddDays(-7);

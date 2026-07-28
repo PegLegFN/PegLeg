@@ -290,6 +290,7 @@ public static partial class Helpers
 		return reply.Status != IPStatus.Success;
 	}
 
+	public static string JoinString(this IEnumerable<object> objects, string separator = ", ") => string.Join(separator, objects);
 
 	static char[] compactNumberMilestones = "KMBT".ToCharArray();
 	public static string Compactify(this int number)

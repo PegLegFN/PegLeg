@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://b3dwgyqw1ptf1" path="res://Scripts/UserInterface/ListEntries/CosmeticShopOfferEntry.cs" id="1_a2plt"]
 [ext_resource type="Shader" uid="uid://dwr30ie6yoste" path="res://Shaders/AdaptivePanel.tres" id="2_655vb"]
 [ext_resource type="Texture2D" uid="uid://cs86xfdq8mxiw" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Disconnected_128.png" id="2_ydd6l"]
-[ext_resource type="Texture2D" uid="uid://chrwn7nsdg50k" path="res://Images/InterfaceIcons/DefaultCosmeticGradient.tres" id="3_8yx3v"]
 [ext_resource type="Texture2D" uid="uid://bite5sw5cyx0l" path="res://Images/InterfaceIcons/T-Items-MTX.png" id="4_dvpr2"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="5_4aip3"]
 [ext_resource type="PackedScene" uid="uid://bnbph4c6t2sui" path="res://Scenes/cosmetic_loading_icon.tscn" id="5_5xuyv"]
@@ -26,6 +25,18 @@ shader_parameter/Fit = false
 shader_parameter/shiftDirection = Vector2(0.5, 0.5)
 shader_parameter/UseCorners = true
 shader_parameter/CornerRadius = 10.0
+
+[sub_resource type="Gradient" id="Gradient_dpukn"]
+resource_local_to_scene = true
+colors = PackedColorArray(0, 0.196078, 0.501961, 1, 0, 0.745098, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lygc2"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_dpukn")
+fill = 1
+fill_from = Vector2(0.5, 0.7)
+fill_to = Vector2(0, 0)
+metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxgw7"]
 bg_color = Color(1, 1, 1, 0)
@@ -55,7 +66,7 @@ shader_parameter/ApplyCornersToFit = true
 shader_parameter/CornerRadius = 10.0
 shader_parameter/ClipOOB = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lygc2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dpukn"]
 resource_local_to_scene = true
 shader = ExtResource("6_yu1fs")
 shader_parameter/ControlSize = Vector2(140, 120)
@@ -77,6 +88,9 @@ shader_parameter/shadowOpacity = 1.0
 content_margin_left = 3.0
 content_margin_right = 3.0
 bg_color = Color(0, 0, 0, 0.392157)
+border_width_left = 1
+border_width_right = 1
+border_color = Color(0, 0, 0, 0)
 expand_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pndfx"]
@@ -118,10 +132,6 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfdvo"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
 bg_color = Color(1, 0, 0, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
@@ -146,7 +156,7 @@ fallbackOutlineColor = Color(0, 0.0705882, 0.231373, 1)
 [node name="ItemBG" type="TextureRect" parent="." unique_id=1198445779]
 material = SubResource("ShaderMaterial_eh405")
 layout_mode = 2
-texture = ExtResource("3_8yx3v")
+texture = SubResource("GradientTexture2D_lygc2")
 expand_mode = 1
 script = ExtResource("7_yjpnu")
 syncControlSize = true
@@ -177,7 +187,7 @@ script = ExtResource("7_yjpnu")
 syncControlSize = true
 
 [node name="CosmeticLoadingIcon" parent="ItemBG" unique_id=1550021752 instance=ExtResource("5_5xuyv")]
-material = SubResource("ShaderMaterial_lygc2")
+material = SubResource("ShaderMaterial_dpukn")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0
@@ -471,24 +481,32 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rfdvo")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/HeadlinePanel" unique_id=822271329]
+[node name="MarginContainer" type="MarginContainer" parent="Overlays/HeadlinePanel" unique_id=1091787935]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Overlays/HeadlinePanel/MarginContainer" unique_id=822271329]
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="Overlays/HeadlinePanel/HBoxContainer" unique_id=2100098715]
+[node name="TextureRect" type="TextureRect" parent="Overlays/HeadlinePanel/MarginContainer/HBoxContainer" unique_id=2100098715]
 visible = false
 layout_mode = 2
 texture = ExtResource("9_7kwsg")
 expand_mode = 3
 
-[node name="HeadlineLabel" type="Label" parent="Overlays/HeadlinePanel/HBoxContainer" unique_id=1350383139]
+[node name="HeadlineLabel" type="Label" parent="Overlays/HeadlinePanel/MarginContainer/HBoxContainer" unique_id=1350383139]
 layout_mode = 2
 theme_override_constants/line_spacing = -1
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 3
 theme_override_font_sizes/font_size = 12
-text = " # "
+text = "NEW TODAY"
 
 [node name="AlmostAYear" type="Control" parent="Overlays" unique_id=1776421360]
 layout_mode = 1
@@ -573,7 +591,7 @@ expand_mode = 1
 [connection signal="AlmostAYearVisibility" from="." to="Overlays/AlmostAYear" method="set_visible"]
 [connection signal="BestsellerTooltip" from="." to="Overlays/BestsellerStar" method="set_tooltip_text"]
 [connection signal="BestsellerVisibility" from="." to="Overlays/BestsellerStar" method="set_visible"]
-[connection signal="BonusTextChanged" from="." to="Overlays/HeadlinePanel/HBoxContainer/HeadlineLabel" method="set_text"]
+[connection signal="BonusTextChanged" from="." to="Overlays/HeadlinePanel/MarginContainer/HBoxContainer/HeadlineLabel" method="set_text"]
 [connection signal="BonusTextVisibility" from="." to="Overlays/HeadlinePanel" method="set_visible"]
 [connection signal="LastSeenAlertVisibility" from="." to="Overlays/VBoxContainer/LastSeenPanel/LastSeenAlert" method="set_visible"]
 [connection signal="LastSeenText" from="." to="Overlays/VBoxContainer/LastSeenPanel/HBoxContainer/LastSeenLabel" method="set_text"]

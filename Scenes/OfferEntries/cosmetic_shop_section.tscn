@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bor0cp73wnxx6"]
+
+[ext_resource type="Script" uid="uid://nnb3viacpliq" path="res://Scripts/UserInterface/ListEntries/CosmeticShopSection.cs" id="1_ykude"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="3_bivd4"]
+[ext_resource type="PackedScene" uid="uid://dcx80phwfyua0" path="res://Scenes/OfferEntries/cosmetic_offer_entry_new.tscn" id="3_mf2dk"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="4_ew4js"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_w6k0t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51cgl"]
+shader = ExtResource("3_bivd4")
+shader_parameter/ControlSize = Vector2(800, 900)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = false
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
+
+[node name="CosmeticShopSection" type="Container" unique_id=386002190 node_paths=PackedStringArray("headerRoot", "headerLabel", "subtitleLabel", "headerJamTrackButton")]
+y_sort_enabled = true
+custom_minimum_size = Vector2(800, 0)
+offset_right = 800.0
+script = ExtResource("1_ykude")
+offerEntryScene = ExtResource("3_mf2dk")
+rowHeight = 250.0
+extendViewportBounds = Vector2(100, 600)
+headerRoot = NodePath("Header")
+headerLabel = NodePath("Header/CosmeticShopHeader/HeaderLabel")
+subtitleLabel = NodePath("Header/CosmeticShopHeader/Subtitle")
+headerJamTrackButton = NodePath("Header/JamTrackViewer")
+
+[node name="Header" type="MarginContainer" parent="." unique_id=244396778]
+custom_minimum_size = Vector2(800, 50)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 0
+
+[node name="CosmeticShopHeader" type="VBoxContainer" parent="Header" unique_id=132545468]
+custom_maximum_size = Vector2(720, -1)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="HeaderLabel" type="Label" parent="Header/CosmeticShopHeader" unique_id=761286653]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Shop Header"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Subtitle" type="Label" parent="Header/CosmeticShopHeader" unique_id=1765173014]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Shop Subtitle with longer text"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="JamTrackViewer" type="Button" parent="Header" unique_id=1434393101]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
+text = " View all Jam Tracks"
+
+[node name="Background" type="TextureRect" parent="." unique_id=1446828537]
+visible = false
+material = SubResource("ShaderMaterial_51cgl")
+custom_minimum_size = Vector2(800, 900)
+layout_mode = 2
+texture = ExtResource("4_ew4js")
+expand_mode = 1
+script = ExtResource("5_w6k0t")
+syncControlSize = true
+
+[connection signal="pressed" from="Header/JamTrackViewer" to="." method="OpenJamTracks"]

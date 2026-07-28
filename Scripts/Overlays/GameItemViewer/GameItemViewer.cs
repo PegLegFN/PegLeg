@@ -218,6 +218,7 @@ public partial class GameItemViewer : ModalWindow
 	public async void ShowOffer(GameOffer offer)
 	{
 		upgrader.Visible = false;
+		displayUUID.Visible = false;
 		itemChoiceParent.Visible = false;
 		defenderEquipmentEntry.Visible = false;
 		currentOffer = offer;
