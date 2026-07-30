@@ -38,11 +38,8 @@ public partial class HeroLoadoutEntry : GameItemEntry
 	[Export]
 	bool addNumberToName = false;
 
-	bool allowDefenderSMGs = false;
-
 	public override void _Ready()
 	{
-		allowDefenderSMGs = PegLegResourceManager.MagicNumbers["allowDefenderSMGs"]?.GetValue<bool>() == true;
 		//if (PegLegResourceManager.MagicNumbers["showDefenders"]?.GetValue<bool>() != true)
 		//{
 		//	if (defenderLayout is not null)
@@ -568,8 +565,7 @@ public partial class HeroLoadoutEntry : GameItemEntry
 		{
 			if (constrainedCategory is not null && item.template?.Category != constrainedCategory)
 				return false;
-			//once game bug is fixed, allow SMG subtype for Pistol/Assault defenders. enabled with a magicNumbers flag
-			if (allowDefenderSMGs && (constrainedSubtype == "Pistol" || constrainedSubtype == "Assault") && item.template?.SubType == "SMG")
+			if ((constrainedSubtype == "Pistol" || constrainedSubtype == "Assault") && item.template?.SubType == "SMG")
 				return true;
 			if (constrainedSubtype is not null && item.template?.SubType != constrainedSubtype)
 				return false;

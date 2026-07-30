@@ -445,6 +445,16 @@ public class GameStorefront
 			return null;
 		}
 
+		public Image ReadLocalImageDirect()
+		{
+			if (uniqueName is null)
+				return null;
+			var path = CatalogRequests.LocalCosmeticResourcePathFromId(uniqueName);
+			if (path is null)
+				return null;
+			return Image.LoadFromFile(path);
+		}
+
 		public async Task<ImageTexture> FetchTexture(float resolutionScale = 1)
 		{
 			if (CatalogRequests.TryGetCosmeticTexture(uniqueName, resolutionScale) is ImageTexture existingTexture)

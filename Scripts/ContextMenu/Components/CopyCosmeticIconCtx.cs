@@ -10,7 +10,7 @@ public partial class CopyCosmeticIconCtx : AbstractContextComponent
 	{
 		currentCosmetic = hook?.cosmeticSource;
 		currentCosmeticNew = hook?.newCosmeticSource;
-		SetDisabled((currentCosmetic?.imageUrl is null && currentCosmeticNew?.currentOffer?.CosmeticDAV2Image is null) || !Win64Helpers.isWindows);
+		SetDisabled((currentCosmetic?.imageUrl is null && currentCosmeticNew?.currentOffer is null) || !Win64Helpers.isWindows);
 	}
 
 	public void Copy()
@@ -22,7 +22,7 @@ public partial class CopyCosmeticIconCtx : AbstractContextComponent
 		}
 		else if (currentCosmeticNew is not null)
 		{
-			cosmeticImage = currentCosmeticNew?.currentOffer?.CosmeticDAV2Image?.ReadLocalImageDirect();
+			cosmeticImage = currentCosmeticNew?.currentOffer?.ReadCosmeticDisplayImageDirect();
 		}
 		if (cosmeticImage is not null)
 			Win64Helpers.ClipboardSetImage(cosmeticImage);

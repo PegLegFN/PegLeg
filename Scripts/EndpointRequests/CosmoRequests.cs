@@ -23,12 +23,12 @@ public partial class CosmoRequests
 		{
 			get
 			{
-				//if (PegLegResourceManager.MiscData["Cosmo"] is JsonObject cosmoData)
-				//	return new(
-				//		cosmoData["Version"].ToString(),
-				//		cosmoData["Key"].ToString(),
-				//		cosmoData["BaseURL"].ToString()
-				//	);
+				if (PegLegResourceManager.MiscData["Cosmo"] is JsonObject cosmoData)
+					return new(
+						cosmoData["Version"].ToString(),
+						cosmoData["Key"].ToString(),
+						cosmoData["BaseURL"].ToString()
+					);
 				return FallbackConfig;
 			}
 		}
@@ -149,21 +149,12 @@ public partial class CosmoRequests
 			return null;
 		}
 
-		public ImageTexture GetLocalTexture(float resolutionScale = 128)
+		public ImageTexture GetLocalTexture(float resolutionScale = 1)
 		{
 			if (uniqueName is null)
 				return null;
 			if (CatalogRequests.TryGetCosmeticTexture(uniqueName, resolutionScale) is ImageTexture existingTexture)
 				return existingTexture;
-			return null;
-		}
-
-		public Image GetLocalImage(float resolutionScale = 128)
-		{
-			if (uniqueName is null)
-				return null;
-			if (CatalogRequests.TryGetCosmeticImage(uniqueName, resolutionScale) is Image existingImage)
-				return existingImage;
 			return null;
 		}
 
@@ -177,17 +168,17 @@ public partial class CosmoRequests
 			return Image.LoadFromFile(path);
 		}
 
-		public async Task<ImageTexture> FetchTexture(float resolutionScale = 128)
+		public async Task<ImageTexture> FetchTexture(float resolutionScale = 1)
 		{
 			if (url is null || uniqueName is null)
 				return null;
 			if (CatalogRequests.TryGetCosmeticTexture(uniqueName, resolutionScale) is ImageTexture existingTexture)
 				return existingTexture;
-			await FetchImage();
+			await FetchImage(resolutionScale);
 			return CatalogRequests.TryGetCosmeticTexture(uniqueName);
 		}
 
-		public async Task<Image> FetchImage(float resolutionScale = 128)
+		public async Task<Image> FetchImage(float resolutionScale = 1)
 		{
 			if (url is null || uniqueName is null)
 				return null;

@@ -55,6 +55,9 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 	float hoverJamOffset = 20;
 	[Export]
 	bool skipLastSeen;
+	[Export]
+	bool useCustomFilter = false;
+
 	[ExportGroup("Curves")]
 	[Export]
 	Curve jamRotationCurve;
@@ -101,6 +104,7 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 	public override void _ExitTree()
 	{
 		CosmeticShopInterfaceNew.OnFiltersChanged -= OnFiltersChanged;
+		currentOffer?.OnCosmeticImageRecieved -= UpdateImageFromRemote;
 	}
 
 	float HoverProgress
@@ -133,7 +137,8 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 
 	private void OnFiltersChanged()
 	{
-		bool filterOut = filterOutPredicate?.Invoke(currentOffer) == false;
+		var predicate = useCustomFilter ? filterOutPredicate : CosmeticShopInterfaceNew.CurrentOfferFilter;
+		bool filterOut = predicate?.Invoke(currentOffer) == false;
 		filterOutPanel.Visible = filterOut;
 		Modulate = filterOut ? filterOutCol : Colors.White;
 	}
@@ -159,9 +164,9 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 			imageFetchTimer.Timeout += StartImageLoad;
 		}
 
-		currentOffer?.OnCosmeticImageRecieved -= UpdateImage;
+		currentOffer?.OnCosmeticImageRecieved -= UpdateImageFromRemote;
 		currentOffer = newValue;
-		currentOffer.OnCosmeticImageRecieved += UpdateImage;
+		currentOffer.OnCosmeticImageRecieved += UpdateImageFromRemote;
 
 		OnFiltersChanged();
 
@@ -367,25 +372,9 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 			currentOffer.OfferId
 		));
 
-		ImageTexture localImage = null;
-		bool canFetch = false;
-		if (currentOffer.CosmeticDAV2Image is not null)
-		{
-			localImage = currentOffer.CosmeticCachedDisplayImage;
-			canFetch = true;
-		}
-		else if (isJamTrack)
-		{
-			localImage = currentOffer.CosmeticCachedJamImage;
-			canFetch = true;
-		}
-		else
-		{
-			GD.Print("Missing image source for: " + currentOffer?.OfferId);
-		}
-
+		ImageTexture localImage = currentOffer.CosmeticCachedDisplayImage;
 		displayImage.Texture = localImage ?? PegLegResourceManager.defaultIcon;
-		buffering.Visible = canFetch && localImage is null;
+		buffering.Visible = localImage is null;
 		displayImage.Visible = !buffering.Visible;
 
 		if (buffering.Visible)
@@ -433,26 +422,21 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 	{
 		if (currentOffer is null)
 			return;
-		if (currentOffer.CosmeticDAV2Image is not null)
-		{
-			if (currentOffer.CosmeticLocalDisplayImage is ImageTexture local)
-				UpdateImage(local);
-			else
-				currentOffer.FetchDisplayAssetImage();
-		}
-		else if (currentOffer.CosmeticPrimaryTemplate is string primaryTemplate && primaryTemplate.StartsWith("SparksSong") == true)
-		{
-			if (currentOffer.CosmeticLocalJamImage is ImageTexture local)
-				UpdateImage(local);
-			else
-				currentOffer.FetchJamTrackImage();
-		}
+		if (currentOffer.CosmeticLocalDisplayImage is ImageTexture local)
+			UpdateImage(local);
+		else
+			currentOffer.FetchDisplayAssetImage();
+	}
+
+	private void UpdateImageFromRemote(ImageTexture texture)
+	{
+		if (texture is null)
+			GD.Print("Failed to get image for: " + currentOffer?.OfferId);
+		UpdateImage(texture);
 	}
 
 	private void UpdateImage(ImageTexture texture)
 	{
-		if(texture is null)
-			GD.Print("Failed to get image for: " + currentOffer?.OfferId);
 		displayImage.Texture = texture ?? PegLegResourceManager.defaultIcon;
 		displayImage.Visible = true;
 		buffering.Visible = false;

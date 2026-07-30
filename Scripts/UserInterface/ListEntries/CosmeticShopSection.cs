@@ -30,7 +30,6 @@ public partial class CosmeticShopSection : Container
 	[Export]
 	Control headerJamTrackButton;
 
-	public CosmeticShopInterfaceNew parentInterface;
 	CosmeticSectionGroup? currentSection;
 	Dictionary<string, CosmeticOfferEntryNew> activeOfferEntries = [];
 	Queue<CosmeticOfferEntryNew> pooledOfferEntries = [];
@@ -180,7 +179,7 @@ public partial class CosmeticShopSection : Container
 
 		Vector2 offerOrigin = rowOrigin;
 		int count = 0;
-		foreach (var offer in offers.OrderByDescending(o => o.SortPriority))
+		foreach (var offer in offers)
 		{
 			count++;
 			if (count > 4)
@@ -190,7 +189,6 @@ public partial class CosmeticShopSection : Container
 			if (!pooledOfferEntries.TryDequeue(out var offerEntry))
 			{
 				offerEntry = offerEntryScene.Instantiate<CosmeticOfferEntryNew>();
-				offerEntry.filterOutPredicate = parentInterface is not null ? parentInterface.FilterOffer : null;
 				offerEntry.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 				offerEntry.SizeFlagsVertical = SizeFlags.ExpandFill;
 			}

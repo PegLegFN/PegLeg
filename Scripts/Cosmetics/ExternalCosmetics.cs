@@ -1,3 +1,4 @@
+using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -344,6 +345,7 @@ public static class ExternalCosmetics
 	//		var rawResponse = await requestBuilder().Send();
 	//		Image image = new();
 	//		byte[] imageBuffer = await rawResponse.Content.ReadAsByteArrayAsync();
+	//		CatalogRequests.RegisterCosmeticImageWithBuffer(ref image, imageBuffer, ".png");
 	//		if (image.LoadPngFromBuffer(imageBuffer) == Error.Ok)
 	//		{
 	//			if (!DirAccess.DirExistsAbsolute("user://cosmetic_images"))
@@ -353,6 +355,8 @@ public static class ExternalCosmetics
 	//			{
 	//				imageFile.StoreBuffer(imageBuffer);
 	//			}
+
+				
 
 	//			var imageSize = image.GetSize();
 	//			var startingSize = imageSize;
@@ -386,7 +390,7 @@ public static class ExternalCosmetics
 	{
 		public string offerId { get; init; }
 		public LayoutData? layout { get; init; }
-		//public DisplayData? newDisplayAsset;
+		public DisplayData? newDisplayAsset { get; init; }
 		public BundleData? bundle { get; init; }
 		public FNDashCosmetic[] brItems { get; init; }
 		public FNDashCosmetic[] cars { get; init; }
@@ -457,30 +461,66 @@ public static class ExternalCosmetics
 		//	}
 		//}
 
-		//public ImageTexture GetLocalOfferImage()
-		//{
-		//	if (newDisplayAsset is not null)
-		//		return LoadLocalImage(newDisplayAsset?.id);
-		//	if (FirstCosmeticInternal is FNDashCosmetic first)
-		//		return LoadLocalImage(first.Id);
-		//	if (tracks?.Length > 0)
-		//		return LoadLocalImage(tracks[0].Id);
-		//	return null;
-		//}
+		public ImageTexture GetCachedOfferImage()
+		{
+			if (newDisplayAsset is not null)
+			{
+				if (CatalogRequests.TryGetCosmeticTexture(newDisplayAsset?.id, cacheOnly:true) is ImageTexture existingTexture)
+					return existingTexture;
+			}
+			return null;
+		}
 
-		//public async Task<ImageTexture> LoadOfferImage()
-		//{
-		//	if (GetLocalOfferImage() is ImageTexture cached)
-		//		return cached;
+		public ImageTexture GetLocalOfferImage(float resolutionScale = 1)
+		{
+			if (newDisplayAsset is not null)
+			{
+				if (CatalogRequests.TryGetCosmeticTexture(newDisplayAsset?.id, resolutionScale) is ImageTexture existingTexture)
+					return existingTexture;
+			}
+			//if (FirstCosmeticInternal is FNDashCosmetic first)
+			//	return LoadLocalImage(first.Id);
+			//if (tracks?.Length > 0)
+			//	return LoadLocalImage(tracks[0].Id);
+			return null;
+		}
 
-		//	if (newDisplayAsset is not null)
-		//		return await LoadRemoteImage(() => WebHelpers.MakeRequest(newDisplayAsset?.renderImages[0].image), newDisplayAsset?.id);
-		//	if (FirstCosmeticInternal is FNDashCosmetic first)
-		//		return await LoadRemoteImage(() => WebHelpers.MakeRequest(first.Images?.featured), first.Id);
-		//	if (tracks?.Length > 0)
-		//		return await LoadRemoteImage(() => WebHelpers.MakeRequest(tracks[0].AlbumArt), tracks[0].Id);
-		//	return null;
-		//}
+		public Image ReadLocalOfferImageDirect()
+		{
+			if (newDisplayAsset is null)
+				return null;
+			var path = CatalogRequests.LocalCosmeticResourcePathFromId(newDisplayAsset?.id);
+			if (path is null)
+				return null;
+			return Image.LoadFromFile(path);
+		}
+
+		public async Task<ImageTexture> FetchOfferImage(float resolutionScale = 1)
+		{
+			if (GetLocalOfferImage() is ImageTexture cached)
+				return cached;
+			if(newDisplayAsset is not null)
+			{
+				using var result = await WebHelpers.MakeRequest(newDisplayAsset?.renderImages[0].image).AddCosmeticHeader().Accepts(WebMedia.Image.Any).Send();
+				if (await result.CheckForError())
+					return null;
+
+				(Image image, byte[] buffer, string type) = await result.ReadImageWithBuffer();
+				//Image image = await result.ReadDownloadImage(testStream);
+				if (image is null)
+					return null;
+
+				CatalogRequests.RegisterCosmeticImageWithBuffer(ref image, buffer, type, newDisplayAsset?.id, resolutionScale);
+				return CatalogRequests.TryGetCosmeticTexture(newDisplayAsset?.id);
+			}
+			//if (newDisplayAsset is not null)
+			//	return await LoadRemoteImage(() => WebHelpers.MakeRequest(newDisplayAsset?.renderImages[0].image), newDisplayAsset?.id);
+			//if (FirstCosmeticInternal is FNDashCosmetic first)
+			//	return await LoadRemoteImage(() => WebHelpers.MakeRequest(first.Images?.featured), first.Id);
+			//if (tracks?.Length > 0)
+			//	return await LoadRemoteImage(() => WebHelpers.MakeRequest(tracks[0].AlbumArt), tracks[0].Id);
+			return null;
+		}
 
 		public CosmeticTimeData GenerateCosmeticTimeData()
 		{

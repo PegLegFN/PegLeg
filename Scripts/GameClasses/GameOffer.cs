@@ -264,7 +264,7 @@ public partial class GameOffer
 	public string CosmeticDisplayAssetPath => rawData["displayAssetPath"]?.ToString();
 	public string CosmeticNewDisplayAssetPath => GetMeta("NewDisplayAssetPath");
 	public string CosmeticOfferMainType => GetMeta("OfferMainType");
-	public string CosmeticPrimaryTemplate => GetMeta("PrimaryTemplateId");
+	public string CosmeticPrimaryTemplate => GetMeta("PrimaryTemplateId") ?? GetMeta("templateId");
 	public string CosmeticTagline => GetMeta("ViolatorTag");
 	public CosmoRequests.CosmoImageData? CosmeticDAV2Image
 	{
@@ -366,46 +366,70 @@ public partial class GameOffer
 			return "https://www.fortnite.com" + extraWebURL;
 		}
 	}
-	float imageResolution => CosmeticTileSize.X; // switch
-	//{
-	//	4 => 4,
-	//	3 => 3,
-	//	2 => 2,
-	//	_ => 1
-	//};
-	public ImageTexture CosmeticCachedDisplayImage => CosmeticDAV2Image?.GetCachedTexture();
-	public ImageTexture CosmeticLocalDisplayImage => CosmeticDAV2Image?.GetLocalTexture(imageResolution);
+	float imageResolution => CosmeticTileSize.X;
+	public ImageTexture CosmeticCachedDisplayImage
+	{
+		get
+		{
+			if (CosmeticDAV2Image?.GetCachedTexture() is ImageTexture cosmoResult)
+				return cosmoResult;
+			if (TryGetJamMeta(out var jamMeta) && jamMeta.GetCachedTexture() is ImageTexture jamResult)
+				return jamResult;
+			if (FNDashOffer?.GetCachedOfferImage() is ImageTexture fnDashResult)
+				return fnDashResult;
+			return null;
+		}
+	}
+
+	public ImageTexture CosmeticLocalDisplayImage
+	{
+		get
+		{
+			if(CosmeticDAV2Image?.GetLocalTexture(imageResolution) is ImageTexture cosmoResult)
+				return cosmoResult;
+			if (TryGetJamMeta(out var jamMeta) && jamMeta.GetLocalTexture(imageResolution) is ImageTexture jamResult)
+				return jamResult;
+			if (FNDashOffer?.GetLocalOfferImage(imageResolution) is ImageTexture fnDashResult)
+				return fnDashResult;
+			return null;
+		}
+	}
+
+	public Image ReadCosmeticDisplayImageDirect()
+	{
+		if (CosmeticDAV2Image?.ReadLocalImageDirect() is Image cosmoResult)
+			return cosmoResult;
+		if (TryGetJamMeta(out var jamMeta) && jamMeta.ReadLocalImageDirect() is Image jamResult)
+			return jamResult;
+		if (FNDashOffer?.ReadLocalOfferImageDirect() is Image fnDashResult)
+			return fnDashResult;
+		return null;
+	}
+
 	public async void FetchDisplayAssetImage()
 	{
-		if (CosmeticDAV2Image is not { } realImage)
-			return;
-		var result = await realImage.FetchTexture(imageResolution);
+		ImageTexture result = null;
+		if (CosmeticDAV2Image is { } realImage)
+			result = await realImage.FetchTexture(imageResolution);
+		if (result is null && TryGetJamMeta(out var jamMeta))
+			result = await jamMeta.FetchTexture();
+		if (result is null && FNDashOffer is not null)
+			result = await FNDashOffer.FetchOfferImage(imageResolution);
 		OnCosmeticImageRecieved?.Invoke(result);
 	}
-	public ImageTexture CosmeticCachedJamImage
+
+	GameStorefront.JamTrackMeta? cachedJamMeta;
+	bool TryGetJamMeta(out GameStorefront.JamTrackMeta jamMeta)
 	{
-		get
-		{
-			if (CosmeticPrimaryTemplate is not string primaryTemplate || !GameStorefront.TryGetJamTrack(primaryTemplate, out var jamMeta))
-				return null;
-			return jamMeta.GetCachedTexture();
-		}
-	}
-	public ImageTexture CosmeticLocalJamImage
-	{
-		get
-		{
-			if (CosmeticPrimaryTemplate is not string primaryTemplate || !GameStorefront.TryGetJamTrack(primaryTemplate, out var jamMeta))
-				return null;
-			return jamMeta.GetLocalTexture();
-		}
-	}
-	public async void FetchJamTrackImage()
-	{
-		if (CosmeticPrimaryTemplate is not string primaryTemplate || !GameStorefront.TryGetJamTrack(primaryTemplate, out var jamMeta))
-			return;
-		var result = await jamMeta.FetchTexture();
-		OnCosmeticImageRecieved?.Invoke(result);
+		jamMeta = cachedJamMeta ?? default;
+		if(cachedJamMeta is not null)
+			return true;
+		if (CosmeticPrimaryTemplate is not string primaryTemplate || !primaryTemplate.StartsWith("SparksSong"))
+			return false;
+		if (!GameStorefront.TryGetJamTrack(primaryTemplate, out jamMeta))
+			return false;
+		cachedJamMeta = jamMeta;
+		return true;
 	}
 
 	#endregion

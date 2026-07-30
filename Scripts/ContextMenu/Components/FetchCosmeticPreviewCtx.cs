@@ -7,7 +7,7 @@ public partial class FetchCosmeticPreviewCtx : AbstractContextComponent
 	public override void Update(ContextMenuHook hook)
 	{
 		currentCosmetic = hook?.cosmeticSource;
-		SetDisabled(!Win64Helpers.isWindows);
+		SetDisabled(!Win64Helpers.isWindows || currentCosmetic?.primaryTemplate is null);
 	}
 
 	public async void Copy()
@@ -21,7 +21,8 @@ public partial class FetchCosmeticPreviewCtx : AbstractContextComponent
 		Image img = null;
 		using (var _ = LoadingOverlay.CreateToken())
 		{
-			img = await cosmoImgData.FetchImage();
+			await cosmoImgData.FetchImage();
+			img = cosmoImgData.ReadLocalImageDirect();
 		}
 		if (img is not null)
 			ShareImagePopup.ShowImage(img);

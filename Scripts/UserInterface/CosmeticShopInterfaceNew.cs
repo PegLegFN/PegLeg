@@ -9,6 +9,8 @@ public partial class CosmeticShopInterfaceNew : Control
 {
 	static CosmeticShopInterfaceNew instance;
 	public static event Action OnFiltersChanged;
+	public static bool CurrentOfferFilter(GameOffer o) => instance?.FilterOffer(o) ?? true;
+
 	[Export]
 	PackedScene shopSectionScene;
 	[Export]
@@ -62,6 +64,7 @@ public partial class CosmeticShopInterfaceNew : Control
 		navToggle.Visible = !compact;
 		navContainer.Visible = compact ? false : NavVisible;
 
+		includeCompactUnfiltered = PegLegResourceManager.MagicNumbers?["includeCompactUnfiltered"]?.GetValue<bool>() ?? includeCompactUnfiltered;
 		compactCosmeticList.LinkListProvider(compactOfferList);
 
 		sacContent.Visible = GameAccount.ActiveAccount.isOwned;
@@ -71,7 +74,6 @@ public partial class CosmeticShopInterfaceNew : Control
 		AppConfig.OnConfigChanged += OnConfigChanged;
 		GameAccount.ActiveAccountChanged += OnActiveAccountChanged;
 		UpdateSAC().StartTask();
-		//Helpers.Defer(ForceCheckSections, 5);
 	}
 
 	public override void _ExitTree()
@@ -90,6 +92,8 @@ public partial class CosmeticShopInterfaceNew : Control
 
 	public bool IsCompact => AppConfig.Get("item_shop", "simple_cosmetics", false);
 	public bool NavVisible => AppConfig.Get("item_shop", "navigation_visible", false);
+
+	bool includeCompactUnfiltered = true;
 
 	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
@@ -173,6 +177,7 @@ public partial class CosmeticShopInterfaceNew : Control
 
 	CosmeticSectionGroup[] sectionGroups = [];
 	CosmeticSectionGroup[] filteredSectionGroups = [];
+	float sectionOrigin;
 	float[] sectionHeights = [];
 
 	EntryList<GameOffer> compactOfferList = [];
@@ -191,7 +196,7 @@ public partial class CosmeticShopInterfaceNew : Control
 		FilterShop();
 	}
 
-	public static CosmeticSectionGroup[] GetGroupedOffers( )
+	public static CosmeticSectionGroup[] GetGroupedOffers()
 	{
 		GameOffer[] offers = [.. GameStorefront.CosmeticDaily.Offers, .. GameStorefront.CosmeticWeekly.Offers];
 		var sections = GameStorefront.cosmeticSectionsCache;
@@ -203,7 +208,7 @@ public partial class CosmeticShopInterfaceNew : Control
 			var rowGroups = sectionGroup.GroupBy(o => o.CosmeticRowGroupId).Select(rowGroup => new CosmeticRowGroup()
 			{
 				offerGroupId = rowGroup.Key,
-				offers = [.. rowGroup],
+				offers = [.. rowGroup.OrderByDescending(o => o.SortPriority)],
 				rowData = sectionRowDict.TryGetValue(rowGroup.Key, out var rowData) ? rowData : null
 			}).OrderByDescending(s => s.Rank);
 			return new CosmeticSectionGroup()
@@ -291,6 +296,36 @@ public partial class CosmeticShopInterfaceNew : Control
 		requireOld = timeFilterIndexes.Contains(3);
 		//GD.Print($"Active Filters: [{string.Join(", ", activeTypeFilters)}]");
 
+		string focusSection = null;
+		float focusOffset = 0;
+		if (!IsCompact && activeSectionEntries.Count>0)
+		{
+			var orderedActiveSections = activeSectionEntries.Values.OrderBy(v => v.Position.Y).ToArray();
+			var viewportRect = shopViewport.GetGlobalRect();
+			var viewportCenter = viewportRect.GetCenter().Y;
+
+			foreach (var entry in activeSectionEntries)
+			{
+				var sectionRect = entry.Value.GetGlobalRect();
+				if (sectionRect.Position.Y < viewportRect.Position.Y && sectionRect.End.Y > viewportCenter)
+				{
+					//start is offscreen, end is at least halfway into viewport
+					focusSection = entry.Key;
+					break;
+				}
+				if (sectionRect.Position.Y > viewportRect.Position.Y)
+				{
+					//start is onscreen (and implicitly in the top half of the viewport)
+					focusSection = entry.Key;
+					break;
+				}
+			}
+			focusSection ??= activeSectionEntries.Keys.FirstOrDefault();
+
+			var focusRect = activeSectionEntries[focusSection].GetGlobalRect();
+			focusOffset = viewportRect.Position.Y - focusRect.Position.Y;
+		}
+
 		filteredSectionGroups = [
 			..sectionGroups
 			.Select(s => s with {
@@ -318,13 +353,29 @@ public partial class CosmeticShopInterfaceNew : Control
 		}
 		activeSectionEntries.Clear();
 
+		if(focusSection is not null)
+		{
+			var target = filteredSectionGroups.FirstOrDefault(d => d.sectionId == focusSection);
+			if(target.sectionId is not null)
+			{
+				sectionOrigin = shopSectionRoot.GlobalPosition.Y - (shopViewport.GetChildOrNull<Control>(0)?.GlobalPosition.Y ?? 0);
+				var idx = Array.IndexOf(filteredSectionGroups, target);
+				//inaccurate, this should be relative to viewport child, currently relative to section parent
+				var startHeight = sectionOrigin + sectionHeights[..idx].Sum();
+				shopViewport.ScrollVertical = (int)(startHeight + focusOffset);
+				//do this thrice, as it may take a frame or two for the maximum scroll range to catch up
+				Helpers.Defer(() => shopViewport.ScrollVertical = (int)(startHeight + focusOffset), 1);
+				Helpers.Defer(() => shopViewport.ScrollVertical = (int)(startHeight + focusOffset), 2);
+			}
+		}
+
 		//populate sidebar with sections
 		//var sidebarGroups = filteredSectionGroups.GroupBy(g => g.sectionData?.category);
 		//var ungrouped = sidebarGroups.FirstOrDefault(cg => cg.Key == null).ToArray();
 		navTree.Clear();
 		lastCategory = null;
 		treeRoot = navTree.CreateItem();
-		float totalHeight = 0;
+		float navCurrentHeight = 0;
 		Dictionary<string, TreeItem> categories = [];
 		for (int i = 0; i < filteredSectionGroups.Length; i++)
 		{
@@ -336,7 +387,7 @@ public partial class CosmeticShopInterfaceNew : Control
 				{
 					catItem = treeRoot.CreateChild();
 					catItem.SetText(0, " "+cat);
-					catItem.SetMetadata(0, totalHeight);
+					catItem.SetMetadata(0, navCurrentHeight);
 					catItem.Collapsed = true;
 					categories.Add(cat, catItem);
 				}
@@ -344,12 +395,18 @@ public partial class CosmeticShopInterfaceNew : Control
 			}
 			var secItem = parent.CreateChild();
 			secItem.SetText(0, " "+(section.sectionData?.displayName ?? section.sectionId));
-			secItem.SetMetadata(0, totalHeight);
-			totalHeight += sectionHeights[i];
+			secItem.SetMetadata(0, navCurrentHeight);
+			navCurrentHeight += sectionHeights[i];
 		}
 
 		compactOfferList.Clear();
 		compactOfferList.AddRange(filteredSectionGroups.SelectMany(s => s.rows.SelectMany(r => r.offers.Where(FilterOffer))));
+		compactOfferList.AddRange(
+			sectionGroups
+				.SelectMany(s => s.rows.SelectMany(r => r.offers))
+				.Except(compactOfferList)
+				.Where(o => o.CosmeticLayoutId != "alc.0")
+		);
 		compactCosmeticList.MarkListDirty();
 		MarkListDirty();
 		CheckSections();
@@ -409,10 +466,10 @@ public partial class CosmeticShopInterfaceNew : Control
 		listDirty = false;
 
 		var viewportRect = shopViewport.GetGlobalRect();
-		var sectionRect = shopSectionRoot.GetGlobalRect();
+		var sectionParentRect = shopSectionRoot.GetGlobalRect();
 
-		NewRecycleListContainer.ScaleRects(ref sectionRect, ref viewportRect, shopSectionRoot.Size);
-		Rect2 relativeVisibleRect = NewRecycleListContainer.GetRelativeRect(sectionRect, viewportRect, extendViewportBounds);
+		NewRecycleListContainer.ScaleRects(ref sectionParentRect, ref viewportRect, shopSectionRoot.Size);
+		Rect2 relativeVisibleRect = NewRecycleListContainer.GetRelativeRect(sectionParentRect, viewportRect, extendViewportBounds);
 		var visibleStart = relativeVisibleRect.Position.Y;
 		var visibleEnd = visibleStart + relativeVisibleRect.Size.Y;
 
@@ -438,14 +495,13 @@ public partial class CosmeticShopInterfaceNew : Control
 			if (!sectionEntryPool.TryDequeue(out var sectionEntry))
 			{
 				sectionEntry = shopSectionScene.Instantiate<CosmeticShopSection>();
-				sectionEntry.parentInterface = this;
-				sectionEntry.SetPool(ref offerEntryPool);//is this even needed any more? just make it use parentInterface to reference the pool
+				sectionEntry.SetPool(ref offerEntryPool);
 				shopSectionRoot.AddChild(sectionEntry);
 			}
 
 			sectionEntry.Visible = true;
 			sectionEntry.Position = new(0, currentSectionStart);
-			sectionEntry.SetOfferSection(section);//lag spike??
+			sectionEntry.SetOfferSection(section);
 			activeSectionEntries.Add(section.sectionId, sectionEntry);
 		}
 		var sectionIdsToRemove = activeSectionEntries.Keys.Except(activeSectionIDs).ToArray();
