@@ -642,7 +642,7 @@ public partial class GameAccount
                 "purchaseQuantity": {{purchaseQuantity}},
                 "currency": "{{offer["prices"][0]["currencyType"]}}",
                 "currencySubType": "{{offer["prices"][0]["currencySubType"]}}",
-                "expectedTotalPrice": {{(await offer.CalculatePersonalPrice(this, true)).quantity * purchaseQuantity}},
+                "expectedTotalPrice": {{offer.CalculatePersonalPrice(this).quantity * purchaseQuantity}},
                 "gameContext": "PegLeg"
             }
             """);
@@ -1148,7 +1148,7 @@ public partial class GameAccount
 
 	public async Task<int> GetAffordableLimit(GameOffer offer, bool cosmetic = false)
 	{
-		var pricePerPurchase = cosmetic ? await offer.CalculatePersonalPrice() : offer.Price;
+		var pricePerPurchase = cosmetic ? offer.CalculatePersonalPrice() : offer.Price;
 		pricePerPurchase ??= offer.Price; //if personal price fails, fall back to standard price
 		if ((pricePerPurchase?.quantity ?? 0) == 0)
 			return 999;
@@ -1161,22 +1161,22 @@ public partial class GameAccount
 		return Mathf.FloorToInt((float)(inInventory?.quantity ?? 0) / pricePerPurchase.quantity);
 	}
 
-	public async Task<bool> MatchesFulfillmentRequirements(GameOffer offer)
+	public bool MatchesFulfillmentRequirements(GameOffer offer)
 	{
 		if (!isOwned)
 			return true;
-
+		var common = GetProfile(FnProfileTypes.Common);
 		JsonObject fulfillments = null;
 		if (offer.FulfillmentDenyList.Count > 0)
 		{
-			fulfillments ??= (await GetProfile(FnProfileTypes.Common).Query()).statAttributes["in_app_purchases"]?["fulfillmentCounts"]?.AsObject() ?? [];
+			fulfillments ??= common.statAttributes["in_app_purchases"]?["fulfillmentCounts"]?.AsObject() ?? [];
 			if (offer.FulfillmentDenyList.Any(check => (fulfillments[check.Key ?? ""]?.GetValue<int>() ?? 0) >= check.Value))
 				return false;
 		}
 
 		if (offer.FulfillmentRequireList.Count > 0)
 		{
-			fulfillments ??= (await GetProfile(FnProfileTypes.Common).Query()).statAttributes["in_app_purchases"]?["fulfillmentCounts"]?.AsObject() ?? [];
+			fulfillments ??= common.statAttributes["in_app_purchases"]?["fulfillmentCounts"]?.AsObject() ?? [];
 			if (offer.FulfillmentRequireList.Any(check => (fulfillments[check.Key ?? ""]?.GetValue<int>() ?? 0) < check.Value))
 				return false;
 		}
@@ -1184,18 +1184,23 @@ public partial class GameAccount
 		return true;
 	}
 
-	public bool MatchesItemRequirements(GameOffer offer) =>
-		offer.ItemDenyList.Count == 0 ||
-		!offer
-		.ItemDenyList
-		.Any(check =>
-			profiles
-			.Select(p =>
+	public bool MatchesItemRequirements(GameOffer offer)
+	{
+		if (offer.ItemDenyList.Count == 0)
+			return true;
+		static int Quant(GameItem i) => i.quantity;
+		foreach (var check in offer.ItemDenyList)
+		{
+			var total = profiles.Sum(p =>
 				p.Value
-				.GetItem(check.Key)?
-				.quantity ?? 0
-			).Sum() >= check.Value
-		);
+				.GetTemplateItems(check.Key)?
+				.Sum(Quant) ?? 0
+			);
+			if (total >= check.Value)
+				return false;
+		}
+		return true;
+	}
 
 	public async Task<string> GetSACCode(bool addExpiredText = true)
 	{

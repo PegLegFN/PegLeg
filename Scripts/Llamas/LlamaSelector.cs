@@ -325,7 +325,7 @@ public partial class LlamaSelector : Control
 
 		var account = GameAccount.ActiveAccount;
 
-		if (!await account.MatchesFulfillmentRequirements(offer))
+		if (!account.MatchesFulfillmentRequirements(offer))
 			return false;
 
 		string priceTemplateId = offer.Price?.templateId;

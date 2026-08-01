@@ -231,10 +231,11 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		}
 	}
 
-
 	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
-		SetInteractable();
+		if (section == "missions" && key == "showLiteVbucks" && currentItem?.templateId == "AccountResource:currency_mtxswap")
+			UpdateItem();
+		//SetInteractable();
 	}
 
 	private void UpdateBookmark()

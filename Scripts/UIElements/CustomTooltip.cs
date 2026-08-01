@@ -168,7 +168,7 @@ public partial class CustomTooltip : Control
 				var offerId = val.ToString();
 				var offer = GameStorefront.GetExistingOffer(offerId);
 				offerCostEntry.SetItem(offer.Price);
-				offerInventoryEntry.SetItem(await offer.GetCurrencyItem());
+				offerInventoryEntry.SetItem(offer.GetCurrencyItem());
 				var limit = await acc.GetStockLimit(offer);
 				offerStockLabel.Text = $"In Stock: {limit}";
 				offerStockLabel.Visible = limit < 999;

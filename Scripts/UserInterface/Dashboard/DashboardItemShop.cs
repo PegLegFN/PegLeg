@@ -50,6 +50,8 @@ public partial class DashboardItemShop : Control
 
 	void SetWeeklyItems(GameOffer[] offers)
 	{
+		if ((offers?.Length ?? 0) == 0)
+			return;
 		var boostedAccountResource = offers
 			.Where(o => o.itemGrants.FirstOrDefault()?.templateId.StartsWith("AccountResource") == true)
 			.GroupBy(o => o.itemGrants[0].templateId)
@@ -68,6 +70,8 @@ public partial class DashboardItemShop : Control
 
 	void SetEventItems(GameOffer[] offers)
 	{
+		if ((offers?.Length ?? 0) == 0)
+			return;
 		var newItemTypes = Timeline.GetLatestShopItems().ToHashSet();
 		var newItemOffers = offers
 			.Where(o => newItemTypes.Contains(o.itemGrants.FirstOrDefault()?.templateId))

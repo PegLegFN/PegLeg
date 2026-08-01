@@ -182,7 +182,7 @@ public partial class GameOfferEntry : Control
 
 		if (cosmeticMode)
 		{
-			var finalPrice = await currentOffer.CalculatePersonalPrice();
+			var finalPrice = currentOffer.CalculatePersonalPrice();
 			if (ct.IsCancellationRequested || currentOffer is null)
 				return;
 			pricePerPurchase = finalPrice;
@@ -190,7 +190,7 @@ public partial class GameOfferEntry : Control
 
 		if ((pricePerPurchase?.quantity ?? 0) > 0)
 		{
-			var inventoryItem = await currentOffer.GetCurrencyItem();
+			var inventoryItem = currentOffer.GetCurrencyItem();
 			if (ct.IsCancellationRequested || currentOffer is null)
 				return;
 			currentPriceInInventory = inventoryItem?.quantity ?? 0;

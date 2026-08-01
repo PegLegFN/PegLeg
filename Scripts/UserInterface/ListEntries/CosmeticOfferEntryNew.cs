@@ -183,9 +183,12 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 			displayName = jamMeta.title;
 
 		EmitSignalNameChanged(displayName);
-		var price = currentOffer.Price?.quantity ?? 1;
+		var price = currentOffer.CalculatePersonalPrice()?.quantity ?? 1;
 		var basePrice = currentOffer.BasePrice?.quantity ?? 3;
 		EmitSignalPriceAmount(price.Notate());
+		var owned = !GameAccount.ActiveAccount.MatchesItemRequirements(currentOffer);
+		EmitSignalOwnedVisibility(owned);
+		EmitSignalFreeVisibility(price == 0);
 
 		EmitSignalDiscountVisibility(price != basePrice);
 		if (price != basePrice)

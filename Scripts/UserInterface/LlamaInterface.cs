@@ -417,7 +417,7 @@ public partial class LlamaInterface : Control
 
 		var account = GameAccount.ActiveAccount;
 
-		if (!await account.MatchesFulfillmentRequirements(offer))
+		if (!account.MatchesFulfillmentRequirements(offer))
 			return false;
 
 		string priceTemplateId = offer.Price?.templateId;
@@ -483,11 +483,11 @@ public partial class LlamaInterface : Control
 		if (!await account.Authenticate() || ct.IsCancellationRequested)
 			return;
 
-		//if this is ticket-based Upgrade Llama, also show token-based Upgrade Llama
+		//if this is ticket-based Upgrade Llama, show token-based Upgrade Llama instead
 
 		if (offer.OfferId == TicketUpgradeId)
 		{
-			bool hasToken = (await tokenUpgradeOffer.GetPriceInInventory()) > 0;
+			bool hasToken = tokenUpgradeOffer.GetPriceInInventory() > 0;
 			if (ct.IsCancellationRequested)
 				return;
 			altPurchaseButton.Visible = hasToken;
@@ -502,7 +502,7 @@ public partial class LlamaInterface : Control
 
 		if (offer.Price?.quantity > 0)
 		{
-			var inventoryCount = await offer.GetPriceInInventory();
+			var inventoryCount = offer.GetPriceInInventory();
 			if (ct.IsCancellationRequested)
 				return;
 			purchaseLimit = Mathf.Min(purchaseLimit, inventoryCount / offer.Price.quantity);
@@ -534,7 +534,7 @@ public partial class LlamaInterface : Control
 			return;
 		}
 
-		purchaseButton.Visible = true;
+		purchaseButton.Visible = !altPurchaseButton.Visible;
 
 		var items = prerollData?.GetPrerollItems();
 		if (items is null)

@@ -183,30 +183,30 @@ public partial class GameOffer
 		return newPriceItem;
 	}
 
-	public async Task<int> GetPriceInInventory(GameAccount account = null)
+	public int GetPriceInInventory(GameAccount account = null)
 	{
 		account ??= GameAccount.ActiveAccount;
-		var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+		var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
 		return accountItems?.GetFirstTemplateItem(basePrice?.templateId)?.quantity ?? 0;
 	}
 
-	public async Task<GameItem> GetCurrencyItem(GameAccount account = null)
+	public GameItem GetCurrencyItem(GameAccount account = null)
 	{
 		account ??= GameAccount.ActiveAccount;
-		var accountItems = await account.GetProfile(FnProfileTypes.AccountItems).Query();
+		var accountItems = account.GetProfile(FnProfileTypes.AccountItems);
 		return accountItems?.GetFirstTemplateItem(basePrice?.templateId);
 	}
 
-	public async Task<GameItem> CalculatePersonalPrice(GameAccount account = null, bool forceCosmetics = false)
+	public GameItem CalculatePersonalPrice(GameAccount account = null)
 	{
 		int price = basePrice?.quantity ?? 0;
 		price -= discountAmount;
 
 		//if dynamic bundle, generate discount based on owned items
 		account ??= GameAccount.ActiveAccount;
-		if (IsDynamicBundle && await account.Authenticate())
+		if (IsDynamicBundle && account.isOwned)
 		{
-			var cosmeticItems = await account.GetProfile(FnProfileTypes.CosmeticInventory).Query(ignoreCache: forceCosmetics);
+			var cosmeticItems = account.GetProfile(FnProfileTypes.CosmeticInventory);
 			foreach (var kvp in conditionalDiscounts)
 			{
 				if (cosmeticItems.GetFirstTemplateItem(kvp.Key) is not null)
@@ -216,7 +216,7 @@ public partial class GameOffer
 
 		price = Mathf.Max(price, discountMin);
 
-		return basePrice?.template?.CreateInstance(price);
+		return basePrice?.Clone(price);
 	}
 
 	public async Task<GameItem> GetXRayLlamaData(GameAccount account = null)

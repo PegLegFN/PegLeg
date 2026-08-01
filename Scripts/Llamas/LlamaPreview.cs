@@ -136,12 +136,12 @@ public partial class LlamaPreview : Control
 		if (!await account.Authenticate() || ct.IsCancellationRequested)
 			return;
 
-		//if this is ticket-based Upgrade Llama, also show token-based Upgrade Llama
+		//if this is ticket-based Upgrade Llama, show token-based Upgrade Llama instead
 		if (offer.OfferId == LlamaSelector.TicketUpgradeId)
 		{
 			tokenUpgradeOffer ??= GameStorefront.GetExistingOffer(LlamaSelector.TokenUpgradeId);
 			//set token offer entry
-			useTokenOffer = (await tokenUpgradeOffer.GetPriceInInventory()) > 0;
+			useTokenOffer = (tokenUpgradeOffer.GetPriceInInventory()) > 0;
 			if (ct.IsCancellationRequested)
 				return;
 		}
@@ -153,7 +153,7 @@ public partial class LlamaPreview : Control
 
 		if (offer.Price?.quantity > 0)
 		{
-			var inventoryCount = await offer.GetPriceInInventory();
+			var inventoryCount = offer.GetPriceInInventory();
 			if (ct.IsCancellationRequested)
 				return;
 			purchaseLimit = Mathf.Min(purchaseLimit, inventoryCount / offer.Price.quantity);

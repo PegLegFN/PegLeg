@@ -1,0 +1,604 @@
+[gd_scene format=3 uid="uid://degwq7pbjwked"]
+
+[ext_resource type="PackedScene" uid="uid://dta7ntrychbp1" path="res://Scenes/Desktop/Overlays/basic_modal_window.tscn" id="1_r4get"]
+[ext_resource type="Shader" uid="uid://dwr30ie6yoste" path="res://Shaders/AdaptivePanel.tres" id="2_nxnwo"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="3_unku2"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_7no1y"]
+[ext_resource type="Shader" uid="uid://cht7xm52dybcv" path="res://Shaders/CosmeticOfferIcon.gdshader" id="5_8xdxl"]
+[ext_resource type="Texture2D" uid="uid://bqhlvb70hrgro" path="res://Images/TextureResources/JamTrackRadial.tres" id="6_pdr6k"]
+[ext_resource type="Texture2D" uid="uid://dhl46dmyqx7fb" path="res://Images/InterfaceIcons/CosmeticPlaceholders/DAV2SummerHarleyIvy2x.png" id="7_rafau"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="8_kdfsp"]
+[ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="10_jtmud"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="11_a3rmu"]
+[ext_resource type="Texture2D" uid="uid://bite5sw5cyx0l" path="res://Images/InterfaceIcons/T-Items-MTX.png" id="12_a0x4t"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="13_8588k"]
+[ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="15_rq3pb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_svb24"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51cgl"]
+shader = ExtResource("2_nxnwo")
+shader_parameter/ControlSize = Vector2(586, 407)
+shader_parameter/Fit = false
+shader_parameter/shiftDirection = Vector2(0.5, 0.5)
+shader_parameter/UseCorners = true
+shader_parameter/CornerRadius = 10.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3vo1a"]
+resource_local_to_scene = true
+shader = ExtResource("5_8xdxl")
+shader_parameter/ControlSize = Vector2(546, 367)
+shader_parameter/Shift = 0.0
+shader_parameter/Fit = true
+shader_parameter/IsJamTrack = false
+shader_parameter/CosmeticZoom = 1.0
+shader_parameter/CornerRadius = 10.0
+shader_parameter/JamRadius = 3.0
+shader_parameter/JamTexture = ExtResource("6_pdr6k")
+shader_parameter/time = 2.145
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_svb24"]
+resource_local_to_scene = true
+shader = ExtResource("5_8xdxl")
+shader_parameter/ControlSize = Vector2(150, 150)
+shader_parameter/Shift = 0.0
+shader_parameter/Fit = true
+shader_parameter/IsJamTrack = false
+shader_parameter/CosmeticZoom = 1.0
+shader_parameter/CornerRadius = 10.0
+shader_parameter/JamRadius = 3.0
+shader_parameter/JamTexture = ExtResource("6_pdr6k")
+shader_parameter/time = 2.145
+
+[node name="BasicWindow" unique_id=811059498 instance=ExtResource("1_r4get")]
+
+[node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=1329420101]
+use_top_left = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer" index="0" unique_id=1266792963]
+custom_minimum_size = Vector2(900, 600)
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="0" unique_id=386794881]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"Panel5Pad"
+theme_override_styles/panel = SubResource("StyleBoxFlat_svb24")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer" index="0" unique_id=438481320]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer" index="0" unique_id=65020559]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="0" unique_id=2083936116]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer" index="0" unique_id=364592792]
+material = SubResource("ShaderMaterial_51cgl")
+layout_mode = 2
+texture = ExtResource("3_unku2")
+expand_mode = 1
+script = ExtResource("4_7no1y")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer" index="1" unique_id=1500239426]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ItemIcon" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer" index="0" unique_id=1489085868]
+material = SubResource("ShaderMaterial_3vo1a")
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+offset_transform_enabled = true
+mouse_filter = 2
+texture = ExtResource("7_rafau")
+expand_mode = 1
+script = ExtResource("4_7no1y")
+syncTimeProperty = true
+syncControlSize = true
+modTime = 5.0
+
+[node name="ItemIcon2" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer/MarginContainer/ItemIcon" index="0" unique_id=1942955025]
+visible = false
+material = SubResource("ShaderMaterial_svb24")
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.15
+anchor_right = 0.5
+anchor_bottom = 0.15
+offset_left = -75.0
+offset_top = -22.5
+offset_right = 75.0
+offset_bottom = 127.5
+grow_horizontal = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(0.915, 0.915)
+mouse_filter = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+script = ExtResource("4_7no1y")
+syncTimeProperty = true
+syncControlSize = true
+modTime = 5.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="1" unique_id=1783177652]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer" index="0" unique_id=259168280]
+visible = false
+self_modulate = Color(1, 1, 1, 0.5019608)
+layout_mode = 2
+text = "Edit Styles Here"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer" index="1" unique_id=1963691705]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer" index="0" unique_id=1849051813]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Styles"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer" index="1" unique_id=917206104]
+layout_mode = 2
+size_flags_vertical = 3
+scroll_vertical = 12
+scroll_hint_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer" index="0" unique_id=1984371281]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Channel" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" index="0" unique_id=1523915525]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel" index="0" unique_id=705814102]
+layout_mode = 2
+text = "Channel Name: Style Name"
+
+[node name="GridContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel" index="1" unique_id=1012705205]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
+
+[node name="Style" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="0" unique_id=1498488113]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style" index="0" unique_id=1314509787]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style2" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="1" unique_id=1287219738]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style2" index="0" unique_id=571395876]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style3" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="2" unique_id=768661326]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style3" index="0" unique_id=1869306296]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style4" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="3" unique_id=162573920]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style4" index="0" unique_id=701227844]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style5" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="4" unique_id=231003454]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style5" index="0" unique_id=681280326]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style6" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="5" unique_id=1346285926]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style6" index="0" unique_id=1132655793]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style7" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer" index="6" unique_id=78666403]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel/GridContainer/Style7" index="0" unique_id=1117884630]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Channel2" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" index="1" unique_id=1134030157]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2" index="0" unique_id=843173182]
+layout_mode = 2
+text = "Channel Name: Style Name"
+
+[node name="GridContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2" index="1" unique_id=1710653522]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
+
+[node name="Style" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="0" unique_id=263935313]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style" index="0" unique_id=1438163701]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style2" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="1" unique_id=1149135679]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style2" index="0" unique_id=1794234819]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style3" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="2" unique_id=1810539886]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style3" index="0" unique_id=57345199]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style4" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="3" unique_id=1511599816]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style4" index="0" unique_id=1905177014]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style5" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="4" unique_id=1911458211]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style5" index="0" unique_id=164022895]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style6" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="5" unique_id=1361272992]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style6" index="0" unique_id=553929379]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style7" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer" index="6" unique_id=1412998775]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel2/GridContainer/Style7" index="0" unique_id=1564539606]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Channel3" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" index="2" unique_id=1792611066]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3" index="0" unique_id=417621106]
+layout_mode = 2
+text = "Channel Name: Style Name"
+
+[node name="GridContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3" index="1" unique_id=1939206932]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
+
+[node name="Style" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="0" unique_id=778716617]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style" index="0" unique_id=1596933684]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style2" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="1" unique_id=1944640734]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style2" index="0" unique_id=1673709578]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style3" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="2" unique_id=628880820]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style3" index="0" unique_id=73760415]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style4" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="3" unique_id=668020594]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style4" index="0" unique_id=170918347]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style5" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="4" unique_id=1229106058]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style5" index="0" unique_id=1599002690]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style6" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="5" unique_id=1914084471]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style6" index="0" unique_id=896449971]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Style7" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer" index="6" unique_id=215078300]
+custom_minimum_size = Vector2(65, 65)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Channel3/GridContainer/Style7" index="0" unique_id=918855411]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer" index="1" unique_id=2081645284]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_type_variation = &"Panel3PadB"
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer" index="0" unique_id=1404590896]
+visible = false
+self_modulate = Color(1, 1, 1, 0.5019608)
+layout_mode = 2
+text = "Offer Contents Here"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer" index="1" unique_id=604675183]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer" index="0" unique_id=246589257]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+alignment = 1
+
+[node name="Item" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer" index="0" unique_id=2126871748]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer/Item" index="0" unique_id=679368237]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Item2" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer" index="1" unique_id=326704593]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer/Item2" index="0" unique_id=1272276071]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Item3" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer" index="2" unique_id=1166071366]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer/Item3" index="0" unique_id=408978948]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Item4" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer" index="3" unique_id=1174778445]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer/Item4" index="0" unique_id=1132028966]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Item5" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer" index="4" unique_id=913566452]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer/Item5" index="0" unique_id=1898455773]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="Item6" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer" index="5" unique_id=1452275438]
+custom_minimum_size = Vector2(85, 85)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/PanelContainer/ScrollContainer/HBoxContainer/Item6" index="0" unique_id=550964055]
+layout_mode = 2
+texture = ExtResource("8_kdfsp")
+expand_mode = 1
+
+[node name="PurchasePanel" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="1" unique_id=1340896492]
+custom_minimum_size = Vector2(400, 75)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel" index="0" unique_id=850453226]
+visible = false
+layout_mode = 2
+
+[node name="InStockToggle" type="Node" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel" index="1" unique_id=22763495]
+script = ExtResource("10_jtmud")
+
+[node name="InStockContent" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel" index="2" unique_id=813943266]
+layout_mode = 2
+
+[node name="AffordableToggle" type="Node" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent" index="0" unique_id=1656442173]
+script = ExtResource("10_jtmud")
+
+[node name="PurchaseButtonContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent" index="1" unique_id=326267882]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer" index="0" unique_id=1117297664]
+layout_mode = 2
+
+[node name="PurchaseButton" type="MarginContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer" index="0" unique_id=1010905148]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton" index="0" unique_id=623691993]
+layout_mode = 2
+theme_type_variation = &"PanelButton"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton" index="1" unique_id=646189806]
+layout_mode = 2
+theme_override_constants/separation = -5
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer" index="0" unique_id=657904255]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Purchase"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TotalPrice" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer" index="1" unique_id=2101137481]
+layout_mode = 2
+alignment = 1
+script = ExtResource("11_a3rmu")
+showSingleItemAmount = true
+showZeroItemAmount = true
+
+[node name="Icon" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice" index="0" unique_id=1898381665]
+layout_mode = 2
+texture = ExtResource("12_a0x4t")
+expand_mode = 3
+
+[node name="PriceText" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice" index="1" unique_id=706910240]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "2500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton" index="2" unique_id=380800322 instance=ExtResource("13_8588k")]
+layout_mode = 2
+useHold = true
+
+[node name="CantAffordContent" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent" index="2" unique_id=735612070]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="CantAffordLabel" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent" index="0" unique_id=1512190476]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Can't Afford"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PriceInInventory" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent" index="1" unique_id=2066709008]
+layout_mode = 2
+alignment = 1
+script = ExtResource("11_a3rmu")
+showSingleItemAmount = true
+showZeroItemAmount = true
+
+[node name="Icon" type="TextureRect" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" index="0" unique_id=697569051]
+layout_mode = 2
+texture = ExtResource("15_rq3pb")
+expand_mode = 3
+
+[node name="InvPriceText" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" index="1" unique_id=744554384]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "1500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SlashText" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" index="2" unique_id=1499635280]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PriceText" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" index="3" unique_id=1716431477]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "2500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OutOfStockLabel" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel" index="3" unique_id=1256671707]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Out Of Stock"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="InvertedValue" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockToggle" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/OutOfStockLabel" method="set_visible"]
+[connection signal="Value" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockToggle" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent" method="set_visible"]
+[connection signal="InvertedValue" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/AffordableToggle" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent" method="set_visible"]
+[connection signal="Value" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/AffordableToggle" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer" method="set_visible"]
+[connection signal="AmountChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice/PriceText" method="set_text"]
+[connection signal="AmountChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory/PriceText" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/VBoxContainer/TotalPrice/Icon" method="set_texture"]
+[connection signal="AmountChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory/InvPriceText" method="set_text"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" to="Control/WindowContents/CenterContainer/VBoxContainer/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory/Icon" method="set_texture"]

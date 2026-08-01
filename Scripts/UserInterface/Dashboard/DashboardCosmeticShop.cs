@@ -56,6 +56,7 @@ public partial class DashboardCosmeticShop : Control
 			cosmeticEntries[i].Visible = false;
 		}
 		buffering.Visible = true;
+		moreButton.Visible = false;
 
 		await GameStorefront.FetchCosmeticDependancies();
 		var groupedOffers = CosmeticShopInterfaceNew.GetGroupedOffers();
