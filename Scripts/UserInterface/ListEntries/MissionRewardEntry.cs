@@ -22,6 +22,9 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	Label missionPowerLabel;
 	[Export]
 	Control todoReorderContent;
+	[Export]
+	Control missionInspectDependancy;
+
 	public Control node => this;
 
 	int IListEntry<MissionRewardPair>.CurrentIndexTarget { get; set; }
@@ -137,7 +140,22 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	{
 		foreach (var item in currentItems)
 		{
-			MissionToDoListController.RemoveFromList(itemEntry.currentItem);
+			MissionToDoListController.RemoveFromList(item);
 		}
+	}
+
+	public void ContextualInspect()
+	{
+		if (missionInspectDependancy is null)
+		{
+			missionEntry?.InspectMission();
+			return;
+		}
+		var localMouse = missionInspectDependancy.GetLocalMousePosition();
+		var size = missionInspectDependancy.Size;
+		if (localMouse.X > 0 && localMouse.Y > 0 && localMouse.X < size.X && localMouse.Y < size.Y)
+			missionEntry?.InspectMission();
+		else
+			itemEntry?.Inspect();
 	}
 }

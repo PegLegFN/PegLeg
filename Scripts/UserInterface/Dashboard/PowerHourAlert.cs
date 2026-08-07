@@ -28,6 +28,8 @@ public partial class PowerHourAlert : Control
 	Control secondaryVisibility;
 	[Export]
 	Label timeText;
+	[Export]
+	Label[] localisedTimeTexts;
 
 	Control[] anecdotes = [];
 	public override void _Ready()
@@ -42,6 +44,25 @@ public partial class PowerHourAlert : Control
 		}
 		PowerHourScheduleTracker.CurrentOrNextEventChanged += SetDetails;
 		SetDetails();
+		localisedTimeTexts ??= [];
+		if (localisedTimeTexts.Length >= 4)
+		{
+			var utcTime = DateTime.UtcNow.Date;
+
+			utcTime = utcTime.AddHours(18);//18:00
+			localisedTimeTexts[0].Text = $"{utcTime.ToLocalTime():t}";
+			utcTime = utcTime.AddHours(2);//20:00
+			localisedTimeTexts[1].Text = $"{utcTime.ToLocalTime():t}";
+
+			utcTime = utcTime.AddHours(4);//00:00 next day
+			localisedTimeTexts[2].Text = $"{utcTime.ToLocalTime():t}";
+			utcTime = utcTime.AddHours(2);//2:00 next day
+			localisedTimeTexts[3].Text = $"{utcTime.ToLocalTime():t}";
+		}
+		if (localisedTimeTexts.Length >= 5)
+		{
+			localisedTimeTexts[4].Text = TimeZoneInfo.Local.StandardName;
+		}
 	}
 
 	public override void _ExitTree()

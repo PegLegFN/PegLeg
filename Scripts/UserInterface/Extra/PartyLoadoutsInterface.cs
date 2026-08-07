@@ -48,10 +48,15 @@ public partial class PartyLoadoutsInterface : Control
 		public string id { get; init; }
 		public string displayName { get; init; }
 		public Dictionary<string, PlatformData> externalAuths { get; init; }
+		[JsonIgnore]
+		public string PrimaryDisplayName => externalAuths.Select(e => e.Value.DisplayName).FirstOrDefault(n => n is not null) ?? displayName;
 
 		public struct PlatformData
 		{
+			public string type { get; init; }
 			public string externalDisplayName { get; init; }
+			[JsonIgnore]
+			public string DisplayName => type == "nintendo" ? null : externalDisplayName;
 		}
 	}
 #pragma warning restore CS0649 //Field is never assigned to, and will always have its default value
@@ -116,7 +121,7 @@ public partial class PartyLoadoutsInterface : Control
 						var newDisplayNames = await displayNameResponse.ReadJson<DisplayNameData[]>();
 						foreach (var nameData in newDisplayNames)
 						{
-							var username = nameData.externalAuths.Select(e => e.Value.externalDisplayName).FirstOrDefault(e => e is not null) ?? nameData.displayName;
+							var username = nameData.PrimaryDisplayName;
 							if (username is not null)
 								knownUsernames.Add(nameData.id, username);
 						}

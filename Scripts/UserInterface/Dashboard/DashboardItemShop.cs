@@ -55,17 +55,18 @@ public partial class DashboardItemShop : Control
 		var boostedAccountResource = offers
 			.Where(o => o.itemGrants.FirstOrDefault()?.templateId.StartsWith("AccountResource") == true)
 			.GroupBy(o => o.itemGrants[0].templateId)
-			.FirstOrDefault(g => g.Count() > 1)
+			.FirstOrDefault(g => g.Count() > 1)?
 			.OrderByDescending(o => o.itemGrants[0].quantity)
-			.FirstOrDefault();
+			.FirstOrDefault() ??
+			offers.FirstOrDefault(o => o.itemGrants.FirstOrDefault()?.templateId == "AccountResource:reagent_alteration_upgrade_sr");
 		var topSchematic = offers
 			.Where(o => o.itemGrants.FirstOrDefault()?.templateId.StartsWith("Schematic") == true)
 			.OrderByDescending(o => o.SortPriority)
 			.FirstOrDefault();
 		offerEntries[0].SetOffer(boostedAccountResource).StartTask();
-		offerEntries[0].Visible = true;
+		offerEntries[0].Visible = boostedAccountResource is not null;
 		offerEntries[1].SetOffer(topSchematic).StartTask();
-		offerEntries[1].Visible = true;
+		offerEntries[1].Visible = topSchematic is not null;
 	}
 
 	void SetEventItems(GameOffer[] offers)

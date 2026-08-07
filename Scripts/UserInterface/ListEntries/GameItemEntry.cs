@@ -48,6 +48,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	public delegate void SurvivorBoostIconChangedEventHandler(Texture2D icon); //squad synergy for leads, set bonus for non-leads
 
 	[Signal]
+	public delegate void WeaponCoreIconChangedEventHandler(Texture2D icon);
+
+	[Signal]
 	public delegate void IsCollectableEventHandler(bool collectable);
 
 	[Signal]
@@ -382,7 +385,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			overrideSurvivorSquad
 		);
 
-		EmitSignalRatingChanged(rating == 0 ? "" : rating.ToString());
+		bool invalidRating = displayItem.RatingOutOfRange;
+		EmitSignalRatingChanged(rating == 0 ? "" : (invalidRating ? "???" : rating.ToString()));
 		EmitSignalRatingVisibility(rating != 0);
 
 		int tier = displayItem.template?.Tier ?? 0;
@@ -434,7 +438,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		{
 			EmitSignalInitLevelChanged(initLevel);
 			EmitSignalInitTierChanged(initTier);
-			EmitSignalInitRarityChanged(GameItemTemplate.rarityColours[initRarityLevel]);
+			EmitSignalInitRarityChanged(initRarityLevel <= 0 || initRarityLevel > 6 ? Colors.Transparent : PaletteHelper.RarityColours[initRarityLevel - 1]);
 			EmitSignalInitLevelTextChanged($"{levelTextPrefix}{level}");
 			EmitSignalInitLevelProgressChanged(((initLevel + 9 % 10) + 1) / 10f);
 		}
@@ -490,6 +494,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		EmitSignalSubtypeIconChanged(subtypeIcon);
 		EmitSignalPackIconChanged(packIcon);
 		EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
+		EmitSignalWeaponCoreIconChanged(displayItem.template?.GetWeaponCoreTexture());
 
 		//bool lowQuality = OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true);
 		bool lowQuality = false;

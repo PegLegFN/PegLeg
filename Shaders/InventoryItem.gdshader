@@ -7,10 +7,10 @@ uniform bool Fit;
 uniform float VerticalShift = 0.0;
 uniform bool IsHero;
 uniform bool IsSchematic;
+uniform bool IsPack;
 uniform sampler2D Noise;
 uniform sampler2D HeroTriangles : hint_default_white;
-uniform bool UsePack;
-uniform sampler2D PackIcon;
+uniform sampler2D PackIcon : hint_default_transparent;
 
 varying vec4 modulate;
 
@@ -43,7 +43,7 @@ void fragment() {
 	if(adaptedUV.y > 1.0 || adaptedUV.y < 0.0){
 		texCol.a = 0.0;
 	}
-	if(UsePack) {
+	if(IsPack) {
 		texCol = MixPackIcon(texCol, adaptedUV, PackIcon);
 	}
 	vec4 backgroundCol = modulate;

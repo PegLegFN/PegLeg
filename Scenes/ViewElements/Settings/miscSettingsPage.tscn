@@ -9,7 +9,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 6
 script = ExtResource("1_u4265")
 loginSceneFilePath = "res://Scenes/Desktop/desktopLogin.tscn"
-accountImportButton = NodePath("VBoxContainer/ImportButton/Responsive Button Area")
+accountImportButton = NodePath("VBoxContainer/MarginContainer/Responsive Button Area")
 collectionBookSpinbox = NodePath("HBoxContainer/SpinBox")
 
 [node name="Banjo" type="Button" parent="." unique_id=1419632038]
@@ -19,28 +19,28 @@ text = "Extract Game Assets"
 
 [node name="SkipLlamaRewards" type="CheckBox" parent="." unique_id=854074333]
 visible = false
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Skip all Llama rewards"
 alignment = 2
 
 [node name="ClaimFreeLlamas" type="CheckBox" parent="." unique_id=822165593]
 visible = false
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Auto-Claim free Llamas"
 alignment = 2
 
 [node name="RecycleFreeRewards" type="CheckBox" parent="." unique_id=1631057433]
 visible = false
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Auto-Recycle free Llama rewards"
 alignment = 2
 
 [node name="AutoCreatorCode" type="CheckBox" parent="." unique_id=1491636516]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Auto-refresh creator code"
 alignment = 2
 script = ExtResource("1_8gj08")
@@ -48,8 +48,8 @@ section = "automation"
 key = "creatorcode"
 
 [node name="AutoDetectMissionReset" type="CheckBox" parent="." unique_id=1361826122]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 button_pressed = true
 text = "Detect multiple Mission Resets"
 alignment = 2
@@ -59,8 +59,8 @@ key = "reset_detection"
 defaultValue = true
 
 [node name="ShowMissionBackgrounds2" type="CheckBox" parent="." unique_id=1694764873]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 text = "Filter Cosmetics added to the Shop"
 alignment = 2
 script = ExtResource("1_8gj08")
@@ -68,8 +68,8 @@ section = "item_shop"
 key = "auto_filter_new"
 
 [node name="FilterMissionPower" type="CheckBox" parent="." unique_id=753307577]
-layout_direction = 3
 layout_mode = 2
+layout_direction = 3
 button_pressed = true
 text = "Filter Missions by Power Level"
 alignment = 2
@@ -108,18 +108,21 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Report Issue"
 
-[node name="ImportButton" type="PanelContainer" parent="VBoxContainer" unique_id=627278635]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1199043766]
+layout_mode = 2
+
+[node name="ImportButton" type="PanelContainer" parent="VBoxContainer/MarginContainer" unique_id=627278635]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"PanelContainerButton"
 
-[node name="Label" type="Label" parent="VBoxContainer/ImportButton" unique_id=1065176424]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/ImportButton" unique_id=1065176424]
 layout_mode = 2
 text = " Import accounts from PegLeg (Release) "
 horizontal_alignment = 1
 
-[node name="Responsive Button Area" parent="VBoxContainer/ImportButton" unique_id=361098053 instance=ExtResource("2_4wbbm")]
+[node name="Responsive Button Area" parent="VBoxContainer/MarginContainer" unique_id=361098053 instance=ExtResource("2_4wbbm")]
 layout_mode = 2
 useHold = true
 holdTime = 2.5
@@ -152,7 +155,7 @@ layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
 
 [connection signal="pressed" from="VBoxContainer/ReportButton" to="." method="OpenAppData"]
-[connection signal="HoldPressed" from="VBoxContainer/ImportButton/Responsive Button Area" to="." method="ImportAccounts"]
+[connection signal="HoldPressed" from="VBoxContainer/MarginContainer/Responsive Button Area" to="." method="ImportAccounts"]
 [connection signal="pressed" from="VBoxContainer/ExchangeToken" to="." method="CopyExchange"]
 [connection signal="pressed" from="VBoxContainer/UserDataButton" to="." method="OpenAppData"]
 [connection signal="pressed" from="VBoxContainer/InstallFolderButton" to="." method="OpenInstallationFolder"]

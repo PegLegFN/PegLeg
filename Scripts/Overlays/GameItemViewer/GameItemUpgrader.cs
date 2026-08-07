@@ -211,10 +211,10 @@ public partial class GameItemUpgrader : Control
 			}
 
 			currentWeaponCore.Visible = showCores;
-			currentWeaponCore.Texture = SelectCore(tier, currentItem.template["EvoType"]?.ToString() == "crystal");
+			currentWeaponCore.Texture = currentItem.template.GetWeaponCoreTexture();
 			nextWeaponCore.Visible = showCores;
 			if (tier > 3)
-				weaponCoreSelector.SetTabPressed(currentItem.template["EvoType"]?.ToString() == "crystal" ? 1 : 0);
+				weaponCoreSelector.SetTabPressed(currentItem.template.IsCrystal ? 1 : 0);
 			nextWeaponCore.Texture = SelectCore(minTier, weaponCoreSelector.LatestTab == 1);
 			weaponCoreSelector.Visible = isShardable && currentItem.template.Tier <= 3 && minTier >= 3;
 
@@ -316,15 +316,16 @@ public partial class GameItemUpgrader : Control
 		nextWeaponCore.Texture = SelectCore(tierSelector.LatestTab + 1, crystal);
 	}
 
-	Texture2D SelectCore(int tier, bool crystal) => tier switch
+	Texture2D SelectCore(int tier, bool crystal) => GameItemTemplate.GetWeaponCoreTexture(SelectCoreName(tier, crystal), null);
+	string SelectCoreName(int tier, bool crystal) => tier switch
 	{
-		5 when crystal => sunbeam,
-		4 when crystal => shadowshard,
-		5 => brightcore,
-		4 => obsidian,
-		3 => malachite,
-		2 => silver,
-		_ => copper
+		5 when crystal => "Sunbeam",
+		4 when crystal => "Brightcore",
+		5 => "Shadowshard",
+		4 => "Obsidian",
+		3 => "Malachite",
+		2 => "Silver",
+		_ => "Copper"
 	};
 
 	private void UpdateUpgradeCosts()

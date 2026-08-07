@@ -35,6 +35,7 @@ shader_parameter/Fit = false
 shader_parameter/VerticalShift = 0.5
 shader_parameter/IsHero = true
 shader_parameter/IsSchematic = false
+shader_parameter/IsPack = true
 shader_parameter/Noise = ExtResource("5_2dd5x")
 shader_parameter/HeroTriangles = ExtResource("5_eckbe")
 
@@ -68,7 +69,7 @@ border_width_bottom = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yfccu"]
 shader = ExtResource("10_acofu")
-shader_parameter/time = 0.25
+shader_parameter/time = 0.263
 
 [node name="InventoryEntry" type="MarginContainer" unique_id=262566370 node_paths=PackedStringArray("selectionGraphics")]
 custom_minimum_size = Vector2(90, 135)
@@ -79,6 +80,7 @@ compactifyAmount = true
 autoLinkToViewer = false
 autoLinkToRecycleSelection = true
 autoSelectOnPress = false
+packImageAsSubtype = false
 selectionGraphics = NodePath("ItemContent/SelectionVisuals")
 
 [node name="Empty" type="MarginContainer" parent="." unique_id=1512271124]
@@ -500,6 +502,7 @@ text = "Overflow"
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
 [connection signal="IsCollectable" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/Space/Collectable" method="set_visible"]
 [connection signal="IsHero" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/ItemIcon" method="SetShaderBool" binds= ["IsHero"]]
+[connection signal="IsPack" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/ItemIcon" method="SetShaderBool" binds= ["IsPack"]]
 [connection signal="IsSchematic" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/ItemIcon" method="SetShaderBool" binds= ["IsSchematic"]]
 [connection signal="ItemDoesExist" from="." to="ItemContent" method="set_visible"]
 [connection signal="ItemDoesNotExist" from="." to="Empty" method="set_visible"]
@@ -509,6 +512,7 @@ text = "Overflow"
 [connection signal="NotificationChanged" from="." to="ItemContent/RarityOutline/NotificationLabel" method="set_visible"]
 [connection signal="OverflowWarning" from="." to="ItemContent/RarityOutline/WarningOutline" method="set_visible"]
 [connection signal="OverflowWarning" from="." to="OverflowWarningPopup" method="set_visible"]
+[connection signal="PackIconChanged" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/ItemIcon" method="SetShaderTexture" binds= ["PackIcon"]]
 [connection signal="PersonalityIconChanged" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/HBoxContainer/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer/Subtype" method="set_texture"]
 [connection signal="RarityChanged" from="." to="ItemContent/EdgePadding/GameItem/MarginContainer/ItemIcon" method="set_self_modulate"]
 [connection signal="RarityChanged" from="." to="ItemContent/EdgePadding/GameItem/TierAndXp/XPTierRarityGradient" method="set_self_modulate"]

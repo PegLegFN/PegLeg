@@ -267,7 +267,9 @@ public class GameItem
 	public (int level, int tier, bool capped) ResolveDesiredLevelAndTier(GameAccount forAccount = null, bool ignoreLevelCap = false)
 	{
 		var level = ignoreLevelCap ? DesiredLevel : ResolveDesiredLevel(forAccount);
-		return (level, ((level - 1) / 10) + 1, level < DesiredLevel);
+		//var tier = ((level - 1) / 10) + 1;		// Lv35 => T4, Lv40 => T4, Lv45 => T5 (incorrect)
+		var tier = Mathf.Min((level / 10) + 1, 5);	// Lv35 => T4, Lv40 => T5, Lv45 => T5 (correct)
+		return (level, tier, level < DesiredLevel);
 	}
 
 	GameItem[] cardPackChoices;
@@ -660,6 +662,27 @@ public class GameItem
 		}
 		var resultRating = (int)ratingSet["Ratings"][subLevel].GetValue<float>();
 		return resultRating;
+	}
+
+	public bool RatingOutOfRange
+	{
+		get
+		{
+			var tier = template.Tier;
+			if (template.Type == "Schematic" && tier == 0)
+				tier = 1;
+			var level = Level;
+
+			if (level <= 0 && DesiredLevel > 0)
+				(level, tier, _) = ResolveDesiredLevelAndTier();
+
+			var minLvForTier = Mathf.Max((tier - 1) * 10, 1);
+			var maxLvForTier = Mathf.Max(tier * 10, 1);
+			if (tier == 5)
+				maxLvForTier += 10;
+
+			return level < minLvForTier || level > maxLvForTier;
+		}
 	}
 
 	public int CalculateSurvivorRating(bool useSquad = true, string survivorSquad = null)

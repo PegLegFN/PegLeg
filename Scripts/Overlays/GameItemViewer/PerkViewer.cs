@@ -124,7 +124,7 @@ public partial class PerkViewer : Control
 				if (perkSlots[i].requiredLevel <= itemLevel && perkSlots[i].RequiredRarityLevel <= itemRarity)
 					unlockedPerks = i + 1;
 				var baseAlteration = activePerks[i] is not null ? GameItemTemplate.Get(activePerks[i]) : null;
-				if (perkSlots[i].OptionsForLevel(baseAlteration?.RarityLevel ?? (previewMaxTierByDefault ? 5 : 1)) is string[] options && options.Length == 1)
+				if (baseAlteration is null && perkSlots[i].OptionsForLevel(1) is string[] options && options.Length == 1)
 				{
 					activePerks[i] = options[0];
 				}
@@ -190,7 +190,7 @@ public partial class PerkViewer : Control
 		var baseAlteration = activePerks[index] is not null ? GameItemTemplate.Get(activePerks[index]) : null;
 
 		int currentLevel = baseAlteration?.RarityLevel ?? 1;
-		bool useMaxLevel = baseAlteration is null && Input.IsKeyPressed(Key.Shift);
+		bool useMaxLevel = currentItem.profile is null && Input.IsKeyPressed(Key.Shift);
 		useMaxLevel |= currentItem?.profile?.account?.isOwned == true && currentItem.profile.profileId == FnProfileTypes.AccountItems && Input.IsKeyPressed(Key.Shift);
 		if (useMaxLevel)
 			currentLevel = 5;

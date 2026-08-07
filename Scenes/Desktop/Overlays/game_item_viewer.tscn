@@ -128,7 +128,7 @@ corner_detail = 5
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bdju2"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(64, 64)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
@@ -154,7 +154,7 @@ resource_name = "ItemViewerChoices"
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b8ene"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(64, 64)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
@@ -177,7 +177,7 @@ shader_parameter/HideBar = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y1f50"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(64, 64)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
@@ -200,7 +200,7 @@ shader_parameter/HideBar = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xtyni"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(0, 0)
+shader_parameter/ControlSize = Vector2(64, 64)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
@@ -456,6 +456,12 @@ offset_bottom = 52.0
 [node name="PowerLevelLabel" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/PowerLevelIndicator/HBoxContainer" parent_id_path=PackedInt32Array(1774023433, 123897073, 530720272) index="0" unique_id=1940135083]
 theme_override_font_sizes/font_size = 20
 
+[node name="CtxNoInteract" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays" index="5" unique_id=436060735]
+componentList = null
+
+[node name="Ctx" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Responsive Button Area" parent_id_path=PackedInt32Array(1774023433, 58375908) index="1" unique_id=1878635780]
+componentList = null
+
 [node name="DefenderEquipment" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1" unique_id=1336454575 instance=ExtResource("15_8sk0j")]
 layout_mode = 2
 size_flags_vertical = 8
@@ -528,11 +534,11 @@ show_percentage = false
 [node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="2" unique_id=2137970661]
 layout_mode = 2
 
-[node name="Lv" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="0" unique_id=1863568685]
-custom_minimum_size = Vector2(38, 0)
+[node name="WeaponCore" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="0" unique_id=1558088226]
 layout_mode = 2
-size_flags_horizontal = 8
-text = "Lv 50"
+size_flags_horizontal = 0
+texture = ExtResource("34_any1v")
+expand_mode = 3
 
 [node name="TierController" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="1" unique_id=1353598102 node_paths=PackedStringArray("tierImages")]
 custom_minimum_size = Vector2(0, 24)
@@ -570,6 +576,12 @@ self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
+
+[node name="Lv" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="2" unique_id=1863568685]
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Lv 50"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="3" unique_id=1501507711]
 layout_mode = 2
@@ -694,7 +706,7 @@ mouse_filter = 2
 color = Color(0.5933223, 0, 1, 1)
 
 [node name="DescriptionAndUpgradeCosts" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer" index="1" unique_id=1619689312]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -710,6 +722,7 @@ size_flags_horizontal = 3
 theme_override_constants/line_spacing = -3
 theme_override_font_sizes/font_size = 18
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent" index="1" unique_id=447050226]
@@ -1105,7 +1118,6 @@ size_flags_vertical = 3
 theme_override_constants/line_spacing = 2
 
 [node name="ItemChoiceSelector" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="1" unique_id=2023102]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -1570,7 +1582,29 @@ text = "Out Of Stock"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Upgrades" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="3" unique_id=352512016 node_paths=PackedStringArray("modeSelector", "upgradePanel", "increaseRarityPanel", "confirmPanel", "confirmLabel", "confirmButton", "upgradeControls", "levelSliderMin", "levelSlider", "levelSliderMax", "tierSelector", "weaponCoreSelector", "currentWeaponCore", "currentLevelLabel", "currentTierDisplay", "nextWeaponCore", "nextLevelLabel", "nextTierDisplay", "fromRarity", "toRarity", "costItems")]
+[node name="OpenPanel" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window" index="3" unique_id=1479645418]
+visible = false
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Panel" type="Panel" parent="Control/WindowContents/CenterContainer/window/OpenPanel" index="0" unique_id=2125978803]
+layout_mode = 2
+theme_type_variation = &"PanelButton"
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/OpenPanel" index="1" unique_id=2021359531]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Open"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/window/OpenPanel" index="2" unique_id=1209510569 instance=ExtResource("3_f2ac1")]
+layout_mode = 2
+useHold = true
+
+[node name="Upgrades" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="4" unique_id=352512016 node_paths=PackedStringArray("modeSelector", "upgradePanel", "increaseRarityPanel", "confirmPanel", "confirmLabel", "confirmButton", "upgradeControls", "levelSliderMin", "levelSlider", "levelSliderMax", "tierSelector", "weaponCoreSelector", "currentWeaponCore", "currentLevelLabel", "currentTierDisplay", "nextWeaponCore", "nextLevelLabel", "nextTierDisplay", "fromRarity", "toRarity", "costItems")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -2060,6 +2094,7 @@ layout_mode = 2
 [connection signal="TierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
 [connection signal="UncappedLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2/DesiredLv" method="set_text"]
 [connection signal="UncappedVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" method="set_visible"]
+[connection signal="WeaponCoreIconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/WeaponCore" method="set_texture"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/HBoxContainer/BackButton" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks" method="ClosePerkChanger"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/HBoxContainer/ApplyButton" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks" method="ApplyReplacementPerk"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Abilities/VBoxContainer/TeamPerk" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Abilities/VBoxContainer/TeamPerk/VBoxContainer/HBoxContainer/TextureRect" method="set_texture"]
@@ -2082,6 +2117,7 @@ layout_mode = 2
 [connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseButton/Responsive Button Area" to="." method="PurchaseItem"]
 [connection signal="AmountChanged" from="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" to="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory/InvPriceText" method="set_text"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory" to="Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/CantAffordContent/PriceInInventory/Icon" method="set_texture"]
+[connection signal="HoldPressed" from="Control/WindowContents/CenterContainer/window/OpenPanel/Responsive Button Area" to="." method="PurchaseItem"]
 [connection signal="AmountChanged" from="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" to="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer/Icon/Label" method="set_text"]
 [connection signal="AmountVisibility" from="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" to="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer/Icon/Label" method="set_visible"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer" to="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer/Icon" method="SetShaderTexture" binds= ["MainIcon"]]

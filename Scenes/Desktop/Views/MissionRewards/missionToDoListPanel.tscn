@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://b5p17hdo00lc6" path="res://Scripts/UserInterface/Dashboard/MissionToDoListController.cs" id="3_u8by4"]
 [ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="4_mj0j4"]
 [ext_resource type="PackedScene" uid="uid://bo5ikr32xssoo" path="res://Scenes/MissionEntry/mission_reward_entry_todo.tscn" id="5_8m7pj"]
+[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/mission_reward_entry_beast.tscn" id="6_mj0j4"]
 
 [node name="ToDoList" type="PanelContainer" unique_id=1403873334]
 theme_type_variation = &"Panel3PadB"
@@ -57,9 +58,23 @@ newMissionListNode = NodePath("RecycleContainer")
 rootPanel = NodePath("../..")
 metadata/_tab_index = 2
 
-[node name="RecycleContainer" type="Container" parent="VBoxContainer/To-Do List (0)" unique_id=1605804328 node_paths=PackedStringArray("viewportParent")]
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/To-Do List (0)" unique_id=1605804328]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("4_mj0j4")
-viewportParent = NodePath("")
 recycleEntryScene = ExtResource("5_8m7pj")
+
+[node name="To-Do List Beast" type="MarginContainer" parent="VBoxContainer" unique_id=1718117675 node_paths=PackedStringArray("newMissionListNode", "rootPanel")]
+visible = false
+layout_mode = 2
+script = ExtResource("3_u8by4")
+newMissionListNode = NodePath("BeastRecycleContainer")
+rootPanel = NodePath("../..")
+metadata/_tab_index = 2
+
+[node name="BeastRecycleContainer" type="Container" parent="VBoxContainer/To-Do List Beast" unique_id=494502079]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_mj0j4")
+recycleEntryScene = ExtResource("6_mj0j4")
+spacing = Vector2(5, 0)

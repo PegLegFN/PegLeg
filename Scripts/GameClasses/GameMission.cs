@@ -80,34 +80,30 @@ public partial class GameMission
 
 	static async Task<HttpResponseMessage> RequestMissions()
 	{
-		if (!GameAccount.ActiveAccount.isOwned)
+		if (GameAccount.ActiveAccount.isOwned)
+			return await FnWebAddresses.FortGame
+					.MakeRequest("fortnite/api/game/v2/world/info")
+					.SetAccount()
+					.Send();
+		const string litePath = "user://latestLiteMissions.json";
+		if (FileAccess.FileExists(litePath) && (DateTime.UtcNow.Hour > 0 || DateTime.UtcNow.Minute > 10))
 		{
-			const string litePath = "user://latestLiteMissions.json";
-			if (FileAccess.FileExists(litePath) && (DateTime.UtcNow.Hour > 0 || DateTime.UtcNow.Minute > 10))
+			using var latestMissionsFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Read);
+			if (latestMissionsFile.GetError() == Error.Ok)
 			{
-				using var latestMissionsFile = FileAccess.Open(litePath, FileAccess.ModeFlags.Read);
-				if (latestMissionsFile.GetError() == Error.Ok)
-				{
-					string missionText = latestMissionsFile.GetAsText();
-					var missionData = JsonNode.Parse(missionText);
-					var expiryDate = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
-					var reset = DateTime.Parse(expiryDate, CultureInfo.InvariantCulture);
-					if (reset > DateTime.UtcNow)
-						return new HttpResponseMessage() { Content = new StringContent(missionText) };
-					GD.Print("local lite missions out of date");
-				}
+				string missionText = latestMissionsFile.GetAsText();
+				var missionData = JsonNode.Parse(missionText);
+				var expiryDate = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
+				var reset = DateTime.Parse(expiryDate, CultureInfo.InvariantCulture);
+				if (reset > DateTime.UtcNow)
+					return new HttpResponseMessage() { Content = new StringContent(missionText) };
+				GD.Print("local lite missions out of date");
 			}
-			return await ApiWebAddresses.pegLegLiteBucket
-				.MakeRequest("latestMissions.json")
-				.Send();
 		}
-		return await FnWebAddresses.FortGame
-				.MakeRequest("fortnite/api/game/v2/world/info")
-				.SetAccount()
-				.Send();
+		return await ApiWebAddresses.pegLegLiteBucket
+			.MakeRequest("latestMissions.json")
+			.Send();
 	}
-
-	static AmazonS3Client BucketClient = null;
 
 	static async Task UpdateMissions(JsonNode missionData, bool ignoreExpiry = false)
 	{

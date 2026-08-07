@@ -144,6 +144,7 @@ public partial class NewRecycleListContainer : Container, IListHandler
 				return;
 		}
 		prevRelativePos = relativePos;
+		force = listDirty;
 		listDirty = false;
 
 		CustomMinimumSize += Vector2.One * 0.1f;

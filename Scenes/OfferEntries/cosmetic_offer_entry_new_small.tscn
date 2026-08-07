@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bqhlvb70hrgro" path="res://Images/TextureResources/JamTrackRadial.tres" id="5_7wh5u"]
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="8_jyoqb"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihkkw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arynh"]
 resource_local_to_scene = true
 shader = ExtResource("2_hh1at")
 shader_parameter/ControlSize = Vector2(100, 100)
@@ -19,7 +19,7 @@ shader_parameter/FirstCol = Color(0, 0.74509805, 1, 1)
 shader_parameter/SecondCol = Color(0, 0.19607843, 0.5019608, 1)
 shader_parameter/ThirdCol = Color(0, 0.74509805, 1, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lma21"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihkkw"]
 resource_local_to_scene = true
 shader = ExtResource("4_3th2c")
 shader_parameter/ControlSize = Vector2(100, 130)
@@ -30,9 +30,9 @@ shader_parameter/CosmeticZoom = 1.0
 shader_parameter/CornerRadius = 10.0
 shader_parameter/JamRadius = 3.0
 shader_parameter/JamTexture = ExtResource("5_7wh5u")
-shader_parameter/time = 4.022
+shader_parameter/time = 0.29
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkyau"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lma21"]
 resource_local_to_scene = true
 shader = ExtResource("4_3th2c")
 shader_parameter/ControlSize = Vector2(150, 150)
@@ -43,9 +43,9 @@ shader_parameter/CosmeticZoom = 1.0
 shader_parameter/CornerRadius = 10.0
 shader_parameter/JamRadius = 3.0
 shader_parameter/JamTexture = ExtResource("5_7wh5u")
-shader_parameter/time = 4.022
+shader_parameter/time = 0.29
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0r0jl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkyau"]
 resource_local_to_scene = true
 shader = ExtResource("8_jyoqb")
 shader_parameter/ControlSize = Vector2(90, 70)
@@ -63,10 +63,10 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tor1b"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0r0jl"]
 resource_local_to_scene = true
 shader = ExtResource("2_hh1at")
-shader_parameter/ControlSize = Vector2(100, 100)
+shader_parameter/ControlSize = Vector2(100, 70)
 shader_parameter/ShiftDirection = Vector2(0.5, 1)
 shader_parameter/UseCorners = true
 shader_parameter/Fit = true
@@ -96,23 +96,24 @@ hoverTypeSize = 13.0
 skipLastSeen = true
 
 [node name="RadialBG" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="0" unique_id=1198445779]
-material = SubResource("ShaderMaterial_ihkkw")
+material = SubResource("ShaderMaterial_arynh")
 
 [node name="LinearBG" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="1" unique_id=31677866]
-material = SubResource("ShaderMaterial_ihkkw")
+material = SubResource("ShaderMaterial_arynh")
 
 [node name="ItemIcon" parent="ImageContent/IconContainer" parent_id_path=PackedInt32Array(1447103009) index="0" unique_id=1494506969]
-material = SubResource("ShaderMaterial_lma21")
+material = SubResource("ShaderMaterial_ihkkw")
 custom_minimum_size = Vector2(90, 90)
 
 [node name="ItemIcon2" parent="ImageContent/IconContainer/ItemIcon" index="0" unique_id=1165155485]
-material = SubResource("ShaderMaterial_gkyau")
+material = SubResource("ShaderMaterial_lma21")
 
 [node name="CosmeticLoadingIcon" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="3" unique_id=1550021752]
-material = SubResource("ShaderMaterial_0r0jl")
+material = SubResource("ShaderMaterial_gkyau")
 
 [node name="TextBG" parent="." index="1" unique_id=1916871813]
-material = SubResource("ShaderMaterial_tor1b")
+material = SubResource("ShaderMaterial_0r0jl")
+custom_minimum_size = Vector2(0, 70)
 
 [node name="MarginContainer" parent="DetailsArea" parent_id_path=PackedInt32Array(1825829364) index="0" unique_id=141096685]
 theme_override_constants/margin_left = 2
@@ -144,6 +145,12 @@ mouse_filter = 2
 
 [node name="HBoxContainer" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/PriceContent/DiscountContent" index="0" unique_id=2066364876]
 visible = false
+
+[node name="FreeLabel" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned" parent_id_path=PackedInt32Array(2085425483) index="1" unique_id=747274228]
+theme_override_font_sizes/font_size = 12
+
+[node name="OwnedLabel" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea" index="1" unique_id=964994074]
+theme_override_font_sizes/font_size = 12
 
 [node name="HoverInfo" parent="DetailsArea" parent_id_path=PackedInt32Array(1825829364) index="1" unique_id=1811839138]
 custom_minimum_size = Vector2(0, 13)

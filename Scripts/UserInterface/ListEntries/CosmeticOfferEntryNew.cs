@@ -186,7 +186,8 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 		var price = currentOffer.CalculatePersonalPrice()?.quantity ?? 1;
 		var basePrice = currentOffer.BasePrice?.quantity ?? 3;
 		EmitSignalPriceAmount(price.Notate());
-		var owned = !GameAccount.ActiveAccount.MatchesItemRequirements(currentOffer);
+		bool isBundle = currentOffer.IsDynamicBundle;
+		var owned = isBundle ? currentOffer.CosmeticBundleOwned() : !GameAccount.ActiveAccount.MatchesItemRequirements(currentOffer);
 		EmitSignalOwnedVisibility(owned);
 		EmitSignalFreeVisibility(price == 0);
 
@@ -197,7 +198,6 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 			EmitSignalBasePriceAmount(basePrice.Notate());
 		}
 
-		bool isBundle = currentOffer.IsDynamicBundle;
 		var offerMainType = currentOffer.CosmeticOfferMainType;
 		var primaryTemplateType = currentOffer.CosmeticPrimaryTemplate?.Split(':')[0].Replace("Athena", "");
 
@@ -335,7 +335,7 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 			EmitSignalAlmostAYearVisibility(timeData.lastSeenDaysAgo > 500);
 		}
 
-		timeData = timeData with { isAddedToday = timeData.isAddedToday || (DateTime.UtcNow - (currentOffer.InDate ?? DateTime.MinValue)).TotalDays < 1 };
+		timeData = timeData with { isAddedToday = timeData.isAddedToday || (currentOffer.InDate ?? DateTime.MinValue) == DateTime.UtcNow.Date };
 
 		//mark when new
 		string bonusText = null;

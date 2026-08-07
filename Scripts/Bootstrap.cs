@@ -139,6 +139,7 @@ public partial class Bootstrap : Node
 			window.Unfocusable = false;
 
 			AppConfig.MigrateAndPreloadConfig();
+			PaletteHelper.Initialise();
 			var preferredScreen = AppConfig.Get("ui", "preferred_screen", -1);
 			GD.Print($"Preferred Screen: {preferredScreen}");
 			if (preferredScreen <= -1)

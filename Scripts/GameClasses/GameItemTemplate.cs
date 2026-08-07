@@ -71,16 +71,18 @@ public partial class GameItemTemplate
 		"T05",
 	];
 
-	public static readonly Color[] rarityColours =
-	[
-		Colors.Transparent,
-		Color.FromString("#bfbfbf", Colors.White),
-		Color.FromString("#83db00", Colors.White),
-		Color.FromString("#008bf1", Colors.White),
-		Color.FromString("#a952ff", Colors.White),
-		Color.FromString("#ff7b3d", Colors.White),
-		Color.FromString("#ffff40", Colors.White),
-	];
+	//swap with palette
+	//public static readonly Color[] rarityColours =
+	//[
+	//	Colors.Transparent,
+	//	..PegLegResourceManager.supplimentaryData.RarityColours
+	//	//Color.FromString("#bfbfbf", Colors.White),
+	//	//Color.FromString("#83db00", Colors.White),
+	//	//Color.FromString("#008bf1", Colors.White),
+	//	//Color.FromString("#a952ff", Colors.White),
+	//	//Color.FromString("#ff7b3d", Colors.White),
+	//	//Color.FromString("#ffff40", Colors.White),
+	//];
 
 	static readonly string[] cardPackFromRarity =
 	[
@@ -163,6 +165,15 @@ public partial class GameItemTemplate
 	{
 		key ??= "";
 		var dict = PegLegResourceManager.supplimentaryData.ItemTypeAndSubtypeIcons;
+		if (dict.TryGetValue(key, out Texture2D value))
+			return value;
+		return fallbackIcon;
+	}
+
+	public static Texture2D GetWeaponCoreTexture(string key, Texture2D fallbackIcon = null)
+	{
+		key ??= "";
+		var dict = PegLegResourceManager.supplimentaryData.WeaponCoreIcons;
 		if (dict.TryGetValue(key, out Texture2D value))
 			return value;
 		return fallbackIcon;
@@ -255,10 +266,21 @@ public partial class GameItemTemplate
 	public string SubType => rawData["SubType"]?.ToString();
 	public string Rarity => rawData["Rarity"]?.ToString();
 	public int RarityLevel => (Rarity ?? "").ConvertRarityString();
-	public Color RarityColor => Name.StartsWith("ZCP_") ? Colors.Transparent : rarityColours[RarityLevel];
+	public Color RarityColor
+	{
+		get
+		{
+			var rLevel = RarityLevel;
+			if (rLevel == 0 || Name.StartsWith("ZCP_"))
+				return Colors.Transparent;
+			return PaletteHelper.RarityColours[rLevel - 1];
+		}
+	}
 
 	public int Tier => rawData["Tier"]?.GetValue<int>() ?? 0;
 	public int MaxTier => Mathf.Min(RarityLevel + 1, 5);
+	public string DisplayTier => rawData["DisplayTier"]?.ToString();
+	public bool IsCrystal => rawData["EvoType"]?.ToString()=="crystal";
 
 	public string Personality => rawData["Personality"]?.ToString();
 
@@ -382,6 +404,13 @@ public partial class GameItemTemplate
 			default:
 				return GetSubtypeTexture(SubType, fallbackIcon);
 		}
+	}
+
+	public Texture2D GetWeaponCoreTexture(Texture2D fallbackIcon = null)
+	{
+		if (Type != "Schematic" && Type != "Weapon")
+			return fallbackIcon;
+		return GetWeaponCoreTexture(DisplayTier, fallbackIcon);
 	}
 
 	public GameItemTemplate TryGetNextRarity()

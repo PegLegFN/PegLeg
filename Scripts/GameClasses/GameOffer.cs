@@ -4,6 +4,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -294,7 +295,7 @@ public partial class GameOffer
 			return result;
 		}
 	}
-	public Color CosmeticTextBGColour => GetMeta("textBackgroundColor") is string textCol ? Color.FromHtml(textCol) : Colors.Black;
+	public Color CosmeticTextBGColour => GetMeta("textBackgroundColor") is string textCol && Color.HtmlIsValid(textCol) ? Color.FromHtml(textCol) : Colors.Black;
 	public string CosmeticLayoutId => GetMeta("LayoutId");
 	public string CosmeticSectionId
 	{
@@ -432,6 +433,21 @@ public partial class GameOffer
 		return true;
 	}
 
+	public bool CosmeticBundleOwned(GameAccount account = null)
+	{
+		account ??= GameAccount.ActiveAccount;
+		if (!IsDynamicBundle || !account.isOwned)
+			return false;
+
+		var cosmeticItems = account.GetProfile(FnProfileTypes.CosmeticInventory);
+		foreach (var kvp in conditionalDiscounts)
+		{
+			if (cosmeticItems.GetFirstTemplateItem(kvp.Key) is null)
+				return false;
+		}
+		return true;
+	}
+
 	#endregion
 
 	#region Third Party Cosmetic Stuff
@@ -441,28 +457,13 @@ public partial class GameOffer
 	public string CosmeticDisplayName => FNDashOffer?.DisplayName.Replace("\\\"", "\"") ?? ParseCosmeticOfferName();
 	public string CosmeticDisplayType => FNDashOffer?.DisplayType;
 
-	CosmeticTimeData? cosmeticTimeData;
-	CosmeticTimeData? estimateCosmeticTimeData;
-	public CosmeticTimeData CosmeticTimeData
+	public CosmeticTimeData CosmeticTimeData => FNDashOffer?.GenerateCosmeticTimeData() ?? new()
 	{
-		get
-		{
-			if (cosmeticTimeData is not null)
-				return cosmeticTimeData.Value;
-			if (FNDashOffer is not null)
-				return cosmeticTimeData ??= FNDashOffer.GenerateCosmeticTimeData();
-
-			if (estimateCosmeticTimeData is not null)
-				return estimateCosmeticTimeData.Value;
-			return estimateCosmeticTimeData ??= new()
-			{
-				lastSeenDaysAgo = 0,
-				isRecentlyNew = CosmeticTagline == "New",
-				isAddedToday = InDate.Value == DateTime.UtcNow.Date,
-				isLeavingSoon = (OutDate.Value - DateTime.UtcNow.Date).TotalHours < 24,
-				lastAddedDate = DateTime.UtcNow.Date
-			};
-		}
-	}
+		lastSeenDaysAgo = 0,
+		isRecentlyNew = CosmeticTagline == "New",
+		isAddedToday = InDate.Value == DateTime.UtcNow.Date,
+		isLeavingSoon = (OutDate.Value - DateTime.UtcNow.Date).TotalHours < 24,
+		lastAddedDate = DateTime.UtcNow.Date
+	};
 	#endregion
 }

@@ -408,8 +408,9 @@ public partial class CosmeticShopInterfaceNew : Control
 				.Where(o => o.CosmeticLayoutId != "alc.0")
 		);
 		compactCosmeticList.MarkListDirty();
+
+
 		MarkListDirty();
-		CheckSections();
 	}
 
 	TreeItem treeRoot = null;

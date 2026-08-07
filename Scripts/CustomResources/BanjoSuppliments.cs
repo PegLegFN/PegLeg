@@ -6,6 +6,13 @@ public partial class BanjoSuppliments : Resource
 {
 	static Texture2D emptyTexture = new();
 
+	[ExportGroup("Palete Defaults")]
+	[Export]
+	public Color[] RarityColours { get; private set; }
+	[Export]
+	public Color[] ZoneColours { get; private set; }
+
+	[ExportGroup("Icon Maps")]
 	[Export]
 	public Dictionary<string, Texture2D> ItemTypeAndSubtypeIcons { get; private set; } = new()
 	{
@@ -123,8 +130,20 @@ public partial class BanjoSuppliments : Resource
 		["IsMaxShieldHigh"] = emptyTexture,
 		["IsShieldRegenLow"] = emptyTexture
 	};
+	[Export]
+	public Dictionary<string, Texture2D> WeaponCoreIcons { get; private set; } = new()
+	{
+		["Copper"] = emptyTexture,
+		["Silver"] = emptyTexture,
+		["Malachite"] = emptyTexture,
+		["Obsidian"] = emptyTexture,
+		["Brightcore"] = emptyTexture,
+		["Shadowshard"] = emptyTexture,
+		["Sunbeam"] = emptyTexture
+	};
 
 
+	[ExportGroup("Survivor Squad Maps")]
 	[Export]
 	public Dictionary<string, string> SynergyToSquadId { get; private set; } = new()
 	{

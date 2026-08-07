@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://be5lic7x1too2"]
+[gd_scene format=3 uid="uid://be5lic7x1too2"]
 
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="1_dh4tg"]
 [ext_resource type="StyleBox" uid="uid://c2skfgtbdx32l" path="res://GodotThemes/Styleboxes/Light/LightBox.tres" id="1_e65vr"]
@@ -28,31 +28,62 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
-[node name="Perk Entry" type="MarginContainer"]
+[node name="Perk Entry" type="MarginContainer" unique_id=966677298 node_paths=PackedStringArray("rarityBar")]
 custom_minimum_size = Vector2(0, 75)
 script = ExtResource("2_t8u73")
+rarityBar = NodePath("MarginContainer/HBoxContainer/RarityBarContainer/RarityBar")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=1870087881]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_e65vr")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=115601463]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=504393381]
 layout_mode = 2
 
-[node name="RarityIcon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="RarityBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=1701586910]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="RarityBar" type="VBoxContainer" parent="MarginContainer/HBoxContainer/RarityBarContainer" unique_id=1507563905]
+modulate = Color(0.7882353, 0.30980393, 1, 1)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/HBoxContainer/RarityBarContainer/RarityBar" unique_id=915863978]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer/HBoxContainer/RarityBarContainer/RarityBar" unique_id=892140247]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect3" type="ColorRect" parent="MarginContainer/HBoxContainer/RarityBarContainer/RarityBar" unique_id=575252114]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect4" type="ColorRect" parent="MarginContainer/HBoxContainer/RarityBarContainer/RarityBar" unique_id=1522009267]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect5" type="ColorRect" parent="MarginContainer/HBoxContainer/RarityBarContainer/RarityBar" unique_id=671386535]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RarityIcon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1733744172]
 layout_mode = 2
 texture = ExtResource("1_dh4tg")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="ElementBG" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon"]
+[node name="ElementBG" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon" unique_id=1255763035]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -65,7 +96,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_0qf3e")
 expand_mode = 3
 
-[node name="ElementIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon/ElementBG"]
+[node name="ElementIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon/ElementBG" unique_id=1797674778]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,7 +105,7 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 3
 
-[node name="LockIconPos" type="Control" parent="MarginContainer/HBoxContainer/RarityIcon"]
+[node name="LockIconPos" type="Control" parent="MarginContainer/HBoxContainer/RarityIcon" unique_id=1362324773]
 visible = false
 layout_mode = 1
 anchors_preset = 0
@@ -84,7 +115,7 @@ offset_right = 30.0
 offset_bottom = 30.0
 grow_horizontal = 0
 
-[node name="LockIconBG" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon/LockIconPos"]
+[node name="LockIconBG" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon/LockIconPos" unique_id=79700109]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -99,7 +130,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_0crah")
 expand_mode = 1
 
-[node name="LockIcon2" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon/LockIconPos"]
+[node name="LockIcon2" type="TextureRect" parent="MarginContainer/HBoxContainer/RarityIcon/LockIconPos" unique_id=295765024]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,7 +141,7 @@ tooltip_text = "Evolve Hero to 2 Stars to unlock Commander Perk"
 texture = ExtResource("4_i1bcj")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/RarityIcon/LockIconPos"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/RarityIcon/LockIconPos" unique_id=1344223090]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -122,7 +153,7 @@ grow_vertical = 2
 theme_override_constants/outline_size = 5
 text = "Lv 50"
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1140244229]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -136,20 +167,20 @@ vertical_alignment = 1
 autowrap_mode = 2
 text_overrun_behavior = 3
 
-[node name="InteractionArrow" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="InteractionArrow" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1896390493]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 texture = ExtResource("5_ylbgw")
 expand_mode = 1
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("3_8d8tg")]
+[node name="Responsive Button Area" parent="." unique_id=774202483 instance=ExtResource("3_8d8tg")]
 layout_mode = 2
 usePressSound = false
 
 [connection signal="ElementIconChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/ElementBG/ElementIcon" method="set_texture"]
 [connection signal="ElementIconVisibilityChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/ElementBG" method="set_visible"]
-[connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
 [connection signal="InteractableChanged" from="." to="MarginContainer/HBoxContainer/InteractionArrow" method="set_visible"]
+[connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]
 [connection signal="LockColorChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/LockIconPos/LockIcon2" method="set_self_modulate"]
 [connection signal="LockTextChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/LockIconPos/Label" method="set_text"]
 [connection signal="LockVisibilityChanged" from="." to="MarginContainer/HBoxContainer/RarityIcon/LockIconPos" method="set_visible"]

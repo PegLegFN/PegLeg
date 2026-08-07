@@ -189,7 +189,7 @@ public partial class GameItemViewer : ModalWindow
 		currentOffer = null;
 		defenderEquipmentEntry.Visible = false;
 
-		if (!preserveUnseen && newItem.profile?.account.isOwned == true)
+		if (!preserveUnseen && newItem.profile?.account.isOwned == true && newItem.profile.profileId == "campaign")
 			newItem.MarkItemSeen();
 
 		displayUUID.Visible = AppConfig.Get("advanced", "developer", false) && newItem.profile is not null;

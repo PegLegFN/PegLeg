@@ -37,7 +37,7 @@ tab_alignment = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer" index="1" unique_id=1440013733 node_paths=PackedStringArray("tabParent", "pageParent")]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = -1
 script = ExtResource("2_orsqi")
 tabScene = ExtResource("3_8p80j")
 tabParent = NodePath("SettingsTabs/MarginContainer/MarginContainer/VBoxContainer")
@@ -185,7 +185,16 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Advanced"
 
-[node name="Publishing" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" unique_id=187348734 groups=["HideTab"]]
+[node name="Accessibility" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" unique_id=183301825 groups=["HideTab"]]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Accessibility" index="0" unique_id=1792923602]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Advanced"
+
+[node name="Publishing" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="8" unique_id=187348734 groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
@@ -209,7 +218,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Publishing"
 
-[node name="Archive" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="8" unique_id=108618715 groups=["HideTab"]]
+[node name="Archive" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" unique_id=108618715 groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
@@ -233,8 +242,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Mission Archive"
 
-[node name="Updates" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" unique_id=169247733]
-visible = false
+[node name="Updates" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="10" unique_id=169247733]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" index="0" unique_id=1641968220]
@@ -242,7 +250,8 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Updates"
 
-[node name="Core" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="10" unique_id=1107420082]
+[node name="Core" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="11" unique_id=1107420082]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" index="0" unique_id=2074768116]
@@ -258,6 +267,7 @@ text = "Core"
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/MarginContainer/Control" method="set_visible"]

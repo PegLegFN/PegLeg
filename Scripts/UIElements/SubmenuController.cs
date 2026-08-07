@@ -69,21 +69,28 @@ public partial class SubmenuController : Container
 				.Select(n => (Control)n)
 				.Where(n => n is not null)
 			];
+			int buttonIdx = 0;
 			for (int i = 0; i < pages.Length; i++)
 			{
-				if (buttonParent.GetChildCount() <= i)
+				if (pages[i].IsInGroup("HideTab"))
+					continue;
+
+				Button btnCtrl = null;
+				if (buttonParent.GetChildCount() <= buttonIdx)
 				{
-					buttonParent.AddChild(buttonScene.Instantiate());
+					btnCtrl = (Button)buttonScene.Instantiate();
+					btnCtrl.Pressed += () => SetActivePageFromBtn(btnCtrl);
+					buttonParent.AddChild(btnCtrl);
 				}
-				var btn = buttonParent.GetChild(i);
-				Button btnCtrl = (Button)btn;
-				//if (btnCtrl is null)
-				//{
-				//    //find button
-				//}
+				else
+				{
+					btnCtrl= (Button)buttonParent.GetChild(buttonIdx);
+				}
+
 				int index = i;
-				btnCtrl.Pressed += () => SetActivePage(index);
 				btnCtrl.Text = pages[i].Name;
+				btnCtrl.SetMeta("idx", index);
+				buttonIdx++;
 			}
 			int btnCount = buttonParent.GetChildCount();
 			for (int i = pages.Length; i < btnCount; i++)
@@ -107,6 +114,12 @@ public partial class SubmenuController : Container
 		{
 			GoBack();
 		}
+	}
+
+	void SetActivePageFromBtn(Control button)
+	{
+		if (button.HasMeta("idx"))
+			SetActivePage((int)button.GetMeta("idx"));
 	}
 
 	void SetActivePage(int index)

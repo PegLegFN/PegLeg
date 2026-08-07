@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="7_dl0dj"]
 [ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="7_huo06"]
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewards.tscn" id="8_51wbn"]
+[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/mission_reward_entry_beast.tscn" id="10_m4ix0"]
 
 [node name="NotableRewards" type="PanelContainer" unique_id=936518577]
 size_flags_horizontal = 3
@@ -190,6 +191,19 @@ filterPower = NodePath("../../HBoxContainer/PlayableFilter")
 bulkTodoBtn = NodePath("../../HBoxContainer/AddAllTodo")
 excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
 
+[node name="NotableBeast" parent="VBoxContainer3/VBoxContainer" unique_id=849178637 node_paths=PackedStringArray("filterPower", "excludeRewards") instance=ExtResource("8_51wbn")]
+visible = false
+layout_mode = 2
+filterPower = NodePath("../../HBoxContainer/PlayableFilter")
+excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
+
+[node name="RecycleContainer" parent="VBoxContainer3/VBoxContainer/NotableBeast/VBoxContainer/MarginContainer/ScrollContainer2" parent_id_path=PackedInt32Array(849178637, 125549210) index="0" unique_id=1028390328]
+recycleEntryScene = ExtResource("10_m4ix0")
+spacing = Vector2(5, 0)
+
 [connection signal="pressed" from="VBoxContainer3/HBoxContainer/RefreshMissions" to="VBoxContainer3/VBoxContainer/Notable" method="ReloadMissions"]
 [connection signal="ConfigValueChanged" from="VBoxContainer3/HBoxContainer/PublishMissions/CheckButton" to="VBoxContainer3/HBoxContainer/PublishMissions" method="set_visible"]
 [connection signal="toggled" from="VBoxContainer3/HBoxContainer/PlayableFilter/CheckButton" to="VBoxContainer3/HBoxContainer/PlayableFilter" method="set_pressed"]
+
+[editable path="VBoxContainer3/VBoxContainer/NotableBeast"]
+[editable path="VBoxContainer3/VBoxContainer/NotableBeast/VBoxContainer/Hidden/MissionCollection"]
