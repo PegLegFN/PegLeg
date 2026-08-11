@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Nodes;
 
 public partial class TeamPerkEntry : GameItemEntry
 {
@@ -63,22 +65,42 @@ public partial class TeamPerkEntry : GameItemEntry
 
 	void UpdateColor() => EmitSignalStateColor(compatible ? (meetsRequirements ? activeColor : inactiveColor) : warningColor);
 
-	protected override string CreateTooltip(GameItem item, string itemName, string itemAmount, List<string> tooltipDescriptions)
+	protected override void SetTooltip()
 	{
-		if (item?.templateId.StartsWith("TeamPerk:", StringComparison.OrdinalIgnoreCase) == true && item?.template is GameItemTemplate teamPerkTemplate)
+		if (displayItem is null)
+			return;
+		if (displayItem.templateId.StartsWith("TeamPerk:", StringComparison.OrdinalIgnoreCase) != true || displayItem.template is not GameItemTemplate teamPerkTemplate)
 		{
-			bool progressive = teamPerkTemplate["ProgressiveBonus"]?.GetValue<bool>() ?? false;
-
-			string supportRequirementText = teamPerkTemplate["SupportRequirements"]?["Description"]?.ToString();
-			if (progressive)
-				tooltipDescriptions[0] = $"{supportRequirementText}\n{tooltipDescriptions[0]}";
-			else
-				tooltipDescriptions[0] += $"\n{supportRequirementText}";
-
-			if (teamPerkTemplate["CommanderRequirement"]?["Description"]?.ToString() is string commanderRequirementText)
-				tooltipDescriptions[0] += $"\n{commanderRequirementText}";
+			base.SetTooltip();
+			return;
 		}
-		return base.CreateTooltip(item, itemName, itemAmount, tooltipDescriptions);
+
+		List<string> tooltipDescriptions =
+		[
+			displayItem.template?.Description ?? "",
+			//"Item Id: " + item.templateId,
+		];
+		bool progressive = teamPerkTemplate["ProgressiveBonus"]?.GetValue<bool>() ?? false;
+
+		string supportRequirementText = teamPerkTemplate["SupportRequirements"]?["Description"]?.ToString();
+		if (progressive)
+			tooltipDescriptions[0] = $"{supportRequirementText}\n{tooltipDescriptions[0]}";
+		else
+			tooltipDescriptions[0] += $"\n{supportRequirementText}";
+
+		if (teamPerkTemplate["CommanderRequirement"]?["Description"]?.ToString() is string commanderRequirementText)
+			tooltipDescriptions[0] += $"\n{commanderRequirementText}";
+
+		if (displayItem.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
+			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Where(t => !t.StartsWith("hidetag_")).ToArray().Join(", "));
+
+		var tooltip = CustomTooltip.GenerateSimpleTooltip(
+			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],
+			null,
+			[.. tooltipDescriptions],
+			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml()
+		);
+		EmitSignalTooltipChanged(tooltip);
 	}
 
 	public override void ClearItem(Texture2D clearIcon)

@@ -49,12 +49,12 @@ public partial class PowerHourAlert : Control
 		{
 			var utcTime = DateTime.UtcNow.Date;
 
-			utcTime = utcTime.AddHours(18);//18:00
+			utcTime = utcTime.AddHours(16);//16:00
 			localisedTimeTexts[0].Text = $"{utcTime.ToLocalTime():t}";
-			utcTime = utcTime.AddHours(2);//20:00
+			utcTime = utcTime.AddHours(2);//18:00
 			localisedTimeTexts[1].Text = $"{utcTime.ToLocalTime():t}";
 
-			utcTime = utcTime.AddHours(4);//00:00 next day
+			utcTime = utcTime.AddHours(6);//00:00 next day
 			localisedTimeTexts[2].Text = $"{utcTime.ToLocalTime():t}";
 			utcTime = utcTime.AddHours(2);//2:00 next day
 			localisedTimeTexts[3].Text = $"{utcTime.ToLocalTime():t}";

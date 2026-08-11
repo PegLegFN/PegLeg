@@ -69,7 +69,7 @@ public partial class PowerHourWebhookDispatcher : Node
 				//event ended + headsup for next event
 				//await webhook.Execute(currentContentProvider: async () => $"The Power Hour has ended, but another one should be active {curEvt.start.Discordify()}.\n(Ongoing missions will keep the modifiers until they end)\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
 				hasDispatchedEventHeadsup = true;
-				await Publish(firstEnd, curEvt.start);
+				await Publish(firstEnd, curEvt.start, true);
 			}
 			else
 			{
@@ -97,7 +97,7 @@ public partial class PowerHourWebhookDispatcher : Node
 			return;
 		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
 		//await inst.webhook.Execute(true, currentContentProvider: async () => $"A Power Hour is scheduled to occur {curEvt.start.Discordify()}.\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
-		await Publish(headsup, curEvt.start);
+		await Publish(headsup, curEvt.start, true);
 	}
 
 	public async void AttemptHeadsup()
@@ -122,18 +122,21 @@ public partial class PowerHourWebhookDispatcher : Node
 	static TimeZoneInfo displayTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 	static TimeZoneValues displayTimeZoneShorthand = TZNames.GetAbbreviationsForTimeZone(displayTimeZone.Id, "en-US");
 	//static string[] timezones = [.. TimeZoneInfo.GetSystemTimeZones().Select(i => i.Id)];
-	async Task Publish(string template, DateTime timestamp, bool noImage = false)
+	async Task Publish(string template, DateTime timestamp, bool noImage = false, bool isStartStamp = false)
 	{
+		var endStamp = timestamp.AddHours(2);
 		var utcTime = timestamp.ToUniversalTime();
+		var utcEnd = utcTime.AddHours(2);
 		var displayTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, displayTimeZone);
+		var endTime = displayTime.AddHours(2);
 		var displayZone = displayTimeZone.IsDaylightSavingTime(displayTime) ? displayTimeZoneShorthand.Standard : displayTimeZoneShorthand.Daylight;
 
 		var (standard, opaque) = noImage ? ([], []) : await screenshotter.CapturePublishingScreenshots();
 
 		await publisher.AttemptPublish(platform => platform switch
 		{
-			"Discord" => new(template.Replace("{timestamp}", timestamp.Discordify()) + discordSuffix, images: standard),
-			_ => new(template.Replace("{timestamp}", $"at {displayTime:h:mm tt} {displayZone} ({utcTime:H:mm} UTC)"), images: opaque)
+			"Discord" => new(template.Replace("{timestamp}", isStartStamp ? $"{timestamp.Discordify()} ({timestamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)}-({endStamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)}))" : $"{timestamp.Discordify()} ({timestamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)})") + discordSuffix, images: standard),
+			_ => new(template.Replace("{timestamp}", isStartStamp ? $"from {displayTime:h:mmtt}-{endTime:h:mmtt} {displayZone} ({utcTime:H:mm}-{utcEnd:H:mm} UTC)" : $"at {displayTime:h:mmtt} {displayZone} ({utcTime:H:mm} UTC)"), images: opaque)
 		});
 	}
 

@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="4_n30m0"]
 [ext_resource type="Texture2D" uid="uid://do17fpp06a7op" path="res://Images/InterfaceIcons/T_Icon_Sort.png" id="5_83ys4"]
 [ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="6_4u2l4"]
+[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="7_4u2l4"]
 
 [node name="MissionPage" type="VBoxContainer" unique_id=2081319794]
 offset_right = 334.0
@@ -303,6 +304,26 @@ script = ExtResource("1_p4q3c")
 section = "ui"
 key = "show_ph_clickbait"
 defaultValue = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1959425577]
+layout_mode = 2
+
+[node name="BeastStyle" type="CheckBox" parent="HBoxContainer2" unique_id=1807019556]
+layout_mode = 2
+size_flags_horizontal = 3
+layout_direction = 3
+text = "Problem Client Mode"
+alignment = 2
+script = ExtResource("1_p4q3c")
+section = "missions"
+key = "beast_style"
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer2" unique_id=1389493984]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "Adjusts style elements to make a self proclaimed \"Problem Client\" feel more comfortable"
+texture = ExtResource("7_4u2l4")
+expand_mode = 1
 
 [connection signal="AppliedChanged" from="NotableItemCap/HSlider" to="NotableItemCap/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="NotableItemCap/HSlider" to="NotableItemCap/HSlider" method="SetValue"]

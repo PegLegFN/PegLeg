@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="2_663fw"]
 [ext_resource type="Script" uid="uid://b5p17hdo00lc6" path="res://Scripts/UserInterface/Dashboard/MissionToDoListController.cs" id="3_u8by4"]
 [ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="4_mj0j4"]
-[ext_resource type="PackedScene" uid="uid://bo5ikr32xssoo" path="res://Scenes/MissionEntry/mission_reward_entry_todo.tscn" id="5_8m7pj"]
-[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/mission_reward_entry_beast.tscn" id="6_mj0j4"]
+[ext_resource type="PackedScene" uid="uid://bo5ikr32xssoo" path="res://Scenes/MissionEntry/Rewards/mission_reward_entry_todo.tscn" id="5_8m7pj"]
+[ext_resource type="PackedScene" uid="uid://7adejvf1okhb" path="res://Scenes/MissionEntry/BeastRewards/mission_reward_entry_beast_todo.tscn" id="6_mj0j4"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="7_8m7pj"]
 
 [node name="ToDoList" type="PanelContainer" unique_id=1403873334]
 theme_type_variation = &"Panel3PadB"
@@ -52,6 +53,7 @@ section = "missions"
 key = "todo_sort_mode"
 
 [node name="To-Do List (0)" type="MarginContainer" parent="VBoxContainer" unique_id=1998254745 node_paths=PackedStringArray("newMissionListNode", "rootPanel")]
+visible = false
 layout_mode = 2
 script = ExtResource("3_u8by4")
 newMissionListNode = NodePath("RecycleContainer")
@@ -63,9 +65,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("4_mj0j4")
 recycleEntryScene = ExtResource("5_8m7pj")
+spacing = Vector2(5, 2)
 
 [node name="To-Do List Beast" type="MarginContainer" parent="VBoxContainer" unique_id=1718117675 node_paths=PackedStringArray("newMissionListNode", "rootPanel")]
-visible = false
 layout_mode = 2
 script = ExtResource("3_u8by4")
 newMissionListNode = NodePath("BeastRecycleContainer")
@@ -78,3 +80,14 @@ size_flags_horizontal = 3
 script = ExtResource("4_mj0j4")
 recycleEntryScene = ExtResource("6_mj0j4")
 spacing = Vector2(5, 0)
+
+[node name="BeastConfig" type="Control" parent="." unique_id=1845736295]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("7_8m7pj")
+section = "missions"
+key = "beast_style"
+tryBind = false
+
+[connection signal="ConfigValueChanged" from="BeastConfig" to="VBoxContainer/To-Do List Beast" method="set_visible"]
+[connection signal="ConfigValueChangedInverse" from="BeastConfig" to="VBoxContainer/To-Do List (0)" method="set_visible"]

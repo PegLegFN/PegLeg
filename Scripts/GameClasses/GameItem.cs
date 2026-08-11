@@ -185,15 +185,7 @@ public class GameItem
 	public int quantity { get; private set; }
 	public void SetLocalQuantity(int newQuant) => quantity = newQuant;
 
-	public int TotalQuantity
-	{
-		get
-		{
-			if (profile is null)
-				return quantity;
-			return profile.GetTemplateItems(templateId).Select(i => i.quantity).Sum();
-		}
-	}
+	public int TotalQuantity => profile?.GetTemplateItems(templateId).Sum(i => i.quantity) ?? quantity;
 
 	public ItemData GameItemData => new()
 	{

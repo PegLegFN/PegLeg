@@ -16,14 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="15_5lp03"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="16_yyruf"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ua30w"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ua30w"]
-bg_color = Color(1, 1, 1, 0.5019608)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_okcsl"]
-bg_color = Color(1, 1, 1, 0.2509804)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4hef"]
 bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 3
@@ -40,7 +32,7 @@ shader_parameter/base = 0.0
 shader_parameter/scalar = 2.0
 shader_parameter/power = 1.5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ua30w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aow5b"]
 resource_local_to_scene = true
 shader = ExtResource("2_513lh")
 shader_parameter/ControlSize = Vector2(25, 25)
@@ -62,15 +54,6 @@ shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = true
 shader_parameter/HideBar = false
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_k64uv"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k64uv"]
-bg_color = Color(0, 0, 0, 0.5019608)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
 [node name="MissionRewardEntry" type="MarginContainer" unique_id=512148745 node_paths=PackedStringArray("missionEntry", "itemEntry", "missionInspectDependancy")]
 custom_minimum_size = Vector2(260, 25)
 offset_right = 556.0
@@ -84,12 +67,7 @@ missionInspectDependancy = NodePath("Button/MissionTooltip")
 show_behind_parent = true
 layout_mode = 2
 mouse_filter = 1
-theme_type_variation = &"LargeButton"
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ua30w")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ua30w")
-theme_override_styles/hover = SubResource("StyleBoxFlat_okcsl")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ua30w")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_ua30w")
+theme_type_variation = &"SubtleButton"
 
 [node name="Ctx" type="Node" parent="Button" unique_id=950363944 node_paths=PackedStringArray("missionSource", "itemSource")]
 script = ExtResource("2_okcsl")
@@ -218,7 +196,7 @@ preventInteractability = true
 levelTextPrefix = " Lv "
 
 [node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" index="0" unique_id=68041144]
-material = SubResource("ShaderMaterial_ua30w")
+material = SubResource("ShaderMaterial_aow5b")
 mouse_filter = 2
 
 [node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="0" unique_id=2062077297]
@@ -302,12 +280,7 @@ expand_mode = 3
 layout_mode = 2
 tooltip_text = "Add to To-Do List"
 mouse_filter = 1
-theme_type_variation = &"LargeButton"
-theme_override_styles/normal = SubResource("StyleBoxEmpty_k64uv")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_k64uv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_k64uv")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_k64uv")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_k64uv")
+theme_type_variation = &"SubtleButtonRound"
 
 [node name="TextureRect" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer3/Button" unique_id=267304898]
 layout_mode = 1

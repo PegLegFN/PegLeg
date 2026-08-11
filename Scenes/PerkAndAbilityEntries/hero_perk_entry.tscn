@@ -1,30 +1,30 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgyk3guex13ch"]
+[gd_scene format=3 uid="uid://bgyk3guex13ch"]
 
 [ext_resource type="StyleBox" uid="uid://c2skfgtbdx32l" path="res://GodotThemes/Styleboxes/Light/LightBox.tres" id="1_qadmb"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="2_hixd1"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="3_ibav2"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Sh_Materials/ShadowImageMat.tres" id="4_2puyx"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="4_2puyx"]
 [ext_resource type="Texture2D" uid="uid://dq8rxm6c5uo11" path="res://Images/InterfaceIcons/T-SlotIcon-Locked-Stroke-32.png" id="5_2puyx"]
 
-[node name="HeroPerkEntry" type="PanelContainer"]
+[node name="HeroPerkEntry" type="PanelContainer" unique_id=644774163]
 size_flags_vertical = 3
 theme_override_styles/panel = ExtResource("1_qadmb")
 script = ExtResource("2_hixd1")
 lockText = "Evolve Hero to 2 Stars to unlock Commander Perk"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1248927024]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1223259652]
 material = ExtResource("4_2puyx")
-custom_minimum_size = Vector2(90, 0)
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
 size_flags_vertical = 0
 texture = ExtResource("3_ibav2")
-expand_mode = 5
+expand_mode = 1
 stretch_mode = 5
 
-[node name="LockIcon2" type="TextureRect" parent="HBoxContainer/TextureRect"]
+[node name="LockIcon2" type="TextureRect" parent="HBoxContainer/TextureRect" unique_id=2077306037]
 material = ExtResource("4_2puyx")
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 1
@@ -38,18 +38,18 @@ tooltip_text = "Evolve Hero to 2 Stars to unlock Commander Perk"
 texture = ExtResource("5_2puyx")
 expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1077556389]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1138689538]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "A Long Hero Perk Name"
 text_overrun_behavior = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer" unique_id=894666207]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

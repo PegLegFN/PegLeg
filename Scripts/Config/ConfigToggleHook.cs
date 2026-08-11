@@ -6,6 +6,8 @@ public partial class ConfigToggleHook : Control
 	[Signal]
 	public delegate void ConfigValueChangedEventHandler(bool newValue);
 	[Signal]
+	public delegate void ConfigValueChangedInverseEventHandler(bool newValue);
+	[Signal]
 	public delegate void OnTrueEventHandler();
 	[Signal]
 	public delegate void OnFalseEventHandler();
@@ -77,6 +79,7 @@ public partial class ConfigToggleHook : Control
 		else
 			EmitSignalOnFalse();
 		EmitSignalConfigValueChanged(newVal);
+		EmitSignalConfigValueChangedInverse(!newVal);
 		if (logChanges)
 			GD.Print($"{section}:{key} = {newVal}");
 	}

@@ -2,6 +2,8 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Xml.Linq;
+using XmppDotNet.Xmpp.Jingle.Apps.Rtp;
 
 public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameItem>
 {
@@ -238,6 +240,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	{
 		if (section == "missions" && key == "showLiteVbucks" && currentItem?.templateId == "AccountResource:currency_mtxswap")
 			UpdateItem();
+		if (section == "ui" && key == "hero_tooltips")
+			SetTooltip();
 		//SetInteractable();
 	}
 
@@ -348,36 +352,11 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		bool amountNeeded = amountText != "";
 
 		string name = displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1];
-		string description = displayItem.template?.Description;
-		string type = displayItem.template?.Type;
+		string displayType = displayItem.template?.Type;
 		Texture2D mainIcon = displayItem.GetTexture(missingIcon, useLargePreview);
 
-		description ??= "";
-		if (type == "GameplayModifier")
-			description = description.Replace("\r\n", " ");
-
-		var personalityText = displayItem.Personality;
-		var setBonusText = displayItem.SetBonus;
-		if (type == "Worker" && name == "Survivor")
-		{
-			if (personalityText is not null && setBonusText is not null)
-			{
-				var pronoun = displayItem.attributes?["gender"]?.ToString() is string gender ? (gender == "1" ? "him" : "her") : "them";
-				description = description
-					.Replace("{Gender}|gender(him, her)", pronoun)
-					.Replace("[Worker.Personality]", personalityText)
-					.Replace("[Worker.SetBonus.Buff]", setBonusText);
-			}
-			else
-			{
-				//cut off text that requires personality and set bonus if we dont know what they are
-				description = description[..104];
-			}
-		}
-		//description = description.Replace(". ", ".\n");
-
-		if (type == "Worker")
-			type = "Survivor";
+		if (displayType == "Worker")
+			displayType = "Survivor";
 
 		string overrideSurvivorSquad = selector is SimpleItemSelector gameItemSelector ? gameItemSelector.OverriddeSurvivorSquad : null;
 		float rating = displayItem.CalculateSurvivorRating(
@@ -443,13 +422,13 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			EmitSignalInitLevelProgressChanged(((initLevel + 9 % 10) + 1) / 10f);
 		}
 
-		if (type == "AccountResource" || type == "ConsumableAccountItem")
+		if (displayType == "AccountResource" || displayType == "ConsumableAccountItem")
 		{
 			//type = Regex.Replace(type, "([A-Z])", " $1");
-			type = name;
+			displayType = name;
 		}
 
-		if (type != "Survivor")
+		if (displayType != "Survivor")
 		{
 			EmitSignalPersonalityIconChanged(null);
 			EmitSignalSurvivorBoostIconChanged(null);
@@ -459,38 +438,20 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		EmitSignalItemDoesNotExist(false);
 
 		EmitSignalNameChanged(name);
-		EmitSignalDescriptionChanged(description);
-		EmitSignalTypeChanged(type ?? displayItem.templateId?.Split(":")[0]);
+		EmitSignalDescriptionChanged(DisplayDescription);
+		EmitSignalTypeChanged(displayType ?? displayItem.templateId?.Split(":")[0]);
 		EmitSignalRarityChanged(displayItem.template?.RarityColor ?? missingRarityColor);
 
-		var tooltipAmount = amountNeeded ? ((addXToAmount ? "x" : "") + amount.Notate()) : null;
-		if (type == "Ingredient" && inspectorOverride is null)
-			tooltipAmount = displayItem.TotalQuantity.ToString();
-
-		List<string> tooltipDescriptions =
-		[
-			description ?? "",
-            //"Item Id: " + item.templateId,
-        ];
-		if (displayItem.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
-			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Where(t=>!t.StartsWith("hidetag_")).ToArray().Join(", "));
-
-		if (displayItem.template is null)
-			tooltipDescriptions[0] = "Err: Missing Template";
-
-		EmitSignal(
-			SignalName.TooltipChanged,
-			CreateTooltip(displayItem, name, tooltipAmount, tooltipDescriptions)
-		);
+		SetTooltip();
 
 		var subtypeIcon = displayItem.template?.GetSubtypeTexture();
 		var packIcon = displayItem.GetTexture(FnItemTextureType.PackImage, null);
 
-		if (packImageAsSubtype && type == "CardPack")
+		if (packImageAsSubtype && displayType == "CardPack")
 			subtypeIcon = packIcon;
 
 		EmitSignalIconChanged(mainIcon ?? missingIcon);
-		EmitSignalIconFit(!(type == "Hero" || type == "Survivor" || type == "Defender"));
+		EmitSignalIconFit(!(displayType == "Hero" || displayType == "Survivor" || displayType == "Defender"));
 		EmitSignalSubtypeIconChanged(subtypeIcon);
 		EmitSignalPackIconChanged(packIcon);
 		EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
@@ -498,13 +459,13 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 		//bool lowQuality = OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true);
 		bool lowQuality = false;
-		EmitSignalIsPack(type == "CardPack");
-		EmitSignalIsSchematic(type == "Schematic" && !lowQuality);
-		EmitSignalIsHero(type == "Hero" && !lowQuality);
+		EmitSignalIsPack(displayType == "CardPack");
+		EmitSignalIsSchematic(displayType == "Schematic" && !lowQuality);
+		EmitSignalIsHero(displayType == "Hero" && !lowQuality);
 
 		EmitSignalAmountVisibility(amountNeeded);
 		EmitSignalAmountChanged(amountText);
-		if (type == "Weapon" && displayItem.template?.Category == "Ranged" && displayItem.attributes?["loadedAmmo"]?.GetValue<int>() is int loadedAmmo)
+		if (displayType == "Weapon" && displayItem.template?.Category == "Ranged" && displayItem.attributes?["loadedAmmo"]?.GetValue<int>() is int loadedAmmo)
 		{
 			int maxAmmo = displayItem.template?["RangedWeaponStats"]?["Reload"]?["ClipSize"]?.GetValue<int>() ?? 0;
 			if (maxAmmo != 0)
@@ -535,7 +496,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 		//if survivor, set personality icons
 
-		if (type == "Survivor")
+		if (displayType == "Survivor")
 		{
 			EmitSignalPersonalityIconChanged(displayItem.GetTexture(FnItemTextureType.Personality, null));
 			if (!hideMythicLeadSquad || displayItem.template?.RarityLevel != 6 || displayItem?.attributes?["portrait"] is not null)
@@ -555,13 +516,82 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		EmitSignalSuperchargeChanged(bonusMaxLevel / 2);
 	}
 
-	protected virtual string CreateTooltip(GameItem displayItem, string itemName, string itemAmount, List<string> tooltipDescriptions) =>
-		CustomTooltip.GenerateSimpleTooltip(
-			itemName,
-			itemAmount,
-			[.. tooltipDescriptions],
-			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml()
+	protected string DisplayDescription
+	{
+		get
+		{
+			string description = displayItem.template?.Description;
+			string name = displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1];
+			string displayType = displayItem.template?.Type;
+			if (displayType == "GameplayModifier")
+				description = description.Replace("\r\n", " ");
+			if (displayType != "Worker" || name != "Survivor")
+				return description;
+			var personalityText = displayItem.Personality;
+			var setBonusText = displayItem.SetBonus;
+
+			if (personalityText is null || setBonusText is null)
+				return description[..104];
+
+			var pronoun = displayItem.attributes?["gender"]?.ToString() is string gender ? (gender == "1" ? "him" : "her") : "them";
+			return description
+				.Replace("{Gender}|gender(him, her)", pronoun)
+				.Replace("[Worker.Personality]", personalityText)
+				.Replace("[Worker.SetBonus.Buff]", setBonusText);
+		}
+	}
+
+	//protected virtual string CreateTooltip(GameItem displayItem, string itemName, string itemAmount, List<string> tooltipDescriptions) =>
+	//	CustomTooltip.GenerateSimpleTooltip(
+	//		itemName,
+	//		itemAmount,
+	//		AppConfig.Get("ui", "hero_tooltips", false) ? null : [..tooltipDescriptions],
+	//		(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),
+	//		abilities: AppConfig.Get("ui", "hero_tooltips", false) ? displayItem.template?.GetHeroAbilities()?.Select(a => a.TemplateId)?.ToArray() : null
+	//	);
+
+	protected virtual void SetTooltip()
+	{
+		if (displayItem is null)
+			return;
+
+		int amount = displayItem.quantity;
+		if (displayItem.template?.Type == "Accolades")
+			amount = displayItem.template?["AccoladeXP"]?.GetValue<int>() ?? 1;
+		string amountText = compactifyAmount ? amount.Compactify() : amount.Notate();
+
+		if (addXToAmount)
+			amountText = "x" + amountText;
+		if (amount <= (showSingleItemAmount ? (showZeroItemAmount ? -1 : 0) : 1))
+			amountText = "";
+		bool amountNeeded = amountText != "";
+
+		var tooltipAmount = amountNeeded ? ((addXToAmount ? "x" : "") + amount.Notate()) : null;
+		if (displayItem.template?.Type == "Ingredient" && inspectorOverride is null)
+			tooltipAmount = displayItem.TotalQuantity.ToString();
+
+		List<string> tooltipDescriptions =
+		[
+			DisplayDescription,
+			//"Item Id: " + item.templateId,
+		];
+		if (displayItem.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
+			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Where(t => !t.StartsWith("hidetag_")).ToArray().Join(", "));
+
+		if (displayItem.template is null)
+			tooltipDescriptions[0] = "Err: Missing Template";
+
+		bool heroTooltip = AppConfig.Get("ui", "hero_tooltips", false) && displayItem.template?.Type == "Hero";
+
+		var tooltip = CustomTooltip.GenerateSimpleTooltip(
+			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],
+			tooltipAmount,
+			heroTooltip ? null : [.. tooltipDescriptions],
+			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),
+			abilities: heroTooltip ? displayItem.template?.GetHeroAbilities()?.Select(a => a.TemplateId)?.ToArray() : null
 		);
+		EmitSignalTooltipChanged(tooltip);
+	}
 
 	void RemoveItem()
 	{

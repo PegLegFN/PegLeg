@@ -559,6 +559,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	void BulkAddToDoList()
 	{
+		if (!IsVisibleInTree())
+			return;
 		MissionToDoListController.BulkAddToList([.. todoRewards]);
 		bulkTodoBtn?.Disabled = true;
 	}

@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://dh6eujun4cbty"]
+[gd_scene format=3 uid="uid://c177xe08uufqj"]
 
-[ext_resource type="PackedScene" uid="uid://bxxycun2kva7" path="res://Scenes/MissionEntry/mission_reward_entry.tscn" id="1_wlsjb"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_ft85u"]
-[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_i2uwg"]
+[ext_resource type="PackedScene" uid="uid://bo5ikr32xssoo" path="res://Scenes/MissionEntry/Rewards/mission_reward_entry_todo.tscn" id="1_0cwgv"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_bja7u"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_sea20"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ft85u"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bja7u"]
 resource_local_to_scene = true
-shader = ExtResource("2_ft85u")
+shader = ExtResource("2_bja7u")
 shader_parameter/ControlSize = Vector2(41, 41)
 shader_parameter/CornerRadius = 3.0
 shader_parameter/Fit = true
@@ -15,7 +15,7 @@ shader_parameter/IsSchematic = false
 shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("3_i2uwg")
+shader_parameter/MainIcon = ExtResource("3_sea20")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = false
 shader_parameter/AltSchematic = false
@@ -26,7 +26,7 @@ shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = true
 shader_parameter/HideBar = false
 
-[node name="MissionRewardEntry" unique_id=512148745 instance=ExtResource("1_wlsjb")]
+[node name="MissionRewardEntry" unique_id=512148745 instance=ExtResource("1_0cwgv")]
 custom_minimum_size = Vector2(260, 45)
 
 [node name="MissionTooltip" parent="Button" parent_id_path=PackedInt32Array(2035664014) index="1" unique_id=2001201075]
@@ -43,7 +43,7 @@ custom_minimum_size = Vector2(39, 0)
 custom_minimum_size = Vector2(0, 20)
 
 [node name="PowerLevel" parent="MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="2" unique_id=295920822]
-custom_minimum_size = Vector2(45, 0)
+custom_minimum_size = Vector2(42, 0)
 theme_override_font_sizes/font_size = 28
 
 [node name="MissionCollectionHighlightItem" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1983976403) index="0" unique_id=357313288]
@@ -51,7 +51,7 @@ levelTextPrefix = "Lv
 "
 
 [node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" index="0" unique_id=68041144]
-material = SubResource("ShaderMaterial_ft85u")
+material = SubResource("ShaderMaterial_bja7u")
 
 [node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="0" unique_id=2062077297]
 theme_override_font_sizes/font_size = 14
@@ -67,7 +67,16 @@ text = "Lv
 45"
 horizontal_alignment = 1
 
-[node name="Button" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" parent_id_path=PackedInt32Array(2059577110) index="1" unique_id=148889520]
+[node name="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3" parent_id_path=PackedInt32Array(2059577110) index="0" unique_id=259613485]
+visible = false
+
+[node name="Button2" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/TodoButtons/TodoReorder" parent_id_path=PackedInt32Array(1067413714) index="0" unique_id=39124377]
+custom_minimum_size = Vector2(39, 0)
+
+[node name="Button3" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/TodoButtons/TodoReorder" parent_id_path=PackedInt32Array(1067413714) index="1" unique_id=920465741]
+custom_minimum_size = Vector2(39, 0)
+
+[node name="Button4" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/TodoButtons" parent_id_path=PackedInt32Array(1019756305) index="1" unique_id=536279400]
 custom_minimum_size = Vector2(39, 0)
 
 [editable path="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem"]

@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class HeroAbilityEntry : Node
+public partial class HeroAbilityEntry : Control
 {
 	[Signal]
 	public delegate void NameChangedEventHandler(string name);

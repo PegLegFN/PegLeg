@@ -19,7 +19,7 @@ public partial class CustomTooltip : Control
 	[Export]
 	Control descriptionContent;
 	[Export]
-	float descriptionMaxWidth = 500;
+	float descriptionMaxWidth = 300;
 	[Export]
 	Label[] descriptionLayers;
 	[ExportGroup("Offer")]
@@ -31,8 +31,20 @@ public partial class CustomTooltip : Control
 	GameItemEntry offerInventoryEntry;
 	[Export]
 	Label offerStockLabel;
+	[ExportGroup("Abilities")]
+	[Export]
+	Control abilityContent;
+	[Export]
+	HeroAbilityEntry supportPerk;
+	[Export]
+	HeroAbilityEntry commanderPerk;
 
-	public static string GenerateSimpleTooltip(string title, string quantity = null, string[] description = null, string bannerCol = null, string offerId = null)
+	public override void _Ready()
+	{
+		abilityContent.Size = abilityContent.GetCombinedMinimumSize() * Vector2.Right;
+	}
+
+	public static string GenerateSimpleTooltip(string title, string quantity = null, string[] description = null, string bannerCol = null, string offerId = null, string[] abilities = null)
 	{
 		JsonObject content = new()
 		{
@@ -59,6 +71,9 @@ public partial class CustomTooltip : Control
 
 		if (offerId is not null)
 			content["offer"] = offerId;
+
+		if (abilities is not null)
+			content["abilities"] = new JsonArray([..abilities]);
 
 		return content.ToString();
 	}
@@ -174,6 +189,21 @@ public partial class CustomTooltip : Control
 				offerStockLabel.Visible = limit < 999;
 				offerContent.Visible = true;
 			}
+		}
+
+		abilityContent.Visible = false;
+		if (contentObject["abilities"] is JsonArray abilityArr)
+		{
+			var support = abilityArr.Count > 0 ? GameItemTemplate.Get(abilityArr[0].ToString()) : null;
+			var command = abilityArr.Count > 1 ? GameItemTemplate.Get(abilityArr[1].ToString()) : null;
+
+			abilityContent.Visible = support is not null || command is not null;
+
+			supportPerk.Visible = support is not null;
+			supportPerk.SetAbility(support);
+
+			commanderPerk.Visible = command is not null;
+			commanderPerk.SetAbility(command);
 		}
 	}
 }

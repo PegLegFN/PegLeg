@@ -7,44 +7,22 @@ using System.Text.Json.Nodes;
 
 public partial class MissionToDoListController : Control, IRecyclableElementProvider<MissionRewardPair>, IListProvider<MissionRewardPair>
 {
-	static MissionToDoListController inst;
+
+	#region Static Stuff
+
+	static DateTime lastKnownReset;
+	static List<MissionRewardDataPair> targetMissionRewardData = [];
+	static List<MissionRewardPair> targetMissionRewards = [];
+
 	public static event Action OnToDoListChanged;
+	static event Action OnToDoListUpdated; //this is different, responds to both standard changes and sorting changes
+	static bool isInitialised;
 
-	[Export]
-	RecycleListContainer missionList;
-
-	[Export]
-	Node newMissionListNode;
-	IListHandler newMissionList;
-
-	[Export]
-	VirtualTab tab;
-
-	[Export]
-	Control rootPanel;
-
-	DateTime lastKnownReset;
-	List<MissionRewardDataPair> targetMissionRewardData = [];
-	List<MissionRewardPair> targetMissionRewards = [];
-
-	public IList<MissionRewardPair> List => targetMissionRewards;
-
-	record struct MissionRewardDataPair(string missionGUID, int indexOfReward);
-
-	public MissionRewardPair GetRecycleElement(int index) => index >= 0 && index < targetMissionRewards.Count ? targetMissionRewards[index] : default;
-
-	public int GetRecycleElementCount() => targetMissionRewards.Count;
-
-	public override void _Ready()
+	public static void InitialiseToDoList()
 	{
-		inst = this;
-		rootPanel?.Visible = false;
-		missionList?.SetProvider(this);
-		if(newMissionListNode is IListHandler listHandler)
-		{
-			newMissionList = listHandler;
-			newMissionList?.LinkListProvider(this);
-		}
+		if (isInitialised)
+			return;
+		isInitialised = true;
 		GameMission.OnMissionsUpdated += GenerateRewards;
 		GameMission.OnMissionsInvalidated += ClearRewards;
 		GameAccount.ActiveAccountChanged += LoadMissions;
@@ -52,16 +30,7 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		LoadMissions();
 	}
 
-	public override void _ExitTree()
-	{
-		GameMission.OnMissionsUpdated -= GenerateRewards;
-		GameMission.OnMissionsInvalidated -= ClearRewards;
-		GameAccount.ActiveAccountChanged -= LoadMissions;
-		AppConfig.OnConfigChanged -= OnConfigChanged;
-		inst = null;
-	}
-
-	private void OnConfigChanged(string section, string key, JsonNode value)
+	static void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (section != "missions")
 			return;
@@ -69,7 +38,24 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 			UpdateList();
 	}
 
-	bool TrimMissions()
+	static bool CheckForNewDay()
+	{
+		try
+		{
+			if (GameMission.MissionList is null || lastKnownReset == GameMission.missionReset || lastKnownReset == default)
+				return false;
+			if (TrimMissions())
+				SaveMissions();
+			return true;
+		}
+		finally
+		{
+			if (GameMission.MissionList is not null)
+				lastKnownReset = GameMission.missionReset;
+		}
+	}
+
+	static bool TrimMissions()
 	{
 		if (targetMissionRewards.Count == 0)
 			return false;
@@ -99,15 +85,17 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		return toRemoveArray.Length > 0;
 	}
 
-	void SaveMissions()
+	static void SaveMissions()
 	{
 		GameAccount.ActiveAccount.SetLocalData("missionToDoList", JsonSerializer.SerializeToNode(targetMissionRewardData));
+		//TODO: save lite missions
 	}
 
-	void LoadMissions()
+	static void LoadMissions()
 	{
 		//load and deserialise data list
 		var localData = GameAccount.ActiveAccount.GetLocalData("missionToDoList")?.AsArray() ?? [];
+		//TODO: load lite missions
 		try
 		{
 			targetMissionRewardData = localData.Deserialize<List<MissionRewardDataPair>>();
@@ -119,14 +107,14 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		GenerateRewards();
 	}
 
-	void ClearRewards()
+	static void ClearRewards()
 	{
 		targetMissionRewards = [];
 		UpdateList();
 		OnToDoListChanged?.Invoke();
 	}
 
-	void GenerateRewards()
+	static void GenerateRewards()
 	{
 		var lookup = GameMission.MissionDict ?? [];
 		targetMissionRewards = [.. targetMissionRewardData.Select(data =>
@@ -141,13 +129,10 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		OnToDoListChanged?.Invoke();
 	}
 
-
-	int prevSort = 0;
-	void UpdateList()
+	static int prevSort = 0;
+	static void UpdateList()
 	{
 		CheckForNewDay();
-		tab?.Text = $"To-Do List ({targetMissionRewards.Count})";
-		rootPanel?.Visible = targetMissionRewards.Count > 0;
 
 		var todoSort = AppConfig.Get("missions", "todo_sort_mode", 0);
 		if (todoSort == 1)
@@ -163,33 +148,18 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 
 		if (todoSort != 0)
 			targetMissionRewards = [.. MissionRewardsController.OrderByMode(targetMissionRewards, todoSort)];
-
-		missionList?.UpdateList(true);
-		newMissionList?.UpdateList();
+		OnToDoListUpdated?.Invoke();
 	}
 
-	bool CheckForNewDay()
-	{
-		try
-		{
-			if (GameMission.MissionList is null || lastKnownReset == GameMission.missionReset || lastKnownReset == default)
-				return false;
-			if (TrimMissions())
-				SaveMissions();
-			return true;
-		}
-		finally
-		{
-			if (GameMission.MissionList is not null)
-				lastKnownReset = GameMission.missionReset;
-		}
-	}
+	#endregion
+
+	#region Public Static Stuff
 
 	public static void MoveToTop(GameItem item) => Reorder(item, true);
 	public static void MoveToBottom(GameItem item) => Reorder(item, false);
 	static void Reorder(GameItem item, bool atTop)
 	{
-		var target = inst.targetMissionRewards.FirstOrDefault(r => r.item == item);
+		var target = targetMissionRewards.FirstOrDefault(r => r.item == item);
 		if (target.item == null)
 			return;
 		RemoveFromList(item);
@@ -198,8 +168,6 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 
 	public static void AddToList(GameMission mission, int rewardIndex, bool atTop = false)
 	{
-		if (inst is null)
-			return;
 		if (mission?.Guid is not string guid)
 		{
 			//GD.Print("mission or GUID is null");
@@ -216,7 +184,7 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 	public static void AddToList(MissionRewardPair pair, bool atTop = false)
 	{
 		bool update = false;
-		if (inst.CheckForNewDay())
+		if (CheckForNewDay())
 		{
 			GD.Print("todo list addition aborted, new day");
 			update = true;
@@ -229,16 +197,16 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 				//GD.Print("list already contains pair");
 				return;
 			}
-			inst.SaveMissions();
+			SaveMissions();
 		}
-		inst.UpdateList();
+		UpdateList();
 		OnToDoListChanged?.Invoke();
 	}
 
 	public static void BulkAddToList(MissionRewardPair[] pairs)
 	{
 		bool update = false;
-		if (inst.CheckForNewDay())
+		if (CheckForNewDay())
 		{
 			GD.Print("todo list addition aborted, new day");
 			update = true;
@@ -254,15 +222,15 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 				//GD.Print("list already contains pair");
 				return;
 			}
-			inst.SaveMissions();
+			SaveMissions();
 		}
-		inst.UpdateList();
+		UpdateList();
 		OnToDoListChanged?.Invoke();
 	}
 
 	static bool AddToListInternal(MissionRewardPair pair, bool atTop)
 	{
-		if (inst.targetMissionRewards.Contains(pair))
+		if (targetMissionRewards.Contains(pair))
 			return false;
 		if (pair.mission?.Guid is not string guid)
 		{
@@ -286,56 +254,103 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 		}
 		if (atTop)
 		{
-			inst.targetMissionRewards.Insert(0, pair);
-			inst.targetMissionRewardData.Insert(0, new(pair.mission.Guid, rewardIndex));
+			targetMissionRewards.Insert(0, pair);
+			targetMissionRewardData.Insert(0, new(pair.mission.Guid, rewardIndex));
 		}
 		else
 		{
-			inst.targetMissionRewards.Add(pair);
-			inst.targetMissionRewardData.Add(new(pair.mission.Guid, rewardIndex));
+			targetMissionRewards.Add(pair);
+			targetMissionRewardData.Add(new(pair.mission.Guid, rewardIndex));
 		}
 		return true;
 	}
 
 	public static bool IsOnToDoList(GameItem item) =>
-		item is not null && inst?.targetMissionRewards.Any(r => r.item == item) == true;
+		item is not null && targetMissionRewards.Any(r => r.item == item) == true;
 
 	public static bool IsOnToDoList(GameMission mission) =>
-		mission is not null && inst?.targetMissionRewards.Any(r => r.mission == mission) == true;
+		mission is not null && targetMissionRewards.Any(r => r.mission == mission) == true;
 
 	public static void RemoveFromList(GameMission mission)
 	{
-		if (inst is null || mission is null)
+		if (mission is null)
 			return;
-		var targets = inst.targetMissionRewards.RemoveAll(r => r.mission == mission);
+		var targets = targetMissionRewards.RemoveAll(r => r.mission == mission);
 		if (targets == 0)
 			return;
-		inst.targetMissionRewardData.RemoveAll(r => r.missionGUID == mission.Guid);
-		inst.SaveMissions();
-		inst.UpdateList();
+		targetMissionRewardData.RemoveAll(r => r.missionGUID == mission.Guid);
+		SaveMissions();
+		UpdateList();
 		OnToDoListChanged?.Invoke();
 	}
 
 	public static void RemoveFromList(GameItem item)
 	{
-		if (inst is null)
-			return;
 		if (item is null)
 		{
 			GD.Print("item is null");
 			return;
 		}
-		var target = inst.targetMissionRewards.FirstOrDefault(r => r.item == item);
+		var target = targetMissionRewards.FirstOrDefault(r => r.item == item);
 		if (target.item == null)
 		{
 			GD.Print("could not find pair");
 			return;
 		}
 		var idx = Array.IndexOf(target.mission.allItems, target.item);
-		inst.targetMissionRewards.Remove(target);
-		inst.targetMissionRewardData.RemoveAll(r => r.missionGUID == target.mission.Guid && r.indexOfReward == idx);
-		inst.SaveMissions();
-		inst.UpdateList();
+		targetMissionRewards.Remove(target);
+		targetMissionRewardData.RemoveAll(r => r.missionGUID == target.mission.Guid && r.indexOfReward == idx);
+		SaveMissions();
+		UpdateList();
 		OnToDoListChanged?.Invoke();
+	}
+
+	#endregion
+
+	[Export]
+	RecycleListContainer missionList;
+
+	[Export]
+	Node newMissionListNode;
+	IListHandler newMissionList;
+
+	[Export]
+	VirtualTab tab;
+
+	[Export]
+	Control rootPanel;
+
+	record struct MissionRewardDataPair(string missionGUID, int indexOfReward);
+	public IList<MissionRewardPair> List => targetMissionRewards;
+
+	public MissionRewardPair GetRecycleElement(int index) => index >= 0 && index < targetMissionRewards.Count ? targetMissionRewards[index] : default;
+
+	public int GetRecycleElementCount() => targetMissionRewards.Count;
+
+	public override void _Ready()
+	{
+		rootPanel?.Visible = false;
+		missionList?.SetProvider(this);
+		if (newMissionListNode is IListHandler listHandler)
+		{
+			newMissionList = listHandler;
+			newMissionList?.LinkListProvider(this);
+		}
+		InitialiseToDoList();
+		UpdateInstanceList();
+		OnToDoListUpdated += UpdateInstanceList;
+	}
+
+	public override void _ExitTree()
+	{
+		OnToDoListUpdated -= UpdateInstanceList;
+	}
+
+	void UpdateInstanceList()
+	{
+		tab?.Text = $"To-Do List ({targetMissionRewards.Count})";
+		rootPanel?.Visible = targetMissionRewards.Count > 0;
+		missionList?.UpdateList(true);
+		newMissionList?.UpdateList();
 	}
 }

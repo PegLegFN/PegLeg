@@ -7,9 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="5_ildms"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="6_xbiu1"]
 [ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="7_dl0dj"]
-[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/specific_mission_reward_container.tscn" id="7_huo06"]
+[ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/Rewards/specific_mission_reward_container.tscn" id="7_huo06"]
 [ext_resource type="PackedScene" uid="uid://dahqdua15k62v" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewards.tscn" id="8_51wbn"]
-[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/mission_reward_entry_beast.tscn" id="10_m4ix0"]
+[ext_resource type="PackedScene" uid="uid://ftrw1couhehx" path="res://Scenes/MissionEntry/BeastRewards/specific_mission_reward_entry_beast.tscn" id="9_to1lf"]
+[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/BeastRewards/mission_reward_entry_beast.tscn" id="10_m4ix0"]
 
 [node name="NotableRewards" type="PanelContainer" unique_id=936518577]
 size_flags_horizontal = 3
@@ -162,13 +163,14 @@ section = "missions"
 key = "filter_power_default"
 defaultValue = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer3" unique_id=603283463]
+[node name="Standard" type="VBoxContainer" parent="VBoxContainer3" unique_id=603283463]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 2
 
-[node name="VBucks" parent="VBoxContainer3/VBoxContainer" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("7_huo06")]
+[node name="VBucks" parent="VBoxContainer3/Standard" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("7_huo06")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "AccountResource:currency_mtxswap"
@@ -176,7 +178,7 @@ targetTemplatePrefix = "AccountResource:currency_mtxswap"
 configDependancy = "missions:groupVBucks"
 filterPlayable = NodePath("../../HBoxContainer/PlayableFilter")
 
-[node name="LegSurvivors" parent="VBoxContainer3/VBoxContainer" unique_id=731076813 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("7_huo06")]
+[node name="LegSurvivors" parent="VBoxContainer3/Standard" unique_id=731076813 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("7_huo06")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "Worker:workerbasic_sr_t01"
@@ -185,25 +187,57 @@ titleText = "Legendary Survivors"
 configDependancy = "missions:groupLegSurvivors"
 filterPlayable = NodePath("../../HBoxContainer/PlayableFilter")
 
-[node name="Notable" parent="VBoxContainer3/VBoxContainer" unique_id=650228639 node_paths=PackedStringArray("filterPower", "bulkTodoBtn", "excludeRewards") instance=ExtResource("8_51wbn")]
+[node name="Notable" parent="VBoxContainer3/Standard" unique_id=650228639 node_paths=PackedStringArray("filterPower", "bulkTodoBtn", "excludeRewards") instance=ExtResource("8_51wbn")]
 layout_mode = 2
 filterPower = NodePath("../../HBoxContainer/PlayableFilter")
 bulkTodoBtn = NodePath("../../HBoxContainer/AddAllTodo")
 excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
 
-[node name="NotableBeast" parent="VBoxContainer3/VBoxContainer" unique_id=849178637 node_paths=PackedStringArray("filterPower", "excludeRewards") instance=ExtResource("8_51wbn")]
-visible = false
+[node name="Beast" type="VBoxContainer" parent="VBoxContainer3" unique_id=407663150]
+layout_mode = 2
+
+[node name="VBucksBeast" parent="VBoxContainer3/Beast" unique_id=835676243 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("7_huo06")]
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+targetTemplateId = "AccountResource:currency_mtxswap"
+targetTemplatePrefix = "AccountResource:currency_mtxswap"
+configDependancy = "missions:groupVBucks"
+filterPlayable = NodePath("../../HBoxContainer/PlayableFilter")
+rewardEntryScene = ExtResource("9_to1lf")
+
+[node name="LegSurvivorsBeast" parent="VBoxContainer3/Beast" unique_id=348275179 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("7_huo06")]
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+targetTemplateId = "Worker:workerbasic_sr_t01"
+targetTemplatePrefix = "Worker:workerbasic_sr_t0"
+titleText = "Legendary Survivors"
+configDependancy = "missions:groupLegSurvivors"
+filterPlayable = NodePath("../../HBoxContainer/PlayableFilter")
+rewardEntryScene = ExtResource("9_to1lf")
+
+[node name="NotableBeast" parent="VBoxContainer3/Beast" unique_id=849178637 node_paths=PackedStringArray("filterPower", "bulkTodoBtn", "excludeRewards") instance=ExtResource("8_51wbn")]
 layout_mode = 2
 filterPower = NodePath("../../HBoxContainer/PlayableFilter")
-excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
+bulkTodoBtn = NodePath("../../HBoxContainer/AddAllTodo")
+excludeRewards = [NodePath("../../Standard/VBucks"), NodePath("../../Standard/LegSurvivors")]
 
-[node name="RecycleContainer" parent="VBoxContainer3/VBoxContainer/NotableBeast/VBoxContainer/MarginContainer/ScrollContainer2" parent_id_path=PackedInt32Array(849178637, 125549210) index="0" unique_id=1028390328]
+[node name="RecycleContainer" parent="VBoxContainer3/Beast/NotableBeast/VBoxContainer/MarginContainer/ScrollContainer2" parent_id_path=PackedInt32Array(849178637, 125549210) index="0" unique_id=1028390328]
 recycleEntryScene = ExtResource("10_m4ix0")
 spacing = Vector2(5, 0)
 
-[connection signal="pressed" from="VBoxContainer3/HBoxContainer/RefreshMissions" to="VBoxContainer3/VBoxContainer/Notable" method="ReloadMissions"]
+[node name="BeastConfig" type="Control" parent="." unique_id=521685983]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_pr8mp")
+section = "missions"
+key = "beast_style"
+tryBind = false
+
+[connection signal="pressed" from="VBoxContainer3/HBoxContainer/RefreshMissions" to="VBoxContainer3/Standard/Notable" method="ReloadMissions"]
 [connection signal="ConfigValueChanged" from="VBoxContainer3/HBoxContainer/PublishMissions/CheckButton" to="VBoxContainer3/HBoxContainer/PublishMissions" method="set_visible"]
 [connection signal="toggled" from="VBoxContainer3/HBoxContainer/PlayableFilter/CheckButton" to="VBoxContainer3/HBoxContainer/PlayableFilter" method="set_pressed"]
+[connection signal="ConfigValueChanged" from="BeastConfig" to="VBoxContainer3/Beast" method="set_visible"]
+[connection signal="ConfigValueChangedInverse" from="BeastConfig" to="VBoxContainer3/Standard" method="set_visible"]
 
-[editable path="VBoxContainer3/VBoxContainer/NotableBeast"]
-[editable path="VBoxContainer3/VBoxContainer/NotableBeast/VBoxContainer/Hidden/MissionCollection"]
+[editable path="VBoxContainer3/Beast/NotableBeast"]
+[editable path="VBoxContainer3/Beast/NotableBeast/VBoxContainer/Hidden/MissionCollection"]

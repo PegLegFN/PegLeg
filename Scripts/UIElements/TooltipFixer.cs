@@ -9,7 +9,7 @@ public partial class TooltipFixer : Node
 	public override async void _Ready()
 	{
 		tooltipControl.Scale = Vector2.Zero;
-		await Helpers.WaitForFrame();
+		await Helpers.WaitForFrames(3);
 		if (tooltipControl?.GetParent() is Node parent)
 			parent.RemoveChild(tooltipControl);
 		tooltipControl.Scale = Vector2.One;
@@ -33,7 +33,7 @@ public partial class TooltipFixer : Node
 		pp.Transparent = true;
 		pp.PopupWindow = false;
 
-		if (pp.ThemeTypeVariation != "TooltipPanel")
+		if (pp.ThemeTypeVariation != "TooltipPanel" || !inTree)
 			return;
 
 		//GD.Print("hello tooltip");
@@ -45,6 +45,8 @@ public partial class TooltipFixer : Node
 		var panel = pp.GetChild<Panel>(0, true);
 		panel.Visible = false;
 
+		ResetCSF(pp);
+
 		pp.AddChild(tooltipControl);
 		tooltipControl.SetTooltip(label.Text);
 		pp.TreeExiting += () =>
@@ -52,8 +54,6 @@ public partial class TooltipFixer : Node
 			if (inTree)
 				pp.RemoveChild(tooltipControl);
 		};
-
-		ResetCSF(pp);
 	}
 
 	private async void ResetCSF(PopupPanel pp)

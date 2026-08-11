@@ -22,8 +22,37 @@
 [ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="21_23rqx"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="22_sxmrt"]
 [ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="23_u5w1i"]
-[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/mission_reward_entry_beast.tscn" id="24_in8s1"]
+[ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/BeastRewards/mission_reward_entry_beast.tscn" id="24_in8s1"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="25_hl6am"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5y7h3"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.88750005, 1, 0.25, 1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uqxlp"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.88750005, 1, 0.25, 1)
+skew = Vector2(0.2, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3jaku"]
 bg_color = Color(1, 1, 1, 1)
@@ -45,9 +74,12 @@ corner_radius_top_left = 3
 corner_radius_bottom_left = 3
 
 [node name="AllRewards" type="PanelContainer" unique_id=454438386]
+offset_right = 376.0
+offset_bottom = 248.0
 theme_type_variation = &"Panel3PadB"
 
 [node name="All" parent="." unique_id=887790858 node_paths=PackedStringArray("filterPower", "filterPowerContainer") instance=ExtResource("1_klgrd")]
+visible = false
 layout_mode = 2
 excludeTodo = true
 filterPower = NodePath("VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel")
@@ -110,8 +142,10 @@ disabled = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 
+[node name="RecycleContainer" parent="All/VBoxContainer/VBoxContainer/MarginContainer/ScrollContainer2" index="0" unique_id=1155007216]
+spacing = Vector2(5, 2)
+
 [node name="AllBeast" type="MarginContainer" parent="." unique_id=1299315515 node_paths=PackedStringArray("newMissionListNode", "loadingIcon", "searchBar", "itemSearchBar", "sortMode", "filterNotable", "filterPower", "filterPowerContainer", "filterStory", "rarityFilters", "zoneFilters", "typeFilters", "excludeRewards", "repeatabilityFilters")]
-visible = false
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(370, 0)
 layout_mode = 2
@@ -197,7 +231,6 @@ button_pressed = true
 script = ExtResource("5_uqxlp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AllBeast/VBoxContainer" unique_id=1364284326]
-custom_minimum_size = Vector2(0, 210)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -342,6 +375,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"EmptyCheckButton"
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = "Stonewood"
 metadata/zone = "s"
 
@@ -380,6 +415,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"EmptyCheckButton"
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = "Plankerton"
 metadata/zone = "p"
 
@@ -425,6 +462,8 @@ theme_override_colors/font_hover_pressed_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_disabled_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_outline_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = "Canny"
 metadata/zone = "c"
 
@@ -463,6 +502,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"EmptyCheckButton"
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = "Twine"
 metadata/zone = "t"
 
@@ -501,6 +542,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"EmptyCheckButton"
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = "Ventures"
 metadata/zone = "v"
 
@@ -624,6 +667,8 @@ theme_override_colors/font_hover_pressed_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_disabled_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_outline_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = " Legendary"
 metadata/rarity = "Mythic,Legendary"
 
@@ -693,6 +738,8 @@ theme_override_colors/font_hover_pressed_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_disabled_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_outline_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = " Epic"
 metadata/rarity = "Epic"
 
@@ -748,6 +795,8 @@ theme_override_colors/font_hover_pressed_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_disabled_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_colors/font_outline_color = Color(0.88, 0.88, 0.88, 0)
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = " Rare"
 metadata/rarity = "Rare"
 
@@ -796,6 +845,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"EmptyCheckButton"
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = " Uncommon"
 metadata/rarity = "Uncommon"
 
@@ -844,6 +895,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"EmptyCheckButton"
 theme_override_font_sizes/font_size = 14
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5y7h3")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uqxlp")
 text = " Common"
 metadata/rarity = "Common"
 
@@ -1135,7 +1188,7 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RecycleContainer" type="Container" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer" unique_id=1155007216 node_paths=PackedStringArray("blinkRect")]
+[node name="RecycleContainer" type="Container" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer" unique_id=1482764943 node_paths=PackedStringArray("blinkRect")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("23_u5w1i")
@@ -1152,6 +1205,14 @@ layout_mode = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
+[node name="BeastConfig" type="Control" parent="." unique_id=730135688]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_qvb47")
+section = "missions"
+key = "beast_style"
+tryBind = false
+
 [connection signal="toggled" from="All/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel/CheckButton" to="All/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel" method="set_pressed"]
 [connection signal="toggled" from="AllBeast/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel/CheckButton" to="AllBeast/VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel" method="set_pressed"]
 [connection signal="toggled" from="AllBeast/VBoxContainer/HBoxContainer/CheckButton" to="AllBeast/VBoxContainer/HBoxContainer/CheckButton/Node" method="EmitValues"]
@@ -1159,5 +1220,7 @@ color = Color(1, 1, 1, 0)
 [connection signal="OnFalse" from="AllBeast/VBoxContainer/HBoxContainer/CheckButton/Node" to="AllBeast" method="set_stretch_ratio"]
 [connection signal="OnTrue" from="AllBeast/VBoxContainer/HBoxContainer/CheckButton/Node" to="AllBeast" method="set_stretch_ratio"]
 [connection signal="pressed" from="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/Reset" to="AllBeast" method="TurnOffFilters"]
+[connection signal="ConfigValueChanged" from="BeastConfig" to="AllBeast" method="set_visible"]
+[connection signal="ConfigValueChangedInverse" from="BeastConfig" to="All" method="set_visible"]
 
 [editable path="All"]

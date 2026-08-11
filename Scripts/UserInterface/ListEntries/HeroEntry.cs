@@ -1,5 +1,7 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Nodes;
 
 public partial class HeroEntry : GameItemEntry
 {
@@ -55,15 +57,36 @@ public partial class HeroEntry : GameItemEntry
 		}
 	}
 
-	protected override string CreateTooltip(GameItem displayItem, string itemName, string itemAmount, List<string> tooltipDescriptions)
+	protected override void SetTooltip()
 	{
-		if ((useCommanderPerkDescription || useHeroPerkDescription) && tooltipDescriptions.Count > 0 && displayItem?.template?.GetHeroAbilities() is GameItemTemplate[] abilityTemplates)
+		if (displayItem is null)
+			return;
+		if (displayItem.template?.Type != "Hero")
 		{
-			GameItemTemplate perkTemplate = displayItem.template.Tier < 2 || useHeroPerkDescription ? abilityTemplates[0] : abilityTemplates[1];
-			if (perkTemplate is not null)
-				tooltipDescriptions[0] = $"{perkTemplate.DisplayName}\n{perkTemplate.Description}";
+			base.SetTooltip();
+			return;
 		}
-		return base.CreateTooltip(displayItem, itemName, itemAmount, tooltipDescriptions);
+
+		List<string> tooltipDescriptions =
+		[
+			DisplayDescription,
+			//"Item Id: " + item.templateId,
+		];
+		if (displayItem.GetSearchTags() is JsonArray tagArray && tagArray.Count > 0)
+			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Where(t => !t.StartsWith("hidetag_")).ToArray().Join(", "));
+
+		string perkTemplateId = null;
+		if ((useCommanderPerkDescription || useHeroPerkDescription) && displayItem.template.GetHeroAbilities() is GameItemTemplate[] abilityTemplates)
+			perkTemplateId = (displayItem.template.Tier < 2 || useHeroPerkDescription ? abilityTemplates[0] : abilityTemplates[1])?.TemplateId;
+
+		var tooltip = CustomTooltip.GenerateSimpleTooltip(
+			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],
+			null,
+			perkTemplateId is not null ? null : [.. tooltipDescriptions],
+			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),
+			abilities: perkTemplateId is not null ? [perkTemplateId] : null
+		);
+		EmitSignalTooltipChanged(tooltip);
 	}
 
 	public override void ClearItem(Texture2D clearIcon)
