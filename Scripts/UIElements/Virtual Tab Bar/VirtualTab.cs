@@ -1,6 +1,5 @@
 using Godot;
 using System.Linq;
-using XmppDotNet.Xmpp.XData;
 
 [Tool]
 public partial class VirtualTab : Control

@@ -34,7 +34,7 @@ public partial class GameAccountEntry : Control
 	public override void _Ready()
 	{
 		GameAccount.ActiveAccountChanged += SetActiveAccount;
-		XmppManager.OnUserStatusChanged += OnUserStatus;
+		//XmppManager.OnUserStatusChanged += OnUserStatus;
 		SetActiveAccount();
 	}
 

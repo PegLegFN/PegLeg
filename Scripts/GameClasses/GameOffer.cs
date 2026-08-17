@@ -9,7 +9,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using XmppDotNet.Xmpp.HttpUpload;
 using static ExternalCosmetics;
 
 public partial class GameOffer

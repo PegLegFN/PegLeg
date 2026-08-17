@@ -1,3 +1,4 @@
+/*
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -466,3 +467,4 @@ public class XmppManager
 	}
 }
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+*/

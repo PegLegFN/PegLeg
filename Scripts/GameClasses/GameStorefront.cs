@@ -8,7 +8,6 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using XmppDotNet.Xmpp.XHtmlIM;
 using static GameStorefront.CosmeticSectionData;
 
 public class GameStorefront

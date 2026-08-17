@@ -19,7 +19,7 @@ public partial class XmppBridge : Control
 	GameAccount account;
 	List<string> listedAccounts = [];
 	string selectedMember;
-
+	/*
 	public override async void _Ready()
 	{
 		var win = GetWindow();
@@ -138,4 +138,5 @@ public partial class XmppBridge : Control
 	{
 		await GameAccount.ActiveAccount.XmppManager.SendStatus(status.Text);
 	}
+	*/
 }

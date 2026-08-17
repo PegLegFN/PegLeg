@@ -12,7 +12,6 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using XmppDotNet.Xmpp.PubSub;
 using static GameItem;
 
 public partial class GameMission

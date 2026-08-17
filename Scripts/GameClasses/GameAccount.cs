@@ -342,11 +342,11 @@ public partial class GameAccount
 	}
 
 	public GameClient TargetClient { get; private set; }
-	public XmppManager XmppManager { get; private set; }
+	//public XmppManager XmppManager { get; private set; }
 	public GameAccount(string accountId)
 	{
 		this.accountId = accountId;
-		XmppManager = new(this);
+		//XmppManager = new(this);
 		//if (GetLocalData("GameClient")?.ToString() is string clientId)
 		//{
 		//    TargetClient = GameClient.clients.TryGetValue(clientId, out var c) ? c : null;

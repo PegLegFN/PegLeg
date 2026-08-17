@@ -25,18 +25,20 @@ public static class GithubHelper
 		}
 	}
 
-	static readonly Uri githubApi = new("https://api.github.com");
-	static JsonSerializerOptions serialiserOptions = new() { IncludeFields = true, WriteIndented = true };
+	public static readonly Uri githubApi = new("https://api.github.com");
+	public static JsonSerializerOptions serialiserOptions = new() { WriteIndented = true };
 
 	public record struct ReleaseData
 	{
-		public string url;
-		public string html_url;
-		public string name;
-		public string tag_name;
-		public string body;
-		public bool prerelease;
-		public ReleaseAsset[] assets;
+		public string url { get; init; }
+		public string html_url { get; init; }
+		public string upload_url { get; init; }
+		public string name { get; init; }
+		public string tag_name { get; init; }
+		public string body { get; init; }
+		public int id { get; init; }
+		public bool prerelease { get; init; }
+		public ReleaseAsset[] assets { get; init; }
 
 		[JsonIgnore]
 		public readonly ReleaseVersion Version => TryGetVersion(out var v) ? v : v;
@@ -58,10 +60,12 @@ public static class GithubHelper
 
 	public record struct ReleaseVersion(int major, int minor, int patch) : IComparable<ReleaseVersion>
 	{
+		public static ReleaseVersion ParseOrDefault(string versionText) => Parse(versionText, out var version) ? version : default;
 		public static bool Parse(
 			string versionText,
 			out ReleaseVersion version,
-			RegEx versionRegex = null
+			RegEx versionRegex = null,
+			bool logError=false
 		)
 		{
 			versionRegex ??= DefaultVersionRegex;
@@ -79,17 +83,20 @@ public static class GithubHelper
 			}
 			if (major.ToString() != groups[1])
 			{
+				if(logError)
 				GD.Print($"Incorrect number format in Major version number ({major} != {groups[1]}, \"{versionText}\")");
 				return false;
 			}
 			if (minor.ToString() != groups[2])
 			{
-				GD.Print($"Incorrect number format in Minor version number ({minor} != {groups[2]}, \"{versionText}\")");
+				if (logError)
+					GD.Print($"Incorrect number format in Minor version number ({minor} != {groups[2]}, \"{versionText}\")");
 				return false;
 			}
 			if (patch.ToString() != groups[3])
 			{
-				GD.Print($"Incorrect number format in Patch version number ({patch} != {groups[3]}, \"{versionText}\")");
+				if (logError)
+					GD.Print($"Incorrect number format in Patch version number ({patch} != {groups[3]}, \"{versionText}\")");
 				return false;
 			}
 			version = new(major, minor, patch);
