@@ -581,7 +581,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		if (displayItem.template is null)
 			tooltipDescriptions[0] = "Err: Missing Template";
 
-		bool heroTooltip = AppConfig.Get("ui", "hero_tooltips", false) && displayItem.template?.Type == "Hero";
+		bool heroTooltip = AppConfig.Get("ui", "hero_tooltips", true) && displayItem.template?.Type == "Hero";
 
 		var tooltip = CustomTooltip.GenerateSimpleTooltip(
 			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],

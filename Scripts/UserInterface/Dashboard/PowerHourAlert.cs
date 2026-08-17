@@ -11,6 +11,11 @@ public partial class PowerHourAlert : Control
 	[Export]
 	bool useHeadsUpForVisibility = true;
 	[Export]
+	Control mainContent;
+	[Export]
+	Control compactContent;
+	[ExportGroup("Main Nodes")]
+	[Export]
 	Label header;
 	[Export]
 	RefreshTimerHook countdown;
@@ -30,18 +35,26 @@ public partial class PowerHourAlert : Control
 	Label timeText;
 	[Export]
 	Label[] localisedTimeTexts;
+	[ExportGroup("Compact Nodes")]
+	[Export]
+	Label compactType;
+	[Export]
+	Label compactTime;
+	[Export]
+	RefreshTimerHook compactCountdown;
 
 	Control[] anecdotes = [];
 	public override void _Ready()
 	{
 		timeText.Text = "";
 		anecdotes = [.. anecdoteParent.GetChildren().OfType<Control>()];
-		if (useHeadsUpForVisibility)
-		{
-			Visible = false;
-			secondaryVisibility?.Visible = Visible;
-			RefreshTimerController.OnMinuteChanged += CheckForHeadsUp;
-		}
+		//if (useHeadsUpForVisibility)
+		//{
+		//	mainContent.Visible = false;
+		//	secondaryVisibility?.Visible = false;
+		//	compactContent.Visible = true;
+		//	RefreshTimerController.OnMinuteChanged += CheckForHeadsUp;
+		//}
 		PowerHourScheduleTracker.CurrentOrNextEventChanged += SetDetails;
 		SetDetails();
 		localisedTimeTexts ??= [];
@@ -81,8 +94,9 @@ public partial class PowerHourAlert : Control
 		var phEvent = PowerHourScheduleTracker.CurrentOrNextEvent;
 		var now = DateTime.UtcNow;
 		int headsUpHours = HeadsUpHours;
-		Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
-		secondaryVisibility?.Visible = Visible;
+		mainContent.Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
+		secondaryVisibility?.Visible = mainContent.Visible;
+		compactContent.Visible = !mainContent.Visible;
 	}
 
 	private void SetDetails()
@@ -91,10 +105,12 @@ public partial class PowerHourAlert : Control
 		var now = DateTime.UtcNow;
 		int headsUpHours = HeadsUpHours;
 		if (useHeadsUpForVisibility)
-		{
-			Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
-			secondaryVisibility?.Visible = Visible;
-		}
+			CheckForHeadsUp();
+		//{
+		//	mainContent.Visible = phEvent.Valid && phEvent.start.AddHours(-headsUpHours) < now;
+		//	secondaryVisibility?.Visible = mainContent.Visible;
+		//	compactContent.Visible = !mainContent.Visible;
+		//}
 
 		bool isActive = phEvent.start < now;
 		timeText.Text = isActive ? "Ends in" : "Starts in";
@@ -103,6 +119,10 @@ public partial class PowerHourAlert : Control
 			countdown.SetCustomRefreshTime(phEvent.end, phEvent.start);
 		else
 			countdown.SetCustomRefreshTime(phEvent.start, phEvent.start.AddHours(-headsUpHours));
+
+		compactType.Text = (phEvent.modifiers ?? []).LastOrDefault()?.DisplayName ?? "???";
+		compactCountdown.SetCustomRefreshTime(phEvent.start, phEvent.start.AddDays(-7));
+		compactTime.Text = $"{phEvent.start.ToLocalTime():g}";
 
 		noModifiersLabel.Text = phEvent.confirmation switch
 		{

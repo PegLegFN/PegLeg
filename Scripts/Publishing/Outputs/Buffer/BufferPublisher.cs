@@ -106,7 +106,9 @@ public class BufferPublisher : IPublisher
 		};
 		try
 		{
-			await GraphQLRequests.Buffer.SendMutationAsync<JsonObject>(orgsRequest);
+			var test = await GraphQLRequests.Buffer.SendMutationAsync<JsonObject>(orgsRequest);
+			if (test.Data["createPost"]["message"]?.ToString() is string errMessage)
+				GD.Print("Buffer Error: " + errMessage);
 		}
 		catch(GraphQLHttpRequestException reqEx)
 		{

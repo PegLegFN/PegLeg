@@ -112,6 +112,7 @@ public partial class GameMission
 			return;
 		bool isExactlyReset = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second == 0;
 		bool isWithin30sOfReset = DateTime.UtcNow.Hour == 0 && DateTime.UtcNow.Minute == 0 && DateTime.UtcNow.Second < 30;
+		bool isLite = !GameAccount.ActiveAccount.isOwned;
 
 		MissionDict = null;
 		MissionList = null;
@@ -127,7 +128,7 @@ public partial class GameMission
 				//if request is made exactly on the hour, its likely for daily reset.
 				//requesting missions exactly at reset can cause consistancy issues, so
 				//we add a 1 second delay before the request
-				if (!GameAccount.ActiveAccount.isOwned)
+				if (isLite)
 				{
 					GD.Print("pausing 5 seconds to wait for lite missions");
 					await Helpers.WaitForTimer(5);
@@ -178,15 +179,23 @@ public partial class GameMission
 				{
 					totalRetries++;
 					missionData = null;
-					GD.Print("lite missions still out of date, pausing 5 more seconds");
-					await Helpers.WaitForTimer(5);
+					if (isLite)
+					{
+						GD.Print("lite missions still out of date, pausing 5 more seconds");
+						await Helpers.WaitForTimer(5);
+					}
+					else
+					{
+						GD.Print("missions still out of date, pausing 1 more second");
+						await Helpers.WaitForTimer(1);
+					}
 					continue;
 				}
 				else if (totalRetries >= 3)
 				{
-					GD.Print("abandoning lite mission retries");
+					GD.Print("abandoning mission retries");
 				}
-				GD.Print("Warning: lite missions are out of date");
+				GD.Print("Warning: missions are out of date");
 				//todo: show onscreen error
 			}
 
@@ -204,7 +213,10 @@ public partial class GameMission
 					using var latestMissionsFile = FileAccess.Open(latestOutput, FileAccess.ModeFlags.Write);
 					latestMissionsFile.StoreString(recentMissionData.ToString());
 				}
-				catch { }
+				catch
+				{
+					GD.Print("Failed to output latest missions file");
+				}
 
 				SendMissionsToBucket();
 			}

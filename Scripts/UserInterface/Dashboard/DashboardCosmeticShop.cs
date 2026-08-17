@@ -66,6 +66,8 @@ public partial class DashboardCosmeticShop : Control
 		[.. sortedOffers
 			.Where(o => o.CosmeticTimeData.isAddedToday && o.CosmeticLayoutId != "alc.0")
 			.OrderByDescending(o => o.itemGrants.Any(i => priorityTypes.Contains(i.templateId.Split(":")[0])))
+			.ThenByDescending(o=> o.CosmeticTimeData.isRecentlyNew)
+			.ThenByDescending(o=> o.CosmeticTimeData.lastSeenDaysAgo > 500)
 			//.ThenByDescending(o => o.BasePrice.quantity)
 		];
 

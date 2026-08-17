@@ -18,12 +18,6 @@ public partial class DailySummaryWebhookDispatcher : Node
 		RefreshTimerController.OnDayChanged += ExecuteWebhookDelayed;
 	}
 
-	static Task<string> Content()
-	{
-		//TODO: add option to ping roles based on presence of certain rewards
-		return Task.FromResult(discordText);
-	}
-
 	public override void _ExitTree()
 	{
 		RefreshTimerController.OnDayChanged -= ExecuteWebhookDelayed;
@@ -45,17 +39,23 @@ public partial class DailySummaryWebhookDispatcher : Node
 		//{
 		//}
 
-		//waits for missions to be fetched, times out after 10 seconds
+		//waits for missions to be fetched, times out after 30 seconds
+		var timeout = AppConfig.Get("missions", "summary_timeout", 30);
 		await Task.WhenAny(
 			GameMission.UpdateMissions(),
-			Helpers.WaitForTimer(10)
+			Helpers.WaitForTimer(timeout)
 		);
+
+		if (GameMission.MissionList is null)
+		{
+			GD.Print($"Daily Summary Publisher timed out ({timeout} seconds)");
+			return;
+		}
+
 		if (AppConfig.TryGet("automation", "summary_160_fallback", out string _))
 			await Helpers.WaitForTimer(6);
 		await Helpers.WaitForFrames(3);
 
-		if (GameMission.MissionList is null)
-			return;
 		await Publish();
 	}
 

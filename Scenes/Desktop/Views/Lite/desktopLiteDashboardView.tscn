@@ -3,17 +3,23 @@
 [ext_resource type="PackedScene" uid="uid://bx77yhl4rdcno" path="res://Scenes/Desktop/Views/MissionRewards/notableMissionRewardsPanel.tscn" id="1_qts83"]
 [ext_resource type="PackedScene" uid="uid://mocwxx3hkrl3" path="res://Scenes/Desktop/Views/MissionRewards/missionToDoListPanel.tscn" id="2_p1mgl"]
 [ext_resource type="PackedScene" uid="uid://dwkncmg0uq77i" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewardsPanel.tscn" id="3_5ma0n"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="4_ql4gu"]
 [ext_resource type="Shader" uid="uid://c15e8ayssfx4d" path="res://Shaders/ClickbaitGlow.gdshader" id="5_1rpsu"]
+[ext_resource type="Texture2D" uid="uid://dvoyeduwdpbyc" path="res://Images/InterfaceIcons/Chapter_7_Season_3_(v41.30)_-_Lobby_Background_-_Fortnite.webp" id="5_36og6"]
 [ext_resource type="PackedScene" uid="uid://bytcic4qvijqc" path="res://Scenes/Desktop/Views/Dashboard/dashboardPowerHourAlert.tscn" id="6_6eljq"]
 [ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="6_nnwiv"]
 [ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardLlamaShop.tscn" id="6_p1mgl"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="6_rt5en"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="6_wvtio"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="7_5ma0n"]
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/Collection/mission_collection.tscn" id="7_31yqt"]
+[ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="7_36og6"]
 [ext_resource type="Script" uid="uid://gssdxmp35yfg" path="res://Scripts/ClickbaitTransform.cs" id="7_ty34v"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="8_1rpsu"]
 [ext_resource type="PackedScene" uid="uid://8nnn83fa7ib4" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardWeeklyShop.tscn" id="8_5ma0n"]
+[ext_resource type="Shader" uid="uid://pto0b48do7dc" path="res://Shaders/BREventLogo.gdshader" id="8_hdvq0"]
 [ext_resource type="PackedScene" uid="uid://c2fllevac3o74" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardEventShop.tscn" id="9_1rpsu"]
+[ext_resource type="Texture2D" uid="uid://brryqlkfor64n" path="res://Images/Unstable_-_Promo_-_Fortnite.webp" id="9_elh2p"]
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/Collection/mission_collection_entry_modifiers.tscn" id="9_p1mgl"]
 [ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="9_wlnwa"]
 [ext_resource type="PackedScene" uid="uid://send81rsbg0r" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardCosmeticShop.tscn" id="10_nnwiv"]
@@ -22,6 +28,23 @@
 [ext_resource type="Texture2D" uid="uid://0rekh58vwqge" path="res://Images/InterfaceIcons/ClickbaitOswald.png" id="12_vnrjy"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="12_yr1bg"]
 [ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="14_qts83"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bp4h1"]
+shader = ExtResource("4_ql4gu")
+shader_parameter/ControlSize = Vector2(566, 150)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.77)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_36og6"]
+shader = ExtResource("8_hdvq0")
+shader_parameter/ControlSize = Vector2(250, 100)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.07)
+shader_parameter/Scale = 0.54
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_51cgl"]
 shader = ExtResource("5_1rpsu")
@@ -81,6 +104,7 @@ hue_variation_max = 0.019999977
 
 [node name="Dashboard" type="MarginContainer" unique_id=353733326]
 custom_minimum_size = Vector2(720, 0)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -138,6 +162,66 @@ theme_override_constants/margin_right = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="OneTimeBREvent" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=1689407400]
+visible = false
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent" unique_id=1452378515]
+material = SubResource("ShaderMaterial_bp4h1")
+layout_mode = 2
+texture = ExtResource("5_36og6")
+expand_mode = 1
+script = ExtResource("6_wvtio")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent" unique_id=624861217]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent/MarginContainer" unique_id=594373594]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent/MarginContainer/HBoxContainer" unique_id=1350558178]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+text = "BR Story Event"
+
+[node name="Label2" type="Label" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent/MarginContainer/HBoxContainer" unique_id=648798951]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 10
+text = "28/12/2028 8:00 ET"
+
+[node name="RefreshTimer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent/MarginContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("7_36og6")]
+layout_mode = 2
+size_flags_vertical = 0
+offset_transform_enabled = true
+
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/OneTimeBREvent/MarginContainer" unique_id=382169816]
+material = SubResource("ShaderMaterial_36og6")
+custom_minimum_size = Vector2(250, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("9_elh2p")
+expand_mode = 1
+script = ExtResource("6_wvtio")
+syncControlSize = true
 
 [node name="ClickbaitSpace" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=758103730]
 layout_mode = 2
@@ -565,8 +649,8 @@ render_target_update_mode = 0
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
 
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/VBoxContainer/NotableBeast"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/VBoxContainer/NotableBeast/VBoxContainer/Hidden/MissionCollection"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/Beast/NotableBeast"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/Beast/NotableBeast/VBoxContainer/Hidden/MissionCollection"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardLlamaShop"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/DoubleLegendary"]

@@ -2,14 +2,20 @@
 
 [ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="1_7drm4"]
 [ext_resource type="Script" uid="uid://dgis6a4dsdr5b" path="res://Scripts/UserInterface/Dashboard/DashboardCosmeticShop.cs" id="1_8eyhg"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="2_02o83"]
 [ext_resource type="PackedScene" uid="uid://c1doenh4cpmcv" path="res://Scenes/OfferEntries/cosmetic_offer_entry_new_small.tscn" id="3_8eyhg"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="3_qxqjn"]
+[ext_resource type="Texture2D" uid="uid://e4cwrq7lup48" path="res://Images/InterfaceIcons/T-SlotIcon-Add-64-White.png" id="4_di6g8"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_h6sn7"]
+[ext_resource type="Texture2D" uid="uid://dfigx3nfwc41t" path="res://Images/InterfaceIcons/CosmeticsToday.png" id="5_4fccl"]
+[ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="6_5cdno"]
+[ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="7_bndrq"]
 
 [node name="CosmeticShop" type="PanelContainer" unique_id=719990971 node_paths=PackedStringArray("cosmeticEntries", "moreButton", "buffering")]
 theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_8eyhg")
 cosmeticEntries = [NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry2"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry3"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry4"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry5"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry6"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry7"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry8"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry9"), NodePath("VBoxContainer/MarginContainer/GridContainer/CosmeticOfferEntry10")]
-moreButton = NodePath("VBoxContainer/HBoxContainer2/Button")
+moreButton = NodePath("VBoxContainer/MarginContainer2/HBoxContainer2/Button")
 buffering = NodePath("VBoxContainer/MarginContainer/SmallLoadingIcon")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=401268017]
@@ -17,19 +23,127 @@ custom_minimum_size = Vector2(310, 0)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1516448170]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer" unique_id=1730860394]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=13180246]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2" unique_id=13180246]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Cosmetic Shop"
 
-[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer2" unique_id=112616027 instance=ExtResource("1_7drm4")]
+[node name="NewTimeFilters" parent="VBoxContainer/MarginContainer2" unique_id=252742647 instance=ExtResource("2_02o83")]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+singleTabMode = false
+preferSingleTab = false
+
+[node name="New" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("3_qxqjn")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = "New"
+Icon = ExtResource("4_di6g8")
+
+[node name="CheckButton" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/New" index="0" unique_id=1785206194]
+theme_type_variation = &"LeftCheckButton"
+
+[node name="Icon" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/New/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(473421915, 2018855118) index="0" unique_id=439966205]
+visible = true
+texture = ExtResource("4_di6g8")
+
+[node name="Label" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/New/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(473421915, 2018855118) index="1" unique_id=1433270987]
+visible = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "New"
+horizontal_alignment = 1
+
+[node name="LabelPadding" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/New/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(473421915, 2018855118) index="2" unique_id=574386466]
+visible = true
+
+[node name="Returned" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer" index="1" unique_id=1343965637 instance=ExtResource("3_qxqjn")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Today"
+Icon = ExtResource("5_4fccl")
+IsPressed = true
+
+[node name="CheckButton" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Returned" index="0" unique_id=1785206194]
+button_pressed = true
+
+[node name="Icon" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Returned/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1343965637, 2018855118) index="0" unique_id=439966205]
+visible = true
+texture = ExtResource("5_4fccl")
+
+[node name="Label" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Returned/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1343965637, 2018855118) index="1" unique_id=1433270987]
+visible = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Today"
+horizontal_alignment = 1
+
+[node name="LabelPadding" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Returned/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1343965637, 2018855118) index="2" unique_id=574386466]
+visible = true
+
+[node name="Any2" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer" index="2" unique_id=974761739 instance=ExtResource("3_qxqjn")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Leaving"
+Icon = ExtResource("6_5cdno")
+
+[node name="Icon" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Any2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(974761739, 2018855118) index="0" unique_id=439966205]
+visible = true
+texture = ExtResource("6_5cdno")
+
+[node name="Label" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Any2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(974761739, 2018855118) index="1" unique_id=1433270987]
+visible = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Leaving"
+horizontal_alignment = 1
+
+[node name="LabelPadding" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Any2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(974761739, 2018855118) index="2" unique_id=574386466]
+visible = true
+
+[node name="Old" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer" index="3" unique_id=50539969 instance=ExtResource("3_qxqjn")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = "Old"
+Icon = ExtResource("7_bndrq")
+
+[node name="CheckButton" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Old" index="0" unique_id=1785206194]
+theme_type_variation = &"RightCheckButton"
+
+[node name="Icon" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Old/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(50539969, 2018855118) index="0" unique_id=439966205]
+visible = true
+texture = ExtResource("7_bndrq")
+
+[node name="Label" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Old/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(50539969, 2018855118) index="1" unique_id=1433270987]
+visible = true
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Old"
+horizontal_alignment = 1
+
+[node name="LabelPadding" parent="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Old/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(50539969, 2018855118) index="2" unique_id=574386466]
+visible = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/MarginContainer2" unique_id=1516448170]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 1
+
+[node name="RefreshTimer" parent="VBoxContainer/MarginContainer2/HBoxContainer2" unique_id=112616027 instance=ExtResource("1_7drm4")]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1068352127]
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer2" unique_id=1068352127]
 layout_mode = 2
 text = "+ 8 More"
 
@@ -119,3 +233,9 @@ useCustomFilter = true
 [node name="SmallLoadingIcon" parent="VBoxContainer/MarginContainer" unique_id=1490743532 instance=ExtResource("4_h6sn7")]
 z_index = 2
 layout_mode = 2
+
+[editable path="VBoxContainer/MarginContainer2/NewTimeFilters"]
+[editable path="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/New"]
+[editable path="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Returned"]
+[editable path="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Any2"]
+[editable path="VBoxContainer/MarginContainer2/NewTimeFilters/HBoxContainer/Old"]

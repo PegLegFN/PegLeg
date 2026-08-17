@@ -314,7 +314,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		return pairs
 			//.Reverse()
 			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
-			.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
+			//.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenByDescending(r => r.mission.TheaterIdx)
 			.ThenBy(r => r.mission.PowerLevel)
 			.ThenBy(r => r.mission.IsFourPlayer)

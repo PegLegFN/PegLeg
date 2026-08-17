@@ -83,9 +83,10 @@ public partial class DiscordWebhookPublisher : IPublisher
 			.MakeRequest($"/api/webhooks/{urlEnding}", HttpMethod.Post)
 			.SetContent(formContent)
 			.Send();
-		if (await publishResponse.CheckForError())
+		(var didErr, var errJson) = await publishResponse.CheckForErrorJson();
+		if (didErr)
 		{
-			GD.Print($"WH: publish failed");
+			GD.Print($"WH: publish failed: {errJson?["message"]} ({errJson?["code"]})");
 			return;
 		}
 		GD.Print($"WH: published successfully");

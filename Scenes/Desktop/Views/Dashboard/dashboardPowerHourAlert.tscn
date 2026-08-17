@@ -29,14 +29,16 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel", "anecdoteParent", "timeText", "localisedTimeTexts")]
+[node name="PowerHourAlert" type="PanelContainer" unique_id=878248880 node_paths=PackedStringArray("mainContent", "compactContent", "header", "countdown", "modifierContainer", "modifierEntryList", "noModifiers", "noModifiersLabel", "anecdoteParent", "timeText", "localisedTimeTexts", "compactType", "compactTime", "compactCountdown")]
 offset_right = 714.0
-offset_bottom = 182.0
+offset_bottom = 6.0
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_smp72")
 incomingText = "Power Hour Scheduled"
 activeText = "Power Hour Active"
+mainContent = NodePath("VBoxContainer")
+compactContent = NodePath("Compact")
 header = NodePath("VBoxContainer/HBoxContainer/PanelContainer/Label2")
 countdown = NodePath("VBoxContainer/HBoxContainer/RefreshTimer")
 modifierContainer = NodePath("VBoxContainer/Modifiers")
@@ -46,6 +48,9 @@ noModifiersLabel = NodePath("VBoxContainer/HBoxContainer/Label")
 anecdoteParent = NodePath("VBoxContainer/Anecdotes")
 timeText = NodePath("VBoxContainer/HBoxContainer/Label2")
 localisedTimeTexts = [NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel2/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel3/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel4/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer3/TimezonePanel/TimezoneLabel")]
+compactType = NodePath("Compact/Label2")
+compactTime = NodePath("Compact/Label4")
+compactCountdown = NodePath("Compact/RefreshTimer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=73010128]
 layout_mode = 2
@@ -334,3 +339,37 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "UTC"
 horizontal_alignment = 1
+
+[node name="Compact" type="HBoxContainer" parent="." unique_id=1214677467]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Compact" unique_id=691902232]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Next Power Hour:"
+
+[node name="Label2" type="Label" parent="Compact" unique_id=128057706]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8083841, 0.48746186, 1)
+theme_override_font_sizes/font_size = 14
+text = "Super Soldiers"
+
+[node name="VSeparator" type="VSeparator" parent="Compact" unique_id=1369130293]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="Compact" unique_id=1331141888]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Scheduled:"
+
+[node name="Label4" type="Label" parent="Compact" unique_id=1369243412]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8083841, 0.48746186, 1)
+theme_override_font_sizes/font_size = 14
+text = "28/12/26 0:00"
+
+[node name="RefreshTimer" parent="Compact" unique_id=1288754175 instance=ExtResource("1_afrxp")]
+layout_mode = 2
+size_flags_horizontal = 8
