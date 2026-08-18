@@ -12,13 +12,8 @@ public partial class CosmoRequests
 {
 	// Based off Krowe Mohs RE work (and an Ai summary document Marlon made)
 
-	public record struct CosmoConfig(
-		string gameVer = "41.20",
-		string key = "fYm7gPh1KVzF1iWkD1rqGQBhAb7FHmJO4CNBCfYlZBk=",
-		string baseURL = "https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/"
-	)
+	public record struct CosmoConfig(string gameVer, string key, string baseURL)
 	{
-
 		public static CosmoConfig PLRConfig
 		{
 			get
@@ -35,14 +30,8 @@ public partial class CosmoRequests
 
 		public static readonly CosmoConfig FallbackConfig =
 			new(
-				"41.20",
-				"fYm7gPh1KVzF1iWkD1rqGQBhAb7FHmJO4CNBCfYlZBk=",
-				"https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/"
-			);
-		public static readonly CosmoConfig LegacyConfig =
-			new(
-				"41.00",
-				"BhmLB0jhpLStVemxcXODVXCbCdmAVHozdTbrG4+R+4E=",
+				"41.30",
+				"OE4VTg8RVeDrg28sI23J6cClN\u002BROG0fVeEJTy6\u002BlAnI=",
 				"https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/"
 			);
 	}

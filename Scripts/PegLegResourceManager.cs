@@ -73,7 +73,7 @@ public class PegLegResourceManager
 		public PackageVersion GetLatestLocalPatch()
 		{
 			using DirAccess packageDir = DirAccess.Open(globalPackageFolderPath);
-			var prefix = $"PegLegResources-v{version.major}.{version.minor}";
+			var prefix = $"PegLegResources-v{version.major}.{version.minor}.";
 			var latestPatchNum = packageDir
 				.GetFiles()
 				.Where(f => f.StartsWith(prefix) && f.EndsWith(".pck"))
@@ -119,9 +119,9 @@ public class PegLegResourceManager
 					r =>
 					{
 						if (OS.HasFeature("mobile"))
-							return r.assets.FirstOrDefault(a => a.name.StartsWith("PegLegResources-m-v"));
+							return r.assets.FirstOrDefault(a => a.name?.StartsWith("PegLegResources-m-v") ?? false);
 						else
-							return r.assets.FirstOrDefault(a => a.name.StartsWith("PegLegResources-v"));
+							return r.assets.FirstOrDefault(a => a.name?.StartsWith("PegLegResources-v") ?? false);
 					}
 				) ?? [];
 			if (releases.Count == 0)
@@ -189,6 +189,7 @@ public class PegLegResourceManager
 		ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
 		PackageVersion targetVersion = new(new(targetMajor, targetMinor, 0));
 		targetVersion = targetVersion.GetLatestLocalPatch();
+		GD.Print($"Using Local Resources: {targetVersion}");
 		targetVersion.LoadAllPackages();
 
 		onProgress?.Invoke("Loading Local Resources", -1);

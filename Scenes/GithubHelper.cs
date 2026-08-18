@@ -48,8 +48,8 @@ public static class GithubHelper
 	}
 	public record struct ReleaseAsset
 	{
-		public string name;
-		public string browser_download_url;
+		public string name { get; init; }
+		public string browser_download_url { get; init; }
 
 		public async Task DownloadTo(Stream dest, IProgress<(long, long)> progress = null, CancellationToken ct = default)
 		{
