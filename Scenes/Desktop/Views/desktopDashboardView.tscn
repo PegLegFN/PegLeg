@@ -7,20 +7,42 @@
 [ext_resource type="PackedScene" uid="uid://dwkncmg0uq77i" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewardsPanel.tscn" id="3_ury42"]
 [ext_resource type="PackedScene" uid="uid://bytcic4qvijqc" path="res://Scenes/Desktop/Views/Dashboard/dashboardPowerHourAlert.tscn" id="6_ury42"]
 [ext_resource type="PackedScene" uid="uid://cjo0qsieb4y21" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummary.tscn" id="6_xee71"]
-[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="7_6rsuw"]
 [ext_resource type="PackedScene" uid="uid://bi6d0s5f2iadi" path="res://Scenes/Desktop/Views/Dashboard/dashboardSupercharger.tscn" id="8_b8wcl"]
-[ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="8_k3a2q"]
 [ext_resource type="PackedScene" uid="uid://8nnn83fa7ib4" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardWeeklyShop.tscn" id="9_6rsuw"]
 [ext_resource type="PackedScene" uid="uid://c2fllevac3o74" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardEventShop.tscn" id="9_21lf2"]
 [ext_resource type="PackedScene" uid="uid://duett2mvuyxl8" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardLlamaShop.tscn" id="9_db4i7"]
 [ext_resource type="PackedScene" uid="uid://ito2u56pohnm" path="res://Scenes/Desktop/Views/Dashboard/dashboardXPProgress.tscn" id="10_gx2q3"]
 [ext_resource type="PackedScene" uid="uid://clts1hy0l7yuw" path="res://Scenes/MissionEntry/Collection/mission_collection_entry_modifiers.tscn" id="11_21lf2"]
 [ext_resource type="PackedScene" uid="uid://send81rsbg0r" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardCosmeticShop.tscn" id="11_k3a2q"]
+[ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="15_21lf2"]
+[ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="16_k3a2q"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="17_kuncf"]
 [ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="19_ury42"]
+[ext_resource type="Texture2D" uid="uid://bihgi4th6uiae" path="res://Images/InterfaceIcons/T-Card-Hero-Anim-Triangle.png" id="22_ew4xe"]
+[ext_resource type="Texture2D" uid="uid://vvcpsv0jcehf" path="res://Images/TextureResources/schematicNoise.tres" id="23_46vvx"]
 [ext_resource type="PackedScene" uid="uid://cyyifj2tha4ri" path="res://Scenes/SharedImageGenerators/shareable_mission_summary.tscn" id="51_0op8k"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="52_q8xc3"]
 [ext_resource type="PackedScene" uid="uid://cschg8vgh0q5i" path="res://Scenes/SharedImageGenerators/shareable_llama_summary.tscn" id="53_pll84"]
 [ext_resource type="PackedScene" uid="uid://co461hhd3r2sk" path="res://Scenes/SharedImageGenerators/shareable_xp_summary.tscn" id="54_6ftts"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21lf2"]
+shader = ExtResource("16_k3a2q")
+shader_parameter/ControlSize = Vector2(256, 256)
+shader_parameter/Fit = false
+shader_parameter/VerticalShift = 0.0
+shader_parameter/IsHero = true
+shader_parameter/IsSchematic = false
+shader_parameter/IsPack = false
+shader_parameter/Noise = ExtResource("23_46vvx")
+shader_parameter/HeroTriangles = ExtResource("22_ew4xe")
+shader_parameter/LockTime = true
+
+[sub_resource type="Gradient" id="Gradient_ew4xe"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ew4xe"]
+gradient = SubResource("Gradient_ew4xe")
+width = 1
 
 [node name="Dashboard" type="MarginContainer" unique_id=823506496]
 custom_minimum_size = Vector2(720, 0)
@@ -78,38 +100,9 @@ layout_mode = 2
 [node name="PowerHourAlert" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=878248880 instance=ExtResource("6_ury42")]
 layout_mode = 2
 
-[node name="Button3" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="5" unique_id=948893207]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-tooltip_text = "Force Dispatches a Power Hour Heads Up "
-mouse_filter = 1
-theme_type_variation = &"LargeButton"
-
-[node name="CheckButton" type="CheckButton" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=647675203]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 22.0
-mouse_filter = 2
-script = ExtResource("7_6rsuw")
-section = "publishing"
-key = "powerHour_enabled"
-
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=2049702868]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_k3a2q")
-expand_mode = 1
-stretch_mode = 5
+[node name="CheckButton" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" parent_id_path=PackedInt32Array(878248880, 1648724221) index="0" unique_id=1639387010]
+disabled = false
+disabled = false
 
 [node name="160_Llamas" type="HBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=2107738049]
 layout_mode = 2
@@ -361,14 +354,38 @@ layout_mode = 2
 [node name="PowerHourViewport" parent="ShareablePowerHour" index="0" unique_id=424942682]
 render_target_update_mode = 0
 
+[node name="Button" type="Button" parent="." unique_id=548465490]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Test"
+
+[node name="SubViewport" type="SubViewport" parent="Button" unique_id=1831706484 node_paths=PackedStringArray("matchSize")]
+size = Vector2i(256, 256)
+render_target_update_mode = 0
+script = ExtResource("15_21lf2")
+uniqueName = "temp"
+matchSize = NodePath("ItemShaderSquare")
+
+[node name="ItemShaderSquare" type="TextureRect" parent="Button/SubViewport" unique_id=1629449229]
+material = SubResource("ShaderMaterial_21lf2")
+custom_minimum_size = Vector2(256, 256)
+offset_right = 256.0
+offset_bottom = 256.0
+texture = SubResource("GradientTexture1D_ew4xe")
+expand_mode = 1
+script = ExtResource("17_kuncf")
+syncControlSize = true
+
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer/ShareMissions" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer/PublishMissions" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
-[connection signal="ConfigValueChanged" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3/CheckButton" to="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" method="set_visible"]
+[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/160_Llamas/DashboardLlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="ShareableLlamaSummary/LlamaSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardXPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="Button" to="Button/SubViewport" method="CopyScreenshot"]
 
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards"]
 [editable path="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/Beast/NotableBeast"]
@@ -396,9 +413,7 @@ render_target_update_mode = 0
 [editable path="ShareableXpSummary/XpSummaryViewport/PegLegWatermark/DashboardXPProgress"]
 [editable path="ShareablePowerHour"]
 [editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry2"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry3"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry4"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry5"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry6"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/Modifiers/MissionAlertItemEntry"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/Modifiers/MissionAlertItemEntry2"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/VBoxContainer/MissionAlertItemEntry7"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/VBoxContainer/MissionAlertItemEntry8"]

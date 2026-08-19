@@ -1,13 +1,13 @@
 using Godot;
 using LibGit2Sharp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
+#if TOOLS
 [GlobalClass]
 [Tool]
 public partial class ReleaseTool : EditorScript
@@ -295,3 +295,4 @@ public partial class ReleaseTool : EditorScript
 		window = null;
 	}
 }
+#endif

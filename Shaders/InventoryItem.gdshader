@@ -11,6 +11,7 @@ uniform bool IsPack;
 uniform sampler2D Noise;
 uniform sampler2D HeroTriangles : hint_default_white;
 uniform sampler2D PackIcon : hint_default_transparent;
+uniform bool LockTime;
 
 varying vec4 modulate;
 
@@ -33,7 +34,7 @@ const float triScale = 1.0;
 const float invTriScale = 1.0/triScale;
 vec4 triTex(vec2 uv, float speed)
 {
-	return texture(HeroTriangles, mod(uv+vec2(0.0,TIME*speed), invTriScale)*triScale);
+	return texture(HeroTriangles, mod(uv+vec2(0.0,(LockTime?25.0:TIME)*speed), invTriScale)*triScale);
 }
 
 void fragment() {

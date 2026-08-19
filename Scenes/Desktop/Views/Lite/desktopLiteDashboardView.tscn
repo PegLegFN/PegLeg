@@ -15,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://c70qnky0xyx4w" path="res://Scenes/MissionEntry/Collection/mission_collection.tscn" id="7_31yqt"]
 [ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="7_36og6"]
 [ext_resource type="Script" uid="uid://gssdxmp35yfg" path="res://Scripts/ClickbaitTransform.cs" id="7_ty34v"]
-[ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="8_1rpsu"]
 [ext_resource type="PackedScene" uid="uid://8nnn83fa7ib4" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardWeeklyShop.tscn" id="8_5ma0n"]
 [ext_resource type="Shader" uid="uid://pto0b48do7dc" path="res://Shaders/BREventLogo.gdshader" id="8_hdvq0"]
 [ext_resource type="PackedScene" uid="uid://c2fllevac3o74" path="res://Scenes/Desktop/Views/Dashboard/ShopPanels/dashboardEventShop.tscn" id="9_1rpsu"]
@@ -31,7 +30,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bp4h1"]
 shader = ExtResource("4_ql4gu")
-shader_parameter/ControlSize = Vector2(566, 150)
+shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/ShiftDirection = Vector2(0.5, 0.77)
 shader_parameter/Fit = false
 shader_parameter/UseCorners = true
@@ -246,13 +245,13 @@ defaultValue = true
 layout_mode = 2
 secondaryVisibility = NodePath("../ClickbaitSpace")
 
-[node name="ClickbaitPanel" type="Panel" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/PanelContainer" parent_id_path=PackedInt32Array(878248880, 485946737) index="1" unique_id=1959021830]
+[node name="ClickbaitPanel" type="Panel" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PanelContainer" parent_id_path=PackedInt32Array(878248880, 485946737) index="1" unique_id=1959021830]
 material = SubResource("ShaderMaterial_51cgl")
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" unique_id=793547761]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" unique_id=793547761]
 z_index = 1
 material = SubResource("ShaderMaterial_51cgl")
 custom_minimum_size = Vector2(50, 100)
@@ -278,46 +277,17 @@ rotationSpeed = 2.0
 heightOffset = -20.0
 heightSpeed = 6.0
 
-[node name="Button3" type="Button" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="5" unique_id=1146439963]
-visible = false
-custom_minimum_size = Vector2(28, 28)
-layout_mode = 2
-tooltip_text = "Force Dispatches a Power Hour Heads Up "
-mouse_filter = 1
-theme_type_variation = &"LargeButton"
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" parent_id_path=PackedInt32Array(878248880, 1648724221) index="0" unique_id=1639387010]
+disabled = false
+disabled = false
 
-[node name="CheckButton" type="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=70060191]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 22.0
-mouse_filter = 2
-script = ExtResource("7_5ma0n")
-section = "publishing"
-key = "powerHour_enabled"
-
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" unique_id=2111461032]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_1rpsu")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="ClickbaitParticles" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert" unique_id=2074138936]
+[node name="ClickbaitParticles" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full" parent_id_path=PackedInt32Array(878248880, 1647997976) index="1" unique_id=2074138936]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="GPUParticles2D" type="GPUParticles2D" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitParticles" unique_id=1696239540]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitParticles" unique_id=1696239540]
 self_modulate = Color(1, 0.9935, 0.61, 0.3529412)
 show_behind_parent = true
 material = SubResource("ShaderMaterial_evgyu")
@@ -326,11 +296,11 @@ texture = ExtResource("10_ty34v")
 lifetime = 3.0
 process_material = SubResource("ParticleProcessMaterial_51cgl")
 
-[node name="ClickbaitArrows" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert" unique_id=1987976886]
+[node name="ClickbaitArrows" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full" parent_id_path=PackedInt32Array(878248880, 1647997976) index="2" unique_id=1987976886]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=954946675]
+[node name="TextureRect" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" unique_id=954946675]
 z_index = 1
 material = SubResource("ShaderMaterial_51cgl")
 custom_minimum_size = Vector2(50, 60)
@@ -347,7 +317,7 @@ script = ExtResource("7_ty34v")
 heightOffset = 20.0
 heightSpeed = 15.0
 
-[node name="TextureRect2" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=325667025]
+[node name="TextureRect2" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" unique_id=325667025]
 z_index = 1
 material = SubResource("ShaderMaterial_51cgl")
 custom_minimum_size = Vector2(50, 60)
@@ -367,7 +337,7 @@ script = ExtResource("7_ty34v")
 heightOffset = 20.0
 heightSpeed = 15.0
 
-[node name="TextureRect3" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=576278501]
+[node name="TextureRect3" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" unique_id=576278501]
 z_index = 1
 material = SubResource("ShaderMaterial_51cgl")
 custom_minimum_size = Vector2(50, 60)
@@ -384,7 +354,7 @@ script = ExtResource("7_ty34v")
 heightOffset = -20.0
 heightSpeed = 15.0
 
-[node name="TextureRect4" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=288957932]
+[node name="TextureRect4" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" unique_id=288957932]
 z_index = 1
 material = SubResource("ShaderMaterial_51cgl")
 custom_minimum_size = Vector2(50, 60)
@@ -404,7 +374,7 @@ script = ExtResource("7_ty34v")
 heightOffset = -20.0
 heightSpeed = 15.0
 
-[node name="TextureRect5" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" unique_id=943843055]
+[node name="TextureRect5" type="TextureRect" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" unique_id=943843055]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 1
 anchors_preset = 2
@@ -640,12 +610,11 @@ render_target_update_mode = 0
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer/ShareMissions" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer/PublishMissions" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control" method="set_visible"]
-[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" method="set_visible"]
-[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitParticles" method="set_visible"]
-[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/ClickbaitArrows" method="set_visible"]
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
-[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/VBoxContainer/HBoxContainer/Button3" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitParticles" method="set_visible"]
+[connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" method="set_visible"]
+[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
+[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
 [connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
 
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards"]
@@ -669,9 +638,7 @@ render_target_update_mode = 0
 [editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]
 [editable path="ShareablePowerHour"]
 [editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry2"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry3"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry4"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry5"]
-[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/VBoxContainer/VBoxContainer/MissionAlertItemEntry6"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/Modifiers/MissionAlertItemEntry"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/Modifiers/MissionAlertItemEntry2"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/VBoxContainer/MissionAlertItemEntry7"]
+[editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/VBoxContainer/MissionAlertItemEntry8"]

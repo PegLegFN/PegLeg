@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://3xbl5x8mbmjv" path="res://Scenes/GameItemEntry/mission_alert_entry_medium.tscn" id="2_0ofo2"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="3_0pbo2"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_bejgr"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_mkfca"]
+[ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="5_u7aa7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smp72"]
 content_margin_left = 5.0
@@ -37,28 +39,31 @@ theme_type_variation = &"Panel3PadB"
 script = ExtResource("1_smp72")
 incomingText = "Power Hour Scheduled"
 activeText = "Power Hour Active"
-mainContent = NodePath("VBoxContainer")
+mainContent = NodePath("Full")
 compactContent = NodePath("Compact")
-header = NodePath("VBoxContainer/HBoxContainer/PanelContainer/Label2")
-countdown = NodePath("VBoxContainer/HBoxContainer/RefreshTimer")
-modifierContainer = NodePath("VBoxContainer/Modifiers")
-modifierEntryList = [NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry2"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry3"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry4"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry5"), NodePath("VBoxContainer/Modifiers/MissionAlertItemEntry6")]
-noModifiers = NodePath("VBoxContainer/HBoxContainer/Label")
-noModifiersLabel = NodePath("VBoxContainer/HBoxContainer/Label")
-anecdoteParent = NodePath("VBoxContainer/Anecdotes")
-timeText = NodePath("VBoxContainer/HBoxContainer/Label2")
-localisedTimeTexts = [NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel2/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel3/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel4/TimerLabel"), NodePath("VBoxContainer/SpecificTimes/HBoxContainer3/TimezonePanel/TimezoneLabel")]
+header = NodePath("Full/VBoxContainer/HBoxContainer/PanelContainer/Label2")
+countdown = NodePath("Full/VBoxContainer/HBoxContainer/RefreshTimer")
+modifierContainer = NodePath("Full/VBoxContainer/Modifiers")
+modifierEntryList = [NodePath("Full/VBoxContainer/Modifiers/MissionAlertItemEntry"), NodePath("Full/VBoxContainer/Modifiers/MissionAlertItemEntry2"), NodePath("Full/VBoxContainer/Modifiers/MissionAlertItemEntry3"), NodePath("Full/VBoxContainer/Modifiers/MissionAlertItemEntry4"), NodePath("Full/VBoxContainer/Modifiers/MissionAlertItemEntry5"), NodePath("Full/VBoxContainer/Modifiers/MissionAlertItemEntry6")]
+noModifiers = NodePath("Full/VBoxContainer/HBoxContainer/Label")
+noModifiersLabel = NodePath("Full/VBoxContainer/HBoxContainer/Label")
+anecdoteParent = NodePath("Full/VBoxContainer/Anecdotes")
+timeText = NodePath("Full/VBoxContainer/HBoxContainer/Label2")
+localisedTimeTexts = [NodePath("Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel/TimerLabel"), NodePath("Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel2/TimerLabel"), NodePath("Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel3/TimerLabel"), NodePath("Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel4/TimerLabel"), NodePath("Full/VBoxContainer/SpecificTimes/HBoxContainer3/TimezonePanel/TimezoneLabel")]
 compactType = NodePath("Compact/Label2")
 compactTime = NodePath("Compact/Label4")
 compactCountdown = NodePath("Compact/RefreshTimer")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=73010128]
+[node name="Full" type="MarginContainer" parent="." unique_id=1647997976]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=267169212]
+[node name="VBoxContainer" type="VBoxContainer" parent="Full" unique_id=73010128]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=485946737]
+[node name="HBoxContainer" type="HBoxContainer" parent="Full/VBoxContainer" unique_id=267169212]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Full/VBoxContainer/HBoxContainer" unique_id=485946737]
 self_modulate = Color(1, 0.61866665, 0.120000005, 1)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -66,7 +71,7 @@ size_flags_vertical = 4
 theme_type_variation = &"Panel3Pad"
 theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
 
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer" unique_id=907435141]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/HBoxContainer/PanelContainer" unique_id=907435141]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/shadow_offset_x = 0
@@ -78,29 +83,29 @@ text = "Power Hour Incoming"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=451205499]
+[node name="Label" type="Label" parent="Full/VBoxContainer/HBoxContainer" unique_id=451205499]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.51171875, 0.51171875, 0.51171875, 1)
 text = "(Validation status)"
 
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1929342216]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/HBoxContainer" unique_id=1929342216]
 layout_mode = 2
 text = "Starts in"
 horizontal_alignment = 1
 
-[node name="RefreshTimer" parent="VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("1_afrxp")]
+[node name="RefreshTimer" parent="Full/VBoxContainer/HBoxContainer" unique_id=112616027 instance=ExtResource("1_afrxp")]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 customCritTime = 300
 
-[node name="ShareBtn" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1655011011]
+[node name="ShareBtn" type="Button" parent="Full/VBoxContainer/HBoxContainer" unique_id=1655011011]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ShareBtn" unique_id=213720266]
+[node name="TextureRect" type="TextureRect" parent="Full/VBoxContainer/HBoxContainer/ShareBtn" unique_id=213720266]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -115,39 +120,77 @@ texture = ExtResource("3_bejgr")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Modifiers" type="Container" parent="VBoxContainer" unique_id=679697045]
+[node name="PublishBtn" type="Button" parent="Full/VBoxContainer/HBoxContainer" unique_id=1648724221]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Force Dispatches a Power Hour Heads Up "
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+
+[node name="CheckButton" type="CheckButton" parent="Full/VBoxContainer/HBoxContainer/PublishBtn" unique_id=1639387010]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+disabled = true
+script = ExtResource("4_mkfca")
+section = "publishing"
+key = "powerHour_enabled"
+disabled = true
+
+[node name="TextureRect" type="TextureRect" parent="Full/VBoxContainer/HBoxContainer/PublishBtn" unique_id=525070860]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u7aa7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Modifiers" type="Container" parent="Full/VBoxContainer" unique_id=679697045]
 layout_mode = 2
 script = ExtResource("3_0pbo2")
 CompressSpacing = true
 Spacing = Vector2(15, 5)
 UseLargestChild = true
 
-[node name="MissionAlertItemEntry" parent="VBoxContainer/Modifiers" unique_id=55775401 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry" parent="Full/VBoxContainer/Modifiers" unique_id=55775401 instance=ExtResource("2_0ofo2")]
 layout_mode = 2
 
-[node name="MissionAlertItemEntry2" parent="VBoxContainer/Modifiers" unique_id=1583837197 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry2" parent="Full/VBoxContainer/Modifiers" unique_id=1583837197 instance=ExtResource("2_0ofo2")]
 layout_mode = 2
 
-[node name="MissionAlertItemEntry3" parent="VBoxContainer/Modifiers" unique_id=1136343832 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry3" parent="Full/VBoxContainer/Modifiers" unique_id=1136343832 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="MissionAlertItemEntry4" parent="VBoxContainer/Modifiers" unique_id=1769395216 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry4" parent="Full/VBoxContainer/Modifiers" unique_id=1769395216 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="MissionAlertItemEntry5" parent="VBoxContainer/Modifiers" unique_id=959529323 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry5" parent="Full/VBoxContainer/Modifiers" unique_id=959529323 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="MissionAlertItemEntry6" parent="VBoxContainer/Modifiers" unique_id=117480615 instance=ExtResource("2_0ofo2")]
+[node name="MissionAlertItemEntry6" parent="Full/VBoxContainer/Modifiers" unique_id=117480615 instance=ExtResource("2_0ofo2")]
 visible = false
 layout_mode = 2
 
-[node name="Anecdotes" type="VBoxContainer" parent="VBoxContainer" unique_id=1516763206]
+[node name="Anecdotes" type="VBoxContainer" parent="Full/VBoxContainer" unique_id=1516763206]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=866967817]
+[node name="PanelContainer" type="PanelContainer" parent="Full/VBoxContainer/Anecdotes" unique_id=866967817]
 self_modulate = Color(0.054141857, 0.8828125, 0.8432795, 1)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -156,7 +199,7 @@ theme_type_variation = &"Panel3Pad"
 theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
 metadata/requirement = "gm_phoenix_superoutlander"
 
-[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer" unique_id=1174201599]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/Anecdotes/PanelContainer" unique_id=1174201599]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/shadow_offset_x = 0
@@ -167,7 +210,7 @@ text = "Infinite punching = Best time for farming"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=1086231502]
+[node name="PanelContainer2" type="PanelContainer" parent="Full/VBoxContainer/Anecdotes" unique_id=1086231502]
 self_modulate = Color(0.88235295, 0.8261964, 0.05831259, 1)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -176,7 +219,7 @@ theme_type_variation = &"Panel3Pad"
 theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
 metadata/requirement = "gm_phoenix_superconstructor"
 
-[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer2" unique_id=501378164]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/Anecdotes/PanelContainer2" unique_id=501378164]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/shadow_offset_x = 0
@@ -187,7 +230,7 @@ text = "Reduced build cost = Best time to build endurances"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="PanelContainer3" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=1639378173]
+[node name="PanelContainer3" type="PanelContainer" parent="Full/VBoxContainer/Anecdotes" unique_id=1639378173]
 self_modulate = Color(0.88235295, 0.49367204, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -196,7 +239,7 @@ theme_type_variation = &"Panel3Pad"
 theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
 metadata/requirement = "gm_phoenix_superheroic"
 
-[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer3" unique_id=1359297546]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/Anecdotes/PanelContainer3" unique_id=1359297546]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/shadow_offset_x = 0
@@ -207,7 +250,7 @@ text = "Reduced cooldowns = great war cry builds"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="PanelContainer4" type="PanelContainer" parent="VBoxContainer/Anecdotes" unique_id=2056557416]
+[node name="PanelContainer4" type="PanelContainer" parent="Full/VBoxContainer/Anecdotes" unique_id=2056557416]
 self_modulate = Color(0.53515625, 0.52333087, 0.5321999, 1)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -216,7 +259,7 @@ theme_type_variation = &"Panel3Pad"
 theme_override_styles/panel = SubResource("StyleBoxFlat_smp72")
 metadata/requirement = "gm_phoenix_superninja"
 
-[node name="Label2" type="Label" parent="VBoxContainer/Anecdotes/PanelContainer4" unique_id=581335884]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/Anecdotes/PanelContainer4" unique_id=581335884]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/shadow_offset_x = 0
@@ -227,30 +270,30 @@ text = "increased damage & attack speed = very very fun"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="SpecificTimes" type="VBoxContainer" parent="VBoxContainer" unique_id=1824718531]
+[node name="SpecificTimes" type="VBoxContainer" parent="Full/VBoxContainer" unique_id=1824718531]
 layout_mode = 2
 offset_transform_enabled = true
 offset_transform_scale = Vector2(0.8, 0.8)
 offset_transform_visual_only = false
 theme_override_constants/separation = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/SpecificTimes" unique_id=1134678868]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Full/VBoxContainer/SpecificTimes" unique_id=1134678868]
 layout_mode = 2
 offset_transform_visual_only = false
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1231967649]
+[node name="Label" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1231967649]
 self_modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 2
 text = "Power Hours are active between "
 
-[node name="TimerPanel" type="PanelContainer" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1138393477]
+[node name="TimerPanel" type="PanelContainer" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1138393477]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bejgr")
 
-[node name="TimerLabel" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel" unique_id=698113930]
+[node name="TimerLabel" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel" unique_id=698113930]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_x = 1
@@ -259,17 +302,17 @@ theme_override_font_sizes/font_size = 12
 text = "12am EST"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=296543822]
+[node name="Label2" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=296543822]
 self_modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 2
 text = "-"
 
-[node name="TimerPanel2" type="PanelContainer" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1086909945]
+[node name="TimerPanel2" type="PanelContainer" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1086909945]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bejgr")
 
-[node name="TimerLabel" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel2" unique_id=1649539374]
+[node name="TimerLabel" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel2" unique_id=1649539374]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_x = 1
@@ -278,17 +321,17 @@ theme_override_font_sizes/font_size = 12
 text = "12am EST"
 horizontal_alignment = 1
 
-[node name="Label3" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=177052310]
+[node name="Label3" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=177052310]
 self_modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 2
 text = ", and then "
 
-[node name="TimerPanel3" type="PanelContainer" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=18067169]
+[node name="TimerPanel3" type="PanelContainer" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=18067169]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bejgr")
 
-[node name="TimerLabel" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel3" unique_id=349737061]
+[node name="TimerLabel" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel3" unique_id=349737061]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_x = 1
@@ -297,17 +340,17 @@ theme_override_font_sizes/font_size = 12
 text = "12am EST"
 horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=143714999]
+[node name="Label4" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=143714999]
 self_modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 2
 text = "-"
 
-[node name="TimerPanel4" type="PanelContainer" parent="VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1533025361]
+[node name="TimerPanel4" type="PanelContainer" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2" unique_id=1533025361]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bejgr")
 
-[node name="TimerLabel" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel4" unique_id=1671683897]
+[node name="TimerLabel" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer2/TimerPanel4" unique_id=1671683897]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_x = 1
@@ -316,22 +359,22 @@ theme_override_font_sizes/font_size = 12
 text = "12am EST"
 horizontal_alignment = 1
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/SpecificTimes" unique_id=2145463879]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Full/VBoxContainer/SpecificTimes" unique_id=2145463879]
 layout_mode = 2
 offset_transform_visual_only = false
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer3" unique_id=730680163]
+[node name="Label" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer3" unique_id=730680163]
 self_modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 2
 text = "Times are listed in your local time: "
 
-[node name="TimezonePanel" type="PanelContainer" parent="VBoxContainer/SpecificTimes/HBoxContainer3" unique_id=294287881]
+[node name="TimezonePanel" type="PanelContainer" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer3" unique_id=294287881]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bejgr")
 
-[node name="TimezoneLabel" type="Label" parent="VBoxContainer/SpecificTimes/HBoxContainer3/TimezonePanel" unique_id=1153745825]
+[node name="TimezoneLabel" type="Label" parent="Full/VBoxContainer/SpecificTimes/HBoxContainer3/TimezonePanel" unique_id=1153745825]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_x = 1
@@ -373,3 +416,5 @@ text = "28/12/26 0:00"
 [node name="RefreshTimer" parent="Compact" unique_id=1288754175 instance=ExtResource("1_afrxp")]
 layout_mode = 2
 size_flags_horizontal = 8
+
+[connection signal="ConfigValueChanged" from="Full/VBoxContainer/HBoxContainer/PublishBtn/CheckButton" to="Full/VBoxContainer/HBoxContainer/PublishBtn" method="set_visible"]
