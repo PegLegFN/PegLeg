@@ -212,7 +212,10 @@ public class GameStorefront
 		cosmeticSectionsExpires = RefreshTimerController.GetRefreshTime(RefreshTimeType.Hourly);
 
 		var root = await response.ReadJson();
-		return cosmeticSectionsCache = root["shopData"]["sections"].Deserialize<CosmeticSectionData[]>().ToDictionary(s => s.sectionID);
+		var sections = root["shopData"]["sections"].Deserialize<CosmeticSectionData[]>();
+		//var duplicates = sections.GroupBy(s => s.sectionID).Where(g => g.Count() > 1).ToArray();
+		//GD.Print($"Duplicate sections: \n{duplicates.Select(g => $"{g.Key} = {JsonSerializer.Serialize(g.ToArray())}").JoinString("\n")}");
+		return cosmeticSectionsCache = sections.DistinctBy(s=>s.sectionID).ToDictionary(s => s.sectionID);
 	}
 	public static DateTime jamTracksExpire { get; private set; } = DateTime.MinValue;
 	public static Dictionary<string, JamTrackMeta> jamTracksCache { get; private set; } = [];
