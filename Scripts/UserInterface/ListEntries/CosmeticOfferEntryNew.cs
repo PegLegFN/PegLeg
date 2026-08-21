@@ -316,7 +316,7 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 		else
 			leavingTimer?.Visible = false;
 
-		var timeData = fnDashOffer?.GenerateCosmeticTimeData() ?? default;
+		var timeData = currentOffer.CosmeticTimeData;
 		if (skipLastSeen)
 		{
 			EmitSignalLastSeenVisibility(false);
@@ -335,19 +335,18 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 			EmitSignalAlmostAYearVisibility(timeData.lastSeenDaysAgo > 500);
 		}
 
-		timeData = timeData with { isAddedToday = timeData.isAddedToday || (currentOffer.InDate ?? DateTime.MinValue) == DateTime.UtcNow.Date };
-
 		//mark when new
 		string bonusText = null;
-		if (((currentOffer.OutDate??DateTime.MaxValue)-DateTime.UtcNow).TotalDays<1)
+		//if (((currentOffer.OutDate ?? DateTime.MaxValue) - DateTime.UtcNow).TotalDays < 1)
+		if(timeData.isLeavingSoon)
 		{
 			bonusText = "LEAVES AT RESET";
 		}
-		else if (fnDashOffer is not null && timeData.isRecentlyNew && timeData.isAddedToday)
+		else if (timeData.isRecentlyNew && timeData.isAddedToday)
 		{
 			bonusText = "NEW TODAY";
 		}
-		else if (fnDashOffer is not null && timeData.isRecentlyNew)
+		else if (timeData.isRecentlyNew)
 		{
 			bonusText = "RECENTLY NEW";
 		}

@@ -252,7 +252,7 @@ public partial class GameOffer
 
 	#region Cosmetic Stuff
 
-	[GeneratedRegex("""\[VIRTUAL](?:\d+ x ([^,]+),?)(?: \d+ x [^,]+,?)*for -?\d+ MtxCurrency""")]
+	[GeneratedRegex("""\[VIRTUAL](?:\d+ x ([^,]+),?)(?: \d+ x [^,]+,?)* for -?\d+ MtxCurrency""")]
 	private static partial Regex DevNameParser();
 	public string ParseCosmeticOfferName()
 	{
@@ -459,9 +459,9 @@ public partial class GameOffer
 	public CosmeticTimeData CosmeticTimeData => FNDashOffer?.GenerateCosmeticTimeData() ?? new()
 	{
 		lastSeenDaysAgo = 0,
-		isRecentlyNew = CosmeticTagline == "New",
-		isAddedToday = InDate.Value == DateTime.UtcNow.Date,
-		isLeavingSoon = (OutDate.Value - DateTime.UtcNow.Date).TotalHours < 24,
+		isRecentlyNew = CosmeticTagline?.Equals("New", StringComparison.OrdinalIgnoreCase) ?? false,
+		isAddedToday = InDate.Value.ToUniversalTime() == DateTime.UtcNow.Date,
+		isLeavingSoon = (OutDate.Value.ToUniversalTime() - DateTime.UtcNow.Date).TotalHours < 24,
 		lastAddedDate = DateTime.UtcNow.Date
 	};
 	#endregion
