@@ -260,17 +260,29 @@ public partial class ReleaseTool : EditorScript
 	private static async Task ExportWindows(bool isBeta)
 	{
 		const string baseOutPath = "C:\\Users\\Tomatech\\Repositories\\TomatechGames\\Godot Projects\\PegLeg\\Builds\\Windows";
-		await Task.Run(() => OS.Execute(OS.GetExecutablePath(), ["--headless", "--export-release", isBeta ? "Windows (Test)" : "Windows", $"{baseOutPath}\\Beta\\Build\\PegLeg.exe"], openConsole: true));
+		int exportStatus = 0;
+		await Task.Run(() => exportStatus = OS.Execute(OS.GetExecutablePath(), ["--headless", "--export-release", isBeta ? "Windows (Test)" : "Windows", $"{baseOutPath}\\Beta\\Build\\PegLeg.exe"], openConsole: true));
+		if (exportStatus != 0)
+			throw new ApplicationException($"Windows Export Failed: {exportStatus}");
+		int compressStatus = 0;
+		int installerStatus = 0;
 		await Task.WhenAll(
-			Task.Run(() => OS.Execute("7z", ["a", "-t7z", $"{baseOutPath}\\Beta\\PegLegBeta-Windows.7z", $"{baseOutPath}\\Beta\\Build\\*"], openConsole: true)),
-			Task.Run(() => OS.Execute($"{baseOutPath}\\buildInstaller.bat", [], openConsole:true))
+			Task.Run(() => compressStatus = OS.Execute("7z", ["a", "-t7z", $"{baseOutPath}\\Beta\\PegLegBeta-Windows.7z", $"{baseOutPath}\\Beta\\Build\\*"], openConsole: true)),
+			Task.Run(() => installerStatus = OS.Execute($"{baseOutPath}\\buildInstaller.bat", [], openConsole:true))
 		);
+		if (compressStatus != 0)
+			throw new ApplicationException($"Windows 7Z Failed: {compressStatus}");
+		if (installerStatus != 0)
+			throw new ApplicationException($"Windows Installer Failed: {installerStatus}");
 	}
 
 	private static async Task ExportAndroid(bool isBeta)
 	{
 		const string outPath = "C:\\Users\\Tomatech\\Repositories\\TomatechGames\\Godot Projects\\PegLeg\\Builds\\Android\\Beta\\PegLegBeta-Android.apk";
-		await Task.Run(() => OS.Execute(OS.GetExecutablePath(), ["--headless", "--export-release", isBeta ? "Android (Test)" : "Android", outPath], openConsole: true));
+		int exportStatus = 0;
+		await Task.Run(() => exportStatus = OS.Execute(OS.GetExecutablePath(), ["--headless", "--export-release", isBeta ? "Android (Test)" : "Android", outPath], openConsole: true));
+		if (exportStatus != 0)
+			throw new ApplicationException($"Android Export Failed: {exportStatus}");
 	}
 
 	static async Task<bool> UploadBuild(string uploadURL, string path, string type, string label, AuthenticationHeaderValue auth)
