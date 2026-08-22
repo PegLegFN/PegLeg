@@ -65,20 +65,20 @@ public partial class MiscSettings : Control
 		GenericConfirmationWindow.ShowInfo("Exchange Code copied").StartTask();
 	}
 
-	void OpenIssuePage()
-	{
-		OS.ShellOpen("https://github.com/PegLegFN/PegLeg/issues");
-	}
+	//void OpenIssuePage()
+	//{
+	//	OS.ShellOpen("https://github.com/PegLegFN/PegLeg/issues");
+	//}
 
-	void OpenAppData()
-	{
-		OS.ShellOpen(ProjectSettings.GlobalizePath("user://"));
-	}
+	//void OpenAppData()
+	//{
+	//	OS.ShellOpen(ProjectSettings.GlobalizePath("user://"));
+	//}
 
-	void OpenInstallationFolder()
-	{
-		OS.ShellOpen(Helpers.GlobalisePath("res://"));
-	}
+	//void OpenInstallationFolder()
+	//{
+	//	OS.ShellOpen(Helpers.GlobalisePath("res://"));
+	//}
 
 	void CloseApp()
 	{

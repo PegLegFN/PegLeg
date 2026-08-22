@@ -45,6 +45,8 @@
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="32_aqo04"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="33_llww6"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="33_xs1ek"]
+[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="36_36vak"]
+[ext_resource type="Script" uid="uid://b5oshbajlo4j7" path="res://Scripts/ShellOpen.cs" id="37_6ysvb"]
 [ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="38_psdk2"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="39_y37er"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="40_ioawx"]
@@ -53,7 +55,7 @@
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="45_pbdue"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="46_hiis4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_36vak"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wt277"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(200, 341)
@@ -71,10 +73,10 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_6ysvb"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_6vfrm"]
 resource_name = "CosmeticTimeFilter"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wt277"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_egmgj"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(0, 20)
@@ -292,25 +294,25 @@ visible = false
 visible = false
 
 [node name="LoadingIcon6" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/BigScrollContainer/MarginContainer/NewLoadingIcon" parent_id_path=PackedInt32Array(1968674659, 244303536) index="1" unique_id=285240235]
-material = SubResource("ShaderMaterial_36vak")
+material = SubResource("ShaderMaterial_wt277")
 
 [node name="VeryNew" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="0" unique_id=2050379603]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="New" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="1" unique_id=1886976013]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="Any" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="2" unique_id=1457088269]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="Old" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="3" unique_id=423896336]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="Popular" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="4" unique_id=34668795]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="LoadingIcon5" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/FilterBlocker" parent_id_path=PackedInt32Array(1968674659, 1161231320) index="0" unique_id=1782587914]
-material = SubResource("ShaderMaterial_wt277")
+material = SubResource("ShaderMaterial_egmgj")
 
 [node name="CosmeticFallbackCheck" type="Node" parent="Content/MainTabs/Item Shop" unique_id=742926138 node_paths=PackedStringArray("tabs")]
 script = ExtResource("32_3l2jb")
@@ -365,6 +367,32 @@ size_flags_horizontal = 8
 mouse_filter = 0
 theme_override_constants/separation = 2
 alignment = 2
+
+[node name="ReportButton" type="Button" parent="Content/StatusBar/Right" unique_id=1725533274]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Report Issue"
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/ReportButton" unique_id=1499127075]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("36_36vak")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReportLink" type="Node" parent="Content/StatusBar/Right/ReportButton" unique_id=98301351]
+script = ExtResource("37_6ysvb")
+defaultURI = "https://github.com/PegLegFN/PegLeg/issues"
 
 [node name="SettingsButton" type="Button" parent="Content/StatusBar/Right" unique_id=741385333]
 custom_minimum_size = Vector2(25, 25)
@@ -495,6 +523,7 @@ modTime = 8.0
 script = ExtResource("41_vp0cx")
 curtain = NodePath("..")
 
+[connection signal="pressed" from="Content/StatusBar/Right/ReportButton" to="Content/StatusBar/Right/ReportButton/ReportLink" method="ShellOpenDefault"]
 [connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindowLite" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]
 [connection signal="pressed" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="ToggleMute"]

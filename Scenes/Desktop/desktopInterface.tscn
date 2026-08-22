@@ -75,8 +75,10 @@
 [ext_resource type="Script" uid="uid://1wq8v7f1so0q" path="res://Scripts/AccountRefreshHook.cs" id="56_xsdc0"]
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="58_7yvd6"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="59_4gcek"]
+[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="59_aot8u"]
 [ext_resource type="PackedScene" uid="uid://bgs7wpcqmkgvo" path="res://Scenes/update_notif.tscn" id="60_d5tfv"]
 [ext_resource type="PackedScene" uid="uid://bbpdgupjy1ovb" path="res://Scenes/Desktop/Overlays/dev_text_overlay.tscn" id="60_o7hny"]
+[ext_resource type="Script" uid="uid://b5oshbajlo4j7" path="res://Scripts/ShellOpen.cs" id="60_t60yp"]
 [ext_resource type="PackedScene" uid="uid://ciamgottppk7s" path="res://Scenes/Desktop/Overlays/image_copy_window.tscn" id="62_wqw3e"]
 [ext_resource type="PackedScene" uid="uid://bxop648lmprhv" path="res://Scenes/Desktop/Overlays/hero_item_selector.tscn" id="64_buut1"]
 [ext_resource type="PackedScene" uid="uid://cddyd14hf7dey" path="res://Scenes/Desktop/Overlays/item_upgrade_animation.tscn" id="73_jacmh"]
@@ -85,7 +87,7 @@
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
 [ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="99_hfy7e"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_53jin"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_t60yp"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7h2tb"]
@@ -461,25 +463,25 @@ targetProfile = "theater2"
 metadata/_tab_index = 7
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(1508465885, 144255995) index="0" unique_id=228194712]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(1508465885, 2039985868) index="0" unique_id=1672625159]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(1508465885, 301043813) index="0" unique_id=1744959934]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1508465885, 1694755347) index="0" unique_id=669176367]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(1508465885, 426083547) index="0" unique_id=2051298463]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(1508465885, 535625123) index="0" unique_id=1931883480]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" parent_id_path=PackedInt32Array(1508465885, 248328693) index="0" unique_id=1448244160]
-button_group = SubResource("ButtonGroup_53jin")
+button_group = SubResource("ButtonGroup_t60yp")
 
 [node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="2" unique_id=317467257]
 elementSpace = 10.0
@@ -657,6 +659,32 @@ theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 20
 text = "144"
 horizontal_alignment = 1
+
+[node name="ReportButton" type="Button" parent="Content/StatusBar/Right" unique_id=844596259]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Report Issue"
+theme_type_variation = &"LargeButton"
+
+[node name="TextureRect" type="TextureRect" parent="Content/StatusBar/Right/ReportButton" unique_id=1178422753]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("59_aot8u")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReportLink" type="Node" parent="Content/StatusBar/Right/ReportButton" unique_id=346943343]
+script = ExtResource("60_t60yp")
+defaultURI = "https://github.com/PegLegFN/PegLeg/issues"
 
 [node name="RefreshBtn" type="Button" parent="Content/StatusBar/Right" unique_id=283216786]
 custom_minimum_size = Vector2(25, 25)
@@ -852,6 +880,7 @@ curtain = NodePath("..")
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="OverlayWindows/AccountSwitcher" method="OpenWindow"]
 [connection signal="pressed" from="Content/StatusBar/Left/Button" to="Content/StatusBar/Left/PowerLevelIndicatorV2" method="TempClaimRewards"]
+[connection signal="pressed" from="Content/StatusBar/Right/ReportButton" to="Content/StatusBar/Right/ReportButton/ReportLink" method="ShellOpenDefault"]
 [connection signal="pressed" from="Content/StatusBar/Right/RefreshBtn" to="Content/StatusBar/Right/RefreshBtn" method="RefreshAccount"]
 [connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindow" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn/TextureRect" method="set_texture"]

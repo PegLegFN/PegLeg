@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="1_8gj08"]
 [ext_resource type="Script" uid="uid://objskpkxjfqt" path="res://Scripts/UserInterface/Settings/MiscSettings.cs" id="1_u4265"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="2_4wbbm"]
+[ext_resource type="Script" uid="uid://b5oshbajlo4j7" path="res://Scripts/ShellOpen.cs" id="3_8a8id"]
 
 [node name="MiscPage" type="VBoxContainer" unique_id=1874196611 node_paths=PackedStringArray("accountImportButton", "collectionBookSpinbox")]
 size_flags_vertical = 3
@@ -108,6 +109,10 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Report Issue"
 
+[node name="ReportLink" type="Node" parent="VBoxContainer/ReportButton" unique_id=183850390]
+script = ExtResource("3_8a8id")
+defaultURI = "https://github.com/PegLegFN/PegLeg/issues"
+
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1199043766]
 layout_mode = 2
 
@@ -140,9 +145,20 @@ text = "Refresh Hour (Dev thing, ignore)"
 layout_mode = 2
 text = "Open AppData folder"
 
+[node name="AppdataLink" type="Node" parent="VBoxContainer/UserDataButton" unique_id=418877186]
+script = ExtResource("3_8a8id")
+defaultURI = "user://"
+globalise = true
+
 [node name="InstallFolderButton" type="Button" parent="VBoxContainer" unique_id=1206344414]
 layout_mode = 2
 text = "Open Installation folder"
+
+[node name="ExeLink" type="Node" parent="VBoxContainer/InstallFolderButton" unique_id=525563092]
+script = ExtResource("3_8a8id")
+defaultURI = "res://"
+globalise = true
+helperGlobalise = true
 
 [node name="CloseAppButton" type="Button" parent="VBoxContainer" unique_id=1892774698]
 layout_mode = 2
@@ -154,9 +170,9 @@ visible = false
 layout_mode = 2
 text = "Import accounts from PegLeg (Release)"
 
-[connection signal="pressed" from="VBoxContainer/ReportButton" to="." method="OpenAppData"]
+[connection signal="pressed" from="VBoxContainer/ReportButton" to="VBoxContainer/ReportButton/ReportLink" method="ShellOpenDefault"]
 [connection signal="HoldPressed" from="VBoxContainer/MarginContainer/Responsive Button Area" to="." method="ImportAccounts"]
 [connection signal="pressed" from="VBoxContainer/ExchangeToken" to="." method="CopyExchange"]
-[connection signal="pressed" from="VBoxContainer/UserDataButton" to="." method="OpenAppData"]
-[connection signal="pressed" from="VBoxContainer/InstallFolderButton" to="." method="OpenInstallationFolder"]
+[connection signal="pressed" from="VBoxContainer/UserDataButton" to="VBoxContainer/UserDataButton/AppdataLink" method="ShellOpenDefault"]
+[connection signal="pressed" from="VBoxContainer/InstallFolderButton" to="VBoxContainer/InstallFolderButton/ExeLink" method="ShellOpenDefault"]
 [connection signal="pressed" from="VBoxContainer/CloseAppButton" to="." method="CloseApp"]
