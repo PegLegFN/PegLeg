@@ -1,15 +1,25 @@
 [gd_scene format=3 uid="uid://bk6022q8aea17"]
 
 [ext_resource type="Script" uid="uid://j3y0qknppuhg" path="res://Scripts/UIElements/Virtual Tab Bar/VirtualTab.cs" id="1_vw2u6"]
+[ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="2_vw2u6"]
 
-[node name="Tab" type="MarginContainer" unique_id=473421915 node_paths=PackedStringArray("button", "label", "labelPadding", "iconRect")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5o6y"]
+shader = ExtResource("2_vw2u6")
+shader_parameter/scalar = 3.0
+shader_parameter/base = 1.5
+
+[node name="Tab" type="MarginContainer" unique_id=473421915 node_paths=PackedStringArray("button", "label", "labelPaddingOther", "labelPadding", "iconRect", "background")]
 offset_right = 9.0
 offset_bottom = 22.0
 script = ExtResource("1_vw2u6")
+Text = "test"
+TextPadding = true
 button = NodePath("CheckButton")
 label = NodePath("MarginContainer/HBoxContainer/Label")
+labelPaddingOther = NodePath("MarginContainer/HBoxContainer/LabelPadding2")
 labelPadding = NodePath("MarginContainer/HBoxContainer/LabelPadding")
 iconRect = NodePath("MarginContainer/HBoxContainer/Icon")
+background = NodePath("MarginContainer/BG")
 
 [node name="CheckButton" type="CheckButton" parent="." unique_id=1785206194]
 layout_mode = 2
@@ -23,10 +33,16 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
+[node name="BG" type="ColorRect" parent="MarginContainer" unique_id=206637363]
+self_modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_d5o6y")
+layout_mode = 2
+mouse_filter = 2
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2018855118]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=439966205]
@@ -38,12 +54,16 @@ mouse_filter = 2
 expand_mode = 3
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1433270987]
-visible = false
+[node name="LabelPadding2" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1872764813]
+custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1433270987]
+layout_mode = 2
+text = "test"
 
 [node name="LabelPadding" type="Control" parent="MarginContainer/HBoxContainer" unique_id=574386466]
-visible = false
-custom_minimum_size = Vector2(2, 0)
+custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
 mouse_filter = 2

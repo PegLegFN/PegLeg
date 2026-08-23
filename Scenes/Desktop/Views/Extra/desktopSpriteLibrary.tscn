@@ -1,0 +1,269 @@
+[gd_scene format=3 uid="uid://kp0n87fnaou3"]
+
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="1_6wfsn"]
+[ext_resource type="PackedScene" uid="uid://qdtb6peaahfr" path="res://Scenes/UI/TabBar/virtualTabLarge.tscn" id="2_ef77v"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="3_etqnd"]
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_ef77v"]
+[ext_resource type="PackedScene" uid="uid://c1qs5v3fbwmbx" path="res://Scenes/Desktop/Views/Extra/spriteEntry.tscn" id="5_etqnd"]
+[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/WonkyButton.gdshader" id="6_f2c4i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f2c4i"]
+resource_local_to_scene = true
+shader = ExtResource("6_f2c4i")
+shader_parameter/ControlSize = Vector2(150, 200)
+shader_parameter/Offset0 = Vector2(-9, -1)
+shader_parameter/Offset1 = Vector2(-3, 4)
+shader_parameter/Offset2 = Vector2(4, 4)
+shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/progress = 0.0
+shader_parameter/outline = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uolwn"]
+resource_local_to_scene = true
+shader = ExtResource("6_f2c4i")
+shader_parameter/ControlSize = Vector2(164, 214)
+shader_parameter/Offset0 = Vector2(-9, -1)
+shader_parameter/Offset1 = Vector2(-3, 4)
+shader_parameter/Offset2 = Vector2(4, 4)
+shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/progress = 1.0
+shader_parameter/outline = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fs68o"]
+resource_local_to_scene = true
+shader = ExtResource("6_f2c4i")
+shader_parameter/ControlSize = Vector2(150, 200)
+shader_parameter/Offset0 = Vector2(-9, -1)
+shader_parameter/Offset1 = Vector2(-3, 4)
+shader_parameter/Offset2 = Vector2(4, 4)
+shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/progress = 1.0
+shader_parameter/outline = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84np2"]
+resource_local_to_scene = true
+shader = ExtResource("6_f2c4i")
+shader_parameter/ControlSize = Vector2(164, 214)
+shader_parameter/Offset0 = Vector2(-9, -1)
+shader_parameter/Offset1 = Vector2(-3, 4)
+shader_parameter/Offset2 = Vector2(4, 4)
+shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/progress = 1.0
+shader_parameter/outline = true
+
+[node name="SpriteLibrary" type="MarginContainer" unique_id=448158228]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=148977835]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=826891293]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1552470767]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search"
+
+[node name="VirtualTabBar" parent="VBoxContainer/HBoxContainer" unique_id=1710060875 instance=ExtResource("1_6wfsn")]
+layout_mode = 2
+singleTabMode = false
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("2_ef77v")]
+layout_mode = 2
+Mode = -1
+Text = "Ch7S3"
+
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=1065833815 instance=ExtResource("2_ef77v")]
+layout_mode = 2
+Mode = 1
+Text = "Ch7S4"
+
+[node name="VirtualTabBar2" parent="VBoxContainer/HBoxContainer" unique_id=863463719 instance=ExtResource("1_6wfsn")]
+layout_mode = 2
+singleTabMode = false
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar2/HBoxContainer" index="0" unique_id=761350132 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Mode = -1
+Text = "Hidden"
+
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar2/HBoxContainer" index="1" unique_id=474939386 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Text = "Lost"
+
+[node name="Tab3" parent="VBoxContainer/HBoxContainer/VirtualTabBar2/HBoxContainer" index="2" unique_id=1802877004 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Mode = 1
+Text = "Extracted"
+
+[node name="VirtualTabBar3" parent="VBoxContainer/HBoxContainer" unique_id=62935380 instance=ExtResource("1_6wfsn")]
+visible = false
+layout_mode = 2
+singleTabMode = false
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar3/HBoxContainer" index="0" unique_id=1514954033 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Mode = -1
+Text = "Co"
+Tint = Color(1, 0, 0.13815689, 1)
+BGTint = Color(0.6901961, 0.7254902, 0.7490196, 1)
+
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar3/HBoxContainer" index="1" unique_id=1049779633 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Text = "Un"
+Tint = Color(1, 0, 0.13815689, 1)
+BGTint = Color(0.3372549, 0.7254902, 0, 1)
+
+[node name="Tab3" parent="VBoxContainer/HBoxContainer/VirtualTabBar3/HBoxContainer" index="2" unique_id=1371140036 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Text = "Ra"
+Tint = Color(1, 0, 0.13815689, 1)
+BGTint = Color(0, 0.65882355, 1, 1)
+
+[node name="Tab4" parent="VBoxContainer/HBoxContainer/VirtualTabBar3/HBoxContainer" index="3" unique_id=79172896 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Text = "Ep"
+Tint = Color(1, 0, 0.13815689, 1)
+BGTint = Color(0.7882353, 0.30980393, 1, 1)
+
+[node name="Tab5" parent="VBoxContainer/HBoxContainer/VirtualTabBar3/HBoxContainer" index="4" unique_id=799350942 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Text = "Le"
+Tint = Color(1, 0, 0.13815689, 1)
+BGTint = Color(1, 0.50980395, 0.07058824, 1)
+
+[node name="Tab6" parent="VBoxContainer/HBoxContainer/VirtualTabBar3/HBoxContainer" index="5" unique_id=2101271519 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Mode = 1
+Text = "My"
+Tint = Color(1, 0, 0.13815689, 1)
+BGTint = Color(1, 0.9666667, 0, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=166299881]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=633284985]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 10
+
+[node name="Container" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1623831964]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_ef77v")
+CompressSpacing = true
+CompressTowards = 0.0
+Spacing = Vector2(12, 14)
+
+[node name="SpriteEntry" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=700536921 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="ColorRect" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry" index="0" unique_id=909220603]
+material = SubResource("ShaderMaterial_f2c4i")
+
+[node name="ColorRect2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry" index="1" unique_id=455400921]
+material = SubResource("ShaderMaterial_uolwn")
+
+[node name="SpriteEntry2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=93126755 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry3" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=285959848 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry4" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=716047265 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry5" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1369266868 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry6" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1210636019 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry7" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=537547983 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry8" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=25681951 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry9" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=192568418 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="ColorRect" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9" index="0" unique_id=909220603]
+material = SubResource("ShaderMaterial_fs68o")
+
+[node name="ColorRect2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9" index="1" unique_id=455400921]
+visible = true
+material = SubResource("ShaderMaterial_84np2")
+
+[node name="SpriteEntry10" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=69961596 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry11" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1181106826 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry12" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1880405316 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry13" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=630674386 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry14" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=406165270 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry15" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=447002827 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry16" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1630908011 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry17" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1639739016 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry18" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1079151987 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry19" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1628612197 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry20" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1066902683 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry21" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1083241269 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry22" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=797254842 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry23" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=22974567 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry24" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=160937445 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry25" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=832580247 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry26" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=439405520 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry27" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1358394984 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[node name="SpriteEntry28" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1108920203 instance=ExtResource("5_etqnd")]
+layout_mode = 2
+
+[editable path="VBoxContainer/HBoxContainer/VirtualTabBar"]
+[editable path="VBoxContainer/HBoxContainer/VirtualTabBar2"]
+[editable path="VBoxContainer/HBoxContainer/VirtualTabBar3"]
+[editable path="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry"]
+[editable path="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9"]

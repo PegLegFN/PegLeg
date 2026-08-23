@@ -27,7 +27,8 @@ public partial class VirtualTab : Control
 				return;
 			label.Text = Text;
 			label.Visible = !string.IsNullOrWhiteSpace(Text);
-			labelPadding?.Visible = (iconRect?.Visible ?? false) && label.Visible;
+			labelPadding?.Visible = TextPadding && label.Visible;
+			labelPaddingOther?.Visible = TextPadding && label.Visible;
 		}
 	}
 	[Export(PropertyHint.MultilineText)]
@@ -53,7 +54,7 @@ public partial class VirtualTab : Control
 				return;
 			iconRect.Visible = value is not null;
 			iconRect.Texture = value;
-			labelPadding?.Visible = (iconRect?.Visible ?? false) && label.Visible;
+			//labelPadding?.Visible = (iconRect?.Visible ?? false) && label.Visible;
 		}
 	}
 	[Export(PropertyHint.Range,"1,1.5")]
@@ -79,6 +80,17 @@ public partial class VirtualTab : Control
 		set => button?.Disabled = value;
 	}
 	[Export]
+	public bool TextPadding
+	{
+		get => field;
+		set
+		{
+			field = value;
+			labelPadding?.Visible = value && (label?.Visible ?? false);
+			labelPaddingOther?.Visible = value && (label?.Visible ?? false);
+		}
+	}
+	[Export]
 	public Color Tint
 	{
 		get => field;
@@ -88,6 +100,16 @@ public partial class VirtualTab : Control
 			iconRect?.SelfModulate = value;
 		}
 	} = Colors.White;
+	[Export]
+	public Color BGTint
+	{
+		get => field;
+		set
+		{
+			field = value;
+			background?.SelfModulate = value;
+		}
+	} = Colors.Transparent;
 
 	[ExportGroup("Nodes")]
 	[Export]
@@ -97,7 +119,11 @@ public partial class VirtualTab : Control
 	[Export]
 	Control labelPadding;
 	[Export]
+	Control labelPaddingOther;
+	[Export]
 	TextureRect iconRect;
+	[Export]
+	Control background;
 
 	public bool pooled;
 

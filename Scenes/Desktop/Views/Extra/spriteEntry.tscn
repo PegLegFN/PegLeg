@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://c1qs5v3fbwmbx"]
+
+[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/WonkyButton.gdshader" id="1_58sin"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="2_8pimq"]
+[ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="3_tfvjn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_etqnd"]
+resource_local_to_scene = true
+shader = ExtResource("1_58sin")
+shader_parameter/ControlSize = Vector2(150, 200)
+shader_parameter/Offset0 = Vector2(-9, -1)
+shader_parameter/Offset1 = Vector2(-3, 4)
+shader_parameter/Offset2 = Vector2(4, 4)
+shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/progress = 0.0
+shader_parameter/outline = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8pimq"]
+resource_local_to_scene = true
+shader = ExtResource("1_58sin")
+shader_parameter/ControlSize = Vector2(164, 214)
+shader_parameter/Offset0 = Vector2(-9, -1)
+shader_parameter/Offset1 = Vector2(-3, 4)
+shader_parameter/Offset2 = Vector2(4, 4)
+shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/progress = 1.0
+shader_parameter/outline = true
+
+[node name="SpriteEntry" type="Button" unique_id=700536921]
+custom_minimum_size = Vector2(150, 200)
+flat = true
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=909220603]
+material = SubResource("ShaderMaterial_etqnd")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0.6666665, 1, 0.76862746)
+script = ExtResource("2_8pimq")
+syncControlSize = true
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=455400921]
+visible = false
+z_index = 1
+material = SubResource("ShaderMaterial_8pimq")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 7.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(1, 1, 1, 0.76862746)
+script = ExtResource("2_8pimq")
+syncControlSize = true
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1789999977]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_tfvjn")
+expand_mode = 1
+stretch_mode = 5

@@ -23,20 +23,9 @@ public partial class GameOffer
 	public JsonNode this[string propertyName] => rawData[propertyName];
 
 	public string OfferId => rawData["offerId"].ToString();
-	JsonObject metadata;
+	Dictionary<string,string> metadata;
 	public int? GetMetaInt(string key) => int.TryParse(GetMeta(key), out var iVal) ? iVal : null;
-	public string GetMeta(string key)
-	{
-		if (metadata[key] is JsonNode metaVal)
-			return metaVal.ToString();
-		var metaInfoTarget = rawData["metaInfo"]?
-			.AsArray()
-			.FirstOrDefault(val => val["key"].ToString() == key)
-			?.AsObject();
-		if (metaInfoTarget is null)
-			return null;
-		return (metadata[key] = metaInfoTarget["value"].ToString()).ToString();
-	}
+	public string GetMeta(string key) => metadata.TryGetValue(key, out var metaVal) ? metaVal : null;
 
 	public bool FakeOffer { get; private set; }
 	public string Title => rawData["title"]?.ToString();
@@ -117,25 +106,24 @@ public partial class GameOffer
 		rawData["dailyLimit"] = limit > 0 ? limit : -1;
 		rawData["offerId"] ??= Guid.NewGuid();
 
-		return new()
-		{
-			rawData = rawData,
-			metadata = rawData["meta"]?.AsObject() ?? [],
-			itemGrants = grants,
-			basePrice = price,
-			FakeOffer = true
-		};
+		GameOffer result = new() { FakeOffer = true };
+		result.SetRawData(rawData);
+		return result;
 	}
 
 	public void SetRawData(JsonObject rawData)
 	{
 		this.rawData = rawData;
 		itemGrants = [.. rawData["itemGrants"].AsArray().Select(n => new GameItem(null, null, n.AsObject()))];
-		metadata = rawData["meta"]?.AsObject() ?? [];
 
-		if(OfferId== "v2:/2cc86f652a3db4537279b78c1ff60458a441c5113a3245d356c14a25b0645c11")
+		//im not deserialising directly to Dictionary because epic has included identical keys in different cases
+		var metaArray = rawData["meta"]?.Deserialize<JsonElement>().EnumerateObject().ToArray() ?? [];
+		metadata = metaArray.DistinctBy(p => p.Name.ToLower()).ToDictionary(p => p.Name, p => p.Value.ToString(), StringComparer.OrdinalIgnoreCase);
+
+		var metaInfo = rawData["metaInfo"]?.Deserialize<(string key, string value)[]>() ?? [];
+		foreach (var (key, value) in metaInfo)
 		{
-			GD.Print("testing price stuff");
+			metadata.TryAdd(key, value);
 		}
 
 		if (rawData["dynamicBundleInfo"] is JsonObject dynamicBundleInfo)
