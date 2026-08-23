@@ -120,10 +120,11 @@ public partial class GameOffer
 		var metaArray = rawData["meta"]?.Deserialize<JsonElement>().EnumerateObject().ToArray() ?? [];
 		metadata = metaArray.DistinctBy(p => p.Name.ToLower()).ToDictionary(p => p.Name, p => p.Value.ToString(), StringComparer.OrdinalIgnoreCase);
 
-		var metaInfo = rawData["metaInfo"]?.Deserialize<(string key, string value)[]>() ?? [];
-		foreach (var (key, value) in metaInfo)
+		var metaInfo = rawData["metaInfo"]?.Deserialize<(string key, string Key, string value, string Value)[]>() ?? [];
+		foreach (var (key, key2, value, value2) in metaInfo)
 		{
-			metadata.TryAdd(key, value);
+			if ((key ?? key2) is string realKey)
+				metadata.TryAdd(realKey, value ?? value2);
 		}
 
 		if (rawData["dynamicBundleInfo"] is JsonObject dynamicBundleInfo)
