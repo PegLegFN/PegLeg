@@ -10,6 +10,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 public partial class CardPackOpener : Control
 {
 	public static CardPackOpener Instance { get; private set; }
+	public static event Action OnLlamaOpeningComplete;
 	[Export]
 	float pullTime = 0.25f;
 	[Export]
@@ -109,6 +110,7 @@ public partial class CardPackOpener : Control
 
 
 	ShaderHook cardChangeEffect;
+	public static bool IsOpen => Instance?.isOpen == true;
 	bool isOpen;
 	bool isSmall;
 	bool cardPacksPrepared;
@@ -303,7 +305,7 @@ public partial class CardPackOpener : Control
 				if (!item.attributes.ContainsKey("options"))
 					openableCardPacks.Add(item);
 			}
-			extraCardPacks = extraCardPacks.Except(openableCardPacks).ToArray();
+			extraCardPacks = [.. extraCardPacks.Except(openableCardPacks)];
 
 			//step 2: send request to open all regular ones
 			if (openableCardPacks.Count > 0)
@@ -314,12 +316,14 @@ public partial class CardPackOpener : Control
 				{
 					["cardPackItemIds"] = cardpacksToOpen
 				};
-				//LoadingOverlay.Instance.AddLoadingKey("LlamaOpenBulk");
 
-				//TODO: handle errors
-				//TODO: merge amounts of identical item stacks
-				var resultNotification = (await account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPackBatch", body.ToString())).FirstOrDefault();
-				var resultItemData = resultNotification["lootGranted"]["items"].AsArray();
+				JsonArray resultItemData = [];
+				foreach (var cardpackId in cardpacksToOpen)
+				{
+					var resultNotification = (await account.GetProfile(FnProfileTypes.AccountItems).PerformOperation("OpenCardPack", new JsonObject() { ["cardPackItemId"] = cardpackId })).FirstOrDefault();
+					//record in Llamalytics
+					resultItemData = [.. resultNotification["lootGranted"]["items"].AsArray().SafeDeepClone()];
+				}
 
 				var resultItems = resultItemData
 					.Where(val => val?["itemGuid"] is not null && !(val["itemType"]?.ToString().StartsWith("CardPack") ?? false))
@@ -422,9 +426,16 @@ public partial class CardPackOpener : Control
 
 	void ResizePanelOpen()
 	{
-		var startingLocation = fromPanel.GetGlobalRect();
-		displayPanel.GlobalPosition = startingLocation.Position;
-		displayPanel.Size = startingLocation.Size;
+		if(fromPanel?.GetGlobalRect() is { } startingLocation)
+		{
+			displayPanel.GlobalPosition = startingLocation.Position;
+			displayPanel.Size = startingLocation.Size;
+		}
+		else
+		{
+			displayPanel.Position = displayPanel.GetParent<Control>().Size / 2;
+			displayPanel.Size = Vector2.Zero;
+		}
 		displayPanel.Modulate = Colors.Transparent;
 
 		MusicController.StopMusic();
@@ -1149,19 +1160,26 @@ public partial class CardPackOpener : Control
 
 	async void CloseMenu()
 	{
+		OnLlamaOpeningComplete?.Invoke();
 		MusicController.ResumeMusic();
-		var startingLocation = fromPanel.GetGlobalRect();
 		var exitAnim = GetTree().CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad);
 		//bgFade.TweenProperty(backgroundImage, "self_modulate", Colors.Transparent, 0.25f);
-		exitAnim.TweenProperty(displayPanel, "global_position", startingLocation.Position, 0.2);
-		exitAnim.TweenProperty(displayPanel, "size", startingLocation.Size, 0.2);
+		if (fromPanel?.GetGlobalRect() is { } startingLocation)
+		{
+			exitAnim.TweenProperty(displayPanel, "global_position", startingLocation.Position, 0.2);
+			exitAnim.TweenProperty(displayPanel, "size", startingLocation.Size, 0.2);
+		}
+		else
+		{
+			exitAnim.TweenProperty(displayPanel, "position", displayPanel.GetParent<Control>().Size / 2, 0.2);
+			exitAnim.TweenProperty(displayPanel, "size", Vector2.Zero, 0.2);
+		}
 		exitAnim.TweenProperty(displayPanel, "modulate", Colors.Transparent, 0.1).SetDelay(0.2);
 		exitAnim.TweenProperty(music, "volume_db", -80, 1)
 			.SetTrans(Tween.TransitionType.Expo)
 			.SetEase(Tween.EaseType.In);
 
 		await Helpers.WaitForTimer(0.31f);
-
 		queuedChoices.Clear();
 		queuedItems.Clear();
 		displayPanel.Visible = false;

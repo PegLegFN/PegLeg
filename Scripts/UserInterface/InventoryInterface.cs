@@ -370,6 +370,10 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 	async void TryFilter()
 	{
+		if (targetProfile == "athena")
+		{
+			int _ = 0;
+		}
 		await Helpers.WaitForFrame();
 		if (accountDirty)
 		{

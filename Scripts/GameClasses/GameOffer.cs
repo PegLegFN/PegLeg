@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ExternalCosmetics;
@@ -111,6 +112,21 @@ public partial class GameOffer
 		return result;
 	}
 
+	record struct MetaInfoKVP
+	{
+		[JsonInclude]
+		string key;
+		[JsonInclude]
+		string Key;
+		[JsonInclude]
+		string value;
+		[JsonInclude]
+		string Value;
+
+		[JsonIgnore]
+		public KeyValuePair<string, string> KVP => KeyValuePair.Create(key ?? Key, value ?? Value);
+	}
+
 	public void SetRawData(JsonObject rawData)
 	{
 		this.rawData = rawData;
@@ -120,11 +136,10 @@ public partial class GameOffer
 		var metaArray = rawData["meta"]?.Deserialize<JsonElement>().EnumerateObject().ToArray() ?? [];
 		metadata = metaArray.DistinctBy(p => p.Name.ToLower()).ToDictionary(p => p.Name, p => p.Value.ToString(), StringComparer.OrdinalIgnoreCase);
 
-		var metaInfo = rawData["metaInfo"]?.Deserialize<(string key, string Key, string value, string Value)[]>() ?? [];
-		foreach (var (key, key2, value, value2) in metaInfo)
+		var metaInfo = rawData["metaInfo"]?.Deserialize<MetaInfoKVP[]>().Select(mkvp=>mkvp.KVP).ToArray() ?? [];
+		foreach (var kvp in metaInfo)
 		{
-			if ((key ?? key2) is string realKey)
-				metadata.TryAdd(realKey, value ?? value2);
+			metadata.TryAdd(kvp.Key, kvp.Value);
 		}
 
 		if (rawData["dynamicBundleInfo"] is JsonObject dynamicBundleInfo)

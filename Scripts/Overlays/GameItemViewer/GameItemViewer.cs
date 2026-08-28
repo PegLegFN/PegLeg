@@ -89,6 +89,12 @@ public partial class GameItemViewer : ModalWindow
 	[Export]
 	SpinBox purchaseSpinner;
 
+	[ExportGroup("Packs")]
+	[Export]
+	Control cardPackOpenPanel;
+	[Export]
+	Control cardPackSource;
+
 	public override void _Ready()
 	{
 		base._Ready();
@@ -197,6 +203,8 @@ public partial class GameItemViewer : ModalWindow
 
 		upgrader.Visible = currentItem.attributes?["level"] is not null;
 		upgrader.SetItem(currentItem);
+
+		cardPackOpenPanel?.Visible = newItem.template?.Type == "CardPack" && newItem.profile?.account.isOwned == true && !CardPackOpener.IsOpen;
 
 		//if choice cardpack, display choices instead
 		if (!rawInspect && currentItem.template?.Type == "CardPack" && currentItem.CardPackChoices is GameItem[] itemChoices)
@@ -509,6 +517,13 @@ public partial class GameItemViewer : ModalWindow
 		SetWindowOpen(false);
 	}
 
+	public async void OpenPack()
+	{
+		var item = currentItem;
+		SetWindowOpen(false);
+		await Helpers.WaitForTimer(0.25f);
+		await CardPackOpener.Instance.StartOpening([item], null, item);
+	}
 
 	public void SetChoiceIndex(int index)
 	{

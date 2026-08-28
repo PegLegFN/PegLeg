@@ -182,7 +182,7 @@ public partial class HomebasePowerLevel : Control
 		var questsToClaim = confirmation == true ? profile.GetItems("Quest", QuestPredicate) : [];
 		var packsToClaim = confirmation == true ? profile.GetItems("CardPack", PackPredicate) : [];
 		bool unclaimedAlert = profile.statAttributes?["mission_alert_redemption_record"]?.AsObject().ContainsKey("pendingMissionAlertRewards") == true;
-		var total = questsToClaim.Length + (packsToClaim.Length > 0 ? 1 : 0) + (unclaimedAlert ? 1 : 0);
+		var total = questsToClaim.Length + packsToClaim.Length + (unclaimedAlert ? 1 : 0);
 		int progress = 0;
 
 		if (questsToClaim.Length == 0 && packsToClaim.Length == 0 && unclaimedAlert)
@@ -202,18 +202,18 @@ public partial class HomebasePowerLevel : Control
 		if (packsToClaim.Length > 0)
 		{
 			string[] cardpacksToOpen = [.. packsToClaim.Select(item => item.uuid)];
-			JsonObject body = new()
+			foreach (var cardpackId in cardpacksToOpen)
 			{
-				["cardPackItemIds"] = new JsonArray([..cardpacksToOpen])
-			};
-			var notifs = await profile.PerformOperation("OpenCardPackBatch", body.ToString());
-			if (notifs.FirstOrDefault() is JsonObject packRewards)
-			{
-				var rewardData = packRewards["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
-				var grouped = rewardData.GroupBy(r => r.itemType).Select(g => g.FirstOrDefault() with { quantity = g.Sum(r => r.quantity) });
-				rewards.AddRange(grouped.Select(r => r.FindOrCreateReward(currentAccount)));
+				var resultNotification = (await profile.PerformOperation("OpenCardPack", new JsonObject() { ["cardPackItemId"] = cardpackId })).FirstOrDefault();
+				//record in Llamalytics
+				if (resultNotification is not null)
+				{
+					var rewardData = resultNotification["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
+					var grouped = rewardData.GroupBy(r => r.itemType).Select(g => g.FirstOrDefault() with { quantity = g.Sum(r => r.quantity) });
+					rewards.AddRange(grouped.Select(r => r.FindOrCreateReward(currentAccount)));
+				}
+				progress++;
 			}
-			progress++;
 			loadingToken.SetLoadingProgress(progress, total);
 		}
 

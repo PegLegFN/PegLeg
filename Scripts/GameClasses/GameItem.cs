@@ -256,6 +256,7 @@ public class GameItem
 		forAccount ??= GameAccount.ActiveAccount;
 		return Mathf.Min(DesiredLevel, forAccount.GetItemLevelCap());
 	}
+
 	public (int level, int tier, bool capped) ResolveDesiredLevelAndTier(GameAccount forAccount = null, bool ignoreLevelCap = false)
 	{
 		var level = ignoreLevelCap ? DesiredLevel : ResolveDesiredLevel(forAccount);
@@ -642,13 +643,13 @@ public class GameItem
 		int subLevel = level - ratingSet["FirstLevel"].GetValue<int>();
 		if (subLevel < 0)
 		{
-			GD.Print($"{template.TemplateId} sublevel below zero. Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			GD.Print($"{templateId} sublevel below zero. Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
 			subLevel = 0;
 			//return 0;
 		}
 		if (subLevel >= ratingsLength)
 		{
-			GD.Print($"{template.TemplateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			GD.Print($"{templateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
 			subLevel = ratingsLength - 1;
 			//return 0;
 		}
@@ -660,8 +661,8 @@ public class GameItem
 	{
 		get
 		{
-			var tier = template.Tier;
-			if (template.Type == "Schematic" && tier == 0)
+			var tier = template?.Tier ?? 0;
+			if (template?.Type == "Schematic" && tier == 0)
 				tier = 1;
 			var level = Level;
 
@@ -756,7 +757,7 @@ public class GameItem
 				if (textureType == FnItemTextureType.PackImage)
 					textureType = FnItemTextureType.Preview;
 			}
-			else if (textureType == FnItemTextureType.PackImage && ((template.TryGetTexturePath(out var previewPath) && !previewPath.Contains("Pinata")) || template.DisplayName.Contains("Mini")))
+			else if (textureType == FnItemTextureType.PackImage && ((!template.TryGetTexturePath(out var previewPath) || !previewPath.Contains("Pinata")) || template.DisplayName.Contains("Mini")))
 				return null;
 			else if (textureType == FnItemTextureType.Preview)
 			{

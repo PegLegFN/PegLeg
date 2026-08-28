@@ -265,31 +265,20 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	public GameItem displayItem { get; protected set; }
 	protected GameItem inspectorOverride;
 
-	public void SetItem(GameItem newItem, bool forceUpdate = false)
+	public void SetItem(GameItem newItem)
 	{
 		if (newItem == currentItem)
-		{
-			if (forceUpdate)
-				UpdateItem(currentItem);
 			return;
-		}
 
-		if (currentItem is not null)
-		{
-			currentItem.OnChanged -= UpdateItem;
-			currentItem.OnRemoved -= RemoveItem;
-		}
+		currentItem?.OnChanged -= UpdateItem;
+		currentItem?.OnRemoved -= RemoveItem;
 
 		currentItem = newItem;
 
-		if (currentItem is not null)
-		{
-			currentItem.OnChanged += UpdateItem;
-			currentItem.OnRemoved += RemoveItem;
-			UpdateItem(currentItem);
-		}
-		else
-			ClearItem();
+		currentItem?.OnChanged += UpdateItem;
+		currentItem?.OnRemoved += RemoveItem;
+
+		UpdateItem(currentItem);
 	}
 
 	public void UpdateItem() => UpdateItem(currentItem);
@@ -608,7 +597,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		_ when item.template?.HasLevel == true => true,
 		"Schematic" or "Weapon" or "Trap" or "Hero" or "Defender" => true,
 		"Worker" when item.profile?.account?.isOwned == true => true,
-		"CardPack" when item.CardPackChoices is not null => true,
+		"CardPack" => true,
 		_ => false
 	};
 

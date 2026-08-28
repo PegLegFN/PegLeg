@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="3_etqnd"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_ef77v"]
 [ext_resource type="PackedScene" uid="uid://c1qs5v3fbwmbx" path="res://Scenes/Desktop/Views/Extra/spriteEntry.tscn" id="5_etqnd"]
-[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/WonkyButton.gdshader" id="6_f2c4i"]
+[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/SpriteButton.gdshader" id="6_f2c4i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_f2c4i"]
 resource_local_to_scene = true
@@ -15,21 +15,14 @@ shader_parameter/Offset0 = Vector2(-9, -1)
 shader_parameter/Offset1 = Vector2(-3, 4)
 shader_parameter/Offset2 = Vector2(4, 4)
 shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/OutlineOffset = 5.0
+shader_parameter/OutlineGap = 2.0
 shader_parameter/progress = 0.0
-shader_parameter/outline = false
+shader_parameter/special = false
+shader_parameter/lost = false
+shader_parameter/locked = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uolwn"]
-resource_local_to_scene = true
-shader = ExtResource("6_f2c4i")
-shader_parameter/ControlSize = Vector2(164, 214)
-shader_parameter/Offset0 = Vector2(-9, -1)
-shader_parameter/Offset1 = Vector2(-3, 4)
-shader_parameter/Offset2 = Vector2(4, 4)
-shader_parameter/Offset3 = Vector2(6, -9)
-shader_parameter/progress = 1.0
-shader_parameter/outline = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fs68o"]
 resource_local_to_scene = true
 shader = ExtResource("6_f2c4i")
 shader_parameter/ControlSize = Vector2(150, 200)
@@ -37,19 +30,12 @@ shader_parameter/Offset0 = Vector2(-9, -1)
 shader_parameter/Offset1 = Vector2(-3, 4)
 shader_parameter/Offset2 = Vector2(4, 4)
 shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/OutlineOffset = 5.0
+shader_parameter/OutlineGap = 2.0
 shader_parameter/progress = 1.0
-shader_parameter/outline = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_84np2"]
-resource_local_to_scene = true
-shader = ExtResource("6_f2c4i")
-shader_parameter/ControlSize = Vector2(164, 214)
-shader_parameter/Offset0 = Vector2(-9, -1)
-shader_parameter/Offset1 = Vector2(-3, 4)
-shader_parameter/Offset2 = Vector2(4, 4)
-shader_parameter/Offset3 = Vector2(6, -9)
-shader_parameter/progress = 1.0
-shader_parameter/outline = true
+shader_parameter/special = false
+shader_parameter/lost = false
+shader_parameter/locked = false
 
 [node name="SpriteLibrary" type="MarginContainer" unique_id=448158228]
 anchors_preset = 15
@@ -168,11 +154,8 @@ Spacing = Vector2(12, 14)
 [node name="SpriteEntry" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=700536921 instance=ExtResource("5_etqnd")]
 layout_mode = 2
 
-[node name="ColorRect" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry" index="0" unique_id=909220603]
+[node name="BG" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry" index="0" unique_id=909220603]
 material = SubResource("ShaderMaterial_f2c4i")
-
-[node name="ColorRect2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry" index="1" unique_id=455400921]
-material = SubResource("ShaderMaterial_uolwn")
 
 [node name="SpriteEntry2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=93126755 instance=ExtResource("5_etqnd")]
 layout_mode = 2
@@ -198,12 +181,8 @@ layout_mode = 2
 [node name="SpriteEntry9" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=192568418 instance=ExtResource("5_etqnd")]
 layout_mode = 2
 
-[node name="ColorRect" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9" index="0" unique_id=909220603]
-material = SubResource("ShaderMaterial_fs68o")
-
-[node name="ColorRect2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9" index="1" unique_id=455400921]
-visible = true
-material = SubResource("ShaderMaterial_84np2")
+[node name="BG" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9" index="0" unique_id=909220603]
+material = SubResource("ShaderMaterial_uolwn")
 
 [node name="SpriteEntry10" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=69961596 instance=ExtResource("5_etqnd")]
 layout_mode = 2

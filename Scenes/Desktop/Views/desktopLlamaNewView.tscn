@@ -1,0 +1,335 @@
+[gd_scene format=3 uid="uid://cvtfken4deoo1"]
+
+[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="10_2w3m7"]
+[ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="11_wcog2"]
+[ext_resource type="Shader" uid="uid://b40dkqdfhp8ce" path="res://Shaders/AdaptivePanel.gdshader" id="13_5iwli"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="14_v5p4c"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="15_woqfw"]
+[ext_resource type="Shader" uid="uid://dmt1xhf6kra1d" path="res://Shaders/LlamaPinata.gdshader" id="16_txd25"]
+[ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="17_6gv4k"]
+[ext_resource type="Texture2D" uid="uid://dufn5f0er7tu7" path="res://Images/Llamas/PinataStandardPack.png" id="18_iogfi"]
+[ext_resource type="Script" uid="uid://dbf8rsvamv77x" path="res://Scripts/UserInterface/ListEntries/GameOfferEntry.cs" id="19_q8u2p"]
+[ext_resource type="Script" uid="uid://cgtewrbm8ev7a" path="res://Scripts/UserInterface/ListEntries/CardPackEntry.cs" id="20_7l1ck"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="24_1fb0f"]
+[ext_resource type="PackedScene" uid="uid://bgr0eeg3fek2e" path="res://Scenes/GameItemEntry/reward_entry_xl.tscn" id="25_eu32p"]
+[ext_resource type="Texture2D" uid="uid://oo036o6whl2w" path="res://Images/InterfaceIcons/OrArrowHD.png" id="26_0jfnr"]
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="27_4s37q"]
+[ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="28_fltnb"]
+[ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="32_jh7eq"]
+[ext_resource type="PackedScene" uid="uid://d2oou8oikfcdl" path="res://Scenes/ViewElements/Llamas/llama_selector.tscn" id="32_qbev3"]
+[ext_resource type="PackedScene" uid="uid://bgljw01ejeesa" path="res://Scenes/ViewElements/Llamas/llama_preview.tscn" id="33_2lt2g"]
+[ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="33_lia10"]
+[ext_resource type="Script" uid="uid://bqv4gh8tj3lm0" path="res://Scripts/Llamas/LlamaPreview.cs" id="36_2lt2g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gtyrb"]
+resource_local_to_scene = true
+shader = ExtResource("16_txd25")
+shader_parameter/packIcon = ExtResource("17_6gv4k")
+shader_parameter/useMask = true
+
+[sub_resource type="Gradient" id="Gradient_qbev3"]
+colors = PackedColorArray(0.19607843, 0.17254902, 0.2784314, 1, 0.08627451, 0.06666667, 0.078431375, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3w4o0"]
+gradient = SubResource("Gradient_qbev3")
+fill_from = Vector2(0.3, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lpoky"]
+shader = ExtResource("13_5iwli")
+shader_parameter/ControlSize = Vector2(450, 306)
+shader_parameter/ShiftDirection = Vector2(0.5, 0.5)
+shader_parameter/Fit = false
+shader_parameter/UseCorners = true
+shader_parameter/UseGlobalCorners = false
+shader_parameter/ApplyCornersToFit = false
+shader_parameter/CornerRadius = 10.0
+shader_parameter/ClipOOB = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kno20"]
+resource_local_to_scene = true
+shader = ExtResource("16_txd25")
+shader_parameter/packIcon = ExtResource("17_6gv4k")
+shader_parameter/useMask = true
+
+[node name="Llamas" type="MarginContainer" unique_id=2047406860]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1475550788]
+layout_mode = 2
+size_flags_horizontal = 3
+split_offsets = PackedInt32Array(550)
+split_offset = 550
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer" unique_id=317717479]
+custom_minimum_size = Vector2(435, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/ScrollContainer" unique_id=116013211]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="LlamaSelector" parent="HSplitContainer/ScrollContainer/MarginContainer" unique_id=682672091 node_paths=PackedStringArray("mainLlamaPreview", "screenshotLlamaPreview") instance=ExtResource("32_qbev3")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mainLlamaPreview = NodePath("../../../Llama Contents")
+screenshotLlamaPreview = NodePath("../../../../SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer")
+
+[node name="Llama Contents" parent="HSplitContainer" unique_id=831886700 instance=ExtResource("33_2lt2g")]
+layout_mode = 2
+
+[node name="Pinata" parent="HSplitContainer/Llama Contents/MarginContainer" parent_id_path=PackedInt32Array(831886700, 1168303491) index="0" unique_id=208809737]
+material = SubResource("ShaderMaterial_gtyrb")
+
+[node name="ShareButton" parent="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer" parent_id_path=PackedInt32Array(831886700, 1016864363) index="1" unique_id=1634306431]
+visible = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1621613795]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=937523238 node_paths=PackedStringArray("matchSize")]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 0
+script = ExtResource("32_jh7eq")
+matchSize = NodePath("PegLegWatermark")
+
+[node name="PegLegWatermark" parent="SubViewportContainer/SubViewport" unique_id=1912781604 instance=ExtResource("33_lia10")]
+offset_right = 64.0
+offset_bottom = 64.0
+
+[node name="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/Background" parent_id_path=PackedInt32Array(1912781604, 818777283) index="0" unique_id=757635141]
+texture = SubResource("GradientTexture2D_3w4o0")
+
+[node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark" unique_id=1530953236]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2" unique_id=1171611683]
+material = SubResource("ShaderMaterial_lpoky")
+layout_mode = 2
+texture = ExtResource("14_v5p4c")
+expand_mode = 1
+script = ExtResource("15_woqfw")
+syncControlSize = true
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2" unique_id=9620967 node_paths=PackedStringArray("llamaPanel", "currentOfferEntry", "currentCardpackEntry", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("36_2lt2g")
+interactive = false
+itemEntryScene = ExtResource("11_wcog2")
+llamaPanel = NodePath(".")
+currentOfferEntry = NodePath("OfferEntry")
+currentCardpackEntry = NodePath("CardPackEntry")
+resultEntriesParent = NodePath("VBoxContainer/MarginContainer/Items/HBoxContainer/RewardsContainer")
+surpriseResultPanel = NodePath("VBoxContainer/MarginContainer/Items/HBoxContainer/Dummy")
+soldOutResultPanel = NodePath("VBoxContainer/MarginContainer/Items/HBoxContainer/Dummy")
+choicePanel = NodePath("VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer")
+firstChoice = NodePath("VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry")
+secondChoice = NodePath("VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2")
+
+[node name="OfferEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=954077950 node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+layout_mode = 2
+script = ExtResource("19_q8u2p")
+grantedItemEntry = NodePath("../CardPackEntry")
+priceEntry = NodePath("../VBoxContainer/Price")
+
+[node name="CardPackEntry" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=1664238255]
+layout_mode = 2
+script = ExtResource("20_7l1ck")
+includeAmountInName = true
+useLargePreview = true
+
+[node name="Pinata" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=1502011676]
+self_modulate = Color(0.5, 0.5, 0.5, 1)
+material = SubResource("ShaderMaterial_kno20")
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("18_iogfi")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("15_woqfw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer" unique_id=774562876]
+layout_mode = 2
+
+[node name="LlamaName" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer" unique_id=1243213583]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Llama Name"
+text_overrun_behavior = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer" unique_id=1727829055]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 30
+
+[node name="Items" type="ScrollContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer" unique_id=369850920]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+
+[node name="HBoxContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items" unique_id=959808740]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RewardsContainer" type="Container" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer" unique_id=975609463]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+script = ExtResource("10_2w3m7")
+CompressSpacing = true
+Spacing = Vector2(5, 0)
+
+[node name="Dummy" type="Control" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer" unique_id=1908973542]
+layout_mode = 2
+
+[node name="ChoiceContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer" unique_id=1606795908]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer" unique_id=172194147]
+layout_mode = 2
+ratio = 2.5
+
+[node name="Control" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer" unique_id=215273271]
+layout_mode = 2
+theme_override_constants/margin_bottom = 20
+
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=1715490138]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("24_1fb0f")
+expand_mode = 3
+
+[node name="RewardEntry" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" unique_id=1525498365 instance=ExtResource("25_eu32p")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+preventInteractability = true
+autoLinkToViewer = false
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect" unique_id=821217485]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+text = "Name"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="TextureRect2" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=994923092]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("24_1fb0f")
+expand_mode = 3
+
+[node name="RewardEntry2" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" unique_id=941667885 instance=ExtResource("25_eu32p")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+preventInteractability = true
+autoLinkToViewer = false
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2" unique_id=779157309]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+text = "Name"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="TextureRect3" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control" unique_id=167880711]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("26_0jfnr")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect3" unique_id=207825236]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -9.0
+offset_right = 20.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 48
+text = "OR"
+
+[node name="Price" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer" unique_id=1382068028]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+script = ExtResource("27_4s37q")
+
+[node name="Icon" type="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" unique_id=1003107657]
+layout_mode = 2
+texture = ExtResource("28_fltnb")
+expand_mode = 3
+
+[node name="PriceText" type="Label" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" unique_id=740505682]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "2500"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/HBoxContainer/ShareButton" to="SubViewportContainer/SubViewport" method="CopyScreenshot"]
+[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/OfferEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/LlamaName" method="set_text"]
+[connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/Pinata" method="set_texture"]
+[connection signal="NameChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/LlamaName" method="set_text"]
+[connection signal="SubtypeIconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/CardPackEntry" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/Pinata" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="AmountChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/PriceText" method="set_text"]
+[connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/Icon" method="set_texture"]
+
+[editable path="HSplitContainer/Llama Contents"]
+[editable path="SubViewportContainer/SubViewport/PegLegWatermark"]

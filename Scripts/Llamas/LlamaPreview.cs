@@ -1,11 +1,12 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
 public partial class LlamaPreview : Control
 {
-	static LlamaPreview instance;
+	static LlamaPreview overlayInstance;
 
 	[Export]
 	bool interactive = true;
@@ -58,6 +59,7 @@ public partial class LlamaPreview : Control
 	GameOffer tokenUpgradeOffer;
 	bool useTokenOffer = false;
 	public GameItem[] currentCardpacks { get; private set; }
+	GameItem topCardpack;
 
 	CancellationTokenSource offerCts;
 	List<GameItemEntry> llamaResultEntries = [];
@@ -70,32 +72,46 @@ public partial class LlamaPreview : Control
 	{
 		if (overlayWindow is not null)
 		{
-			instance = this;
+			overlayInstance = this;
 			overlayWindow.WindowClosed += ClearPreview;
 		}
-		quantitySpinner.ValueChanged += OnQuantityChanged;
+		quantitySpinner?.ValueChanged += OnQuantityChanged;
+		ClearPreview();
+		CardPackOpener.OnLlamaOpeningComplete += RefreshLlama;
 	}
 
 	public override void _ExitTree()
 	{
-		if (instance == this)
-			instance = null;
+		if (overlayInstance == this)
+			overlayInstance = null;
+		CardPackOpener.OnLlamaOpeningComplete += RefreshLlama;
 	}
 
 	public static void ShowLlamaOffer(GameOffer offer)
 	{
-		if (instance is null)
+		if (overlayInstance is null)
 			return;
-		instance.overlayWindow.SetWindowOpen(true);
-		instance.SetLlamaOffer(offer);
+		overlayInstance.overlayWindow.SetWindowOpen(true);
+		overlayInstance.SetLlamaOffer(offer);
 	}
 
 	public static void ShowLlamaItems(GameItem[] items)
 	{
-		if (instance is null)
+		if (overlayInstance is null)
 			return;
-		instance.overlayWindow.SetWindowOpen(true);
-		instance.SetLlamaItems(items);
+		overlayInstance.overlayWindow.SetWindowOpen(true);
+		overlayInstance.SetLlamaItems(items);
+	}
+
+	private void RefreshLlama()
+	{
+		if (currentOffer is not null)
+			SetLlamaOffer(currentOffer);
+		else if (currentCardpacks is not null)
+		{
+			currentCardpacks = [.. currentCardpacks.Where(c => c.profile is not null)];
+			SetLlamaItems(currentCardpacks);
+		}
 	}
 
 	public void ClearPreview()
@@ -103,17 +119,17 @@ public partial class LlamaPreview : Control
 		offerCts?.Cancel();
 		useTokenOffer = false;
 
-		currentOfferEntry.ClearOffer();
-		currentCardpackEntry.ClearItem();
+		currentOfferEntry?.ClearOffer();
+		currentCardpackEntry?.ClearItem();
 
-		openButton.Visible = false;
-		purchaseButton.Visible = false;
-		quantitySpinner.Visible = false;
+		openButton?.Visible = false;
+		purchaseButton?.Visible = false;
+		quantitySpinner?.Visible = false;
 
-		resultEntriesParent.Visible = false;
-		surpriseResultPanel.Visible = false;
-		soldOutResultPanel.Visible = false;
-		choicePanel.Visible = false;
+		resultEntriesParent?.Visible = false;
+		surpriseResultPanel?.Visible = false;
+		soldOutResultPanel?.Visible = false;
+		choicePanel?.Visible = false;
 
 		currentOffer = null;
 		currentCardpacks = null;
@@ -141,7 +157,7 @@ public partial class LlamaPreview : Control
 		{
 			tokenUpgradeOffer ??= GameStorefront.GetExistingOffer(LlamaSelector.TokenUpgradeId);
 			//set token offer entry
-			useTokenOffer = (tokenUpgradeOffer.GetPriceInInventory()) > 0;
+			useTokenOffer = tokenUpgradeOffer.GetPriceInInventory() > 0;
 			if (ct.IsCancellationRequested)
 				return;
 		}
@@ -183,20 +199,88 @@ public partial class LlamaPreview : Control
 			return;
 		}
 
-		purchaseButton.Visible = true;
+		purchaseButton?.Visible = true;
 
 		var items = prerollData?.GetPrerollItems();
 		if (items is null)
 		{
 			//it's a surprise
-			quantitySpinner.MaxValue = Mathf.Max(purchaseLimit, 1);
-			quantitySpinner.Visible = purchaseButton.Visible && purchaseLimit > 1;
-			surpriseResultPanel.Visible = true;
+			quantitySpinner?.MaxValue = Mathf.Max(purchaseLimit, 1);
+			quantitySpinner?.Visible = purchaseLimit > 1;
+			surpriseResultPanel?.Visible = true;
 			return;
 		}
 
 		//fill out item list
-		resultEntriesParent.Visible = true;
+		SetLlamaContents(items);
+	}
+
+	private void OnQuantityChanged(double value)
+	{
+		if (currentOffer is not null)
+			currentOfferEntry.SetTargetPurchaseQuantity((int)value);
+	}
+
+	public void InspectChoiceLlama(int choiceIndex)
+	{
+		if (topCardpack is null)
+			return;
+		GameItemViewer.Instance.ShowItem(topCardpack, choiceIndex);
+	}
+
+	public void SetLlamaItems(GameItem[] items)
+	{
+		items = [.. items.Where(i => i.profile is not null)];
+		ClearPreview();
+
+		if ((items?.Length ?? 0) == 0)
+		{
+			GD.PushWarning("Null or empty Item Array");
+			return;
+		}
+
+		currentCardpacks = items;
+		GameItem.MarkItemsSeen(items);
+
+		if (items.Length > 1 && items.Any(i => i.CardPackChoices is not null))
+		{
+			//stack of choices
+			SetLlamaContents(items);
+		}
+		else
+		{
+			SetTopLlamaItem(items[^1]);
+			var maxAmount = items.Length;
+			quantitySpinner?.MaxValue = Mathf.Max(maxAmount, 1);
+			quantitySpinner?.Visible = maxAmount > 1;
+			openButton?.Visible = true;
+		}
+	}
+
+	void SetTopLlamaItem(GameItem topItem)
+	{
+		surpriseResultPanel.Visible = false;
+		choicePanel.Visible = false;
+
+		topCardpack = topItem;
+		currentCardpackEntry.SetItem(topItem);
+
+		if (topItem.CardPackChoices is not GameItem[] choices)
+		{
+			surpriseResultPanel.Visible = true;
+			return;
+		}
+
+		choicePanel.Visible = true;
+		firstChoice.SetItem(choices[0]);
+		secondChoice.SetItem(choices[1]);
+	}
+
+	void SetLlamaContents(GameItem[] items)
+	{
+		resultEntriesParent.Visible = (items?.Length ?? 0) > 0;
+		if (!resultEntriesParent.Visible)
+			return;
 		while (llamaResultEntries.Count <= items.Length)
 		{
 			var newEntry = itemEntryScene.Instantiate<GameItemEntry>();
@@ -216,52 +300,6 @@ public partial class LlamaPreview : Control
 		}
 	}
 
-	private void OnQuantityChanged(double value)
-	{
-		if (currentOffer is not null)
-			currentOfferEntry.SetTargetPurchaseQuantity((int)value);
-	}
-
-	public void InspectChoiceLlama(int choiceIndex)
-	{
-		if (currentCardpacks is null)
-			return;
-		var cardPackItem = currentCardpacks[0];
-		GameItemViewer.Instance.ShowItem(cardPackItem, choiceIndex);
-	}
-
-	public void SetLlamaItems(GameItem[] items)
-	{
-		items = [.. items.Where(i => i.profile is not null)];
-		ClearPreview();
-
-
-		if ((items?.Length ?? 0) == 0)
-		{
-			GD.PushWarning("Null or empty Item Array");
-			return;
-		}
-
-		currentCardpacks = items;
-		openButton.Visible = true;
-
-		var maxAmount = items.Length;
-		quantitySpinner.MaxValue = Mathf.Max(maxAmount, 1);
-		quantitySpinner.Visible = maxAmount > 1;
-		GameItem.MarkItemsSeen(items);
-		currentCardpackEntry.SetItem(items[^1]);
-
-		if (items[^1].CardPackChoices is not GameItem[] choices)
-		{
-			surpriseResultPanel.Visible = true;
-			return;
-		}
-
-		choicePanel.Visible = true;
-		firstChoice.SetItem(choices[0]);
-		secondChoice.SetItem(choices[1]);
-	}
-
 	public async void PurchaseLlamaOffer()
 	{
 		if (currentOffer is null)
@@ -271,7 +309,7 @@ public partial class LlamaPreview : Control
 		GD.Print("attempting to purchase offer: " + targetOffer.OfferId);
 		var itemsKnown = await targetOffer.GetXRayLlamaData() is not null;
 		await CardPackOpener.Instance.StartOpening(null, this, targetOffer, currentOfferEntry.currentPurchaseQuantity, itemsKnown);
-		SetLlamaOffer(currentOffer);
+		//SetLlamaOffer(currentOffer);
 	}
 
 	public async void OpenSelectedCardpack()
@@ -290,9 +328,9 @@ public partial class LlamaPreview : Control
 		currentCardpacks = amount < currentCardpacks.Length ? currentCardpacks[..^amount] : [];
 
 		await CardPackOpener.Instance.StartOpening(targetItems, llamaPanel, targetItems[^1]);
-		if (currentCardpacks.Length == 0)
-			ClearPreview();
-		else
-			SetLlamaItems(currentCardpacks);
+		//if (currentCardpacks.Length == 0)
+		//	ClearPreview();
+		//else
+		//	SetLlamaItems(currentCardpacks);
 	}
 }

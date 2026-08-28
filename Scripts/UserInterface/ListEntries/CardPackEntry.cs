@@ -6,8 +6,6 @@ public partial class CardPackEntry : GameItemEntry
 {
 	[Signal]
 	public delegate void LlamaPressedEventHandler(string itemId);
-	[Signal]
-	public delegate void SimpleModeEventHandler(bool simple);
 
 	[Signal]
 	public delegate void Color1ChangedEventHandler(Color color);
@@ -20,8 +18,8 @@ public partial class CardPackEntry : GameItemEntry
 
 	[Export]
 	bool includeAmountInName;
-	//[Export]
-	//bool debug = false;
+	[Export]
+	public bool debug = false;
 
 	const string defaultPreviewImage = "PinataStandardPack";
 	static JsonObject llamaColorData;
@@ -37,6 +35,11 @@ public partial class CardPackEntry : GameItemEntry
 		{
 			ClearItem();
 			return;
+		}
+
+		if (debug)
+		{
+			int _ = 0;
 		}
 
 		if (item.template?.Type != "CardPack")
@@ -55,13 +58,13 @@ public partial class CardPackEntry : GameItemEntry
 		displayItem = item;
 
 		string name = item.template.DisplayName;
-		int amount = item.customData["stackQuantity"]?.GetValue<int>() ?? item.quantity;
-		int shopAmount = item.customData["shopQuantity"]?.GetValue<int>() ?? amount;
-		string nameWithAmount = amount >= 0 ? $"{name} ({shopAmount} left)" : name;
+		int amount = Mathf.Max(item.customData["stackQuantity"]?.GetValue<int>() ?? 0,  item.quantity);
+		amount = Mathf.Max(item.customData["shopQuantity"]?.GetValue<int>() ?? 0, amount);
+		//string nameWithAmount = amount >= 0 ? $"{name} ({amount} left)" : name;
+		string nameWithAmount = name;
 		string description = item.template.Description;
 
-		//EmitSignalSimpleMode(OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true));
-		EmitSignalNameChanged((includeAmountInName && shopAmount >= 0) ? nameWithAmount : name);
+		EmitSignalNameChanged((includeAmountInName && amount >= 0) ? nameWithAmount : name);
 		EmitSignalDescriptionChanged(description);
 		EmitSignalNotificationChanged(!item.IsSeen);
 
@@ -70,7 +73,7 @@ public partial class CardPackEntry : GameItemEntry
 			amountText = "x" + amountText;
 		if (amount <= (showSingleItemAmount ? 0 : 1))
 			amountText = null;
-		EmitSignal(SignalName.AmountChanged, amountText ?? null);
+		EmitSignalAmountChanged(amountText ?? null);
 
 
 		int llamaTier = item.customData?["llamaTier"]?.GetValue<int>() ?? 0;
@@ -135,24 +138,24 @@ public partial class CardPackEntry : GameItemEntry
 		currentLlamaGradient.Colors = currentLlamaColors;
 
 		EmitSignalRarityChanged(currentLlamaColors[0]);
-		EmitSignal(SignalName.Color1Changed, currentLlamaColors[1]);
-		EmitSignal(SignalName.Color2Changed, currentLlamaColors[2]);
-		EmitSignal(SignalName.Color3Changed, currentLlamaColors[3]);
-		EmitSignal(SignalName.GradientChanged, currentLlamaGradient);
+		EmitSignalColor1Changed(currentLlamaColors[1]);
+		EmitSignalColor2Changed(currentLlamaColors[2]);
+		EmitSignalColor3Changed(currentLlamaColors[3]);
+		EmitSignalGradientChanged(currentLlamaGradient);
 	}
 
 	public override void ClearItem(Texture2D clearTexture)
 	{
 		base.ClearItem(clearTexture);
-		EmitSignal(SignalName.NameChanged, "Select a Llama");
-		EmitSignal(SignalName.IconChanged, GameItem.llamaTierIcons[0]);
-		EmitSignal(SignalName.SubtypeIconChanged, PegLegResourceManager.defaultIcon);
+		EmitSignalNameChanged("Select a Llama");
+		EmitSignalIconChanged(GameItem.llamaTierIcons[0]);
+		EmitSignalSubtypeIconChanged(PegLegResourceManager.defaultIcon);
 	}
 
 	public override void EmitPressedSignal()
 	{
 		selectionGraphics?.ButtonPressed = true;
 		if (currentItem?.uuid is not null)
-			EmitSignal(SignalName.LlamaPressed, currentItem.uuid);
+			EmitSignalLlamaPressed(currentItem.uuid);
 	}
 }

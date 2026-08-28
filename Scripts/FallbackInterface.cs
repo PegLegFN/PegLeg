@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class TempCosmeticFallback : Node
+public partial class FallbackInterface : Node
 {
 	[Export]
 	TabContainer tabs;

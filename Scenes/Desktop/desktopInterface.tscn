@@ -28,7 +28,6 @@
 [ext_resource type="AudioStream" uid="uid://bjjgpivjq30po" path="res://Audio/SFX/Notifs/VendingMachine_Vend_Sparkle.wav" id="19_s7yuu"]
 [ext_resource type="PackedScene" uid="uid://kgl0dydu0mtf" path="res://Scenes/Desktop/desktopContextMenu.tscn" id="20_ayavh"]
 [ext_resource type="PackedScene" uid="uid://c78gt6b2m1utg" path="res://Scenes/Desktop/Views/desktopMissionView.tscn" id="22_qlkcq"]
-[ext_resource type="PackedScene" uid="uid://4hei03rcfvmu" path="res://Scenes/Desktop/Views/desktopLlamaView.tscn" id="23_b4gaj"]
 [ext_resource type="Script" uid="uid://840dnd45qqla" path="res://Scripts/UIElements/MobilePadding.cs" id="24_r4l5r"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="24_sj3vv"]
 [ext_resource type="PackedScene" uid="uid://bwunyntryyu6o" path="res://Scenes/Desktop/Views/Armory/desktopSurvivorLoadoutView.tscn" id="25_ag48h"]
@@ -39,11 +38,11 @@
 [ext_resource type="PackedScene" uid="uid://53fn442ut5dy" path="res://Scenes/Desktop/Overlays/mission_viewer.tscn" id="26_fna7y"]
 [ext_resource type="Shader" uid="uid://17ec5ugjn0qv" path="res://Shaders/CircleBaseMask.gdshader" id="26_jn02y"]
 [ext_resource type="PackedScene" uid="uid://b2k3opkacmxbr" path="res://Scenes/Desktop/Overlays/accountSwitcherOverlay.tscn" id="26_xb41w"]
-[ext_resource type="PackedScene" uid="uid://d6pm7vs0s7ta" path="res://Scenes/Desktop/Views/desktopCosmeticShopView.tscn" id="27_5ey2a"]
 [ext_resource type="Script" uid="uid://dvgcv52c2ve0w" path="res://Scripts/UserInterface/ListEntries/GameAccountEntry.cs" id="27_a331l"]
 [ext_resource type="Texture2D" uid="uid://cj7awxlqm1to2" path="res://Images/InterfaceIcons/T_UI_Icon_Sidebar_OnlinePlayers.png" id="28_chpxd"]
 [ext_resource type="Texture2D" uid="uid://cjtv2aa84wwwr" path="res://Images/InterfaceIcons/T_Icon_Spray_Adjustments_Tab_128.png" id="28_p4icb"]
 [ext_resource type="PackedScene" uid="uid://cochrwi38s2xb" path="res://Scenes/Desktop/Views/desktopQuestGroupListView.tscn" id="28_rt2uq"]
+[ext_resource type="PackedScene" uid="uid://cvtfken4deoo1" path="res://Scenes/Desktop/Views/desktopLlamaNewView.tscn" id="28_w80nr"]
 [ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="29_ql5qm"]
 [ext_resource type="PackedScene" uid="uid://b4k4ku3cjmqku" path="res://Scenes/Desktop/Views/desktopHeroLoadoutView.tscn" id="31_i2466"]
 [ext_resource type="Texture2D" uid="uid://cj7hjf5jc1l2t" path="res://Images/InterfaceIcons/FortPlayBtn.png" id="31_retv3"]
@@ -57,7 +56,6 @@
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/AppIcons/PegLegIcon256.png" id="37_5b0rm"]
 [ext_resource type="PackedScene" uid="uid://b8cv7fnnprix6" path="res://Scenes/Desktop/Views/Extra/desktopWeaponStatView.tscn" id="37_c6nfh"]
 [ext_resource type="PackedScene" uid="uid://cnrvmeve5u3rr" path="res://Scenes/Desktop/Views/desktopCosmeticShopNewView.tscn" id="37_xksdo"]
-[ext_resource type="Script" uid="uid://dpxc7niau51tw" path="res://Scripts/TempCosmeticFallback.cs" id="38_53jin"]
 [ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/cardpack_opener_window.tscn" id="41_alhak"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="41_kf5nt"]
 [ext_resource type="PackedScene" uid="uid://cr3cku76polyu" path="res://Scenes/Desktop/Views/Extra/desktopPartyLoadoutsView.tscn" id="42_i2466"]
@@ -87,7 +85,7 @@
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
 [ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="99_hfy7e"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_t60yp"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_w80nr"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7h2tb"]
@@ -265,14 +263,15 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 0
+current_tab = 3
 script = ExtResource("16_hsemp")
 
 [node name="Dashboard" parent="Content/MainTabs" unique_id=291427184 instance=ExtResource("10_xfiw1")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Llamas" parent="Content/MainTabs" unique_id=622182493 instance=ExtResource("23_b4gaj")]
+[node name="Llamas" parent="Content/MainTabs" unique_id=2047406860 instance=ExtResource("28_w80nr")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
@@ -283,7 +282,6 @@ layout_mode = 2
 metadata/_tab_index = 2
 
 [node name="Armoury" type="TabContainer" parent="Content/MainTabs" unique_id=1848144313]
-visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
@@ -304,6 +302,7 @@ metadata/_tab_index = 1
 
 [node name="Inventory" parent="Content/MainTabs/Armoury" unique_id=680848205 instance=ExtResource("13_yfdoy")]
 layout_mode = 2
+theme_override_constants/margin_bottom = -10
 metadata/_tab_index = 2
 
 [node name="Backpack" parent="Content/MainTabs/Armoury" unique_id=1450260708 instance=ExtResource("15_dlrdq")]
@@ -322,8 +321,6 @@ layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
 current_tab = 2
-tab_3/title = "Cosmetic Shop"
-tab_3/hidden = true
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 4
 
@@ -341,19 +338,6 @@ metadata/_tab_index = 1
 layout_mode = 2
 metadata/_tab_index = 2
 metadata/_tab_name = "Cosmetic Shop"
-
-[node name="Cosmetic Shop OLD" parent="Content/MainTabs/Item Shop" unique_id=1584211738 instance=ExtResource("27_5ey2a")]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 3
-metadata/_tab_name = "Cosmetic Shop"
-
-[node name="CosmeticFallbackCheck" type="Node" parent="Content/MainTabs/Item Shop" unique_id=630380705 node_paths=PackedStringArray("tabs")]
-script = ExtResource("38_53jin")
-tabs = NodePath("..")
-standardIndex = 2
-fallbackIndex = 3
-requiredMagicBool = "revertCosmeticShop"
 
 [node name="Quests" parent="Content/MainTabs" unique_id=528753016 instance=ExtResource("28_rt2uq")]
 visible = false
@@ -463,25 +447,25 @@ targetProfile = "theater2"
 metadata/_tab_index = 7
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(1508465885, 144255995) index="0" unique_id=228194712]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(1508465885, 2039985868) index="0" unique_id=1672625159]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(1508465885, 301043813) index="0" unique_id=1744959934]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1508465885, 1694755347) index="0" unique_id=669176367]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(1508465885, 426083547) index="0" unique_id=2051298463]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(1508465885, 535625123) index="0" unique_id=1931883480]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" parent_id_path=PackedInt32Array(1508465885, 248328693) index="0" unique_id=1448244160]
-button_group = SubResource("ButtonGroup_t60yp")
+button_group = SubResource("ButtonGroup_w80nr")
 
 [node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="2" unique_id=317467257]
 elementSpace = 10.0

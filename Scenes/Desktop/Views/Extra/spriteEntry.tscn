@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://c1qs5v3fbwmbx"]
 
-[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/WonkyButton.gdshader" id="1_58sin"]
+[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/SpriteButton.gdshader" id="1_58sin"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="2_8pimq"]
 [ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="3_tfvjn"]
+[ext_resource type="Texture2D" uid="uid://b206b4woetnac" path="res://Images/InterfaceIcons/T-Stars-Full-M.png" id="4_hvuc3"]
+[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="4_xceuh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_etqnd"]
 resource_local_to_scene = true
@@ -12,25 +14,26 @@ shader_parameter/Offset0 = Vector2(-9, -1)
 shader_parameter/Offset1 = Vector2(-3, 4)
 shader_parameter/Offset2 = Vector2(4, 4)
 shader_parameter/Offset3 = Vector2(6, -9)
+shader_parameter/OutlineOffset = 5.0
+shader_parameter/OutlineGap = 2.0
 shader_parameter/progress = 0.0
-shader_parameter/outline = false
+shader_parameter/special = false
+shader_parameter/lost = false
+shader_parameter/locked = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8pimq"]
-resource_local_to_scene = true
-shader = ExtResource("1_58sin")
-shader_parameter/ControlSize = Vector2(164, 214)
-shader_parameter/Offset0 = Vector2(-9, -1)
-shader_parameter/Offset1 = Vector2(-3, 4)
-shader_parameter/Offset2 = Vector2(4, 4)
-shader_parameter/Offset3 = Vector2(6, -9)
-shader_parameter/progress = 1.0
-shader_parameter/outline = true
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51cgl"]
+content_margin_left = 3.0
+content_margin_right = 4.0
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(0.2, 0)
 
 [node name="SpriteEntry" type="Button" unique_id=700536921]
 custom_minimum_size = Vector2(150, 200)
+offset_right = 150.0
+offset_bottom = 200.0
 flat = true
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=909220603]
+[node name="BG" type="ColorRect" parent="." unique_id=909220603]
 material = SubResource("ShaderMaterial_etqnd")
 layout_mode = 1
 anchors_preset = 15
@@ -43,26 +46,7 @@ color = Color(0, 0.6666665, 1, 0.76862746)
 script = ExtResource("2_8pimq")
 syncControlSize = true
 
-[node name="ColorRect2" type="ColorRect" parent="." unique_id=455400921]
-visible = false
-z_index = 1
-material = SubResource("ShaderMaterial_8pimq")
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 7.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-color = Color(1, 1, 1, 0.76862746)
-script = ExtResource("2_8pimq")
-syncControlSize = true
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1789999977]
+[node name="Icon" type="TextureRect" parent="." unique_id=1789999977]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,3 +56,92 @@ grow_vertical = 2
 texture = ExtResource("3_tfvjn")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="Crown" type="TextureRect" parent="." unique_id=440601554]
+self_modulate = Color(1, 0.89576936, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.545
+anchor_top = 0.125
+anchor_right = 0.545
+anchor_bottom = 0.125
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.20071286
+scale = Vector2(1.125, 0.665)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("4_hvuc3")
+metadata/_edit_use_anchors_ = true
+
+[node name="LevelInfo" type="PanelContainer" parent="." unique_id=332654928]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_bottom = -5.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
+
+[node name="MarginContainer" type="MarginContainer" parent="LevelInfo" unique_id=1770493243]
+layout_mode = 2
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_bottom = -1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LevelInfo/MarginContainer" unique_id=2050370292]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="LevelInfo/MarginContainer/HBoxContainer" unique_id=1891221711]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 14
+text = "Lvl"
+
+[node name="Label2" type="Label" parent="LevelInfo/MarginContainer/HBoxContainer" unique_id=480120882]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 18
+text = "5"
+
+[node name="CostInfo" type="PanelContainer" parent="." unique_id=1424075069]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_bottom = -5.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
+
+[node name="MarginContainer" type="MarginContainer" parent="CostInfo" unique_id=1059811744]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CostInfo/MarginContainer" unique_id=1281615396]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="CostInfo/MarginContainer/HBoxContainer" unique_id=432730331]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_xceuh")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="CostInfo/MarginContainer/HBoxContainer" unique_id=21558809]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 14
+text = "1,500"

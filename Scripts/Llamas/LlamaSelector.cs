@@ -57,16 +57,18 @@ public partial class LlamaSelector : Control
 		RefreshTimerController.OnHourChanged += ForceLoadShopLlamas;
 		GameAccount.ActiveAccountChanged += OnAccountChanged;
 		OnAccountChanged();
+		CardPackOpener.OnLlamaOpeningComplete += CheckStacks;
 	}
 
 	public override void _ExitTree()
 	{
 		RefreshTimerController.OnHourChanged -= ForceLoadShopLlamas;
 		GameAccount.ActiveAccountChanged -= OnAccountChanged;
+		CardPackOpener.OnLlamaOpeningComplete -= CheckStacks;
 		if (llamaItemProfile is not null)
 		{
-			llamaItemProfile.OnItemAdded -= AddItem;
-			llamaItemProfile.OnItemRemoved -= RemoveLlamaItem;
+			llamaItemProfile.OnItemAdded -= AddToStack;
+			llamaItemProfile.OnItemRemoved -= RemoveFromStack;
 		}
 	}
 
@@ -81,8 +83,8 @@ public partial class LlamaSelector : Control
 		//disconnect prev profile
 		if (llamaItemProfile is not null)
 		{
-			llamaItemProfile.OnItemAdded -= AddItem;
-			llamaItemProfile.OnItemRemoved -= RemoveLlamaItem;
+			llamaItemProfile.OnItemAdded -= AddToStack;
+			llamaItemProfile.OnItemRemoved -= RemoveFromStack;
 			llamaItemProfile = null;
 		}
 
@@ -109,13 +111,13 @@ public partial class LlamaSelector : Control
 		//    GD.Print(newLlamaItems.Select(i=>i.templateId).ToArray());
 		foreach (var item in newLlamaItems)
 		{
-			AddItem(item);
+			AddToStack(item);
 		}
 
 		//connect new profile
 		llamaItemProfile = newLlamaItemProfile;
-		llamaItemProfile.OnItemAdded += AddItem;
-		llamaItemProfile.OnItemRemoved += RemoveLlamaItem;
+		llamaItemProfile.OnItemAdded += AddToStack;
+		llamaItemProfile.OnItemRemoved += RemoveFromStack;
 	}
 
 	#region Cardpack Stack stuff
@@ -138,7 +140,8 @@ public partial class LlamaSelector : Control
 			isKnown = firstItem.attributes.ContainsKey("options");
 
 			items = [firstItem];
-			DisplayItem = GameItemTemplate.Get(templateId).CreateInstance().SetUUID();
+			DisplayItem = firstItem.Clone(useInspectorOverride: false).SetUUID();
+			DisplayItem.customData.Remove("stackQuantity");//prevents clashes with old stacking system
 			UpdateDisplayItem();
 		}
 
@@ -148,8 +151,9 @@ public partial class LlamaSelector : Control
 
 		public bool IsStackable(GameItem item)
 		{
-			if (item.attributes.ContainsKey("options"))
-				return false;
+			//todo: allow choice packs to be stacked
+			//if (item.attributes.ContainsKey("options"))
+			//	return false;
 			if (templateId == item.templateId)
 				return true;
 			if (item.template.DisplayName.Contains("Accolade") && customType == "Accolade")
@@ -172,12 +176,13 @@ public partial class LlamaSelector : Control
 
 		void UpdateDisplayItem()
 		{
-			DisplayItem.SetLocalQuantity(items.Count);
+			var count = items.Count;
+			DisplayItem.SetLocalQuantity(count);
 			DisplayItem.NotifyChanged();
 		}
 	}
 
-	void AddItem(GameItem item)
+	void AddToStack(GameItem item)
 	{
 		if (item?.template?.Type != "CardPack")
 			return;
@@ -201,6 +206,7 @@ public partial class LlamaSelector : Control
 		{
 			//spawn new
 			newEntry = cardpackLlamaEntryScene.Instantiate<CardPackEntry>();
+			newEntry.debug = true;
 			llamaItemEntryParent.AddChild(newEntry);
 			newEntry.LlamaPressed += SelectLlamaItem;
 		}
@@ -212,24 +218,48 @@ public partial class LlamaSelector : Control
 		inventoryLlamaEntries.Add(llamaStack.DisplayItem.uuid, newEntry);
 	}
 
-	void RemoveLlamaItem(GameItem item)
+	private void CheckStacks()
+	{
+		List<string> stackIdsToRemove = [];
+		foreach (var stackKVP in llamaItemStacks)
+		{
+			GameItem[] toRemove = [..stackKVP.Value.items.Where(i => i.profile is null)];
+			foreach (var item in toRemove)
+			{
+				stackKVP.Value.RemoveItem(item);
+			}
+			if (stackKVP.Value.items.Count == 0)
+				stackIdsToRemove.Add(stackKVP.Key);
+		}
+		foreach (var stackID in stackIdsToRemove)
+		{
+			var entry = inventoryLlamaEntries[stackID];
+			entry.Visible = false;
+			inventoryLlamaEntries.Remove(stackID);
+			llamaItemStacks.Remove(stackID);
+			llamaItemEntryPool.Enqueue(entry);
+		}
+		if (llamaItemStacks.Count == 0)
+			llamaItemEntryPanel.Visible = false;
+	}
+
+	void RemoveFromStack(GameItem item)
 	{
 		if (item?.template?.Type != "CardPack")
 			return;
 		var llamaStack = llamaItemStacks.Values.FirstOrDefault(val => val.Has(item));
-		if (llamaStack is not null)
-		{
-			llamaStack.RemoveItem(item);
-			if (llamaStack.items.Count == 0)
-			{
-				var entry = inventoryLlamaEntries[llamaStack.DisplayItem.uuid];
-				inventoryLlamaEntries.Remove(llamaStack.DisplayItem.uuid);
-				llamaItemStacks.Remove(llamaStack.DisplayItem.uuid);
-				llamaItemEntryPool.Enqueue(entry);
-				if (llamaItemStacks.Count == 0)
-					llamaItemEntryPanel.Visible = false;
-			}
-		}
+		if (llamaStack is null)
+			return;
+		llamaStack.RemoveItem(item);
+		if (llamaStack.items.Count > 0)
+			return;
+		var entry = inventoryLlamaEntries[llamaStack.DisplayItem.uuid];
+		entry.Visible = false;
+		inventoryLlamaEntries.Remove(llamaStack.DisplayItem.uuid);
+		llamaItemStacks.Remove(llamaStack.DisplayItem.uuid);
+		llamaItemEntryPool.Enqueue(entry);
+		if (llamaItemStacks.Count == 0)
+			llamaItemEntryPanel.Visible = false;
 	}
 
 	#endregion

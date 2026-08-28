@@ -1,3 +1,4 @@
+using Amazon.S3.Model;
 using Godot;
 using System;
 using System.Collections.Concurrent;
@@ -314,6 +315,20 @@ public partial class GameItemTemplate
 				.Contains("GenericWorker") ?? false
 			))
 			return GetSubtypeTexture(SubType ?? "Survivor", fallbackIcon);
+
+		if (
+			Type == "CardPack" &&
+			Name.StartsWith("ZCP_STWAccolade_")
+		)
+		{
+			if (textureType == FnItemTextureType.Preview)
+			{
+				var result = PegLegResourceManager.LoadResourceAsset<Texture2D>($"GameAssets/ExportedImages/T_UI_FNBR_XPeverywhere_{(largePreview ? "L" : "S")}.png");
+				if (result is not null)
+					persistantTextureCache[textureType] = result;
+				return result;
+			}
+		}
 
 		if
 		(

@@ -70,21 +70,21 @@ public partial class GameItemUpgrader : Control
 	[Export]
 	ItemTierDisplay nextTierDisplay;
 
-	[ExportGroup("Core Images")]
-	[Export]
-	Texture2D copper;
-	[Export]
-	Texture2D silver;
-	[Export]
-	Texture2D malachite;
-	[Export]
-	Texture2D obsidian;
-	[Export]
-	Texture2D shadowshard;
-	[Export]
-	Texture2D brightcore;
-	[Export]
-	Texture2D sunbeam;
+	//[ExportGroup("Core Images")]
+	//[Export]
+	//Texture2D copper;
+	//[Export]
+	//Texture2D silver;
+	//[Export]
+	//Texture2D malachite;
+	//[Export]
+	//Texture2D obsidian;
+	//[Export]
+	//Texture2D shadowshard;
+	//[Export]
+	//Texture2D brightcore;
+	//[Export]
+	//Texture2D sunbeam;
 
 	[ExportGroup("Increase Rarity Preview")]
 	[Export]
@@ -320,8 +320,8 @@ public partial class GameItemUpgrader : Control
 	string SelectCoreName(int tier, bool crystal) => tier switch
 	{
 		5 when crystal => "Sunbeam",
-		4 when crystal => "Brightcore",
-		5 => "Shadowshard",
+		4 when crystal => "Shadowshard",
+		5 => "Brightcore",
 		4 => "Obsidian",
 		3 => "Malachite",
 		2 => "Silver",
