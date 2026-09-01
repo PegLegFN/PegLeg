@@ -229,6 +229,7 @@ public partial class GameItemViewer : ModalWindow
 		displayUUID.Visible = false;
 		itemChoiceParent.Visible = false;
 		defenderEquipmentEntry.Visible = false;
+		cardPackOpenPanel?.Visible = false;
 		currentOffer = offer;
 		currentItem = currentOffer.itemGrants[0];
 		SetDisplayItem(currentItem);

@@ -1091,7 +1091,7 @@ public partial class CardPackOpener : Control
 		cancelChoiceButton.Visible = false;
 		if (singleChoiceMode)
 		{
-			choiceClose.Finished += () => CloseMenu();
+			choiceClose.Finished += CloseMenu;
 		}
 		else
 		{
@@ -1154,6 +1154,8 @@ public partial class CardPackOpener : Control
 	{
 		if (!isOpen)
 			return;
+		SkipChoice(false);
+		pullButton.Visible = false;
 		await ShowRecyclePopup();
 		CloseMenu();
 	}
