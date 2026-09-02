@@ -1,5 +1,6 @@
 
 using Godot;
+using System.Threading.Tasks;
 
 public partial class SaveItemIconCtx : AbstractContextComponent
 {
@@ -11,7 +12,9 @@ public partial class SaveItemIconCtx : AbstractContextComponent
 	public override void _Ready()
 	{
 		filePicker?.FileSelected += OnSaveLocation;
+		filePicker.Canceled += OnCancel;
 	}
+
 
 	public override void Update(ContextMenuHook hook)
 	{
@@ -23,6 +26,8 @@ public partial class SaveItemIconCtx : AbstractContextComponent
 		SetDisabled(currentImage is null);
 	}
 
+	bool isPicking=false;
+
 	public async void Copy()
 	{
 		if (currentImage is null)
@@ -31,10 +36,18 @@ public partial class SaveItemIconCtx : AbstractContextComponent
 		filePicker.SetMeta("targetImage", currentImage);
 		filePicker.Popup();
 		menu.CloseMenu();
+		using var _ = LoadingOverlay.CreateToken();
+		isPicking = true;
+		while (isPicking)
+		{
+			await Helpers.WaitForFrame();
+		}
 	}
 
+	private void OnCancel() => isPicking = false;
 	private void OnSaveLocation(string path)
 	{
+		isPicking = false;
 		if (filePicker.GetMeta("targetImage").As<Image>() is not Image outImage)
 			return;
 		outImage.SavePng(path);
