@@ -8,12 +8,6 @@ public partial class CopyItemIconCtx : AbstractContextComponent
 	public override void Update(ContextMenuHook hook)
 	{
 		currentImage = null;
-		if (OS.HasFeature("mobile"))
-		{
-			//this can be removed when an uncompressed version of PegLegResources is ready for mobile
-			SetDisabled(true);
-			return;
-		}
 		var currentItem = hook?.itemSource?.currentItem;
 		var tex = currentItem?.GetTexture(null, true);
 		currentImage = tex?.GetImage();

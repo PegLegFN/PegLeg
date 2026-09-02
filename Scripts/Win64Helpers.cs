@@ -184,6 +184,11 @@ static partial class Win64Helpers
 			}
 
 			GD.Print("copying DIBV5");
+			if (image.IsCompressed())
+			{
+				GD.Print("Image compressed, decompressing...");
+				image.Decompress();
+			}
 			var imageSize = image.GetSize();
 			var bitmapHeader = BitmapV5Header.Create(imageSize.X, imageSize.Y, 32);
 			var pixCount = imageSize.X * imageSize.Y;

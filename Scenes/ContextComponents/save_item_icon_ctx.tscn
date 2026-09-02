@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bdr0cjbdxq4mg"]
+
+[ext_resource type="PackedScene" uid="uid://crl5su2stqsku" path="res://Scenes/ContextComponents/basic_ctx.tscn" id="1_h7x14"]
+[ext_resource type="Script" uid="uid://c4cusej2rduuf" path="res://Scripts/ContextMenu/Components/SaveItemIconCtx.cs" id="2_p78mj"]
+[ext_resource type="Texture2D" uid="uid://dq47qrpctjwnp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Input_128.png" id="3_p78mj"]
+
+[node name="SaveItemIconCtx" unique_id=507156131 node_paths=PackedStringArray("filePicker") instance=ExtResource("1_h7x14")]
+script = ExtResource("2_p78mj")
+filePicker = NodePath("FileDialog")
+
+[node name="Icon" parent="MarginContainer/HBoxContainer/IconArea" parent_id_path=PackedInt32Array(16911845) index="0" unique_id=1417089072]
+texture = ExtResource("3_p78mj")
+
+[node name="Label" parent="MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(650842185) index="1" unique_id=1106396072]
+text = "Save Icon"
+
+[node name="FileDialog" type="FileDialog" parent="." index="4" unique_id=873032036]
+dialog_hide_on_ok = true
+access = 2
+filters = PackedStringArray("*.png")
+use_native_dialog = true
+
+[connection signal="pressed" from="TextureButton" to="." method="Copy"]
