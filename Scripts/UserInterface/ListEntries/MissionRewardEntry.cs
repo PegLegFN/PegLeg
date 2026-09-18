@@ -55,13 +55,9 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 		EmitSignalIsToDo(currentItems.All(MissionToDoListController.IsOnToDoList));
 	}
 
-	bool knownCompleteState = false;
 
-	private void TryEmitComplete(bool complete)
-	{
-		knownCompleteState = complete;
-		EmitSignalMissionCompleteIfAlert(complete && itemEntry?.currentItem?.template?.Name.StartsWith("zcp_", StringComparison.OrdinalIgnoreCase) == false);
-	}
+	private void TryEmitComplete(bool complete) =>
+		EmitSignalMissionCompleteIfAlert(complete && itemEntry?.currentItem?.templateId?.StartsWith("CardPack:zcp_") == false);
 
 	IRecyclableElementProvider<MissionRewardPair> provider;
 	public void SetRecyclableElementProvider(IRecyclableElementProvider provider)
@@ -87,9 +83,9 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	{
 		currentItems = items;
 		GameItem mainItem = items.FirstOrDefault();
-		missionEntry.SetMission(mission);
 		mainItem.SetRewardNotification();
 		itemEntry?.SetItem(mainItem);
+		missionEntry.SetMission(mission);
 		if (levelLabel is null || missionPowerLabel is null)
 			return;
 		if (items.Length <= 1 || items.Any(i => i.customData.ContainsKey("fools")))
@@ -119,14 +115,11 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 
 	void SetPair(MissionRewardPair pair)
 	{
-		var guidMatch = pair.mission?.Guid == "c40c2805-b054-4ea0-b539-9525ea3242e6";
-		using var _ = PerfTimer.Start("pairTimer", guidMatch ? 0 : 1000);
-		missionEntry.SetMission(pair.mission);
 		pair.item?.SetRewardNotification();
 		itemEntry.SetItem(pair.item);
+		missionEntry.SetMission(pair.mission);
 		currentItems = [pair.item];
 		EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(itemEntry.currentItem));
-		TryEmitComplete(knownCompleteState);
 	}
 
 	public void AddToList()

@@ -198,7 +198,7 @@ public partial class CardPackOpener : Control
 			if (llamaOffer is not null)
 			{
 				llamaTier = llamaOffer.GetLocalXRayLlamaData(account)?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
-				if (llamaItem.template.DisplayName.Contains("Legendary"))
+				if (llamaItem.template.ItemName.Contains("Legendary"))
 					llamaTier = 2;
 				llamaItem.customData["llamaTier"] = llamaTier;
 				GD.Print($"Offer Tier: {llamaTier}");
@@ -341,7 +341,7 @@ public partial class CardPackOpener : Control
 					.Select(val => account.GetProfile(val["itemProfile"].ToString()).GetItem(val["itemGuid"].ToString()))
 					.ToArray();
 
-				GD.Print($"LlamaResult: [\n{resultItemData.JoinString(",\n")}\n]");
+				GD.Print($"LlamaResult: [\n{resultItemData.JoinString(",\n")}\n]".FixNewlines());
 
 				var exceptions = resultItemData
 					.Where(val => !val.AsObject().ContainsKey("itemGuid"))
@@ -350,7 +350,8 @@ public partial class CardPackOpener : Control
 				{
 					exceptions.RemoveAll(i => i["itemType"]?.ToString().StartsWith("Accolades:") == true);
 					var total = accoladeNodes.Sum(i => i["quantity"]?.GetValue<int>() ?? 0);
-					GD.Print("Accolade XP: " + total);
+					if (total > 0)
+						GD.Print("Accolade XP: " + total);
 				}
 				if (exceptions.Count > 0)
 					GD.Print("Exceptions: " + string.Join(",", exceptions));

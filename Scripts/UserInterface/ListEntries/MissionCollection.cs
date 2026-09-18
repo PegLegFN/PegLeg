@@ -239,8 +239,8 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 			filteredMissions.Select(m => new MissionRewardSet(m, [
 				.. m.allItems
 					.Where(r =>
-						r.template.DisplayName != "Gold" &&
-						r.template.DisplayName != "Venture XP"
+						r.template.ItemName != "Gold" &&
+						r.template.ItemName != "Venture XP"
 					)
 					.Where(ItemFilter)
 					.OrderBy(r => -r.sortingTemplate.RarityLevel)

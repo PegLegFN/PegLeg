@@ -146,8 +146,8 @@ public partial class QuestViewer : Control
 	public void SetupQuest(QuestSlot quest)
 	{
 		currentQuest = quest;
-		EmitSignal(SignalName.NameChanged, quest.questTemplate.DisplayName);
-		EmitSignal(SignalName.DescriptionChanged, quest.questTemplate.Description);
+		EmitSignal(SignalName.NameChanged, quest.questTemplate.ItemName);
+		EmitSignal(SignalName.DescriptionChanged, quest.questTemplate.ItemDescription);
 		EmitSignal(SignalName.IconChanged, quest.questTemplate.GetTexture());
 		EmitSignal(SignalName.CompleteVisible, quest.isClaimed);
 
@@ -191,7 +191,7 @@ public partial class QuestViewer : Control
 			foreach (var item in options)
 			{
 				var template = GameItemTemplate.Get(item.itemType);
-				var name = template?.DisplayName ?? item.itemType;
+				var name = template?.ItemName ?? item.itemType;
 				claimRewardSelector.AddItem($"{name}{(item.quantity <= 1 ? "" : $" x{item.quantity}")}");
 			}
 		}

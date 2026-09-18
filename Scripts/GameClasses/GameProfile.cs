@@ -456,8 +456,9 @@ public class GameProfile
 				{
 					notifs.Remove(notif);
 				}
-				if (notifs.Count > 0 && AppConfig.Get("advanced", "logNotifs", false))
-					GD.Print("Notifications: " + notifs.ToString());
+				var loggableNotifs = notifs.Where(n => !DontLogTheseNotifTypes.Contains(n["type"]?.ToString()));
+				if (loggableNotifs.Any() && AppConfig.Get("advanced", "logNotifs", false))
+					GD.Print("Notifications: " + loggableNotifs.ToString().FixNewlines());
 				return notifs;
 			}
 			return [];
@@ -468,6 +469,21 @@ public class GameProfile
 			silenceOperationLog = false;
 		}
 	}
+
+	static readonly HashSet<string> DontLogTheseNotifTypes = 
+	[
+		"cardPackResult",
+		"catalogPurchase",
+		"collectionBookResearchedItem",
+		"collectionBookUnslotItem",
+		"dailyQuestReroll",
+		"missionAlertComplete",
+		"phoenixLevelUp",
+		"questClaim",
+		"redeemStwTokens",
+		"slotItemResult",
+		"upgradeItemRarityNotification"
+	];
 
 	JsonArray GenerateChanges(JsonObject newItems, JsonObject newStats = null)
 	{

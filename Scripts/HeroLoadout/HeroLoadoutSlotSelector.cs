@@ -318,7 +318,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 			if (commanderItem is null)
 				return false;
 			var template = commanderItem.template;
-			return PLSearch.EvaluateInstructions(searchFilter, commanderItem.CustomSearchObject([template.DisplayName, .. template.GetHeroAbilities().Select(a => a.DisplayName)]));
+			return PLSearch.EvaluateInstructions(searchFilter, commanderItem.CustomSearchObject([template.ItemName, .. template.GetHeroAbilities().Select(a => a.ItemName)]));
 		}));
 
 		filteredLoadouts.AddRange(loadouts.Except(filteredLoadouts).Where(loadout =>
@@ -333,7 +333,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 			if (teamPerkItem is null)
 				return false;
 			var template = teamPerkItem.template;
-			return PLSearch.EvaluateInstructions(searchFilter, teamPerkItem.CustomSearchObject([template.DisplayName]));
+			return PLSearch.EvaluateInstructions(searchFilter, teamPerkItem.CustomSearchObject([template.ItemName]));
 		}));
 
 		filteredLoadouts.AddRange(loadouts.Except(filteredLoadouts).Where(loadout =>
@@ -350,7 +350,7 @@ public partial class HeroLoadoutSlotSelector : Control, IRecyclableElementProvid
 				if (supportItem is null)
 					continue;
 				var template = supportItem.template;
-				if (PLSearch.EvaluateInstructions(searchFilter, supportItem.CustomSearchObject([template.DisplayName, template.GetHeroAbilities()[0].DisplayName])))
+				if (PLSearch.EvaluateInstructions(searchFilter, supportItem.CustomSearchObject([template.ItemName, template.GetHeroAbilities()[0].ItemName])))
 					return true;
 			}
 			return false;

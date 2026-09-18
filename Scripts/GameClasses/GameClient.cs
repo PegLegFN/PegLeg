@@ -57,7 +57,7 @@ public class GameClient
 			return clientTokenHeader;
 
 		var response = await RequestToken("grant_type=client_credentials");
-		if (await response.CheckForError(true))
+		if (await response.CheckForError(showErrorPopup: true))
 			return null;
 
 		var tokenData = await response.ReadJson();
@@ -188,7 +188,7 @@ public class GameClient
 			.MakeRequest("/account/api/oauth/deviceAuthorization", HttpMethod.Post)
 			.SetAuthorisation(clientTokenHeader)
 			.Send();
-		if (await linkGetResponse.CheckForError(true))
+		if (await linkGetResponse.CheckForError(showErrorPopup: true))
 			return null;
 
 		activeLinkData = await linkGetResponse.ReadJson<JsonObject>();

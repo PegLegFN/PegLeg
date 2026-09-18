@@ -351,7 +351,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			amountText = "";
 		bool amountNeeded = amountText != "";
 
-		string name = displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1];
+		string name = displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1];
 		string displayType = displayItem.template?.Type;
 		Texture2D mainIcon = displayItem.GetTexture(missingIcon, useLargePreview);
 
@@ -520,8 +520,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	{
 		get
 		{
-			string description = displayItem.template?.Description;
-			string name = displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1];
+			string description = displayItem.template?.ItemDescription;
+			string name = displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1];
 			string displayType = displayItem.template?.Type;
 			if (displayType == "GameplayModifier")
 				description = description.Replace("\r\n", " ");
@@ -585,7 +585,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		heroTooltip &= displayItem.template?.Type == "Hero";
 
 		var tooltip = CustomTooltip.GenerateSimpleTooltip(
-			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],
+			displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1],
 			tooltipAmount,
 			heroTooltip ? null : [.. tooltipDescriptions],
 			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),

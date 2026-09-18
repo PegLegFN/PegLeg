@@ -375,8 +375,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			.ThenByDescending(r => itemSelector(r).sortingTemplate.RarityLevel)
 			.ThenBy(r => OrderByItemType(itemSelector(r).sortingTemplate), StringComparer.InvariantCultureIgnoreCase)
 			.ThenByDescending(r => itemSelector(r).DesiredLevel)
-			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
-			.ThenBy(r => itemSelector(r).sortingTemplate.DisplayName)
+			.ThenBy(r => itemSelector(r).sortingTemplate.ItemName.EndsWith(" XP", StringComparison.InvariantCultureIgnoreCase))
+			.ThenBy(r => itemSelector(r).sortingTemplate.ItemName)
 			.ThenBy(r => itemSelector(r).sortingTemplate != itemSelector(r).template)
 			.ThenByDescending(r => itemSelector(r).quantity);
 	}
@@ -514,7 +514,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 				continue;
 			foreach (var item in mission.alertRewardItems ?? [])
 			{
-				if (item.template.DisplayName == "Venture XP")
+				if (item.template.ItemName == "Venture XP")
 					continue;
 				if (itemPredicate?.Invoke(item) == false)
 					continue;
@@ -525,10 +525,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			foreach (var item in mission.rewardItems ?? [])
 			{
 				if (
-					item.template.DisplayName == "Gold" ||
-					item.template.DisplayName == "Venture XP" ||
-					item.template.DisplayName == "People XP" ||
-					item.template.DisplayName == "Schematic XP"
+					item.template.ItemName == "Gold" ||
+					item.template.ItemName == "Venture XP" ||
+					item.template.ItemName == "People XP" ||
+					item.template.ItemName == "Schematic XP"
 					)
 					continue;
 				if (itemPredicate?.Invoke(item) == false)
@@ -571,13 +571,13 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		"Hero" => "000000",
 		"Worker" when template.SubType is null => "00000Z",
 		"Worker" => "0000ZZ",
-		"AccountResource" when template.DisplayName.Contains("Perk", StringComparison.OrdinalIgnoreCase) => "000AZZ",
+		"AccountResource" when template.ItemName.Contains("Perk", StringComparison.OrdinalIgnoreCase) => "000AZZ",
 		"AccountResource" when template.Name.Contains("reagent_alteration", StringComparison.OrdinalIgnoreCase) => "000ZZZ",
 		"AccountResource" => "00ZZZZ",
 		_ => template?.Type,
 	};
 
-	static string OrderByMissionNameDB(GameItemTemplate template) => template?.DisplayName switch
+	static string OrderByMissionNameDB(GameItemTemplate template) => template?.ItemName switch
 	{
 		"Fight Category 4 Storm" => "000000",
 		"Fight Category 3 Storm" => "000001",
@@ -590,7 +590,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		"Fight the Storm" => "000033",
 		"Elimenate and Collect" => "000040",
 		"Destroy the Encampments" => "000050",
-		_ => template?.DisplayName,
+		_ => template?.ItemName,
 	};
 
 	void ClearMissions()

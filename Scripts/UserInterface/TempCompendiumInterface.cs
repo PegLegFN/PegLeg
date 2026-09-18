@@ -76,7 +76,7 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 				.ThenBy(item => $"""
 					{item.Category} 
 					{item.SubType}
-					{item.SortingDisplayName}
+					{item.SortingName}
 					""")
 				.Select(item => item.CreateInstance())
 			];

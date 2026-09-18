@@ -374,6 +374,9 @@ public static partial class Helpers
 
 	public static string FormatTime(this TimeSpan time, TimeFormat timeFormat = TimeFormat.Full, bool useWeeks = false, bool longDecimals = true)
 	{
+		if (time.TotalSeconds < 60)
+			return time.Seconds.ToString();
+
 		if (timeFormat == TimeFormat.Full)
 		{
 			string text = time.Seconds.ToString();

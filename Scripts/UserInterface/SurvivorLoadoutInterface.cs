@@ -323,23 +323,24 @@ public partial class SurvivorLoadoutInterface : Node
 	[Export]
 	Texture2D collectionIcon;
 
-	static readonly Predicate<GameItem> recycleFilter = item =>
-		item.template.Type is string type && (type == "Worker" || type == "Schematic" || type == "Hero" || type == "Defender") &&
-		!(item.template["IsPermanent"]?.GetValue<bool>() ?? false) &&
-		!item.templateId.Contains("ammo") && !item.templateId.Contains("floor_defender") &&
-		!item.templateId.Contains("player_jump_pad") && !item.templateId.Contains("ingredient");
+	//static readonly Predicate<GameItem> recycleFilter = item =>
+	//	//item.template.Type is string type && (type == "Worker" || type == "Schematic" || type == "Hero" || type == "Defender") &&
+	//	!item.template.Unrecyclable &&
+	//	!item.templateId.Contains("ammo") && !item.templateId.Contains("floor_defender") &&
+	//	!item.templateId.Contains("player_jump_pad") && 
+	//	!item.templateId.Contains("ingredient");
 
 	async void DebugRecycle()
 	{
-		using var loadingToken = LoadingOverlay.CreateToken();
-		var accountItems = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+		//using var loadingToken = LoadingOverlay.CreateToken();
+		//var accountItems = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
 
-		GameItem[] filteredItems = accountItems.GetItems(recycleFilter);
+		//GameItem[] filteredItems = accountItems.GetItems(recycleFilter);
 
-		loadingToken.Dispose();
+		//loadingToken.Dispose();
 
-		var recycleItems = await SimpleItemSelector.OpenMultiSelector(filteredItems, SimpleItemSelector.RecycleConfig);
+		//var recycleItems = await SimpleItemSelector.OpenMultiSelector(filteredItems, SimpleItemSelector.RecycleConfig);
 
-		GD.Print("Items: \n" + recycleItems.Select(item => item.uuid).ToArray().Join("\n"));
+		//GD.Print("Items: \n" + recycleItems.Select(item => item.uuid).ToArray().Join("\n"));
 	}
 }

@@ -162,7 +162,7 @@ public partial class LlamaInterface : Control
 
 			templateId = firstItem.templateId;
 
-			if (firstItem.template.DisplayName.Contains("Accolade"))
+			if (firstItem.template.ItemName.Contains("Accolade"))
 				customType = "Accolade";
 
 			isKnown = firstItem.attributes.ContainsKey("options");
@@ -181,7 +181,7 @@ public partial class LlamaInterface : Control
 				return false;
 			if (templateId == item.templateId)
 				return true;
-			if (item.template.DisplayName.Contains("Accolade") && customType == "Accolade")
+			if (item.template.ItemName.Contains("Accolade") && customType == "Accolade")
 				return true;
 			return false;
 		}

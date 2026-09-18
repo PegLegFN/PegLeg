@@ -256,6 +256,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 		currentProfile?.OnProfileChanged -= UpdateProfile;
 		currentProfile = await account.GetProfile(targetProfile).Query();
+		if (currentProfile is null)
+			return;
 
 		inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
 
@@ -461,7 +463,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			.ThenBy(i => i.template?.Type);
 
 		if (sortByName)
-			resultItems = resultItems.ThenBy(i => i.template?.SortingDisplayName);
+			resultItems = resultItems.ThenBy(i => i.template?.SortingName);
 
 		resultItems = resultItems
 			//.ThenBy(i => i.template.Category)
@@ -471,7 +473,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			.ThenBy(i => -i.quantity);
 
 		if (!sortByName)
-			resultItems = resultItems.ThenBy(i => i.template?.SortingDisplayName);
+			resultItems = resultItems.ThenBy(i => i.template?.SortingName);
 
 
 		currentItems = [.. resultItems];
@@ -489,7 +491,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		if (selectedItem.Length == 0)
 			return true;
 		var result = await GenericConfirmationWindow.ShowConfirmation(
-			$"Research \"{selectedItem[0].Key.template.DisplayName}\"?",
+			$"Research \"{selectedItem[0].Key.template.ItemName}\"?",
 			"Research",
 			"Recycle"
 		);

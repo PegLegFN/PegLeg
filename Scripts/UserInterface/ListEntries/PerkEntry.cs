@@ -72,7 +72,7 @@ public partial class PerkEntry : Control
 			return;
 		}
 
-		EmitSignal(SignalName.NameChanged, alteration.DisplayName);
+		EmitSignal(SignalName.NameChanged, alteration.ItemName);
 
 		if (hasRarity)
 		{
@@ -122,7 +122,7 @@ public partial class PerkEntry : Control
 
 	public void SetLockLevel(int level)
 	{
-		EmitSignal(SignalName.LockTextChanged, "Lv " + level);
+		EmitSignal(SignalName.LockTextChanged, level > 0 ? $"Lv {level}" : "");
 	}
 
 	public void SetLockRarity(int rarity)

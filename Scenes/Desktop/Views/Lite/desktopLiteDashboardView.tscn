@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://0rekh58vwqge" path="res://Images/InterfaceIcons/ClickbaitOswald.png" id="12_vnrjy"]
 [ext_resource type="PackedScene" uid="uid://bcnf5m1xdyb7r" path="res://Scenes/SharedImageGenerators/shareable_alert_summary.tscn" id="12_yr1bg"]
 [ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="14_qts83"]
+[ext_resource type="Script" uid="uid://dacb4bdswtpwm" path="res://Scripts/Config/ConfigFoldoutHook.cs" id="19_hdvq0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bp4h1"]
 shader = ExtResource("4_ql4gu")
@@ -412,40 +413,57 @@ size_flags_horizontal = 6
 custom_minimum_size = Vector2(200, 0)
 size_flags_horizontal = 4
 
-[node name="FoldableContainer" type="FoldableContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=155677086]
+[node name="Shops" type="FoldableContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=155677086]
 layout_mode = 2
+folded = true
 title = "Item Shops"
 title_alignment = 1
+script = ExtResource("19_hdvq0")
+section = "dashboard"
+key = "shops"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer" unique_id=607049738]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/Shops" unique_id=607049738]
+visible = false
 layout_mode = 2
 
-[node name="Gameplay Shops" type="HBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer" unique_id=2049174298]
+[node name="Gameplay Shops" type="HBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/Shops/VBoxContainer" unique_id=2049174298]
 layout_mode = 2
 alignment = 1
 
-[node name="WeeklyShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer/Gameplay Shops" unique_id=944500429 instance=ExtResource("8_5ma0n")]
+[node name="WeeklyShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/Shops/VBoxContainer/Gameplay Shops" unique_id=944500429 instance=ExtResource("8_5ma0n")]
 layout_mode = 2
 
-[node name="EventShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer/Gameplay Shops" unique_id=1061525120 instance=ExtResource("9_1rpsu")]
+[node name="EventShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/Shops/VBoxContainer/Gameplay Shops" unique_id=1061525120 instance=ExtResource("9_1rpsu")]
 layout_mode = 2
 
-[node name="CosmeticShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FoldableContainer/VBoxContainer" unique_id=719990971 instance=ExtResource("10_nnwiv")]
+[node name="CosmeticShop" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/Shops/VBoxContainer" unique_id=719990971 instance=ExtResource("10_nnwiv")]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=1210819099]
+[node name="FourPlayerRepeatables" type="FoldableContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=1929012489]
+custom_minimum_size = Vector2(576, 0)
+layout_mode = 2
+folded = true
+title = "4x Rewards"
+title_alignment = 1
+script = ExtResource("19_hdvq0")
+section = "dashboard"
+key = "fourPlayer"
+
+[node name="MarginContainer2" type="MarginContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables" unique_id=1210819099]
+visible = false
 custom_minimum_size = Vector2(469, 0)
 layout_mode = 2
 
-[node name="Container" type="HBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2" unique_id=224683875]
+[node name="Container" type="HBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables" unique_id=224683875]
+visible = false
 layout_mode = 2
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container" unique_id=1995144250]
+[node name="VBoxContainer" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container" unique_id=1995144250]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DoubleLegendary" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer" unique_id=319474280 instance=ExtResource("7_31yqt")]
+[node name="DoubleLegendary" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer" unique_id=319474280 instance=ExtResource("7_31yqt")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -455,14 +473,14 @@ testSearch = "\"Double Legendary\"///!bundle Legendary | Mythic !AccountResource
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(319474280, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(319474280, 1750868079) index="0" unique_id=796681065]
 text = "x2 Legendary"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(319474280, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/DoubleLegendary/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(319474280, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="Stone" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer" unique_id=879159812 instance=ExtResource("7_31yqt")]
+[node name="Stone" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer" unique_id=879159812 instance=ExtResource("7_31yqt")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
@@ -471,14 +489,14 @@ testSearch = "Stonewood \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(879159812, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(879159812, 1750868079) index="0" unique_id=796681065]
 text = "x4 Stonewood"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(879159812, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Stone/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(879159812, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="Plank" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer" unique_id=171229345 instance=ExtResource("7_31yqt")]
+[node name="Plank" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer" unique_id=171229345 instance=ExtResource("7_31yqt")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
@@ -487,14 +505,14 @@ testSearch = "Plankerton \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Plank/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(171229345, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Plank/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(171229345, 1750868079) index="0" unique_id=796681065]
 text = "x4 Plankerton"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Plank/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(171229345, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Plank/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(171229345, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="Canny" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer" unique_id=444761713 instance=ExtResource("7_31yqt")]
+[node name="Canny" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer" unique_id=444761713 instance=ExtResource("7_31yqt")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
@@ -503,14 +521,14 @@ testSearch = "Canny \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Canny/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(444761713, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Canny/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(444761713, 1750868079) index="0" unique_id=796681065]
 text = "x4 Canny Valley"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Canny/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(444761713, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Canny/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(444761713, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="Vents" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer" unique_id=678279883 instance=ExtResource("7_31yqt")]
+[node name="Vents" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer" unique_id=678279883 instance=ExtResource("7_31yqt")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel3PadB"
@@ -519,18 +537,18 @@ testSearch = "Ventures \"Large Reward\"///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Vents/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(678279883, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Vents/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(678279883, 1750868079) index="0" unique_id=796681065]
 text = "x4 Ventures"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Vents/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(678279883, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Vents/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(678279883, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container" unique_id=256233134]
+[node name="VBoxContainer2" type="VBoxContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container" unique_id=256233134]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="160" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2" unique_id=1352265404 instance=ExtResource("7_31yqt")]
+[node name="160" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2" unique_id=1352265404 instance=ExtResource("7_31yqt")]
 custom_minimum_size = Vector2(327, 60)
 layout_mode = 2
 size_flags_vertical = 0
@@ -542,20 +560,20 @@ sortByZoneCat = true
 alwaysHidePlayableFilter = true
 ignoreLargeXPSetting = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
 text = "x5 Twine Peaks"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
-[node name="SmallLoadingIcon" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="0" unique_id=1398539103]
+[node name="SmallLoadingIcon" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="0" unique_id=1398539103]
 mouse_filter = 0
 
-[node name="RecycleContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="1" unique_id=812189577]
+[node name="RecycleContainer" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/160/VBoxContainer/Body" parent_id_path=PackedInt32Array(1352265404, 1401981871) index="1" unique_id=812189577]
 recycleEntryScene = ExtResource("9_p1mgl")
 
-[node name="Twine" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2" unique_id=1945201001 instance=ExtResource("7_31yqt")]
+[node name="Twine" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2" unique_id=1945201001 instance=ExtResource("7_31yqt")]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -565,11 +583,11 @@ testSearch = "Twine \"Large Reward\" !160///bundle"
 sortByPower = true
 sortByZoneCat = true
 
-[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/Twine/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1945201001, 1750868079) index="0" unique_id=796681065]
+[node name="Name" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/Twine/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1945201001, 1750868079) index="0" unique_id=796681065]
 text = "x4 Twine Peaks"
 horizontal_alignment = 1
 
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/Twine/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1945201001, 1750868079) index="3" unique_id=1160045743]
+[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/Twine/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1945201001, 1750868079) index="3" unique_id=1160045743]
 visible = false
 
 [node name="DashboardAlertSummary" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container" unique_id=891970499 instance=ExtResource("6_rt5en")]
@@ -622,13 +640,13 @@ render_target_update_mode = 0
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/Beast/NotableBeast/VBoxContainer/Hidden/MissionCollection"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardLlamaShop"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/DoubleLegendary"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Stone"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Plank"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Canny"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer/Vents"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/160"]
-[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/MarginContainer2/Container/VBoxContainer2/Twine"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/DoubleLegendary"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Stone"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Plank"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Canny"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer/Vents"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/160"]
+[editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/FourPlayerRepeatables/Container/VBoxContainer2/Twine"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardAlertSummary"]
 [editable path="ShareableMissionSummary"]
 [editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer/VBucks"]

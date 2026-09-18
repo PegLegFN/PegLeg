@@ -77,7 +77,7 @@ public partial class TeamPerkEntry : GameItemEntry
 
 		List<string> tooltipDescriptions =
 		[
-			displayItem.template?.Description ?? "",
+			displayItem.template?.ItemDescription ?? "",
 			//"Item Id: " + item.templateId,
 		];
 		bool progressive = teamPerkTemplate["ProgressiveBonus"]?.GetValue<bool>() ?? false;
@@ -95,7 +95,7 @@ public partial class TeamPerkEntry : GameItemEntry
 			tooltipDescriptions.Add("Search Tags: " + tagArray.Select(t => t?.ToString()).Where(t => !t.StartsWith("hidetag_")).ToArray().Join(", "));
 
 		var tooltip = CustomTooltip.GenerateSimpleTooltip(
-			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],
+			displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1],
 			null,
 			[.. tooltipDescriptions],
 			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml()

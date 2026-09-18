@@ -230,7 +230,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 		{
 			abilities ??= item.template?.GetHeroAbilities();
 			var perk = commanderContainer.Visible ? abilities[1] : abilities[0];
-			if (!descriptionRequirements.Any(r => Regex.Match(perk.Description, r, RegexOptions.IgnoreCase).Success))
+			if (!descriptionRequirements.Any(r => Regex.Match(perk.ItemDescription, r, RegexOptions.IgnoreCase).Success))
 				return false;
 		}
 		if (abilityRequirement is not null)
@@ -247,7 +247,7 @@ public partial class HeroItemSelector : GameItemSelectorBase<HeroItemSelector.Co
 			}
 		}
 		var activeAbility = (commanderContainer.Visible && item.template.Tier > 1) ? abilities[1] : abilities[0];
-		return PLSearch.EvaluateInstructions(searchInstructions, item.CustomSearchObject([activeAbility.Description, Deacronymise(activeAbility.Description)], true));
+		return PLSearch.EvaluateInstructions(searchInstructions, item.CustomSearchObject([activeAbility.ItemDescription, Deacronymise(activeAbility.ItemDescription)], true));
 	}
 
 	private IOrderedEnumerable<GameItem> ItemSorter(IOrderedEnumerable<GameItem> items) => items

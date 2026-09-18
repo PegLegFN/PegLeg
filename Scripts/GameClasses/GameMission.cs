@@ -228,7 +228,7 @@ public partial class GameMission
 				.OrderBy(m => m.TheaterIdx)
 				.ThenBy(m => m.PowerLevel)
 				.ThenBy(m => m.IsFourPlayer)
-				.ThenBy(m => m.missionGenerator?.DisplayName ?? "AAAAA")
+				.ThenBy(m => m.missionGenerator?.ItemName ?? "AAAAA")
 			];
 
 			ArchiveMissions();
@@ -359,7 +359,7 @@ public partial class GameMission
 					new ArchiveData.CompactMission()
 					{
 						missionName = m.DisplayName,
-						zoneName = m.zoneTheme is GameItemTemplate zt ? $"{zt.DisplayName} - {m.TheaterName}" : m.tile.zoneTheme,
+						zoneName = m.zoneTheme is GameItemTemplate zt ? $"{zt.ItemName} - {m.TheaterName}" : m.tile.zoneTheme,
 						powerLevel = m.PowerLevel,
 						fourPlayer = m.difficultyInfo?.DisplayName?.EndsWith("4 Players") ?? false,
 						rewards = m.missionData.missionRewards.NamedItems,
@@ -572,10 +572,10 @@ public partial class GameMission
 				{
 					if (FulfillmentToTemplate(items[i].itemType, out var fid, out var fPack))
 					{
-						items[i].name = fPack?.DisplayName ?? $"<fid:{fid}>";
+						items[i].name = fPack?.ItemName ?? $"<fid:{fid}>";
 						continue;
 					}
-					items[i].name = GameItemTemplate.Get(items[i].itemType)?.DisplayName ?? $"<{items[i].itemType}>";
+					items[i].name = GameItemTemplate.Get(items[i].itemType)?.ItemName ?? $"<{items[i].itemType}>";
 				}
 				return items;
 			}
@@ -794,10 +794,10 @@ public partial class GameMission
 	public Region[] regions { get; private set; }
 
 	public string Guid => missionData.missionGuid;
-	public string DisplayName => missionGenerator?.DisplayName;
-	public string Description => missionGenerator?.Description;
-	public string Location => zoneTheme?.DisplayName;
-	public string LocationDescription => zoneTheme?.Description;
+	public string DisplayName => missionGenerator?.ItemName;
+	public string Description => missionGenerator?.ItemDescription;
+	public string Location => zoneTheme?.ItemName;
+	public string LocationDescription => zoneTheme?.ItemDescription;
 	public int PowerLevel => difficultyInfo?.RecommendedRating ?? 0;
 	public int MinPower => difficultyInfo?.RequiredRating ?? 0;
 	public int MaxPower => difficultyInfo?.MaximumRating ?? 0;

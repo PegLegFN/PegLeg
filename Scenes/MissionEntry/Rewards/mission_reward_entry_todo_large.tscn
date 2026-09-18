@@ -4,7 +4,16 @@
 [ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="2_bja7u"]
 [ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="3_sea20"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bja7u"]
+[sub_resource type="Gradient" id="Gradient_34jcw"]
+offsets = PackedFloat32Array(0, 0.2, 0.8, 1)
+colors = PackedColorArray(0, 1, 0, 0, 0, 1, 0, 0.5019608, 0, 1, 0, 0.25098038, 0, 1, 0, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_51cgl"]
+gradient = SubResource("Gradient_34jcw")
+metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_prc5a"]
 resource_local_to_scene = true
 shader = ExtResource("2_bja7u")
 shader_parameter/ControlSize = Vector2(41, 41)
@@ -32,17 +41,23 @@ custom_minimum_size = Vector2(260, 45)
 [node name="MissionTooltip" parent="Button" parent_id_path=PackedInt32Array(2035664014) index="1" unique_id=2001201075]
 custom_minimum_size = Vector2(120, 0)
 
-[node name="TheaterCat" parent="MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="0" unique_id=723104068]
+[node name="MarginContainer4" parent="MissionEntry/HBoxContainer" parent_id_path=PackedInt32Array(1267303960) index="0" unique_id=989322961]
+mouse_filter = 1
+
+[node name="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer4/Complete" parent_id_path=PackedInt32Array(865555044) index="0" unique_id=563319087]
+texture = SubResource("GradientTexture2D_51cgl")
+
+[node name="TheaterCat" parent="MissionEntry/HBoxContainer/MarginContainer4/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="0" unique_id=723104068]
 custom_minimum_size = Vector2(30, 0)
 theme_override_font_sizes/font_size = 28
 
-[node name="Icon" parent="MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="1" unique_id=189692744]
+[node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer4/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="1" unique_id=189692744]
 custom_minimum_size = Vector2(39, 0)
 
-[node name="TextureRect2" parent="MissionEntry/HBoxContainer/HBoxContainer/Icon" index="0" unique_id=1911805740]
-custom_minimum_size = Vector2(0, 20)
+[node name="TextureRect2" parent="MissionEntry/HBoxContainer/MarginContainer4/HBoxContainer/Icon" index="0" unique_id=1911805740]
+custom_minimum_size = Vector2(0, 16)
 
-[node name="PowerLevel" parent="MissionEntry/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="2" unique_id=295920822]
+[node name="PowerLevel" parent="MissionEntry/HBoxContainer/MarginContainer4/HBoxContainer" parent_id_path=PackedInt32Array(142706386) index="2" unique_id=295920822]
 custom_minimum_size = Vector2(42, 0)
 theme_override_font_sizes/font_size = 28
 
@@ -51,15 +66,21 @@ levelTextPrefix = "Lv
 "
 
 [node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" index="0" unique_id=68041144]
-material = SubResource("ShaderMaterial_bja7u")
+material = SubResource("ShaderMaterial_prc5a")
 
 [node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="0" unique_id=2062077297]
 theme_override_font_sizes/font_size = 14
 
+[node name="NotificationLabel" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="1" unique_id=1997996294]
+theme_override_font_sizes/font_size = 16
+
 [node name="Label" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1467368915) index="1" unique_id=1772908320]
 theme_override_font_sizes/font_size = 24
 
-[node name="ItemLv" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1467368915) index="3" unique_id=554594560]
+[node name="NotificationLabel" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/CollectableIcon" parent_id_path=PackedInt32Array(689731058) index="0" unique_id=184197745]
+theme_override_font_sizes/font_size = 16
+
+[node name="ItemLv" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1467368915) index="4" unique_id=554594560]
 custom_minimum_size = Vector2(22, 0)
 theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 16
@@ -78,5 +99,7 @@ custom_minimum_size = Vector2(39, 0)
 
 [node name="Button4" parent="MissionEntry/HBoxContainer/MarginContainer2/MarginContainer3/TodoButtons" parent_id_path=PackedInt32Array(1019756305) index="1" unique_id=536279400]
 custom_minimum_size = Vector2(39, 0)
+
+[connection signal="MissionCompleteIfAlert" from="." to="MissionEntry/HBoxContainer/MarginContainer4/Complete" method="set_visible"]
 
 [editable path="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem"]

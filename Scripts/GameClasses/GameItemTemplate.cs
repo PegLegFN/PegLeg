@@ -188,16 +188,16 @@ public partial class GameItemTemplate
 		this.rawData = rawData;
 	}
 
-	public GameItemTemplate(string templateId = "Custom:item", string displayName = "Custom Item", string description = null, string iconPath = null, JsonObject extraData = null)
+	public GameItemTemplate(string templateId = "Custom:item", string name = "Custom Item", string description = null, string iconPath = null, JsonObject extraData = null)
 	{
 		extraData ??= [];
 		var splitTemplateId = templateId.Split(":");
 		extraData["Type"] = splitTemplateId[0];
 		extraData["Name"] = splitTemplateId[1];
-		if (displayName is not null)
-			extraData["DisplayName"] = displayName;
+		if (name is not null)
+			extraData["ItemName"] = name;
 		if (description is not null)
-			extraData["Description"] = description;
+			extraData["ItemDescription"] = description;
 		if (iconPath is not null)
 			extraData["ImagePaths"] = new JsonObject() { ["LargePreview"] = iconPath };
 		rawData = extraData;
@@ -260,9 +260,9 @@ public partial class GameItemTemplate
 
 	public string CollectionProfile => Type == "Schematic" ? FnProfileTypes.SchematicCollection : FnProfileTypes.PeopleCollection;
 	public string Name => rawData["Name"].ToString();
-	public string DisplayName => rawData["DisplayName"]?.ToString();
-	public string SortingDisplayName => DisplayName.StartsWith("The ") ? DisplayName[4..] : DisplayName;
-	public string Description => rawData["Description"]?.ToString();
+	public string ItemName => rawData["ItemName"]?.ToString();
+	public string SortingName => ItemName.StartsWith("The ") ? ItemName[4..] : ItemName;
+	public string ItemDescription => rawData["ItemDescription"]?.ToString();
 	public string Category => rawData["Category"]?.ToString();
 	public string SubType => rawData["SubType"]?.ToString();
 	public string Rarity => rawData["Rarity"]?.ToString();
@@ -334,8 +334,8 @@ public partial class GameItemTemplate
 		(
 			Type == "CardPack" &&
 			textureType == FnItemTextureType.Preview &&
-			DisplayName.Contains("Legendary") &&
-			DisplayName.Contains("Llama") &&
+			ItemName.Contains("Legendary") &&
+			ItemName.Contains("Llama") &&
 			!Name.StartsWith("ZCP_")
 		)
 			return goldLlama;
@@ -852,7 +852,7 @@ public partial class GameItemTemplate
 
 		List<string> tags =
 		[
-			$"hidetag_{DisplayName}",
+			$"hidetag_{ItemName}",
 			//$"hidetag_{Description}",
             Rarity ?? (assumeUncommon ? "Uncommon" : null),
 			Type,
@@ -865,14 +865,14 @@ public partial class GameItemTemplate
 		{
 			foreach (var ability in abilities)
 			{
-				if (!ability?.DisplayName?.EndsWith('+') ?? false)
-					tags.Add(ability.DisplayName);
+				if (!ability?.ItemName?.EndsWith('+') ?? false)
+					tags.Add(ability.ItemName);
 				//if (ability["PreferredQuickbarSlot"] is null)
 				//	tags.Add($"hidetag_{ability.Description}");
 			}
 		}
 		if (GetTeamPerk() is GameItemTemplate teamPerk)
-			tags.Add(teamPerk.DisplayName);
+			tags.Add(teamPerk.ItemName);
 
 		if (tags.Contains("Worker"))
 			tags.Add("Survivor");

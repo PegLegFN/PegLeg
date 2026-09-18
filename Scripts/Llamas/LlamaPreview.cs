@@ -77,6 +77,7 @@ public partial class LlamaPreview : Control
 		}
 		quantitySpinner?.ValueChanged += OnQuantityChanged;
 		ClearPreview();
+		GameAccount.ActiveAccountChanged += RefreshLlama;
 		CardPackOpener.OnLlamaOpeningComplete += RefreshLlama;
 	}
 
@@ -84,7 +85,8 @@ public partial class LlamaPreview : Control
 	{
 		if (overlayInstance == this)
 			overlayInstance = null;
-		CardPackOpener.OnLlamaOpeningComplete += RefreshLlama;
+		GameAccount.ActiveAccountChanged -= RefreshLlama;
+		CardPackOpener.OnLlamaOpeningComplete -= RefreshLlama;
 	}
 
 	public static void ShowLlamaOffer(GameOffer offer)
@@ -109,7 +111,7 @@ public partial class LlamaPreview : Control
 			SetLlamaOffer(currentOffer);
 		else if (currentCardpacks is not null)
 		{
-			currentCardpacks = [.. currentCardpacks.Where(c => c.profile is not null)];
+			currentCardpacks = [.. currentCardpacks.Where(c => c.profile?.account == GameAccount.ActiveAccount)];
 			SetLlamaItems(currentCardpacks);
 		}
 	}

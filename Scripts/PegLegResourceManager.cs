@@ -171,7 +171,7 @@ public class PegLegResourceManager
 		}
 		await Helpers.WaitForFrame();
 		onProgress?.Invoke("Applying Resource Packs", -1);
-		ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
+		TryAddExtraPatch();
 		latestVersion.LoadAllPackages();
 		latestVersion.ClearOutdatedPackages();
 		onProgress?.Invoke("Loading Resources", -1);
@@ -186,7 +186,7 @@ public class PegLegResourceManager
 	static async Task FallbackLoadLocalResources(int targetMajor, int targetMinor, Action<string, float> onProgress = null)
 	{
 		onProgress?.Invoke("Applying Local Resource Packs", -1);
-		ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
+		TryAddExtraPatch();
 		PackageVersion targetVersion = new(new(targetMajor, targetMinor, 0));
 		targetVersion = targetVersion.GetLatestLocalPatch();
 		GD.Print($"Using Local Resources: {targetVersion}");
@@ -199,6 +199,14 @@ public class PegLegResourceManager
 		);
 		hasLoadedResources = true;
 		OnResourcesLoaded?.Invoke();
+	}
+
+	static void TryAddExtraPatch()
+	{
+		if (!FileAccess.FileExists(globalPackageFolderPath + "ExtraPatch.pck"))
+			return;
+		GD.Print("Using Extra Patch");
+		ProjectSettings.LoadResourcePack(globalPackageFolderPath + "ExtraPatch.pck", false);
 	}
 
 	//temporary until proper resource versioning system is ready

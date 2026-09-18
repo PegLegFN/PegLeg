@@ -175,7 +175,7 @@ public partial class GameOfferEntry : Control
 			int tier = (await currentOffer.GetXRayLlamaData(account))?.attributes?["highest_rarity"]?.GetValue<int>() ?? 0;
 			if (ct.IsCancellationRequested || currentOffer is null)
 				return;
-			if (grantedItem.template.DisplayName.Contains("Legendary"))
+			if (grantedItem.template.ItemName.Contains("Legendary"))
 				tier = 2;
 			grantedItem.customData["llamaTier"] = tier;
 		}
@@ -268,7 +268,7 @@ public partial class GameOfferEntry : Control
 		}
 
 		var name = currentOffer.Title ??
-			grantedItem?.template?.DisplayName ??
+			grantedItem?.template?.ItemName ??
 			currentOffer.itemGrants.FirstOrDefault().templateId.Split(":")[1] ??
 			"Offer Name";
 		if (includeAmountInName)

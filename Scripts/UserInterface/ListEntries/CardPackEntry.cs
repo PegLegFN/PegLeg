@@ -57,12 +57,12 @@ public partial class CardPackEntry : GameItemEntry
 		}
 		displayItem = item;
 
-		string name = item.template.DisplayName;
+		string name = item.template.ItemName;
 		int amount = Mathf.Max(item.customData["stackQuantity"]?.GetValue<int>() ?? 0,  item.quantity);
 		amount = Mathf.Max(item.customData["shopQuantity"]?.GetValue<int>() ?? 0, amount);
 		//string nameWithAmount = amount >= 0 ? $"{name} ({amount} left)" : name;
 		string nameWithAmount = name;
-		string description = item.template.Description;
+		string description = item.template.ItemDescription;
 
 		EmitSignalNameChanged((includeAmountInName && amount >= 0) ? nameWithAmount : name);
 		EmitSignalDescriptionChanged(description);

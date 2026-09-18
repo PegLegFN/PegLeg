@@ -80,7 +80,7 @@ public partial class HeroEntry : GameItemEntry
 			perkTemplateId = (displayItem.template.Tier < 2 || useHeroPerkDescription ? abilityTemplates[0] : abilityTemplates[1])?.TemplateId;
 
 		var tooltip = CustomTooltip.GenerateSimpleTooltip(
-			displayItem.template?.DisplayName ?? displayItem.templateId?.Split(":")[1],
+			displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1],
 			null,
 			perkTemplateId is not null ? null : [.. tooltipDescriptions],
 			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),

@@ -446,7 +446,7 @@ public partial class GameItemUpgrader : Control
 		[
 			..costs
 				.Select(i => i.ToItem())
-				.OrderBy(i => !i.template.DisplayName.Contains("Flux", StringComparison.OrdinalIgnoreCase))
+				.OrderBy(i => !i.template.ItemName.Contains("Flux", StringComparison.OrdinalIgnoreCase))
 				//.ThenBy(i => !i.template.DisplayName.Contains("Supercharger", StringComparison.OrdinalIgnoreCase))
 				.ThenBy(i => -i.template.RarityLevel)
 		];

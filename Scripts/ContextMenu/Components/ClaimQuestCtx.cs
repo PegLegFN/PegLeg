@@ -56,8 +56,8 @@ public partial class ClaimQuestCtx : AbstractContextComponent
 		{
 			icon = i.GetTexture(),
 			itemColor = i.template.RarityColor,
-			header = $"Claimed: {i.template.DisplayName} x{i.quantity}",
-			body = i.template.Description
+			header = $"Claimed: {i.template.ItemName} x{i.quantity}",
+			body = i.template.ItemDescription
 		}));
 	}
 }

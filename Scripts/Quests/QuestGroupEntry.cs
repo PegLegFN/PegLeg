@@ -109,18 +109,18 @@ public partial class QuestGroupEntry : Control
 			questSlotList.Add(newData);
 		}
 
-		var enduranceQuest = questSlotList.FirstOrDefault(q => q.isUnlocked && (q.questTemplate?.DisplayName?.EndsWith("Wave 5") ?? false));
+		var enduranceQuest = questSlotList.FirstOrDefault(q => q.isUnlocked && (q.questTemplate?.ItemName?.EndsWith("Wave 5") ?? false));
 		if (enduranceQuest is not null)
-			EmitSignal(SignalName.NameChanged, enduranceQuest.questTemplate.DisplayName[..^7]);
+			EmitSignal(SignalName.NameChanged, enduranceQuest.questTemplate.ItemName[..^7]);
 
 		var weeklySthQuest = questSlotList.FirstOrDefault(q =>
 			q.isUnlocked &&
 			q.questTemplate is GameItemTemplate qTemp &&
 			qTemp.Category == "LTE_HordeV3" &&
-			qTemp.DisplayName.EndsWith(" (Weekly)")
+			qTemp.ItemName.EndsWith(" (Weekly)")
 		);
 		if (weeklySthQuest is not null)
-			EmitSignal(SignalName.NameChanged, "Weekly STH: " + weeklySthQuest.questTemplate.DisplayName[..^9]);
+			EmitSignal(SignalName.NameChanged, "Weekly STH: " + weeklySthQuest.questTemplate.ItemName[..^9]);
 
 		UpdateSequenceProgress();
 		UpdateEventTimer();

@@ -120,7 +120,7 @@ public partial class PowerHourAlert : Control
 		else
 			countdown.SetCustomRefreshTime(phEvent.start, phEvent.start.AddHours(-headsUpHours));
 
-		compactType.Text = (phEvent.modifiers ?? []).LastOrDefault()?.DisplayName ?? "???";
+		compactType.Text = (phEvent.modifiers ?? []).LastOrDefault()?.ItemName ?? "???";
 		compactCountdown.SetCustomRefreshTime(phEvent.start, phEvent.start.AddDays(-7));
 		compactTime.Text = $"{phEvent.start.ToLocalTime():g}";
 

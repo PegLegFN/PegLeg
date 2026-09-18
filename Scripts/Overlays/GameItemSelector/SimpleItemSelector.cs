@@ -310,7 +310,7 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 	IOrderedEnumerable<GameItem> SortByPowerAsc(IOrderedEnumerable<GameItem> items) =>
 		items.ThenBy(item => item.CalculateSurvivorRating(CurrentConfig.overrideSurvivorSquad is not null, CurrentConfig.overrideSurvivorSquad));
 	IOrderedEnumerable<GameItem> SortByName(IOrderedEnumerable<GameItem> items) =>
-		items.ThenBy(item => item.template.SortingDisplayName);
+		items.ThenBy(item => item.template.SortingName);
 
 	public override Color GetSelectableColor(GameItem item)
 	{

@@ -136,9 +136,9 @@ public partial class LlamaSelector : Control
 		public CardPackStack(GameItem firstItem)
 		{
 			templateId = firstItem.templateId;
-			displayName = firstItem.template?.DisplayName ?? templateId;
+			displayName = firstItem.template?.ItemName ?? templateId;
 
-			if (firstItem.template.DisplayName.Contains("Accolade"))
+			if (firstItem.template.ItemName.Contains("Accolade"))
 				customType = "Accolade";
 
 			isKnown = firstItem.attributes.ContainsKey("options");
@@ -157,9 +157,9 @@ public partial class LlamaSelector : Control
 		{
 			//if (templateId == item.templateId)
 			//	return true;
-			if (displayName == (item.template?.DisplayName ?? item.templateId))
+			if (displayName == (item.template?.ItemName ?? item.templateId))
 				return true;
-			if (item.template.DisplayName.Contains("Accolade") && customType == "Accolade")
+			if (item.template.ItemName.Contains("Accolade") && customType == "Accolade")
 				return true;
 			return false;
 		}
@@ -231,7 +231,7 @@ public partial class LlamaSelector : Control
 		var entryArray = inventoryLlamaEntries.Values.ToArray();
 		var indexes = entryArray
 			.OrderBy(e => e.currentItem.CardPackChoices is not null)
-			.ThenBy(e => e.currentItem.template.DisplayName ?? "ZZZZ")
+			.ThenBy(e => e.currentItem.template.ItemName ?? "ZZZZ")
 			.Select(e => Array.IndexOf(entryArray, e))
 			.ToArray();
 		for (int i = 0; i < entryArray.Length; i++)

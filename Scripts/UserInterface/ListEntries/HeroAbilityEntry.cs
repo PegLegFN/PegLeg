@@ -37,8 +37,8 @@ public partial class HeroAbilityEntry : Control
 
 	public void SetAbility(GameItemTemplate heroAbility, bool locked = false, string warning = null)
 	{
-		string name = heroAbility?.DisplayName;
-		string description = heroAbility?.Description;
+		string name = heroAbility?.ItemName;
+		string description = heroAbility?.ItemDescription;
 
 		EmitSignal(SignalName.NameChanged, name);
 		EmitSignal(SignalName.DescriptionChanged, description);

@@ -79,7 +79,7 @@ public partial class LoginPopup : ModalWindow
 	{
 		using var _ = LoadingOverlay.CreateToken();
 		var exchangeCodeResponse = await GameClient.PreferredClient.LoginWithExchangeCode(exchangeCodeBox.Text);
-		if (await exchangeCodeResponse.CheckForError(true))
+		if (await exchangeCodeResponse.CheckForError(showErrorPopup: true))
 		{
 			Cancel();
 			return;

@@ -479,7 +479,7 @@ text = "Equipped:"
 horizontal_alignment = 1
 
 [node name="Item Name" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="1" unique_id=886346814]
-custom_minimum_size = Vector2(0, 70)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 32
@@ -583,6 +583,7 @@ size_flags_horizontal = 8
 text = "Lv 50"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="3" unique_id=1501507711]
+visible = false
 layout_mode = 2
 alignment = 2
 
@@ -766,14 +767,13 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Perks" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="0" unique_id=1053041289 node_paths=PackedStringArray("realPerkArea", "optionalPerkArea", "interactionBlocker", "currentPerkEntries", "perkUpArea", "perkUpEntry", "reperkEntries", "costArea", "costEntries", "perkApplyButton")]
-visible = false
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 script = ExtResource("7_14t7q")
 realPerkArea = NodePath("Perks/Perk Slot Selector")
 optionalPerkArea = NodePath("Perks/Perk Option Selector")
 interactionBlocker = NodePath("Perks/MouseBlocker")
-currentPerkEntries = [NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entry"), NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entry2"), NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entry3"), NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entry4"), NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entry5"), NodePath("Perks/Perk Slot Selector/VBoxContainer/Perk Entry6")]
+currentPerkEntries = [NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry2"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry3"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry4"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry5"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry6"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry7"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry8"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry9"), NodePath("Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer/Perk Entry10")]
 perkUpArea = NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer2/UpgradePerkLayout")
 perkUpEntry = NodePath("Perks/Perk Option Selector/VBoxContainer/MarginContainer2/UpgradePerkLayout/UpgradePerk")
 reperkEntries = [NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk1"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk2"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk3"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk4"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk5"), NodePath("Perks/Perk Option Selector/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/Reperk6")]
@@ -787,43 +787,70 @@ clip_contents = true
 layout_mode = 2
 
 [node name="Perk Slot Selector" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks" index="0" unique_id=839039958]
+custom_minimum_size = Vector2(0, 475)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector" index="0" unique_id=2072340051]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector" index="0" unique_id=1297879808]
 layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer" index="0" unique_id=783634392]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer" index="0" unique_id=2072340051]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 3
 
-[node name="Perk Entry" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/VBoxContainer" index="0" unique_id=1571081926 instance=ExtResource("2_t0h0p")]
+[node name="Perk Entry" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="0" unique_id=1571081926 instance=ExtResource("2_t0h0p")]
 layout_mode = 2
 
-[node name="Perk Entry2" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/VBoxContainer" index="1" unique_id=1276463392 instance=ExtResource("2_t0h0p")]
+[node name="Perk Entry2" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="1" unique_id=1276463392 instance=ExtResource("2_t0h0p")]
 layout_mode = 2
 
-[node name="Perk Entry3" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/VBoxContainer" index="2" unique_id=1386570219 instance=ExtResource("2_t0h0p")]
+[node name="Perk Entry3" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="2" unique_id=1386570219 instance=ExtResource("2_t0h0p")]
 layout_mode = 2
 
-[node name="Perk Entry4" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/VBoxContainer" index="3" unique_id=480706642 instance=ExtResource("2_t0h0p")]
+[node name="Perk Entry4" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="3" unique_id=480706642 instance=ExtResource("2_t0h0p")]
 layout_mode = 2
 
-[node name="Perk Entry5" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/VBoxContainer" index="4" unique_id=1797242853 instance=ExtResource("2_t0h0p")]
+[node name="Perk Entry5" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="4" unique_id=1797242853 instance=ExtResource("2_t0h0p")]
 layout_mode = 2
 
-[node name="Perk Entry6" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/VBoxContainer" index="5" unique_id=1829235420 instance=ExtResource("2_t0h0p")]
+[node name="Perk Entry6" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="5" unique_id=1829235420 instance=ExtResource("2_t0h0p")]
+layout_mode = 2
+
+[node name="Perk Entry7" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="6" unique_id=966677298 instance=ExtResource("2_t0h0p")]
+visible = false
+layout_mode = 2
+
+[node name="Perk Entry8" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="7" unique_id=1332911421 instance=ExtResource("2_t0h0p")]
+visible = false
+layout_mode = 2
+
+[node name="Perk Entry9" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="8" unique_id=1283983606 instance=ExtResource("2_t0h0p")]
+visible = false
+layout_mode = 2
+
+[node name="Perk Entry10" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer/MarginContainer/VBoxContainer" index="9" unique_id=845962022 instance=ExtResource("2_t0h0p")]
+visible = false
 layout_mode = 2
 
 [node name="Perk Option Selector" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks" index="1" unique_id=1446930557]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
+anchor_left = 1.0
+anchor_right = 2.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -966,6 +993,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Abilities" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="1" unique_id=384164109]
+visible = false
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 

@@ -414,7 +414,7 @@ public partial class TimelineInterface : Node
 				return eventQuestItem ??= GameItemTemplate.Get(eventQuest)?.CreateInstance();
 			}
 		}
-		protected override string GeneratedDisplayName => EventQuestItem?.template?.DisplayName ?? eventFlag;
+		protected override string GeneratedDisplayName => EventQuestItem?.template?.ItemName ?? eventFlag;
 		public bool free;
 		public override bool Free => free;
 	}

@@ -22,7 +22,7 @@ public partial class SaveItemIconCtx : AbstractContextComponent
 		var currentItem = hook?.itemSource?.currentItem;
 		var tex = currentItem?.GetTexture(null, true);
 		currentImage = tex?.GetImage();
-		currentImage?.SetMeta("filename", currentItem.template?.DisplayName ?? "item");
+		currentImage?.SetMeta("filename", currentItem.template?.ItemName ?? "item");
 		SetDisabled(currentImage is null);
 	}
 

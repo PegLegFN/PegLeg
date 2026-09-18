@@ -383,13 +383,13 @@ public static class WebHelpers
 	}
 
 	public record struct ErrorContext(HttpResponseMessage response, int epicErrorCode, JsonNode errorContent);
-	public static async Task<bool> CheckForError(this HttpResponseMessage response, bool showErrorPopup = false, bool logError = true) =>
-		(await response.CheckForErrorJson(showErrorPopup, logError)).didError;
+	public static async Task<bool> CheckForError(this HttpResponseMessage response, bool logError = true, bool showErrorPopup = false) =>
+		(await response.CheckForErrorJson(showErrorPopup: showErrorPopup, logError: logError)).didError;
 	public static async Task<bool> CheckForError(this HttpResponseMessage response, Func<ErrorContext, bool> logErrorPredicate, bool showErrorPopup = false) =>
-		(await response.CheckForErrorJson(logErrorPredicate, showErrorPopup)).didError;
+		(await response.CheckForErrorJson(logErrorPredicate, showErrorPopup: showErrorPopup)).didError;
 
 	public static async Task<(bool didError, JsonNode errorContents)> CheckForErrorJson(this HttpResponseMessage response, bool logError = true, bool showErrorPopup = false) =>
-		await response.CheckForErrorJson(_ => logError, showErrorPopup);
+		await response.CheckForErrorJson(_ => logError, showErrorPopup: showErrorPopup);
 	public static async Task<(bool didError, JsonNode errorContents)> CheckForErrorJson(this HttpResponseMessage response, Func<ErrorContext, bool> logErrorPredicate, bool showErrorPopup = false)
 	{
 		if (response.IsSuccessStatusCode)
@@ -454,7 +454,7 @@ public static class WebHelpers
 				warningText:
 					errorContent?["errorCode"]?.ToString() ??
 					fallbackErrorName ??
-					response.StatusCode.ToString(),
+					$"Status: {(int)response.StatusCode} {response.StatusCode}",
 				allowCancel: false
 			).StartTask();
 		}

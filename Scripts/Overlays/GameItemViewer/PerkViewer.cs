@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -92,7 +93,7 @@ public partial class PerkViewer : Control
 		isSchematic = currentItem.template.Type == "Schematic";
 		isDefender = currentItem.template.Type == "Defender";
 		unlockedPerks = 10;
-		visiblePerks = currentItem.template.AlterationSlots?.Length ?? 10;
+		visiblePerks = Mathf.Max(currentItem.template.AlterationSlots?.Length ?? 10, currentItem.Alterations?.Length ?? 0);
 		if (currentItem.profile is null || !isSchematic)
 			visiblePerks = 10;
 
@@ -115,11 +116,14 @@ public partial class PerkViewer : Control
 		{
 			//set interactable and assign possibilities (if possibilities greater than one and not max level)
 			perkSlots = currentItem.template.AlterationSlots;
+			var slotLength = perkSlots?.Length ?? 0;
 			unlockedPerks = 0;
-			activePerks ??= new string[perkSlots?.Length ?? 0];
+			activePerks ??= new string[slotLength];
+			if (activePerks.Length < slotLength)
+				Array.Resize(ref activePerks, perkSlots.Length);
 			int itemLevel = currentItem.attributes?["level"]?.GetValue<int>() ?? 0;
 			int itemRarity = currentItem.template.RarityLevel;
-			for (int i = 0; i < (perkSlots?.Length ?? 0); i++)
+			for (int i = 0; i < slotLength; i++)
 			{
 				if (perkSlots[i].requiredLevel <= itemLevel && perkSlots[i].RequiredRarityLevel <= itemRarity)
 					unlockedPerks = i + 1;
@@ -147,6 +151,8 @@ public partial class PerkViewer : Control
 			}
 			currentPerkEntries[i].Visible = true;
 			currentPerkEntries[i].SetPerkAlteration(activePerks[i], !isDefender, i);
+			currentPerkEntries[i].SetLockLevel(0);
+			currentPerkEntries[i].SetLockRarity(0);
 			if (currentItem.profile?.account?.isOwned == false)
 			{
 				currentPerkEntries[i].SetInteractable(true);

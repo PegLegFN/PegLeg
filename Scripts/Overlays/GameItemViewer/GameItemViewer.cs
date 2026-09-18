@@ -323,7 +323,7 @@ public partial class GameItemViewer : ModalWindow
 				perkDetailsPanel.SetItem(item);
 			}
 
-			var statsSource = type == "Schematic" ? GameItemTemplate.Get(item.template["CraftingResult"].ToString()) : item.template;
+			var statsSource = type == "Schematic" ? GameItemTemplate.Get(item.template["CraftingRecipe"]?["Result"]?.ToString()) : item.template;
 
 			JsonObject statsJson = null;
 

@@ -14,7 +14,7 @@ public partial class Bootstrap : Node
 	public const string processLockPath = "user://pid";
 	const string pipeName = "PegLegPipe";
 	const int majorPackageVersion = 4;
-	const int minorPackageVersion = 0;
+	const int minorPackageVersion = 1;
 
 	public static event Action OnBootComplete;
 
@@ -100,6 +100,7 @@ public partial class Bootstrap : Node
 	public static readonly FrozenSet<string> cmdLineArgs = OS.GetCmdlineArgs().ToFrozenSet();
 	public static bool StartMinimised { get; private set; } = cmdLineArgs.Contains("--start-minimised");
 	public static bool UseShareMenu { get; private set; } = cmdLineArgs.Contains("--share-menu");
+	public static bool IsEditor { get; private set; } = OS.HasFeature("editor");
 
 	static bool hasBooted = false;
 	static bool isFirstBoot = false;

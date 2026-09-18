@@ -458,7 +458,7 @@ public class GameItem
 		{
 			hideNotif = accountItems
 				.GetFirstItem(template.Type, item =>
-					item.template?.DisplayName == (template.DisplayName ?? "nope") &&
+					item.template?.ItemName == (template.ItemName ?? "nope") &&
 					item.template?.RarityLevel >= template.RarityLevel
 				) is not null;
 		}
@@ -587,8 +587,10 @@ public class GameItem
 			.Select(node => new GameItem(null, null, node.AsObject()))
 			.OrderBy(item => -item.template?.RarityLevel)
 			.ThenBy(item => item.template?.Type)
-			.ThenBy(item => item.template?.DisplayName)
+			.ThenBy(item => item.template?.ItemName)
 			.ToArray() ?? null;
+
+	static readonly HashSet<string> warnedUUIDs = [];
 
 	public int CalculateRating()
 	{
@@ -643,13 +645,23 @@ public class GameItem
 		int subLevel = level - ratingSet["FirstLevel"].GetValue<int>();
 		if (subLevel < 0)
 		{
-			GD.Print($"{templateId} sublevel below zero. Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			if ((uuid is not null && !warnedUUIDs.Contains(uuid)) || Bootstrap.IsEditor)
+			{
+				if (uuid is not null)
+					warnedUUIDs.Add(uuid);
+				GD.Print($"{templateId} sublevel below zero. Item is Lv{level} {(level == debugClampedLevel ? "" : $"(wouldve been clamped to Lv{debugClampedLevel})")}, Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			}
 			subLevel = 0;
 			//return 0;
 		}
 		if (subLevel >= ratingsLength)
 		{
-			GD.Print($"{templateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			if ((uuid is not null && !warnedUUIDs.Contains(uuid)) || Bootstrap.IsEditor)
+			{
+				if (uuid is not null)
+					warnedUUIDs.Add(uuid);
+				GD.Print($"{templateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+			}
 			subLevel = ratingsLength - 1;
 			//return 0;
 		}
@@ -757,7 +769,7 @@ public class GameItem
 				if (textureType == FnItemTextureType.PackImage)
 					textureType = FnItemTextureType.Preview;
 			}
-			else if (textureType == FnItemTextureType.PackImage && ((!template.TryGetTexturePath(out var previewPath) || !previewPath.Contains("Pinata")) || template.DisplayName.Contains("Mini")))
+			else if (textureType == FnItemTextureType.PackImage && ((!template.TryGetTexturePath(out var previewPath) || !previewPath.Contains("Pinata")) || template.ItemName.Contains("Mini")))
 				return null;
 			else if (textureType == FnItemTextureType.Preview)
 			{

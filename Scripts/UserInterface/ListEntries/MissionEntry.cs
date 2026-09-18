@@ -242,7 +242,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 					{
 						var modifierTemplate = currentMission.alertModifiers[i].template;
 						textureChild.Texture = modifierTemplate.GetTexture();
-						textureChild.TooltipText = modifierTemplate.DisplayName;
+						textureChild.TooltipText = modifierTemplate.ItemName;
 					}
 					else if (alertChild is GameItemEntry gameItemChild)
 					{
@@ -276,8 +276,8 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 			var rewards = fullItems ?
 				currentMission.rewardItems :
 				[.. currentMission.rewardItems.Where(r =>
-					r.template.DisplayName != "Gold" &&
-					r.template.DisplayName != "Venture XP"
+					r.template.ItemName != "Gold" &&
+					r.template.ItemName != "Venture XP"
 				)];
 			if (rewards.Length > 0)
 			{
@@ -299,7 +299,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 			var rewards = fullItems ?
 				currentMission.alertRewardItems :
 				[.. currentMission.alertRewardItems.Where(r =>
-					r.template.DisplayName != "Venture XP"
+					r.template.ItemName != "Venture XP"
 				)];
 			if (rewards.Length > 0)
 			{
@@ -339,8 +339,8 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 				currentMission?.allItems :
 				[.. (currentMission?.allItems ?? [])
 					.Where(r =>
-						r.template.DisplayName != "Gold" &&
-						r.template.DisplayName != "Venture XP"
+						r.template.ItemName != "Gold" &&
+						r.template.ItemName != "Venture XP"
 					)
 					.OrderBy(r => -r.sortingTemplate.RarityLevel)
 					.ThenBy(r => -r.quantity)

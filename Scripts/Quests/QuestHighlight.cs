@@ -26,7 +26,7 @@ public partial class QuestHighlight : Control
 		ProcessMode = questData.isUnlocked ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled;
 		if (!Visible)
 			return;
-		EmitSignal(SignalName.TooltipChanged, questData.questTemplate["DisplayName"].ToString());
+		EmitSignal(SignalName.TooltipChanged, questData.questTemplate.ItemName);
 		if (questData.isClaimed)
 		{
 			EmitSignal(SignalName.ColorChanged, completeColor);
