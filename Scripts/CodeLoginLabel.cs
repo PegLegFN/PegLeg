@@ -105,7 +105,7 @@ public partial class CodeLoginLabel : Node
 	async void CheckForCode()
 	{
 		var linkCheckRequest = await GameClient.PreferredClient.CheckLoginLinkCode();
-		if (await linkCheckRequest.CheckForError())
+		if (await linkCheckRequest.CheckForError(logErrorPredicate:GameClient.LoginLinkErrorSupressor))
 			return;
 		var linkData = await linkCheckRequest.ReadJson<JsonObject>();
 

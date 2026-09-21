@@ -12,14 +12,15 @@
 [ext_resource type="PackedScene" uid="uid://ito2u56pohnm" path="res://Scenes/Desktop/Views/Dashboard/dashboardXPProgress.tscn" id="6_8cocd"]
 
 [node name="MobileDashboardView" type="MarginContainer" unique_id=1679969338]
-custom_minimum_size = Vector2(454, 881)
+custom_minimum_size = Vector2(450, 881)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -227.0
-offset_right = 227.0
-offset_bottom = 1102.0
+offset_left = -225.0
+offset_right = 225.0
+offset_bottom = 1635.0
 grow_horizontal = 2
+size_flags_horizontal = 4
 theme_override_constants/margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=78900829]
@@ -40,22 +41,20 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Notable Mission Rewards"
 
-[node name="VBucks" parent="VBoxContainer/Notable/VBoxContainer" unique_id=1333906878 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("1_1ws6e")]
+[node name="VBucks" parent="VBoxContainer/Notable/VBoxContainer" unique_id=1333906878 instance=ExtResource("1_1ws6e")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "AccountResource:currency_hybrid_mtx_xrayllama"
 targetTemplatePrefix = "AccountResource:currency_hybrid_mtx_xrayllama"
 configDependancy = "missions:groupVBucks"
-filterPlayable = NodePath("")
 
-[node name="LegSurvivors" parent="VBoxContainer/Notable/VBoxContainer" unique_id=801626076 node_paths=PackedStringArray("filterPlayable") instance=ExtResource("1_1ws6e")]
+[node name="LegSurvivors" parent="VBoxContainer/Notable/VBoxContainer" unique_id=801626076 instance=ExtResource("1_1ws6e")]
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 targetTemplateId = "Worker:workerbasic_sr_t01"
 targetTemplatePrefix = "Worker:workerbasic_sr_t0"
 titleText = "Legendary Survivors"
 configDependancy = "missions:groupLegSurvivors"
-filterPlayable = NodePath("")
 
 [node name="Notable" parent="VBoxContainer/Notable/VBoxContainer" unique_id=650228639 node_paths=PackedStringArray("excludeRewards") instance=ExtResource("1_r8nc6")]
 layout_mode = 2
@@ -63,6 +62,10 @@ excludeRewards = [NodePath("../VBucks"), NodePath("../LegSurvivors")]
 
 [node name="PowerHourAlert" parent="VBoxContainer" unique_id=878248880 instance=ExtResource("2_r8nc6")]
 layout_mode = 2
+
+[node name="Label" parent="VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(878248880, 267169212) index="1" unique_id=451205499]
+self_modulate = Color(1, 1, 1, 0)
+text_overrun_behavior = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=131415897]
 custom_minimum_size = Vector2(450, 0)
@@ -263,6 +266,7 @@ layout_mode = 2
 
 [editable path="VBoxContainer/Notable/VBoxContainer/Notable"]
 [editable path="VBoxContainer/Notable/VBoxContainer/Notable/VBoxContainer/Hidden/MissionCollection"]
+[editable path="VBoxContainer/PowerHourAlert"]
 [editable path="VBoxContainer/MarginContainer/Container/MissionCollection"]
 [editable path="VBoxContainer/HBoxContainer/DashboardSupercharger"]
 [editable path="VBoxContainer/HBoxContainer/DashboardLlamaShop"]

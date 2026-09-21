@@ -91,6 +91,7 @@ shader_parameter/Fit = true
 shader_parameter/Scale = 2.0
 shader_parameter/Speed = 0.05
 shader_parameter/Progress = 0.0
+shader_parameter/Rotate = 30.0
 shader_parameter/ClipOOB = false
 
 [node name="Root" type="Control" unique_id=820721531]
@@ -393,7 +394,6 @@ useAsTabContainer = NodePath("../ScrollContainer/TabPages")
 layout_mode = 2
 theme_override_colors/scroll_hint_horizontal_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
 follow_focus = true
-scroll_horizontal = 58
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 scroll_hint_mode = 1
@@ -490,22 +490,27 @@ layout_mode = 1
 
 [node name="GameItemSelector" parent="OverlayWindows" unique_id=809701910 instance=ExtResource("39_wtfcc")]
 visible = false
+z_index = 2
 layout_mode = 1
 
 [node name="GameItemViewer" parent="OverlayWindows" unique_id=1687330932 instance=ExtResource("42_7ax35")]
 visible = false
+z_index = 3
 layout_mode = 1
 
 [node name="LoginPopup" parent="OverlayWindows" unique_id=1746420847 instance=ExtResource("38_qxpsy")]
 visible = false
+z_index = 3
 layout_mode = 1
 
 [node name="GenericConfirmationWindow" parent="OverlayWindows" unique_id=870480094 instance=ExtResource("43_6xiwr")]
 visible = false
+z_index = 3
 layout_mode = 1
 
 [node name="ItemUpgradeAnimation" parent="OverlayWindows" unique_id=1631981925 instance=ExtResource("47_8c7wp")]
 visible = false
+z_index = 4
 layout_mode = 1
 
 [node name="CenterContainer" parent="OverlayWindows/ItemUpgradeAnimation/Control/WindowContents" parent_id_path=PackedInt32Array(1631981925, 1567660947) index="4" unique_id=169129452]
@@ -514,6 +519,7 @@ pivot_offset_ratio = Vector2(0.5, 0.5)
 
 [node name="LoadingOverlay" parent="OverlayWindows" unique_id=1763907081 instance=ExtResource("38_60tdr")]
 visible = false
+z_index = 4
 layout_mode = 1
 
 [node name="Curtain" type="TextureRect" parent="." unique_id=1351154514]

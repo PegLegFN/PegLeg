@@ -9,6 +9,11 @@
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="6_8sgcw"]
 [ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="7_1rht6"]
 [ext_resource type="PackedScene" uid="uid://bky7r16i1cb1t" path="res://Scenes/GameItemEntry/ventureLevelReward.tscn" id="8_pjpr3"]
+[ext_resource type="PackedScene" uid="uid://cs4uqvp2hvjpe" path="res://Scenes/powerLevelIndicatorV2Large.tscn" id="10_c5shx"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="11_2ddfn"]
+[ext_resource type="PackedScene" uid="uid://cg2qqkx3wm41t" path="res://Scenes/GameItemEntry/reward_entry_tiny.tscn" id="12_hlfeo"]
+[ext_resource type="PackedScene" uid="uid://bsecdrkeadxdb" path="res://Scenes/GameItemEntry/mission_alert_entry_large.tscn" id="13_bl2si"]
+[ext_resource type="PackedScene" uid="uid://3p45e57puggq" path="res://Scenes/Desktop/Views/Extra/desktopVenturesLevelEntry.tscn" id="14_2ddfn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g5s1g"]
 bg_color = Color(0.184314, 0.184314, 0.184314, 1)
@@ -31,30 +36,91 @@ border_color = Color(0, 1, 0, 1)
 corner_radius_top_left = 7
 corner_radius_top_right = 7
 
-[node name="Ventures" type="MarginContainer" unique_id=2075361443 node_paths=PackedStringArray("statusBarRoot", "currentLevelLabel", "levelProgress", "nextLevelLabel", "nextReward", "majorLevelSection", "nextMajorLevelLabel", "nextMajorReward", "modifierEntries", "mainItems", "legendaryToggle", "extraItems")]
-custom_minimum_size = Vector2(454, 837)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bsvks"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dncc3"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vlm5s"]
+bg_color = Color(0.39215687, 0.4509804, 0.60784316, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.16078432, 0.12941177, 0.49803922, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkohg"]
+bg_color = Color(0.29411766, 0.24313726, 0.91764706, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color(0.15900443, 0.13144363, 0.49609375, 1)
+corner_radius_top_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a5uye"]
+bg_color = Color(0.29411766, 0.24313726, 0.91764706, 1)
+skew = Vector2(0.33, 0)
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15900443, 0.13144363, 0.49609375, 1)
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuwte"]
+bg_color = Color(0.39215687, 0.4509804, 0.60784316, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.15900443, 0.13144363, 0.49609375, 1)
+
+[sub_resource type="Gradient" id="Gradient_7f6lk"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hlfeo"]
+gradient = SubResource("Gradient_7f6lk")
+width = 10
+height = 1
+
+[sub_resource type="Gradient" id="Gradient_bl2si"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gkohg"]
+gradient = SubResource("Gradient_bl2si")
+width = 10
+height = 1
+
+[node name="Ventures" type="MarginContainer" unique_id=2075361443 node_paths=PackedStringArray("currentLevelLabel", "levelProgress", "nextLevelLabel", "nextReward", "majorLevelSection", "nextMajorLevelLabel", "nextMajorReward", "customXP", "customXPSection", "autoXPSection", "fullXPLabel", "modifierEntries", "hideCompleted", "importantLevels", "mainItemEntries", "extraItemEntries")]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -260.0
-offset_right = 194.0
-offset_bottom = 881.0
+offset_left = -222.5
+offset_right = 222.5
+offset_bottom = 2638.0
 grow_horizontal = 2
+theme_override_constants/margin_left = -5
 script = ExtResource("1_8sgcw")
-statusBarRoot = NodePath("VBoxContainer/PanelContainer")
-currentLevelLabel = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/CurLv")
-levelProgress = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/ProgressBar")
-nextLevelLabel = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/NextLv")
-nextReward = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/NextReward")
-majorLevelSection = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/MajorLvSection")
-nextMajorLevelLabel = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/MajorLvSection/MajorLv")
-nextMajorReward = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/MajorLvSection/MajorReward")
-modifierEntries = [NodePath("VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry"), NodePath("VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2"), NodePath("VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3"), NodePath("VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4")]
-mainItems = [NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward2"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward3"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward4"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward5"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward6"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward7"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward8"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward9"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward10"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward11"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward12"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward13"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward14"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward15"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward16"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward17"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward18"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward19"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward20"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward21"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward22"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward23"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward24"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward25"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward26"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward27"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward28"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward29"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward30"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward31"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward32"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward33"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward34"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward35"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward36"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward37"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward38"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward39"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward40"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward41"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward42"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward43"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward44"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward45"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward46"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward47"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward48"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward49"), NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward50")]
-legendaryToggle = NodePath("VBoxContainer/MainRewardPanel/VBoxContainer/HBoxContainer/CheckButton")
-extraItems = [NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward2"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward3"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward4"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward5"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward6"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward7"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward8"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward9"), NodePath("VBoxContainer/ExtraRewardPanel/VBoxContainer/MarginContainer/Container/VenturesReward10")]
+currentLevelLabel = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/Label")
+levelProgress = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/ProgressBar")
+nextLevelLabel = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/Label2")
+nextReward = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/RewardEntry")
+majorLevelSection = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor")
+nextMajorLevelLabel = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor/VBoxContainer3/Label2")
+nextMajorReward = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor/RewardEntry2")
+customXP = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ManualXP/LineEdit")
+customXPSection = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ManualXP")
+autoXPSection = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/AutoXP")
+fullXPLabel = NodePath("VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/AutoXP/Label")
+modifierEntries = [NodePath("VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry"), NodePath("VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2"), NodePath("VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3"), NodePath("VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4")]
+hideCompleted = NodePath("VBoxContainer2/NewMain/VBoxContainer/HBoxContainer/VBoxContainer/CheckButton")
+importantLevels = NodePath("VBoxContainer2/NewMain/VBoxContainer/HBoxContainer/VBoxContainer/CheckButton2")
+mainItemEntries = [NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry2"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry3"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry4"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry5"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry6"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry7"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry8"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry9"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry10"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry11"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry12"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry13"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry14"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry15"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry16"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry17"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry18"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry19"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry20"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry21"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry22"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry23"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry24"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry25"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry26"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry27"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry28"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry29"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry30"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry31"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry32"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry33"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry34"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry35"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry36"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry37"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry38"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry39"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry40"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry41"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry42"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry43"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry44"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry45"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry46"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry47"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry48"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry49"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry51"), NodePath("VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry50")]
+extraItemEntries = [NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry2"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry3"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry4"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry5"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry6"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry7"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry8"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry11"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry12"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry9"), NodePath("VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry10")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1046639487]
+visible = false
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1782338868]
@@ -658,6 +724,666 @@ theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "Next Reward"
 horizontal_alignment = 1
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=2055777191]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer2" unique_id=2112635809]
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"Panel3PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/PanelContainer" unique_id=1557632817]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer" unique_id=1975847324]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1018219117]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1209990528]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2099852019]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Level ???"
+
+[node name="ManualXP" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2032424390]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ManualXP" unique_id=1258078404]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.58, 0.58, 1)
+text = "Enter your XP amount here -->"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ManualXP" unique_id=1609209070]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 16
+text = "1565565"
+placeholder_text = "0"
+alignment = 2
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="Label2" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ManualXP" unique_id=868376186]
+layout_mode = 2
+text = "XP  "
+
+[node name="AutoXP" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1115729022]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/AutoXP" unique_id=2048797888]
+layout_mode = 2
+text = "1,565,565"
+
+[node name="Label2" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/AutoXP" unique_id=384352331]
+layout_mode = 2
+text = "XP  "
+
+[node name="Button" type="Button" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/AutoXP" unique_id=225619040]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+icon = ExtResource("11_2ddfn")
+expand_icon = true
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=948462726]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=785817022]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_bsvks")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dncc3")
+max_value = 10.0
+value = 2.46
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=1404244125]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=36329886]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel2" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=642017633]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel3" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1105548005]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel4" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=469616410]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel5" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=895415093]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel6" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=95182455]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel7" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1554664922]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="Panel8" type="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1465648094]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_vlm5s")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer" unique_id=241304033]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="PowerLevelIndicatorV2L" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=1952626507 instance=ExtResource("10_c5shx")]
+layout_mode = 2
+size_flags_horizontal = 2
+ventures = true
+
+[node name="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 770299496) index="0" unique_id=1402179337]
+theme_override_styles/panel = SubResource("StyleBoxFlat_gkohg")
+
+[node name="Panel2" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1952626507, 1892792438) index="0" unique_id=426845704]
+theme_override_styles/panel = SubResource("StyleBoxFlat_a5uye")
+
+[node name="Panel" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="0" unique_id=1626611112]
+theme_override_styles/panel = SubResource("StyleBoxFlat_cuwte")
+
+[node name="Panel2" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="1" unique_id=312613005]
+theme_override_styles/panel = SubResource("StyleBoxFlat_cuwte")
+
+[node name="Panel3" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="2" unique_id=2124727635]
+theme_override_styles/panel = SubResource("StyleBoxFlat_cuwte")
+
+[node name="Panel4" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="3" unique_id=1372308516]
+theme_override_styles/panel = SubResource("StyleBoxFlat_cuwte")
+
+[node name="Panel5" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="4" unique_id=1168463852]
+theme_override_styles/panel = SubResource("StyleBoxFlat_cuwte")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=2062770614]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1605390218]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=282211633]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "20"
+horizontal_alignment = 1
+
+[node name="RewardEntry" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=1679564155 instance=ExtResource("12_hlfeo")]
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+
+[node name="NextMajor" type="HBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2" unique_id=341020301]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor" unique_id=280707862]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor" unique_id=1883257288]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor/VBoxContainer3" unique_id=41650327]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor/VBoxContainer3" unique_id=2006393701]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "50"
+horizontal_alignment = 1
+
+[node name="RewardEntry2" parent="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/NextMajor" unique_id=793377038 instance=ExtResource("12_hlfeo")]
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+
+[node name="ModifierPanel" type="PanelContainer" parent="VBoxContainer2" unique_id=1835950381]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 1
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/ModifierPanel" unique_id=1722129579]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/ModifierPanel/VBoxContainer" unique_id=767642042]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Active Modifiers"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer2/ModifierPanel/VBoxContainer" unique_id=1729458976]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="GridContainer" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer" unique_id=689152452]
+layout_mode = 2
+
+[node name="MissionAlertItemEntry" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1093655368 instance=ExtResource("13_bl2si")]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+
+[node name="Label2" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer" parent_id_path=PackedInt32Array(1093655368, 1602665601) index="2" unique_id=442091765]
+custom_minimum_size = Vector2(1, 75)
+
+[node name="MissionAlertItemEntry2" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1268955431 instance=ExtResource("13_bl2si")]
+visible = false
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+
+[node name="Label2" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2/VBoxContainer" parent_id_path=PackedInt32Array(1268955431, 1602665601) index="2" unique_id=442091765]
+custom_minimum_size = Vector2(1, 75)
+
+[node name="MissionAlertItemEntry3" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=606335899 instance=ExtResource("13_bl2si")]
+visible = false
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+
+[node name="Label2" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3/VBoxContainer" parent_id_path=PackedInt32Array(606335899, 1602665601) index="2" unique_id=442091765]
+custom_minimum_size = Vector2(1, 75)
+
+[node name="MissionAlertItemEntry4" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=76095751 instance=ExtResource("13_bl2si")]
+visible = false
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+
+[node name="Label2" parent="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer" parent_id_path=PackedInt32Array(76095751, 1602665601) index="2" unique_id=442091765]
+custom_minimum_size = Vector2(1, 75)
+
+[node name="NewMain" type="PanelContainer" parent="VBoxContainer2" unique_id=1456124047]
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/NewMain" unique_id=1664170715]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/NewMain/VBoxContainer" unique_id=1205916770]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/NewMain/VBoxContainer/HBoxContainer" unique_id=483057166]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Rewards"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/NewMain/VBoxContainer/HBoxContainer" unique_id=2132723152]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer2/NewMain/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=978239413]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hide Completed"
+
+[node name="CheckButton2" type="CheckButton" parent="VBoxContainer2/NewMain/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1411572207]
+layout_mode = 2
+size_flags_vertical = 4
+button_pressed = true
+text = "Important Levels Only"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer2/NewMain/VBoxContainer" unique_id=278516853]
+clip_contents = true
+layout_mode = 2
+
+[node name="HBoxContainer2" type="Container" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer" unique_id=681973839]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_g5s1g")
+ExpandChildren = true
+Spacing = Vector2(0, 10)
+
+[node name="DesktopVenturesLevelEntry" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1603426451 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PrevProgressContainer" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry/HBoxContainer/PrevProgressScale" parent_id_path=PackedInt32Array(1603426451, 1334467379) index="0" unique_id=1141501275]
+visible = false
+
+[node name="DesktopVenturesLevelEntry2" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1814088812 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry3" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=385224281 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry4" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=123172109 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry5" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=495528919 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry6" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=733480866 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry7" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1345147580 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry8" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1067189605 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry9" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1757725616 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry10" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=437301752 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry11" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1461216570 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry12" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1009509323 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry13" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=436107466 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry14" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1761454924 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry15" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=850997464 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry16" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1483994855 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry17" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=905701912 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry18" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=223226688 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry19" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=321510060 instance=ExtResource("14_2ddfn")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry20" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=153257554 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry21" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=902496891 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry22" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1449541906 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry23" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1413459534 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry24" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1939893627 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry25" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1290497942 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry26" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1846191437 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry27" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=532584260 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry28" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1123625594 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry29" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=2043918031 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry30" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=157667248 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry31" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1578831720 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry32" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1748948725 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry33" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1172440369 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry34" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=2083189987 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry35" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1385347963 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry36" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=185240883 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry37" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=294195159 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry38" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1344634633 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry39" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=2072734189 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry40" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1522921576 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry41" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1276988275 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry42" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=621201416 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry43" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=270927504 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry44" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1464330864 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry45" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1720596886 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry46" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=5791354 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry47" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=445344497 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry48" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1163397720 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry49" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=246028911 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry51" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1586396983 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry50" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1349329357 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PrevProgress" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry50/HBoxContainer/PrevProgressScale/PrevProgressContainer" parent_id_path=PackedInt32Array(1349329357, 1141501275) index="1" unique_id=449452607]
+visible = true
+
+[node name="TextureRect" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry50/HBoxContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1349329357, 1745303869) index="0" unique_id=1251881799]
+self_modulate = Color(0.14117648, 0.16470589, 0.24705882, 1)
+
+[node name="NextProgressContainer" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry50/HBoxContainer/NextProgressScale" parent_id_path=PackedInt32Array(1349329357, 1105456790) index="0" unique_id=833819933]
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer" unique_id=23595034]
+self_modulate = Color(0.14509805, 0.14509805, 0.14509805, 1)
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = SubResource("GradientTexture2D_hlfeo")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer2/NewMain/VBoxContainer/MarginContainer" unique_id=362734617]
+self_modulate = Color(0.14509805, 0.14509805, 0.14509805, 1)
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = SubResource("GradientTexture2D_hlfeo")
+expand_mode = 1
+flip_h = true
+
+[node name="NewRepeatable" type="PanelContainer" parent="VBoxContainer2" unique_id=79063342]
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"Panel5PadB"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer2/NewRepeatable" unique_id=1273417830]
+visible = false
+layout_mode = 2
+mouse_filter = 1
+theme_type_variation = &"Panel5PadB"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/NewRepeatable/PanelContainer" unique_id=1035387588]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/NewRepeatable/PanelContainer/VBoxContainer" unique_id=1443475685]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Rewards"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/NewRepeatable" unique_id=1286131512]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2/NewRepeatable/VBoxContainer" unique_id=1076417589]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/NewRepeatable/VBoxContainer/HBoxContainer" unique_id=1691113083]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Extra Rewards"
+
+[node name="Label2" type="Label" parent="VBoxContainer2/NewRepeatable/VBoxContainer/HBoxContainer" unique_id=234490536]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 16
+text = "(Repeats every 10 Levels)"
+vertical_alignment = 2
+
+[node name="Control" type="Control" parent="VBoxContainer2/NewRepeatable/VBoxContainer/HBoxContainer" unique_id=959847467]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer2/NewRepeatable/VBoxContainer" unique_id=1247867179]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="GridContainer" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer" unique_id=456453089]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 10
+columns = 4
+
+[node name="DesktopVenturesLevelEntry" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=374390099 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry2" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1636624898 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry3" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1739696188 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry4" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1941283067 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry5" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1861028093 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry6" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1264891067 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry7" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1040897065 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry8" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=652683728 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry11" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=785587395 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry12" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1785467883 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry9" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1512779336 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DesktopVenturesLevelEntry10" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer/HBoxContainer2" unique_id=1654962331 instance=ExtResource("14_2ddfn")]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer" unique_id=1319345349]
+self_modulate = Color(0.14509805, 0.14509805, 0.14509805, 1)
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = SubResource("GradientTexture2D_gkohg")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer2/NewRepeatable/VBoxContainer/MarginContainer" unique_id=1760234010]
+self_modulate = Color(0.14509805, 0.14509805, 0.14509805, 1)
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = SubResource("GradientTexture2D_gkohg")
+expand_mode = 1
+flip_h = true
+
 [connection signal="DescriptionChanged" from="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label2" method="set_text"]
 [connection signal="IconChanged" from="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/TextureRect6" method="set_texture"]
 [connection signal="NameChanged" from="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry" to="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry/VBoxContainer/Label" method="set_text"]
@@ -674,3 +1400,11 @@ horizontal_alignment = 1
 [connection signal="IconChanged" from="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/TextureRect6" method="set_texture"]
 [connection signal="NameChanged" from="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4/VBoxContainer/Label" method="set_text"]
 [connection signal="TooltipChanged" from="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" to="VBoxContainer/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4" method="set_tooltip_text"]
+
+[editable path="VBoxContainer2/PanelContainer/VBoxContainer/HBoxContainer2/PowerLevelIndicatorV2L"]
+[editable path="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry"]
+[editable path="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry2"]
+[editable path="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry3"]
+[editable path="VBoxContainer2/ModifierPanel/VBoxContainer/MarginContainer/HBoxContainer/MissionAlertItemEntry4"]
+[editable path="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry"]
+[editable path="VBoxContainer2/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry50"]

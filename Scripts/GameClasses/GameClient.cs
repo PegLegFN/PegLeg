@@ -247,4 +247,6 @@ public class GameClient
 			linkCodeExpiresAt = -999;
 		return tokenResponse;
 	}
+
+	public static bool LoginLinkErrorSupressor(WebHelpers.ErrorContext ctx) => ctx.epicErrorCode != 18115; //supresses authorization_pending errors from being logged
 }

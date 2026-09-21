@@ -45,11 +45,11 @@ smallContainer = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxConta
 multiselectControls = [NodePath("Control/MarginContainer/VBoxContainer/Items/HBoxContainer2"), NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons")]
 confirmButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/Confirm")
 skipButton = NodePath("Control/MarginContainer/VBoxContainer/MultiselectButtons/Skip")
-searchInput = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SearchBox")
-survivorFilters = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters")
-personalityFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities")
-trapDuraFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura")
-hiddenSelectionText = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/HiddenCount")
+searchInput = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/SearchBox")
+survivorFilters = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters")
+personalityFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities")
+trapDuraFilter = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura")
+hiddenSelectionText = NodePath("Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/HiddenCount")
 addToSelectionBtn = NodePath("Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AddFiltered")
 removeFromSelectionBtn = NodePath("Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/RemoveFiltered")
 windowControl = NodePath("Control")
@@ -112,85 +112,98 @@ theme_type_variation = &"Panel5Pad"
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items" index="0" unique_id=1586420421]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="0" unique_id=281258672]
+[node name="GridContainer" type="GridContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer" index="0" unique_id=410183638]
 layout_mode = 2
+columns = 2
 
-[node name="SearchBox" type="LineEdit" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="0" unique_id=1730238994]
+[node name="SearchBox" type="LineEdit" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer" index="0" unique_id=1730238994]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search items"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="HiddenCount" type="Label" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="1" unique_id=297807842]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer" index="1" unique_id=281258672]
+layout_mode = 2
+
+[node name="HiddenCount" type="Label" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer" index="0" unique_id=297807842]
 visible = false
 layout_mode = 2
 
-[node name="SurvivorFilters" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer" index="2" unique_id=1783568109]
+[node name="SurvivorFilters" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer" index="1" unique_id=1783568109]
 layout_mode = 2
 
-[node name="Personalities" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="0" unique_id=73696586 instance=ExtResource("7_6tduj")]
+[node name="Personalities" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters" index="0" unique_id=73696586 instance=ExtResource("7_6tduj")]
 layout_mode = 2
 
-[node name="Tab9" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="0" unique_id=1301912128 instance=ExtResource("8_3lmwd")]
+[node name="Tab9" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="0" unique_id=1301912128 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Mode = -1
 Tooltip = "All"
 Icon = ExtResource("9_3lmwd")
 IsPressed = true
 
-[node name="Tab" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="1" unique_id=163658665 instance=ExtResource("8_3lmwd")]
+[node name="Tab" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="1" unique_id=163658665 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Adventurous"
 Icon = ExtResource("7_715da")
 
-[node name="Tab2" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="2" unique_id=1874336363 instance=ExtResource("8_3lmwd")]
+[node name="Tab2" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="2" unique_id=1874336363 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Analytical"
 Icon = ExtResource("8_f2ysx")
 
-[node name="Tab3" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="3" unique_id=970259427 instance=ExtResource("8_3lmwd")]
+[node name="Tab3" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="3" unique_id=970259427 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Competitive"
 Icon = ExtResource("9_nfj2x")
 
-[node name="Tab4" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="4" unique_id=1601878135 instance=ExtResource("8_3lmwd")]
+[node name="Tab4" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="4" unique_id=1601878135 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Cooperative"
 Icon = ExtResource("10_rnqg5")
 IsPressed = true
 
-[node name="Tab5" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="5" unique_id=654325147 instance=ExtResource("8_3lmwd")]
+[node name="Tab5" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="5" unique_id=654325147 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Curious"
 Icon = ExtResource("11_15uha")
 
-[node name="Tab6" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="6" unique_id=948462429 instance=ExtResource("8_3lmwd")]
+[node name="Tab6" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="6" unique_id=948462429 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Dependable"
 Icon = ExtResource("12_ji0gj")
 
-[node name="Tab7" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="7" unique_id=704154658 instance=ExtResource("8_3lmwd")]
+[node name="Tab7" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="7" unique_id=704154658 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Tooltip = "Dreamer"
 Icon = ExtResource("13_kogrg")
 
-[node name="Tab8" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="8" unique_id=1374190574 instance=ExtResource("8_3lmwd")]
+[node name="Tab8" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities/HBoxContainer" index="8" unique_id=1374190574 instance=ExtResource("8_3lmwd")]
 layout_mode = 2
+size_flags_horizontal = 3
 Mode = 1
 Tooltip = "Pragmatic"
 Icon = ExtResource("14_38aec")
 
-[node name="SetBonusFilters" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="1" unique_id=1340840120]
+[node name="SetBonusFilters" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters" index="1" unique_id=1340840120]
 visible = false
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters" index="0" unique_id=670223077]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters" index="0" unique_id=670223077]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="WeaponDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="0" unique_id=1641197968]
+[node name="WeaponDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="0" unique_id=1641197968]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Survivors"
@@ -198,7 +211,7 @@ theme_type_variation = &"LeftCheckButton"
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/WeaponDamage" index="0" unique_id=1347611008]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/WeaponDamage" index="0" unique_id=1347611008]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -211,7 +224,7 @@ texture = ExtResource("15_qneur")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MeleeDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="1" unique_id=1023355089]
+[node name="MeleeDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="1" unique_id=1023355089]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Lead Survivors"
@@ -219,7 +232,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Worker:manager"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/MeleeDamage" index="0" unique_id=1368212930]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/MeleeDamage" index="0" unique_id=1368212930]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -232,7 +245,7 @@ texture = ExtResource("16_kejyc")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrapDamge" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="2" unique_id=1140574480]
+[node name="TrapDamge" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="2" unique_id=1140574480]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Upgrade Llamas"
@@ -240,7 +253,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "AccountResource:voucher_cardpack_bronze"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDamge" index="0" unique_id=1678068943]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDamge" index="0" unique_id=1678068943]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -253,7 +266,7 @@ texture = ExtResource("17_n7h2h")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AbilityDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="3" unique_id=1860438710]
+[node name="AbilityDamage" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="3" unique_id=1860438710]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Heroes"
@@ -261,7 +274,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Hero"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/AbilityDamage" index="0" unique_id=1774855588]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/AbilityDamage" index="0" unique_id=1774855588]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -274,7 +287,7 @@ texture = ExtResource("18_6tduj")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="4" unique_id=2124036104]
+[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="4" unique_id=2124036104]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Mini Llamas"
@@ -283,7 +296,7 @@ button_pressed = true
 text = " "
 metadata/type = "AccountResource:voucher_basicpack"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDura" index="0" unique_id=1596850604]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/TrapDura" index="0" unique_id=1596850604]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -296,7 +309,7 @@ texture = ExtResource("15_f2ysx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HealthBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="5" unique_id=1803100850]
+[node name="HealthBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="5" unique_id=1803100850]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Schematics"
@@ -304,7 +317,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/HealthBoost" index="0" unique_id=1316186046]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/HealthBoost" index="0" unique_id=1316186046]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -317,7 +330,7 @@ texture = ExtResource("20_3lmwd")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ShieldBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="6" unique_id=1096398967]
+[node name="ShieldBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="6" unique_id=1096398967]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Ranged Weapons"
@@ -325,7 +338,7 @@ theme_type_variation = &"MiddleCheckButton"
 text = " "
 metadata/type = "Schematic>Ranged"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/ShieldBoost" index="0" unique_id=893084897]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/ShieldBoost" index="0" unique_id=893084897]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -338,7 +351,7 @@ texture = ExtResource("21_iceif")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EnergyBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="7" unique_id=567345725]
+[node name="EnergyBoost" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer" index="7" unique_id=567345725]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Traps"
@@ -346,7 +359,7 @@ theme_type_variation = &"RightCheckButton"
 text = " "
 metadata/type = "Schematic>Trap"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/EnergyBoost" index="0" unique_id=491168956]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/SetBonusFilters/HBoxContainer/EnergyBoost" index="0" unique_id=491168956]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -359,15 +372,15 @@ texture = ExtResource("22_8tyk0")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrapBonusFilter" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters" index="2" unique_id=1407038649]
+[node name="TrapBonusFilter" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters" index="2" unique_id=1407038649]
 layout_mode = 2
 theme_type_variation = &"CheckContainer"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter" index="0" unique_id=1496378201]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter" index="0" unique_id=1496378201]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer" index="0" unique_id=1705200572]
+[node name="TrapDura" type="CheckButton" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer" index="0" unique_id=1705200572]
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
 tooltip_text = "Survivors"
@@ -376,7 +389,7 @@ button_pressed = true
 text = " "
 metadata/type = "Worker"
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura" index="0" unique_id=420919908]
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/TrapBonusFilter/HBoxContainer/TrapDura" index="0" unique_id=420919908]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -470,15 +483,15 @@ Spacing = Vector2(10, 10)
 [node name="Padding" type="Control" parent="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/SmallItems/MarginContainer/VBoxContainer" index="2" unique_id=1022516821]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/Items" index="1" unique_id=1497196998]
+[node name="HBoxContainer2" type="GridContainer" parent="Control/MarginContainer/VBoxContainer/Items" index="1" unique_id=699332132]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
+columns = 6
 
 [node name="ClearSelected" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="0" unique_id=2106194831]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-size_flags_horizontal = 0
 text = "Clear Selection"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/ClearSelected" index="0" unique_id=213354014]
@@ -495,7 +508,6 @@ expand_mode = 3
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-size_flags_horizontal = 0
 text = "Reset Selection"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AutoSelect" index="0" unique_id=818886907]
@@ -511,7 +523,6 @@ expand_mode = 3
 [node name="AddFiltered" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="2" unique_id=2068938014]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-size_flags_horizontal = 0
 text = "Add Filtered Items To Selection"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/AddFiltered" index="0" unique_id=1540341369]
@@ -527,7 +538,6 @@ expand_mode = 3
 [node name="RemoveFiltered" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="3" unique_id=739622810]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
-size_flags_horizontal = 0
 text = "Remove Filtered Items From Selection"
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/RemoveFiltered" index="0" unique_id=1715426733]
@@ -542,11 +552,13 @@ expand_mode = 3
 
 [node name="Sort" type="Button" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2" index="4" unique_id=1923112185]
 visible = false
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(40, 24)
 layout_mode = 2
-size_flags_horizontal = 0
+icon = ExtResource("9_yrbk2")
+expand_icon = true
 
 [node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/Items/HBoxContainer2/Sort" index="0" unique_id=1819781393]
+visible = false
 layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
@@ -686,4 +698,4 @@ text = "Hidden Items Selected: ??"
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/AutoSelect" to="." method="AutoMarkSelection"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/MultiselectButtons/HBoxContainer2/Sort" to="." method="CycleSort"]
 
-[editable path="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/HBoxContainer/SurvivorFilters/Personalities"]
+[editable path="Control/MarginContainer/VBoxContainer/Items/VBoxContainer/GridContainer/HBoxContainer/SurvivorFilters/Personalities"]
