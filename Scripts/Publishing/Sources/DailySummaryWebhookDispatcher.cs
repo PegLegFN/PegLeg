@@ -4,23 +4,41 @@ using System.Threading.Tasks;
 
 public partial class DailySummaryWebhookDispatcher : Node
 {
-	DiscordWebhookProxy webhook;
-	PublisherProxy publisher;
+	static PublisherProxy publisher = PublisherProxy.GetOrCreatePublisher(new("dailySummary", "PegLeg Daily Summary"));
 	[Export]
 	SubViewportScreenshotter screenshotter;
-	static DailySummaryWebhookDispatcher inst;
+	TriggerInstance forcePublishTrigger = new("forceShareDailySummary", true);
+
 	public override void _Ready()
 	{
-		inst = this;
 		//if (!DiscordWebhookProxy.TryGetProxy("dailySummary", out webhook))
 		//	webhook = new("PegLeg Daily Summary", "dailySummary", contentProvider: Content, imageProvider: GenerateImage);
-		publisher = PublisherProxy.GetOrCreatePublisher(new("dailySummary", "PegLeg Daily Summary"));
 		RefreshTimerController.OnDayChanged += ExecuteWebhookDelayed;
+		forcePublishTrigger.BindNode(this, ForcePublishWebhook);
+		UpdateEnabled();
+		publisher.EnabledChanged += UpdateEnabled;
+
+		Node ancestor = GetParent();
+		while (ancestor is not null)
+		{
+			if (ancestor.IsInGroup("ShareTab"))
+			{
+				ancestor.SetMeta("publishTriggers", new Godot.Collections.Dictionary<string, string>()
+				{
+					["Summary"] = "forceShareDailySummary"
+				});
+				break;
+			}
+			ancestor = ancestor.GetParent();
+		}
 	}
+
+	void UpdateEnabled() => forcePublishTrigger.Enabled = publisher.IsEnabled;
 
 	public override void _ExitTree()
 	{
 		RefreshTimerController.OnDayChanged -= ExecuteWebhookDelayed;
+		publisher.EnabledChanged -= UpdateEnabled;
 	}
 
 	const string standardText = "DAILY MISSIONS{vbucks}\n\nInstall PegLeg for more features.";
@@ -59,11 +77,15 @@ public partial class DailySummaryWebhookDispatcher : Node
 		await Publish();
 	}
 
-	public async void ForceExecuteWebhook()
+	public async void ForceExecuteWebhook() => ForcePublishWebhook([]);
+	public async void ForcePublishWebhook(string[] ctx)
 	{
-		var confirm = await GenericConfirmationWindow.ShowConfirmation("Publish Daily Summary?", warningText: "This will immediately publish onto all enabled platforms");
-		if (confirm != true)
-			return;
+		if (!(ctx is not null && ctx.Length > 0 && ctx[0] == "force"))
+		{
+			var confirm = await GenericConfirmationWindow.ShowConfirmation("Publish Daily Summary?", warningText: "This will immediately publish onto all enabled platforms");
+			if (confirm != true)
+				return;
+		}
 		if (GameMission.MissionList is null)
 			await GameMission.UpdateMissions();
 		await Helpers.WaitForFrames(3);
@@ -76,31 +98,14 @@ public partial class DailySummaryWebhookDispatcher : Node
 		var vbuckCount = GameMission.MissionList.SelectMany(m => m.alertRewardItems ?? []).Where(i => i.template?.VBucksOrXRayTickets == true).Sum(i => i.quantity);
 		baseText = baseText.Replace("{vbucks}", vbuckCount > 0 ? $": {vbuckCount} V-BUCKS/X-RAY TICKETS!" : "");
 
-		//Image[] images = [await inst.screenshotter.CaptureScreenshot()];
-		//Image[] opaqueImages;
-		//if(AppConfig.Get("advanced", "share_bg", false))
-		//	opaqueImages = images;
-		//else
-		//{
-		//	AppConfig.Set("advanced", "share_bg", true);
-		//	opaqueImages = [await inst.screenshotter.CaptureScreenshot()];
-		//	AppConfig.Set("advanced", "share_bg", false);
-		//}
+		//using promises ensures screenshots are only captured when needed
+		var transparant = screenshotter.GetPromise();
+		var opaque = screenshotter.GetPromise(true);
 
-		var (standard, opaque) = await screenshotter.CapturePublishingScreenshots();
-
-		await publisher.AttemptPublish(platform => platform switch
+		await publisher.AttemptPublish(async platform => platform switch
 		{
-			"Discord" => new(discordText, images: standard),
-			_ => new(baseText, images: opaque)
+			"Discord" => new(discordText, images: [await transparant.GetOrCapture()]),
+			_ => new(baseText, images: [await opaque.GetOrCapture()])
 		});
-	}
-
-	static async Task<Image[]> GenerateImage()
-	{
-		if (inst is null)
-			return [];
-		var screenshot = await inst.screenshotter.CaptureScreenshot();
-		return [screenshot];
 	}
 }

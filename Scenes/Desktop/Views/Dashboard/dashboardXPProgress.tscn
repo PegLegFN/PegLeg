@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="2_rp5sv"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="3_f3du3"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="4_8g4df"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="4_rp5sv"]
 [ext_resource type="Script" uid="uid://bwua60il6w4x2" path="res://Scripts/UserInterface/Dashboard/XpLimitDisplay.cs" id="5_xbh73"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="6_qrhk5"]
 [ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="7_54q2i"]
@@ -162,48 +163,25 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="ShareBtn" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=903443066]
-visible = false
-custom_minimum_size = Vector2(26, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 1
-theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" unique_id=1715350721]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_rp5sv")
-expand_mode = 1
-
 [node name="RefreshBtn" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1876132367]
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
+icon = ExtResource("3_f3du3")
+expand_icon = true
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/HBoxContainer/RefreshBtn" unique_id=441580521]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_f3du3")
-expand_mode = 1
+[node name="ShareBtn" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=903443066]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+icon = ExtResource("2_rp5sv")
+expand_icon = true
+script = ExtResource("4_rp5sv")
+name = "xpSumary_copy"
 
 [node name="Body" type="MarginContainer" parent="VBoxContainer" unique_id=1868733428]
 custom_minimum_size = Vector2(0, 125)

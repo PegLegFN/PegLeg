@@ -679,9 +679,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		if (currentItem is null)
 			return;
 		if (inspectorOverride is not null)
-			GameItemViewer.Instance.ShowItem(inspectorOverride);
+			GameItemViewer.Instance?.ShowItem(inspectorOverride);
 		else
-			GameItemViewer.Instance.ShowItem(currentItem);
+			GameItemViewer.Instance?.ShowItem(currentItem);
 	}
 
 	//public static bool TypeShouldBeInteractable(string type) => autoInteractableTypes.Contains(type.ToLower());

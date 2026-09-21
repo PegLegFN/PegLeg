@@ -99,7 +99,6 @@ public partial class Bootstrap : Node
 
 	public static readonly FrozenSet<string> cmdLineArgs = OS.GetCmdlineArgs().ToFrozenSet();
 	public static bool StartMinimised { get; private set; } = cmdLineArgs.Contains("--start-minimised");
-	public static bool UseShareMenu { get; private set; } = cmdLineArgs.Contains("--share-menu");
 	public static bool IsEditor { get; private set; } = OS.HasFeature("editor");
 
 	static bool hasBooted = false;
@@ -178,7 +177,6 @@ public partial class Bootstrap : Node
 
 		if (StartMinimised)
 			window.Mode = Window.ModeEnum.Minimized;
-		UseShareMenu |= OS.HasFeature("editor") && shareInEditor;
 
 #if GODOT_WINDOWS
 		if (FileAccess.FileExists(processLockPath))
@@ -444,7 +442,7 @@ public partial class Bootstrap : Node
 				targetScene = desktopOnboarding;
 			else if (OS.HasFeature("editor") && testingScene is not null)
 				targetScene = testingScene;
-			else if (UseShareMenu)
+			else if (AppConfig.Get("core", "shareMenu", false))
 				targetScene = shareMenu;
 			else
 				targetScene = desktopInterface;

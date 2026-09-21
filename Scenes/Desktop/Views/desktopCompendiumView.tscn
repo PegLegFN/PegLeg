@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://q7ic84srvgy5"]
+[gd_scene format=3 uid="uid://q7ic84srvgy5"]
 
 [ext_resource type="Script" uid="uid://dnl1lptfobd1w" path="res://Scripts/UserInterface/TempCompendiumInterface.cs" id="1_8mwmu"]
 [ext_resource type="PackedScene" uid="uid://76mx3dxck070" path="res://Scenes/loading_icon.tscn" id="2_a4ybs"]
 [ext_resource type="Script" uid="uid://gxtxnc3gl5tx" path="res://Scripts/UIElements/RecycleListContainer.cs" id="3_wbayu"]
 [ext_resource type="PackedScene" uid="uid://cei68i5c1u3d1" path="res://Scenes/GameItemEntry/reward_entry_compendium.tscn" id="4_b5i84"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="5_xahuf"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="6_wbayu"]
 
-[node name="Compendium" type="MarginContainer" node_paths=PackedStringArray("itemList", "searchBox", "loadingIcon")]
+[node name="Compendium" type="MarginContainer" unique_id=1232496011 node_paths=PackedStringArray("newItemListNode", "searchBox", "loadingIcon")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,24 +15,24 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_bottom = -4
 script = ExtResource("1_8mwmu")
-itemList = NodePath("VBoxContainer/PanelContainer/ScrollContainer")
+newItemListNode = NodePath("VBoxContainer/ScrollContainer2/MarginContainer/RecycleContainer")
 searchBox = NodePath("VBoxContainer/LineEdit")
 loadingIcon = NodePath("LoadingIcon")
 
-[node name="LoadingIcon" parent="." instance=ExtResource("2_a4ybs")]
+[node name="LoadingIcon" parent="." unique_id=60139780 instance=ExtResource("2_a4ybs")]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=252901110]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=826008018]
 layout_mode = 2
 placeholder_text = "Search Compendium"
 clear_button_enabled = true
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+[node name="ItemList" type="ItemList" parent="VBoxContainer" unique_id=957885931]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -47,13 +48,15 @@ same_column_width = true
 icon_scale = 2.0
 fixed_icon_size = Vector2i(64, 64)
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=614997890]
+visible = false
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Panel5Pad"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer" node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer" unique_id=1030292764 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_wbayu")
@@ -64,7 +67,7 @@ paddingControl = NodePath("MarginContainer/VBoxContainer/Padding")
 elementParent = NodePath("MarginContainer/VBoxContainer/DynGridContainer")
 elementScene = ExtResource("4_b5i84")
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer" unique_id=1167194092]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -73,24 +76,48 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer" unique_id=1084461059]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Offset" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Offset" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=800631853]
 layout_mode = 2
 
-[node name="DynGridContainer" type="Container" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="DynGridContainer" type="Container" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=527487344]
 layout_mode = 2
 script = ExtResource("5_xahuf")
 CompressSpacing = true
-Spacing = Vector2(5, 5)
 
-[node name="Padding" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="Padding" type="Control" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1805529124]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=121892228]
 visible = false
 layout_mode = 2
 text = "Yes, this screen is bad. I intend to replace this screen with a proper Collection Book screen in the future"
 horizontal_alignment = 1
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer" unique_id=2033836212]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer2" unique_id=369318464]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/ScrollContainer2/MarginContainer" unique_id=26726069 node_paths=PackedStringArray("viewportParent")]
+custom_minimum_size = Vector2(610, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("6_wbayu")
+viewportParent = NodePath("../..")
+recycleEntryScene = ExtResource("4_b5i84")
+layoutMode = 2
+spacing = Vector2(3, 3)
+shift = Vector2(0.5, 0)

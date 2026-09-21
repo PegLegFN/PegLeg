@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_2a2sa"]
 [ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="3_b2tw5"]
 [ext_resource type="PackedScene" uid="uid://pcyuj0ewudy3" path="res://Scenes/ViewElements/Llamas/llama_highlight_db_style.tscn" id="4_47kpc"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="5_hc5ye"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="5_hikyq"]
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="6_j8kjp"]
 [ext_resource type="Texture2D" uid="uid://bs2rkwdm3joj1" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Caution_128.png" id="7_bcf81"]
@@ -44,25 +45,14 @@ timerType = 1
 layout_mode = 2
 
 [node name="ShareBtn" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2021237232]
-visible = false
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ShareBtn" unique_id=938532660]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_2a2sa")
-expand_mode = 1
+icon = ExtResource("3_2a2sa")
+expand_icon = true
+script = ExtResource("5_hc5ye")
+name = "llamaSummary_copy"
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=511489282]
 custom_minimum_size = Vector2(220, 150)

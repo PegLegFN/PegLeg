@@ -312,6 +312,13 @@ public partial class GameAccount
 
 	public static void ClearActiveAccount() => _activeAccount = emptyAccount;
 
+	public static TriggerInstance refreshTrigger = new("refreshActiveAccount", RefreshActiveAccountWithOverlay);
+	static async void RefreshActiveAccountWithOverlay()
+	{
+		using var _ = LoadingOverlay.CreateToken();
+		await GameAccount.RefreshActiveAccount();
+	}
+
 	public static async Task RefreshActiveAccount()
 	{
 		if (!await ActiveAccount.Authenticate(assumeValid: false))

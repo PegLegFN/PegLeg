@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cjo0qsieb4y21"]
 
 [ext_resource type="Script" uid="uid://bob0mcr4r7qyn" path="res://Scripts/UserInterface/Dashboard/AlertSummaryController.cs" id="1_vcuvx"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="2_d2rmp"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="2_n1o3m"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="3_d2rmp"]
 [ext_resource type="PackedScene" uid="uid://dn2ji38mchobh" path="res://Scenes/Desktop/Views/Dashboard/dashboardAlertSummaryRow.tscn" id="4_fr4qi"]
@@ -34,26 +35,15 @@ text = "Alert Summary"
 horizontal_alignment = 1
 
 [node name="ShareBtn" type="Button" parent="VBoxContainer/MarginContainer2" unique_id=616104917]
-visible = false
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/ShareBtn" unique_id=2057812752]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_n1o3m")
-expand_mode = 1
+icon = ExtResource("2_n1o3m")
+expand_icon = true
+script = ExtResource("2_d2rmp")
+name = "alertSummary_copy"
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1490155305]
 layout_mode = 2

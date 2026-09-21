@@ -6,12 +6,16 @@ using System.Text.Json.Nodes;
 
 public partial class MissionRewardsController : Control, IRecyclableElementProvider<MissionRewardPair>, IListProvider<MissionRewardPair>
 {
+	public static MissionRewardsController PrimaryAllRewards { get; private set; }
+	public static MissionRewardsController PrimaryNotableRewards { get; private set; }
 	[Signal]
 	public delegate void HasVBucksEventHandler(bool value);
 	[Export]
 	bool notableMode;
 	[Export]
 	bool excludeTodo;
+	[Export]
+	bool isPrimary;
 	[Export]
 	RecycleListContainer missionList;
 	[Export]
@@ -78,6 +82,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	IListHandler newMissionList;
 	public override void _Ready()
 	{
+		OnVisibleChanged();
+		VisibilityChanged += OnVisibleChanged;
 		excludeRewards ??= [];
 		missionList?.SetProvider(this);
 		if(newMissionListNode is IListHandler newListHandler)
@@ -85,7 +91,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			newMissionList = newListHandler;
 			newMissionList.LinkListProvider(this);
 		}
-		allFilters = rarityFilters.Union(zoneFilters).Union(typeFilters).Where(f => f is not null).ToArray();
+		allFilters = [.. rarityFilters.Union(zoneFilters).Union(typeFilters).Where(f => f is not null)];
 		SetupFilters(rarityFilters);
 		SetupFilters(zoneFilters);
 		SetupFilters(typeFilters);
@@ -118,6 +124,10 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 
 	public override void _ExitTree()
 	{
+		if (PrimaryAllRewards == this)
+			PrimaryAllRewards = null;
+		if (PrimaryNotableRewards == this)
+			PrimaryNotableRewards = null;
 		MissionToDoListController.OnToDoListChanged -= FilterMissions;
 		GameMission.OnMissionsUpdated -= FilterMissions;
 		GameMission.OnMissionsInvalidated -= ClearMissions;
@@ -125,6 +135,17 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		GameAccount.RemindersChanged -= FilterMissions;
 		GameAccount.LocalDataChanged -= OnAccountDataChanged;
 		AppConfig.OnConfigChanged -= OnConfigChanged;
+	}
+
+	void OnVisibleChanged()
+	{
+		if (isPrimary && Visible)
+		{
+			if (notableMode)
+				PrimaryNotableRewards = this;
+			else
+				PrimaryAllRewards = this;
+		}
 	}
 
 	private void OnAccountDataChanged(string key)
@@ -200,6 +221,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		{
 			filter.ButtonPressed = false;
 		}
+		searchBar?.Text = "";
+		itemSearchBar?.Text = "";
+		UpdateSearch();
 		lockFilter = false;
 		FilterMissions();
 	}
@@ -215,6 +239,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 		}
 		lockFilter = false;
 	}
+
 	void TurnOnSelectedFilters(IEnumerable<CheckButton> onlyThese, CheckButton exceptThis = null)
 	{
 		lockFilter = true;
@@ -223,6 +248,50 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			filter.ButtonPressed = filter != exceptThis;
 		}
 		lockFilter = false;
+	}
+
+	public void SetFilterFromSummary(string itemSearch, string zones)
+	{
+		lockFilter = true;
+
+		foreach (var filter in allFilters)
+		{
+			filter.ButtonPressed = false;
+		}
+		foreach (var filter in repeatabilityFilters)
+		{
+			filter.ButtonPressed = false;
+		}
+
+		searchBar?.Text = "";
+		itemSearchBar?.Text = itemSearch;
+		UpdateSearch();
+		foreach (var zone in zones)
+		{
+			switch (zone)
+			{
+				case 's':
+					zoneFilters[0].ButtonPressed = true;
+					break;
+				case 'p':
+					zoneFilters[1].ButtonPressed = true;
+					break;
+				case 'c':
+					zoneFilters[2].ButtonPressed = true;
+					break;
+				case 't':
+					zoneFilters[3].ButtonPressed = true;
+					break;
+				case 'v':
+					zoneFilters[4].ButtonPressed = true;
+					break;
+			}
+		}
+		repeatabilityFilters[0].ButtonPressed = true;
+		filterPower?.ButtonPressed = false;
+		lockFilter = false;
+		needsRefresh = true;
+		FilterMissions();
 	}
 
 	void TryRefresh()
@@ -450,7 +519,7 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			];
 			Func<GameItem, bool> notableItemFilter = null;
 
-			bool excludeAccountResources = AppConfig.Get("missions", "excludeAccountResourceAll", false);
+			bool excludeAccountResources = AppConfig.Get("missions", "excludeAccountResourceAll", false) && string.IsNullOrWhiteSpace(itemSearchBar?.Text);
 
 			bool TypeFilter(GameItem i)
 			{
@@ -477,9 +546,9 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 			{
 				if (repeatabilityFilters[0].ButtonPressed && i.zcpEquivelent is not null)
 					return false;
-				else if (repeatabilityFilters[1].ButtonPressed && i.zcpEquivelent is null)
+				if (repeatabilityFilters[1].ButtonPressed && i.zcpEquivelent is null)
 					return false;
-				else if (repeatabilityFilters[2].ButtonPressed && (i.zcpEquivelent is null || i.quantity < 4))
+				if (repeatabilityFilters[2].ButtonPressed && (i.zcpEquivelent is null || i.quantity < 4))
 					return false;
 
 				if (excludeAccountResources && i.sortingTemplate?.Type == "AccountResource")

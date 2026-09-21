@@ -25,6 +25,11 @@
 [ext_resource type="PackedScene" uid="uid://pek5poid4c6h" path="res://Scenes/MissionEntry/BeastRewards/mission_reward_entry_beast.tscn" id="24_in8s1"]
 [ext_resource type="PackedScene" uid="uid://2iou6v2uijh8" path="res://Scenes/small_loading_icon.tscn" id="25_hl6am"]
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_asvga"]
+resource_local_to_scene = false
+resource_name = "RewardType"
+allow_unpress = true
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5y7h3"]
 content_margin_left = 4.0
 content_margin_top = 2.0
@@ -62,11 +67,6 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_asvga"]
-resource_local_to_scene = false
-resource_name = "RewardType"
-allow_unpress = true
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_in8s1"]
 bg_color = Color(1, 1, 1, 1)
 skew = Vector2(0.2, 0)
@@ -82,6 +82,7 @@ theme_type_variation = &"Panel3PadB"
 visible = false
 layout_mode = 2
 excludeTodo = true
+isPrimary = true
 filterPower = NodePath("VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel")
 filterPowerContainer = NodePath("VBoxContainer/HBoxContainer2/PlayableContainer")
 
@@ -154,10 +155,11 @@ size_flags_stretch_ratio = 5.0
 theme_type_variation = &"Panel5PadB"
 script = ExtResource("4_in8s1")
 excludeTodo = true
+isPrimary = true
 newMissionListNode = NodePath("VBoxContainer/VBoxContainer/MarginContainer/RecycleContainer")
 loadingIcon = NodePath("VBoxContainer/VBoxContainer/MarginContainer/SmallLoadingIcon")
 searchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox")
-itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox2")
+itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/BeastItemSearch")
 sortMode = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/OptionButton")
 filterNotable = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/NotableFilter/CheckButton")
 filterPower = NodePath("VBoxContainer/HBoxContainer2/PlayableContainer/FilterPlayable-Panel")
@@ -167,7 +169,7 @@ rarityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxCont
 zoneFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ZoneFilters/Stonewood"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ZoneFilters/Plankerton"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ZoneFilters/Canny Valley"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ZoneFilters/Twine Peaks"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ZoneFilters/Ventures")]
 typeFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Lead Survivors"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Heroes"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Evo Mats"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Perk Up"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Re Perk"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Ranged Weapons"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Random"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/TypeFilters/HBoxContainer/Traps")]
 excludeRewards = []
-repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer/4x")]
+repeatabilityFilters = [NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer/Alert"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer/Repeatable"), NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer/4x")]
 metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AllBeast" unique_id=2044151659]
@@ -244,24 +246,95 @@ layout_mode = 2
 theme_override_constants/separation = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=2007388593]
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 2
 
 [node name="SearchBox" type="LineEdit" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=88566526]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Search missions"
 context_menu_enabled = false
 clear_button_enabled = true
 
-[node name="SearchBox2" type="LineEdit" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1531152992]
+[node name="BeastItemSearch" type="LineEdit" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1837025997]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
+theme_override_font_sizes/font_size = 14
 placeholder_text = "Search items"
-context_menu_enabled = false
-clear_button_enabled = true
+
+[node name="RewardTypeFilter" type="PanelContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1228440926]
+layout_mode = 2
+theme_type_variation = &"CheckContainer"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter" unique_id=1179755440]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Alert" type="CheckButton" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer" unique_id=939802002]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Alert Rewards"
+theme_type_variation = &"LeftCheckButton"
+theme_override_font_sizes/font_size = 12
+button_group = SubResource("ButtonGroup_asvga")
+text = " "
+
+[node name="TextureRect" type="TextureRect" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer/Alert" unique_id=1428468965]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_5ouyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Repeatable" type="CheckButton" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer" unique_id=1795322515]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Repeatable Rewards"
+theme_type_variation = &"MiddleCheckButton"
+theme_override_font_sizes/font_size = 12
+button_group = SubResource("ButtonGroup_asvga")
+text = " "
+
+[node name="TextureRect" type="TextureRect" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer/Repeatable" unique_id=362793876]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_dm05o")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="4x" type="CheckButton" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer" unique_id=1182313242]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "x4 Alert Rewards"
+theme_type_variation = &"RightCheckButton"
+theme_override_font_sizes/font_size = 12
+button_group = SubResource("ButtonGroup_asvga")
+
+[node name="Label" type="Label" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/RewardTypeFilter/HBoxContainer/4x" unique_id=712735251]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "x4"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=908473569]
+layout_mode = 2
 
 [node name="HBoxContainer2" type="HFlowContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=145397223]
 visible = false
@@ -579,75 +652,6 @@ vertical_alignment = 1
 [node name="VSeparator" type="VSeparator" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" unique_id=1091204744]
 layout_mode = 2
 
-[node name="RewardTypeFilter" type="PanelContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" unique_id=1228440926]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"CheckContainer"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter" unique_id=1179755440]
-layout_mode = 2
-theme_override_constants/separation = 1
-
-[node name="Alert" type="CheckButton" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer" unique_id=939802002]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Alert Rewards"
-theme_type_variation = &"LeftCheckButton"
-button_group = SubResource("ButtonGroup_asvga")
-text = " "
-
-[node name="TextureRect" type="TextureRect" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer/Alert" unique_id=1428468965]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("17_5ouyu")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Repeatable" type="CheckButton" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer" unique_id=1795322515]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Repeatable Rewards"
-theme_type_variation = &"MiddleCheckButton"
-button_group = SubResource("ButtonGroup_asvga")
-text = " "
-
-[node name="TextureRect" type="TextureRect" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer/Repeatable" unique_id=362793876]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("18_dm05o")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="4x" type="CheckButton" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer" unique_id=1182313242]
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "x4 Alert Rewards"
-theme_type_variation = &"RightCheckButton"
-button_group = SubResource("ButtonGroup_asvga")
-
-[node name="Label" type="Label" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/RewardTypeFilter/HBoxContainer/4x" unique_id=712735251]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "x4"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="RarityFilters" type="HFlowContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" unique_id=2084324712]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -939,7 +943,7 @@ text = "Common"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=908473569]
+[node name="HSeparator2" type="HSeparator" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=2067766116]
 layout_mode = 2
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1290903438]

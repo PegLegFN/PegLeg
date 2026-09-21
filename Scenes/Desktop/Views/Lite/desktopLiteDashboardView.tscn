@@ -141,9 +141,6 @@ layout_mode = 2
 [node name="NotableRewards" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer" unique_id=936518577 instance=ExtResource("1_qts83")]
 layout_mode = 2
 
-[node name="ShareMissions" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="3" unique_id=667966702]
-visible = true
-
 [node name="PlayableFilter" parent="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="6" unique_id=485339679]
 visible = false
 
@@ -277,10 +274,6 @@ rotationOffset = 45.0
 rotationSpeed = 2.0
 heightOffset = -20.0
 heightSpeed = 6.0
-
-[node name="CheckButton" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" parent_id_path=PackedInt32Array(878248880, 1648724221) index="0" unique_id=1639387010]
-disabled = false
-disabled = false
 
 [node name="ClickbaitParticles" type="Control" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full" parent_id_path=PackedInt32Array(878248880, 1647997976) index="1" unique_id=2074138936]
 layout_mode = 2
@@ -594,9 +587,6 @@ visible = false
 custom_minimum_size = Vector2(473.5, 420)
 layout_mode = 2
 
-[node name="ShareBtn" parent="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardAlertSummary/VBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(891970499, 741974284) index="1" unique_id=616104917]
-visible = true
-
 [node name="Control2" type="Control" parent="BeastDashboard/HSplitContainer" unique_id=2033552600]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -615,9 +605,6 @@ layout_mode = 2
 [node name="AlertSummaryViewport" parent="ShareableAlertSummary" index="0" unique_id=1497359965]
 render_target_update_mode = 0
 
-[node name="ItemEntry" parent="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1311100369, 88080159, 604010644) index="0" unique_id=216241938]
-forceShowVBucks = true
-
 [node name="ShareablePowerHour" parent="." unique_id=1004627350 instance=ExtResource("14_qts83")]
 visible = false
 layout_mode = 2
@@ -625,15 +612,10 @@ layout_mode = 2
 [node name="PowerHourViewport" parent="ShareablePowerHour" index="0" unique_id=424942682]
 render_target_update_mode = 0
 
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer/ShareMissions" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/HBoxContainer/PublishMissions" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control" method="set_visible"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PanelContainer/ClickbaitPanel" method="set_visible"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitParticles" method="set_visible"]
 [connection signal="ConfigValueChanged" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/ClickbaitSpace/Control/CheckButton" to="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/ClickbaitArrows" method="set_visible"]
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
-[connection signal="pressed" from="BeastDashboard/HSplitContainer/HBoxContainer/MarginContainer/Container/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
 
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards"]
 [editable path="BeastDashboard/HSplitContainer/HBoxContainer/VBoxContainer/NotableRewards/VBoxContainer3/Beast/NotableBeast"]
@@ -653,7 +635,8 @@ render_target_update_mode = 0
 [editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160"]
 [editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160"]
 [editable path="ShareableAlertSummary"]
-[editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]
+[editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/DashboardAlertSummary"]
+[editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/DashboardAlertSummary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]
 [editable path="ShareablePowerHour"]
 [editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert"]
 [editable path="ShareablePowerHour/PowerHourViewport/PegLegWatermark/PowerHourAlert/Full/VBoxContainer/Modifiers/MissionAlertItemEntry"]

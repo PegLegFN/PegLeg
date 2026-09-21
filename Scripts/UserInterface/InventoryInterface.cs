@@ -16,6 +16,8 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 	[Export]
 	RecycleListContainer itemList;
 	[Export]
+	Node newItemListNode;
+	[Export]
 	LineEdit searchBox;
 	[Export]
 	LineEdit targetUser;
@@ -52,6 +54,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 	Control currentCreatorImage;
 	AnimationPlayer currentCreatorAnimation;
+	IListHandler newItemList;
 
 	public override void _Ready()
 	{
@@ -63,10 +66,19 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		}
 		heavySearchWarning?.Visible = false;
 		GameAccount.ActiveAccountChanged += UpdateAccount;
-		itemList.SetProvider(this);
+
+		itemList?.SetProvider(this);
+		if (newItemListNode is IListHandler newListHandler)
+		{
+			newItemList = newListHandler;
+			newItemList.LinkListProvider(currentItems);
+		}
+
 		searchBox.TextChanged += _ => LightweithtApplyFilters();
 		searchBox.TextSubmitted += _ => ApplyFilters();
+
 		var dev = AppConfig.Get("advanced", "developer", false) && allowDevMode;
+
 		targetUser?.TextSubmitted += t =>
 		{
 			AppConfig.Set("inventory", "customUser", t);
@@ -74,8 +86,10 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		};
 		targetUser?.Visible = dev;
 		targetUser?.Text = dev ? AppConfig.Get("inventory", "customUser", "") : "";
+
 		devAllPanel?.Visible = dev;
 		devAllButton?.Toggled += SetTypeFilter;
+
 		researchTokenButton?.Pressed += ShowResearchTokenMenu;
 		researchTokenArea?.Visible = false;
 
@@ -84,9 +98,11 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 		tabBar.SetTabPressed(0);
 		tabBar.TabsChanged += SetTypeFilter;
+
 		AppConfig.OnConfigChanged += OnConfigChanged;
 		RefreshTimerController.OnMinuteChanged += TryAutoDismantle;
 		VisibilityChanged += TryFilter;
+
 		SetTypeFilter();
 		UpdateAccount();
 	}
@@ -212,9 +228,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 	}
 
 	GameItem[] filteredItems;
-	GameItem[] currentItems;
+	EntryList<GameItem> currentItems = [];
 	string currentTypeFilter = "";
-	public int GetRecycleElementCount() => currentItems?.Length ?? 0;
+	public int GetRecycleElementCount() => currentItems?.Count ?? 0;
 	public GameItem GetRecycleElement(int index) => currentItems?[index];
 	GameProfile currentProfile;
 
@@ -431,8 +447,9 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		var instructions = PLSearch.GenerateSearchInstructions(searchBox.Text);
 		var allItems = currentProfile.GetItems();
 		totalItemCount = allItems.Length;
-		currentItems = [];
-		itemList.UpdateList(true);
+		currentItems.Clear();
+		itemList?.UpdateList(true);
+		newItemList?.UpdateList();
 		GameItem[] resultItems = [];
 		GameItem[] FilterFunc() =>
 		[.. allItems
@@ -475,9 +492,10 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		if (!sortByName)
 			resultItems = resultItems.ThenBy(i => i.template?.SortingName);
 
-
-		currentItems = [.. resultItems];
-		itemList.UpdateList(true);
+		currentItems.Clear();
+		currentItems.AddRange(resultItems);
+		itemList?.UpdateList(true);
+		newItemList?.UpdateList();
 	}
 
 	public void OnElementSelected(int index, string context)

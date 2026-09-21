@@ -7,27 +7,61 @@ using TimeZoneNames;
 public partial class PowerHourWebhookDispatcher : Node
 {
 	//DiscordWebhookProxy webhook;
-	PublisherProxy publisher;
+	static PublisherProxy publisher = PublisherProxy.GetOrCreatePublisher(new("powerHour", "PegLeg Power Hour Alert"));
 	[Export]
 	SubViewportScreenshotter screenshotter;
+	TriggerInstance forcePublishHeadsupTrigger = new("forcePublishPowerHourHeadsup", true);
+	TriggerInstance forcePublishStartTrigger = new("forcePublishPowerHourStart", true);
+	TriggerInstance forcePublishFirstEndTrigger = new("forcePublishPowerHourFirstEnd", true);
+	TriggerInstance forcePublishSecondEndTrigger = new("forcePublishPowerHourSecondEnd", true);
 
 	public override void _Ready()
 	{
-		//if (!DiscordWebhookProxy.TryGetProxy("powerHour", out webhook))
-		//	webhook = new("PegLeg Power Hour Alert", "powerHour", imageProvider: GenerateImage);
-		publisher = PublisherProxy.GetOrCreatePublisher(new("powerHour", "PegLeg Power Hour Alert"));
-
 		PowerHourScheduleTracker.CurrentOrNextEventChanged += TryExecute;
 		GameMission.OnMissionsUpdated += AttemptHeadsup;
 
 		//todo: read dispatch state from file (might be unnececary)
 		currentDispatchEnd = PowerHourScheduleTracker.CurrentOrNextEvent.end;
+
+		forcePublishHeadsupTrigger.BindNode(this, ForceExecuteHeadsupCtx);
+		forcePublishStartTrigger.BindNode(this, ForceExecuteStarted);
+		forcePublishFirstEndTrigger.BindNode(this, ForceExecuteFirstEnd);
+		forcePublishSecondEndTrigger.BindNode(this, ForceExecuteSecondEnd);
+		UpdateEnabled();
+		publisher.EnabledChanged += UpdateEnabled;
+
+
+		Node ancestor = GetParent();
+		while (ancestor is not null)
+		{
+			if (ancestor.IsInGroup("ShareTab"))
+			{
+				ancestor.SetMeta("publishTriggers", new Godot.Collections.Dictionary<string, string>()
+				{
+					["Heads-Up"] = "forcePublishPowerHourHeadsup",
+					["Start"] = "forcePublishPowerHourStart",
+					["First End"] = "forcePublishPowerHourFirstEnd",
+					["Second End"] = "forcePublishPowerHourSecondEnd"
+				});
+				break;
+			}
+			ancestor = ancestor.GetParent();
+		}
+	}
+
+	void UpdateEnabled()
+	{
+		forcePublishHeadsupTrigger.Enabled = publisher.IsEnabled;
+		forcePublishStartTrigger.Enabled = publisher.IsEnabled;
+		forcePublishFirstEndTrigger.Enabled = publisher.IsEnabled;
+		forcePublishSecondEndTrigger.Enabled = publisher.IsEnabled;
 	}
 
 	public override void _ExitTree()
 	{
 		PowerHourScheduleTracker.CurrentOrNextEventChanged -= TryExecute;
 		GameMission.OnMissionsUpdated -= AttemptHeadsup;
+		publisher.EnabledChanged -= UpdateEnabled;
 	}
 
 	const string headsup = "A Power Hour is scheduled to occur {timestamp}";
@@ -67,14 +101,12 @@ public partial class PowerHourWebhookDispatcher : Node
 			if (now > curEvt.start.AddHours(-24))
 			{
 				//event ended + headsup for next event
-				//await webhook.Execute(currentContentProvider: async () => $"The Power Hour has ended, but another one should be active {curEvt.start.Discordify()}.\n(Ongoing missions will keep the modifiers until they end)\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
 				hasDispatchedEventHeadsup = true;
-				await Publish(firstEnd, curEvt.start, true);
+				await Publish(firstEnd, curEvt.start, isStartStamp: true);
 			}
 			else
 			{
 				//event ended
-				//await webhook.Execute(currentContentProvider: async () => "The Power Hour has ended. (Ongoing missions will keep the modifiers until they end)", currentImageProvider: async () => []);
 				await Publish(secondEnd, now, noImage: true);
 			}
 		}
@@ -84,20 +116,50 @@ public partial class PowerHourWebhookDispatcher : Node
 			if (now < curEvt.start || hasDispatchedEventStart)
 				return;
 			//event started
-			//await webhook.Execute(currentContentProvider: async () => $"A Power Hour has started! It's expected to end {curEvt.end.Discordify()}.\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
 			await Publish(powerHourStart, curEvt.end);
 			hasDispatchedEventStart = true;
 		}
 	}
 
-	public async void ForceExecuteHeadsup()
+	static async Task<bool> ShowConfirmation(string[] ctx, string type)
 	{
-		var confirm = await GenericConfirmationWindow.ShowConfirmation("Publish Power Hour Headsup?", warningText: "This will immediately publish onto all enabled platforms");
-		if (confirm != true)
+		if (ctx is not null && ctx.Length > 0 && ctx[0] == "force")
+			return true;
+		var confirm = await GenericConfirmationWindow.ShowConfirmation($"Publish Power Hour {type}?", warningText: "This will immediately publish onto all enabled platforms");
+		return confirm == true;
+	}
+
+	public void ForceExecuteHeadsup() => ForceExecuteHeadsupCtx([]);
+	public async void ForceExecuteHeadsupCtx(string[] ctx)
+	{
+		if (!await ShowConfirmation(ctx, "Headsup"))
 			return;
 		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
-		//await inst.webhook.Execute(true, currentContentProvider: async () => $"A Power Hour is scheduled to occur {curEvt.start.Discordify()}.\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
-		await Publish(headsup, curEvt.start, true);
+		await Publish(headsup, curEvt.start, isStartStamp: true);
+	}
+
+	public async void ForceExecuteStarted(string[] ctx)
+	{
+		if (!await ShowConfirmation(ctx, "Start Alert"))
+			return;
+		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
+		await Publish(powerHourStart, curEvt.end);
+	}
+
+	public async void ForceExecuteFirstEnd(string[] ctx)
+	{
+		if (!await ShowConfirmation(ctx, "End Alert with Headsup"))
+			return;
+		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
+		await Publish(firstEnd, curEvt.start, isStartStamp: true);
+	}
+
+	public async void ForceExecuteSecondEnd(string[] ctx)
+	{
+		if (!await ShowConfirmation(ctx, "End Alert"))
+			return;
+		var curEvt = PowerHourScheduleTracker.CurrentOrNextEvent;
+		await Publish(secondEnd, curEvt.start, noImage: true);
 	}
 
 	public async void AttemptHeadsup()
@@ -113,8 +175,7 @@ public partial class PowerHourWebhookDispatcher : Node
 		//only if event hasnt started, but is less than 24 hours away
 		if (curEvt.start > now && curEvt.start.AddHours(-24) < now)
 		{
-			//await inst.webhook.Execute(currentContentProvider: async () => $"A Power Hour is scheduled to occur {curEvt.start.Discordify()}.\n-# Try out [PegLeg](<https://peglegfn.com/releases>)");
-			await Publish(headsup, curEvt.start);
+			await Publish(headsup, curEvt.start, isStartStamp: true);
 			hasDispatchedEventHeadsup = true;
 		}
 	}
@@ -131,21 +192,25 @@ public partial class PowerHourWebhookDispatcher : Node
 		var endTime = displayTime.AddHours(2);
 		var displayZone = displayTimeZone.IsDaylightSavingTime(displayTime) ? displayTimeZoneShorthand.Standard : displayTimeZoneShorthand.Daylight;
 
-		var (standard, opaque) = noImage ? ([], []) : await screenshotter.CapturePublishingScreenshots();
+		//using promises ensures screenshots are only captured when needed
+		var transparant = screenshotter.GetPromise();
+		var opaque = screenshotter.GetPromise(true);
 
-		await publisher.AttemptPublish(platform => platform switch
+		await publisher.AttemptPublish(async platform => platform switch
 		{
-			"Discord" => new(template.Replace("{timestamp}", isStartStamp ? $"{timestamp.Discordify()} ({timestamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)}-({endStamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)}))" : $"{timestamp.Discordify()} ({timestamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)})") + discordSuffix, images: standard),
-			_ => new(template.Replace("{timestamp}", isStartStamp ? $"from {displayTime:h:mmtt}-{endTime:h:mmtt} {displayZone} ({utcTime:H:mm}-{utcEnd:H:mm} UTC)" : $"at {displayTime:h:mmtt} {displayZone} ({utcTime:H:mm} UTC)"), images: opaque)
+			"Discord" => new(
+				template.Replace("{timestamp}", isStartStamp ? 
+					$"{timestamp.Discordify()} ({timestamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)}-({endStamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)}))" : 
+					$"{timestamp.Discordify()} ({timestamp.Discordify(Helpers.DiscordTimeFormat.ShortTime)})"
+				) + discordSuffix, 
+				images: [noImage ? null : await transparant.GetOrCapture()]
+			),
+			_ => new(
+				template.Replace("{timestamp}", isStartStamp ? 
+				$"from {displayTime:h:mmtt}-{endTime:h:mmtt} {displayZone} ({utcTime:H:mm}-{utcEnd:H:mm} UTC)" : 
+				$"at {displayTime:h:mmtt} {displayZone} ({utcTime:H:mm} UTC)"), 
+				images: [noImage ? null : await opaque.GetOrCapture()]
+			)
 		});
 	}
-
-
-	//static async Task<Image[]> GenerateImage()
-	//{
-	//	if (inst is null)
-	//		return [];
-	//	var screenshot = await inst.screenshotter.CaptureScreenshot();
-	//	return [screenshot];
-	//}
 }

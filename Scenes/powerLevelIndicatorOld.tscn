@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://bturici7n7dgy"]
+
+[ext_resource type="Script" uid="uid://cld6m7s42cv6q" path="res://Scripts/HomebasePowerLevel.cs" id="1_7w0dx"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="2_f8jos"]
+[ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="3_ndgj1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yef35"]
+bg_color = Color(0.184314, 0.184314, 0.184314, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="PowerLevel" type="MarginContainer" unique_id=1265177694 node_paths=PackedStringArray("homebaseNumberLabel", "homebaseNumberProgressBar")]
+visible = false
+script = ExtResource("1_7w0dx")
+homebaseNumberLabel = NodePath("MarginContainer/HBoxContainer/PowerLevelNumber")
+homebaseNumberProgressBar = NodePath("MarginContainer/HBoxContainer/PowerLevelProgressBar")
+tooltipColor = Color(0, 0.537255, 0.729412, 1)
+
+[node name="Panel" type="Panel" parent="." unique_id=2089114239]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yef35")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1866634392]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1797020780]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PowerLevelProgressBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer" unique_id=736757618]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+max_value = 1.0
+step = 0.0
+value = 0.35
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("2_f8jos")
+texture_progress = ExtResource("2_f8jos")
+tint_under = Color(0.145098, 0.145098, 0.145098, 1)
+tint_progress = Color(0, 0.535333, 0.73, 1)
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/PowerLevelProgressBar" unique_id=518795776]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ndgj1")
+expand_mode = 1
+
+[node name="PowerLevelNumber" type="Label" parent="MarginContainer/HBoxContainer" unique_id=192512365]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 20
+text = "144"
+horizontal_alignment = 1

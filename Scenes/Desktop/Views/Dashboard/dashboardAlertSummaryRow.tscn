@@ -1,11 +1,16 @@
 [gd_scene format=3 uid="uid://dn2ji38mchobh"]
 
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItemEntry.cs" id="1_1dwer"]
+[ext_resource type="Script" uid="uid://mbbyr2ndrj1f" path="res://Scripts/UserInterface/Dashboard/AlertRewardRow.cs" id="1_i7kbv"]
 [ext_resource type="Texture2D" uid="uid://de4vkpc5d58on" path="res://Images/InterfaceIcons/T-Items-WeaponPerkup-Legendary-L.png" id="2_i7kbv"]
 
-[node name="AlertSummaryRow" type="MarginContainer" unique_id=1097291852]
+[node name="AlertSummaryRow" type="MarginContainer" unique_id=1097291852 node_paths=PackedStringArray("itemEntry", "countLabels", "buttons")]
 offset_right = 404.0
 offset_bottom = 24.0
+script = ExtResource("1_i7kbv")
+itemEntry = NodePath("VBoxContainer/MarginContainer/ItemEntry")
+countLabels = [NodePath("VBoxContainer/Stonewood"), NodePath("VBoxContainer/Plankerton"), NodePath("VBoxContainer/Canny"), NodePath("VBoxContainer/Twine"), NodePath("VBoxContainer/Total"), NodePath("VBoxContainer/Ventures")]
+buttons = [NodePath("VBoxContainer/MarginContainer/AllButton"), NodePath("VBoxContainer/Stonewood/SButton"), NodePath("VBoxContainer/Plankerton/PButton"), NodePath("VBoxContainer/Canny/CButton"), NodePath("VBoxContainer/Twine/TButton"), NodePath("VBoxContainer/Total/MainButton"), NodePath("VBoxContainer/Ventures/VButton")]
 
 [node name="Color" type="ColorRect" parent="." unique_id=827181727]
 self_modulate = Color(1, 1, 1, 0.176471)
@@ -43,8 +48,7 @@ size_flags_horizontal = 3
 text = "Legendary PERK-UP!"
 text_overrun_behavior = 3
 
-[node name="Button" type="Button" parent="VBoxContainer/MarginContainer" unique_id=1546218139]
-visible = false
+[node name="AllButton" type="Button" parent="VBoxContainer/MarginContainer" unique_id=1546218139]
 show_behind_parent = true
 layout_mode = 2
 theme_type_variation = &"SemiInvisButton"
@@ -60,8 +64,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Stonewood" unique_id=664770067]
-visible = false
+[node name="SButton" type="Button" parent="VBoxContainer/Stonewood" unique_id=664770067]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
@@ -82,8 +85,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Plankerton" unique_id=1634860358]
-visible = false
+[node name="PButton" type="Button" parent="VBoxContainer/Plankerton" unique_id=1634860358]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
@@ -104,8 +106,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Canny" unique_id=885871795]
-visible = false
+[node name="CButton" type="Button" parent="VBoxContainer/Canny" unique_id=885871795]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
@@ -126,8 +127,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Twine" unique_id=399681568]
-visible = false
+[node name="TButton" type="Button" parent="VBoxContainer/Twine" unique_id=399681568]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
@@ -148,8 +148,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Total" unique_id=1760207906]
-visible = false
+[node name="MainButton" type="Button" parent="VBoxContainer/Total" unique_id=1760207906]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
@@ -170,8 +169,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Ventures" unique_id=1901364275]
-visible = false
+[node name="VButton" type="Button" parent="VBoxContainer/Ventures" unique_id=1901364275]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1

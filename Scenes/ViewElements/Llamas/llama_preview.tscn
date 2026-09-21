@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="10_oiegs"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="11_jp4cn"]
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="12_dgltu"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="12_f2kye"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="13_a5bbv"]
 [ext_resource type="PackedScene" uid="uid://bgr0eeg3fek2e" path="res://Scenes/GameItemEntry/reward_entry_xl.tscn" id="14_2sn7c"]
 [ext_resource type="Texture2D" uid="uid://oo036o6whl2w" path="res://Images/InterfaceIcons/OrArrowHD.png" id="15_fus83"]
@@ -138,24 +139,13 @@ text = "Select a Llama"
 text_overrun_behavior = 3
 
 [node name="ShareButton" type="Button" parent="MarginContainer/CardPackEntry/HBoxContainer" unique_id=1634306431]
-visible = false
 custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/CardPackEntry/HBoxContainer/ShareButton" unique_id=1236506743]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_4oeg7")
-expand_mode = 1
+icon = ExtResource("9_4oeg7")
+expand_icon = true
+script = ExtResource("12_f2kye")
+name = "llamaContents_copy"
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry" unique_id=660517761]
 layout_mode = 2

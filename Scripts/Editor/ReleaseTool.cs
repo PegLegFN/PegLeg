@@ -52,9 +52,9 @@ public partial class ReleaseTool : EditorScript
 			window?.QueueFree();
 			window = null;
 		};
-		button?.Disabled = !isReady;
+		button?.Disabled = false;
 
-		EditorInterface.Singleton.PopupDialog(window, new(200,200,300,150));
+		EditorInterface.Singleton.PopupDialogCentered(window, new(300, 150));
 		window.CloseRequested += OnCloseRequested;
 	}
 
@@ -116,14 +116,14 @@ public partial class ReleaseTool : EditorScript
 		return true;
 	}
 
+	static readonly string exportEXE = OS.GetExecutablePath();
+	//static readonly string exportEXE = OS.GetExecutablePath().Replace(".exe", "_console.exe");
 	static PushOptions pushOptions = new();
 	private static async void MakeRelease(bool skipExport = false)
 	{
-		if (!VerifyReadiness(out _))
-		{
-			GD.Print("Booo...");
-			return;
-		}
+		bool readyForRelease = VerifyReadiness(out _);
+		if (!readyForRelease)
+			GD.Print("Only exporting, as release is not ready");
 
 		//todo: auto switch presets depending on if ver number is beta
 		//start exports
@@ -131,7 +131,22 @@ public partial class ReleaseTool : EditorScript
 		//if (!skipExport)
 		{
 			GD.Print("Starting exports");
-			buildTasks = ExportAll(true, skipExport);
+			buildTasks = ExportAll(true);
+			if (!readyForRelease)
+			{
+				GD.Print("Waiting for exports to complete...");
+				try
+				{
+					await buildTasks;
+					GD.Print("Exports Complete");
+				}
+				catch (Exception ex)
+				{
+					GD.Print("Exception during export");
+					GD.PushError(ex);
+				}
+				return;
+			}
 		}
 
 		string ghKey = null;
@@ -195,19 +210,21 @@ public partial class ReleaseTool : EditorScript
 				GD.Print($"Not a commit ({prevTag.Target.Sha[..6]})");
 				return;
 			}
-			GD.Print($"Finding commits between {prevTag.FriendlyName} and {latestVer} (ie. all commits until ({prevCommit.Sha[..6]}))");
+			GD.Print($"Finding commits between {prevTag.FriendlyName} and {latestVer} (ie. all commits after ({prevCommit.Sha[..6]}))");
 			var betweenCommits = repo.Head.Commits.TakeWhile(c => c != prevCommit);
 			releaseDescription = betweenCommits.Select(c => c.Message).JoinString("\n");
 		}
 		//GD.Print(releaseDescription);
 
-		if (!skipExport)
-			GD.Print("Waiting for exports to complete...");
-		await buildTasks;
-		if (buildTasks.IsFaulted)
+		GD.Print("Waiting for exports to complete...");
+		try
+		{
+			await buildTasks;
+		}
+		catch (Exception ex)
 		{
 			GD.Print("Exception during export");
-			GD.PushError(buildTasks.Exception);
+			GD.PushError(ex);
 			return;
 		}
 
@@ -254,28 +271,26 @@ public partial class ReleaseTool : EditorScript
 		OS.ShellOpen(releaseData.html_url.Replace("/tag/", "/edit/"));
 	}
 
-	private static async Task ExportAll(bool isBeta, bool skipExport)
+	private static async Task ExportAll(bool isBeta)
 	{
-		await ExportWindows(isBeta, skipExport);
-		if(!skipExport)
+		await ExportWindows(isBeta);
 		await ExportAndroid(isBeta);
 	}
 
-	private static async Task ExportWindows(bool isBeta, bool skipExport)
+	private static async Task ExportWindows(bool isBeta)
 	{
-		const string baseOutPath = "C:\\Users\\Tomatech\\Repositories\\TomatechGames\\Godot Projects\\PegLeg\\Builds\\Windows";
-		if (!skipExport)
-		{
-			int exportStatus = 0;
-			await Task.Run(() => exportStatus = OS.Execute(OS.GetExecutablePath(), ["--headless", "--export-release", isBeta ? "Windows (Test)" : "Windows", $"{baseOutPath}\\Beta\\Build\\PegLeg.exe"], openConsole: true));
-			if (exportStatus != 0)
-				throw new ApplicationException($"Windows Export Failed: {exportStatus}");
-		}
+		string baseOutPath = ProjectSettings.GlobalizePath("res://Builds/Windows");
+
+		int exportStatus = 0;
+		await Task.Run(() => exportStatus = OS.Execute(exportEXE, ["--headless", "--path", ProjectSettings.GlobalizePath("res://"), isBeta ? "--export-debug" : "--export-release", isBeta ? "Windows (Test)" : "Windows", $"{baseOutPath}/{(isBeta? "Beta":"Release")}/Build/PegLeg.exe"], openConsole: true));
+		if (exportStatus != 0)
+			throw new ApplicationException($"Windows Export Failed: {exportStatus}");
+
 		int compressStatus = 0;
 		int installerStatus = 0;
 		await Task.WhenAll(
-			Task.Run(() => compressStatus = OS.Execute("7z", ["a", "-t7z", $"{baseOutPath}\\Beta\\PegLegBeta-Windows.7z", $"{baseOutPath}\\Beta\\Build\\*"], openConsole: true)),
-			Task.Run(() => installerStatus = OS.Execute($"{baseOutPath}\\buildInstaller.bat", [], openConsole:true))
+			Task.Run(() => compressStatus = OS.Execute("7z", ["a", "-t7z", $"{baseOutPath}/{(isBeta ? "Beta" : "Release")}/PegLegBeta-Windows.7z", $"{baseOutPath}/{(isBeta ? "Beta" : "Release")}/Build/*"], openConsole: true)),
+			Task.Run(() => installerStatus = OS.Execute($"{baseOutPath}/buildInstaller.bat", [], openConsole:true))
 		);
 		if (compressStatus != 0)
 			throw new ApplicationException($"Windows 7Z Failed: {compressStatus}");
@@ -285,11 +300,11 @@ public partial class ReleaseTool : EditorScript
 
 	private static async Task ExportAndroid(bool isBeta)
 	{
-		const string outPath = "C:\\Users\\Tomatech\\Repositories\\TomatechGames\\Godot Projects\\PegLeg\\Builds\\Android\\Beta\\PegLegBeta-Android.apk";
+		string outPath = ProjectSettings.GlobalizePath($"res://Builds/Android/{(isBeta ? "Beta" : "Release")}/PegLegBeta-Android.apk");
 		int exportStatus = 0;
-		await Task.Run(() => exportStatus = OS.Execute(OS.GetExecutablePath(), ["--headless", "--export-release", isBeta ? "Android (Test)" : "Android", outPath], openConsole: true));
+		await Task.Run(() => exportStatus = OS.Execute(exportEXE, ["--headless", "--path", ProjectSettings.GlobalizePath("res://"), isBeta ? "--export-debug" : "--export-release", isBeta ? "Android (Test)" : "Android", outPath], openConsole: true));
 		if (exportStatus != 0)
-			throw new ApplicationException($"Android Export Failed: {exportStatus}");
+			throw new ApplicationException($"Android Export Failed: {exportStatus.ToString().FixNewlines()}");
 	}
 
 	static async Task<bool> UploadBuild(string uploadURL, string path, string type, string label, AuthenticationHeaderValue auth)

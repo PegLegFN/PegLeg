@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://b8hsqxu7wjoo2"]
 
 [ext_resource type="Script" uid="uid://cnduts0olijb7" path="res://Scripts/UserInterface/Settings/CoreSettings.cs" id="1_mbu52"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="2_ax421"]
 
 [node name="CorePage" type="VBoxContainer" unique_id=596819378 node_paths=PackedStringArray("liteLabel", "liteButton", "mobileLabel", "mobileButton")]
-theme_override_constants/separation = 12
+theme_override_constants/separation = 16
 script = ExtResource("1_mbu52")
 liteActiveText = "Lite mode uses a subset of features that don't require a Login. Lite mode can be re-enabled from here at any time."
 liteInactiveText = "Lite mode uses a subset of features that don't require a Login. Lite mode can be disabled from here at any time."
@@ -38,6 +39,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Mobile" unique_id=955497188]
 custom_minimum_size = Vector2(1, 0)
 layout_mode = 2
+theme_override_constants/line_spacing = -2
 text = "Mobile UI:"
 autowrap_mode = 3
 
@@ -45,5 +47,26 @@ autowrap_mode = 3
 layout_mode = 2
 text = "Switch to Mobile UI"
 
+[node name="Share" type="VBoxContainer" parent="." unique_id=1459440441]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Share" unique_id=1411970411]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+text = "The Share Menu provides a more lightweight way to copy/publish shareable Images (Advanced users only, this is probably useless for most people)"
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Share" unique_id=334494470]
+layout_mode = 2
+text = "Switch to Share Menu"
+
+[node name="Node" type="Node" parent="Share" unique_id=438328105]
+script = ExtResource("2_ax421")
+
+[connection signal="IsMobile" from="." to="Share/Node" method="EmitInverted"]
+[connection signal="ShowMobileOptions" from="." to="Mobile" method="set_visible"]
 [connection signal="pressed" from="Lite/Button" to="." method="ToggleLiteMode"]
 [connection signal="pressed" from="Mobile/Button" to="." method="ToggleMobileMode"]
+[connection signal="pressed" from="Share/Button" to="." method="EnableShareMenu"]
+[connection signal="InvertedValue" from="Share/Node" to="Share" method="set_visible"]

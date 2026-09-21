@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c5j52ymk713sh" path="res://Scenes/UI/refresh_timer.tscn" id="1_r4l81"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="2_e83rq"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="3_0tsum"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="3_pr8mp"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="4_xtkaj"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="5_ildms"]
@@ -17,17 +18,27 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_type_variation = &"Panel3PadB"
 
+[node name="BeastConfig" type="Control" parent="." unique_id=521685983]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_pr8mp")
+section = "missions"
+key = "beast_style"
+tryBind = false
+
 [node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1933367472]
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer3" unique_id=811683499]
 layout_mode = 2
+theme_override_constants/separation = 3
 
 [node name="Label" type="Label" parent="VBoxContainer3/HBoxContainer" unique_id=1299471964]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Notable Rewards"
+text_overrun_behavior = 3
 
 [node name="RefreshTimer" parent="VBoxContainer3/HBoxContainer" unique_id=112616027 instance=ExtResource("1_r4l81")]
 layout_mode = 2
@@ -37,43 +48,18 @@ custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/RefreshMissions" unique_id=383435641]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_xtkaj")
-expand_mode = 1
-stretch_mode = 5
+icon = ExtResource("4_xtkaj")
+expand_icon = true
 
 [node name="ShareMissions" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=667966702]
-visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/ShareMissions" unique_id=875622855]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_ildms")
-expand_mode = 1
-stretch_mode = 5
+icon = ExtResource("5_ildms")
+expand_icon = true
+script = ExtResource("3_0tsum")
+name = "missionSummary_copy"
 
 [node name="PublishMissions" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=1404085514]
 visible = false
@@ -82,31 +68,11 @@ layout_mode = 2
 tooltip_text = "Force Dispatches a Mission Summary "
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer3/HBoxContainer/PublishMissions" unique_id=1194014245]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 22.0
-mouse_filter = 2
-script = ExtResource("3_pr8mp")
-section = "publishing"
-key = "dailySummary_enabled"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/PublishMissions" unique_id=795073781]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_xbiu1")
-expand_mode = 1
-stretch_mode = 5
+icon = ExtResource("6_xbiu1")
+expand_icon = true
+script = ExtResource("3_0tsum")
+Disable = true
+name = "forceShareDailySummary"
 
 [node name="AddAllTodo" type="Button" parent="VBoxContainer3/HBoxContainer" unique_id=488150027]
 custom_minimum_size = Vector2(28, 28)
@@ -114,21 +80,8 @@ layout_mode = 2
 tooltip_text = "Add all visible rewards to To-Do List"
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/AddAllTodo" unique_id=1776106807]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("7_dl0dj")
-expand_mode = 1
-stretch_mode = 5
+icon = ExtResource("7_dl0dj")
+expand_icon = true
 
 [node name="PlayableFilter" type="CheckButton" parent="VBoxContainer3/HBoxContainer" unique_id=485339679]
 custom_minimum_size = Vector2(28, 0)
@@ -137,6 +90,8 @@ tooltip_text = "Only show Missions that can be accessed on this account"
 mouse_filter = 1
 theme_type_variation = &"EmptySquareCheckButton"
 button_pressed = true
+icon_alignment = 2
+expand_icon = true
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer3/HBoxContainer/PlayableFilter" unique_id=367611334]
 layout_mode = 1
@@ -225,19 +180,10 @@ excludeRewards = [NodePath("../../Standard/VBucks"), NodePath("../../Standard/Le
 recycleEntryScene = ExtResource("10_m4ix0")
 spacing = Vector2(5, 0)
 
-[node name="BeastConfig" type="Control" parent="." unique_id=521685983]
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("3_pr8mp")
-section = "missions"
-key = "beast_style"
-tryBind = false
-
-[connection signal="pressed" from="VBoxContainer3/HBoxContainer/RefreshMissions" to="VBoxContainer3/Standard/Notable" method="ReloadMissions"]
-[connection signal="ConfigValueChanged" from="VBoxContainer3/HBoxContainer/PublishMissions/CheckButton" to="VBoxContainer3/HBoxContainer/PublishMissions" method="set_visible"]
-[connection signal="toggled" from="VBoxContainer3/HBoxContainer/PlayableFilter/CheckButton" to="VBoxContainer3/HBoxContainer/PlayableFilter" method="set_pressed"]
 [connection signal="ConfigValueChanged" from="BeastConfig" to="VBoxContainer3/Beast" method="set_visible"]
 [connection signal="ConfigValueChangedInverse" from="BeastConfig" to="VBoxContainer3/Standard" method="set_visible"]
+[connection signal="pressed" from="VBoxContainer3/HBoxContainer/RefreshMissions" to="VBoxContainer3/Standard/Notable" method="ReloadMissions"]
+[connection signal="toggled" from="VBoxContainer3/HBoxContainer/PlayableFilter/CheckButton" to="VBoxContainer3/HBoxContainer/PlayableFilter" method="set_pressed"]
 
 [editable path="VBoxContainer3/Beast/NotableBeast"]
 [editable path="VBoxContainer3/Beast/NotableBeast/VBoxContainer/Hidden/MissionCollection"]

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://3xbl5x8mbmjv" path="res://Scenes/GameItemEntry/mission_alert_entry_medium.tscn" id="2_0ofo2"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="3_0pbo2"]
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="3_bejgr"]
-[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_mkfca"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="3_mkfca"]
 [ext_resource type="Texture2D" uid="uid://b1p0g5okeg641" path="res://Images/InterfaceIcons/T-Icon-Manage-Upgrade-32.png" id="5_u7aa7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smp72"]
@@ -104,21 +104,10 @@ custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="Full/VBoxContainer/HBoxContainer/ShareBtn" unique_id=213720266]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_bejgr")
-expand_mode = 1
-stretch_mode = 5
+icon = ExtResource("3_bejgr")
+expand_icon = true
+script = ExtResource("3_mkfca")
+name = "powerHour_copy"
 
 [node name="PublishBtn" type="Button" parent="Full/VBoxContainer/HBoxContainer" unique_id=1648724221]
 visible = false
@@ -127,36 +116,11 @@ layout_mode = 2
 tooltip_text = "Force Dispatches a Power Hour Heads Up "
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
-
-[node name="CheckButton" type="CheckButton" parent="Full/VBoxContainer/HBoxContainer/PublishBtn" unique_id=1639387010]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-disabled = true
-script = ExtResource("4_mkfca")
-section = "publishing"
-key = "powerHour_enabled"
-disabled = true
-
-[node name="TextureRect" type="TextureRect" parent="Full/VBoxContainer/HBoxContainer/PublishBtn" unique_id=525070860]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_u7aa7")
-expand_mode = 1
-stretch_mode = 5
+icon = ExtResource("5_u7aa7")
+expand_icon = true
+script = ExtResource("3_mkfca")
+Disable = true
+name = "forcePublishPowerHourHeadsup"
 
 [node name="Modifiers" type="Container" parent="Full/VBoxContainer" unique_id=679697045]
 layout_mode = 2
@@ -416,5 +380,3 @@ text = "28/12/26 0:00"
 [node name="RefreshTimer" parent="Compact" unique_id=1288754175 instance=ExtResource("1_afrxp")]
 layout_mode = 2
 size_flags_horizontal = 8
-
-[connection signal="ConfigValueChanged" from="Full/VBoxContainer/HBoxContainer/PublishBtn/CheckButton" to="Full/VBoxContainer/HBoxContainer/PublishBtn" method="set_visible"]

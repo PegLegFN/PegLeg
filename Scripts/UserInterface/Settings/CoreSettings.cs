@@ -4,6 +4,8 @@ public partial class CoreSettings : Control
 {
 	[Signal]
 	public delegate void IsMobileEventHandler(bool value);
+	[Signal]
+	public delegate void ShowMobileOptionsEventHandler(bool value);
 	[Export]
 	string bootScenePath = "res://Scenes/boot_scene.tscn";
 	[ExportGroup("Text")]
@@ -37,7 +39,8 @@ public partial class CoreSettings : Control
 
 	public override void _Ready()
 	{
-		EmitSignalIsMobile(OS.HasFeature("editor") || OS.HasFeature("mobile"));
+		EmitSignalIsMobile(OS.HasFeature("mobile"));
+		EmitSignalShowMobileOptions(OS.HasFeature("editor") || OS.HasFeature("mobile"));
 
 		bool liteActive = AppConfig.Get("core", "litemode", false);
 		liteLabel.Text = liteActive ? liteActiveText : liteInactiveText;
@@ -60,6 +63,13 @@ public partial class CoreSettings : Control
 	{
 		//using var _ = LoadingOverlay.CreateToken();
 		AppConfig.Set("core", "disable_mobile", !AppConfig.Get("core", "disable_mobile", true));
+		//await Helpers.WaitForFrames(10);
+		GetTree().ChangeSceneToFile(bootScenePath);
+	}
+	public void EnableShareMenu()
+	{
+		//using var _ = LoadingOverlay.CreateToken();
+		AppConfig.Set("core", "shareMenu", true);
 		//await Helpers.WaitForFrames(10);
 		GetTree().ChangeSceneToFile(bootScenePath);
 	}

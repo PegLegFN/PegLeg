@@ -31,21 +31,26 @@ public class PublisherProxy
 			publisher.Configure(config);
 	}
 
+	public event Action EnabledChanged;
 	public bool IsEnabled => AppConfig.Get("advanced", "publishing", false) && AppConfig.Get("publishing", internalName + "_enabled", false);
 
 	public async Task AttemptPublish(Func<string, PublisherContent?> platformContent)
 	{
-		if (!IsEnabled || platformContent is null)
-			return;
-		await Task.WhenAll(publishers.Select(p =>
-		{
-			var content = platformContent.Invoke(p.PlatformId);
-			if (content is null)
-				return Task.CompletedTask;
-			return p.AttemptPublish(content.Value);
-		}));
+		await AttemptPublish(async platform => platformContent(platform));
 	}
 
+	public async Task AttemptPublish(Func<string, Task<PublisherContent?>> platformContent)
+	{
+		if (!IsEnabled || platformContent is null)
+			return;
+		await Task.WhenAll(publishers.Select(async p =>
+		{
+			var content = await platformContent.Invoke(p.PlatformId);
+			if (content is null)
+				return;
+			await p.AttemptPublish(content.Value);
+		}));
+	}
 }
 
 public interface IPublisher

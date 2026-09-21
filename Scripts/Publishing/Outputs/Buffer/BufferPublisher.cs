@@ -1,13 +1,11 @@
 ﻿using Godot;
 using GraphQL;
-using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 public class BufferPublisher : IPublisher
@@ -33,25 +31,14 @@ public class BufferPublisher : IPublisher
 		string[] imgURLs = [];
 		if ((publisherContent.images?.Length ?? 0) > 0)
 		{
-			string imgbbSauce = AppConfig.Get("buffer_publish", "imgbbKey", "");
-			if (string.IsNullOrWhiteSpace(imgbbSauce))
-				imgbbSauce = "babd90038d568f4ec4d51d88351376b4";
-			var imgTasks = publisherContent.images.Select(img =>
-				WebHelpers.MakeRequest($"https://api.imgbb.com/1/upload?expiration=60&key={imgbbSauce}", HttpMethod.Post)
-				.BuildFormContent(f => f.AddImageContent("image", img))
-				.Send()
-			).ToArray();
-			await Task.WhenAll(imgTasks);
-			List<string> imageUrlList = [];
-			foreach (var responseTask in imgTasks)
+			//imgURLs = await ImgbbURLs(publisherContent.images);
+			imgURLs = await CloudinaryURLs(publisherContent.images);
+			if(imgURLs is null)
 			{
-				var response = await responseTask;
-				if (await response.CheckForError())
-					continue;
-				var urlData = await response.ReadJson<ImgBBResponse>();
-				imageUrlList.Add(urlData.data.url);
+				GD.Print("Buffer Images failed to upload");
+				return;
 			}
-			imgURLs = [.. imageUrlList];
+			//imgURLs = ["https://pbs.twimg.com/media/HSnkQcrXoAAyGzodhdh"];
 		}
 
 		if (imgURLs.Length == 0 && string.IsNullOrWhiteSpace(publisherContent.content))
@@ -61,6 +48,30 @@ public class BufferPublisher : IPublisher
 		await Task.WhenAll(channels.Select(c => AttemptPublishToChannel(key, c, publisherContent.content, imgURLs)));
 	}
 
+	static async Task<string[]> ImgbbURLs(Image[] images)
+	{
+		string imgbbSauce = AppConfig.Get("buffer_publish", "imgbbKey", "");
+		if (string.IsNullOrWhiteSpace(imgbbSauce))
+			imgbbSauce = "babd90038d568f4ec4d51d88351376b4";
+		var imgTasks = images.Select(img =>
+			WebHelpers.MakeRequest($"https://api.imgbb.com/1/upload?expiration=300&key={imgbbSauce}", HttpMethod.Post)
+			.BuildFormContent(f => f.AddImageContent("image", img))
+			.Send()
+		).ToArray();
+		await Task.WhenAll(imgTasks);
+		List<string> imageUrlList = [];
+		foreach (var responseTask in imgTasks)
+		{
+			var response = await responseTask;
+			if (await response.CheckForError())
+				return null;
+			var urlData = await response.ReadJson<ImgBBResponse>();
+			imageUrlList.Add(urlData.data.url);
+		}
+		await Helpers.WaitForTimer(1);
+		return [.. imageUrlList];
+	}
+
 	record struct ImgBBResponse
 	{
 		public Data data { get; init; }
@@ -68,6 +79,34 @@ public class BufferPublisher : IPublisher
 		{
 			public string url { get; init; }
 		}
+	}
+
+	static async Task<string[]> CloudinaryURLs(Image[] images)
+	{
+		var imgTasks = images.Select(img =>
+			WebHelpers.MakeRequest("https://api.cloudinary.com/v1_1/a1prkxd8/image/upload", HttpMethod.Post)
+			.BuildFormContent(f => f
+				.AddImageContent("file", img)
+				.AddStringContent("upload_preset", "publishable_image")
+			).Send()
+		).ToArray();
+		await Task.WhenAll(imgTasks);
+		List<string> imageUrlList = [];
+		foreach (var responseTask in imgTasks)
+		{
+			var response = await responseTask;
+			if (await response.CheckForError())
+				return null;
+			var urlData = await response.ReadJson<CloudinaryResponse>();
+			imageUrlList.Add(urlData.url);
+		}
+		await Helpers.WaitForTimer(1);
+		return [.. imageUrlList];
+	}
+
+	record struct CloudinaryResponse
+	{
+		public string url { get; init; }
 	}
 
 	async Task AttemptPublishToChannel(string key, string channelId, string content, string[] imageURLs)
@@ -106,9 +145,21 @@ public class BufferPublisher : IPublisher
 		};
 		try
 		{
-			var test = await GraphQLRequests.Buffer.SendMutationAsync<JsonObject>(orgsRequest);
-			if (test.Data["createPost"]["message"]?.ToString() is string errMessage)
-				GD.Print("Buffer Error: " + errMessage);
+			var mutation = await GraphQLRequests.Buffer.SendMutationAsync<JsonObject>(orgsRequest);
+			if (mutation.Errors is not null)
+			{
+				var log = $"Buffer Errors: [\n{mutation.Errors.Select(e => 
+					$"{e.Message} (\"{e.Path}\", [{e.Locations?.Select(l => 
+						$"(l:{l.Line},c:{l.Column})").JoinString()
+					}], [{e.Extensions.Select(kvp => 
+						$"{kvp.Key}:({kvp.Value})").JoinString()
+					}])").JoinString(",\n")
+				}\n]".FixNewlines();
+				GD.Print(log);
+			} else if (Bootstrap.IsEditor)
+			{
+				GD.Print("Buffer Response: " + mutation.Data.ToString().FixNewlines());
+			}
 		}
 		catch(GraphQLHttpRequestException reqEx)
 		{

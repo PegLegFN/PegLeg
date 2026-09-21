@@ -9,9 +9,13 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 	[Export]
 	RecycleListContainer itemList;
 	[Export]
+	Control newItemListNode;
+	[Export]
 	LineEdit searchBox;
 	[Export]
 	Control loadingIcon;
+
+	IListHandler newItemList;
 
 	static readonly string[] includedSources =
 	[
@@ -22,14 +26,19 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 	{
 		VisibilityChanged += GenerateCompendiumEntries;
 		searchBox.TextChanged += FilterItems;
-		itemList.SetProvider(this);
+		itemList?.SetProvider(this);
+		if (newItemListNode is IListHandler newListHandler)
+		{
+			newItemList = newListHandler;
+			newItemList.LinkListProvider(filteredEntries);
+		}
 		//itemList. += InspectItem;
 	}
 
 
 	bool generated = false;
 	List<GameItem> compendiumEntries = [];
-	List<GameItem> filteredEntries = [];
+	EntryList<GameItem> filteredEntries = [];
 	public GameItem GetRecycleElement(int index) => filteredEntries?[index];
 
 	public int GetRecycleElementCount() => filteredEntries?.Count ?? 0;
@@ -55,7 +64,8 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 		generated = true;
 		searchBox.Editable = false;
 		loadingIcon.Visible = true;
-		itemList.Visible = false;
+		itemList?.Visible = false;
+		newItemListNode?.Visible = false;
 
 		ConcurrentDictionary<string, GameItemTemplate> uniqueTemplates = new();
 		List<GameItem> orderedItems = null;
@@ -78,7 +88,11 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 					{item.SubType}
 					{item.SortingName}
 					""")
-				.Select(item => item.CreateInstance())
+				.Select(template => {
+					var item=template.CreateInstance();
+					item.SetRewardNotification();
+					return item;
+				})
 			];
 		});
 		compendiumEntries = orderedItems ?? [];
@@ -86,15 +100,21 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 		FilterItems("");
 		searchBox.Editable = true;
 		loadingIcon.Visible = false;
-		itemList.Visible = true;
+		itemList?.Visible = true;
+		newItemListNode?.Visible = true;
 	}
 
 	void FilterItems(string _)
 	{
 		var instructions = PLSearch.GenerateSearchInstructions(searchBox.Text);
-		filteredEntries = string.IsNullOrWhiteSpace(searchBox.Text) ? compendiumEntries : compendiumEntries.Where(item => PLSearch.EvaluateInstructions(instructions, item.RawData)).ToList();
+		filteredEntries.Clear();
+		filteredEntries.AddRange(string.IsNullOrWhiteSpace(searchBox.Text) ? 
+			compendiumEntries : 
+			compendiumEntries.Where(item => PLSearch.EvaluateInstructions(instructions, item.RawData))
+		);
 
 		//GD.Print("filteredEntries: " + filteredEntries.Count);
-		itemList.UpdateList(true);
+		itemList?.UpdateList(true);
+		newItemList?.UpdateList();
 	}
 }

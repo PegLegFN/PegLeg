@@ -15,6 +15,21 @@ public partial class ShellOpen : Node
 	string sourceNodeProp;
 	[Export]
 	string sourceNodeFormat;
+	[Export]
+	bool tryBind = true;
+	[Export]
+	bool bindInNodeMode = false;
+
+	public override void _Ready()
+	{
+		if (tryBind)
+		{
+			if (HasSignal("pressed"))
+			{
+				Connect("pressed", Callable.From(bindInNodeMode ? ShellOpenNode : ShellOpenDefault));
+			}
+		}
+	}
 
 
 	public void ShellOpenDefault() => ShellOpenURI(defaultURI, globalise, helperGlobalise);

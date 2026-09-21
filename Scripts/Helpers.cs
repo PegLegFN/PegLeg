@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -531,6 +532,26 @@ public static partial class Helpers
 		//    node.Disconnect(signalName, callable);
 		if (node.IsConnected(signalName, callable))
 			node.Disconnect(signalName, callable);
+	}
+
+	public static T GetMetaOrDefault<[MustBeVariant] T>(this Node node, string name)
+	{
+		if (!node.HasMeta(name))
+			return default;
+		if (node.GetMeta(name).As<T>() is not T realVal)
+			return default;
+		return realVal;
+	}
+
+	public static bool TryGetMeta<[MustBeVariant]T>(this Node node, string name, [MaybeNullWhen(false)] out T value)
+	{
+		value = default;
+		if (!node.HasMeta(name))
+			return false;
+		if (node.GetMeta(name).As<T>() is not T realVal)
+			return false;
+		value = realVal;
+		return true;
 	}
 
 	public static bool DevTextKeybindPressed(this InputEvent e, Key customKey = Key.D) =>

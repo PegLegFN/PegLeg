@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="1_4dqrj"]
 [ext_resource type="PackedScene" uid="uid://ckgomc13aefaq" path="res://Scenes/PegLegWatermark.tscn" id="2_h68g4"]
+[ext_resource type="Texture2D" uid="uid://cwxakaprkjova" path="res://Images/Wallpapers/STWShop.png" id="2_rymeg"]
 [ext_resource type="Script" uid="uid://ce73kldw4p5yw" path="res://Scripts/UserInterface/Dashboard/MissionRewardsController.cs" id="3_2noju"]
 [ext_resource type="PackedScene" uid="uid://cogh58dgygj4l" path="res://Scenes/MissionEntry/Rewards/specific_mission_reward_container.tscn" id="3_6jjmv"]
 [ext_resource type="PackedScene" uid="uid://dhpixv4oijehf" path="res://Scenes/MissionEntry/Rewards/specific_mission_reward_entry_shareable.tscn" id="4_6jjmv"]
@@ -35,13 +36,24 @@ offset_bottom = 914.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="MissionSummaryViewport" type="SubViewport" parent="." unique_id=424942682 node_paths=PackedStringArray("matchSize")]
+[node name="MissionSummaryViewport" type="SubViewport" parent="." unique_id=424942682 node_paths=PackedStringArray("matchSize", "opaqueBG")]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(1268, 950)
-render_target_update_mode = 4
+size = Vector2i(1402, 716)
 script = ExtResource("1_4dqrj")
+uniqueName = "missionSummary"
 matchSize = NodePath("PegLegWatermark")
+opaqueBG = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="MissionSummaryViewport" unique_id=1822757471]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_rymeg")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="PegLegWatermark" parent="MissionSummaryViewport" unique_id=1716002338 instance=ExtResource("2_h68g4")]
 offset_right = 701.0
@@ -274,9 +286,9 @@ ignoreLargeXPSetting = true
 
 [node name="Name" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="0" unique_id=796681065]
 text = "x5 Twine Peaks"
-horizontal_alignment = 1
 
 [node name="CheckButton" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer" parent_id_path=PackedInt32Array(1352265404, 1750868079) index="3" unique_id=1160045743]
+visible = false
 button_pressed = false
 
 [node name="CheckButton" parent="MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160/VBoxContainer/Header/HBoxContainer/CheckButton" index="1" unique_id=669145984]

@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using static AccountDisplayNames.External;
 
 public partial class MissionToDoListController : Control, IRecyclableElementProvider<MissionRewardPair>, IListProvider<MissionRewardPair>
 {
 
 	#region Static Stuff
+
+	const string liteListPath = "user://liteToDoList.json";
 
 	static DateTime lastKnownReset;
 	static List<MissionRewardDataPair> targetMissionRewardData = [];
@@ -82,23 +85,39 @@ public partial class MissionToDoListController : Control, IRecyclableElementProv
 			targetMissionRewards.Remove(pair);
 			targetMissionRewardData.RemoveAll(r => r.missionGUID == pair.mission.Guid && r.indexOfReward == idx);
 		}
-		return toRemoveArray.Length > 0;
+		var remainingIDs = targetMissionRewards.Select(r => r.mission.missionData.missionGuid).ToHashSet();
+		int missingIDs = targetMissionRewardData.RemoveAll(r => !remainingIDs.Contains(r.missionGUID));
+		return toRemoveArray.Length > 0 || missingIDs > 0;
 	}
 
 	static void SaveMissions()
 	{
-		GameAccount.ActiveAccount.SetLocalData("missionToDoList", JsonSerializer.SerializeToNode(targetMissionRewardData));
-		//TODO: save lite missions
+		if (GameAccount.ActiveAccount.isOwned)
+			GameAccount.ActiveAccount.SetLocalData("missionToDoList", JsonSerializer.SerializeToNode(targetMissionRewardData));
+		else
+		{
+			using var liteList = FileAccess.Open(liteListPath, FileAccess.ModeFlags.Write);
+			liteList.StoreString(JsonSerializer.Serialize(targetMissionRewardData));
+		}
 	}
 
 	static void LoadMissions()
 	{
 		//load and deserialise data list
-		var localData = GameAccount.ActiveAccount.GetLocalData("missionToDoList")?.AsArray() ?? [];
-		//TODO: load lite missions
+		targetMissionRewardData.Clear();
+		targetMissionRewards.Clear();
 		try
 		{
-			targetMissionRewardData = localData.Deserialize<List<MissionRewardDataPair>>();
+			if (GameAccount.ActiveAccount.isOwned)
+			{
+				var localData = GameAccount.ActiveAccount.GetLocalData("missionToDoList")?.AsArray() ?? [];
+				targetMissionRewardData = localData.Deserialize<List<MissionRewardDataPair>>();
+			}
+			else
+			{
+				using var liteList = FileAccess.Open(liteListPath, FileAccess.ModeFlags.Read);
+				targetMissionRewardData = JsonSerializer.Deserialize<List<MissionRewardDataPair>>(liteList.GetAsText());
+			}
 		}
 		catch (Exception ex)
 		{

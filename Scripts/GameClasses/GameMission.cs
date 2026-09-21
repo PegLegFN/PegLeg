@@ -70,6 +70,8 @@ public partial class GameMission
 	}
 
 	static SemaphoreSlim missionUpdateSemaphore = new(1);
+	public static TriggerInstance refreshTrigger = new("refreshMissions", TriggerRefresh);
+	static async void TriggerRefresh() => await UpdateMissions(null);
 
 	public static async Task UpdateMissions() => await UpdateMissions(null);
 

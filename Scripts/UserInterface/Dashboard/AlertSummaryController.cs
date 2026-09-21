@@ -18,7 +18,7 @@ public partial class AlertSummaryController : Control
 
 	public override void _Ready()
 	{
-		rewardRows = rewardRowParent.GetChildren().Select(c => new AlertRewardRow(c as Control)).ToArray();
+		rewardRows = [.. rewardRowParent.GetChildren().OfType<AlertRewardRow>()];
 		GameMission.OnMissionsUpdated += CountRewards;
 		GameMission.OnMissionsInvalidated += ClearRewards;
 		VisibilityChanged += CountRewards;
@@ -96,36 +96,14 @@ public partial class AlertSummaryController : Control
 				rewardRows[i].Visible = false;
 				continue;
 			}
-			rewardRows[i].SetValues(template, outcome);
+			rewardRows[i].SetTotals(template, outcome);
 		}
 		loadingIcon.Visible = false;
 	}
 
-	struct ZoneTotals
+	public record struct ZoneTotals(int S, int P, int C, int T, int V)
 	{
-		public int S;
-		public int P;
-		public int C;
-		public int T;
-		public int V;
-
-		public ZoneTotals()
-		{
-			S = 0;
-			P = 0;
-			C = 0;
-			T = 0;
-			V = 0;
-		}
-
-		public ZoneTotals(int s, int p, int c, int t, int v)
-		{
-			S = s;
-			P = p;
-			C = c;
-			T = t;
-			V = v;
-		}
+		public int Main => S + P + C + T;
 
 		public static ZoneTotals operator +(ZoneTotals left, ZoneTotals right)
 		{
@@ -138,7 +116,7 @@ public partial class AlertSummaryController : Control
 		}
 	}
 
-	struct AlertRewardRow
+	struct AlertRewardRowOld
 	{
 		Control row;
 		GameItemEntry itemEntry;
@@ -150,7 +128,7 @@ public partial class AlertSummaryController : Control
 		Label total;
 		Label ventures;
 
-		public AlertRewardRow(Control parent)
+		public AlertRewardRowOld(Control parent)
 		{
 			row = parent;
 			itemEntry = parent.GetNode<GameItemEntry>("%ItemEntry");

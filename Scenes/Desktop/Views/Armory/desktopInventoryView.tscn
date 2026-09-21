@@ -31,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://dulj7swgucc3q" path="res://Images/InterfaceIcons/SchematicIcon32.png" id="23_xj7y8"]
 [ext_resource type="Texture2D" uid="uid://hljvhk8gc1lw" path="res://Images/BanjoSuppliments/TypeIcons/T-Icon-Survivor-128.png" id="24_teqqu"]
 [ext_resource type="Texture2D" uid="uid://df1h55n2choqy" path="res://Images/InterfaceIcons/LockerIcons/T_UI_Empty_Pickaxe.png" id="25_novys"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="32_0ffrp"]
 [ext_resource type="Texture2D" uid="uid://7taj4xrecshe" path="res://Images/InterfaceIcons/T-Icon-ResearchPoint-128.png" id="32_hre2m"]
 [ext_resource type="Shader" uid="uid://scvs5j1r5xyp" path="res://Shaders/ResearchGlow.gdshader" id="32_xj7y8"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="33_teqqu"]
@@ -63,14 +64,14 @@ shader_parameter/skipSDF = false
 shader = ExtResource("32_xj7y8")
 shader_parameter/ControlSize = Vector2(375, 100)
 
-[node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("itemList", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel", "researchTokenArea", "researchTokenButton")]
+[node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("newItemListNode", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel", "researchTokenArea", "researchTokenButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ix0kh")
-itemList = NodePath("VBoxContainer/ScrollContainer")
+newItemListNode = NodePath("VBoxContainer/ScrollContainer2/MarginContainer/RecycleContainer")
 searchBox = NodePath("VBoxContainer/HBoxContainer/Search")
 targetUser = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/User")
 devAllPanel = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev")
@@ -718,6 +719,7 @@ size_flags_horizontal = 8
 text = "Test Hero"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=317467257 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
@@ -755,6 +757,30 @@ CompressSpacing = true
 
 [node name="Padding" type="Control" parent="VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=2070795]
 layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="VBoxContainer" unique_id=1934357777]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer2" unique_id=942366728]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 80
+
+[node name="RecycleContainer" type="Container" parent="VBoxContainer/ScrollContainer2/MarginContainer" unique_id=1670778527 node_paths=PackedStringArray("viewportParent")]
+custom_minimum_size = Vector2(610, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("32_0ffrp")
+viewportParent = NodePath("../..")
+recycleEntryScene = ExtResource("20_m3xe0")
+layoutMode = 2
+shift = Vector2(0.5, 0)
 
 [node name="SchematicTokenButtonArea" type="MarginContainer" parent="." unique_id=1411973582]
 z_index = 1

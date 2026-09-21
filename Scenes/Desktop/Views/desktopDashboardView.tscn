@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://bsvkl56j1kp7" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Share_128.png" id="13_lhdlo"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="14_8j6oq"]
 [ext_resource type="Script" uid="uid://rx1wks4gx4sj" path="res://Scripts/SubViewportScreenshotter.cs" id="15_21lf2"]
+[ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="15_mhif0"]
 [ext_resource type="Shader" uid="uid://dwjqthwpe1fq1" path="res://Shaders/InventoryItem.gdshader" id="16_k3a2q"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="17_kuncf"]
 [ext_resource type="PackedScene" uid="uid://bf0c8n5okf1lh" path="res://Scenes/SharedImageGenerators/shareable_power_hour.tscn" id="19_ury42"]
@@ -85,9 +86,6 @@ layout_mode = 2
 [node name="NotableRewards" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards" unique_id=936518577 instance=ExtResource("1_k3a2q")]
 layout_mode = 2
 
-[node name="ShareMissions" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer" parent_id_path=PackedInt32Array(936518577, 811683499) index="3" unique_id=667966702]
-visible = true
-
 [node name="ToDoList" parent="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards" unique_id=1403873334 instance=ExtResource("2_21lf2")]
 layout_mode = 2
 
@@ -104,10 +102,6 @@ layout_mode = 2
 [node name="PowerHourAlert" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=878248880 instance=ExtResource("6_ury42")]
 layout_mode = 2
 
-[node name="CheckButton" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" parent_id_path=PackedInt32Array(878248880, 1648724221) index="0" unique_id=1639387010]
-disabled = false
-disabled = false
-
 [node name="160_Llamas" type="HBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=2107738049]
 layout_mode = 2
 alignment = 1
@@ -120,9 +114,6 @@ size_flags_vertical = 0
 [node name="DashboardLlamaShop" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/160_Llamas" unique_id=1829206076 instance=ExtResource("9_db4i7")]
 layout_mode = 2
 size_flags_vertical = 0
-
-[node name="ShareBtn" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/160_Llamas/DashboardLlamaShop/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1829206076, 1192162583) index="3" unique_id=2021237232]
-visible = true
 
 [node name="Shops" type="FoldableContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=475068518]
 layout_mode = 2
@@ -279,7 +270,6 @@ horizontal_alignment = 1
 
 [node name="RoyaleXP" type="FoldableContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=54417116]
 layout_mode = 2
-folded = true
 title = "Seasonal Pass XP"
 title_alignment = 1
 script = ExtResource("7_8j6oq")
@@ -287,16 +277,12 @@ section = "dashboard"
 key = "xp"
 
 [node name="DashboardXPProgress" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP" unique_id=1187567345 instance=ExtResource("10_gx2q3")]
-visible = false
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(471.5, 0)
 layout_mode = 2
 
 [node name="HBoxContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer" parent_id_path=PackedInt32Array(1187567345, 1814028007) index="0" unique_id=1985834280]
 visible = false
-
-[node name="ShareBtn" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/HBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1187567345, 1938860013) index="0" unique_id=903443066]
-visible = true
 
 [node name="MarginContainer" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent" parent_id_path=PackedInt32Array(1187567345, 1521222726) index="2" unique_id=1665864253]
 size_flags_vertical = 1
@@ -307,54 +293,29 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 alignment = 1
 
-[node name="ShareBtn" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" unique_id=1568639179]
-custom_minimum_size = Vector2(26, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 1
-theme_type_variation = &"LargeButton"
-
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/ShareBtn" unique_id=937304247]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("13_lhdlo")
-expand_mode = 1
-
 [node name="RefreshBtn" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" unique_id=61222854]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 1
 theme_type_variation = &"LargeButton"
+icon = ExtResource("14_8j6oq")
+expand_icon = true
 
-[node name="TextureRect" type="TextureRect" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/RefreshBtn" unique_id=1335200743]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("14_8j6oq")
-expand_mode = 1
+[node name="ShareBtn" type="Button" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer" unique_id=1568639179]
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_type_variation = &"LargeButton"
+icon = ExtResource("13_lhdlo")
+expand_icon = true
+script = ExtResource("15_mhif0")
+name = "xpSummary_copy"
 
 [node name="DashboardAlertSummary" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer" unique_id=836124398 instance=ExtResource("6_xee71")]
 custom_minimum_size = Vector2(471.5, 420)
 layout_mode = 2
-
-[node name="ShareBtn" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2" parent_id_path=PackedInt32Array(836124398, 741974284) index="1" unique_id=616104917]
-visible = true
 
 [node name="Container" type="Container" parent="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer" unique_id=627290535]
 visible = false
@@ -416,14 +377,11 @@ layout_mode = 2
 [node name="AlertSummaryViewport" parent="ShareableAlertSummary" index="0" unique_id=1497359965]
 render_target_update_mode = 0
 
-[node name="ItemEntry" parent="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(683641621, 88080159, 604010644) index="0" unique_id=216241938]
-forceShowVBucks = true
-
 [node name="ShareableLlamaSummary" parent="." unique_id=1235900724 instance=ExtResource("53_pll84")]
 visible = false
 layout_mode = 2
 
-[node name="LlamaSummaryViewport" parent="ShareableLlamaSummary" index="0"]
+[node name="LlamaSummaryViewport" parent="ShareableLlamaSummary" index="0" unique_id=1878830695]
 render_target_update_mode = 0
 
 [node name="ShareableXpSummary" parent="." unique_id=1518912809 instance=ExtResource("54_6ftts")]
@@ -464,13 +422,7 @@ expand_mode = 1
 script = ExtResource("17_kuncf")
 syncControlSize = true
 
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer/ShareMissions" to="ShareableMissionSummary/MissionSummaryViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MissionRewards/NotableRewards/VBoxContainer3/HBoxContainer/PublishMissions" to="ShareableMissionSummary/SummaryDispatcher" method="ForceExecuteWebhook"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer/ShareBtn" to="ShareablePowerHour/PowerHourViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/PowerHourAlert/Full/VBoxContainer/HBoxContainer/PublishBtn" to="ShareablePowerHour/PowerHourDispatcher" method="ForceExecuteHeadsup"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/160_Llamas/DashboardLlamaShop/VBoxContainer/HBoxContainer/ShareBtn" to="ShareableLlamaSummary/LlamaSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/HBoxContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
-[connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/ShareBtn" to="ShareableXpSummary/XpSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/RoyaleXP/DashboardXPProgress/VBoxContainer/Body/XPContent/MarginContainer/HBoxContainer/RefreshBtn" to="ShareableXpSummary/XpSummaryViewport/PegLegWatermark/DashboardXPProgress" method="UpdateProfiles"]
 [connection signal="pressed" from="ScrollContainer/HSplitContainer/BeastDashboard/MarginContainer/VBoxContainer/DashboardAlertSummary/VBoxContainer/MarginContainer2/ShareBtn" to="ShareableAlertSummary/AlertSummaryViewport" method="CopyScreenshot"]
 [connection signal="pressed" from="Button" to="Button/SubViewport" method="CopyScreenshot"]
@@ -495,7 +447,8 @@ syncControlSize = true
 [editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/S160"]
 [editable path="ShareableMissionSummary/MissionSummaryViewport/PegLegWatermark/HBoxContainer/VBoxContainer2/160"]
 [editable path="ShareableAlertSummary"]
-[editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/Alert Summary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]
+[editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/DashboardAlertSummary"]
+[editable path="ShareableAlertSummary/AlertSummaryViewport/PegLegWatermark/DashboardAlertSummary/VBoxContainer/MarginContainer/VBoxContainer/DashboardAlertSummary"]
 [editable path="ShareableLlamaSummary"]
 [editable path="ShareableXpSummary"]
 [editable path="ShareableXpSummary/XpSummaryViewport/PegLegWatermark/DashboardXPProgress"]
