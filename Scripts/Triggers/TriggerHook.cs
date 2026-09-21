@@ -125,8 +125,7 @@ public class TriggerInstance : IDisposable
 	void TriggerInst(string[] context)
 	{
 		OnTriggered?.Invoke();
-		if (context is not null)
-			OnTriggeredCtx?.Invoke(context);
+		OnTriggeredCtx?.Invoke(context);
 	}
 
 	public event Action OnTriggered;
