@@ -73,6 +73,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			newItemList = newListHandler;
 			newItemList.LinkListProvider(currentItems);
 		}
+		currentItems.OnItemSelectedEvt += OnListItemSelected;
 
 		searchBox.TextChanged += _ => LightweithtApplyFilters();
 		searchBox.TextSubmitted += _ => ApplyFilters();
@@ -498,6 +499,10 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		newItemList?.UpdateList();
 	}
 
+	public void OnListItemSelected(int index, GameItem item, string context)
+	{
+		GameItemViewer.Instance.ShowItem(item);
+	}
 	public void OnElementSelected(int index, string context)
 	{
 		GameItemViewer.Instance.ShowItem(currentItems[index]);

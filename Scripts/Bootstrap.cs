@@ -99,6 +99,7 @@ public partial class Bootstrap : Node
 	public static readonly FrozenSet<string> cmdLineArgs = OS.GetCmdlineArgs().ToFrozenSet();
 	public static bool StartMinimised { get; private set; } = cmdLineArgs.Contains("--start-minimised");
 	public static bool IsEditor { get; private set; } = OS.HasFeature("editor");
+	public static bool UsingMobileUI { get; private set; }
 
 	static bool hasBooted = false;
 	static bool isFirstBoot = false;
@@ -252,127 +253,6 @@ public partial class Bootstrap : Node
 		}
 	}
 
-	//async void InitialiseTest() => Initialise();
-
-	//async void InitialiseFake()
-	//{
-	//	liteContent.Visible = false;
-	//	loadingContent.Visible = false;
-
-	//	if (!AppConfig.TryGet("core", "litemode", out bool lite))
-	//	{
-	//		liteContent.Visible = true;
-	//		GD.Print("Asking for Lite Mode");
-	//		return;
-	//	}
-
-	//	loadingContent.Visible = true;
-
-	//	GD.Print("Initialise2");
-	//	await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, OnPackageProgress);
-	//	void OnPackageProgress(string text, float prog)
-	//	{
-	//		progressLabel.Text = text;
-	//		downloadParticles.Emitting = prog > 0 && prog < 1;
-	//		progressBar.Indeterminate = prog < 0;
-	//		progressBar.Visible = prog <= 1;
-	//		progressBar.Value = prog;
-	//	}
-	//	GD.Print("Initialise3");
-	//	downloadParticles.Emitting = false;
-
-	//	await Helpers.WaitForFrame();
-	//	bool showCachingProgress = false;
-	//	var preloadTexturesTask = PegLegResourceManager.PreloadTemplateTextures(OnTextureProgress);
-	//	void OnTextureProgress(string _, float prog)
-	//	{
-	//		if (!showCachingProgress)
-	//			return;
-	//		progressBar.Value = prog;
-	//	}
-
-	//	if (lite || (OS.HasFeature("editor") && testingScene is not null && !testingRequiresAccount))
-	//	{
-	//		GameAccount.ClearActiveAccount();
-
-	//		progressBar.Visible = true;
-	//		progressBar.Indeterminate = true;
-	//		progressLabel.Text = "Fetching missions";
-	//		await GameMission.UpdateMissions();
-
-	//		if (preloadTexturesTask is not null)
-	//		{
-	//			progressBar.Indeterminate = false;
-	//			progressBar.Visible = true;
-	//			progressLabel.Text = "Caching textures";
-	//			showCachingProgress = true;
-	//			await preloadTexturesTask;
-	//		}
-	//		LoadSceneWithPrefs();
-	//		return;
-	//	}
-
-	//	progressBar.Indeterminate = true;
-	//	progressBar.Visible = true;
-	//	progressBar.Value = 0;
-
-	//	bool hasAccount = false;
-	//	var lastUsedId = AppConfig.Get<string>("account", "lastUsed");
-	//	if (lastUsedId is not null)
-	//	{
-	//		GD.Print("last: " + lastUsedId);
-	//		var lastUsedAccount = GameAccount.GetOrCreateAccount(lastUsedId);
-	//		hasAccount = await lastUsedAccount.SetAsActiveAccount(p => progressLabel.Text = p);
-	//		GD.Print("hasAccount: " + hasAccount);
-	//	}
-
-	//	if (!hasAccount)
-	//	{
-	//		foreach (var a in GameAccount.OwnedAccounts)
-	//		{
-	//			progressLabel.Text = "Login Failed\nWill try another account";
-	//			progressBar.Indeterminate = false;
-	//			await Helpers.WaitForTimer(1.5, t => progressBar.Value = t / 1.5);
-	//			progressBar.Indeterminate = true;
-	//			if (!await a.SetAsActiveAccount(p => progressLabel.Text = p))
-	//				continue;
-	//			hasAccount = true;
-	//			break;
-	//		}
-	//		if (!hasAccount && GameAccount.OwnedAccounts.Length > 0)
-	//		{
-	//			progressLabel.Text = "Login Failed\nAll accounts attempted";
-	//			progressBar.Indeterminate = false;
-	//			await Helpers.WaitForTimer(1.5, t => progressBar.Value = t / 1.5);
-	//		}
-	//	}
-
-	//	if (GameAccount.ActiveAccount.isAuthed)
-	//	{
-	//		progressBar.Visible = true;
-	//		progressBar.Indeterminate = true;
-	//		progressLabel.Text = "Fetching missions";
-	//		await GameMission.UpdateMissions();
-	//		progressLabel.Text = "Fetching catalog";
-	//		await GameStorefront.UpdateCatalog();
-	//		progressLabel.Text = "Updating XRay Llamas";
-	//		await GameAccount.ActiveAccount.GenerateXRayLlamaResults();
-	//		progressLabel.Text = "Updating quests";
-	//		await GameAccount.ActiveAccount.ClientQuestLoginCampaign();
-	//		await GameAccount.ActiveAccount.ClientQuestLoginAthena();
-	//	}
-
-	//	if (preloadTexturesTask is not null)
-	//	{
-	//		progressBar.Indeterminate = false;
-	//		progressBar.Visible = true;
-	//		progressLabel.Text = "Caching textures";
-	//		showCachingProgress = true;
-	//		await preloadTexturesTask;
-	//	}
-	//	LoadSceneWithPrefs();
-	//}
-
 	async void Initialise()
 	{
 		liteContent.Visible = false;
@@ -407,17 +287,17 @@ public partial class Bootstrap : Node
 			//progressBar.Visible = true;
 			//await CosmoRequests.LoadConfigOverride();
 
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_character_hammervice", "store_image", [0], "2048x2048"));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "preview_image"));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
-			//PrintCosmo(CosmoRequests.GetItemPreview("AthenaCharacter:character_glamclaws"));
-			//PrintCosmo(CosmoRequests.GetItemPreview("AthenaCharacter:character_loosecreep"));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image"));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image", [1,0]));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "locker_preview_image", [1, 0]));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_817_m_dirtydocks", "preview_image", [1]));
-			//PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "store_image"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_character_hammervice", "store_image", [0], "2048x2048"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "preview_image"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
+			PrintCosmo(CosmoRequests.GetItemPreview("AthenaCharacter:character_glamclaws"));
+			PrintCosmo(CosmoRequests.GetItemPreview("AthenaCharacter:character_loosecreep"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image"));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image", [1, 0]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "locker_preview_image", [1, 0]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_817_m_dirtydocks", "preview_image", [1]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "store_image"));
 
 			//PrintDistinctIconCount("Hero", "Defender");
 			//PrintDistinctIconCount("Schematic", "Weapon", "Trap");
@@ -545,11 +425,14 @@ public partial class Bootstrap : Node
 		await Helpers.WaitForFrame();
 
 		bool mobileMode = OS.HasFeature("editor") || OS.HasFeature("mobile");
+		if (OS.HasFeature("editor") && !AppConfig.TryGet("core", "disable_mobile", out bool _))
+			AppConfig.Set("core", "disable_mobile", true);
 
 		Vector2I targetSize = mobileMode ? mobileSize : windowSize;
 		PackedScene targetScene = null;
 		if (mobileMode && !AppConfig.Get("core", "disable_mobile", false))
 		{
+			UsingMobileUI = true;
 			if (lite)
 				targetScene = mobileLiteInterface;
 			else if (!GameAccount.ActiveAccount.isOwned)
@@ -559,6 +442,7 @@ public partial class Bootstrap : Node
 		}
 		else
 		{
+			UsingMobileUI = false;
 			if (!OS.HasFeature("mobile"))
 				targetSize = windowSize;
 			if (lite)

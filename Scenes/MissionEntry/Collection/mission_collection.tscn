@@ -63,7 +63,6 @@ texture = ExtResource("2_ma4gr")
 expand_mode = 1
 
 [node name="AddToDoBtn" type="Button" parent="VBoxContainer/Header/HBoxContainer" unique_id=356092187]
-visible = false
 custom_minimum_size = Vector2(26, 0)
 layout_mode = 2
 tooltip_text = "Add all visible rewards to To-Do List"
@@ -140,4 +139,5 @@ color = Color(1, 1, 1, 0)
 
 [connection signal="NameChanged" from="." to="VBoxContainer/Header/HBoxContainer/Name" method="set_text"]
 [connection signal="pressed" from="VBoxContainer/Header/HBoxContainer/SearchBtn" to="." method="GoToSearch"]
+[connection signal="pressed" from="VBoxContainer/Header/HBoxContainer/AddToDoBtn" to="." method="BulkAddToDoList"]
 [connection signal="toggled" from="VBoxContainer/Header/HBoxContainer/CheckButton/CheckButton" to="VBoxContainer/Header/HBoxContainer/CheckButton" method="set_pressed"]

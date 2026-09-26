@@ -14,7 +14,7 @@ public partial class NewRecycleListTest : Node
 		missionList.OnItemSelectedEvt += OnMissionSelected;
 	}
 
-	private void OnMissionSelected(GameMission mission, string context)
+	private void OnMissionSelected(int index, GameMission mission, string context)
 	{
 		GD.Print("Selected: " + mission.DisplayName);
 	}

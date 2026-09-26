@@ -44,7 +44,7 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	PLSearch.Instruction[] itemSearchInstructions = [];
 	IList<MissionRewardSet> IListProvider<MissionRewardSet>.List => rewardSets;
 
-	public void OnItemSelected(MissionRewardSet rewardSet, string context)
+	public void SelectItem(MissionRewardSet rewardSet, string context)
 	{
 		MissionViewer.ShowMission(rewardSet.mission);
 	}
@@ -188,7 +188,10 @@ public partial class MissionCollection : Control, IMissionHighlightProvider, IRe
 	public void FilterMissions()
 	{
 		if (!missionsDirty || !CtrlParent.IsVisibleInTree())
+		{
+			bulkTodoBtn?.Disabled = rewardSets.All(s => s.AllToDo);
 			return;
+		}
 
 		missionsDirty = false;
 

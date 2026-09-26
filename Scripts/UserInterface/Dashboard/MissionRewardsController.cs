@@ -367,8 +367,8 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	{
 		return pairs
 			//.Reverse()
-			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
-			.ThenByDescending(r => r.mission.PowerLevel)
+			//.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+			.OrderByDescending(r => r.mission.PowerLevel)
 			.ThenByDescending(r => r.mission.IsFourPlayer)
 			.ThenByDescending(r => r.mission.TheaterIdx)
 			.ThenByDescending(r => r.item.sortingTemplate.RarityLevel)
@@ -382,13 +382,15 @@ public partial class MissionRewardsController : Control, IRecyclableElementProvi
 	{
 		return pairs
 			//.Reverse()
-			.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
+			//.OrderBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
 			//.ThenByDescending(r => r.item.sortingTemplate.VBucksOrXRayTickets)
-			.ThenByDescending(r => r.mission.TheaterIdx)
+			.OrderByDescending(r => r.mission.TheaterIdx)
+			.ThenBy(r => r.item.sortingTemplate?.Type == "AccountResource" && !r.item.sortingTemplate.VBucksOrXRayTickets)
 			.ThenBy(r => r.mission.PowerLevel)
 			.ThenBy(r => r.mission.IsFourPlayer)
-			.ThenBy(r => r.item.sortingTemplate.RarityLevel)
 			.ThenByDescending(r => OrderByMissionNameDB(r.mission.missionGenerator), StringComparer.InvariantCultureIgnoreCase)
+			.ThenBy(r => r.mission.Guid)
+			.ThenBy(r => r.item.zcpEquivelent is null ? r.item.sortingTemplate.RarityLevel : 0)
 			//.ThenBy(r => r.mission.Guid)
 			//.Reverse().OrderBy(_=>true)
 			;

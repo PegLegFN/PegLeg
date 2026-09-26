@@ -320,11 +320,12 @@ public class GameProfile
 			if (operation == "QueryProfile" && (DateTime.UtcNow - lastProfileOperationTime).TotalSeconds < 1)
 				return [];
 
+			//credit to _.fizz_ for pointing out that adding a / at the end can work around the block that epic has on public profile requests
 			var opResponse = await FnWebAddresses.FortGame
 				.MakeRequest(
 					"fortnite/api/game/v2/profile/" +
 					$"{account.accountId}/{(account.isOwned ? "client" : "public")}/" +
-					$"{operation}?profileId={profileId}&rvn={rvn}",
+					$"{operation}/?profileId={profileId}&rvn={rvn}{(operation == "QueryPublicProfile" ? "&sorry-epic=but-this-is-a-skill-issue" : "")}",
 					HttpMethod.Post
 				)
 				.SetJsonContent(content)

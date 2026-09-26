@@ -26,7 +26,7 @@ public interface IListEntry<T> : IListEntry
 	}
 
 	void SelectEntry(string context = "") =>
-		CurrentListProvider?.OnItemSelected(CurrentIndexTarget, context);
+		CurrentListProvider?.SelectItem(CurrentIndexTarget, context);
 
 	void IListEntry.SetTargetListIndex(int index, bool force)
 	{
@@ -50,25 +50,20 @@ public interface IListEntry<T> : IListEntry
 
 public class EntryList<T> : List<T>, IListProvider<T>
 {
-	public delegate void IndexSelected(int index, string context);
-	public delegate void ItemSelected(T item, string context);
+	public delegate void ItemSelected(int index, T item, string context);
 
-	public event IndexSelected OnIndexSelectedEvt;
 	public event ItemSelected OnItemSelectedEvt;
 
 	public IList<T> List => this;
 
-	void IListProvider.OnItemSelected(int index, string context)
-	{
-		OnIndexSelectedEvt?.Invoke(index, context);
-		OnItemSelectedEvt?.Invoke(this[index], context);
-	}
+	void IListProvider<T>.SelectItem(int index, T item, string context) => 
+		OnItemSelectedEvt?.Invoke(index, item, context);
 }
 
 public interface IListProvider
 {
 	public int ListItemCount { get; }
-	public void OnItemSelected(int index, string context = "") { }
+	public void SelectItem(int index, string context = "") { }
 }
 
 public interface IListProvider<T> : IListProvider
@@ -76,9 +71,9 @@ public interface IListProvider<T> : IListProvider
 	public IList<T> List { get; }
 	int IListProvider.ListItemCount => List.Count;
 
-	void IListProvider.OnItemSelected(int index, string context) =>
-		OnItemSelected(List[index], context);
-	public void OnItemSelected(T item, string context) { }
+	void IListProvider.SelectItem(int index, string context) =>
+		SelectItem(index, List[index], context);
+	public void SelectItem(int index, T item, string context) { }
 }
 
 public interface IListHandler

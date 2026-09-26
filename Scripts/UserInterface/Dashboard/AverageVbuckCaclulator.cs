@@ -55,9 +55,8 @@ public partial class AverageVbuckCaclulator : Control
 		var today = DateTime.UtcNow.Date;
 		weekAverage.Text = weekText.Replace("{x}", CalcAverage(today.AddDays(-6)).ToString());
 		monthAverage.Text = monthText.Replace("{x}", CalcAverage(today.AddDays(-29)).ToString());
-		var eventRefresh = RefreshTimerController.GetLastRefreshTime(RefreshTimeType.Event);
-		GD.Print("LastEvent: " + eventRefresh);
-		seasonAverage.Text = seasonText.Replace("{x}", CalcAverage(eventRefresh).ToString());
+		Timeline.GetCurrentSeason(out var seasonStart);
+		seasonAverage.Text = seasonText.Replace("{x}", CalcAverage(seasonStart).ToString());
 	}
 
 	int CalcAverage(DateTime startDate)
@@ -72,8 +71,7 @@ public partial class AverageVbuckCaclulator : Control
 				vBucks += archive.Missions
 					.SelectMany(m => m.alertRewardItems)
 					.Where(item => item.template.VBucksOrXRayTickets)
-					.Select(i => i.quantity)
-					.Sum();
+					.Sum(i => i.quantity);
 			else
 				totalDays--;
 		}

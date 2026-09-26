@@ -709,9 +709,11 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	public void PerformRecycleSelection() => PerformRecycleSelection("");
 	public virtual void PerformRecycleSelection(string ctx)
 	{
-		if (itemProvider is null)
+		var listProvider = ListEntry.CurrentListProvider;
+		if (itemProvider is null && listProvider is null)
 			return;
-		itemProvider.OnElementSelected(recycleIndex, ctx);
+		itemProvider?.OnElementSelected(recycleIndex, ctx);
+		ListEntry.SelectEntry(ctx);
 		UpdateSelectionVisuals();
 	}
 
@@ -731,7 +733,17 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		EmitSignalSelectionQuantityChanged(quantity > 0 ? quantity.ToString() : "");
 	}
 
+	IListEntry<GameItem> ListEntry => this;
 	int IListEntry<GameItem>.CurrentIndexTarget { get; set; }
-	IListProvider<GameItem> IListEntry<GameItem>.CurrentListProvider { get; set; }
+	IListProvider<GameItem> IListEntry<GameItem>.CurrentListProvider
+	{
+		get => field;
+		set
+		{
+			if (value is ISelectableElementProvider<GameItem> selector)
+				this.selector = selector;
+			field = value;
+		}
+	}
 	public void SetListEntryValue(GameItem newValue) => SetItem(newValue);
 }

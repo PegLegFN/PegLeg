@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cyea6hwd3vtxl"]
+[gd_scene format=3 uid="uid://cyea6hwd3vtxl"]
 
 [ext_resource type="Script" uid="uid://chydnr6s8mjyl" path="res://Scripts/UserInterface/Extra/MissionAnalytics.cs" id="1_rkaj1"]
 [ext_resource type="PackedScene" uid="uid://ca32sei0g7jq5" path="res://Scenes/Desktop/Views/Extra/missionAnalyticsDataPoint.tscn" id="2_i4rvt"]
 
-[node name="Mission Analytics" type="MarginContainer" node_paths=PackedStringArray("missionFilter", "itemFilter", "sampleItems", "fromDateText", "toDateText", "dataEntryParent", "totalLabel", "averageLabel")]
+[node name="Mission Analytics" type="MarginContainer" unique_id=980032145 node_paths=PackedStringArray("missionFilter", "itemFilter", "sampleItems", "fromDateText", "toDateText", "dataEntryParent", "totalLabel", "averageLabel", "downloadMissing")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,97 +12,110 @@ grow_vertical = 2
 script = ExtResource("1_rkaj1")
 missionFilter = NodePath("VBoxContainer/HBoxContainer/LineEdit")
 itemFilter = NodePath("VBoxContainer/HBoxContainer/LineEdit2")
-sampleItems = NodePath("VBoxContainer/HBoxContainer2/CheckButton")
+sampleItems = NodePath("VBoxContainer/HBoxContainer/CheckButton")
 fromDateText = NodePath("VBoxContainer/HBoxContainer2/LineEdit3")
 toDateText = NodePath("VBoxContainer/HBoxContainer2/LineEdit4")
 dataEntryScene = ExtResource("2_i4rvt")
 dataEntryParent = NodePath("VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer")
 totalLabel = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Label")
 averageLabel = NodePath("VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Label2")
+downloadMissing = NodePath("VBoxContainer/HBoxContainer2/Button2")
 metadata/_tab_index = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=646867801]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1062034686]
 layout_mode = 2
 alignment = 1
 
-[node name="LineEdit3" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+[node name="LinkButton" type="LinkButton" parent="VBoxContainer/HBoxContainer2" unique_id=2089804433]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Archers Archive"
+uri = "https://f.lycan.rocks/fortnite/stw/daily_archive/"
+
+[node name="LineEdit3" type="LineEdit" parent="VBoxContainer/HBoxContainer2" unique_id=1405539109]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 text = "2026-1-22"
 placeholder_text = "From Date (yyyy-mm-dd)"
 
-[node name="LineEdit4" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+[node name="LineEdit4" type="LineEdit" parent="VBoxContainer/HBoxContainer2" unique_id=911825751]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 placeholder_text = "To Date (yyyy-mm-dd)"
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2"]
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1636756304]
 layout_mode = 2
 text = "Set Time Range"
 
-[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2"]
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1206946569]
 layout_mode = 2
-button_pressed = true
-text = "Sample Items"
+disabled = true
+text = "Download Missing Days"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=710664543]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1802702440]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Mission Filter"
 
-[node name="LineEdit2" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="LineEdit2" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1464251991]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 text = "V-Buck"
 placeholder_text = "Item Filter"
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer" unique_id=1422625888]
+layout_mode = 2
+button_pressed = true
+text = "Sample Items"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1862175085]
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"Panel5PadB"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=347360605]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer" unique_id=1164593872]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1836379916]
 layout_mode = 2
 text = "Total: 999"
 
-[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=2076565086]
 layout_mode = 2
 text = "Average: 999/day"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer" unique_id=1182187813]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 4
 vertical_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer" unique_id=397129368]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
 theme_override_constants/margin_right = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1070106463]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=63388118]
 layout_mode = 2
 size_flags_vertical = 3
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Button" to="." method="UpdateTimeRange"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/Button2" to="." method="PromptDownload"]

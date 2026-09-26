@@ -164,6 +164,9 @@ public partial class SimpleItemSelector : GameItemSelectorBase<SimpleItemSelecto
 		EmitSignalSkipButtonChanged(CurrentConfig.skipText);
 		EmitSignalAutoselectChanged(CurrentConfig.autoselectButtonTex);
 
+		if (Bootstrap.UsingMobileUI)
+			CurrentConfig.smallItems = true;
+
 		container.Visible = !CurrentConfig.smallItems;
 		smallContainer.Visible = CurrentConfig.smallItems;
 		activeContainer = CurrentConfig.smallItems ? smallContainer : container;

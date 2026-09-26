@@ -45,4 +45,5 @@ class ApiWebAddresses
 	public static readonly Uri fnDashApiCdn = new("https://cdn.fortnite-api.com");
 	public static readonly Uri fnDotApi = new("https://api.fortniteapi.com/");
 	public static readonly Uri pegLegLiteBucket = new("https://litedata.peglegfn.com/");
+	public static readonly Uri lycanRocks = new("https://f.lycan.rocks");
 }

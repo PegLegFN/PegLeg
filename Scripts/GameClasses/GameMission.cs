@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -13,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static GameItem;
+using static GameMission;
 
 public partial class GameMission
 {
@@ -286,7 +288,6 @@ public partial class GameMission
 
 	static JsonSerializerOptions archiveSerialisation = new()
 	{
-		IncludeFields = true,
 		WriteIndented = true,
 		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 	};
@@ -326,21 +327,8 @@ public partial class GameMission
 		archiveName = null;
 		archivePath = null;
 
-		var archiveDirPath = AppConfig.Get("mission_archive", "target_folder", "user://mission_archive/");
-		if (string.IsNullOrWhiteSpace(archiveDirPath))
-			archiveDirPath = "user://mission_archive/";
-		if (!DirAccess.DirExistsAbsolute(archiveDirPath))
-		{
-			try
-			{
-				DirAccess.MakeDirAbsolute(archiveDirPath);
-			}
-			catch
-			{
-				GD.Print($"Failed to create archive directory \"{archiveDirPath}\"");
-				return false;
-			}
-		}
+		if (!GetOrCreateArchiveDir(out var archiveDirPath))
+			return false;
 
 		if (!missions.Any(m => m.DisplayName is not null))
 		{
@@ -379,24 +367,60 @@ public partial class GameMission
 			});
 		}
 
-		ArchiveData archiveData = new()
-		{
-			expiresUTC = resetTime,
-			expiresEST = resetTime.AddHours(-5),
-			theaters = [.. compactedTheaters]
-		};
-
+		var estResetTime = resetTime.AddHours(-5);
 		try
 		{
 			TimeZoneInfo easternTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-			//archiveData.beganEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.beganUTC, easternTimeZone);
-			archiveData.expiresEST = TimeZoneInfo.ConvertTimeFromUtc(archiveData.expiresUTC, easternTimeZone);
+			estResetTime = TimeZoneInfo.ConvertTimeFromUtc(resetTime, easternTimeZone);
 		}
 		catch
 		{
-			GD.PushWarning("EST Time Conversion failed, mission archive times will not account for EST Daylight Savings");
+			GD.PushWarning("EST Time Zone not found, Mission Archive EST Time may be inaccurate");
 		}
 
+
+		ArchiveData archiveData = new()
+		{
+			expiresUTC = resetTime,
+			expiresEST = estResetTime,
+			theaters = [.. compactedTheaters]
+		};
+
+		return SaveArchive(archiveData, archiveDirPath, out archiveName, out archivePath);
+	}
+
+	static bool GetOrCreateArchiveDir(out string archiveDirPath)
+	{
+		archiveDirPath = AppConfig.Get("mission_archive", "target_folder", "user://mission_archive/");
+		if (string.IsNullOrWhiteSpace(archiveDirPath))
+			archiveDirPath = "user://mission_archive/";
+		if (DirAccess.DirExistsAbsolute(archiveDirPath))
+			return true;
+		try
+		{
+			DirAccess.MakeDirAbsolute(archiveDirPath);
+		}
+		catch
+		{
+			GD.Print($"Failed to create archive directory \"{archiveDirPath}\"");
+			return false;
+		}
+		return true;
+	}
+
+	public static bool ImportArchive(ArchiveData archiveData)
+	{
+		if (!GetOrCreateArchiveDir(out var archiveDirPath))
+			return false;
+		return SaveArchive(archiveData, archiveDirPath, out _, out _);
+	}
+
+	static bool SaveArchive(ArchiveData archiveData, string archiveDirPath, out string archiveName, out string archivePath)
+	{
+		archiveName = null;
+		archivePath = null;
+
+		using var archiveDir = DirAccess.Open(archiveDirPath);
 		string archiveContent = JsonSerializer.Serialize(archiveData, archiveSerialisation);
 
 		DateTime archiveDateTime = archiveData.expiresUTC.AddDays(-1);
@@ -473,22 +497,20 @@ public partial class GameMission
 	[JsonSerializable(typeof(ArchiveData))]
 	public record class ArchiveData
 	{
-		public ArchiveVersion blakebeardArchiveFormat = new(1, 0);
-		public DateTime expiresUTC;
-		public DateTime expiresEST;
-		public CompactTheater[] theaters;
+		public ArchiveVersion blakebeardArchiveFormat { get; init; } = new(1, 0);
+		public DateTime expiresUTC { get; init; }
+		public DateTime expiresEST { get; init; }
+		public CompactTheater[] theaters { get; init; }
 
 		[JsonIgnore]
-		GameMission[] missions;
-		[JsonIgnore]
-		public GameMission[] Missions => missions ??= [.. theaters.SelectMany(a => a.CreateMissions())];
+		public GameMission[] Missions => field ??= [.. theaters.SelectMany(a => a.CreateMissions())];
 
 		public record struct ArchiveVersion(int major, int minor);
 		public record struct CompactTheater()
 		{
-			public string theaterId;
-			public string theaterName;
-			public CompactMission[] missions;
+			public string theaterId { get; init; }
+			public string theaterName { get; init; }
+			public CompactMission[] missions { get; init; }
 
 			public IEnumerable<GameMission> CreateMissions()
 			{
@@ -503,20 +525,20 @@ public partial class GameMission
 
 		public record struct CompactMission()
 		{
-			public string missionName;
-			public string zoneName;
-			public int powerLevel;
-			public bool fourPlayer;
-			public ItemReward[] rewards;
-			public ItemReward[] modifiers;
-			public ItemReward[] alertRewards;
+			public string missionName { get; init; }
+			public string zoneName { get; init; }
+			public int powerLevel { get; init; }
+			public bool fourPlayer { get; init; }
+			public ItemReward[] rewards { get; init; }
+			public ItemReward[] modifiers { get; init; }
+			public ItemReward[] alertRewards { get; init; }
 
-			public int tileIndex;
-			public string missionGuid;
-			public string alertGuid;
-			public string missionGenerator;
-			public string zoneTheme;
-			public string difficultyRow;
+			public int tileIndex { get; init; }
+			public string missionGuid { get; init; }
+			public string alertGuid { get; init; }
+			public string missionGenerator { get; init; }
+			public string zoneTheme { get; init; }
+			public string difficultyRow { get; init; }
 		}
 	}
 

@@ -41,7 +41,7 @@ public partial class DashboardItemShop : Control
 		}
 		var storefront = eventShop ? GameStorefront.CampaignEvent : GameStorefront.CampaignWeekly;
 		await storefront.Fetch();
-
+		await Helpers.WaitForTimer(0.1);
 		if (eventShop)
 			SetEventItems(storefront.Offers);
 		else
