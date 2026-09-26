@@ -287,6 +287,7 @@ public partial class Bootstrap : Node
 			//progressBar.Visible = true;
 			//await CosmoRequests.LoadConfigOverride();
 
+#if GODOT_PC
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_character_hammervice", "store_image", [0], "2048x2048"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "preview_image"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));
@@ -298,6 +299,7 @@ public partial class Bootstrap : Node
 			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "locker_preview_image", [1, 0]));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_817_m_dirtydocks", "preview_image", [1]));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "store_image"));
+#endif
 
 			//PrintDistinctIconCount("Hero", "Defender");
 			//PrintDistinctIconCount("Schematic", "Weapon", "Trap");
