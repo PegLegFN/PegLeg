@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class GameAccountEntry : Control
 {
@@ -19,6 +20,12 @@ public partial class GameAccountEntry : Control
 	public delegate void AuthenticatedChangedEventHandler(bool isAuthed);
 
 	[Signal]
+	public delegate void InboxChangedEventHandler(bool isAuthed);
+
+	[Signal]
+	public delegate void AnyInboxChangedEventHandler(bool isAuthed);
+
+	[Signal]
 	public delegate void PressedEventHandler(string accountId);
 	[Signal]
 	public delegate void DeletedEventHandler(string accountId);
@@ -34,8 +41,15 @@ public partial class GameAccountEntry : Control
 	public override void _Ready()
 	{
 		GameAccount.ActiveAccountChanged += SetActiveAccount;
-		//XmppManager.OnUserStatusChanged += OnUserStatus;
+		ItemInbox.InboxUpdated += UpdateInbox;
 		SetActiveAccount();
+	}
+
+	public override void _ExitTree()
+	{
+		GameAccount.ActiveAccountChanged -= SetActiveAccount;
+		currentAccount?.OnAccountUpdated -= UpdateAccount;
+		ItemInbox.InboxUpdated -= UpdateInbox;
 	}
 
 	private void OnUserStatus(string account, string status)
@@ -91,6 +105,7 @@ public partial class GameAccountEntry : Control
 		EmitSignal(SignalName.NameChanged, $"{namePrefix}{displayName}");
 		EmitSignal(SignalName.IconChanged, currentAccount.ProfileIcon ?? defaultIcon);
 		EmitSignal(SignalName.AuthenticatedChanged, currentAccount.isAuthed);
+		UpdateInbox();
 
 		string tooltipText = CustomTooltip.GenerateSimpleTooltip(
 			$" {displayName}   ",
@@ -101,6 +116,13 @@ public partial class GameAccountEntry : Control
 			Colors.Blue.ToHtml()
 		);
 		EmitSignal(SignalName.TooltipChanged, tooltipText);
+	}
+
+	void UpdateInbox()
+	{
+		EmitSignal(SignalName.InboxChanged, ItemInbox.HasInbox(currentAccount));
+		if (useActiveAccount)
+			EmitSignal(SignalName.AnyInboxChanged, GameAccount.OwnedAccounts.Any(ItemInbox.HasInbox));
 	}
 
 	public void Press()
@@ -122,12 +144,5 @@ public partial class GameAccountEntry : Control
 		if (currentAccount is null)
 			return;
 		EmitSignal(SignalName.Deleted, currentAccount.accountId);
-	}
-
-	public override void _ExitTree()
-	{
-		if (useActiveAccount)
-			GameAccount.ActiveAccountChanged -= SetActiveAccount;
-		currentAccount?.OnAccountUpdated -= UpdateAccount;
 	}
 }

@@ -1,48 +1,31 @@
 [gd_scene format=3 uid="uid://kp0n87fnaou3"]
 
 [ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="1_6wfsn"]
-[ext_resource type="PackedScene" uid="uid://qdtb6peaahfr" path="res://Scenes/UI/TabBar/virtualTabLarge.tscn" id="2_ef77v"]
+[ext_resource type="Script" uid="uid://dxxd3ebpcw3t0" path="res://Scripts/UserInterface/Extra/SpriteLibraryInterface.cs" id="1_uolwn"]
 [ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="3_etqnd"]
-[ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="4_ef77v"]
 [ext_resource type="PackedScene" uid="uid://c1qs5v3fbwmbx" path="res://Scenes/Desktop/Views/Extra/spriteEntry.tscn" id="5_etqnd"]
-[ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/SpriteButton.gdshader" id="6_f2c4i"]
+[ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="7_fs68o"]
+[ext_resource type="Texture2D" uid="uid://dq47qrpctjwnp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Input_128.png" id="8_84np2"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="8_fs68o"]
+[ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="8_row8w"]
+[ext_resource type="Texture2D" uid="uid://dffqg6jtdu38u" path="res://Images/InterfaceIcons/Icon_Seach_Close.png" id="9_x2nkr"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_f2c4i"]
-resource_local_to_scene = true
-shader = ExtResource("6_f2c4i")
-shader_parameter/ControlSize = Vector2(150, 200)
-shader_parameter/Offset0 = Vector2(-9, -1)
-shader_parameter/Offset1 = Vector2(-3, 4)
-shader_parameter/Offset2 = Vector2(4, 4)
-shader_parameter/Offset3 = Vector2(6, -9)
-shader_parameter/OutlineOffset = 5.0
-shader_parameter/OutlineGap = 2.0
-shader_parameter/progress = 0.0
-shader_parameter/special = false
-shader_parameter/lost = false
-shader_parameter/locked = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uolwn"]
-resource_local_to_scene = true
-shader = ExtResource("6_f2c4i")
-shader_parameter/ControlSize = Vector2(150, 200)
-shader_parameter/Offset0 = Vector2(-9, -1)
-shader_parameter/Offset1 = Vector2(-3, 4)
-shader_parameter/Offset2 = Vector2(4, 4)
-shader_parameter/Offset3 = Vector2(6, -9)
-shader_parameter/OutlineOffset = 5.0
-shader_parameter/OutlineGap = 2.0
-shader_parameter/progress = 1.0
-shader_parameter/special = false
-shader_parameter/lost = false
-shader_parameter/locked = false
-
-[node name="SpriteLibrary" type="MarginContainer" unique_id=448158228]
+[node name="Sprite Library" type="MarginContainer" unique_id=448158228 node_paths=PackedStringArray("listHandlerNode", "searchBar", "generationFilter", "ownershipFilter", "masteryFilter", "compareInfo", "compareOwner", "neededToggle", "manualImporter")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_uolwn")
+listHandlerNode = NodePath("VBoxContainer/ScrollContainer/MarginContainer/Container2")
+searchBar = NodePath("VBoxContainer/HBoxContainer/LineEdit")
+generationFilter = NodePath("VBoxContainer/HBoxContainer/VirtualTabBar")
+ownershipFilter = NodePath("VBoxContainer/HBoxContainer/VirtualTabBar2")
+masteryFilter = NodePath("VBoxContainer/HBoxContainer/VirtualTabBar4")
+compareInfo = NodePath("CompareInfo")
+compareOwner = NodePath("CompareInfo/HBoxContainer/Label2")
+neededToggle = NodePath("VBoxContainer/HBoxContainer/CheckButton")
+manualImporter = NodePath("FileDialog")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=148977835]
 layout_mode = 2
@@ -59,15 +42,15 @@ placeholder_text = "Search"
 layout_mode = 2
 singleTabMode = false
 
-[node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("2_ef77v")]
+[node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("3_etqnd")]
 layout_mode = 2
 Mode = -1
 Text = "Ch7S3"
 
-[node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=1065833815 instance=ExtResource("2_ef77v")]
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=1398528964 instance=ExtResource("3_etqnd")]
 layout_mode = 2
 Mode = 1
-Text = "Ch7S4"
+Text = "Ch7S3"
 
 [node name="VirtualTabBar2" parent="VBoxContainer/HBoxContainer" unique_id=863463719 instance=ExtResource("1_6wfsn")]
 layout_mode = 2
@@ -76,11 +59,11 @@ singleTabMode = false
 [node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar2/HBoxContainer" index="0" unique_id=761350132 instance=ExtResource("3_etqnd")]
 layout_mode = 2
 Mode = -1
-Text = "Hidden"
+Text = "Undiscovered"
 
 [node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar2/HBoxContainer" index="1" unique_id=474939386 instance=ExtResource("3_etqnd")]
 layout_mode = 2
-Text = "Lost"
+Text = "Lost In Match"
 
 [node name="Tab3" parent="VBoxContainer/HBoxContainer/VirtualTabBar2/HBoxContainer" index="2" unique_id=1802877004 instance=ExtResource("3_etqnd")]
 layout_mode = 2
@@ -130,119 +113,113 @@ Text = "My"
 Tint = Color(1, 0, 0.13815689, 1)
 BGTint = Color(1, 0.9666667, 0, 1)
 
+[node name="VirtualTabBar4" parent="VBoxContainer/HBoxContainer" unique_id=1117478334 instance=ExtResource("1_6wfsn")]
+layout_mode = 2
+singleTabMode = false
+
+[node name="Tab" parent="VBoxContainer/HBoxContainer/VirtualTabBar4/HBoxContainer" index="0" unique_id=1237523690 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Mode = -1
+Text = "Unmastered"
+
+[node name="Tab2" parent="VBoxContainer/HBoxContainer/VirtualTabBar4/HBoxContainer" index="1" unique_id=1245966441 instance=ExtResource("3_etqnd")]
+layout_mode = 2
+Mode = 1
+Text = "Mastered"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer" unique_id=1396623347]
+layout_mode = 2
+disabled = true
+text = "Needed Only"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1571635969]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Export List"
+icon = ExtResource("7_fs68o")
+expand_icon = true
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1815026329]
+visible = false
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+icon = ExtResource("8_84np2")
+expand_icon = true
+
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=166299881]
 layout_mode = 2
 size_flags_vertical = 3
+scroll_hint_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=633284985]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 25
 
-[node name="Container" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1623831964]
+[node name="Container2" type="Container" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1743860360 node_paths=PackedStringArray("viewportParent")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("4_ef77v")
-CompressSpacing = true
-CompressTowards = 0.0
-Spacing = Vector2(12, 14)
+script = ExtResource("8_fs68o")
+viewportParent = NodePath("../..")
+recycleEntryScene = ExtResource("5_etqnd")
+layoutMode = 2
 
-[node name="SpriteEntry" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=700536921 instance=ExtResource("5_etqnd")]
+[node name="CompareInfo" type="MarginContainer" parent="." unique_id=1145837508]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 5
 
-[node name="BG" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry" index="0" unique_id=909220603]
-material = SubResource("ShaderMaterial_f2c4i")
-
-[node name="SpriteEntry2" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=93126755 instance=ExtResource("5_etqnd")]
+[node name="MarginContainer" type="MarginContainer" parent="CompareInfo" unique_id=778182757]
 layout_mode = 2
+theme_override_constants/margin_left = -10
+theme_override_constants/margin_top = -5
+theme_override_constants/margin_right = -10
+theme_override_constants/margin_bottom = -5
 
-[node name="SpriteEntry3" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=285959848 instance=ExtResource("5_etqnd")]
+[node name="TextureRect" type="TextureRect" parent="CompareInfo/MarginContainer" unique_id=781173512]
+self_modulate = Color(1, 1, 1, 0.84705883)
 layout_mode = 2
+texture = ExtResource("8_row8w")
+expand_mode = 1
 
-[node name="SpriteEntry4" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=716047265 instance=ExtResource("5_etqnd")]
+[node name="HBoxContainer" type="HBoxContainer" parent="CompareInfo" unique_id=103274007]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
 
-[node name="SpriteEntry5" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1369266868 instance=ExtResource("5_etqnd")]
+[node name="Label" type="Label" parent="CompareInfo/HBoxContainer" unique_id=1768068593]
 layout_mode = 2
+text = "Comparing with:"
 
-[node name="SpriteEntry6" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1210636019 instance=ExtResource("5_etqnd")]
+[node name="Label2" type="Label" parent="CompareInfo/HBoxContainer" unique_id=1569550888]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9106094, 0.38872492, 1)
+text = "Username"
 
-[node name="SpriteEntry7" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=537547983 instance=ExtResource("5_etqnd")]
+[node name="Button" type="Button" parent="CompareInfo/HBoxContainer" unique_id=2022545698]
+custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+icon = ExtResource("9_x2nkr")
+expand_icon = true
 
-[node name="SpriteEntry8" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=25681951 instance=ExtResource("5_etqnd")]
-layout_mode = 2
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1782397409]
+title = "Open a File"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.pegleg")
+use_native_dialog = true
 
-[node name="SpriteEntry9" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=192568418 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="BG" parent="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9" index="0" unique_id=909220603]
-material = SubResource("ShaderMaterial_uolwn")
-
-[node name="SpriteEntry10" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=69961596 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry11" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1181106826 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry12" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1880405316 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry13" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=630674386 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry14" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=406165270 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry15" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=447002827 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry16" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1630908011 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry17" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1639739016 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry18" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1079151987 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry19" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1628612197 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry20" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1066902683 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry21" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1083241269 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry22" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=797254842 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry23" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=22974567 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry24" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=160937445 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry25" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=832580247 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry26" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=439405520 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry27" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1358394984 instance=ExtResource("5_etqnd")]
-layout_mode = 2
-
-[node name="SpriteEntry28" parent="VBoxContainer/ScrollContainer/MarginContainer/Container" unique_id=1108920203 instance=ExtResource("5_etqnd")]
-layout_mode = 2
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="ExportArchive"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Button2" to="FileDialog" method="show"]
+[connection signal="pressed" from="CompareInfo/HBoxContainer/Button" to="." method="ClearComparison"]
 
 [editable path="VBoxContainer/HBoxContainer/VirtualTabBar"]
 [editable path="VBoxContainer/HBoxContainer/VirtualTabBar2"]
 [editable path="VBoxContainer/HBoxContainer/VirtualTabBar3"]
-[editable path="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry"]
-[editable path="VBoxContainer/ScrollContainer/MarginContainer/Container/SpriteEntry9"]
+[editable path="VBoxContainer/HBoxContainer/VirtualTabBar4"]

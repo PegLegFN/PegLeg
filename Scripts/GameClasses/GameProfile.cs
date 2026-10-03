@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using static Godot.Variant;
 
 static class FnProfileTypes
 {
@@ -27,6 +26,26 @@ public class GameProfile
 	{
 		this.account = account;
 		this.profileId = profileId;
+	}
+
+	public static GameProfile TryCreateCustomProfile(JsonObject fullProfileResponse, GameAccount forAccount)
+	{
+		//validate response data
+		if (
+			fullProfileResponse?["profileChanges"]?[0] is not JsonObject change ||
+			change["changeType"]?.ToString() != "fullProfileUpdate" ||
+			change["profile"]?["accountId"]?.ToString() is not string profileAccID ||
+			change["profile"]?["stats"]?["attributes"] is not JsonObject ||
+			change["profile"]?["items"] is not JsonObject
+			)
+			return null;
+
+		if (forAccount?.accountId != profileAccID)
+			forAccount = new(profileAccID);
+		var profile = forAccount.GetProfile(fullProfileResponse["profileId"].ToString());
+		profile.ApplyFullProfile(fullProfileResponse["profileChanges"][0]["profile"]);
+		profile.rvn = 0;
+		return profile;
 	}
 
 	public void InvalidateProfile()
@@ -367,21 +386,22 @@ public class GameProfile
 			{
 				//GD.Print("FULLUPDATE: " + profileId);
 				fullUpdate = true;
-				var resultItems = result["profileChanges"][0]["profile"]["items"].AsObject();
-				var resultStats = result["profileChanges"][0]["profile"]["stats"]["attributes"].AsObject();
-				profileLockExpiration = result["profileChanges"][0]["profile"]["profileLockExpiration"]?.Deserialize<DateTime>() ?? DateTime.MinValue;
-				if (hasProfile)
-					ApplyProfileChanges(GenerateChanges(resultItems, resultStats));
-				else
-				{
-					items = resultItems.Select(kvp => new GameItem(this, kvp.Key, kvp.Value.AsObject())).ToDictionary(item => item.uuid);
-					groupedItems = new(
-						items.GroupBy(kvp => kvp.Value.templateId.Split(":")[0].ToLower())
-						.Select(grouping => KeyValuePair.Create(grouping.Key, grouping.Select(kvp => kvp.Value).ToList())),
-						StringComparer.OrdinalIgnoreCase
-					);
-					statAttributes = resultStats;
-				}
+				ApplyFullProfile(result["profileChanges"][0]["profile"]);
+				//var resultItems = result["profileChanges"][0]["profile"]["items"].AsObject();
+				//var resultStats = result["profileChanges"][0]["profile"]["stats"]["attributes"].AsObject();
+				//profileLockExpiration = result["profileChanges"][0]["profile"]["profileLockExpiration"]?.Deserialize<DateTime>() ?? DateTime.MinValue;
+				//if (hasProfile)
+				//	ApplyProfileChanges(GenerateChanges(resultItems, resultStats));
+				//else
+				//{
+				//	items = resultItems.Select(kvp => new GameItem(this, kvp.Key, kvp.Value.AsObject())).ToDictionary(item => item.uuid);
+				//	groupedItems = new(
+				//		items.GroupBy(kvp => kvp.Value.templateId.Split(":")[0].ToLower())
+				//		.Select(grouping => KeyValuePair.Create(grouping.Key, grouping.Select(kvp => kvp.Value).ToList())),
+				//		StringComparer.OrdinalIgnoreCase
+				//	);
+				//	statAttributes = resultStats;
+				//}
 			}
 			else
 			{
@@ -485,6 +505,25 @@ public class GameProfile
 		"slotItemResult",
 		"upgradeItemRarityNotification"
 	];
+
+	void ApplyFullProfile(JsonNode profile)
+	{
+		var resultItems = profile["items"].AsObject();
+		var resultStats = profile["stats"]["attributes"].AsObject();
+		profileLockExpiration = profile["profileLockExpiration"]?.Deserialize<DateTime>() ?? DateTime.MinValue;
+		if (hasProfile)
+			ApplyProfileChanges(GenerateChanges(resultItems, resultStats));
+		else
+		{
+			items = resultItems.Select(kvp => new GameItem(this, kvp.Key, kvp.Value.AsObject())).ToDictionary(item => item.uuid);
+			groupedItems = new(
+				items.GroupBy(kvp => kvp.Value.templateId.Split(":")[0].ToLower())
+				.Select(grouping => KeyValuePair.Create(grouping.Key, grouping.Select(kvp => kvp.Value).ToList())),
+				StringComparer.OrdinalIgnoreCase
+			);
+			statAttributes = resultStats;
+		}
+	}
 
 	JsonArray GenerateChanges(JsonObject newItems, JsonObject newStats = null)
 	{

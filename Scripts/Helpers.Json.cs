@@ -10,6 +10,10 @@ public static partial class Helpers
 {
 	public static class JsonOptions
 	{
+		public static JsonSerializerOptions Indented { get; private set; } = new()
+		{
+			WriteIndented = true
+		};
 		public static JsonSerializerOptions Fields { get; private set; } = new()
 		{
 			IncludeFields = true,
@@ -17,8 +21,7 @@ public static partial class Helpers
 		};
 		public static JsonSerializerOptions FieldsCompact { get; private set; } = new()
 		{
-			IncludeFields = true,
-			WriteIndented = false
+			IncludeFields = true
 		};
 		public static JsonSerializerOptions CamelCase { get; private set; } = new()
 		{

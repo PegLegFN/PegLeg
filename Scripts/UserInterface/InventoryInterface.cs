@@ -13,6 +13,45 @@ public partial class AppConfig
 
 public partial class InventoryInterface : Control, IRecyclableElementProvider<GameItem>
 {
+	static GameAccount customProfileAccount;
+	static Dictionary<string, GameProfile> customProfiles = [];
+
+	//todo: use path as input
+	public static void SetCustomProfile(string filepath)
+	{
+		if (!FileAccess.FileExists(filepath))
+			return;
+		using var profileFile = FileAccess.Open(filepath, FileAccess.ModeFlags.Read);
+		SetCustomProfile(JsonNode.Parse(profileFile.GetAsText()).AsObject());
+	}
+
+	public static void SetCustomProfile(JsonObject fullProfileResponse)
+	{
+		if (GameProfile.TryCreateCustomProfile(fullProfileResponse, customProfileAccount) is not { } newProfile)
+			return;
+		if (newProfile.account != customProfileAccount)
+		{
+			customProfiles.Clear();
+			customProfileAccount = newProfile.account;
+		}
+		customProfiles[newProfile.profileId] = newProfile;
+		switchTabForProfile = newProfile.profileId;
+		accountUpdateQueued = true;
+	}
+
+	static event Action CustomProfilesChanged;
+
+	[Export]
+	string targetProfile;
+	[Export(PropertyHint.ArrayType)]
+	string[] typeFilters;
+	[Export]
+	bool sortByName = false;
+	[Export]
+	bool allowDevMode = true;
+	[Export]
+	string autoDismantleRules;
+	[ExportGroup("Nodes")]
 	[Export]
 	RecycleListContainer itemList;
 	[Export]
@@ -28,14 +67,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 	[Export]
 	VirtualTabBar tabBar;
 	[Export]
-	string targetProfile;
-	[Export(PropertyHint.ArrayType)]
-	string[] typeFilters;
-	[Export]
-	bool sortByName = false;
-	[Export]
-	bool allowDevMode = true;
-	[Export]
 	Control creatorImageParent;
 	AnimationPlayer creatorAnimations;
 	Dictionary<string, Control> creatorImages;
@@ -50,7 +81,13 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 	[Export]
 	Button researchTokenButton;
 	[Export]
-	string autoDismantleRules;
+	Button profileExport;
+	[Export]
+	Control customProfileSection;
+	[Export]
+	Control ownedProfileSection;
+	[Export]
+	FileDialog fileExportDialog;
 
 	Control currentCreatorImage;
 	AnimationPlayer currentCreatorAnimation;
@@ -65,7 +102,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			item.Visible = false;
 		}
 		heavySearchWarning?.Visible = false;
-		GameAccount.ActiveAccountChanged += UpdateAccount;
 
 		itemList?.SetProvider(this);
 		if (newItemListNode is IListHandler newListHandler)
@@ -100,12 +136,65 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		tabBar.SetTabPressed(0);
 		tabBar.TabsChanged += SetTypeFilter;
 
+		GameAccount.ActiveAccountChanged += UpdateAccount;
 		AppConfig.OnConfigChanged += OnConfigChanged;
 		RefreshTimerController.OnMinuteChanged += TryAutoDismantle;
+		RefreshTimerController.OnSecondChanged += CheckForQueuedUpdate;
+
 		VisibilityChanged += TryFilter;
+
+		fileExportDialog?.FileSelected += ExportProfile;
+		
 
 		SetTypeFilter();
 		UpdateAccount();
+	}
+	public override void _ExitTree()
+	{
+		currentProfile?.OnProfileChanged -= UpdateProfile;
+		GameAccount.ActiveAccountChanged -= UpdateAccount;
+		AppConfig.OnConfigChanged -= OnConfigChanged;
+		RefreshTimerController.OnMinuteChanged -= TryAutoDismantle;
+		RefreshTimerController.OnSecondChanged -= CheckForQueuedUpdate;
+	}
+
+	static bool accountUpdateQueued = false;
+	static string switchTabForProfile = null;
+	public void CheckForQueuedUpdate()
+	{
+		if (!accountUpdateQueued)
+			return;
+		accountUpdateQueued = false;
+		if (switchTabForProfile == targetProfile)
+		{
+			Visible = true;
+			GetParentOrNull<Control>()?.Visible = true;
+			switchTabForProfile = null;
+		}
+		UpdateAccount();
+	}
+
+	void ShowExport()
+	{
+		if (currentProfile is null)
+			return;
+		fileExportDialog.CurrentFile = $"{GameAccount.ActiveAccount.DisplayName}_{targetProfile}";
+		fileExportDialog.Show();
+	}
+
+	async void ExportProfile(string path)
+	{
+		if (currentProfile is null || await currentProfile.Query(true, true) is null)
+			return;
+		string content = JsonSerializer.Serialize(currentProfile.lastOp, Helpers.JsonOptions.Indented);
+		using var exportedFile = FileAccess.Open(path, FileAccess.ModeFlags.Write);
+		exportedFile.StoreString(content);
+	}
+
+	void ClearImported()
+	{
+		if (customProfiles.Remove(targetProfile))
+			UpdateAccount();
 	}
 
 	PLSearch.Instruction[] autoDismantleInstructions;
@@ -134,7 +223,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 			return;
 
 
-		GD.Print($"Auto-Dismantling {toDismantle.Length} junk items from the backpack of {currentProfile.account.DisplayName}...");
+		GD.Print($"Auto-Dismantling {toDismantle.Length} junk items from the backpack of {currentProfile.account.DisplayName}:\n[{toDismantle.Select(i=>$"{i.templateId}:{i.quantity}")}]");
 		JsonObject content = new()
 		{
 			["targetItemIdAndQuantityPairs"] = new JsonArray(
@@ -188,12 +277,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		}
 	}
 
-	public override void _ExitTree()
-	{
-		GameAccount.ActiveAccountChanged -= UpdateAccount;
-		AppConfig.OnConfigChanged -= OnConfigChanged;
-		currentProfile?.OnProfileChanged -= UpdateProfile;
-	}
 
 	bool filterNew;
 	public void SetNewFilter(bool value)
@@ -237,54 +320,46 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 	async void UpdateAccount()
 	{
-		//accountDirty = true;
-		//if (!IsVisibleInTree())
-		//    return;
-		//accountDirty = false;
-
-		var account = GameAccount.ActiveAccount;
-		if (!string.IsNullOrEmpty(targetUser?.Text) && targetProfile == FnProfileTypes.AccountItems)
+		if (customProfiles.TryGetValue(targetProfile, out var customProfile))
 		{
-			if (targetUser.Text.Length == 32)
-				account = GameAccount.GetOrCreateAccount(targetUser.Text);
-			else
-				account = (await GameAccount.SearchForAccount(targetUser?.Text)) ?? account;
+			if (currentProfile == customProfile)
+				return;
+			customProfileSection?.Visible = true;
+			ownedProfileSection?.Visible = false;
+			currentProfile?.OnProfileChanged -= UpdateProfile;
+			currentProfile = customProfile;
 		}
-		if (currentProfile?.account == account)
-			return;
-		filteredItems = [];
-		ApplySorting();
-		if (targetProfile != FnProfileTypes.AccountItems && !account.isOwned)
-			return;
-		if (targetProfile == FnProfileTypes.AccountItems)
-			GD.Print("Inventory target: " + account?.accountId);
-
-		researchTokenArea?.Visible = false;
-
-		currentCreatorImage?.Visible = false;
-		creatorAnimations.Stop();
-		if (creatorImages.TryGetValue(account.accountId, out var image))
+		else
 		{
-			currentCreatorImage = image;
-			image.Visible = true;
-			if (creatorAnimations.HasAnimation(account.accountId))
-				creatorAnimations.Play(account.accountId);
-		}
+			var account = GameAccount.ActiveAccount;
+			if (currentProfile?.account == account)
+				return;
+			customProfileSection?.Visible = false;
+			ownedProfileSection?.Visible = true;
+			filteredItems = [];
+			ApplySorting();
 
-		currentProfile?.OnProfileChanged -= UpdateProfile;
-		currentProfile = await account.GetProfile(targetProfile).Query();
+			researchTokenArea?.Visible = false;
+
+			currentCreatorImage?.Visible = false;
+			creatorAnimations.Stop();
+			if (creatorImages.TryGetValue(account.accountId, out var image))
+			{
+				currentCreatorImage = image;
+				image.Visible = true;
+				if (creatorAnimations.HasAnimation(account.accountId))
+					creatorAnimations.Play(account.accountId);
+			}
+
+			currentProfile?.OnProfileChanged -= UpdateProfile;
+			currentProfile = await account.GetProfile(targetProfile).Query();
+		}
 		if (currentProfile is null)
 			return;
 
-		inMissionIndicator.Visible = !account.isOwned && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
+		inMissionIndicator.Visible = currentProfile.account.isOwned == false && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
 
-		powerLevel?.SetAccount(account);
-
-		if (!account.isOwned)
-		{
-			var custom = account.RatingData with { backpackRating = 144 };
-			custom.Print("Profile Target with 144 backpack");
-		}
+		powerLevel?.SetAccount(currentProfile.account);
 
 		currentProfile.OnProfileChanged += UpdateProfile;
 		UpdateProfile();
@@ -389,10 +464,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 	async void TryFilter()
 	{
-		if (targetProfile == "athena")
-		{
-			int _ = 0;
-		}
 		await Helpers.WaitForFrame();
 		if (accountDirty)
 		{

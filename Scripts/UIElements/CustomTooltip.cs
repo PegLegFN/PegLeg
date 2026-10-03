@@ -44,10 +44,11 @@ public partial class CustomTooltip : Control
 		abilityContent.Size = abilityContent.GetCombinedMinimumSize() * Vector2.Right;
 	}
 
-	public static string GenerateSimpleTooltip(string title, string quantity = null, string[] description = null, string bannerCol = null, string offerId = null, string[] abilities = null)
+	public static string GenerateSimpleTooltip(string title, string quantity = null, string[] description = null, string bannerCol = null, string offerId = null, string[] abilities = null, JsonObject extra = null)
 	{
 		JsonObject content = new()
 		{
+			["extra"] = extra,
 			["title"] = new JsonObject()
 			{
 				["label"] = title,
@@ -94,6 +95,8 @@ public partial class CustomTooltip : Control
 			contentObject = JsonNode.Parse(content).AsObject();
 		}
 
+		JsonObject extraObject = contentObject["extra"]?.AsObject() ?? [];
+
 		if (contentObject["title"]?.AsFlexibleObject("label") is JsonObject titleData)
 		{
 			titleContent.Visible = true;
@@ -110,6 +113,7 @@ public partial class CustomTooltip : Control
 				titleBanner.Visible = true;
 				titleBanner.SetTimeOffset(Time.GetTicksMsec() - 200);
 				//set banner appearance
+				titleBanner.SetShaderBool(extraObject["rainbow"]?.GetValue<bool>() == true, "rainbow");
 				if (bannerData["color"]?.ToString() is string bannerColor)
 				{
 					//GD.Print(bannerColor);

@@ -193,6 +193,14 @@ public class GameItem
 		attributes = attributes?.SafeDeepClone() ?? [],
 		quantity = quantity,
 	};
+	public ItemReward GameItemReward => new()
+	{
+		itemGuid = uuid,
+		itemProfile = profile?.profileId,
+		itemType = templateId,
+		attributes = JsonSerializer.SerializeToElement(attributes ?? []),
+		quantity = quantity,
+	};
 
 	public void SetItemOrRewardData(JsonObject rawData)
 	{
@@ -437,7 +445,7 @@ public class GameItem
 		var notifs = await profile.PerformOperation("ClaimQuestReward", altcontent);
 		var claimNotif = notifs?.FirstOrDefault(n => n["type"]?.ToString() == "questClaim");
 		var rewards = claimNotif?["loot"]?["items"]?.Deserialize<ItemReward[]>() ?? [];
-		return [.. rewards.Select(r => r.FindOrCreateReward(profile.account))];
+		return [.. rewards?.Select(r => r.FindOrCreateReward(profile?.account)) ?? []];
 	}
 
 	public void SetRewardNotification(GameAccount account = null)
@@ -649,7 +657,7 @@ public class GameItem
 			{
 				if (uuid is not null)
 					warnedUUIDs.Add(uuid);
-				GD.Print($"{templateId} sublevel below zero. Item is Lv{level} {(level == debugClampedLevel ? "" : $"(wouldve been clamped to Lv{debugClampedLevel})")}, Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+				GD.Print($"{templateId} sublevel below zero. Item is Lv{level} {(level == debugClampedLevel ? "" : $"(wouldve been clamped to Lv{debugClampedLevel})")}, Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate ({uuid})");
 			}
 			subLevel = 0;
 			//return 0;
@@ -660,7 +668,7 @@ public class GameItem
 			{
 				if (uuid is not null)
 					warnedUUIDs.Add(uuid);
-				GD.Print($"{templateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate");
+				GD.Print($"{templateId} above range of ratings array ({subLevel}>={ratingsLength}). Item is Lv{level} (wouldve been clamped to Lv{debugClampedLevel}), Tier {tier}, of {template.Rarity ?? "<Null>"} Rarity, categorized as {ratingCategory}. Clamping rating to compensate ({uuid})");
 			}
 			subLevel = ratingsLength - 1;
 			//return 0;

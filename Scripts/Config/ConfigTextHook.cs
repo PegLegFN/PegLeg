@@ -52,7 +52,10 @@ public partial class ConfigTextHook : Control
 
 		base._Ready();
 		if (accountMode)
+		{
 			GameAccount.LocalDataChanged += UpdateAccountValue;
+			GameAccount.ActiveAccountChanged += UpdateAccount;
+		}
 		else
 			AppConfig.OnConfigChanged += UpdateConfigValue;
 		EmitSignal(SignalName.ConfigValueChanged, GetCurrentValue());
@@ -61,7 +64,10 @@ public partial class ConfigTextHook : Control
 	public override void _ExitTree()
 	{
 		if (accountMode)
+		{
 			GameAccount.LocalDataChanged -= UpdateAccountValue;
+			GameAccount.ActiveAccountChanged -= UpdateAccount;
+		}
 		else
 			AppConfig.OnConfigChanged -= UpdateConfigValue;
 	}
@@ -85,6 +91,11 @@ public partial class ConfigTextHook : Control
 	{
 		if (key != this.key || editingValue)
 			return;
+		EmitSignal(SignalName.ConfigValueChanged, GetCurrentValue());
+	}
+
+	private void UpdateAccount()
+	{
 		EmitSignal(SignalName.ConfigValueChanged, GetCurrentValue());
 	}
 

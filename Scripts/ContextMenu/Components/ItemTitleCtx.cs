@@ -9,4 +9,11 @@ public partial class ItemTitleCtx : BaseTitleCtx
 
 	protected override Color GetColor(ContextMenuHook hook) =>
 		hook?.itemSource?.displayItem?.template?.RarityColor ?? Colors.Transparent;
+
+	protected override bool GetRainbow(ContextMenuHook hook)
+	{
+		if (hook?.itemSource?.displayItem?.template is not { } template)
+			return false;
+		return template.Type == "ExtractableRelic" && (template["Augments"]?.AsArray().Count ?? 0) > 1;
+	}
 }

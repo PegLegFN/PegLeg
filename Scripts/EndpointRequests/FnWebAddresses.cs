@@ -11,6 +11,9 @@ class FnWebAddresses
 	Uri epicUserSearch = new("https://user-search-service-prod.ol.epicgames.com");
 	Uri unrealCDN = new("https://cdn2.unrealengine.com");
 	Uri epicParty = new("https://party-service-prod.ol.epicgames.com");
+	Uri eos = new("https://api.epicgames.dev");
+	Uri magpie = new("https://gc.svc.live.fngw.ol.epicgames.com");
+	Uri magpieCatalog = new("https://mcp-gc.live.fngw.ol.epicgames.com");
 
 	static FnWebAddresses standardAddresses = new();
 	//static FnWebAddresses testingAddresses = new()
@@ -37,6 +40,10 @@ class FnWebAddresses
 	public static readonly Uri EpicUserSearch = ActiveAddresses.epicUserSearch;
 	public static readonly Uri UnrealCDN = ActiveAddresses.unrealCDN;
 	public static readonly Uri EpicParty = ActiveAddresses.epicParty;
+
+	public static readonly Uri EOS = ActiveAddresses.eos;
+	public static readonly Uri Magpie = ActiveAddresses.magpie;
+	public static readonly Uri MagpieCatalog = ActiveAddresses.magpieCatalog;
 }
 
 class ApiWebAddresses

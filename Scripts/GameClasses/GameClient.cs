@@ -126,15 +126,16 @@ public class GameClient
 			deviceDetails?["secret"]?.ToString()
 		);
 
+	public const string FortEOSDeployment = "62a9473a2dca46b29ccf17577fcf42d7";
 	public Task<HttpResponseMessage> EOSLogin(string authToken)
 	{
-		return WebHelpers.MakeRequest("https://api.epicgames.dev/auth/v1/oauth/token", HttpMethod.Post)
+		return FnWebAddresses.EOS.MakeRequest("/auth/v1/oauth/token", HttpMethod.Post)
 			.SetAuthorisation(ClientHeader)
 			.SetFormContent(
 				$"grant_type=external_auth&" +
 				$"external_auth_type=epicgames_access_token&" +
 				$"external_auth_token={authToken}&" +
-				$"deployment_id=62a9473a2dca46b29ccf17577fcf42d7&" +
+				$"deployment_id={FortEOSDeployment}&" +
 				$"nonce={Guid.NewGuid()}"
 			)
 			.Send();

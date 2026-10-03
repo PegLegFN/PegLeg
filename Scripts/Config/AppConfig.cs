@@ -1,5 +1,6 @@
 using Godot;
 using Json.Path;
+using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -17,6 +18,7 @@ public partial class AppConfig
 	public partial class ExperimentalConfig { }
 
 	public delegate void ConfigChangeHandler(string section, string key, JsonNode value);
+	public static event Action OnInitialised;
 	public static event ConfigChangeHandler OnConfigChanged;
 
 	//static ConfigFile configFile;
@@ -249,6 +251,8 @@ public partial class AppConfig
 
 	static JsonObject LoadConfig()
 	{
+		if (_configData is not null)
+			return _configData;
 		using var configFile = FileAccess.Open(configPath, FileAccess.ModeFlags.Read);
 		if (configFile?.GetError() != Error.Ok)
 		{
@@ -258,7 +262,9 @@ public partial class AppConfig
 		//var configStructure = JsonSerializer.Deserialize<AppConfig>(configFile.GetAsText(), jsonOptions);
 		//return JsonNode.Parse(JsonSerializer.Serialize(configStructure))?.AsObject();
 		string fileContent = configFile.GetAsText();
-		return JsonNode.Parse(fileContent)?.AsObject();
+		_configData = JsonNode.Parse(fileContent)?.AsObject();
+		OnInitialised?.Invoke();
+		return _configData;
 	}
 
 	public readonly struct AdaptiveJsonValue

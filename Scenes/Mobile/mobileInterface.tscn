@@ -27,7 +27,9 @@
 [ext_resource type="Script" uid="uid://1wq8v7f1so0q" path="res://Scripts/AccountRefreshHook.cs" id="11_albn5"]
 [ext_resource type="PackedScene" uid="uid://d8qax8qc6jh8" path="res://Scenes/Mobile/Views/mobileSettingsView.tscn" id="11_uljcv"]
 [ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="12_5jecb"]
+[ext_resource type="Script" uid="uid://bncajbq6g5sic" path="res://Scripts/ItemInbox.cs" id="12_e34xc"]
 [ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="12_tdxd6"]
+[ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="13_exprw"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="13_l5xev"]
 [ext_resource type="PackedScene" uid="uid://cs4uqvp2hvjpe" path="res://Scenes/powerLevelIndicatorV2Large.tscn" id="14_5jecb"]
 [ext_resource type="PackedScene" uid="uid://53fn442ut5dy" path="res://Scenes/Desktop/Overlays/mission_viewer.tscn" id="17_06gui"]
@@ -214,6 +216,30 @@ text = "TomatechGames"
 horizontal_alignment = 1
 text_overrun_behavior = 3
 
+[node name="Button2" type="Button" parent="Content/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=704926903 node_paths=PackedStringArray("inboxContainer")]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 12
+expand_icon = true
+script = ExtResource("12_e34xc")
+inboxContainer = NodePath(".")
+
+[node name="TextureRect" type="TextureRect" parent="Content/VBoxContainer/MarginContainer2/HBoxContainer/Button2" unique_id=2112260400]
+self_modulate = Color(0, 0, 0.5546875, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_exprw")
+expand_mode = 1
+
 [node name="RefreshBtn" type="Button" parent="Content/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=833399045]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -330,6 +356,7 @@ visible = false
 layout_mode = 2
 
 [node name="Inventory" parent="Content/VBoxContainer/ScrollContainer/TabPages" unique_id=325556342 instance=ExtResource("20_qh5c3")]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_bottom = 4
 
@@ -347,7 +374,6 @@ custom_minimum_size = Vector2(454, 800)
 layout_mode = 2
 
 [node name="Accounts" parent="Content/VBoxContainer/ScrollContainer/TabPages" unique_id=742899924 instance=ExtResource("22_tdxd6")]
-visible = false
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Content/VBoxContainer" unique_id=1033264984]
@@ -545,6 +571,7 @@ curtain = NodePath("..")
 
 [connection signal="IconChanged" from="Content/VBoxContainer/MarginContainer2/HBoxContainer/PanelContainer/HBoxContainer" to="Content/VBoxContainer/MarginContainer2/HBoxContainer/PanelContainer/HBoxContainer/Icon" method="set_texture"]
 [connection signal="NameChanged" from="Content/VBoxContainer/MarginContainer2/HBoxContainer/PanelContainer/HBoxContainer" to="Content/VBoxContainer/MarginContainer2/HBoxContainer/PanelContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="pressed" from="Content/VBoxContainer/MarginContainer2/HBoxContainer/Button2" to="Content/VBoxContainer/MarginContainer2/HBoxContainer/Button2" method="ShowInbox"]
 [connection signal="pressed" from="Content/VBoxContainer/MarginContainer2/HBoxContainer/RefreshBtn" to="Content/VBoxContainer/MarginContainer2/HBoxContainer/RefreshBtn" method="RefreshAccount"]
 
 [editable path="Content/VBoxContainer/MarginContainer/SubTabs"]

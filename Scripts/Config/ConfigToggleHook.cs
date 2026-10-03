@@ -24,6 +24,8 @@ public partial class ConfigToggleHook : Control
 	[Export]
 	bool tryBind = true;
 	[Export]
+	bool accountMode = false;
+	[Export]
 	bool logChanges = false;
 	[Export]
 	bool disabled = false;
@@ -57,10 +59,27 @@ public partial class ConfigToggleHook : Control
 			}
 		}
 
-		AppConfig.OnConfigChanged += UpdateValue;
+		if (accountMode)
+		{
+			GameAccount.LocalDataChanged += UpdateAccountValue;
+			GameAccount.ActiveAccountChanged += UpdateAccount;
+		}
+		else
+			AppConfig.OnConfigChanged += UpdateValue;
 		valueIsChanging = true;
-		Emit(AppConfig.Get(section, key, defaultValue));
+		Emit(GetCurrentValue());
 		valueIsChanging = false;
+	}
+
+	public override void _ExitTree()
+	{
+		if (accountMode)
+		{
+			GameAccount.LocalDataChanged -= UpdateAccountValue;
+			GameAccount.ActiveAccountChanged -= UpdateAccount;
+		}
+		else
+			AppConfig.OnConfigChanged -= UpdateValue;
 	}
 
 	private void UpdateValue(string section, string key, JsonNode val)
@@ -70,6 +89,25 @@ public partial class ConfigToggleHook : Control
 		valueIsChanging = true;
 		Emit(val.GetValue<bool>());
 		valueIsChanging = false;
+	}
+
+	private void UpdateAccountValue(string key)
+	{
+		if (key != this.key)
+			return;
+		Emit(GetCurrentValue());
+	}
+
+	private void UpdateAccount()
+	{
+		Emit(GetCurrentValue());
+	}
+
+	bool GetCurrentValue()
+	{
+		if (accountMode)
+			return GameAccount.ActiveAccount.GetLocalData(key)?.GetValue<bool>() ?? defaultValue;
+		return AppConfig.Get(section, key, defaultValue);
 	}
 
 	private void Emit(bool newVal)
@@ -86,12 +124,14 @@ public partial class ConfigToggleHook : Control
 
 	public void SetValue(bool newValue)
 	{
-		if (!valueIsChanging)
+		if (valueIsChanging)
+			return;
+		if (accountMode)
+		{
+			GD.Print($"Set Account Data for {GameAccount.ActiveAccount.DisplayName} ({key}={newValue})");
+			GameAccount.ActiveAccount.SetLocalData(key, newValue);
+		}
+		else
 			AppConfig.Set(section, key, newValue);
-	}
-
-	public override void _ExitTree()
-	{
-		AppConfig.OnConfigChanged -= UpdateValue;
 	}
 }

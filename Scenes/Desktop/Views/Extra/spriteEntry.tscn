@@ -1,20 +1,23 @@
 [gd_scene format=3 uid="uid://c1qs5v3fbwmbx"]
 
 [ext_resource type="Shader" uid="uid://qpk22iwlsp6y" path="res://Shaders/SpriteButton.gdshader" id="1_58sin"]
+[ext_resource type="Script" uid="uid://cqjwulwycgo0l" path="res://Scripts/UserInterface/ListEntries/GameItem/SpriteEntry.cs" id="1_fa13v"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="2_8pimq"]
 [ext_resource type="Texture2D" uid="uid://cib738d5hxrrv" path="res://Images/ContentCreators/archer_plake_hd.png" id="3_tfvjn"]
-[ext_resource type="Texture2D" uid="uid://b206b4woetnac" path="res://Images/InterfaceIcons/T-Stars-Full-M.png" id="4_hvuc3"]
-[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="4_xceuh"]
+[ext_resource type="Texture2D" uid="uid://dxw6dn3xps4si" path="res://Images/InterfaceIcons/T_UI_SpriteExtraction_Crown_Icon.png" id="5_s2ln0"]
+[ext_resource type="Texture2D" uid="uid://dsv5yhljuc51" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_SpriteExtraction_SpriteDust_Color_128.png" id="6_s2ln0"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="7_s2ln0"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="8_600uf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_etqnd"]
 resource_local_to_scene = true
 shader = ExtResource("1_58sin")
-shader_parameter/ControlSize = Vector2(150, 200)
-shader_parameter/Offset0 = Vector2(-9, -1)
-shader_parameter/Offset1 = Vector2(-3, 4)
-shader_parameter/Offset2 = Vector2(4, 4)
-shader_parameter/Offset3 = Vector2(6, -9)
-shader_parameter/OutlineOffset = 5.0
+shader_parameter/ControlSize = Vector2(90, 120)
+shader_parameter/Offset0 = Vector2(-6.75, -0.75)
+shader_parameter/Offset1 = Vector2(-2.25, 3)
+shader_parameter/Offset2 = Vector2(2.25, 4.5)
+shader_parameter/Offset3 = Vector2(4.5, -6.75)
+shader_parameter/OutlineOffset = 4.0
 shader_parameter/OutlineGap = 2.0
 shader_parameter/progress = 0.0
 shader_parameter/special = false
@@ -27,11 +30,25 @@ content_margin_right = 4.0
 bg_color = Color(1, 1, 1, 1)
 skew = Vector2(0.2, 0)
 
-[node name="SpriteEntry" type="Button" unique_id=700536921]
-custom_minimum_size = Vector2(150, 200)
-offset_right = 150.0
-offset_bottom = 200.0
+[node name="SpriteEntry" type="Button" unique_id=700536921 node_paths=PackedStringArray("bgShader", "icon", "levelInfo", "levelLabel", "summonInfo", "summonLabel", "neededInfo", "neededLabel", "masteryIndicator")]
+custom_minimum_size = Vector2(90, 120)
+offset_right = 90.0
+offset_bottom = 120.0
+icon = Object(TextureRect,"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":2,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"oversampling_with_scale":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"custom_minimum_size":Vector2(0, 0),"custom_maximum_size":Vector2(-1, -1),"propagate_maximum_size":false,"clip_contents":false,"layout_mode":1,"anchors_preset":15,"anchor_left":0.0,"anchor_top":0.0,"anchor_right":1.0,"anchor_bottom":1.0,"offset_left":0.0,"offset_top":0.0,"offset_right":0.0,"offset_bottom":0.0,"grow_horizontal":2,"grow_vertical":2,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"pivot_offset_ratio":Vector2(0, 0),"size_flags_horizontal":1,"size_flags_vertical":1,"size_flags_stretch_ratio":1.0,"offset_transform_enabled":true,"offset_transform_position":Vector2(0, 0),"offset_transform_position_ratio":Vector2(0, 0),"offset_transform_scale":Vector2(1, 1),"offset_transform_rotation":0.0,"offset_transform_pivot":Vector2(0, 0),"offset_transform_pivot_ratio":Vector2(0.5, 0.5),"offset_transform_visual_only":true,"localize_numeral_system":true,"layout_direction":0,"translation_context":&"","tooltip_text":"","tooltip_auto_translate_mode":0,"focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"focus_behavior_recursive":0,"mouse_filter":1,"mouse_behavior_recursive":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"accessibility_name":"","accessibility_description":"","accessibility_live":0,"accessibility_controls_nodes":Array[NodePath]([]),"accessibility_described_by_nodes":Array[NodePath]([]),"accessibility_labeled_by_nodes":Array[NodePath]([]),"accessibility_flow_to_nodes":Array[NodePath]([]),"theme":null,"theme_type_variation":&"","texture":ExtResource("3_tfvjn"),"expand_mode":1,"stretch_mode":5,"flip_h":false,"flip_v":false,"script":null)
+
 flat = true
+script = ExtResource("1_fa13v")
+bgShader = NodePath("BG")
+icon = NodePath("Icon")
+levelInfo = NodePath("LevelInfo")
+levelLabel = NodePath("LevelInfo/MarginContainer/HBoxContainer/Label2")
+summonInfo = NodePath("CostInfo")
+summonLabel = NodePath("CostInfo/MarginContainer/HBoxContainer/Label")
+neededInfo = NodePath("NeededInfo")
+neededLabel = NodePath("NeededInfo/MarginContainer/Label")
+masteryIndicator = NodePath("Crown")
+speed = 10.0
+autoLinkToViewer = false
 
 [node name="BG" type="ColorRect" parent="." unique_id=909220603]
 material = SubResource("ShaderMaterial_etqnd")
@@ -53,6 +70,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+offset_transform_enabled = true
 texture = ExtResource("3_tfvjn")
 expand_mode = 1
 stretch_mode = 5
@@ -61,19 +79,20 @@ stretch_mode = 5
 self_modulate = Color(1, 0.89576936, 0, 1)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.545
-anchor_top = 0.125
-anchor_right = 0.545
-anchor_bottom = 0.125
+anchor_left = 0.52000004
+anchor_top = 0.13
+anchor_right = 0.7333334
+anchor_bottom = 0.29
 grow_horizontal = 2
 grow_vertical = 2
-rotation = 0.20071286
-scale = Vector2(1.125, 0.665)
-pivot_offset_ratio = Vector2(0.5, 0.5)
-texture = ExtResource("4_hvuc3")
+offset_transform_enabled = true
+offset_transform_rotation = 0.429351
+texture = ExtResource("5_s2ln0")
+expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="LevelInfo" type="PanelContainer" parent="." unique_id=332654928]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -81,6 +100,7 @@ anchor_bottom = 1.0
 offset_left = 5.0
 offset_bottom = -5.0
 grow_vertical = 0
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
 
 [node name="MarginContainer" type="MarginContainer" parent="LevelInfo" unique_id=1770493243]
@@ -112,7 +132,6 @@ theme_override_font_sizes/font_size = 18
 text = "5"
 
 [node name="CostInfo" type="PanelContainer" parent="." unique_id=1424075069]
-visible = false
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -121,6 +140,7 @@ anchor_bottom = 1.0
 offset_left = 5.0
 offset_bottom = -5.0
 grow_vertical = 0
+mouse_behavior_recursive = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
 
 [node name="MarginContainer" type="MarginContainer" parent="CostInfo" unique_id=1059811744]
@@ -134,7 +154,7 @@ theme_override_constants/separation = 2
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_vertical = 4
-texture = ExtResource("4_xceuh")
+texture = ExtResource("6_s2ln0")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="CostInfo/MarginContainer/HBoxContainer" unique_id=21558809]
@@ -145,3 +165,43 @@ theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 0
 theme_override_font_sizes/font_size = 14
 text = "1,500"
+
+[node name="NeededInfo" type="PanelContainer" parent="." unique_id=1417535706]
+self_modulate = Color(1, 0.27446437, 0.07888669, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 2.0
+grow_horizontal = 2
+mouse_behavior_recursive = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
+
+[node name="MarginContainer" type="MarginContainer" parent="NeededInfo" unique_id=570675776]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="Label" parent="NeededInfo/MarginContainer" unique_id=987016849]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 5
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 14
+text = "They Need"
+
+[node name="Node" type="Node" parent="." unique_id=1579368453 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("7_s2ln0")
+itemSource = NodePath("..")
+componentList = ExtResource("8_600uf")
+
+[connection signal="IconChanged" from="." to="Icon" method="set_texture"]
+[connection signal="RarityChanged" from="." to="BG" method="set_color"]
+[connection signal="TooltipChanged" from="." to="." method="set_tooltip_text"]
+[connection signal="button_down" from="." to="." method="SetPressed" binds= [true]]
+[connection signal="button_up" from="." to="." method="SetPressed" binds= [false]]
+[connection signal="pressed" from="." to="." method="EmitPressedSignal"]
+[connection signal="pressed" from="." to="." method="SetPressed" binds= [false]]

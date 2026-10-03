@@ -419,14 +419,14 @@ public static class ExternalCosmetics
 		}
 
 		[JsonIgnore]
-		public IFNDashCosmetic FirstCosmetic =>
+		public IFNDashCosmetic FirstCosmetic => field ??=
 			brItems?.FirstOrDefault() ??
 			cars?.FirstOrDefault() ??
 			instruments?.FirstOrDefault() ??
 			((IFNDashCosmetic)tracks?.FirstOrDefault());
 
 		[JsonIgnore]
-		public IFNDashCosmetic[] AllCosmetics => [
+		public IFNDashCosmetic[] AllCosmetics => field ??= [
 			..brItems??[],
 			..cars??[],
 			..instruments??[],

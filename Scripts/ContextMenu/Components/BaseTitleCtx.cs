@@ -29,6 +29,7 @@ public abstract partial class BaseTitleCtx : AbstractContextComponent
 		}
 		else
 		{
+			bg.SetShaderBool(GetRainbow(hook), "rainbow");
 			bg.SetShaderColor(GetColor(hook), "Color");
 			bg.SetShaderBool(true, "ColorMode");
 			bg.SetTimeOffset(Time.GetTicksMsec() - 200);
@@ -39,4 +40,5 @@ public abstract partial class BaseTitleCtx : AbstractContextComponent
 
 	protected virtual Color GetColor(ContextMenuHook hook) => Colors.Transparent;
 	protected virtual Texture2D GetTexture(ContextMenuHook hook) => null;
+	protected virtual bool GetRainbow(ContextMenuHook hook) => false;
 }

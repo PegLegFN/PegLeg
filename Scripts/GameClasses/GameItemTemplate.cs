@@ -1,4 +1,3 @@
-using Amazon.S3.Model;
 using Godot;
 using System;
 using System.Collections.Concurrent;

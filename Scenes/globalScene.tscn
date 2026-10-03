@@ -16,8 +16,20 @@
 [ext_resource type="AudioStream" uid="uid://b6tgtvgm8anpn" path="res://Audio/SFX/UI/Appear/UI_Page_Wipe_Whoosh_A_01.ogg" id="14_sgpu8"]
 [ext_resource type="AudioStream" uid="uid://bno3vjyhutov7" path="res://Audio/SFX/UI/Disappear/UI_PartyInvite_Close.ogg" id="15_pq5wg"]
 [ext_resource type="AudioStream" uid="uid://c6h74kp3cntns" path="res://Audio/SFX/UI/Disappear/UI_LeftScreen_Text_Return_01.ogg" id="16_1wsdy"]
+[ext_resource type="AudioStream" uid="uid://6fsuvskpul1" path="res://Audio/SFX/UI/Press/feddy.mp3" id="17_ln1mx"]
+[ext_resource type="AudioStream" uid="uid://6k724an1uqhd" path="res://Audio/SFX/UI/Press/furddy.mp3" id="18_ngmsl"]
 [ext_resource type="Script" uid="uid://b385h8gxfv572" path="res://Scripts/PowerHourScheduleTracker.cs" id="18_nonk5"]
+[ext_resource type="Script" uid="uid://okghai8rjwb8" path="res://Scripts/FileDistributer.cs" id="21_edrvh"]
 [ext_resource type="Script" uid="uid://08sm2feac2sd" path="res://Scripts/Audio/VolumeController.cs" id="25_a8u1q"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_f2c4i"]
+playback_mode = 1
+random_pitch = 1.1892071
+random_volume_offset_db = 3.0
+streams_count = 2
+stream_0/stream = ExtResource("17_ln1mx")
+stream_0/weight = 50.0
+stream_1/stream = ExtResource("18_ngmsl")
 
 [node name="GlobalScene" type="Node" unique_id=1502664517]
 
@@ -114,8 +126,24 @@ volume_db = 2.0
 max_polyphony = 3
 bus = &"SFX"
 
+[node name="Feddy" type="AudioStreamPlayer" parent="UISounds" unique_id=695853595]
+stream = SubResource("AudioStreamRandomizer_f2c4i")
+max_polyphony = 5
+bus = &"SFX"
+
 [node name="VolumeController" type="Node" parent="." unique_id=390856634]
 script = ExtResource("25_a8u1q")
 
 [node name="PowerHourTracker" type="Node" parent="." unique_id=698095403]
 script = ExtResource("18_nonk5")
+
+[node name="FileDistributer" type="Node" parent="." unique_id=2079108057 node_paths=PackedStringArray("fileDialog")]
+script = ExtResource("21_edrvh")
+fileDialog = NodePath("FileDialog")
+
+[node name="FileDialog" type="FileDialog" parent="FileDistributer" unique_id=17332616]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
+access = 2
+filters = PackedStringArray("*.pegleg")
+use_native_dialog = true

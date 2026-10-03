@@ -7,7 +7,7 @@ using TimeZoneNames;
 public partial class PowerHourWebhookDispatcher : Node
 {
 	//DiscordWebhookProxy webhook;
-	static PublisherProxy publisher = PublisherProxy.GetOrCreatePublisher(new("powerHour", "PegLeg Power Hour Alert"));
+	static PublisherProxy publisher = PublisherProxy.GetOrCreatePublisher(new("powerHour", "PegLeg Heroic Hours Alert"));
 	[Export]
 	SubViewportScreenshotter screenshotter;
 	TriggerInstance forcePublishHeadsupTrigger = new("forcePublishPowerHourHeadsup", true);
@@ -64,10 +64,10 @@ public partial class PowerHourWebhookDispatcher : Node
 		publisher.EnabledChanged -= UpdateEnabled;
 	}
 
-	const string headsup = "A Power Hour is scheduled to occur {timestamp}";
-	const string powerHourStart = "A Power Hour has started! It's expected to end {timestamp}";
-	const string firstEnd = "The Power Hour has ended, but another one should be active {timestamp}.\n(Ongoing missions will keep the modifiers until they end)";
-	const string secondEnd = "The Power Hour has ended.\n(Ongoing missions will keep the modifiers until they end)";
+	const string headsup = "Heroic Hours are scheduled to occur {timestamp}";
+	const string powerHourStart = "Heroic Hours have started! They're expected to end {timestamp}";
+	const string firstEnd = "Heroic Hours have ended, but more should be active {timestamp}.\n(Ongoing missions will keep the modifiers until they end)";
+	const string secondEnd = "Heroic Hours have ended.\n(Ongoing missions will keep the modifiers until they end)";
 
 	const string discordSuffix = "\n-# Try out [PegLeg](<https://peglegfn.com/releases>)";
 
@@ -125,7 +125,7 @@ public partial class PowerHourWebhookDispatcher : Node
 	{
 		if (ctx is not null && ctx.Length > 0 && ctx[0] == "force")
 			return true;
-		var confirm = await GenericConfirmationWindow.ShowConfirmation($"Publish Power Hour {type}?", warningText: "This will immediately publish onto all enabled platforms");
+		var confirm = await GenericConfirmationWindow.ShowConfirmation($"Publish Heroic Hours {type}?", warningText: "This will immediately publish onto all enabled platforms");
 		return confirm == true;
 	}
 

@@ -54,9 +54,9 @@
 [ext_resource type="Texture2D" uid="uid://ctiwn7uwikijd" path="res://Images/AppIcons/PegLegIcon256.png" id="37_5b0rm"]
 [ext_resource type="PackedScene" uid="uid://b8cv7fnnprix6" path="res://Scenes/Desktop/Views/Extra/desktopWeaponStatView.tscn" id="37_c6nfh"]
 [ext_resource type="PackedScene" uid="uid://cnrvmeve5u3rr" path="res://Scenes/Desktop/Views/desktopCosmeticShopNewView.tscn" id="37_xksdo"]
+[ext_resource type="PackedScene" uid="uid://kp0n87fnaou3" path="res://Scenes/Desktop/Views/Extra/desktopSpriteLibrary.tscn" id="39_d5tfv"]
 [ext_resource type="PackedScene" uid="uid://b5elx1mhn5ahk" path="res://Scenes/Desktop/Overlays/cardpack_opener_window.tscn" id="41_alhak"]
 [ext_resource type="PackedScene" uid="uid://cji2iyaxon6uv" path="res://Scenes/Desktop/Overlays/login_popup.tscn" id="41_kf5nt"]
-[ext_resource type="PackedScene" uid="uid://cr3cku76polyu" path="res://Scenes/Desktop/Views/Extra/desktopPartyLoadoutsView.tscn" id="42_i2466"]
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="43_4gcek"]
 [ext_resource type="PackedScene" uid="uid://cyea6hwd3vtxl" path="res://Scenes/Desktop/Views/Extra/desktopMissionAnalyticsView.tscn" id="44_bxc6c"]
 [ext_resource type="PackedScene" uid="uid://cvc7hj4ng7c04" path="res://Scenes/Desktop/Overlays/game_item_selector.tscn" id="44_m211x"]
@@ -67,6 +67,7 @@
 [ext_resource type="Script" uid="uid://dbi4mg37e4bvq" path="res://Scripts/CurtainOpener.cs" id="50_2a2nn"]
 [ext_resource type="PackedScene" uid="uid://b3d7t7ydascvj" path="res://Scenes/powerLevelIndicatorV2.tscn" id="52_csww2"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="52_pam8h"]
+[ext_resource type="Script" uid="uid://bncajbq6g5sic" path="res://Scripts/ItemInbox.cs" id="55_xksdo"]
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="58_7yvd6"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="59_4gcek"]
 [ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="59_53jin"]
@@ -82,11 +83,18 @@
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
 [ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="99_hfy7e"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_2uiud"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_d5tfv"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7h2tb"]
 shader = ExtResource("26_jn02y")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xksdo"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4jxvi"]
 shader = ExtResource("74_qm6e2")
@@ -248,10 +256,11 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 0
+current_tab = 7
 script = ExtResource("16_hsemp")
 
 [node name="Dashboard" parent="Content/MainTabs" unique_id=291427184 instance=ExtResource("10_xfiw1")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -335,7 +344,6 @@ layout_mode = 2
 metadata/_tab_index = 6
 
 [node name="Extra" type="TabContainer" parent="Content/MainTabs" unique_id=1129433097]
-visible = false
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
@@ -347,12 +355,12 @@ metadata/_tab_index = 7
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Ventures" parent="Content/MainTabs/Extra" unique_id=2076901842 instance=ExtResource("35_s7yuu")]
+[node name="Sprite Library" parent="Content/MainTabs/Extra" unique_id=448158228 instance=ExtResource("39_d5tfv")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Team Loadouts" parent="Content/MainTabs/Extra" unique_id=777247922 instance=ExtResource("42_i2466")]
+[node name="Ventures" parent="Content/MainTabs/Extra" unique_id=2076901842 instance=ExtResource("35_s7yuu")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
@@ -432,25 +440,25 @@ targetProfile = "theater2"
 metadata/_tab_index = 7
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(1508465885, 144255995) index="0" unique_id=228194712]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(1508465885, 2039985868) index="0" unique_id=1672625159]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(1508465885, 301043813) index="0" unique_id=1744959934]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1508465885, 1694755347) index="0" unique_id=669176367]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(1508465885, 426083547) index="0" unique_id=2051298463]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(1508465885, 535625123) index="0" unique_id=1931883480]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" parent_id_path=PackedInt32Array(1508465885, 248328693) index="0" unique_id=1448244160]
-button_group = SubResource("ButtonGroup_2uiud")
+button_group = SubResource("ButtonGroup_d5tfv")
 
 [node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="2" unique_id=317467257]
 elementSpace = 10.0
@@ -527,6 +535,24 @@ mouse_filter = 2
 texture = ExtResource("29_ql5qm")
 expand_mode = 3
 
+[node name="Control" type="Control" parent="Content/StatusBar/Left/AccountSelectorBtn" unique_id=1531177690]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="UpdateNotif" type="Panel" parent="Content/StatusBar/Left/AccountSelectorBtn/Control" unique_id=941434612]
+self_modulate = Color(1, 1, 0, 1)
+z_index = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = -1
+offset_left = -5.0
+offset_top = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xksdo")
+
 [node name="LaunchBtn" type="Button" parent="Content/StatusBar/Left" unique_id=1071874668]
 visible = false
 custom_minimum_size = Vector2(25, 25)
@@ -548,16 +574,25 @@ texture = ExtResource("31_retv3")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PowerLevelIndicatorV2" parent="Content/StatusBar/Left" unique_id=1952626507 node_paths=PackedStringArray("tempClaimContent") instance=ExtResource("52_csww2")]
+[node name="PowerLevelIndicatorV2" parent="Content/StatusBar/Left" unique_id=1952626507 instance=ExtResource("52_csww2")]
 layout_mode = 2
-tempClaimContent = NodePath("../Button")
 
 [node name="Button" type="Button" parent="Content/StatusBar/Left" unique_id=1534175427]
+visible = false
 layout_mode = 2
 size_flags_vertical = 4
 theme_type_variation = &"ActionButton"
 theme_override_font_sizes/font_size = 12
 text = "!! Rewards !!"
+
+[node name="Button2" type="Button" parent="Content/StatusBar/Left" unique_id=487640777 node_paths=PackedStringArray("inboxContainer")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"ActionButton"
+theme_override_font_sizes/font_size = 12
+text = "!! Inbox !!"
+script = ExtResource("55_xksdo")
+inboxContainer = NodePath(".")
 
 [node name="Right" type="HBoxContainer" parent="Content/StatusBar" unique_id=1749668514]
 layout_mode = 2
@@ -597,7 +632,7 @@ theme_type_variation = &"LargeButton"
 icon = ExtResource("28_p4icb")
 expand_icon = true
 
-[node name="UpdateNotif" parent="Content/StatusBar/Right/SettingsButton" unique_id=941434612 instance=ExtResource("60_d5tfv")]
+[node name="UpdateNotif" parent="Content/StatusBar/Right/SettingsButton" unique_id=329531460 instance=ExtResource("60_d5tfv")]
 layout_mode = 1
 anchors_preset = -1
 
@@ -730,10 +765,12 @@ modTime = 8.0
 script = ExtResource("50_2a2nn")
 curtain = NodePath("..")
 
+[connection signal="AnyInboxChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Control/UpdateNotif" method="set_visible"]
 [connection signal="IconChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/MarginContainer/TextureRect" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/StatusBar/Left/AccountSelectorBtn" to="Content/StatusBar/Left/AccountSelectorBtn/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="OverlayWindows/AccountSwitcher" method="OpenWindow"]
 [connection signal="pressed" from="Content/StatusBar/Left/Button" to="Content/StatusBar/Left/PowerLevelIndicatorV2" method="TempClaimRewards"]
+[connection signal="pressed" from="Content/StatusBar/Left/Button2" to="Content/StatusBar/Left/Button2" method="ShowInbox"]
 [connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindow" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="set_button_icon"]
 [connection signal="pressed" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="ToggleMute"]

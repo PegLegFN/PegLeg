@@ -1,6 +1,7 @@
 shader_type canvas_item;
 #include "Includes/AdaptToAspect.gdshaderinc"
 #include "Includes/CornerMask.gdshaderinc"
+#include "Includes/HSVToRGB.gdshaderinc"
 
 uniform sampler2D TrianglePattern;
 uniform vec2 ControlSize = vec2(100.0, 100.0);
@@ -9,6 +10,7 @@ uniform float CornerRadius = 10.0;
 uniform bool ColorMode = false;
 uniform vec4 Color : source_color = vec4(1);
 uniform float time = 0.0;
+uniform bool rainbow;
 
 varying vec4 modulate;
 
@@ -33,7 +35,7 @@ void fragment() {
 		gradient = 1.0-abs(gradient);
 		gradient=clamp(gradient,0,1);
 		
-		COLOR=Color;
+		COLOR = rainbow ? vec4(hsv_to_rgb(vec3((patternResult*2.0+patternUV.x-TIME*2.0)*0.07+patternUV.y*0.01,1,1)),1) : Color;
 		COLOR.rgb *= 0.6+((patternResult+gradient*2.0)*0.2);
 	}
 	else

@@ -864,10 +864,8 @@ public partial class CardPackOpener : Control
 			skipChoiceButton.Visible = true;
 
 		int nextChoiceIndex = choicesOnly ? nextPullIndex - 1 : nextPullIndex - (queuedItems.Count + 1);
-		GD.Print(nextChoiceIndex);
 		nextChoiceIndex = Mathf.Clamp(nextChoiceIndex, 0, queuedChoices.Count - 1);
-		GD.Print(nextChoiceIndex);
-		GD.Print(queuedChoices[nextChoiceIndex]);
+		GD.Print($"Choice Llama: {queuedChoices[nextChoiceIndex]}".FixNewlines());
 		JsonArray currentChoices = null;
 		if (queuedChoices[nextChoiceIndex].profile is not null && queuedChoices[nextChoiceIndex].attributes["options"]?.AsArray() is JsonArray choices)
 			currentChoices = choices;

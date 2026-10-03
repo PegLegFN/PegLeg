@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b6i4qroblgrhs"]
+[gd_scene format=3 uid="uid://b6i4qroblgrhs"]
 
 [ext_resource type="Shader" uid="uid://17ec5ugjn0qv" path="res://Shaders/CircleBaseMask.gdshader" id="1_6n3co"]
 [ext_resource type="Script" uid="uid://dvgcv52c2ve0w" path="res://Scripts/UserInterface/ListEntries/GameAccountEntry.cs" id="1_flh3e"]
@@ -12,23 +12,30 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pkso0"]
 shader = ExtResource("1_6n3co")
 
-[node name="AccountEntry" type="HBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_624ui"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="AccountEntry" type="HBoxContainer" unique_id=1307363336]
 custom_minimum_size = Vector2(150, 0)
 script = ExtResource("1_flh3e")
 defaultIcon = ExtResource("2_krnhj")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1577869210]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="MarginContainer"]
+[node name="Button" type="Button" parent="MarginContainer" unique_id=1074076558]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 theme_type_variation = &"AccountButton"
 text = "
 "
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=386405254]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -36,11 +43,11 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer" unique_id=1577057927]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer" unique_id=1295740798]
 material = SubResource("ShaderMaterial_pkso0")
 custom_minimum_size = Vector2(21, 0)
 layout_mode = 2
@@ -48,13 +55,13 @@ mouse_filter = 2
 texture = ExtResource("2_oc5xf")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/MarginContainer/HBoxContainer" unique_id=2025082382]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "TomatechGames"
 text_overrun_behavior = 3
 
-[node name="AuthAlert" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer"]
+[node name="AuthAlert" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer" unique_id=1861259391]
 visible = false
 custom_minimum_size = Vector2(21, 0)
 layout_mode = 2
@@ -63,16 +70,34 @@ tooltip_text = "Could not authenticate, please sign in again"
 texture = ExtResource("4_py8uw")
 expand_mode = 1
 
-[node name="InvertHasAuth" type="Node" parent="MarginContainer/MarginContainer/HBoxContainer/AuthAlert"]
+[node name="InvertHasAuth" type="Node" parent="MarginContainer/MarginContainer/HBoxContainer/AuthAlert" unique_id=1270475446]
 script = ExtResource("5_5y5dk")
 
-[node name="DeleteButton" type="Button" parent="."]
+[node name="Control" type="Control" parent="MarginContainer" unique_id=144086928]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="UpdateNotif" type="Panel" parent="MarginContainer/Control" unique_id=1875040624]
+self_modulate = Color(1, 1, 0, 1)
+z_index = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = -1
+offset_left = -5.0
+offset_top = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_624ui")
+
+[node name="DeleteButton" type="Button" parent="." unique_id=1334935742]
 self_modulate = Color(1, 0, 0, 1)
 custom_minimum_size = Vector2(27, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="DeleteButton"]
+[node name="TextureRect" type="TextureRect" parent="DeleteButton" unique_id=401724737]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -86,13 +111,13 @@ grow_vertical = 2
 texture = ExtResource("4_l8hq6")
 expand_mode = 1
 
-[node name="ExchangeBtn" type="Button" parent="."]
+[node name="ExchangeBtn" type="Button" parent="." unique_id=1061480579]
 visible = false
 custom_minimum_size = Vector2(27, 0)
 layout_mode = 2
 theme_type_variation = &"LargeButton"
 
-[node name="TextureRect" type="TextureRect" parent="ExchangeBtn"]
+[node name="TextureRect" type="TextureRect" parent="ExchangeBtn" unique_id=1031071382]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -108,6 +133,7 @@ expand_mode = 1
 
 [connection signal="AuthenticatedChanged" from="." to="MarginContainer/MarginContainer/HBoxContainer/AuthAlert/InvertHasAuth" method="EmitInverted"]
 [connection signal="IconChanged" from="." to="MarginContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
+[connection signal="InboxChanged" from="." to="MarginContainer/Control/UpdateNotif" method="set_visible"]
 [connection signal="NameChanged" from="." to="MarginContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
 [connection signal="TooltipChanged" from="." to="MarginContainer/Button" method="set_tooltip_text"]
 [connection signal="pressed" from="MarginContainer/Button" to="." method="Press"]

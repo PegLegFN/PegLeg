@@ -1,9 +1,11 @@
 using Godot;
 using System;
 using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using FileAccess = Godot.FileAccess;
 
@@ -97,6 +99,7 @@ public partial class Bootstrap : Node
 	}
 
 	public static readonly FrozenSet<string> cmdLineArgs = OS.GetCmdlineArgs().ToFrozenSet();
+	public static string FirstArg { get; private set; } = cmdLineArgs.FirstOrDefault() ?? "";
 	public static bool StartMinimised { get; private set; } = cmdLineArgs.Contains("--start-minimised");
 	public static bool IsEditor { get; private set; } = OS.HasFeature("editor");
 	public static bool UsingMobileUI { get; private set; }
@@ -142,6 +145,7 @@ public partial class Bootstrap : Node
 			PaletteHelper.Initialise();
 			var preferredScreen = AppConfig.Get("ui", "preferred_screen", -1);
 			GD.Print($"Preferred Screen: {preferredScreen}");
+			GD.Print($"All Args: [{cmdLineArgs.JoinString()}]");
 			if (preferredScreen <= -1)
 			{
 				preferredScreen = DisplayServer.GetScreenFromRect(
@@ -207,8 +211,10 @@ public partial class Bootstrap : Node
 					{
 						GD.Print("Pipe connected");
 						using StreamWriter writer = new(pipeClient);
-						//if this instance was trying to open a file, forward the file to the running instance
 						writer.WriteLine("showWindow");
+						//if this instance was trying to open a file, forward the file to the running instance
+						if (FirstArg.EndsWith(".pegleg") || FirstArg.EndsWith(".fnprofile"))
+							writer.WriteLine($"openFile:{FirstArg}");
 						writer.WriteLine("disconnect");
 						writer.Flush();
 						GD.Print("Sending: showWindow");
@@ -231,6 +237,11 @@ public partial class Bootstrap : Node
 			var currentPid = OS.GetProcessId();
 			processFile.Store64((ulong)currentPid);
 		}
+
+		if (FirstArg.EndsWith(".pegleg"))
+			FileDistributer.TryAddFileFromPath(FirstArg);
+		if (FirstArg.EndsWith(".fnProfile"))
+			InventoryInterface.SetCustomProfile(FirstArg);
 #endif
 
 #if GODOT_WINDOWS
@@ -536,6 +547,12 @@ public partial class Bootstrap : Node
 						GD.Print("Pipe recieved " + input);
 						switch (input)
 						{
+							case string when input.StartsWith("openFile:") && input[9..] is string path:
+								if (path.EndsWith(".pegleg"))
+									FileDistributer.TryAddFileFromPath(path);
+								if (path.EndsWith(".fnprofile"))
+									InventoryInterface.SetCustomProfile(path);
+									break;
 							case "showWindow":
 								TrayIcon.UnminimiseDeferred();
 								break;

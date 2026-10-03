@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://boywmwfvrbmwp" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Cogs_128.png" id="6_6h6v6"]
 [ext_resource type="Texture2D" uid="uid://up5i4jhi7v1v" path="res://Images/InterfaceIcons/Rating-Icon_48.png" id="6_8o7d2"]
 [ext_resource type="Script" uid="uid://ni2kue85s6jc" path="res://Scripts/UIElements/DynamicGridContainer.cs" id="6_a3sqn"]
+[ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="7_0ffrp"]
+[ext_resource type="Texture2D" uid="uid://dffqg6jtdu38u" path="res://Images/InterfaceIcons/Icon_Seach_Close.png" id="8_2do1g"]
 [ext_resource type="Texture2D" uid="uid://bufu4bggy6lrs" path="res://Images/InterfaceIcons/T-Icon-Defenders_-CARD.png" id="9_my6h5"]
 [ext_resource type="Texture2D" uid="uid://dw4n1jlpyogxw" path="res://Images/InterfaceIcons/T-Icon-Nav-Squad-128.png" id="10_17ihq"]
 [ext_resource type="Texture2D" uid="uid://fo5dt3fnvrt0" path="res://Images/InterfaceIcons/SchematicIcon128.png" id="11_k86hi"]
@@ -64,27 +66,30 @@ shader_parameter/skipSDF = false
 shader = ExtResource("32_xj7y8")
 shader_parameter/ControlSize = Vector2(375, 100)
 
-[node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("newItemListNode", "searchBox", "targetUser", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel", "researchTokenArea", "researchTokenButton")]
+[node name="Inventory" type="MarginContainer" unique_id=325556342 node_paths=PackedStringArray("newItemListNode", "searchBox", "devAllPanel", "devAllButton", "tabBar", "creatorImageParent", "inMissionIndicator", "heavySearchWarning", "powerLevel", "researchTokenArea", "researchTokenButton", "profileExport", "customProfileSection", "ownedProfileSection", "fileExportDialog")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ix0kh")
+targetProfile = "campaign"
+typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "Schematic", "Hero", "Defender", "Worker", "AccountResource", "CardPack")
 newItemListNode = NodePath("VBoxContainer/ScrollContainer2/MarginContainer/RecycleContainer")
 searchBox = NodePath("VBoxContainer/HBoxContainer/Search")
-targetUser = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/User")
 devAllPanel = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev")
 devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/MarginContainer/CheckButton")
 tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2")
-targetProfile = "campaign"
-typeFilters = PackedStringArray("Hero,Schematic,Defender,Worker,AccountResource", "Schematic", "Hero", "Defender", "Worker", "AccountResource", "CardPack")
 creatorImageParent = NodePath("CreatorEasterEggs")
 inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
 heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
 powerLevel = NodePath("VBoxContainer/HBoxContainer/PowerLevel")
 researchTokenArea = NodePath("SchematicTokenButtonArea")
 researchTokenButton = NodePath("SchematicTokenButtonArea/MarginContainer/Button")
+profileExport = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer3/Button")
+customProfileSection = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer3/HBoxContainer")
+ownedProfileSection = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer3/Button")
+fileExportDialog = NodePath("FileDialog")
 
 [node name="CreatorEasterEggs" parent="." unique_id=100444052 instance=ExtResource("2_5b23r")]
 layout_mode = 2
@@ -181,11 +186,13 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainer2" unique_id=1604566211]
+visible = false
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/MarginContainer" unique_id=2144496585]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2" unique_id=547535601]
@@ -217,6 +224,33 @@ anchor_right = 1.0
 offset_top = 5.0
 grow_horizontal = 2
 theme_type_variation = &"Panel3PadB"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2" unique_id=218653382]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer3" unique_id=609601458]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Export Profile"
+icon = ExtResource("7_0ffrp")
+expand_icon = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/HBoxContainer3" unique_id=1073578151]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/HBoxContainer3/HBoxContainer" unique_id=687739350]
+layout_mode = 2
+text = "Viewing imported Profile"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer3/HBoxContainer" unique_id=942340539]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"LargeButton"
+icon = ExtResource("8_2do1g")
+expand_icon = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2" unique_id=771268266]
 layout_mode = 2
@@ -842,6 +876,13 @@ grow_vertical = 2
 texture = ExtResource("32_hre2m")
 expand_mode = 3
 
+[node name="FileDialog" type="FileDialog" parent="." unique_id=137061099]
+access = 2
+filters = PackedStringArray("*.fnprofile")
+use_native_dialog = true
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer3/Button" to="." method="ShowExport"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer3/HBoxContainer/Button" to="." method="ClearImported"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/NewFilter/MarginContainer/CheckButton" to="." method="SetNewFilter"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/FavouriteFilter/MarginContainer/CheckButton" to="." method="SetFavoriteFilter"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/HBoxContainer/NameSort/MarginContainer/CheckButton" to="." method="SetSortMode"]

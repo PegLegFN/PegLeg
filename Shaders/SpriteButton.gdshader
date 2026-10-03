@@ -1,10 +1,11 @@
 shader_type canvas_item;
 #include "Includes/ScaleVector.gdshaderinc"
+#include "Includes/HSVToRGB.gdshaderinc"
 
 uniform vec2 ControlSize = vec2(100.0, 100.0);
 uniform vec2 Offset0 = vec2(-9,-1);
 uniform vec2 Offset1 = vec2(-3,4);
-uniform vec2 Offset2 = vec2(4, 4);
+uniform vec2 Offset2 = vec2(3, 6);
 uniform vec2 Offset3 = vec2(6,-9);
 uniform float OutlineOffset = 5;
 uniform float OutlineGap = 2;
@@ -16,7 +17,7 @@ uniform bool locked;
 varying vec4 modulate;
 
 void vertex() {
-	modulate=COLOR;
+	modulate = COLOR;
 	vec2 offset = vec2(0);
 	vec2 extraOffset = vec2(0);
 	switch(VERTEX_ID){
@@ -42,7 +43,7 @@ void vertex() {
 
 void fragment()
 {
-	COLOR=vec4(1.0);
+	COLOR = vec4(1.0);
 	
 	vec2 offsetSize = ControlSize+vec2(OutlineOffset*2.0);
 	vec2 distVecBase=max(UV, vec2(1.0)-UV);
@@ -52,9 +53,9 @@ void fragment()
 	float outlineDist = clamp(min(dist+(OutlineOffset-OutlineGap)*2.0, -dist),0,1);
 	float cardDist = clamp(-dist-(OutlineOffset)*2.0,0,1);
 	
-	vec4 rarityColor = special ? vec4(1) : modulate;
+	vec4 rarityColor = special ? vec4(hsv_to_rgb(vec3((UV.x-TIME*0.1)*0.5-UV.y*0.2,0.6,1.0)), 1.0) : modulate;
 	
-	float cardBase = (UV.y*100.0)-93.0;
+	float cardBase = (UV.y*100.0)-(93.0-(progress*3.0));
 	cardBase+=UV.x*(5.0+(progress*5.0));
 	cardBase=clamp(cardBase,0,1);
 	
@@ -64,18 +65,18 @@ void fragment()
 	//float cardGradient = 1.0-distance(aspectUV,vec2(0.5,0.6));
 	float cardGradient = clamp((UV.y*1.5)-0.5,0,1)*0.3;
 	vec4 cardGradientCol = mix(vec4(0.8),rarityColor,cardGradient);
-	if (lost){
-		cardGradientCol=vec4(0.3);
+	if (lost) {
+		cardGradientCol = vec4(0.3);
 	}
 	
 	vec4 cardColor = vec4(mix(cardGradientCol,rarityColor,cardBase));
-	if(locked) {
-		cardColor=vec4(mix(0.1,0.9,progress));
+	if (locked) {
+		cardColor = vec4(mix(0.1,0.3,progress));
 	}
 	cardColor.a=1.0;
 	
-	COLOR = mix(vec4(1,1,1,0.75),cardColor,cardDist);
-	COLOR.a *= cardDist+(outlineDist*progress);
+	COLOR = mix(vec4(1),cardColor,cardDist);
+	COLOR.a *= cardDist + (outlineDist * progress);
 }
 
 //void light() {

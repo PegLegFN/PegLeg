@@ -503,14 +503,13 @@ public partial class GameAccount
 		{
 			var refreshRequest = await TargetClient.LoginWithRefreshToken(refreshToken);
 
-			if (!await refreshRequest.CheckForError())
+			if (!await refreshRequest.CheckForError(false))
 			{
 				GD.Print($"Token refreshed for {DisplayName}");
 				var json = await refreshRequest.ReadJson();
 				SetAuthentication(json);
 				return true;
 			}
-			//GD.Print($"Refresh token error for {DisplayName}");
 		}
 		var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
 		var ddJson = DecryptDeviceDetails(dd);
