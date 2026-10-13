@@ -13,7 +13,7 @@ using System.Xml;
 
 static class CatalogRequests
 {
-	static JsonObject storefrontCache;
+	//static JsonObject storefrontCache;
 
 	//static JsonObject[] llamaCache;
 	//public static async Task<JsonObject[]> GetLlamaShop(bool forceRefresh = false)

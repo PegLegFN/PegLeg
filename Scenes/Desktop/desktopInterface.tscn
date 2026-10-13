@@ -494,18 +494,21 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 5
 
 [node name="Left" type="HBoxContainer" parent="Content/StatusBar" unique_id=2014413193]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 0
 theme_override_constants/separation = 2
 
-[node name="AccountSelectorBtn" type="MarginContainer" parent="Content/StatusBar/Left" unique_id=689381301]
+[node name="AccountSelectorBtn" type="MarginContainer" parent="Content/StatusBar/Left" unique_id=689381301 node_paths=PackedStringArray("launchContent", "launchContentInverse")]
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 script = ExtResource("27_a331l")
 defaultIcon = ExtResource("28_chpxd")
 useActiveAccount = true
+launchContent = NodePath("../../MarginContainer")
+launchContentInverse = NodePath("..")
 
 [node name="Button" type="Button" parent="Content/StatusBar/Left/AccountSelectorBtn" unique_id=1542407438]
 layout_mode = 2
@@ -593,6 +596,15 @@ theme_override_font_sizes/font_size = 12
 text = "!! Inbox !!"
 script = ExtResource("55_xksdo")
 inboxContainer = NodePath(".")
+
+[node name="MarginContainer" type="MarginContainer" parent="Content/StatusBar" unique_id=1450324161]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Button" type="Button" parent="Content/StatusBar/MarginContainer" unique_id=515282741]
+layout_mode = 2
+theme_type_variation = &"ActionButton"
+text = "Launch Game"
 
 [node name="Right" type="HBoxContainer" parent="Content/StatusBar" unique_id=1749668514]
 layout_mode = 2
@@ -771,6 +783,7 @@ curtain = NodePath("..")
 [connection signal="pressed" from="Content/StatusBar/Left/AccountSelectorBtn/Button" to="OverlayWindows/AccountSwitcher" method="OpenWindow"]
 [connection signal="pressed" from="Content/StatusBar/Left/Button" to="Content/StatusBar/Left/PowerLevelIndicatorV2" method="TempClaimRewards"]
 [connection signal="pressed" from="Content/StatusBar/Left/Button2" to="Content/StatusBar/Left/Button2" method="ShowInbox"]
+[connection signal="pressed" from="Content/StatusBar/MarginContainer/Button" to="Content/StatusBar/Left/AccountSelectorBtn" method="LaunchGamePrompt"]
 [connection signal="pressed" from="Content/StatusBar/Right/SettingsButton" to="OverlayWindows/SettingsWindow" method="OpenWindow"]
 [connection signal="UpdateMuteIcon" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="set_button_icon"]
 [connection signal="pressed" from="Content/StatusBar/Right/MuteBtn" to="Content/StatusBar/Right/MuteBtn" method="ToggleMute"]

@@ -37,11 +37,6 @@ public partial class CardPackEntry : GameItemEntry
 			return;
 		}
 
-		if (debug)
-		{
-			int _ = 0;
-		}
-
 		if (item.template?.Type != "CardPack")
 		{
 			GD.Print("not a cardpack");

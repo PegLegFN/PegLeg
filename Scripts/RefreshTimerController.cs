@@ -46,19 +46,19 @@ public partial class RefreshTimerController : Node
 
 		lastTime = DateTime.UtcNow;
 		AppConfig.OnConfigChanged += OnConfigChanged;
-		offset = AppConfig.Get("advanced", "offset_refresh", true) ? 0 : 2;
+		offset = AppConfig.Get("advanced", "offset_refresh", true) ? targetDelayedOffset : 0;
 		timeTravelDays = AppConfig.Get("advanced", "time_travel", 0);
 		PegLegResourceManager.OnResourcesLoaded += OnResourcesLoaded;
 	}
 
 	private void OnResourcesLoaded()
 	{
-		targetDelayedOffset = PegLegResourceManager.MagicNumbers?["questErrorDelay"]?.GetValue<double>() ?? 5;
+		targetDelayedOffset = PegLegResourceManager.MagicNumbers?["questErrorDelayNew"]?.GetValue<double>() ?? 2;
 		if (AppConfig.Get("advanced", "offset_refresh", true))
 			offset = targetDelayedOffset;
 	}
-	double targetDelayedOffset = 5;
-	double offset = 5;
+	double targetDelayedOffset = 2;
+	double offset = 2;
 	private void OnConfigChanged(string section, string key, JsonNode value)
 	{
 		if (section == "advanced")

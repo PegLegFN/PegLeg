@@ -1,11 +1,9 @@
 using Godot;
 using System;
 using System.Collections.Frozen;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using FileAccess = Godot.FileAccess;
 
@@ -29,6 +27,8 @@ public partial class Bootstrap : Node
 	Control background;
 	[Export]
 	Control curtain;
+	[Export]
+	Control loadingAtlas;
 	[Export]
 	Control loadingContent;
 	[Export]
@@ -83,6 +83,12 @@ public partial class Bootstrap : Node
 	[Export]
 	Control liteContent;
 
+	[ExportGroup("Launcher")]
+	[Export]
+	Control launchContent;
+	[Export]
+	AccountList launchAccountList;
+
 	static void DeleteContents(string path)
 	{
 		foreach (var dir in DirAccess.GetDirectoriesAt(path))
@@ -134,6 +140,7 @@ public partial class Bootstrap : Node
 		isFirstBoot = !hasBooted;
 		if (isFirstBoot)
 		{
+			GD.Print($"All Args: [{cmdLineArgs.JoinString()}]");
 			window.Mode = Window.ModeEnum.Windowed;
 			window.ContentScaleSize = window.Size = bootSize;
 			window.Transparent = true;
@@ -142,10 +149,18 @@ public partial class Bootstrap : Node
 			window.Unfocusable = false;
 
 			AppConfig.MigrateAndPreloadConfig();
+
+#if GODOT_WINDOWS
+
+			if (GameLauncher.TryQuickLaunch(ShowLaunchAccountSelector))
+			{
+				window.Win64SetVisible(false);
+				return;
+			}
+#endif
+
 			PaletteHelper.Initialise();
 			var preferredScreen = AppConfig.Get("ui", "preferred_screen", -1);
-			GD.Print($"Preferred Screen: {preferredScreen}");
-			GD.Print($"All Args: [{cmdLineArgs.JoinString()}]");
 			if (preferredScreen <= -1)
 			{
 				preferredScreen = DisplayServer.GetScreenFromRect(
@@ -156,8 +171,12 @@ public partial class Bootstrap : Node
 				);
 				GD.Print($"Auto Screen: {preferredScreen}");
 			}
+			else
+			{
+				GD.Print($"Preferred Screen: {preferredScreen}");
+			}
+			window.Position = Vector2I.One * -10000;
 			window.CurrentScreen = preferredScreen;
-			window.MoveToCenter();
 			BufferKeySetting.LoadLocalOrgsAndChannels();
 			CatalogRequests.CleanCosmeticResourceCache();
 		}
@@ -201,7 +220,7 @@ public partial class Bootstrap : Node
 			)
 			{
 				GD.Print("PegLeg already running, exiting process");
-				window.Mode = Window.ModeEnum.Minimized;
+				window.Win64SetVisible(false);
 				try
 				{
 					using NamedPipeClientStream pipeClient = new(pipeName);
@@ -244,15 +263,14 @@ public partial class Bootstrap : Node
 			InventoryInterface.SetCustomProfile(FirstArg);
 #endif
 
-#if GODOT_WINDOWS
 		//todo: remove any update files from the update download folder that are less than or equal to the current version.
 		//Also show a notice if an update was downloaded but not installed, prompting users to install it
-#endif
 
 		try
 		{
 #if GODOT_WINDOWS
-			NamedPipeContainer.OpenPipe();
+			if (!IsEditor)
+				NamedPipeContainer.OpenPipe();
 #endif
 			Initialise();
 		}
@@ -264,8 +282,51 @@ public partial class Bootstrap : Node
 		}
 	}
 
+	async void ShowLaunchAccountSelector()
+	{
+		await Helpers.WaitForFrames(5);
+
+		if (GameAccount.OwnedAccounts.Length == 0)
+			GetTree().Quit();
+
+		if (GameAccount.OwnedAccounts.Length == 1)
+		{
+			await GameLauncher.LaunchGame(GameAccount.OwnedAccounts.FirstOrDefault(), true);
+			GetTree().Quit();
+		}
+
+		foreach (var a in GameAccount.OwnedAccounts)
+		{
+			if (await a.SetAsActiveAccount())
+				break;
+		}
+
+		GetWindow().Win64SetVisible(true);
+		GetWindow().MoveToCenter();
+		launchContent.Visible = true;
+		launchAccountList.AccountSelectedUnauthed += LaunchAsAccount;
+		launchAccountList.PopulateAccounts();
+	}
+
+	private async void LaunchAsAccount(string accountId)
+	{
+		launchContent.Visible = false;
+		if (GameAccount.OwnedAccounts.FirstOrDefault(a => a.accountId == accountId) is { } acc)
+			await GameLauncher.LaunchGame(acc, true);
+		GetTree().Quit();
+	}
+
 	async void Initialise()
 	{
+#if GODOT_WINDOWS
+		if (isFirstBoot)
+		{
+			await Helpers.WaitForFrames(5);
+			var win = GetWindow();
+			win.MoveToCenter();
+			win.GrabFocus();
+		}
+#endif
 		liteContent.Visible = false;
 		loadingContent.Visible = false;
 
@@ -277,7 +338,6 @@ public partial class Bootstrap : Node
 
 		loadingContent.Visible = true;
 
-		GD.Print("Initialise2");
 		//GetWindow().ContentScaleFactor = OS.HasFeature("mobile") ? 3 : 1;
 		//bool hasBanjoAssets = await PegLegResourceManager.ReadAllSources();
 		await PegLegResourceManager.FetchAndLoadPackages(majorPackageVersion, minorPackageVersion, OnPackageProgress);
@@ -289,7 +349,6 @@ public partial class Bootstrap : Node
 			progressBar.Visible = prog <= 1;
 			progressBar.Value = prog;
 		}
-		GD.Print("Initialise3");
 
 		if (isFirstBoot && IsEditor)
 		{
@@ -308,6 +367,7 @@ public partial class Bootstrap : Node
 			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "preview_image", [1, 0]));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_humorshale_teak", "locker_preview_image", [1, 0]));
+			PrintCosmo(CosmoRequests.GetImageData("AthenaCharacter:character_techtomato", "locker_preview_image"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_817_m_dirtydocks", "preview_image", [1]));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "store_image"));
 #endif

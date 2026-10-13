@@ -4,6 +4,8 @@
 [ext_resource type="Shader" uid="uid://c1wby5d34ekir" path="res://Shaders/GradientPanel.gdshader" id="2_hh1at"]
 [ext_resource type="Shader" uid="uid://cht7xm52dybcv" path="res://Shaders/CosmeticOfferIcon.gdshader" id="4_3th2c"]
 [ext_resource type="Texture2D" uid="uid://bqhlvb70hrgro" path="res://Images/TextureResources/JamTrackRadial.tres" id="5_7wh5u"]
+[ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="6_lma21"]
+[ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="7_gkyau"]
 [ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="8_jyoqb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_arynh"]
@@ -30,7 +32,7 @@ shader_parameter/CosmeticZoom = 1.0
 shader_parameter/CornerRadius = 10.0
 shader_parameter/JamRadius = 3.0
 shader_parameter/JamTexture = ExtResource("5_7wh5u")
-shader_parameter/time = 3.684
+shader_parameter/time = 4.43
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lma21"]
 resource_local_to_scene = true
@@ -43,7 +45,7 @@ shader_parameter/CosmeticZoom = 1.0
 shader_parameter/CornerRadius = 10.0
 shader_parameter/JamRadius = 3.0
 shader_parameter/JamTexture = ExtResource("5_7wh5u")
-shader_parameter/time = 3.684
+shader_parameter/time = 4.43
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkyau"]
 resource_local_to_scene = true
@@ -88,12 +90,23 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="CosmeticOfferEntry" unique_id=1963553576 instance=ExtResource("1_arynh")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pt1cr"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 3.0
+content_margin_bottom = 2.0
+bg_color = Color(0.6, 0.6, 0.6, 0.752941)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="CosmeticOfferEntry" unique_id=1963553576 node_paths=PackedStringArray("leavingTimer") instance=ExtResource("1_arynh")]
 custom_minimum_size = Vector2(100, 100)
 offset_right = 100.0
 offset_bottom = 100.0
 hoverTypeSize = 13.0
-skipLastSeen = true
+leavingTimer = NodePath("VBoxContainer/Overlays/HBoxContainer/LeavingTimer2")
 
 [node name="RadialBG" parent="ImageContent" parent_id_path=PackedInt32Array(1960588957) index="0" unique_id=1198445779]
 material = SubResource("ShaderMaterial_arynh")
@@ -149,6 +162,9 @@ visible = false
 [node name="FreeLabel" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/FreeContent" parent_id_path=PackedInt32Array(1626327332) index="0" unique_id=747274228]
 theme_override_font_sizes/font_size = 12
 
+[node name="OriginalPrice" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/FreeContent" parent_id_path=PackedInt32Array(1626327332) index="1" unique_id=263259455]
+visible = false
+
 [node name="OwnedLabel" parent="DetailsArea/MarginContainer/VBoxContainer/PriceArea" index="1" unique_id=964994074]
 theme_override_font_sizes/font_size = 12
 
@@ -161,11 +177,31 @@ theme_override_font_sizes/font_size = 10
 [node name="StandardType" parent="DetailsArea/HoverInfo" index="3" unique_id=1229785293]
 theme_override_font_sizes/font_size = 10
 
-[node name="AlmostAYear" parent="VBoxContainer/Overlays" parent_id_path=PackedInt32Array(2136210566) index="0" unique_id=1776421360]
-modulate = Color(1, 1, 1, 0)
+[node name="TextureRect" parent="VBoxContainer/Overlays/AlmostAYear" parent_id_path=PackedInt32Array(1776421360) index="0" unique_id=1563365150]
+visible = false
+offset_left = -12.0
+offset_top = -63.0
+offset_right = -2.0
+offset_bottom = -43.0
 
-[node name="HBoxContainer" parent="VBoxContainer/Overlays" parent_id_path=PackedInt32Array(2136210566) index="1" unique_id=1291098870]
+[node name="Label" parent="VBoxContainer/Overlays/AlmostAYear" parent_id_path=PackedInt32Array(1776421360) index="1" unique_id=1692529766]
+offset_left = -109.00001
+offset_top = -58.0
+offset_right = -6.0000076
+offset_bottom = -44.0
+rotation = 0.010471975
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="HBoxContainer" parent="VBoxContainer/Overlays" parent_id_path=PackedInt32Array(2136210566) index="1" unique_id=1838586421]
+offset_right = -3.0
 offset_bottom = -1.0
+theme_override_constants/v_separation = 13
+columns = 1
+
+[node name="LeavingTimer" parent="VBoxContainer/Overlays/HBoxContainer" index="0" unique_id=1910063822]
+visible = false
 
 [node name="Panel" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer/LeavingSoonAlert" parent_id_path=PackedInt32Array(714371069) index="0" unique_id=1438835707]
 theme_override_styles/panel = SubResource("StyleBoxFlat_arynh")
@@ -178,8 +214,69 @@ theme_override_constants/shadow_outline_size = 1
 theme_override_font_sizes/font_size = 8
 vertical_alignment = 2
 
-[node name="LastSeenPanel" parent="VBoxContainer/Overlays/HBoxContainer" index="1" unique_id=1121278558]
-visible = false
+[node name="Panel" parent="VBoxContainer/Overlays/HBoxContainer/LastSeenPanel/LastSeenAlert" parent_id_path=PackedInt32Array(256512533) index="0" unique_id=619443712]
+theme_override_styles/panel = SubResource("StyleBoxFlat_arynh")
+
+[node name="LastSeenLabel" parent="VBoxContainer/Overlays/HBoxContainer/LastSeenPanel/HBoxContainer" parent_id_path=PackedInt32Array(922294911) index="1" unique_id=1546786789]
+size_flags_vertical = 1
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_outline_size = 1
+theme_override_font_sizes/font_size = 8
+vertical_alignment = 2
+
+[node name="LeavingTimer2" type="PanelContainer" parent="VBoxContainer/Overlays/HBoxContainer" index="2" unique_id=2058061128 node_paths=PackedStringArray("target")]
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Time until the item leaves the shop"
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_pt1cr")
+script = ExtResource("6_lma21")
+target = NodePath("HBoxContainer/LeavingLabel")
+timerType = 5
+formatType = 1
+customWarningTime = 1440
+customCritTime = 1440
+useWeeks = true
+useDecimalDaysAndWeeks = false
+tooltipPrefix = "Leaves shop on:"
+
+[node name="LeavingSoonAlert" type="MarginContainer" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2" index="0" unique_id=1171646071]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = -2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -2
+
+[node name="Panel" type="Panel" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2/LeavingSoonAlert" index="0" unique_id=1007035139]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_arynh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2" index="1" unique_id=1892688136]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2/HBoxContainer" index="0" unique_id=1794565124]
+layout_mode = 2
+texture = ExtResource("7_gkyau")
+expand_mode = 3
+
+[node name="LeavingLabel" type="Label" parent="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2/HBoxContainer" index="1" unique_id=1768562893]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_font_sizes/font_size = 8
+text = "99d"
+vertical_alignment = 2
 
 [node name="TypeSpacer" parent="VBoxContainer" parent_id_path=PackedInt32Array(1098215444) index="1" unique_id=133146277]
 custom_minimum_size = Vector2(0, 13)
+
+[connection signal="IsCritical" from="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2" to="VBoxContainer/Overlays/HBoxContainer/LeavingTimer2/LeavingSoonAlert" method="set_visible"]

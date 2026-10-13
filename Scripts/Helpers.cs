@@ -83,7 +83,7 @@ public static partial class Helpers
 		return replacement;
 	}
 
-	static SceneTree MainLoopSceneTree => (SceneTree)Engine.GetMainLoop();
+	public static SceneTree MainLoopSceneTree => (SceneTree)Engine.GetMainLoop();
 
 	public static async Task WaitForFrame() => await MainLoopSceneTree.WaitForFrame();
 	public static async Task WaitForFrames(int count)

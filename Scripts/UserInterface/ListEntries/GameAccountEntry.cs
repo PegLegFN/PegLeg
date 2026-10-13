@@ -1,6 +1,10 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 public partial class GameAccountEntry : Control
 {
@@ -36,6 +40,12 @@ public partial class GameAccountEntry : Control
 	string namePrefix = "";
 	[Export]
 	bool useActiveAccount = false;
+	[Export]
+	bool tooltip = true;
+	[Export]
+	Control launchContent;
+	[Export]
+	Control launchContentInverse;
 	public GameAccount currentAccount { get; protected set; }
 
 	public override void _Ready()
@@ -51,6 +61,19 @@ public partial class GameAccountEntry : Control
 		currentAccount?.OnAccountUpdated -= UpdateAccount;
 		ItemInbox.InboxUpdated -= UpdateInbox;
 	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+#if GODOT_WINDOWS
+		if (launchContent is null)
+			return;
+		launchContent.Visible = Input.IsKeyPressed(Key.Shift);
+		launchContentInverse?.Visible = !launchContent.Visible;
+#endif
+	}
+
+	public static async void LaunchGamePrompt() => GameLauncher.LaunchGamePrompt();
+
 
 	private void OnUserStatus(string account, string status)
 	{
@@ -107,6 +130,9 @@ public partial class GameAccountEntry : Control
 		EmitSignal(SignalName.AuthenticatedChanged, currentAccount.isAuthed);
 		UpdateInbox();
 
+		if (!tooltip)
+			return;
+
 		string tooltipText = CustomTooltip.GenerateSimpleTooltip(
 			$" {displayName}   ",
 			null,
@@ -122,7 +148,7 @@ public partial class GameAccountEntry : Control
 	{
 		EmitSignal(SignalName.InboxChanged, ItemInbox.HasInbox(currentAccount));
 		if (useActiveAccount)
-			EmitSignal(SignalName.AnyInboxChanged, GameAccount.OwnedAccounts.Any(ItemInbox.HasInbox));
+			EmitSignal(SignalName.AnyInboxChanged, GameAccount.OwnedAccounts.Except([currentAccount]).Any(ItemInbox.HasInbox));
 	}
 
 	public void Press()

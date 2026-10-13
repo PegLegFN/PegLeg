@@ -14,6 +14,8 @@
 [ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="10_i47mm"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="10_rxgfw"]
 [ext_resource type="Texture2D" uid="uid://c8gc2giakfb0e" path="res://Images/InterfaceIcons/Fortnite-Item-Pattern-512.png" id="11_i47mm"]
+[ext_resource type="Script" uid="uid://bxnnukevkvf6c" path="res://Scripts/AccountList.cs" id="15_5fvyt"]
+[ext_resource type="PackedScene" uid="uid://k63widra025v" path="res://Scenes/Accounts/account_entry_launcher.tscn" id="17_f0jhy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g0s4o"]
 shader = ExtResource("4_p8jt0")
@@ -99,7 +101,7 @@ shader_parameter/Progress = 0.0
 shader_parameter/Rotate = 29.99999932944
 shader_parameter/ClipOOB = false
 
-[node name="BootScene" type="MarginContainer" unique_id=214749137 node_paths=PackedStringArray("background", "curtain", "loadingContent", "progressLabel", "progressBar", "downloadParticles", "liteContent")]
+[node name="BootScene" type="MarginContainer" unique_id=214749137 node_paths=PackedStringArray("background", "curtain", "loadingAtlas", "loadingContent", "progressLabel", "progressBar", "downloadParticles", "liteContent", "launchContent", "launchAccountList")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -109,6 +111,7 @@ script = ExtResource("1_6qsod")
 mobileSize = Vector2i(480, 900)
 background = NodePath("TextureRect")
 curtain = NodePath("Curtain")
+loadingAtlas = NodePath("MarginContainer/LoadingIcon")
 loadingContent = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Loading")
 progressLabel = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Loading/Label2")
 progressBar = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Loading/ProgressBar")
@@ -121,6 +124,8 @@ shareMenu = ExtResource("4_efo63")
 mobileInterface = ExtResource("6_tdqv4")
 mobileLiteInterface = ExtResource("7_srwo5")
 liteContent = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/LiteMode")
+launchContent = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Launcher")
+launchAccountList = NodePath("MarginContainer/Control/CenterContainer/PanelContainer/Launcher/ScrollContainer/VBoxContainer")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1523481312]
 visible = false
@@ -191,6 +196,32 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"Panel5Pad"
 
+[node name="Launcher" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer" unique_id=1724254432]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/Control/CenterContainer/PanelContainer/Launcher" unique_id=1700301182]
+layout_mode = 2
+text = "Launch Fortnite as:"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer/Launcher" unique_id=1191981509]
+custom_maximum_size = Vector2(-1, 150)
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 5
+scroll_hint_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer/Launcher/ScrollContainer" unique_id=27862283 node_paths=PackedStringArray("accountEntryParent")]
+layout_mode = 2
+alignment = 2
+script = ExtResource("15_5fvyt")
+accountEntryScene = ExtResource("17_f0jhy")
+accountEntryParent = NodePath(".")
+repopulateWhenMadeVisible = true
+authOnSelection = false
+allowLaunch = false
+
 [node name="Loading" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer" unique_id=1717482608]
 visible = false
 layout_mode = 2
@@ -220,6 +251,7 @@ indeterminate = true
 editor_preview_indeterminate = true
 
 [node name="LiteMode" type="VBoxContainer" parent="MarginContainer/Control/CenterContainer/PanelContainer" unique_id=1060040342]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 

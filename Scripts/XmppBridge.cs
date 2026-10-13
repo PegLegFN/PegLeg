@@ -16,9 +16,9 @@ public partial class XmppBridge : Control
 	[Export]
 	Control accountParent;
 
-	GameAccount account;
-	List<string> listedAccounts = [];
-	string selectedMember;
+	//GameAccount account;
+	//List<string> listedAccounts = [];
+	//string selectedMember;
 	/*
 	public override async void _Ready()
 	{

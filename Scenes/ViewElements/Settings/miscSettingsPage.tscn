@@ -105,6 +105,7 @@ size_flags_vertical = 3
 alignment = 2
 
 [node name="ReportButton" type="Button" parent="VBoxContainer" unique_id=2021986333]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Report Issue"
@@ -114,6 +115,7 @@ script = ExtResource("3_8a8id")
 defaultURI = "https://github.com/PegLegFN/PegLeg/issues"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1199043766]
+visible = false
 layout_mode = 2
 
 [node name="ImportButton" type="PanelContainer" parent="VBoxContainer/MarginContainer" unique_id=627278635]
@@ -141,26 +143,32 @@ visible = false
 layout_mode = 2
 text = "Refresh Hour (Dev thing, ignore)"
 
-[node name="UserDataButton" type="Button" parent="VBoxContainer" unique_id=1403475952]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1665593482]
 layout_mode = 2
+
+[node name="UserDataButton" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1403475952]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Open AppData folder"
 
-[node name="AppdataLink" type="Node" parent="VBoxContainer/UserDataButton" unique_id=418877186]
+[node name="AppdataLink" type="Node" parent="VBoxContainer/HBoxContainer2/UserDataButton" unique_id=418877186]
 script = ExtResource("3_8a8id")
 defaultURI = "user://"
 globalise = true
 
-[node name="InstallFolderButton" type="Button" parent="VBoxContainer" unique_id=1206344414]
+[node name="InstallFolderButton" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1206344414]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Open Installation folder"
 
-[node name="ExeLink" type="Node" parent="VBoxContainer/InstallFolderButton" unique_id=525563092]
+[node name="ExeLink" type="Node" parent="VBoxContainer/HBoxContainer2/InstallFolderButton" unique_id=525563092]
 script = ExtResource("3_8a8id")
 defaultURI = "res://"
 globalise = true
 helperGlobalise = true
 
 [node name="CloseAppButton" type="Button" parent="VBoxContainer" unique_id=1892774698]
+visible = false
 layout_mode = 2
 size_flags_vertical = 8
 text = "Close PegLeg"
@@ -173,6 +181,6 @@ text = "Import accounts from PegLeg (Release)"
 [connection signal="pressed" from="VBoxContainer/ReportButton" to="VBoxContainer/ReportButton/ReportLink" method="ShellOpenDefault"]
 [connection signal="HoldPressed" from="VBoxContainer/MarginContainer/Responsive Button Area" to="." method="ImportAccounts"]
 [connection signal="pressed" from="VBoxContainer/ExchangeToken" to="." method="CopyExchange"]
-[connection signal="pressed" from="VBoxContainer/UserDataButton" to="VBoxContainer/UserDataButton/AppdataLink" method="ShellOpenDefault"]
-[connection signal="pressed" from="VBoxContainer/InstallFolderButton" to="VBoxContainer/InstallFolderButton/ExeLink" method="ShellOpenDefault"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/UserDataButton" to="VBoxContainer/HBoxContainer2/UserDataButton/AppdataLink" method="ShellOpenDefault"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/InstallFolderButton" to="VBoxContainer/HBoxContainer2/InstallFolderButton/ExeLink" method="ShellOpenDefault"]
 [connection signal="pressed" from="VBoxContainer/CloseAppButton" to="." method="CloseApp"]

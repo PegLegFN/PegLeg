@@ -106,7 +106,7 @@ public partial class BRRivalryController : Control
 			return;
 		}
 		var eventJson = await eventResponse.ReadJson();
-		var eventData = eventJson.Deserialize<EventData>(Helpers.JsonOptions.Fields);
+		var eventData = eventJson.Deserialize<EventData>();
 
 		hasData = true;
 		rootControl.Visible = true;
@@ -157,21 +157,21 @@ public partial class BRRivalryController : Control
 	struct EventData
 	{
 		[JsonPropertyName("MeshNetworkedEvent.Clash.FactionA")]
-		public MeshnetData Foundation;
+		public MeshnetData Foundation { get; init; }
 		[JsonPropertyName("MeshNetworkedEvent.Clash.FactionB")]
-		public MeshnetData IceKing;
+		public MeshnetData IceKing { get; init; }
 	}
 
 	struct MeshnetData
 	{
-		public MeshnetRequirements metadataStructData;
+		public MeshnetRequirements metadataStructData { get; init; }
 		public long Current => metadataStructData.currentValue;
 		public float Progress => metadataStructData.currentValue / (float)metadataStructData.requiredValue;
 	}
 
 	struct MeshnetRequirements
 	{
-		public long requiredValue;
-		public long currentValue;
+		public long requiredValue { get; init; }
+		public long currentValue { get; init; }
 	}
 }

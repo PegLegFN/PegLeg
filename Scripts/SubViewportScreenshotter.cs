@@ -91,8 +91,11 @@ public partial class SubViewportScreenshotter : SubViewport
 			ShareImagePopup.ShowImage(img);
 	}
 
+	SemaphoreSlim screenshotSemaphore = new(1);
 	public async Task<Image> CaptureScreenshot(bool opaque = false)
 	{
+		//ensures multiple concurrent screenshots dont collide
+		using var _ = screenshotSemaphore.AwaitToken();
 		opaqueBG?.Visible = opaque;
 		await QueueRenderTask();
 		opaqueBG?.Visible = false;

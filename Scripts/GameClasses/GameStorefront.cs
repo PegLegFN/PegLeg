@@ -181,12 +181,12 @@ public class GameStorefront
 		return GetOrCreateStorefront(storefrontKey, refreshType);
 	}
 
-	public static GameStorefront XRayLlamas => GetOrCreateStorefront("CardPackStorePreroll", RefreshTimeType.Hourly);
-	public static GameStorefront RandomLlamas => GetOrCreateStorefront("CardPackStoreGameplay", RefreshTimeType.Hourly);
-	public static GameStorefront CampaignWeekly => GetOrCreateStorefront("STWRotationalEventStorefront", RefreshTimeType.Weekly);
-	public static GameStorefront CampaignEvent => GetOrCreateStorefront("STWSpecialEventStorefront", RefreshTimeType.Event);
-	public static GameStorefront CosmeticWeekly => GetOrCreateStorefront("BRWeeklyStorefront", RefreshTimeType.Daily);
-	public static GameStorefront CosmeticDaily => GetOrCreateStorefront("BRDailyStorefront", RefreshTimeType.Daily);
+	public static GameStorefront XRayLlamas { get; } = GetOrCreateStorefront("CardPackStorePreroll", RefreshTimeType.Hourly);
+	public static GameStorefront RandomLlamas { get; } = GetOrCreateStorefront("CardPackStoreGameplay", RefreshTimeType.Hourly);
+	public static GameStorefront CampaignWeekly { get; } = GetOrCreateStorefront("STWRotationalEventStorefront", RefreshTimeType.Weekly);
+	public static GameStorefront CampaignEvent { get; } = GetOrCreateStorefront("STWSpecialEventStorefront", RefreshTimeType.Event);
+	public static GameStorefront CosmeticWeekly { get; } = GetOrCreateStorefront("BRWeeklyStorefront", RefreshTimeType.Daily);
+	public static GameStorefront CosmeticDaily { get; } = GetOrCreateStorefront("BRDailyStorefront", RefreshTimeType.Daily);
 
 	public static GameOffer GetExistingOffer(string offerId)
 	{
@@ -246,7 +246,7 @@ public class GameStorefront
 		jamTracksCache = containerDict.ToDictionary(kvp => kvp.Value.track.templateId, kvp => kvp.Value.track);
 	}
 
-	public static async Task FetchCosmeticDependancies(bool withExternal=true)
+	public static async Task FetchCosmeticDependancies(bool withExternal = true)
 	{
 		await Task.WhenAll([
 			FetchCosmeticSections(),
@@ -260,7 +260,10 @@ public class GameStorefront
 		{
 			await ExternalCosmetics.LoadCosmeticShopData();
 		}
-		catch { }
+		catch
+		{
+			GD.Print("Failed to load cosmetic data");
+		}
 	}
 
 	#endregion

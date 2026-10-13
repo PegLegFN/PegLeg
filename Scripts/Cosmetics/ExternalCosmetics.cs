@@ -872,8 +872,8 @@ public static class ExternalCosmetics
 			public record VariantOption
 			{
 				public RawLocString VariantName;
-				[JsonInclude]
-				RawAssetReference PreviewImage;
+				//[JsonInclude]
+				//RawAssetReference PreviewImage { get; init; }
 				//ImageTexture imageTexture;
 				//bool hasCheckedForLocalImage;
 

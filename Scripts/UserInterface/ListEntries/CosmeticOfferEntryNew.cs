@@ -137,6 +137,8 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 
 	private void OnFiltersChanged()
 	{
+		if (currentOffer is null)
+			return;
 		var predicate = useCustomFilter ? filterOutPredicate : CosmeticShopInterfaceNew.CurrentOfferFilter;
 		bool filterOut = predicate?.Invoke(currentOffer) == false;
 		filterOutPanel.Visible = filterOut;

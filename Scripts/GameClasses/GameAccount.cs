@@ -620,15 +620,21 @@ public partial class GameAccount
 		eosExpiresAt = 0;
 	}
 
-	public async Task<string> GenerateExchangeCode()
+	public async Task<string> GenerateExchangeCode(string targetClientId = null)
 	{
 		if (!await Authenticate())
 			return null;
-		var response = await FnWebAddresses.EpicAccount
+		return await GenerateExchangeCode(AuthHeader, targetClientId);
+	}
+
+	public static async Task<string> GenerateExchangeCode(AuthenticationHeaderValue auth, string targetClientId = null)
+	{
+		var request = FnWebAddresses.EpicAccount
 			.MakeRequest("account/api/oauth/exchange")
-			.SetFormContent("consumingClientId=launcherAppClient2")
-			.SetAccount(this)
-			.Send();
+			.SetAuthorisation(auth);
+		if (targetClientId is not null)
+			request.SetFormContent($"consumingClientId={targetClientId}");
+		var response = await request.Send();
 		if (await response.CheckForError())
 			return null;
 		var result = await response.ReadJson();
@@ -1490,6 +1496,7 @@ public partial class GameAccount
 	{
 		await GetProfile(FnProfileTypes.AccountItems)
 			.PerformOperation("ClientQuestLogin", @"{""streamingAppKey"": """"}");
+		GD.Print($"ClientQuestLogin for {DisplayName} completed at UTC: {DateTime.UtcNow}");
 	}
 
 	public async Task ClientQuestLoginAthena()

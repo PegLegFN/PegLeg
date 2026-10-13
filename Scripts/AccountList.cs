@@ -5,6 +5,8 @@ using System.Linq;
 public partial class AccountList : Control
 {
 	[Signal]
+	public delegate void AccountSelectedUnauthedEventHandler(string accountId);
+	[Signal]
 	public delegate void AccountSelectedEventHandler(string accountId);
 	[Export]
 	PackedScene accountEntryScene;
@@ -15,6 +17,10 @@ public partial class AccountList : Control
 	bool repopulateWhenMadeVisible;
 	[Export]
 	bool excludeActive;
+	[Export]
+	bool authOnSelection = true;
+	[Export]
+	bool allowLaunch = true;
 	[Export]
 	string bootScenePath = "res://Scenes/boot_scene.tscn";
 
@@ -71,13 +77,20 @@ public partial class AccountList : Control
 	async void SelectAccount(string accountId)
 	{
 		bool loggedIn = false;
-
+		bool tryLaunch = allowLaunch && Input.IsKeyPressed(Key.Shift);
+		EmitSignalAccountSelectedUnauthed(accountId);
+		if (!authOnSelection)
+			return;
 		using (LoadingOverlay.CreateToken())
 		{
 			loggedIn = await GameAccount.SetActiveAccount(accountId);
 		}
 		PopulateAccounts();
 		EmitSignalAccountSelected(accountId);
+#if GODOT_WINDOWS
+		if (tryLaunch)
+			GameAccountEntry.LaunchGamePrompt();
+#endif
 	}
 
 	async void RemoveAccount(string accountId)

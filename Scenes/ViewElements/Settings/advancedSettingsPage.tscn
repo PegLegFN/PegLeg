@@ -4,44 +4,10 @@
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="2_ktmhl"]
 [ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="3_em5vg"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="4_gewxr"]
+[ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="5_j32xq"]
 
 [node name="AdvancedPage" type="VBoxContainer" unique_id=172606478]
 theme_override_constants/separation = 6
-
-[node name="MissionAutoClaim" type="CheckBox" parent="." unique_id=749185434]
-layout_mode = 2
-layout_direction = 3
-tooltip_text = "Mission/Quest rewards will be claimed and placed in the Inbox, and can be reviewed later"
-text = "Auto-Claim Mission/Quest Rewards"
-alignment = 2
-script = ExtResource("2_ktmhl")
-key = "autoClaimMissions"
-accountMode = true
-
-[node name="AutoRecycle" type="VBoxContainer" parent="." unique_id=1616947118]
-layout_mode = 2
-
-[node name="AutoRecycleLabel" type="Label" parent="AutoRecycle" unique_id=410167744]
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/line_spacing = 0
-text = "Auto-Recycle Parameters"
-
-[node name="AutoRecycleParams" type="TextEdit" parent="AutoRecycle" unique_id=2132595796]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Common | Uncommon | Rare | 
-(Defender !Legendary | !\"Sniper') "
-placeholder_text = "eg: Common | Uncommon | Rare"
-context_menu_enabled = false
-emoji_menu_enabled = false
-wrap_mode = 1
-scroll_fit_content_height = true
-script = ExtResource("1_32dbh")
-section = "automation"
-key = "RecycleFilter"
-defaultValue = "Common | Uncommon | Rare"
-accountMode = true
 
 [node name="AutoDismantle" type="VBoxContainer" parent="." unique_id=1385807091]
 visible = false
@@ -137,7 +103,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer" unique_id=1277002958]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Auto Restart Hour"
+text = "Restart Hour"
 
 [node name="SpinBox" type="SpinBox" parent="HBoxContainer" unique_id=408378265]
 layout_mode = 2
@@ -225,6 +191,59 @@ alignment = 2
 script = ExtResource("2_ktmhl")
 section = "advanced"
 key = "developer"
+
+[node name="LauncherSettings" type="FoldableContainer" parent="." unique_id=1334829468]
+layout_mode = 2
+folded = true
+title = "Launcher Settings"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LauncherSettings" unique_id=1617799957]
+visible = false
+layout_mode = 2
+
+[node name="InstallPath" type="HBoxContainer" parent="LauncherSettings/VBoxContainer" unique_id=855464302]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LauncherSettings/VBoxContainer/InstallPath" unique_id=1007565567]
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+text = "Fortnite EXE"
+
+[node name="LineEdit" type="LineEdit" parent="LauncherSettings/VBoxContainer/InstallPath" unique_id=1275878076]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Auto Detect"
+script = ExtResource("1_32dbh")
+section = "launcher"
+key = "launchExe"
+
+[node name="AppIdpath" type="HBoxContainer" parent="LauncherSettings/VBoxContainer" unique_id=2106384579]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LauncherSettings/VBoxContainer/AppIdpath" unique_id=372178896]
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+text = "Steam AppID"
+
+[node name="LineEdit" type="LineEdit" parent="LauncherSettings/VBoxContainer/AppIdpath" unique_id=1632779794]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_32dbh")
+section = "launcher"
+key = "steamAppId"
+
+[node name="TextureRect" type="TextureRect" parent="LauncherSettings/VBoxContainer/AppIdpath" unique_id=1783466913]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+tooltip_text = "When set, PegLeg will attempt to launch Fortnite via Steam, allowing for Steam Controller support and other Steam features.
+To set this up, you must:
+- Add PegLeg to Steam as a Non-Steam Game
+- Create a Desktop Shortcut for it via Steam
+- Right click the Desktop Shortcut and copy the URL value
+(it should start with \"steam://rungameid/\")
+- Paste it into the Steam AppID setting"
+texture = ExtResource("5_j32xq")
+expand_mode = 1
 
 [node name="BeastMode" type="CheckBox" parent="." unique_id=135193457]
 layout_mode = 2

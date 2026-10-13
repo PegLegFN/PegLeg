@@ -39,8 +39,6 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		accountUpdateQueued = true;
 	}
 
-	static event Action CustomProfilesChanged;
-
 	[Export]
 	string targetProfile;
 	[Export(PropertyHint.ArrayType)]
@@ -341,21 +339,23 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 
 			researchTokenArea?.Visible = false;
 
-			currentCreatorImage?.Visible = false;
-			creatorAnimations.Stop();
-			if (creatorImages.TryGetValue(account.accountId, out var image))
-			{
-				currentCreatorImage = image;
-				image.Visible = true;
-				if (creatorAnimations.HasAnimation(account.accountId))
-					creatorAnimations.Play(account.accountId);
-			}
 
 			currentProfile?.OnProfileChanged -= UpdateProfile;
 			currentProfile = await account.GetProfile(targetProfile).Query();
 		}
 		if (currentProfile is null)
 			return;
+
+		currentCreatorImage?.Visible = false;
+		creatorAnimations.Stop();
+		var accId = currentProfile.account.accountId;
+		if (creatorImages.TryGetValue(accId, out var image))
+		{
+			currentCreatorImage = image;
+			image.Visible = true;
+			if (creatorAnimations.HasAnimation(accId))
+				creatorAnimations.Play(accId);
+		}
 
 		inMissionIndicator.Visible = currentProfile.account.isOwned == false && currentProfile.statAttributes["quest_manager"]?["objectiveDeferral"] is not null;
 
@@ -595,11 +595,11 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		return true;
 	}
 
-	struct ResearchItem
+	record struct ResearchItem
 	{
-		public string itemId;
-		public string[] itemPerks;
-		public int itemLevel;
+		public string itemId { get; init; }
+		public string[] itemPerks { get; init; }
+		public int itemLevel { get; init; }
 
 		public GameItem CreateItem()
 		{
@@ -618,7 +618,7 @@ public partial class InventoryInterface : Control, IRecyclableElementProvider<Ga
 		if (currentProfile.account != GameAccount.ActiveAccount)
 			return;
 		var researchToken = currentProfile.GetFirstTemplateItem("Token:campaignresearchtoken");
-		var researchItems = researchToken.attributes["items_for_schematic_creation_data"].Deserialize<ResearchItem[]>(Helpers.JsonOptions.Fields);
+		var researchItems = researchToken.attributes["items_for_schematic_creation_data"].Deserialize<ResearchItem[]>();
 		GameItem[] possibleItems = [.. researchItems.Select(r => r.CreateItem())];
 
 		recycleNextTokenResearch = false;

@@ -1,0 +1,223 @@
+[gd_scene format=3 uid="uid://ycpjxkqbqpif"]
+
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="1_n42fp"]
+[ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="2_3tlj3"]
+[ext_resource type="Script" uid="uid://e518j1sodp1x" path="res://Scripts/FilterTester.cs" id="3_lfi4x"]
+[ext_resource type="Script" uid="uid://kk75e22mij4k" path="res://Scripts/Config/ConfigTemplateList.cs" id="4_n42fp"]
+
+[sub_resource type="DPITexture" id="DPITexture_lfi4x"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
+"
+
+[node name="AutomationPage" type="VBoxContainer" unique_id=172606478]
+theme_override_constants/separation = 6
+
+[node name="AutoRecycle" type="VBoxContainer" parent="." unique_id=1188155768]
+layout_mode = 2
+
+[node name="AutoRecycleLabel" type="Label" parent="AutoRecycle" unique_id=933886301]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Quick Recycle Filter"
+
+[node name="AutoRecycleParams" type="TextEdit" parent="AutoRecycle" unique_id=1961073590]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "eg: Common | Uncommon | Rare | 
+(Epic Survivor !Trap)"
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("2_3tlj3")
+section = "automation"
+key = "RecycleFilter"
+defaultValue = "Common | Uncommon | Rare"
+accountMode = true
+
+[node name="MissionAutoDismantle" type="CheckBox" parent="." unique_id=1751960013]
+visible = false
+layout_mode = 2
+layout_direction = 3
+tooltip_text = "Prevents PegLeg from running ClientQuestLogin, which allows for quests to be claimed after they wouldve been removed from your inventory"
+text = "Auto Dismantle Backpack Items"
+alignment = 2
+script = ExtResource("1_n42fp")
+section = "advanced"
+key = "auto_dismantle_on_timer"
+accountMode = true
+
+[node name="AutoDismantle" type="VBoxContainer" parent="." unique_id=418681926]
+visible = false
+layout_mode = 2
+
+[node name="AutoDismantleLabel" type="Label" parent="AutoDismantle" unique_id=2134749423]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Auto Dismantle Filter"
+
+[node name="AutoRecycleParams" type="TextEdit" parent="AutoDismantle" unique_id=23789951]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "!\"Trap\" | quantity=..3 
+Common | Uncommon | Rare"
+placeholder_text = "eg: !\"Trap\" | quantity=..3 
+Common | Uncommon"
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("2_3tlj3")
+section = "automation"
+key = "dismantle_filter"
+defaultValue = "Common | Uncommon | Rare"
+accountMode = true
+
+[node name="MissionAutoClaim" type="CheckBox" parent="." unique_id=749185434]
+layout_mode = 2
+layout_direction = 3
+tooltip_text = "Mission/Quest rewards will be claimed and placed in the Inbox, and can be reviewed later"
+text = "Auto-Claim Mission/Quest Rewards"
+alignment = 2
+script = ExtResource("1_n42fp")
+key = "autoClaimMissions"
+accountMode = true
+
+[node name="LlamaAutoClaim" type="CheckBox" parent="." unique_id=976356596]
+layout_mode = 2
+layout_direction = 3
+tooltip_text = "Mission/Quest rewards will be claimed and placed in the Inbox, and can be reviewed later"
+text = "Auto-Claim Free Llamas"
+alignment = 2
+script = ExtResource("1_n42fp")
+key = "autoClaimFreeLlamas"
+accountMode = true
+
+[node name="StoreResources" type="CheckBox" parent="." unique_id=951268276]
+layout_mode = 2
+layout_direction = 3
+tooltip_text = "Mission/Quest rewards will be claimed and placed in the Inbox, and can be reviewed later"
+text = "Auto-Redeem Weekly Gold Items"
+alignment = 2
+script = ExtResource("1_n42fp")
+key = "autoClaimWeeklyItems"
+accountMode = true
+
+[node name="StoreResourcesFilter" type="VBoxContainer" parent="." unique_id=222265623]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StoreResourcesFilter" unique_id=2095414997 node_paths=PackedStringArray("filterSource", "result")]
+layout_mode = 2
+script = ExtResource("3_lfi4x")
+itemSource = 2
+itemSubSource = "STWRotationalEventStorefront"
+filterSource = NodePath("../StoreResourcesFilterText")
+result = NodePath("../Label")
+
+[node name="Label2" type="Label" parent="StoreResourcesFilter/HBoxContainer" unique_id=1686193166]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/line_spacing = 0
+text = "Auto-Redeem Weekly Filter"
+
+[node name="TestBtn" type="Button" parent="StoreResourcesFilter/HBoxContainer" unique_id=986990346]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Test"
+
+[node name="StoreResourcesFilterText" type="TextEdit" parent="StoreResourcesFilter" unique_id=131923616]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "eg: (Legendary Flux | Perk-Up) | 
+(Epic Perk-Up)"
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("2_3tlj3")
+key = "autoClaimWeeklyFilter"
+accountMode = true
+
+[node name="Label" type="Label" parent="StoreResourcesFilter" unique_id=244210580]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+
+[node name="AutoRerollDaily" type="CheckBox" parent="." unique_id=711771178]
+layout_mode = 2
+layout_direction = 3
+tooltip_text = "Rerolls a valid Daily Quest automatically, excluding Pinned Quests and any quests manually marked to be excluded"
+text = "Auto-Reroll Daily Quests"
+alignment = 2
+script = ExtResource("1_n42fp")
+key = "autoQuestReroll"
+accountMode = true
+
+[node name="AutoRerollExclude" type="VBoxContainer" parent="." unique_id=1206761537]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AutoRerollExclude" unique_id=1863109596]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+text = "Exclude Daily Quest Rerolls"
+
+[node name="TextEdit" type="TextEdit" parent="AutoRerollExclude" unique_id=633913977]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "\"Mission Veteran (Any Hero)\" | \"All Together Now\""
+placeholder_text = "eg: \"Mission Veteran (Any Hero)\" | \"All Together Now\""
+context_menu_enabled = false
+emoji_menu_enabled = false
+wrap_mode = 1
+scroll_fit_content_height = true
+script = ExtResource("2_3tlj3")
+key = "questRerollExclude"
+defaultValue = "\"Mission Veteran (Any Hero)\" | \"All Together Now\""
+accountMode = true
+
+[node name="AutoRerollExcludeList" type="Button" parent="." unique_id=501659057 node_paths=PackedStringArray("menu")]
+layout_mode = 2
+text = "Exclude Quests from Rerolls (1)"
+icon = SubResource("DPITexture_lfi4x")
+alignment = 0
+icon_alignment = 2
+script = ExtResource("4_n42fp")
+textPrefix = "Exclude Quests from Rerolls"
+menu = NodePath("PopupMenu")
+templatePrefix = "Quest:daily_"
+key = "questRerollExcludeList"
+accountMode = true
+tooltipMode = 2
+
+[node name="PopupMenu" type="PopupMenu" parent="AutoRerollExcludeList" unique_id=98510451]
+oversampling_override = 1.0
+size = Vector2i(149, 72)
+max_size = Vector2i(32768, 250)
+hide_on_item_selection = false
+hide_on_checkable_item_selection = false
+shrink_width = false
+search_bar_enabled = true
+search_bar_min_item_count = 10
+item_count = 3
+item_0/text = "All Together Now"
+item_0/checkable = 1
+item_0/id = 0
+item_1/text = "efrsefsef"
+item_1/checkable = 1
+item_1/id = 1
+item_2/text = "adasdasd"
+item_2/checkable = 1
+item_2/checked = true
+item_2/id = 2
+
+[connection signal="ConfigValueChanged" from="StoreResources" to="StoreResourcesFilter" method="set_visible"]
+[connection signal="pressed" from="StoreResourcesFilter/HBoxContainer/TestBtn" to="StoreResourcesFilter/HBoxContainer" method="Test"]
+[connection signal="ConfigValueChanged" from="AutoRerollDaily" to="AutoRerollExcludeList" method="set_visible"]

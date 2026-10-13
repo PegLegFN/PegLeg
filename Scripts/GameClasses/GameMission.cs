@@ -934,12 +934,12 @@ public partial class GameMission
 	static GameItemTemplate genericFallback;
 	static GameItemTemplate fulfillmentFallback;
 
-	static GameItem[] foolsHeroAlerts;
-	static GameItem[] foolsTypedAlerts;
+	//static int foolsCount = 0;
+	//static GameItem[] foolsHeroAlerts;
+	//static GameItem[] foolsTypedAlerts;
 	static GameItem[] foolsAlerts;
 	static List<GameItem> foolsAlertsDistinct;
 	static JsonObject foolsData = new() { ["fools"] = true };
-	static int foolsCount = 0;
 
 	void GenerateItems(ItemReward[] rewards, ItemReward[] modifiers, ItemReward[] alertRewards)
 	{

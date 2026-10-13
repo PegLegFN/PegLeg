@@ -152,14 +152,19 @@ layout_mode = 2
 alignment = 2
 script = ExtResource("7_ulxpl")
 accountEntryScene = ExtResource("7_xgkqb")
-accountEntryParent = NodePath("ScrollContainer/VBoxContainer")
+accountEntryParent = NodePath("ScrollContainer/MarginContainer/VBoxContainer")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer" unique_id=1434690379]
 layout_mode = 2
 script = ExtResource("7_gpno0")
 maxSize = Vector2(0, 200)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/ScrollContainer" unique_id=254854671]
+[node name="MarginContainer" type="MarginContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/ScrollContainer" unique_id=359097622]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AccountSelector/SelectorOptions/Control/MarginContainer/MarginContainer2/VBoxContainer/ScrollContainer/MarginContainer" unique_id=254854671]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -202,6 +207,7 @@ horizontal_alignment = 1
 text_overrun_behavior = 3
 
 [node name="SelectorButton" type="MarginContainer" parent="AccountSelector" unique_id=927683717]
+z_index = 1
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_vertical = 0
@@ -220,8 +226,8 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="LabelReciever" type="Control" parent="AccountSelector/SelectorButton/MarginContainer2" unique_id=1241152313]
-clip_contents = true
 custom_minimum_size = Vector2(242, 0)
+clip_contents = true
 layout_mode = 2
 mouse_filter = 2
 

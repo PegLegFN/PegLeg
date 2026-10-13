@@ -147,6 +147,8 @@ public partial class CosmeticShopInterfaceNew : Control
 
 	public bool FilterOffer(GameOffer offer)
 	{
+		if (offer is null)
+			return false;
 		if (offer.CosmeticLayoutId == "alc.0")
 			return false;//legally obligated un-bundled purchases
 
@@ -411,6 +413,7 @@ public partial class CosmeticShopInterfaceNew : Control
 
 
 		MarkListDirty();
+		OnFiltersChanged?.Invoke();
 	}
 
 	TreeItem treeRoot = null;

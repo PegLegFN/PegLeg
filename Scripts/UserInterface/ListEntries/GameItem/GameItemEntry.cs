@@ -296,6 +296,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		}
 
 		int amount = displayItem.quantity;
+		int rewardStack = displayItem.customData["rewardStack"]?.GetValue<int>() ?? 0;
 
 		if (
 			!forceShowVBucks &&
@@ -336,7 +337,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 				displayItem = eventTemplate.CreateInstance(amount);
 		}
 
-			inspectorOverride = displayItem.inspectorOverride;
+		inspectorOverride = displayItem.inspectorOverride;
 		if (inspectorOverride is not null && inspectorOverride.template is not null)
 			displayItem = inspectorOverride;
 
@@ -349,6 +350,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 			amountText = "x" + amountText;
 		if (amount <= (showSingleItemAmount ? (showZeroItemAmount ? -1 : 0) : 1))
 			amountText = "";
+		if (rewardStack > 1)
+			amountText = $"{amountText} x{rewardStack}";
 		bool amountNeeded = amountText != "";
 
 		string name = displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1];

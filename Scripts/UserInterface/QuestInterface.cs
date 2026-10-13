@@ -1,6 +1,8 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,19 +47,18 @@ public partial class QuestInterface : Control
 
 	private async void ReloadQuests()
 	{
+		GD.Print($"Reloading quests at UTC: {DateTime.UtcNow}");
 		foreach (var node in questGroupCollections)
 		{
 			node.QueueFree();
 		}
 		questGroupCollections.Clear();
 
-		//check if in mission and quests are outdated
-		//if so, start repeated check if in mission every 15 seconds (force query campaign profile)
-		//when no longer in mission, claim any completed quests immediately, then resume reloading quests
-
 		if (!AppConfig.Get("advanced", "suspend_quests", false))
 		{
 			await GameAccount.ActiveAccount.ClientQuestLoginCampaign();
+			await TryAutoReroll(GameAccount.ActiveAccount);
+
 			if (AppConfig.Get("advanced", "bulk_quest_refresh", false))
 				BulkClientQuestLoginCampaign(GameAccount.ActiveAccount);
 		}
@@ -69,7 +70,30 @@ public partial class QuestInterface : Control
 
 	private static async void BulkClientQuestLoginCampaign(GameAccount except)
 	{
-		await Task.WhenAll(GameAccount.OwnedAccounts.Except([except]).Select(a => a.ClientQuestLoginCampaign()));
+		await Task.WhenAll(GameAccount.OwnedAccounts.Except([except]).Select(async a =>
+		{
+			await a.ClientQuestLoginCampaign();
+			await TryAutoReroll(a);
+		}));
+	}
+
+	static async Task TryAutoReroll(GameAccount account)
+	{
+		var config = account.GetLocalData("autoQuestReroll")?.GetValue<bool>();
+		if (config != true || !account.CanRerollQuest())
+			return;
+		var rerollExclusions = account.GetLocalData("questRerollExcludeList")?.Deserialize<HashSet<string>>() ?? [];
+		var rerollableQuest = account.GetProfile(FnProfileTypes.AccountItems).GetFirstItem("Quest", i => 
+			i.templateId.StartsWith("Quest:daily_") &&
+			!i.QuestComplete && !i.QuestPinned &&
+			!rerollExclusions.Contains(i.templateId)
+		);
+		if (rerollableQuest is not null)
+		{
+			var oldItem = rerollableQuest.template.ItemName;
+			var newItem = await account.RerollQuest(rerollableQuest);
+			GD.Print($"Auto Rerolled \"{oldItem}\" into \"{newItem.template.ItemName}\" for {account.DisplayName}");
+		}
 	}
 
 	public override void _ExitTree()

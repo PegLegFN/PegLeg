@@ -29,6 +29,13 @@ public class PublisherProxy
 		];
 		foreach (var publisher in publishers)
 			publisher.Configure(config);
+		AppConfig.OnConfigChanged += OnConfigChanged;
+	}
+
+	private void OnConfigChanged(string section, string key, System.Text.Json.Nodes.JsonNode value)
+	{
+		if ((section == "advanced" && key == "publishing") || (section == "publishing" && key == internalName + "_enabled"))
+			EnabledChanged?.Invoke();
 	}
 
 	public event Action EnabledChanged;

@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bnw6gwdhv8twq" path="res://Scenes/ViewElements/Settings/missionSettingsPage.tscn" id="7_l2xc1"]
 [ext_resource type="PackedScene" uid="uid://yh3ykg67s05o" path="res://Scenes/ViewElements/Settings/miscSettingsPage.tscn" id="8_c1ulb"]
 [ext_resource type="PackedScene" uid="uid://0ry0nxkc35eg" path="res://Scenes/ViewElements/Settings/accessibilitySettingsPage.tscn" id="9_4bswm"]
+[ext_resource type="PackedScene" uid="uid://ycpjxkqbqpif" path="res://Scenes/ViewElements/Settings/automationSettingsPage.tscn" id="9_c1ulb"]
 [ext_resource type="PackedScene" uid="uid://b4aq3gm8ok7ta" path="res://Scenes/ViewElements/Settings/advancedSettingsPage.tscn" id="9_pr66f"]
 [ext_resource type="PackedScene" uid="uid://clfdh2vd0pwmp" path="res://Scenes/ViewElements/Settings/webhookSettingsPage.tscn" id="10_uxyso"]
 [ext_resource type="PackedScene" uid="uid://cnldkl7bl76gf" path="res://Scenes/ViewElements/Settings/archiveSettingsPage.tscn" id="11_ygx4j"]
@@ -37,6 +38,12 @@ layout_mode = 2
 [node name="AdvancedPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" parent_id_path=PackedInt32Array(789085913) index="1" unique_id=172606478 instance=ExtResource("9_pr66f")]
 layout_mode = 2
 
+[node name="Automation" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="7" unique_id=700977941]
+visible = true
+
+[node name="AutomationPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Automation" index="1" unique_id=1315500929 instance=ExtResource("9_c1ulb")]
+layout_mode = 2
+
 [node name="AccessibilityPage" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Accessibility" parent_id_path=PackedInt32Array(183301825) index="1" unique_id=1910394951 instance=ExtResource("9_4bswm")]
 layout_mode = 2
 
@@ -50,7 +57,10 @@ layout_mode = 2
 layout_mode = 2
 currentVersionLabel = NodePath("../../../../HBoxContainer/Version")
 
-[node name="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" parent_id_path=PackedInt32Array(1107420082) index="1" unique_id=596819378 instance=ExtResource("13_4bswm")]
+[node name="Core" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" parent_id_path=PackedInt32Array(1233063541) index="12" unique_id=1107420082]
+visible = false
+
+[node name="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" index="1" unique_id=596819378 instance=ExtResource("13_4bswm")]
 layout_mode = 2
 
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab/MarginContainer/Control" method="set_visible"]
@@ -60,8 +70,10 @@ layout_mode = 2
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AutomationTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AutomationTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/MarginContainer/Control" method="set_visible"]
 [connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab/MarginContainer/Control" method="set_visible"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Button" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc/MiscPage" method="CloseApp"]

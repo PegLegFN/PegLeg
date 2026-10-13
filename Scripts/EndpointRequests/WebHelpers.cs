@@ -274,7 +274,7 @@ public static class WebHelpers
 			GD.Print("TODO: Investigate this");
 			throw;
 		}
-		catch (TaskCanceledException ex)
+		catch (TaskCanceledException)
 		{
 			GD.Print("Request Timed Out");
 			return new HttpResponseMessage() { StatusCode = HttpStatusCode.GatewayTimeout };

@@ -73,7 +73,7 @@ shader_parameter/CosmeticZoom = 1.0
 shader_parameter/CornerRadius = 10.0
 shader_parameter/JamRadius = 3.0
 shader_parameter/JamTexture = ExtResource("6_odjx0")
-shader_parameter/time = 3.201
+shader_parameter/time = 1.198
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7v50w"]
 resource_local_to_scene = true
@@ -86,7 +86,7 @@ shader_parameter/CosmeticZoom = 1.0
 shader_parameter/CornerRadius = 10.0
 shader_parameter/JamRadius = 3.0
 shader_parameter/JamTexture = ExtResource("6_odjx0")
-shader_parameter/time = 3.201
+shader_parameter/time = 1.198
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_odjx0"]
 resource_local_to_scene = true
@@ -644,7 +644,7 @@ theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 12
 text = "That's almost a year!"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Overlays" unique_id=1291098870]
+[node name="HBoxContainer" type="GridContainer" parent="VBoxContainer/Overlays" unique_id=1838586421]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -656,8 +656,7 @@ offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 3
-theme_override_constants/separation = 1
-alignment = 2
+columns = 2
 
 [node name="LeavingTimer" type="PanelContainer" parent="VBoxContainer/Overlays/HBoxContainer" unique_id=1910063822 node_paths=PackedStringArray("target")]
 layout_mode = 2
@@ -762,8 +761,8 @@ layout_mode = 2
 [connection signal="DiscountAmount" from="." to="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/PriceContent/DiscountContent/HBoxContainer/Discount" method="set_text"]
 [connection signal="DiscountVisibility" from="." to="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/PriceContent/DiscountContent" method="set_visible"]
 [connection signal="DiscountVisibility" from="." to="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/FreeContent/OriginalPrice" method="set_visible"]
-[connection signal="FreeVisibility" from="." to="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/InvertFree" method="EmitInverted"]
 [connection signal="FreeVisibility" from="." to="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/FreeContent" method="set_visible"]
+[connection signal="FreeVisibility" from="." to="DetailsArea/MarginContainer/VBoxContainer/PriceArea/Unowned/InvertFree" method="EmitInverted"]
 [connection signal="LastSeenAlertVisibility" from="." to="VBoxContainer/Overlays/HBoxContainer/LastSeenPanel/LastSeenAlert" method="set_visible"]
 [connection signal="LastSeenText" from="." to="VBoxContainer/Overlays/HBoxContainer/LastSeenPanel/HBoxContainer/LastSeenLabel" method="set_text"]
 [connection signal="LastSeenTooltip" from="." to="VBoxContainer/Overlays/HBoxContainer/LastSeenPanel" method="set_tooltip_text"]

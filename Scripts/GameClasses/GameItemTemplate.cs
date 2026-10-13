@@ -141,9 +141,10 @@ public partial class GameItemTemplate
 		return null;
 	}
 
-	public static IEnumerable<GameItemTemplate> GetTemplates()
+	public static IEnumerable<GameItemTemplate> GetTemplates(Func<GameItemTemplate, bool> filter = null)
 	{
-		return importedTemplates?.Union(customTemplates)?.Select(kvp => kvp.Value);
+		var all = importedTemplates?.Union(customTemplates)?.Select(kvp => kvp.Value);
+		return filter is null ? all : all.Where(filter);
 	}
 
 	//probably pretty performance heavy, use sparingly

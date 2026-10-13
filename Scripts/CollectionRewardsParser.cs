@@ -40,36 +40,36 @@ public partial class CollectionRewardsParser : Control
 
 	public record struct CollectionLevel
 	{
-		public int level;
-		public CollectionRewardGroups Rewards;
+		public int level { get; init; }
+		public CollectionRewardGroups Rewards { get; init; }
 		public struct CollectionRewardGroups
 		{
-			public CollectionReward[] SelectableRewards;
-			public CollectionReward[] StandardRewards;
-			public CollectionReward[] HiddenRewards;
-			public CollectionReward[] PremiumRewards;
+			public CollectionReward[] SelectableRewards { get; init; }
+			public CollectionReward[] StandardRewards { get; init; }
+			public CollectionReward[] HiddenRewards { get; init; }
+			public CollectionReward[] PremiumRewards { get; init; }
 		}
 	}
 
 	public struct CollectionReward
 	{
 		[JsonInclude]
-		PrimaryAsset ItemPrimaryAssetId;
+		PrimaryAsset ItemPrimaryAssetId { get; init; }
 		[JsonInclude]
-		int Quantity;
+		int Quantity { get; init; }
 
 		[JsonIgnore]
 		public GameItem.ItemData ItemData => new(ItemPrimaryAssetId.TemplateId, Quantity);
 		struct PrimaryAsset
 		{
 			[JsonInclude]
-			PrimaryAssetTypeData PrimaryAssetType;
+			PrimaryAssetTypeData PrimaryAssetType { get; init; }
 			[JsonInclude]
-			string PrimaryAssetName;
+			string PrimaryAssetName { get; init; }
 			struct PrimaryAssetTypeData
 			{
 				[JsonInclude]
-				public string Name;
+				public string Name { get; init; }
 			}
 
 			[JsonIgnore]

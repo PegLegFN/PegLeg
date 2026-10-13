@@ -115,13 +115,13 @@ public partial class GameOffer
 	record struct MetaInfoKVP
 	{
 		[JsonInclude]
-		string key;
+		string key { get; init; }
 		[JsonInclude]
-		string Key;
+		string Key { get; init; }
 		[JsonInclude]
-		string value;
+		string value { get; init; }
 		[JsonInclude]
-		string Value;
+		string Value { get; init; }
 
 		[JsonIgnore]
 		public KeyValuePair<string, string> KVP => KeyValuePair.Create(key ?? Key, value ?? Value);

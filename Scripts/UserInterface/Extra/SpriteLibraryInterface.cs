@@ -13,21 +13,9 @@ public partial class SpriteLibraryInterface : Control
 	static string currentModule;
 	static string currentGen;
 	static Dictionary<string, GameItemTemplate> spriteTemplates;
+	static bool hasLinkedToFileHandler = false;
 
 	const string spriteArchiveType = "spriteArchive";
-	static SpriteLibraryInterface()
-	{
-		FileDistributer.RegisterFileHandler<SpriteArchive>(spriteArchiveType, a =>
-		{
-			if (instance is null)
-				return false;
-			//switch to tab
-			instance.SetComparison(a);
-			instance.Visible = true;
-			instance.GetParentOrNull<Control>()?.Visible = true;
-			return true;
-		});
-	}
 
 	[Export]
 	Control listHandlerNode;
@@ -58,6 +46,21 @@ public partial class SpriteLibraryInterface : Control
 
 	public override void _Ready()
 	{
+		if (!hasLinkedToFileHandler)
+		{
+			hasLinkedToFileHandler = true;
+			FileDistributer.RegisterFileHandler<SpriteArchive>(spriteArchiveType, a =>
+			{
+				if (instance is null)
+					return false;
+				//switch to tab
+				instance.SetComparison(a);
+				instance.Visible = true;
+				instance.GetParentOrNull<Control>()?.Visible = true;
+				return true;
+			});
+		}
+
 		instance = this;
 		if (listHandlerNode is IListHandler handler)
 		{

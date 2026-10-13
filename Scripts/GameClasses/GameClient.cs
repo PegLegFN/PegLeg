@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -11,30 +12,22 @@ public class GameClient
 {
 	static string ClientAuthHeaderFromKeys(string clientID, string clientSecret) =>
 		Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientID}:{clientSecret}"));
+	public static GameClient LauncherClient { get; private set; } = new("34a02cf8f4414e29b15921876da36f9a", "daafbccc737745039dffe53d94fc76cf");
+	public static GameClient PCClient { get; private set; } = new("ec684b8c687f479fadea3cb2ad83f5c6", "e1f31c211f28413186262d37a13fc84d");
+	public static GameClient IOSClient { get; private set; } = new("3446cd72694c4a4485d81b77adbb2141", "9209d4a5e25a457fb9b07489d313b41a");
+	public static GameClient AndroidClient { get; private set; } = new("3f69e56c7649492c8cc29f1af08a8a12", "b51ee9cb12234f50a69efa67ef53812e");
+	public static GameClient NewSwitchClient { get; private set; } = new("98f7e42c2e3a4f86a74eb43fbb41ed39", "0a2449a2-001a-451e-afec-3e812901c4d7");
 
-	const string fortPCClientId = "ec684b8c687f479fadea3cb2ad83f5c6";
-	const string fortPCSecret = "e1f31c211f28413186262d37a13fc84d";
-	public static GameClient PCClient { get; private set; } = new(fortPCClientId, fortPCSecret);
+	static readonly GameClient[] ClientList =
+	[
+		LauncherClient,
+		PCClient,
+		IOSClient,
+		AndroidClient,
+		NewSwitchClient
+	];
 
-	const string fortIOSClientId = "3446cd72694c4a4485d81b77adbb2141";
-	const string fortIOSSecret = "9209d4a5e25a457fb9b07489d313b41a";
-	public static GameClient IOSClient { get; private set; } = new(fortIOSClientId, fortIOSSecret);
-
-	const string fortAndroidClientId = "3f69e56c7649492c8cc29f1af08a8a12";
-	const string fortAndroidSecret = "b51ee9cb12234f50a69efa67ef53812e";
-	public static GameClient AndroidClient { get; private set; } = new(fortAndroidClientId, fortAndroidSecret);
-
-	const string fortNewSwitchClientId = "98f7e42c2e3a4f86a74eb43fbb41ed39";
-	const string fortNewSwitchSecret = "0a2449a2-001a-451e-afec-3e812901c4d7";
-	public static GameClient NewSwitchClient { get; private set; } = new(fortNewSwitchClientId, fortNewSwitchSecret);
-
-	public static readonly Dictionary<string, GameClient> clients = new()
-	{
-		[fortPCClientId] = PCClient,
-		[fortIOSClientId] = IOSClient,
-		[fortAndroidClientId] = AndroidClient,
-		[fortNewSwitchClientId] = NewSwitchClient,
-	};
+	public static Dictionary<string, GameClient> ClientDict => field ??= ClientList.ToDictionary(c => c.ClientID);
 
 	public static GameClient PreferredClient { get; private set; } = AndroidClient;
 
@@ -177,7 +170,7 @@ public class GameClient
 	bool LinkCodeExpired => linkCodeExpiresAt <= Mathf.Max((Time.GetTicksMsec() * 0.001) - 10, 0);
 	public async Task<JsonObject> GetLoginLinkData(bool force = false)
 	{
-		if (ClientID != fortNewSwitchClientId)
+		if (ClientID != NewSwitchClient.ClientID)
 			return await NewSwitchClient.GetLoginLinkData(force);
 
 		if (!LinkCodeHalfExpired && !force)
@@ -203,7 +196,7 @@ public class GameClient
 	DateTime lastChecked = DateTime.MinValue;
 	public async Task<HttpResponseMessage> CheckLoginLinkCode()
 	{
-		if (ClientID != fortNewSwitchClientId)
+		if (ClientID != NewSwitchClient.ClientID)
 		{
 			var checkResponse = await NewSwitchClient.CheckLoginLinkCode();
 			if (!checkResponse.IsSuccessStatusCode)

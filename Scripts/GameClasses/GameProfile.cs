@@ -289,7 +289,7 @@ public class GameProfile
 	DateTime lastProfileOperationTime = DateTime.MinValue;
 	DateTime lastClientQuestLoginTime = DateTime.MinValue;
 	public JsonObject lastOp { get; private set; }
-	async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry = false, bool silent = false, bool witholdChanges = false)
+	async Task<JsonArray> PerformOperationUnsafe(string operation, string content = "{}", bool isRetry = false, bool silent = false)
 	{
 		try
 		{
@@ -369,9 +369,6 @@ public class GameProfile
 			}
 			catch { }
 			lastOp = result;
-
-			if (witholdChanges)
-				return [];
 
 			var changes = result["profileChanges"]?.AsArray();
 
@@ -605,15 +602,14 @@ public class GameProfile
 		}
 		foreach (var statKVP in newStats)
 		{
-			if (!statAttributes.TryGetPropertyValue(statKVP.Key, out var statVal) || statKVP.Value.ToString() != statVal.ToString())
+			if (statAttributes.TryGetPropertyValue(statKVP.Key, out var statVal) && statKVP.Value.ToString() == statVal.ToString())
+				continue;
+			profileChanges.Add(new JsonObject()
 			{
-				profileChanges.Add(new JsonObject()
-				{
-					["changeType"] = "statModified",
-					["name"] = statKVP.Key,
-					["value"] = statVal.SafeDeepClone()
-				});
-			}
+				["changeType"] = "statModified",
+				["name"] = statKVP.Key,
+				["value"] = statKVP.Value.SafeDeepClone()
+			});
 		}
 
 		return profileChanges;

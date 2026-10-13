@@ -129,24 +129,24 @@ public class GameItem
 		public JsonElement? attributes { get; init; }
 		public int quantity { get; init; } = 1;
 
-		public GameItem CreateItem() => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>(), templateId: itemType);
-		public GameItem TryCreateItem() => GameItemTemplate.Get(itemType)?.CreateInstance(quantity, attributes?.Deserialize<JsonObject>());
+		public GameItem CreateItem(JsonObject customData = null) => new(GameItemTemplate.Get(itemType), quantity, attributes?.Deserialize<JsonObject>(), templateId: itemType, customData: customData);
+		public GameItem TryCreateItem(JsonObject customData = null) => GameItemTemplate.Get(itemType)?.CreateInstance(quantity, attributes?.Deserialize<JsonObject>(), customData: customData);
 		public GameItem FindItem(GameAccount account)
 		{
 			if (itemGuid is null || itemProfile is null)
 				return null;
 			return account?.GetProfile(itemProfile).GetItem(itemGuid);
 		}
-		public GameItem FindItemAsReward(GameAccount account)
+		public GameItem FindItemAsReward(GameAccount account, JsonObject customData = null)
 		{
 			if (FindItem(account) is not GameItem realItem)
 				return null;
 			if (realItem.quantity == quantity)
 				return realItem;
-			return realItem.Clone(quantity);
+			return realItem.Clone(quantity, customData);
 		}
-		public GameItem FindOrCreateReward(GameAccount account) =>
-			FindItemAsReward(account) ?? CreateItem();
+		public GameItem FindOrCreateReward(GameAccount account, JsonObject customData = null) =>
+			FindItemAsReward(account, customData) ?? CreateItem(customData);
 	}
 
 	public GameItem SetUUID(string customUUID = null)
@@ -313,6 +313,8 @@ public class GameItem
 			_searchTags.Add("Overflow");
 		if (attributes?["personality"]?.ToString() is string rawPersonality)
 			_searchTags.Add(ParseSurvivorAttribute(rawPersonality));
+		if (attributes?["favorite"]?.GetValue<bool>() == true)
+			_searchTags.Add("Favourite");
 		if (attributes?["set_bonus"]?.ToString() is string rawSetBonus)
 			_searchTags.Add(ParseSurvivorAttribute(rawSetBonus));
 		if (attributes?["quest_state"]?.ToString() is string questState)
