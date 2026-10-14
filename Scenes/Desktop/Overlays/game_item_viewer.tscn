@@ -335,7 +335,7 @@ script = ExtResource("1_5fxot")
 displayUUID = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/LineEdit")
 displayItemEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem")
 defenderEquipmentEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderEquipment")
-inventoryItemPanel = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier")
+inventoryItemPanel = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier")
 upgrader = NodePath("Control/WindowContents/CenterContainer/window/Upgrades")
 tabRoot = NodePath("Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer")
 tabBar = NodePath("Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar")
@@ -488,30 +488,39 @@ vertical_alignment = 1
 autowrap_mode = 2
 text_overrun_behavior = 3
 
-[node name="LvAndTier" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="2" unique_id=1593097362]
+[node name="DescriptionAndUpgradeCosts" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer" index="1" unique_id=1619689312]
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts" index="0" unique_id=21096346]
+layout_mode = 2
+
+[node name="LvAndTier" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer" index="0" unique_id=1593097362]
 layout_mode = 2
 theme_type_variation = &"Panel3PadB"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier" index="0" unique_id=1133603298]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier" index="0" unique_id=1133603298]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="0" unique_id=272438655]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer" index="0" unique_id=272438655]
 visible = false
 layout_mode = 2
 text = "Expected level:"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="1" unique_id=1775442954]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer" index="1" unique_id=1775442954]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer" index="0" unique_id=1567340623]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer" index="0" unique_id=1567340623]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "Lv 1"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer" index="1" unique_id=321591485]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer" index="1" unique_id=321591485]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -520,7 +529,7 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer/MarginContainer" index="0" unique_id=635262427]
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer/MarginContainer" index="0" unique_id=635262427]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 theme_type_variation = &"ItemLevelProgress"
@@ -530,16 +539,16 @@ min_value = -0.04
 max_value = 1.0
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="2" unique_id=2137970661]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer" index="2" unique_id=2137970661]
 layout_mode = 2
 
-[node name="WeaponCore" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="0" unique_id=1558088226]
+[node name="WeaponCore" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="0" unique_id=1558088226]
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("34_any1v")
 expand_mode = 3
 
-[node name="TierController" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="1" unique_id=1353598102 node_paths=PackedStringArray("tierImages")]
+[node name="TierController" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="1" unique_id=1353598102 node_paths=PackedStringArray("tierImages")]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -549,84 +558,84 @@ script = ExtResource("29_hrq73")
 tierImages = [NodePath("TextureRect"), NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4"), NodePath("TextureRect5")]
 superchargeColor = Color(0, 0.708333, 0.85, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="0" unique_id=1978964137]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="0" unique_id=1978964137]
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="1" unique_id=1487614733]
+[node name="TextureRect2" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="1" unique_id=1487614733]
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect3" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="2" unique_id=1172217621]
+[node name="TextureRect3" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="2" unique_id=1172217621]
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect4" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="3" unique_id=1545268462]
+[node name="TextureRect4" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="3" unique_id=1545268462]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect5" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="4" unique_id=938319243]
+[node name="TextureRect5" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" index="4" unique_id=938319243]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="Lv" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="2" unique_id=1863568685]
+[node name="Lv" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer" index="2" unique_id=1863568685]
 custom_minimum_size = Vector2(38, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Lv 50"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer" index="3" unique_id=1501507711]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer" index="3" unique_id=1501507711]
 visible = false
 layout_mode = 2
 alignment = 2
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" index="0" unique_id=867793953]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" index="0" unique_id=867793953]
 layout_mode = 2
 text = "Capped from:"
 
-[node name="DesiredLv" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" index="1" unique_id=495796877]
+[node name="DesiredLv" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" index="1" unique_id=495796877]
 custom_minimum_size = Vector2(38, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Lv 50"
 
-[node name="InitLvAndTier" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="3" unique_id=1334703338]
+[node name="InitLvAndTier" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer" index="1" unique_id=1334703338]
 layout_mode = 2
 theme_type_variation = &"Panel3PadB"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier" index="0" unique_id=1973670103]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier" index="0" unique_id=1973670103]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer" index="0" unique_id=134727507]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer" index="0" unique_id=134727507]
 visible = false
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer2" index="0" unique_id=106331957]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer2" index="0" unique_id=106331957]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Epic"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer" index="1" unique_id=749426747]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer" index="1" unique_id=749426747]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer" index="0" unique_id=1032031541]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer" index="0" unique_id=1032031541]
 visible = false
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "Lv 1"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer" index="1" unique_id=28403812]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer" index="1" unique_id=28403812]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -635,7 +644,7 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer/MarginContainer" index="0" unique_id=748063104]
+[node name="ProgressBar" type="ProgressBar" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/HBoxContainer/MarginContainer" index="0" unique_id=748063104]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 theme_type_variation = &"ItemLevelProgress"
@@ -645,23 +654,23 @@ min_value = -0.04
 max_value = 1.0
 show_percentage = false
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer" index="2" unique_id=1593001797]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer" index="2" unique_id=1593001797]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="0" unique_id=64440973]
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="0" unique_id=64440973]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 12
 text = "Started at:"
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="1" unique_id=1961667401]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="1" unique_id=1961667401]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_font_sizes/font_size = 12
 text = "Lv 50"
 
-[node name="TierController" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="2" unique_id=1947216017 node_paths=PackedStringArray("tierImages")]
+[node name="TierController" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="2" unique_id=1947216017 node_paths=PackedStringArray("tierImages")]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -671,56 +680,51 @@ script = ExtResource("29_hrq73")
 tierImages = [NodePath("TextureRect"), NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4"), NodePath("TextureRect5")]
 superchargeColor = Color(0, 0.708333, 0.85, 1)
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="0" unique_id=1065473129]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="0" unique_id=1065473129]
 material = ExtResource("14_lxpss")
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect2" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="1" unique_id=1802620561]
+[node name="TextureRect2" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="1" unique_id=1802620561]
 material = ExtResource("14_lxpss")
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect3" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="2" unique_id=162738688]
+[node name="TextureRect3" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="2" unique_id=162738688]
 material = ExtResource("14_lxpss")
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect4" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="3" unique_id=1400119009]
+[node name="TextureRect4" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="3" unique_id=1400119009]
 self_modulate = Color(0, 0, 0, 1)
 material = ExtResource("14_lxpss")
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="TextureRect5" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="4" unique_id=1082153872]
+[node name="TextureRect5" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" index="4" unique_id=1082153872]
 self_modulate = Color(0, 0, 0, 1)
 material = ExtResource("14_lxpss")
 layout_mode = 2
 texture = ExtResource("30_ylct0")
 expand_mode = 3
 
-[node name="ColorRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="3" unique_id=533861877]
+[node name="ColorRect" type="ColorRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer" index="3" unique_id=533861877]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_qg5xp")
 layout_mode = 2
 mouse_filter = 2
 color = Color(0.5933223, 0, 1, 1)
 
-[node name="DescriptionAndUpgradeCosts" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer" index="1" unique_id=1619689312]
-custom_minimum_size = Vector2(0, 125)
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer" index="2" unique_id=1619486428]
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts" index="0" unique_id=1619486428]
-layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/ScrollContainer" index="0" unique_id=822375055]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/ScrollContainer" index="0" unique_id=822375055]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -2106,22 +2110,22 @@ layout_mode = 2
 [node name="CostItem7" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer3/GridContainer" index="6" unique_id=514104900 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
-[connection signal="CanBeLeveledChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier" method="set_visible"]
-[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/ScrollContainer/Label" method="set_text"]
-[connection signal="InitLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/Label" method="set_text"]
-[connection signal="InitRarityChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/ColorRect" method="set_color"]
-[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
-[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
-[connection signal="InitVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/InitLvAndTier" method="set_visible"]
-[connection signal="LevelProgressChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer/MarginContainer/ProgressBar" method="set_value"]
-[connection signal="LevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/Lv" method="set_text"]
-[connection signal="MaxTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
+[connection signal="CanBeLeveledChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier" method="set_visible"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/ScrollContainer/Label" method="set_text"]
+[connection signal="InitLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/Label" method="set_text"]
+[connection signal="InitRarityChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/ColorRect" method="set_color"]
+[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
+[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
+[connection signal="InitVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier" method="set_visible"]
+[connection signal="LevelProgressChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer/MarginContainer/ProgressBar" method="set_value"]
+[connection signal="LevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/Lv" method="set_text"]
+[connection signal="MaxTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
 [connection signal="NameChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/Item Name" method="set_text"]
-[connection signal="SuperchargeChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetSuperchargedTier"]
-[connection signal="TierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
-[connection signal="UncappedLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2/DesiredLv" method="set_text"]
-[connection signal="UncappedVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" method="set_visible"]
-[connection signal="WeaponCoreIconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/WeaponCore" method="set_texture"]
+[connection signal="SuperchargeChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetSuperchargedTier"]
+[connection signal="TierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
+[connection signal="UncappedLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2/DesiredLv" method="set_text"]
+[connection signal="UncappedVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" method="set_visible"]
+[connection signal="WeaponCoreIconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/WeaponCore" method="set_texture"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/HBoxContainer/BackButton" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks" method="ClosePerkChanger"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/HBoxContainer/ApplyButton" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks" method="ApplyReplacementPerk"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Abilities/VBoxContainer/TeamPerk" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Abilities/VBoxContainer/TeamPerk/VBoxContainer/HBoxContainer/TextureRect" method="set_texture"]

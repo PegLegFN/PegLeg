@@ -27,23 +27,21 @@ public static class GameLauncher
 	public static bool TryQuickLaunch(Action showSelector)
 	{
 		LaunchData launchData = default;
-		if (Bootstrap.cmdLineArgs.Contains("--launchGame") || Bootstrap.cmdLineArgs.Any(a => a.StartsWith("--launchAccount=")))
+		GD.Print($"Checking for Launch Data at path: \"{LaunchDataFilePath}\"");
+		if (FileAccess.FileExists(LaunchDataFilePath))
+		{
+			using (var launchDataFile = FileAccess.Open(LaunchDataFilePath, FileAccess.ModeFlags.Read))
+			{
+				launchData = JsonSerializer.Deserialize<LaunchData>(launchDataFile.GetAsText());
+			}
+			IsSteam |= launchData.IsSteam;
+			DirAccess.RemoveAbsolute(LaunchDataFilePath);
+		}
+		if (launchData.QuickLaunchExpiry < DateTime.UtcNow && (Bootstrap.cmdLineArgs.Contains("--launchGame") || Bootstrap.cmdLineArgs.Any(a => a.StartsWith("--launchAccount="))))
 		{
 			launchData.QuickLaunchExpiry = DateTime.UtcNow.AddSeconds(1);
 			if (Bootstrap.cmdLineArgs.FirstOrDefault(a => a.StartsWith("--launchAccount=")) is string launchAccountArg)
 				launchData.TargetAccount = launchAccountArg[16..];
-		}
-		else
-		{
-			if (FileAccess.FileExists(LaunchDataFilePath))
-			{
-				using (var launchDataFile = FileAccess.Open(LaunchDataFilePath, FileAccess.ModeFlags.Read))
-				{
-					launchData = JsonSerializer.Deserialize<LaunchData>(launchDataFile.GetAsText());
-				}
-				IsSteam |= launchData.IsSteam;
-				DirAccess.RemoveAbsolute(LaunchDataFilePath);
-			}
 		}
 		if (launchData.QuickLaunchExpiry < DateTime.UtcNow)
 			return false;
@@ -106,16 +104,6 @@ public static class GameLauncher
 		await LaunchGame(GameAccount.ActiveAccount, false);
 	}
 
-	struct AnticheatData
-	{
-		public string provider { get; init; }
-		public string jwt { get; init; }
-		[JsonPropertyName("deployment_id")]
-		public string deploymentId { get; init; }
-		[JsonPropertyName("sandbox_id")]
-		public string sandboxId { get; init; }
-	}
-
 	public static async Task LaunchGame(GameAccount asAccount, bool quicklaunch = false)
 	{
 		GD.Print($"Launcher: Attempting to launch as {asAccount.DisplayName}");
@@ -150,7 +138,7 @@ public static class GameLauncher
 
 		//if steam is set up and we are not running through steam, set quickstart settings and launch via steam
 		IsSteam |= Bootstrap.cmdLineArgs.Contains("--steam");
-		if (AppConfig.Get<string>("launcher", "steamAppId") is string steamAppId && !IsSteam)
+		if (AppConfig.Get<string>("launcher", "steamAppId") is string steamAppId && !IsSteam && steamAppId.Length > 5)
 		{
 			if (steamAppId.StartsWith("steam://rungameid/"))
 			{
@@ -169,12 +157,15 @@ public static class GameLauncher
 
 				using var launchDataFile = FileAccess.Open(LaunchDataFilePath, FileAccess.ModeFlags.Write);
 				launchDataFile.StoreString(JsonSerializer.Serialize(newLaunchData));
+				return;
 			}
 			else
 			{
-				GD.PushWarning($"Failed to launch via steam: {error} ({steamAppId})");
+				if (!quicklaunch)
+					await GenericConfirmationWindow.ShowError("Failed to launch via Steam, attempting to launch normally", "Launch Error");
+				GD.PushWarning($"Failed to launch via steam: {error} ({steamAppId}). Attempting to launch normally");
+				//AppConfig.Clear("launcher", "steamAppId");
 			}
-			return;
 		}
 
 		string initExchangeCode = await asAccount.GenerateExchangeCode();
@@ -197,37 +188,6 @@ public static class GameLauncher
 
 		AuthenticationHeaderValue launcherAuthHeader = new("Bearer", (await launcherAuthResponse.ReadJson())["access_token"].ToString());
 		string launcherExchangeCode = await GameAccount.GenerateExchangeCode(launcherAuthHeader);
-
-		//anticheat check
-		var anticheatResponse = await WebHelpers.MakeRequest("https://caldera-service-prod.ecosec.on.epicgames.com/caldera/api/v1/launcher/racp", HttpMethod.Post)
-			.SetAuthorisation(launcherAuthHeader)
-			.SetJsonContent($$"""
-			{
-				"accountId": "{{asAccount.accountId}}",
-				"exchange_code": "{{launcherExchangeCode}}",
-				"test_mode": false,
-				"epic_app": "fortnite",
-				"nvidia": false
-			}
-			""")
-			.Send();
-		if (await anticheatResponse.CheckForError())
-		{
-			if (!quicklaunch)
-				GenericConfirmationWindow.ShowError("Failed to verify with anticheat", "Launch Error").StartTask();
-			GD.PushWarning("Launcher: Failed to verify with anticheat");
-			return;
-		}
-
-		var anticheatData = await anticheatResponse.ReadJson<AnticheatData>();
-		GD.Print($"Launching using anticheat: \"{anticheatData.provider}\"");
-
-		//if (anticheatData.provider?.Equals("EasyAntiCheat", System.StringComparison.OrdinalIgnoreCase) != true)
-		//{
-		//	//show error except when quicklaunching
-		//	GD.PushWarning($"Launcher: Invalid anticheat provider: {anticheatData.provider ?? "<null>"}");
-		//	return;
-		//}
 
 		List<string> args = [
 			"-AUTH_LOGIN=unused",

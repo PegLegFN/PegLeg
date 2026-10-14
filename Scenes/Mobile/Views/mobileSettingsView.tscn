@@ -9,10 +9,15 @@
 [ext_resource type="PackedScene" uid="uid://c5jt6u1d5qp2m" path="res://Scenes/ViewElements/Settings/filterInfoSettingsPage.tscn" id="7_ole1h"]
 [ext_resource type="PackedScene" uid="uid://b4aq3gm8ok7ta" path="res://Scenes/ViewElements/Settings/advancedSettingsPage.tscn" id="8_s4sog"]
 [ext_resource type="PackedScene" uid="uid://0ry0nxkc35eg" path="res://Scenes/ViewElements/Settings/accessibilitySettingsPage.tscn" id="9_82ppn"]
+[ext_resource type="PackedScene" uid="uid://ycpjxkqbqpif" path="res://Scenes/ViewElements/Settings/automationSettingsPage.tscn" id="9_hwsgy"]
 [ext_resource type="PackedScene" uid="uid://3okusvm1npwp" path="res://Scenes/ViewElements/Settings/updatesSettingsPage.tscn" id="9_t6tmo"]
 [ext_resource type="PackedScene" uid="uid://b8hsqxu7wjoo2" path="res://Scenes/ViewElements/Settings/coreSettingsPage.tscn" id="10_82ppn"]
 
 [node name="Settings" unique_id=1392335631 instance=ExtResource("1_0u16l")]
+
+[node name="PageParent" parent="PanelContainer/SubmenuContainer/PageContainer" parent_id_path=PackedInt32Array(570908151, 933658718) index="1" unique_id=1962361108]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
 
 [node name="InterfacePage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Interface" parent_id_path=PackedInt32Array(2108461666) index="1" unique_id=342944049 instance=ExtResource("2_nlxjj")]
 layout_mode = 2
@@ -44,6 +49,21 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 6
 
+[node name="OpaqueImages" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced/AdvancedPage" index="4" unique_id=447608998]
+visible = false
+
+[node name="TrayMinimise" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced/AdvancedPage" index="8" unique_id=861072088]
+visible = false
+
+[node name="ExperimentalNotifs" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced/AdvancedPage" index="9" unique_id=338767119]
+visible = false
+
+[node name="LauncherSettings" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced/AdvancedPage" index="11" unique_id=1334829468]
+visible = false
+
+[node name="AutomationPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Automation" parent_id_path=PackedInt32Array(1574792381) index="1" unique_id=635571196 instance=ExtResource("9_hwsgy")]
+layout_mode = 2
+
 [node name="AccessibilityPage" parent="PanelContainer/SubmenuContainer/PageContainer/PageParent/Accessibility" parent_id_path=PackedInt32Array(1540632451) index="1" unique_id=1799614675 instance=ExtResource("9_82ppn")]
 layout_mode = 2
 
@@ -56,3 +76,4 @@ size_flags_vertical = 6
 
 [editable path="PanelContainer/SubmenuContainer"]
 [editable path="PanelContainer/SubmenuContainer/PageContainer/PageParent/Misc/MiscPage"]
+[editable path="PanelContainer/SubmenuContainer/PageContainer/PageParent/Advanced/AdvancedPage"]
