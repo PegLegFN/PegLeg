@@ -62,9 +62,16 @@ public partial class TooltipFixer : Node
 		await Helpers.WaitForFrame();
 		try
 		{
+			var oldCSF = pp.ContentScaleFactor;
 			pp.ContentScaleFactor = 1f;
-			pp.Size = Vector2I.Zero;
-			//tooltip offset is applied here
+			var oldSize = pp.Size;
+			pp.Size = (Vector2I)((Vector2)pp.Size/oldCSF);
+			var diff = pp.Size - oldSize;
+			var mousePos = DisplayServer.MouseGetPosition();
+			if (pp.Position.X < mousePos.X)
+				pp.Position -= diff * Vector2I.Right;
+			if (pp.Position.Y < mousePos.Y)
+				pp.Position -= diff * Vector2I.Down;
 			tooltipControl.Visible = true;
 		}
 		catch (ObjectDisposedException) { }
