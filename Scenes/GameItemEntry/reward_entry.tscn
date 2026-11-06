@@ -24,6 +24,7 @@ script = ExtResource("2_jy1bu")
 compactifyAmount = true
 hideMythicLeadSquad = true
 packImageAsSubtype = false
+usePackChoices = true
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1323663121]
 self_modulate = Color(0.901961, 0.509804, 0, 1)
@@ -174,9 +175,16 @@ script = ExtResource("12_tj077")
 itemSource = NodePath("../..")
 componentList = ExtResource("13_4i2dj")
 
+[connection signal="AltIconChanged" from="." to="TextureRect" method="SetShaderTexture" binds= ["AltIcon"]]
+[connection signal="AltIsHero" from="." to="TextureRect" method="SetShaderBool" binds= ["AltHero"]]
+[connection signal="AltIsPack" from="." to="TextureRect" method="SetShaderBool" binds= ["AltPack"]]
+[connection signal="AltIsSchematic" from="." to="TextureRect" method="SetShaderBool" binds= ["AltSchematic"]]
+[connection signal="AltPackIconChanged" from="." to="TextureRect" method="SetShaderTexture" binds= ["AltPackIcon"]]
+[connection signal="AltRarityChanged" from="." to="TextureRect" method="SetShaderColor" binds= ["AltRarity"]]
 [connection signal="AmmoIconChanged" from="." to="Overlays/AmountContainer/LeftIcon" method="set_texture"]
 [connection signal="AmountChanged" from="." to="Overlays/AmountContainer/AmountLabel" method="set_text"]
 [connection signal="AmountVisibility" from="." to="Overlays/AmountContainer/AmountLabel" method="set_visible"]
+[connection signal="DisplayChoices" from="." to="TextureRect" method="SetShaderBool" binds= ["IsChoice"]]
 [connection signal="IconChanged" from="." to="TextureRect" method="SetShaderTexture" binds= ["MainIcon"]]
 [connection signal="InteractableChanged" from="." to="Overlays/InteractableIcon" method="set_visible"]
 [connection signal="InteractableChanged" from="." to="Responsive Button Area" method="set_visible"]

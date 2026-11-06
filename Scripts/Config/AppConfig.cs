@@ -247,6 +247,9 @@ public partial class AppConfig
 			Set("advanced", "publishing", oldWebhookState);
 			Clear("advanced", "webhooks");
 		}
+
+		if (TryGet("ui", "hero_tooltips", out bool oldHeroTooltips))
+			Set("ui", "hero_tooltips", oldHeroTooltips ? 1 : 2);
 	}
 
 	static JsonObject LoadConfig()

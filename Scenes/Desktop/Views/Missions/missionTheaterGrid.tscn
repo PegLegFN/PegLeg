@@ -1,0 +1,169 @@
+[gd_scene format=3 uid="uid://die50fb03kyxn"]
+
+[ext_resource type="Script" uid="uid://bmvlfbhstysrx" path="res://Scripts/UserInterface/Missions/MissionTheaterTiles.cs" id="1_n21cm"]
+[ext_resource type="Texture2D" uid="uid://do4s2kcsaudnl" path="res://Images/Missions/HexStamp.tga" id="2_8rmbu"]
+[ext_resource type="Shader" uid="uid://c3qwcfcbb4u0a" path="res://Shaders/MissionHexCloudBlit.gdshader" id="3_we6eg"]
+[ext_resource type="Shader" uid="uid://cv5xt7qo0g6w7" path="res://Shaders/MissionHexBiomeBlit.gdshader" id="4_8rmbu"]
+[ext_resource type="PackedScene" uid="uid://cxeel4f7ncwoi" path="res://Scenes/MissionEntry/mission_entry_hex.tscn" id="5_eix2o"]
+[ext_resource type="Shader" uid="uid://cp5nmpscp3y0j" path="res://Shaders/MissionStormClouds.gdshader" id="6_4qtbb"]
+[ext_resource type="Shader" uid="uid://dbqvlmpw4drmm" path="res://Shaders/MissionBiomes.gdshader" id="6_we6eg"]
+[ext_resource type="Texture2D" uid="uid://dh3sechhtdvue" path="res://Images/Missions/T_StormCloudDetail01_M.png" id="7_8u03e"]
+[ext_resource type="Texture2D" uid="uid://b0xsnmot53y1w" path="res://Images/AppIcons/PegLegIcon432BG.png" id="7_we6eg"]
+[ext_resource type="Texture2D" uid="uid://4e28scn244ie" path="res://Images/Missions/T_StormCloudDetail01_N.png" id="8_fecgf"]
+[ext_resource type="Texture2D" uid="uid://cv0vjxncl4653" path="res://Images/Missions/T_Swirl_Flowmap.png" id="9_bgmce"]
+[ext_resource type="Texture2D" uid="uid://diyph5qafrk1q" path="res://Images/Missions/T_StormSwirlNormal.png" id="10_qs7cl"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="11_50id2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ll5e3"]
+shader = ExtResource("3_we6eg")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n21cm"]
+shader = ExtResource("4_8rmbu")
+shader_parameter/intensity = 0.50000002375
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r4bk3"]
+noise_type = 3
+frequency = 0.03
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_we6eg"]
+width = 64
+height = 64
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_r4bk3")
+seamless = true
+in_3d_space = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8rmbu"]
+resource_local_to_scene = true
+shader = ExtResource("6_we6eg")
+shader_parameter/ControlSize = Vector2(870, 537)
+shader_parameter/noise = SubResource("NoiseTexture2D_we6eg")
+shader_parameter/noiseScale = 100.0
+shader_parameter/offsetScale = 15.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_owuw5"]
+frequency = 0.1
+offset = Vector3(1000, 0, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vo5os"]
+noise = SubResource("FastNoiseLite_owuw5")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ye5te"]
+resource_local_to_scene = true
+shader = ExtResource("6_4qtbb")
+shader_parameter/ControlSize = Vector2(870, 537)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/noise = SubResource("NoiseTexture2D_vo5os")
+shader_parameter/swirl = ExtResource("10_qs7cl")
+shader_parameter/flow = ExtResource("9_bgmce")
+shader_parameter/detailMask = ExtResource("7_8u03e")
+shader_parameter/detailNormal = ExtResource("8_fecgf")
+
+[sub_resource type="Gradient" id="Gradient_8rmbu"]
+offsets = PackedFloat32Array(0.5, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_we6eg"]
+gradient = SubResource("Gradient_8rmbu")
+width = 24
+height = 24
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+metadata/_snap_enabled = true
+
+[node name="Theater" type="Control" unique_id=1048263427 node_paths=PackedStringArray("cloudTarget", "biomeTarget", "missionNodeParent")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 870.0
+offset_bottom = 537.0
+mouse_filter = 1
+script = ExtResource("1_n21cm")
+testTargetCat = "c"
+envPaddingFactor = 0.5
+envDownsampling = 8
+envBlitTexture = ExtResource("2_8rmbu")
+envCellSize = Vector2(126, 110)
+envOffset = Vector2(128, 128)
+cloudBlitMat = SubResource("ShaderMaterial_ll5e3")
+cloudTarget = NodePath("StormClouds")
+defaultBiomeMap = Dictionary[String, String]({
+"243870C643F8611F25D24287814E1DA4": "Water",
+"25D86CC64F0F3EE1831CFD9B2DF6D68C": "Sand",
+"33A2311D4AE64B361CCE27BC9F313C8B": "Grass",
+"D477605B4FA48648107B649CE97FCF27": "Autumn",
+"D61659064BED28BEA91FD2A343C126B7": "Snow",
+"D9A801C5444D1C74D1B7DAB5C7C12C5B": "Water",
+"DBB6E92A4EDE30B76C94C7BA3852C473": "Spooky",
+"E6ECBD064B153234656CB4BDE6743870": "Sand",
+"FF97186D4741CB5F2A980BB0164081D4": "Autumn"
+})
+biomeRules = Dictionary[String, PackedStringArray]({
+"Autumn": PackedStringArray("Lakeside", "Autumn"),
+"Grass": PackedStringArray("Grasslands", "The City", "^City$", "The Forest", "^Forest$", "Industrial Park", "^Suburbs$", "The Mansion", "Storm Shield", "Homebase"),
+"Sand": PackedStringArray("Desert", "Ghost Town", "Route 99"),
+"Snow": PackedStringArray("Boreal Base", "Chilly Cove", "Crackshot"),
+"Spooky": PackedStringArray("The Portal", "Storm King", "Haunted", "Shady Acres", "The Swamps"),
+"Water": PackedStringArray("BP_TZ_TP_Water_C", "Tropical")
+})
+biomeColours = Dictionary[String, Color]({
+"Autumn": Color(0.75, 0.34705883, 0.011764705, 1),
+"Grass": Color(0, 0.546875, 0.026461668, 1),
+"Sand": Color(0.61328125, 0.5813906, 0.294375, 1),
+"Snow": Color(0.6640625, 0.6640625, 0.6640625, 1),
+"Spooky": Color(0.4671263, 0.2081495, 0.6171875, 1),
+"Water": Color(0.1736232, 0.4457932, 0.72265625, 1)
+})
+biomeBlitMat = SubResource("ShaderMaterial_n21cm")
+biomeTarget = NodePath("Biomes")
+missionNodeScene = ExtResource("5_eix2o")
+missionNodeParent = NodePath("Missions")
+
+[node name="Biomes" type="TextureRect" parent="." unique_id=2000523755]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_8rmbu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_we6eg")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("11_50id2")
+syncControlSize = true
+metadata/_edit_lock_ = true
+
+[node name="Tiles" type="Control" parent="." unique_id=1134178007]
+anchors_preset = 0
+offset_left = 128.0
+offset_top = 128.0
+offset_right = 128.0
+offset_bottom = 128.0
+
+[node name="Missions" type="Control" parent="." unique_id=994529228]
+anchors_preset = 0
+offset_left = 128.0
+offset_top = 128.0
+offset_right = 128.0
+offset_bottom = 128.0
+mouse_filter = 1
+
+[node name="StormClouds" type="TextureRect" parent="." unique_id=66127543]
+self_modulate = Color(0.470115, 0.024052227, 0.64453125, 1)
+material = SubResource("ShaderMaterial_ye5te")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_we6eg")
+expand_mode = 1
+script = ExtResource("11_50id2")
+syncControlSize = true
+metadata/_edit_lock_ = true

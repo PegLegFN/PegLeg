@@ -17,6 +17,13 @@ public partial class ConfigTemplateList : Button
 	string templatePrefix;
 
 	[Export]
+	string[] templateList;
+
+	//multi-template filters
+	[Export]
+	Godot.Collections.Dictionary<string, string> customOptions;
+
+	[Export]
 	string section;
 
 	[Export]
@@ -31,6 +38,8 @@ public partial class ConfigTemplateList : Button
 	[Export]
 	TooltipMode tooltipMode;
 
+	[Export]
+	Texture2D swapIcon;
 
 	enum TooltipMode
 	{
@@ -42,6 +51,8 @@ public partial class ConfigTemplateList : Button
 	GameItemTemplate[] allOptions;
 	List<string> selectedTemplateIds;
 
+	const int listOffset = 2;
+	int listEndOffset = 0;
 	public override void _Ready()
 	{
 		menu ??= GetChildOrNull<PopupMenu>(0);
@@ -51,13 +62,21 @@ public partial class ConfigTemplateList : Button
 			AddChild(menu);
 		}
 
-		allOptions = [.. GameItemTemplate.GetTemplates(t => t.TemplateId.StartsWith(templatePrefix)).OrderBy(t => t.SortingName)];
+		allOptions = [
+			..string.IsNullOrWhiteSpace(templatePrefix) ? [] : GameItemTemplate.GetTemplates(t => t.TemplateId.StartsWith(templatePrefix)),
+			..(templateList?.Length ?? 0) == 0 ? [] : templateList.Select(GameItemTemplate.Get).Where(t => t is not null)
+		];
+		allOptions = [.. allOptions.OrderBy(t => t.SortingName)];
 		menu.Clear();
+
+		menu.AddIconItem(swapIcon, "Invert Selection");
+		menu.AddSeparator();
+
 		for (int i = 0; i < allOptions.Length; i++)
 		{
-			menu.AddCheckItem(allOptions[i].ItemName, i);
-			menu.SetItemMetadata(i, allOptions[i].TemplateId);
-			menu.SetItemTooltip(i, tooltipMode switch
+			menu.AddCheckItem(allOptions[i].ItemName, i + listOffset);
+			menu.SetItemMetadata(i + listOffset, allOptions[i].TemplateId);
+			menu.SetItemTooltip(i + listOffset, tooltipMode switch
 			{
 				TooltipMode.Description => allOptions[i].ItemDescription,
 				TooltipMode.FirstObjective => allOptions[i]["Objectives"]?.AsArray().FirstOrDefault()["Description"].ToString(),
@@ -84,7 +103,11 @@ public partial class ConfigTemplateList : Button
 		var combinedTransform = GetWindow().GetFinalTransform() * GetGlobalTransformWithCanvas();
 		var startPos = (Vector2I)(combinedTransform * (Size * Vector2.Down)); // bottom left
 		var endPos = (Vector2I)(combinedTransform * Size); // bottom right
-		menu.PopupOnParent(new(startPos, endPos - startPos));
+		Rect2I box = new(startPos, endPos - startPos);
+		menu.PopupOnParent(box);
+		//await Helpers.WaitForFrame();
+		//menu.Size = Vector2I.Zero;
+		//menu.PopupOnParent(box);
 	}
 
 	private async void CleanupMenu()
@@ -112,13 +135,6 @@ public partial class ConfigTemplateList : Button
 		LoadList();
 	}
 
-	string[] GetCurrentValues()
-	{
-		if (accountMode)
-			return GameAccount.ActiveAccount.GetLocalData(key)?.Deserialize<string[]>() ?? [];
-		return AppConfig.Get<string[]>(section, key, []);
-	}
-
 	bool isChanging = false;
 
 	void LoadList()
@@ -127,26 +143,61 @@ public partial class ConfigTemplateList : Button
 			return;
 		isChanging = true;
 
-		if (accountMode)
-			selectedTemplateIds = [.. GameAccount.ActiveAccount.GetLocalData(key)?.Deserialize<string[]>() ?? []];
-		else
-			selectedTemplateIds = [.. AppConfig.Get<string[]>(section, key, [])];
+		selectedTemplateIds = accountMode ? 
+			[.. GameAccount.ActiveAccount.GetLocalData(key)?.Deserialize<string[]>() ?? []] :
+			[.. AppConfig.Get<string[]>(section, key, [])];
 
+		var allTIDs = allOptions.Select(t => t.TemplateId).ToHashSet();
+		selectedTemplateIds = [.. selectedTemplateIds.Where(allTIDs.Contains)];
+
+		ApplyList(true);
+		isChanging = false;
+	}
+
+	private void ApplyList(bool applyCheckmarks)
+	{
 		Text = $"{textPrefix} ({selectedTemplateIds.Count})";
 
-		for (int i = 0; i < allOptions.Length; i++)
+		if (accountMode)
+			GameAccount.ActiveAccount.SetLocalData(key, JsonSerializer.SerializeToNode(selectedTemplateIds));
+		else
+			AppConfig.SetSerialised(section, key, selectedTemplateIds);
+
+		if (applyCheckmarks)
 		{
-			string template = menu.GetItemMetadata(i).AsString();
-			menu.SetItemChecked(i, selectedTemplateIds.Contains(template));
+			for (int i = 0; i < allOptions.Length; i++)
+			{
+				string template = menu.GetItemMetadata(i).AsString();
+				menu.SetItemChecked(i, selectedTemplateIds.Contains(template));
+			}
 		}
+	}
+
+	public void InvertList()
+	{
+		isChanging = true;
+		selectedTemplateIds = [.. allOptions.Select(t => t.TemplateId).Except(selectedTemplateIds)];
+
+		ApplyList(true);
 		isChanging = false;
 	}
 
 	private void ListChanged(long longIndex)
 	{
+		if (longIndex < listOffset)
+		{
+			if (longIndex == 0)
+				InvertList();
+			return;
+		}
+		if (longIndex >= menu.ItemCount-listEndOffset)
+		{
+			return;
+		}
 		if (isChanging)
 			return;
 		isChanging = true;
+
 		int index = (int)longIndex;
 		bool isChecked = menu.IsItemChecked(index);
 		string template = menu.GetItemMetadata(index).AsString();
@@ -162,12 +213,7 @@ public partial class ConfigTemplateList : Button
 			menu.SetItemChecked(index, false);
 		}
 
-		Text = $"{textPrefix} ({selectedTemplateIds.Count})";
-
-		if (accountMode)
-			GameAccount.ActiveAccount.SetLocalData(key, JsonSerializer.SerializeToNode(selectedTemplateIds));
-		else
-			AppConfig.SetSerialised(section, key, selectedTemplateIds);
+		ApplyList(false);
 		isChanging = false;
 	}
 }

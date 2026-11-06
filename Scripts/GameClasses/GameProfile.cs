@@ -476,10 +476,15 @@ public class GameProfile
 				}
 				var loggableNotifs = notifs.Where(n => !DontLogTheseNotifTypes.Contains(n["type"]?.ToString()));
 				if (loggableNotifs.Any() && AppConfig.Get("advanced", "logNotifs", false))
-					GD.Print("Notifications: " + loggableNotifs.ToString().FixNewlines());
+					GD.Print("Notifications: " + loggableNotifs.JoinString().FixNewlines());
 				return notifs;
 			}
 			return [];
+		}
+		catch(Exception e)
+		{
+			GD.PushWarning($"Exception in Profile Operation: {e}");
+			throw;
 		}
 		finally
 		{
@@ -637,120 +642,131 @@ public class GameProfile
 			//if (printChanges)
 			//    GD.Print($"Applying \"{changeType}\"");
 			//ProfileItemId profileItemId = new(profileId, uuid);
-			GameItem targetItem;
-			switch (changeType)
+
+			GameItem targetItem = null;
+			bool disconnect = false;
+			try
 			{
-				case "itemAdded":
-					targetItem = new(this, uuid, change["item"].AsObject());
-					lock (items)
-					{
-						items[uuid] = targetItem;
-					}
-					lock (groupedItems)
-					{
-						groupedItems.TryAdd(targetItem.templateId.Split(":")[0], []);
-						groupedItems[targetItem.templateId.Split(":")[0]].Add(targetItem);
-					}
-					if (printChanges)
-						GD.Print($"ADDED: {items[uuid]}");
-					OnItemAdded?.Invoke(targetItem);
-					break;
-				case "itemRemoved":
-					if (!items.ContainsKey(uuid))
-						continue;
-					targetItem = items[uuid];
-					if (printChanges)
-						GD.Print($"REMOVING: {targetItem}");
-					targetItem.NotifyRemoving();
-					lock (items)
-					{
+				switch (changeType)
+				{
+					case "itemAdded":
+						targetItem = new(this, uuid, change["item"].AsObject());
+						lock (items)
+						{
+							items[uuid] = targetItem;
+						}
+						lock (groupedItems)
+						{
+							groupedItems.TryAdd(targetItem.templateId.Split(":")[0], []);
+							groupedItems[targetItem.templateId.Split(":")[0]].Add(targetItem);
+						}
+						if (printChanges)
+							GD.Print($"ADDED: {items[uuid]}");
+						OnItemAdded?.Invoke(targetItem);
+						break;
+					case "itemRemoved":
+						if (!items.ContainsKey(uuid))
+							continue;
+						targetItem = items[uuid];
+						if (printChanges)
+							GD.Print($"REMOVING: {targetItem}");
+						targetItem.NotifyRemoving();
+						lock (items)
+						{
+							items.Remove(uuid);
+						}
+						lock (groupedItems)
+						{
+							if (groupedItems.TryGetValue(targetItem.templateId.Split(":")[0], out var list) && list.Contains(targetItem))
+								list.Remove(targetItem);
+						}
+						itemsToIgnore.Add(targetItem);
+						disconnect = true;
+						OnItemRemoved?.Invoke(targetItem);
+						break;
+					case "statModified":
+						var statName = change["name"].ToString();
+						var statVal = change["value"].SafeDeepClone();
+						JsonNode oldStatVal = null;
+						var hadStatBefore = statAttributes?.TryGetPropertyValue(statName, out oldStatVal) ?? false;
+						var hasStatNow = statVal is not null;
+
+						string statValText = "[Removed]";
+						if (hasStatNow)
+						{
+							statAttributes ??= [];
+							statAttributes[statName] = statVal;
+							statValText = statVal.ToString();
+							if (statValText.Length > 500)
+								statValText = "[500+ chars]";
+						}
+						else
+							statAttributes.Remove(statName);
+
+
+						string oldStatValText = "";
+						if (hadStatBefore)
+						{
+							oldStatValText = oldStatVal.ToString();
+							if (oldStatValText.Length > 500)
+								oldStatValText = "[500+]";
+							oldStatValText += "\n=>\n";
+						}
+
+						if (printChanges)
+							GD.Print($"STAT CHANGED: {statName}: {oldStatValText}{statValText}");
+						OnStatChanged?.Invoke(statName);
+						OnStatsChanged?.Invoke();
+
+						break;
+					case "itemQuantityChanged":
+						targetItem = items[uuid];
+						var oldQuantity = targetItem.quantity;
+						targetItem.SetLocalQuantity(change["quantity"].GetValue<int>());
+						if (printChanges)
+							GD.Print($"QUANT CHANGED: {uuid} ({oldQuantity} => {targetItem.quantity})");
+						itemsToNotify.Add(targetItem);
+						break;
+					case "itemAttrChanged":
+						targetItem = items[uuid];
+						var oldValue = targetItem.attributes[change["attributeName"].ToString()]?.ToString();
+						targetItem.attributes[change["attributeName"].ToString()] = change["attributeValue"].SafeDeepClone();
+						if (printChanges)
+							GD.Print($"ATTR CHANGED: {uuid}[{change["attributeName"]}] \n{oldValue}\n=>\n{change["attributeValue"]}");
+						itemsToNotify.Add(targetItem);
+						break;
+					case "itemUpgraded":
+						//reassociates an item that was removed and readded as part of an upgrade
+						targetItem = items[uuid];
+						targetItem.Reassociate(change["newItemId"]?.ToString(), change["item"].AsObject());
 						items.Remove(uuid);
-					}
-					lock (groupedItems)
-					{
-						if (groupedItems.TryGetValue(targetItem.templateId.Split(":")[0], out var list) && list.Contains(targetItem))
-							list.Remove(targetItem);
-					}
-					itemsToIgnore.Add(targetItem);
-					OnItemRemoved?.Invoke(targetItem);
-					targetItem.DisconnectFromProfile();
-					break;
-				case "statModified":
-					var statName = change["name"].ToString();
-					var statVal = change["value"].SafeDeepClone();
-					JsonNode oldStatVal = null;
-					var hadStatBefore = statAttributes?.TryGetPropertyValue(statName, out oldStatVal) ?? false;
-					var hasStatNow = statVal is not null;
-
-					string statValText = "[Removed]";
-					if (hasStatNow)
-					{
-						statAttributes ??= [];
-						statAttributes[statName] = statVal;
-						statValText = statVal.ToString();
-						if (statValText.Length > 500)
-							statValText = "[500+ chars]";
-					}
-					else
-						statAttributes.Remove(statName);
-
-
-					string oldStatValText = "";
-					if (hadStatBefore)
-					{
-						oldStatValText = oldStatVal.ToString();
-						if (oldStatValText.Length > 500)
-							oldStatValText = "[500+]";
-						oldStatValText += "\n=>\n";
-					}
-
-					if (printChanges)
-						GD.Print($"STAT CHANGED: {statName}: {oldStatValText}{statValText}");
-					OnStatChanged?.Invoke(statName);
-					OnStatsChanged?.Invoke();
-
-					break;
-				case "itemQuantityChanged":
-					targetItem = items[uuid];
-					var oldQuantity = targetItem.quantity;
-					targetItem.SetLocalQuantity(change["quantity"].GetValue<int>());
-					if (printChanges)
-						GD.Print($"QUANT CHANGED: {uuid} ({oldQuantity} => {targetItem.quantity})");
-					itemsToNotify.Add(targetItem);
-					break;
-				case "itemAttrChanged":
-					targetItem = items[uuid];
-					var oldValue = targetItem.attributes[change["attributeName"].ToString()]?.ToString();
-					targetItem.attributes[change["attributeName"].ToString()] = change["attributeValue"].SafeDeepClone();
-					if (printChanges)
-						GD.Print($"ATTR CHANGED: {uuid}[{change["attributeName"]}] \n{oldValue}\n=>\n{change["attributeValue"]}");
-					itemsToNotify.Add(targetItem);
-					break;
-				case "itemUpgraded":
-					//reassociates an item that was removed and readded as part of an upgrade
-					targetItem = items[uuid];
-					targetItem.Reassociate(change["newItemId"]?.ToString(), change["item"].AsObject());
-					items.Remove(uuid);
-					items.Add(targetItem.uuid, targetItem);
-					if (printChanges)
-						GD.Print($"UPGRADED: {uuid} => {targetItem.uuid}");
-					itemsToNotify.Add(targetItem);
-					reassociations.Add(uuid, targetItem);
-					break;
-				case "itemFullyChanged":
-					//autogenerated item changes
-					targetItem = items[uuid];
-					targetItem.SetItemOrRewardData(change["item"].AsObject());
-					if (printChanges)
-						GD.Print($"ITEM FULL CHANGED: {targetItem}");
-					itemsToNotify.Add(targetItem);
-					break;
+						items.Add(targetItem.uuid, targetItem);
+						if (printChanges)
+							GD.Print($"UPGRADED: {uuid} => {targetItem.uuid}");
+						itemsToNotify.Add(targetItem);
+						reassociations.Add(uuid, targetItem);
+						break;
+					case "itemFullyChanged":
+						//autogenerated item changes
+						targetItem = items[uuid];
+						targetItem.SetItemOrRewardData(change["item"].AsObject());
+						if (printChanges)
+							GD.Print($"ITEM FULL CHANGED: {targetItem}");
+						itemsToNotify.Add(targetItem);
+						break;
+				}
 			}
+			catch(Exception e)
+			{
+				GD.PushWarning($"Exception in profile change ({account?.accountId},{profileId},{changeType})\n{e}");
+			}
+			if (disconnect)
+				targetItem?.DisconnectFromProfile();
 		}
 
 		heroesInLoadouts = null;
 
-		itemsToNotify.RemoveAll(i => itemsToIgnore.Contains(i));
+		itemsToNotify.RemoveAll(itemsToIgnore.Contains);
 		foreach (var item in itemsToNotify)
 		{
 			if (printChanges)

@@ -7,6 +7,9 @@ using System.Text.Json.Serialization;
 
 public partial class VenturesInterface : Control
 {
+	[Export]
+	bool barOnly;
+
 	[ExportGroup("Status Bar")]
 	[Export]
 	Label currentLevelLabel;
@@ -46,27 +49,32 @@ public partial class VenturesInterface : Control
 	VenturesLevelEntry[] extraItemEntries;
 
 	bool hasSeason = false;
+	GameProfile currentProfile;
 	VentureSeasonProgressData currentSeason;
 	VentureLevel[] currentLevels;
 	GameItem[] currentItems;
 	GameItem[] currentExtraItems;
 	Dictionary<string, VentureSeasonProgressData> ventureSeasons;
-	public override void _Ready()
+	public override async void _Ready()
 	{
+		await Helpers.WaitForFrames(3);
 		ventureSeasons = PegLegResourceManager.VenturesSeasons.Deserialize<Dictionary<string, VentureSeasonProgressData>>();
 		RefreshTimerController.OnDayChanged += CheckSeason;
 		GameAccount.ActiveAccountChanged += UpdateXP;
-		importantLevels.Toggled += _ => UpdateXP();
-		hideCompleted.Toggled += _ => UpdateXP();
+		importantLevels?.Toggled += _ => UpdateXP();
+		hideCompleted?.Toggled += _ => UpdateXP();
 		customXP?.TextSubmitted += SetCustomXP;
 
-		foreach (var item in mainItemEntries)
+		if (!barOnly)
 		{
-			item.SetInterface(this);
-		}
-		foreach (var item in extraItemEntries)
-		{
-			item.SetInterface(this);
+			foreach (var item in mainItemEntries)
+			{
+				item.SetInterface(this);
+			}
+			foreach (var item in extraItemEntries)
+			{
+				item.SetInterface(this);
+			}
 		}
 
 		CheckSeason();
@@ -101,10 +109,10 @@ public partial class VenturesInterface : Control
 
 	async void Refresh()
 	{
-		if (!GameAccount.ActiveAccount.isOwned)
+		if (currentProfile is null)
 			return;
 		autoXPSection.Visible = false;
-		await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+		await currentProfile.Query();
 		UpdateXP();
 	}
 
@@ -128,6 +136,13 @@ public partial class VenturesInterface : Control
 		currentLevels = [.. currentSeason.Levels.OrderBy(l => l.TotalRequiredXP)];
 		currentItems = [.. currentLevels.Select(l => l.Rewards.FirstOrDefault().AsItem())];
 		currentExtraItems = [.. currentSeason.PastLevels.Select(l => l.AsItem())];
+
+
+		if(barOnly)
+		{
+			UpdateXP();
+			return;
+		}
 
 		string[] modifiers = currentSeasonFlag switch
 		{
@@ -169,7 +184,7 @@ public partial class VenturesInterface : Control
 	}
 
 	//todo: make this more automated based on PL calculations (perhaps precalculate during export)
-	static int LevelToMissionUnlock(int level)=> level switch
+	static int LevelToMissionUnlock(int level) => level switch
 	{
 		7 => 23,
 		11 => 34,
@@ -189,9 +204,29 @@ public partial class VenturesInterface : Control
 		if (!hasSeason)
 			return;
 
-		autoXPSection.Visible = GameAccount.ActiveAccount.isOwned;
+		if (currentProfile?.account != GameAccount.ActiveAccount && (currentProfile is not null || GameAccount.ActiveAccount.isOwned))
+		{
+			currentProfile?.OnProfileChanged -= UpdateXP;
+			currentProfile = GameAccount.ActiveAccount.isOwned ? GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems) : null;
+			currentProfile?.OnProfileChanged += UpdateXP;
+		}
+
+		autoXPSection.Visible = currentProfile is not null;
 		customXPSection.Visible = !autoXPSection.Visible;
-		var xp = autoXPSection.Visible ? (GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).GetFirstTemplateItem("AccountResource:phoenixxp")?.quantity ?? 0) : customXPValue;
+		var xp = autoXPSection.Visible ? (currentProfile.GetFirstTemplateItem("AccountResource:phoenixxp")?.quantity ?? 0) : customXPValue;
+
+		if (IsVisibleInTree())
+		{
+			var tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
+			tween.TweenProperty(this, "DisplayXP", xp, 0.5);
+		}
+		else
+		{
+			DisplayXP = xp;
+		}
+
+		if (barOnly)
+			return;
 
 		var visibleLevelIndexes = Enumerable.Range(0, currentLevels.Length).Where(i =>
 		{
@@ -203,6 +238,7 @@ public partial class VenturesInterface : Control
 				return false;
 			return true;
 		}).ToArray();
+
 		for (int j = 0; j < visibleLevelIndexes.Length; j++)
 		{
 			var i = visibleLevelIndexes[j];
@@ -225,16 +261,6 @@ public partial class VenturesInterface : Control
 			int extraLevel = startingExtraLevel + i;
 			int levelRequirement = extraBaseXP + ((extraLevel + 1) * extraXPIncrement);
 			extraItemEntries[i].SetInfo(currentExtraItems[extraLevel % currentExtraItems.Length], levelRequirement - extraXPIncrement, levelRequirement, levelRequirement + extraXPIncrement, 51+extraLevel, 0);
-		}
-
-		if (IsVisibleInTree())
-		{
-			var tween = CreateTween().SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Quad);
-			tween.TweenProperty(this, "DisplayXP", xp, 0.5);
-		}
-		else
-		{
-			DisplayXP = xp;
 		}
 	}
 

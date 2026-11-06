@@ -252,17 +252,33 @@ public partial class ItemInbox : Control
 
 	static async void CheckMissionState(GameAccount account)
 	{
+		bool moreLogs = AppConfig.Get("advanced", "autoClaimMoreLogs", false);
 		if (
 			account.GetLocalData("autoClaimMissions")?.GetValue<bool>() == true &&
 			inMission.GetValueOrDefault(account.accountId) is not null &&
 			!isClaimingMission.GetValueOrDefault(account.accountId)
 		)
 		{
-			isClaimingMission[account.accountId] = true;
-			var gotRewards = await ClaimMissionAndQuestRewards(account);
-			isClaimingMission[account.accountId] = false;
+			bool gotRewards = false;
+			try
+			{
+				isClaimingMission[account.accountId] = true;
+				if (moreLogs)
+					GD.Print($"[{DateTime.UtcNow}] attempting to claim");
+				gotRewards = await ClaimMissionAndQuestRewards(account);
+			}
+			catch(Exception e)
+			{
+				GD.PushWarning($"Exception when claiming rewards: {e}");
+			}
+			finally
+			{
+				isClaimingMission[account.accountId] = false;
+			}
 			if (gotRewards)
 			{
+				if (moreLogs)
+					GD.Print($"[{DateTime.UtcNow}] did claim");
 				claimedMission[account.accountId] = inMission[account.accountId];
 				inMission[account.accountId] = null;
 				missionCooldowns[account.accountId] = missionInactiveCooldown;
@@ -283,18 +299,26 @@ public partial class ItemInbox : Control
 		var match = matchDataList.FirstOrDefault(m => m.attributes.Theater != "C4C2925C466832846A042E97F00FE5CF", matchDataList[0]);
 		if (match.attributes.Theater == "C4C2925C466832846A042E97F00FE5CF")
 		{
-			GD.Print($"Detected {account.DisplayName} in Hestia, ending reward check");
 			if (inMission.GetValueOrDefault(account.accountId) is not null)
 			{
+				if (moreLogs)
+					GD.Print($"[{DateTime.UtcNow}] in Hestia only");
+				GD.Print($"Detected {account.DisplayName} in Hestia, ending reward check");
 				inMission[account.accountId] = null;
 				OnMissionEnded();
 			}
 			return;
 		}
 		if (claimedMission.GetValueOrDefault(account.accountId) == match.id)
+		{
+			if (moreLogs)
+				GD.Print($"[{DateTime.UtcNow}] already claimed");
 			return;
+		}
 		if(inMission.GetValueOrDefault(account.accountId) is null)
 		{
+			if (moreLogs)
+				GD.Print($"[{DateTime.UtcNow}] mission detected");
 			GD.Print($"Detected {account.DisplayName} in mission session {match.id}, starting reward check");
 		}
 		inMission[account.accountId] = match.id;
@@ -329,14 +353,6 @@ public partial class ItemInbox : Control
 
 		var questsToClaim = profile.GetItems("Quest", QuestPredicate);
 		var packsToClaim = profile.GetItems("CardPack", PackPredicate);
-		if (false && (questsToClaim.Length > 0 || packsToClaim.Length > 0))
-		{
-			//GD.Print($"Last Query Result = {profile.lastOp}".FixNewlines());
-			using var debugFile = FileAccess.Open("user://debugOp.json", FileAccess.ModeFlags.Write);
-			debugFile.StoreString(JsonSerializer.Serialize(profile.lastOp, Helpers.JsonOptions.Indented));
-			await Helpers.WaitForFrame();
-			await profile.Query(true, true);//queries with revisions dont seem to update stats in these circumstances? either that or my profile system is broken...
-		}
 		bool unclaimedAlert = profile.statAttributes?["mission_alert_redemption_record"]?.AsObject().ContainsKey("pendingMissionAlertRewards") == true;
 
 		if (questsToClaim.Length == 0 && packsToClaim.Length == 0 && unclaimedAlert)
@@ -345,7 +361,6 @@ public partial class ItemInbox : Control
 			GD.Print($"Claiming {questsToClaim.Length} quests and {packsToClaim.Length} packs{(unclaimedAlert ? " plus alert rewards" : "")}");
 		else
 			return false;
-
 
 		List<GameItem.ItemReward> rewards = [];
 
@@ -360,14 +375,17 @@ public partial class ItemInbox : Control
 			foreach (var cardpackId in cardpacksToOpen)
 			{
 				var original = profile.GetItem(cardpackId.ToString());
-				var notifs = (await profile.PerformOperation("OpenCardPack", new JsonObject() { ["cardPackItemId"] = cardpackId }));
-				var resultNotification = notifs?.FirstOrDefault();
+				var notifs = await profile.PerformOperation("OpenCardPack", new JsonObject() { ["cardPackItemId"] = cardpackId });
+
+				var resultNotification = notifs?.FirstOrDefault(n => n["type"]?.ToString() == "cardPackResult");
 				Llamalytics.TryAddCardpack(original, resultNotification?.AsObject());
-				if (resultNotification is null)
-					continue;
-				var packRewardData = resultNotification["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
-				var grouped = packRewardData.GroupBy(r => r.itemType).Select(g => g.FirstOrDefault() with { quantity = g.Sum(r => r.quantity) });
-				rewards.AddRange(grouped);
+				if (resultNotification is not null)
+				{
+					var packRewardData = resultNotification["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
+					var grouped = packRewardData.GroupBy(r => r.itemType).Select(g => g.FirstOrDefault() with { quantity = g.Sum(r => r.quantity) });
+					rewards.AddRange(grouped);
+				}
+
 				var ventureLevelUps = notifs.Where(n => n["type"]?.ToString() == "phoenixLevelUp").ToArray();
 				foreach (var levelUp in ventureLevelUps)
 				{
@@ -375,15 +393,6 @@ public partial class ItemInbox : Control
 					rewards.AddRange(rewardData);
 				}
 			}
-		}
-
-		for (int i = 0; i < 5; i++)
-		{
-			if (unclaimedAlert)
-				break;
-			await Helpers.WaitForTimer(1);
-			await profile.Query(true, true); //Todo: fix weirdness with alerts
-			unclaimedAlert = profile.statAttributes?["mission_alert_redemption_record"]?.AsObject().ContainsKey("pendingMissionAlertRewards") == true;
 		}
 
 		if (unclaimedAlert)

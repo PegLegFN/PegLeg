@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="4_f00de"]
 [ext_resource type="Texture2D" uid="uid://furde0e0enip" path="res://Images/Llamas/PinataGold.png" id="4_f43w7"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="4_iopkv"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="10_uohp7"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="11_bsplj"]
+[ext_resource type="Resource" uid="uid://bsnrx6wq1cj3o" path="res://Scripts/ContextMenu/ComponentLists/LlamaOfferCtxList.tres" id="12_r8qx2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_efhpm"]
 resource_local_to_scene = true
@@ -16,12 +19,17 @@ shader = ExtResource("2_sdxsh")
 shader_parameter/packIcon = ExtResource("3_kd85f")
 shader_parameter/useMask = false
 
-[node name="LlamaHighlightDBStyle" type="HBoxContainer" unique_id=911756334 node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+[node name="LlamaHighlightDBStyle" type="MarginContainer" unique_id=1037061410 node_paths=PackedStringArray("grantedItemEntry", "priceEntry")]
+offset_right = 138.0
+offset_bottom = 70.0
 script = ExtResource("1_bf3l3")
-grantedItemEntry = NodePath("Llama")
-priceEntry = NodePath("Llama/Price")
+grantedItemEntry = NodePath("HBoxContainer/Llama")
+priceEntry = NodePath("HBoxContainer/Llama/Price")
 
-[node name="Icon" type="TextureRect" parent="." unique_id=1611596503]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=758013935]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer" unique_id=1611596503]
 material = SubResource("ShaderMaterial_efhpm")
 custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
@@ -29,7 +37,7 @@ texture = ExtResource("4_f43w7")
 expand_mode = 1
 script = ExtResource("4_iopkv")
 
-[node name="LlamaStock" type="Label" parent="Icon" unique_id=2841525]
+[node name="LlamaStock" type="Label" parent="HBoxContainer/Icon" unique_id=2841525]
 custom_minimum_size = Vector2(1, 0)
 layout_mode = 1
 anchors_preset = 12
@@ -47,7 +55,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="LlamaPriority" type="Label" parent="Icon" unique_id=2030139195]
+[node name="LlamaPriority" type="Label" parent="HBoxContainer/Icon" unique_id=2030139195]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1, 0)
 layout_mode = 1
@@ -61,17 +69,17 @@ theme_override_font_sizes/font_size = 12
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="IsFree" type="Node" parent="." unique_id=1614923312]
+[node name="IsFree" type="Node" parent="HBoxContainer" unique_id=1614923312]
 script = ExtResource("2_m35jj")
 
-[node name="Llama" type="VBoxContainer" parent="." unique_id=1991489026]
+[node name="Llama" type="VBoxContainer" parent="HBoxContainer" unique_id=1991489026]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 script = ExtResource("3_jueem")
 
-[node name="Name" type="Label" parent="Llama" unique_id=262577709]
+[node name="Name" type="Label" parent="HBoxContainer/Llama" unique_id=262577709]
 custom_minimum_size = Vector2(1, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -82,22 +90,22 @@ vertical_alignment = 1
 autowrap_mode = 2
 text_overrun_behavior = 3
 
-[node name="Price" type="HBoxContainer" parent="Llama" unique_id=781018642]
+[node name="Price" type="HBoxContainer" parent="HBoxContainer/Llama" unique_id=781018642]
 layout_mode = 2
 alignment = 1
 script = ExtResource("3_c5s7e")
 
-[node name="TextureRect" type="TextureRect" parent="Llama/Price" unique_id=1836153273]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Llama/Price" unique_id=1836153273]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("4_f00de")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Llama/Price" unique_id=737408167]
+[node name="Label" type="Label" parent="HBoxContainer/Llama/Price" unique_id=737408167]
 layout_mode = 2
 text = "1000"
 
-[node name="FreeMarker" type="Label" parent="Llama" unique_id=1549217280]
+[node name="FreeMarker" type="Label" parent="HBoxContainer/Llama" unique_id=1549217280]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.929412, 1, 1, 1)
@@ -108,12 +116,34 @@ text = "FREE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[connection signal="IsFreeChanged" from="." to="IsFree" method="EmitValues"]
-[connection signal="NameChanged" from="." to="Llama/Name" method="set_text"]
-[connection signal="StockChanged" from="." to="Icon/LlamaStock" method="set_text"]
-[connection signal="InvertedValue" from="IsFree" to="Llama/Price" method="set_visible"]
-[connection signal="Value" from="IsFree" to="Llama/FreeMarker" method="set_visible"]
-[connection signal="IconChanged" from="Llama" to="Icon" method="set_texture"]
-[connection signal="SubtypeIconChanged" from="Llama" to="Icon" method="SetShaderTexture" binds= ["packIcon"]]
-[connection signal="AmountChanged" from="Llama/Price" to="Llama/Price/Label" method="set_text"]
-[connection signal="IconChanged" from="Llama/Price" to="Llama/Price/TextureRect" method="set_texture"]
+[node name="Control" type="Control" parent="." unique_id=279781195]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Control" unique_id=419852301 node_paths=PackedStringArray("itemSource", "offerSource")]
+script = ExtResource("11_bsplj")
+itemSource = NodePath("../../HBoxContainer/Llama")
+offerSource = NodePath("../..")
+componentList = ExtResource("12_r8qx2")
+
+[node name="Responsive Button Area" parent="." unique_id=1404289772 instance=ExtResource("10_uohp7")]
+layout_mode = 2
+
+[node name="Ctx" type="Node" parent="Responsive Button Area" unique_id=1597416882 node_paths=PackedStringArray("itemSource", "offerSource")]
+script = ExtResource("11_bsplj")
+itemSource = NodePath("../../HBoxContainer/Llama")
+offerSource = NodePath("../..")
+componentList = ExtResource("12_r8qx2")
+
+[connection signal="IsFreeChanged" from="." to="HBoxContainer/IsFree" method="EmitValues"]
+[connection signal="NameChanged" from="." to="HBoxContainer/Llama/Name" method="set_text"]
+[connection signal="StockChanged" from="." to="HBoxContainer/Icon/LlamaStock" method="set_text"]
+[connection signal="InvertedValue" from="HBoxContainer/IsFree" to="HBoxContainer/Llama/Price" method="set_visible"]
+[connection signal="Value" from="HBoxContainer/IsFree" to="HBoxContainer/Llama/FreeMarker" method="set_visible"]
+[connection signal="IconChanged" from="HBoxContainer/Llama" to="HBoxContainer/Icon" method="set_texture"]
+[connection signal="InteractableChanged" from="HBoxContainer/Llama" to="Responsive Button Area" method="set_visible"]
+[connection signal="SubtypeIconChanged" from="HBoxContainer/Llama" to="HBoxContainer/Icon" method="SetShaderTexture" binds= ["packIcon"]]
+[connection signal="TooltipChanged" from="HBoxContainer/Llama" to="Control" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="HBoxContainer/Llama" to="Responsive Button Area" method="set_tooltip_text"]
+[connection signal="AmountChanged" from="HBoxContainer/Llama/Price" to="HBoxContainer/Llama/Price/Label" method="set_text"]
+[connection signal="IconChanged" from="HBoxContainer/Llama/Price" to="HBoxContainer/Llama/Price/TextureRect" method="set_texture"]
+[connection signal="pressed" from="Responsive Button Area" to="HBoxContainer/Llama" method="Inspect"]

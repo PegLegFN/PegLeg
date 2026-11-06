@@ -83,7 +83,7 @@ public partial class DashboardLlamasController : Control
 			var priorityGroups = offers
 				.Where(o => o.rawData["catalogGroup"]?.ToString() == "Shared")
 				.GroupBy(o => o.rawData["catalogGroupPriority"]?.GetValue<int>() ?? 0)
-				.OrderByDescending(g=>g.Key)
+				.OrderByDescending(g => g.Key)
 				.ToList();
 
 			var priorityMap = priorityGroups

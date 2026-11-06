@@ -424,14 +424,13 @@ public partial class LlamaSelector : Control
 		//if main preview is null, try use overlay
 	}
 
-	static GameItem allTheLlamas;
+	static GameItem allTheLlamas => field ??= GameItemTemplate.Get("CardPack:cardpack_bronze_10x").CreateInstance();
 	public async void BulkOpenAllCardpacks()
 	{
 		GameItem[] allCardpacks = [.. llamaItemStacks.SelectMany(stack => stack.Value.items)];
-		var selectedUUIDs = mainLlamaPreview?.currentCardpacks.Select(c => c.uuid).ToHashSet();
+		var selectedUUIDs = mainLlamaPreview?.currentCardpacks?.Select(c => c.uuid).ToHashSet() ?? [];
 		bool includesSelected = allCardpacks.Any(i => selectedUUIDs.Contains(i.uuid));
 
-		allTheLlamas ??= GameItemTemplate.Get("CardPack:cardpack_bronze_10x").CreateInstance();
 		await CardPackOpener.Instance.StartOpening([.. allCardpacks], mainLlamaPreview?.llamaPanel, allTheLlamas);
 
 		if (includesSelected)

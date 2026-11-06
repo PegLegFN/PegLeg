@@ -179,7 +179,7 @@ public abstract partial class GameItemSelectorBase<T> : ModalWindow,
 
 	protected void FilterItems()
 	{
-		filteredItems = FilterFunction is null ? items : [.. items.Where(item => item.profile is null || (IncludeSelectionWhenFiltering && IsSelected(item)) || FilterFunction(item))];
+		filteredItems = FilterFunction is null ? items : [.. items.Where(item => item == GameItem.Empty || (IncludeSelectionWhenFiltering && IsSelected(item)) || FilterFunction(item))];
 		OnItemsFiltered();
 		activeContainer?.UpdateList(true);
 	}

@@ -19,6 +19,7 @@ public static class ExternalCosmetics
 	static Dictionary<string, RawDisplayAsset> rawDisplayAssets = [];
 
 	static Queue<DateTime> exportTimestamps = [];
+	static bool pathsErroredThisSession = false;
 
 	public static async Task LoadCosmeticShopData()
 	{
@@ -29,27 +30,21 @@ public static class ExternalCosmetics
 			.Send();
 		//var fnDotDisplayAssetTask = ApiWebAddresses.fnDotApi.MakeRequest("v1/export/displayassets/parsed").Send();
 		var rawCosmeticPathsTask = ApiWebAddresses.fnDotApi.MakeRequest("v1/export/cosmetics/all").Send();
-		try
-		{
-			await Task.WhenAll(fnDashShopTask, rawCosmeticPathsTask);
-		}
-		catch { }
 
 		var fnDashShopResponse = await fnDashShopTask;
-		//var newDisplayAssetResponse = await fnDotDisplayAssetTask;
 		var cosmeticPathsResponse = await rawCosmeticPathsTask;
 
 		InvalidateDashOffers?.Invoke();
-		if (await fnDashShopResponse.CheckForError())
-		{
-			dashOffers = [];
-		}
-		else
+		if (!await fnDashShopResponse.CheckForError())
 		{
 			var entries = (await fnDashShopResponse.ReadJson())["data"]?["entries"]?.AsArray() ?? [];
 			//var first = entries.FirstOrDefault(o => o["brItems"] is not null);
 			//var test = first["brItems"].Deserialize<FNDashCosmetic[]>();
 			dashOffers = entries.Deserialize<FNDashOffer[]>().ToDictionary(o => o.offerId);
+		}
+		else
+		{
+			dashOffers = [];
 		}
 
 		//if (!await newDisplayAssetResponse.CheckForError())
@@ -68,7 +63,7 @@ public static class ExternalCosmetics
 		//	).ToDictionary();
 		//}
 
-		if (!await cosmeticPathsResponse.CheckForError())
+		if (!await cosmeticPathsResponse.CheckForError(!pathsErroredThisSession))
 		{
 			var cosmeticLookups = (await cosmeticPathsResponse.ReadJson())?["jsonOutput"]?.AsArray();
 			//var duplicates = cosmeticLookups.GroupBy(kvp => kvp["id"].ToString().ToLower()).Where(g => g.Count() > 1).ToArray();
@@ -77,6 +72,10 @@ public static class ExternalCosmetics
 				kvp => kvp["path"].ToString(), 
 				StringComparer.OrdinalIgnoreCase
 			);
+		}
+		else
+		{
+			pathsErroredThisSession = true;
 		}
 	}
 

@@ -1,4 +1,5 @@
 using Godot;
+using System.Threading;
 
 public partial class ResponsiveButton : BaseButton
 {
@@ -77,7 +78,7 @@ public partial class ResponsiveButton : BaseButton
 	Tween outlineTween;
 	Tween holdTween;
 	Tween holdPressTween;
-	Timer holdTimer;
+	Godot.Timer holdTimer;
 
 	bool fallback = false;
 	StyleBoxFlat fallbackOutline;
@@ -184,8 +185,22 @@ public partial class ResponsiveButton : BaseButton
 		EmitSignal(SignalName.HoldReleased);
 	}
 
-	public void SetHoverState(bool newHovered, bool playSounds = true)
+	CancellationTokenSource hoverCT;
+	public async void SetHoverState(bool newHovered, bool playSounds = true)
 	{
+		//cancel a previous hover state change
+		hoverCT?.Cancel();
+		hoverCT?.Dispose();
+		hoverCT = null;
+
+		//if a hover state changes rapidly, only the last state is used
+		hoverCT = hoverCT.CancelAndRegenerate(out var ct);
+		await Helpers.WaitForFrames(2);
+		if (ct.IsCancellationRequested)
+			return;
+		hoverCT.Dispose();
+		hoverCT = null;
+
 		//prevents accidental highlights when using spinbox, in which case hover events wouldnt change anyway
 		if (Input.MouseMode == Input.MouseModeEnum.Captured)
 			return;

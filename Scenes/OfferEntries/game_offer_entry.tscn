@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="11_mgblp"]
 [ext_resource type="Resource" uid="uid://7km1btwc7syu" path="res://Scripts/ContextMenu/ComponentLists/ShopOfferCtxList.tres" id="12_j05ur"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="14_g50ko"]
+[ext_resource type="Texture2D" uid="uid://ddjxkaoe8stlj" path="res://Images/InterfaceIcons/T-Icon-ST-CollectionBook-128.png" id="17_sgac5"]
 
 [sub_resource type="Gradient" id="Gradient_rxla7"]
 colors = PackedColorArray(0.9, 0.9, 0.9, 1, 0.6, 0.6, 0.6, 1)
@@ -257,6 +258,45 @@ useLargePreview = true
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="MarginContainer" type="MarginContainer" parent="DetailsArea" unique_id=238156771]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DetailsArea/MarginContainer" unique_id=1418116220]
+layout_mode = 2
+alignment = 2
+
+[node name="CollectableIcon" type="TextureRect" parent="DetailsArea/MarginContainer/HBoxContainer" unique_id=707448175]
+self_modulate = Color(0.53098965, 0.9850764, 1, 1)
+material = ExtResource("8_gu5mh")
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("17_sgac5")
+expand_mode = 1
+
+[node name="NotificationLabel" type="Label" parent="DetailsArea/MarginContainer/HBoxContainer/CollectableIcon" unique_id=1226552543]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -7.955
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 12.895
+grow_horizontal = 0
+rotation = -0.1309
+pivot_offset_ratio = Vector2(1, 1)
+theme_override_colors/font_outline_color = Color(0, 0.61666656, 1, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+text = " ! "
+horizontal_alignment = 2
+
 [node name="NameBox" type="PanelContainer" parent="DetailsArea" unique_id=523615115]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nb4if")
@@ -369,6 +409,7 @@ componentList = ExtResource("12_j05ur")
 [connection signal="IconChanged" from="DetailsArea" to="ItemIcon" method="set_texture"]
 [connection signal="IconChanged" from="DetailsArea" to="ItemIcon2" method="set_texture"]
 [connection signal="IconFit" from="DetailsArea" to="ItemIcon2" method="SetShaderBool" binds= ["Fit"]]
+[connection signal="IsCollectable" from="DetailsArea" to="DetailsArea/MarginContainer/HBoxContainer/CollectableIcon" method="set_visible"]
 [connection signal="IsHero" from="DetailsArea" to="ItemIcon2/IsHero" method="Output"]
 [connection signal="IsSchematic" from="DetailsArea" to="ItemIcon2/IsSchematic" method="Output"]
 [connection signal="RarityChanged" from="DetailsArea" to="RarityGradient" method="set_self_modulate"]

@@ -1,15 +1,13 @@
-[gd_scene load_steps=22 format=3 uid="uid://cnggvfd2x7nu2"]
+[gd_scene format=3 uid="uid://cnggvfd2x7nu2"]
 
-[ext_resource type="Script" uid="uid://o3tk4tcrx50j" path="res://Scripts/Timeline/Strips/TimelineEventStrip.cs" id="1_s5dn3"]
+[ext_resource type="Script" uid="uid://o3tk4tcrx50j" path="res://Scripts/UserInterface/Timeline/Strips/TimelineEventStrip.cs" id="1_s5dn3"]
 [ext_resource type="Texture2D" uid="uid://dxvp287jaaqg6" path="res://Images/TimelineBanners/TropicalBanner.png" id="3_n2y6x"]
 [ext_resource type="Shader" uid="uid://bltfyj0s6dc6x" path="res://Shaders/TimelineEvent.gdshader" id="4_1nqvp"]
-[ext_resource type="Script" uid="uid://yroee6412pwf" path="res://Scripts/Timeline/TimelineContentContainer.cs" id="4_ox2i8"]
+[ext_resource type="Script" uid="uid://yroee6412pwf" path="res://Scripts/UserInterface/Timeline/TimelineContentContainer.cs" id="4_ox2i8"]
 [ext_resource type="Texture2D" uid="uid://b4bciexx47o70" path="res://Images/TimelineBanners/TemparateBanner.png" id="4_xd1r2"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_1nqvp"]
 [ext_resource type="Texture2D" uid="uid://u4k5h7f7kx7t" path="res://Images/TimelineBanners/SwampBanner.png" id="5_126vd"]
 [ext_resource type="PackedScene" uid="uid://cg2qqkx3wm41t" path="res://Scenes/GameItemEntry/reward_entry_tiny.tscn" id="5_eucja"]
-[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="5_oi1f7"]
-[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="6_1nqvp"]
 [ext_resource type="Texture2D" uid="uid://c6n51dty0q28d" path="res://Images/TimelineBanners/AridBanner.png" id="6_awf16"]
 [ext_resource type="Texture2D" uid="uid://cbm22c4pgh4u1" path="res://Images/TimelineBanners/FrozenBanner.png" id="6_otfrr"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_1nqvp"]
@@ -26,26 +24,6 @@ shader_parameter/HeaderSpace = 250.0
 shader_parameter/SkySpace = 0.4
 shader_parameter/ParallaxScale = 200.0
 shader_parameter/background = ExtResource("4_xd1r2")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ox2i8"]
-resource_local_to_scene = true
-shader = ExtResource("5_oi1f7")
-shader_parameter/ControlSize = Vector2(64, 57)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("6_1nqvp")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2y6x"]
 content_margin_left = 2.0
@@ -83,7 +61,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[node name="TimelineEvent" type="MarginContainer" node_paths=PackedStringArray("displayName", "displayItems", "freeMarker", "styleTarget", "refreshTimer")]
+[node name="TimelineEvent" type="MarginContainer" unique_id=995708806 node_paths=PackedStringArray("displayName", "displayItems", "freeMarker", "styleTarget", "refreshTimer")]
 custom_minimum_size = Vector2(350, 47)
 anchors_preset = 2
 anchor_top = 1.0
@@ -108,7 +86,7 @@ styles = Dictionary[String, Texture2D]({
 styleTarget = NodePath("ColorRect")
 refreshTimer = NodePath("MarginContainer2/Control/MarginContainer/RefreshTimerContainer")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=20860024]
 self_modulate = Color(0.0996, 0.30654666, 0.83, 1)
 texture_repeat = 2
 material = SubResource("ShaderMaterial_djiff")
@@ -118,19 +96,19 @@ script = ExtResource("5_1nqvp")
 syncControlSize = true
 syncParallax = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=849944905]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="Control" type="Control" parent="MarginContainer2" node_paths=PackedStringArray("stripRoot")]
+[node name="Control" type="Control" parent="MarginContainer2" unique_id=187489871 node_paths=PackedStringArray("stripRoot")]
 layout_mode = 2
 script = ExtResource("4_ox2i8")
 stripRoot = NodePath("../..")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/Control"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/Control" unique_id=1964581953]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 1
 anchors_preset = 9
@@ -138,18 +116,16 @@ anchor_bottom = 1.0
 offset_right = 136.0
 grow_vertical = 2
 
-[node name="RewardEntry" parent="MarginContainer2/Control/HBoxContainer" instance=ExtResource("5_eucja")]
+[node name="RewardEntry" parent="MarginContainer2/Control/HBoxContainer" unique_id=924725198 instance=ExtResource("5_eucja")]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 mouse_filter = 2
 mouse_behavior_recursive = 1
 theme_override_constants/margin_top = -14
+autoCheckReward = true
 placeholderItem = "Hero:hid_outlander_036_dino_outlander_sr_t01"
 
-[node name="TextureRect" parent="MarginContainer2/Control/HBoxContainer/RewardEntry" index="0"]
-material = SubResource("ShaderMaterial_ox2i8")
-
-[node name="Label" type="Label" parent="MarginContainer2/Control/HBoxContainer/RewardEntry"]
+[node name="Label" type="Label" parent="MarginContainer2/Control/HBoxContainer/RewardEntry" unique_id=305856894]
 z_index = 1
 layout_mode = 2
 size_flags_vertical = 8
@@ -162,12 +138,12 @@ text = "FREE"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/Control/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/Control/HBoxContainer" unique_id=947422806]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer" unique_id=1094977017]
 layout_mode = 2
 size_flags_vertical = 2
 theme_override_constants/shadow_offset_x = 1
@@ -176,35 +152,39 @@ theme_override_font_sizes/font_size = 13
 text = "Escort Penny pt 2"
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer" unique_id=524904077]
 layout_mode = 2
 size_flags_vertical = 10
 
-[node name="RewardEntry" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_eucja")]
+[node name="RewardEntry" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=36792659 instance=ExtResource("5_eucja")]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "amongus"
+autoCheckReward = true
 placeholderItem = "Hero:hid_constructor_025_progressivepirateconstructor_sr_t01"
 
-[node name="RewardEntry2" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_eucja")]
+[node name="RewardEntry2" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2005184435 instance=ExtResource("5_eucja")]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "amongus"
+autoCheckReward = true
 placeholderItem = "Weapon:peglegweapon_t01"
 
-[node name="RewardEntry3" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_eucja")]
+[node name="RewardEntry3" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1061402009 instance=ExtResource("5_eucja")]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "amongus"
+autoCheckReward = true
 
-[node name="RewardEntry4" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource("5_eucja")]
+[node name="RewardEntry4" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1398848687 instance=ExtResource("5_eucja")]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "amongus"
+autoCheckReward = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/Control"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/Control" unique_id=2113263751]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 1
 anchors_preset = 11
@@ -217,7 +197,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="RefreshTimerContainer" type="VBoxContainer" parent="MarginContainer2/Control/MarginContainer" node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
+[node name="RefreshTimerContainer" type="VBoxContainer" parent="MarginContainer2/Control/MarginContainer" unique_id=1724831885 node_paths=PackedStringArray("target", "tooltipTarget", "progressBar")]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 8
@@ -235,14 +215,14 @@ customCritTime = 4320
 useWeeks = true
 progressBar = NodePath("TimerProgress")
 
-[node name="TimerPanel" type="PanelContainer" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer"]
+[node name="TimerPanel" type="PanelContainer" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer" unique_id=1350924969]
 custom_minimum_size = Vector2(47, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n2y6x")
 
-[node name="LeavingSoonAlert" type="MarginContainer" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel"]
+[node name="LeavingSoonAlert" type="MarginContainer" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel" unique_id=1141642768]
 visible = false
 layout_mode = 2
 mouse_filter = 2
@@ -251,23 +231,23 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -3
 theme_override_constants/margin_bottom = -2
 
-[node name="Panel" type="Panel" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert"]
+[node name="Panel" type="Panel" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel/LeavingSoonAlert" unique_id=396527986]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_xd1r2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel" unique_id=1794773671]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" unique_id=1969636206]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("8_djiff")
 expand_mode = 3
 
-[node name="TimerLabel" type="Label" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer/TimerPanel/HBoxContainer" unique_id=1684165185]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/shadow_offset_x = 1
@@ -275,7 +255,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 12
 text = "99h"
 
-[node name="TimerProgress" type="ProgressBar" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer"]
+[node name="TimerProgress" type="ProgressBar" parent="MarginContainer2/Control/MarginContainer/RefreshTimerContainer" unique_id=1295897528]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -288,7 +268,7 @@ step = 0.0
 value = 0.615
 show_percentage = false
 
-[node name="Responsive Button Area" parent="." instance=ExtResource("7_1nqvp")]
+[node name="Responsive Button Area" parent="." unique_id=643781137 instance=ExtResource("7_1nqvp")]
 layout_mode = 2
 outlinePadding = 16.0
 

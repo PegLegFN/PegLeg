@@ -26,7 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://d21c3cdy7sqyf" path="res://Images/Flipbook/VendingSheet.png" id="18_s7yuu"]
 [ext_resource type="AudioStream" uid="uid://bjjgpivjq30po" path="res://Audio/SFX/Notifs/VendingMachine_Vend_Sparkle.wav" id="19_s7yuu"]
 [ext_resource type="PackedScene" uid="uid://kgl0dydu0mtf" path="res://Scenes/Desktop/desktopContextMenu.tscn" id="20_ayavh"]
-[ext_resource type="PackedScene" uid="uid://c78gt6b2m1utg" path="res://Scenes/Desktop/Views/desktopMissionView.tscn" id="22_qlkcq"]
+[ext_resource type="PackedScene" uid="uid://c78gt6b2m1utg" path="res://Scenes/Desktop/Views/Missions/desktopMissionView.tscn" id="22_qlkcq"]
 [ext_resource type="Script" uid="uid://840dnd45qqla" path="res://Scripts/UIElements/MobilePadding.cs" id="24_r4l5r"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="24_sj3vv"]
 [ext_resource type="PackedScene" uid="uid://bwunyntryyu6o" path="res://Scenes/Desktop/Views/Armory/desktopSurvivorLoadoutView.tscn" id="25_ag48h"]
@@ -64,6 +64,7 @@
 [ext_resource type="PackedScene" uid="uid://bjiel0kdf06wo" path="res://Scenes/Desktop/Views/Extra/desktopPowerLevelDebug.tscn" id="46_2uiud"]
 [ext_resource type="PackedScene" uid="uid://2okdom0nii2b" path="res://Scenes/Desktop/Overlays/GenericWindows/generic_confirmation_window.tscn" id="46_fbpme"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="47_6bd6x"]
+[ext_resource type="PackedScene" uid="uid://ca1mi3xemwvv4" path="res://Scenes/Desktop/Views/Missions/desktopMissionV2View.tscn" id="47_xksdo"]
 [ext_resource type="Script" uid="uid://dbi4mg37e4bvq" path="res://Scripts/CurtainOpener.cs" id="50_2a2nn"]
 [ext_resource type="PackedScene" uid="uid://b3d7t7ydascvj" path="res://Scenes/powerLevelIndicatorV2.tscn" id="52_csww2"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="52_pam8h"]
@@ -83,7 +84,7 @@
 [ext_resource type="PackedScene" uid="uid://dpd06j33s360w" path="res://Scenes/Desktop/Overlays/shop_purchase_animation.tscn" id="96_2bhmt"]
 [ext_resource type="PackedScene" uid="uid://dt403r6613tos" path="res://Scenes/Desktop/Overlays/settings_window.tscn" id="99_hfy7e"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_d5tfv"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_xksdo"]
 resource_name = "InventoryTypeFilter"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7h2tb"]
@@ -347,11 +348,12 @@ metadata/_tab_index = 6
 layout_mode = 2
 theme_type_variation = &"MenuTabContainer"
 tab_alignment = 1
-current_tab = 0
+current_tab = 2
 script = ExtResource("16_hsemp")
 metadata/_tab_index = 7
 
 [node name="Compendium" parent="Content/MainTabs/Extra" unique_id=1376070178 instance=ExtResource("24_sj3vv")]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -361,7 +363,6 @@ layout_mode = 2
 metadata/_tab_index = 1
 
 [node name="Ventures" parent="Content/MainTabs/Extra" unique_id=2076901842 instance=ExtResource("35_s7yuu")]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -440,27 +441,27 @@ targetProfile = "theater2"
 metadata/_tab_index = 7
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/All" parent_id_path=PackedInt32Array(1508465885, 144255995) index="0" unique_id=228194712]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Dev All" parent_id_path=PackedInt32Array(1508465885, 2039985868) index="0" unique_id=1672625159]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab1" parent_id_path=PackedInt32Array(1508465885, 301043813) index="0" unique_id=1744959934]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab2" parent_id_path=PackedInt32Array(1508465885, 1694755347) index="0" unique_id=669176367]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab3" parent_id_path=PackedInt32Array(1508465885, 426083547) index="0" unique_id=2051298463]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab4" parent_id_path=PackedInt32Array(1508465885, 535625123) index="0" unique_id=1931883480]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
 [node name="CheckButton" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters/MarginContainer/HBoxContainer/Tab5" parent_id_path=PackedInt32Array(1508465885, 248328693) index="0" unique_id=1448244160]
-button_group = SubResource("ButtonGroup_d5tfv")
+button_group = SubResource("ButtonGroup_xksdo")
 
-[node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="2" unique_id=317467257]
+[node name="ScrollContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1504640056) index="3" unique_id=317467257]
 elementSpace = 10.0
 elementScene = ExtResource("34_hoc2f")
 
@@ -473,6 +474,9 @@ theme_override_constants/margin_bottom = 10
 [node name="Grid" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/ScrollContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1508465885, 1017061478) index="1" unique_id=592302133]
 Spacing = Vector2(10, 10)
 
+[node name="RecycleContainer" parent="Content/MainTabs/Dev/Game Profiles/Venture Backpack/VBoxContainer/ScrollContainer2/MarginContainer" parent_id_path=PackedInt32Array(1508465885, 942366728) index="0" unique_id=1670778527]
+recycleEntryScene = ExtResource("34_hoc2f")
+
 [node name="Recycle Bin" parent="Content/MainTabs/Dev/Game Profiles" unique_id=265409258 instance=ExtResource("33_7d0l0")]
 visible = false
 layout_mode = 2
@@ -482,6 +486,11 @@ metadata/_tab_index = 8
 [node name="Power Level Debug" parent="Content/MainTabs/Dev" unique_id=107096756 instance=ExtResource("46_2uiud")]
 visible = false
 layout_mode = 2
+
+[node name="Missions V2 WIP" parent="Content/MainTabs/Dev" unique_id=470633722 instance=ExtResource("47_xksdo")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="StatusBar" type="MarginContainer" parent="Content" unique_id=2062517272]
 z_index = 5
@@ -494,7 +503,6 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 5
 
 [node name="Left" type="HBoxContainer" parent="Content/StatusBar" unique_id=2014413193]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 0
@@ -598,6 +606,7 @@ script = ExtResource("55_xksdo")
 inboxContainer = NodePath(".")
 
 [node name="MarginContainer" type="MarginContainer" parent="Content/StatusBar" unique_id=1450324161]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 

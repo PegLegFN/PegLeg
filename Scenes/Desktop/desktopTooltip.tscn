@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="5_hwtg6"]
 [ext_resource type="Script" uid="uid://dfnqrcwtrgxw3" path="res://Scripts/UserInterface/ListEntries/HeroAbilityEntry.cs" id="9_qtdsi"]
 [ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="10_axak1"]
+[ext_resource type="Texture2D" uid="uid://c14xo8fbe7lbf" path="res://Images/BanjoSuppliments/PersonalityIcons/T-Icon-Adventurer-64.png" id="10_x58qi"]
+[ext_resource type="Texture2D" uid="uid://b2yrws3fr4lqu" path="res://Images/BanjoSuppliments/SurvivorSquadIcons/T-Icon-Firing-Range-128.png" id="11_b5rng"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="11_x58qi"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItem/GameItemEntry.cs" id="13_b5rng"]
 [ext_resource type="Texture2D" uid="uid://bkj1uu2syehgg" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Item-GoldBars.png" id="14_b5rng"]
@@ -20,7 +22,7 @@ shader_parameter/ShiftDirection = Vector2(0, 0.5)
 shader_parameter/CornerRadius = 4.0
 shader_parameter/ColorMode = true
 shader_parameter/Color = Color(0, 1, 1, 1)
-shader_parameter/time = 63.97
+shader_parameter/time = 12.219
 shader_parameter/rainbow = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lhx3n"]
@@ -35,7 +37,7 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="Tooltip" type="MarginContainer" unique_id=1237028000 node_paths=PackedStringArray("titleContent", "titleBanner", "titleTextLabel", "titleQuantityLayout", "titleQuantityLabel", "descriptionContent", "descriptionLayers", "offerContent", "offerCostEntry", "offerInventoryEntry", "offerStockLabel", "abilityContent", "supportPerk", "commanderPerk")]
+[node name="Tooltip" type="MarginContainer" unique_id=1237028000 node_paths=PackedStringArray("titleContent", "titleBanner", "titleTextLabel", "titleQuantityLayout", "titleQuantityLabel", "descriptionContent", "descriptionLayers", "offerContent", "offerCostEntry", "offerInventoryEntry", "offerStockLabel", "abilityContent", "supportPerk", "commanderPerk", "survivorContent", "personalityIcon", "personalityLabel", "survivorSecondIcon", "survivorSecondLabel")]
 offset_top = 1.0
 offset_right = 414.0
 offset_bottom = 108.0
@@ -55,6 +57,11 @@ offerStockLabel = NodePath("Content/MarginContainer/VBoxContainer/OfferContent/V
 abilityContent = NodePath("Content/MarginContainer/VBoxContainer/AbilityContent")
 supportPerk = NodePath("Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry")
 commanderPerk = NodePath("Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry")
+survivorContent = NodePath("Content/MarginContainer/VBoxContainer/SurvivorContent")
+personalityIcon = NodePath("Content/MarginContainer/VBoxContainer/SurvivorContent/PTex")
+personalityLabel = NodePath("Content/MarginContainer/VBoxContainer/SurvivorContent/PLabel")
+survivorSecondIcon = NodePath("Content/MarginContainer/VBoxContainer/SurvivorContent/Extratex")
+survivorSecondLabel = NodePath("Content/MarginContainer/VBoxContainer/SurvivorContent/ExtraLabel")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1882789680]
 layout_mode = 2
@@ -157,6 +164,135 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 text = "x256"
+
+[node name="AbilityContent" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=704832115]
+layout_mode = 2
+
+[node name="SupportPerkEntry" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent" unique_id=1929793344]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("9_qtdsi")
+lockText = "Evolve Hero to 2 Stars to unlock Commander Perk"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" unique_id=936944339]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer" unique_id=2096813238]
+material = ExtResource("10_axak1")
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("11_x58qi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer" unique_id=954948202]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer" unique_id=1240990636]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Name Here"
+text_overrun_behavior = 3
+
+[node name="Label2" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer" unique_id=638600392]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 16
+text = "description "
+autowrap_mode = 3
+
+[node name="CommanderPerkEntry" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent" unique_id=1847911647]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("9_qtdsi")
+lockText = "Evolve Hero to 2 Stars to unlock Commander Perk"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" unique_id=1400029819]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer" unique_id=450950778]
+material = ExtResource("10_axak1")
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("11_x58qi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/TextureRect" unique_id=1262915137]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 32
+text = "+"
+horizontal_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer" unique_id=689759691]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer" unique_id=749933921]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Name Here"
+text_overrun_behavior = 3
+
+[node name="Label2" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer" unique_id=427006968]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 16
+text = "long description long description long description long description long description long description long description long description long description long description long description "
+autowrap_mode = 3
+
+[node name="SurvivorContent" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=1956751221]
+layout_mode = 2
+
+[node name="PTex" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/SurvivorContent" unique_id=1075395626]
+material = ExtResource("10_axak1")
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("10_x58qi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PLabel" type="Label" parent="Content/MarginContainer/VBoxContainer/SurvivorContent" unique_id=1736075650]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Adventurous"
+
+[node name="Extratex" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/SurvivorContent" unique_id=35538140]
+material = ExtResource("10_axak1")
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("11_b5rng")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ExtraLabel" type="Label" parent="Content/MarginContainer/VBoxContainer/SurvivorContent" unique_id=1075459620]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Marksman"
 
 [node name="DescriptionContent" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=477991600]
 layout_mode = 2
@@ -282,83 +418,12 @@ text = "???"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AbilityContent" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer" unique_id=704832115]
-layout_mode = 2
-
-[node name="SupportPerkEntry" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent" unique_id=1929793344]
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("9_qtdsi")
-lockText = "Evolve Hero to 2 Stars to unlock Commander Perk"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" unique_id=936944339]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer" unique_id=2096813238]
-material = ExtResource("10_axak1")
-custom_minimum_size = Vector2(45, 45)
-layout_mode = 2
-size_flags_vertical = 0
-texture = ExtResource("11_x58qi")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer" unique_id=954948202]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer" unique_id=1240990636]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Name Here"
-text_overrun_behavior = 3
-
-[node name="Label2" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer" unique_id=638600392]
-custom_minimum_size = Vector2(350, 0)
-layout_mode = 2
-theme_override_constants/line_spacing = -2
-theme_override_font_sizes/font_size = 16
-text = "description "
-autowrap_mode = 3
-
-[node name="CommanderPerkEntry" type="MarginContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent" unique_id=1847911647]
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("9_qtdsi")
-lockText = "Evolve Hero to 2 Stars to unlock Commander Perk"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" unique_id=1400029819]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer" unique_id=450950778]
-material = ExtResource("10_axak1")
-custom_minimum_size = Vector2(45, 45)
-layout_mode = 2
-size_flags_vertical = 0
-texture = ExtResource("11_x58qi")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer" unique_id=689759691]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="Label" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer" unique_id=749933921]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Name Here"
-text_overrun_behavior = 3
-
-[node name="Label2" type="Label" parent="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer" unique_id=427006968]
-custom_minimum_size = Vector2(350, 0)
-layout_mode = 2
-theme_override_constants/line_spacing = -2
-theme_override_font_sizes/font_size = 16
-text = "long description long description long description long description long description long description long description long description long description long description long description "
-autowrap_mode = 3
-
+[connection signal="DescriptionChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer/Label" method="set_text"]
+[connection signal="DescriptionChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer/Label2" method="set_text"]
+[connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/TextureRect" method="set_texture"]
+[connection signal="NameChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer/Label" method="set_text"]
 [connection signal="AmountChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" to="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer/AmountText" method="set_text"]
 [connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" to="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
 [connection signal="TooltipChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" to="Content/MarginContainer/VBoxContainer/OfferContent/VBoxContainer/Price" method="set_tooltip_text"]
@@ -366,9 +431,3 @@ autowrap_mode = 3
 [connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory/MarginContainer/HBoxContainer/MarginContainer/Icon" method="set_texture"]
 [connection signal="ItemDoesExist" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" method="set_visible"]
 [connection signal="TooltipChanged" from="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" to="Content/MarginContainer/VBoxContainer/OfferContent/In Inventory" method="set_tooltip_text"]
-[connection signal="DescriptionChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/TextureRect" method="set_texture"]
-[connection signal="NameChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/SupportPerkEntry/HBoxContainer/VBoxContainer/Label" method="set_text"]
-[connection signal="DescriptionChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer/Label2" method="set_text"]
-[connection signal="IconChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/TextureRect" method="set_texture"]
-[connection signal="NameChanged" from="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry" to="Content/MarginContainer/VBoxContainer/AbilityContent/CommanderPerkEntry/HBoxContainer/VBoxContainer/Label" method="set_text"]

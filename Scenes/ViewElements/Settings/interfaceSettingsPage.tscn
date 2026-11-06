@@ -5,11 +5,13 @@
 [ext_resource type="Script" uid="uid://bplh0uuyvlse8" path="res://Scripts/Config/ConfigRangeHook.cs" id="2_v5lx2"]
 [ext_resource type="Texture2D" uid="uid://b5f6h8q50sc0x" path="res://Images/InterfaceIcons/T_UI_Checkmark.png" id="3_e7whk"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="4_dnpv7"]
+[ext_resource type="Script" uid="uid://bs11bn308ogp7" path="res://Scripts/Config/ConfigOptionHook.cs" id="6_sorew"]
 
-[node name="InterfacePage" type="VBoxContainer" unique_id=342944049 node_paths=PackedStringArray("preferredScreenOptions")]
+[node name="InterfacePage" type="VBoxContainer" unique_id=342944049 node_paths=PackedStringArray("preferredScreenOptions", "preferredNotifScreenOptions")]
 theme_override_constants/separation = 6
 script = ExtResource("1_2xq05")
-preferredScreenOptions = NodePath("HBoxContainer/OptionButton")
+preferredScreenOptions = NodePath("HBoxContainer/DefaultScreen")
+preferredNotifScreenOptions = NodePath("NotifSection/HBoxContainer2/NotifScreen")
 
 [node name="FPS" type="HBoxContainer" parent="." unique_id=121239265]
 layout_mode = 2
@@ -83,11 +85,10 @@ layout_mode = 2
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Target Display"
+text = "Default Display"
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer" unique_id=1530537235]
+[node name="DefaultScreen" type="OptionButton" parent="HBoxContainer" unique_id=1530537235]
 layout_mode = 2
-alignment = 1
 selected = 0
 item_count = 2
 popup/item_0/text = "Auto"
@@ -203,6 +204,24 @@ section = "notification"
 key = "on_minimised"
 defaultValue = true
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="NotifSection" unique_id=112718799]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NotifSection/HBoxContainer2" unique_id=1739526076]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Notification Target Display"
+
+[node name="NotifScreen" type="OptionButton" parent="NotifSection/HBoxContainer2" unique_id=1633712990]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Auto"
+popup/item_0/id = 0
+popup/item_1/text = "Display 1"
+popup/item_1/id = 1
+
 [node name="ObscureNames" type="CheckBox" parent="." unique_id=878228724]
 layout_mode = 2
 layout_direction = 3
@@ -300,26 +319,74 @@ script = ExtResource("4_dnpv7")
 section = "misc"
 key = "fast_animations"
 
-[node name="HeroTooltips" type="CheckBox" parent="." unique_id=931382549]
+[node name="ItemWarnings" type="CheckBox" parent="." unique_id=959681597]
 layout_mode = 2
 layout_direction = 3
+text = "Show Item Warnings"
+alignment = 2
+script = ExtResource("4_dnpv7")
+section = "ui"
+key = "funny_warning"
+
+[node name="HeroTooltipsOld" type="CheckBox" parent="." unique_id=931382549]
+visible = false
+layout_mode = 2
+layout_direction = 3
+disabled = true
 button_pressed = true
 text = "Show Hero Perks in Tooltips"
 alignment = 2
 script = ExtResource("4_dnpv7")
 section = "ui"
-key = "hero_tooltips"
+key = "hero_tooltips_old"
 defaultValue = true
+disabled = true
 
-[node name="QuickTooltips" type="CheckBox" parent="." unique_id=516764178]
-visible = false
+[node name="HeroTooltip" type="HBoxContainer" parent="." unique_id=2091450343]
 layout_mode = 2
-layout_direction = 3
-text = "Quick Tooltips"
-alignment = 2
-script = ExtResource("4_dnpv7")
+
+[node name="Label" type="Label" parent="HeroTooltip" unique_id=433248415]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hero Tooltip Info:"
+
+[node name="OptionButton" type="OptionButton" parent="HeroTooltip" unique_id=55814432]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Special"
+popup/item_1/id = 1
+popup/item_2/text = "Standard"
+popup/item_2/id = 2
+script = ExtResource("6_sorew")
 section = "ui"
-key = "fast_tooltips"
+key = "hero_tooltips"
+
+[node name="SurvivorTooltips" type="HBoxContainer" parent="." unique_id=544651348]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SurvivorTooltips" unique_id=1202817243]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Survivor Tooltip Info:"
+
+[node name="OptionButton" type="OptionButton" parent="SurvivorTooltips" unique_id=1382425472]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Special"
+popup/item_1/id = 1
+popup/item_2/text = "Standard"
+popup/item_2/id = 2
+script = ExtResource("6_sorew")
+section = "ui"
+key = "survivor_tooltips"
 
 [connection signal="AppliedChanged" from="UIScale/HSlider" to="UIScale/Button" method="set_disabled"]
 [connection signal="ConfigValueChanged" from="UIScale/HSlider" to="UIScale/HSlider" method="SetValue"]

@@ -30,14 +30,15 @@ public static class Llamalytics
 
 	record class PackEntry()
 	{
-		public bool xRay { get; init; }
+		public bool? xRay { get => field == false ? null : field; init; }
 		public string type { get; init; }
 		public int? displayLevel { get; init; }
 		public string tierGroup { get; init; }
-		public int? tier { get; init; } = -1;
-		public int? highestRarity { get; init; } = 0;
-		public int? overrideTier { get; init; } = -1;
-		public int? packLevel { get; init; } = 1;
+		public int? tier { get => field == -1 ? null : field; init; }
+		public int? highestRarity { get => field == 0 ? null : field; init; }
+		public int? overrideTier { get => field == -1 ? null : field; init; }
+		public int? packLevel { get => field == 1 ? null : field; init; }
+		public int? occurences { get => field == 1 ? null : field; init; }
 		public Dictionary<string, int> fixedRewards { get; init; }
 		public string[][] choiceRewards { get; init; }
 	}
@@ -45,7 +46,7 @@ public static class Llamalytics
 	static DataFile currentData = new();
 	static JsonSerializerOptions sOptions = new()
 	{
-		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 		WriteIndented = true
 	};
 
@@ -82,12 +83,11 @@ public static class Llamalytics
 		if (pack is null || resultNotification is null)
 			return;
 		TryLoadPacks();
-		pack.SetUUID();
 		try
 		{
 			var items = resultNotification["lootGranted"]["items"].Deserialize<GameItem.ItemReward[]>();
 			var (fixedRewards, choiceRewards) = ConvertItems(items);
-			currentData.Packs.Add(pack.uuid, new()
+			PackEntry entry = new()
 			{
 				type = pack.templateId,
 				packLevel = pack.attributes["level"].GetValue<int>(),
@@ -97,7 +97,11 @@ public static class Llamalytics
 				overrideTier = resultNotification["overrideTier"]?.GetValue<int>(),
 				fixedRewards = fixedRewards,
 				choiceRewards = choiceRewards
-			});
+			};
+			var hash = $"h:{JsonSerializer.Serialize(entry).GetHashCode()}";
+			if (currentData.Packs.TryGetValue(hash, out var existing))
+				entry = entry with { occurences = (existing.occurences ?? 1) + 1 };
+			currentData.Packs[hash] = entry;
 			SavePacks();
 		}
 		catch { }

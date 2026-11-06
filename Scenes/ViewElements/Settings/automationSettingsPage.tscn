@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://blavw6em7d2ij" path="res://Scripts/Config/ConfigTextHook.cs" id="2_3tlj3"]
 [ext_resource type="Script" uid="uid://e518j1sodp1x" path="res://Scripts/FilterTester.cs" id="3_lfi4x"]
 [ext_resource type="Script" uid="uid://kk75e22mij4k" path="res://Scripts/Config/ConfigTemplateList.cs" id="4_n42fp"]
+[ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="5_3tlj3"]
 
 [sub_resource type="DPITexture" id="DPITexture_lfi4x"]
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".85\" stroke-width=\"2\" d=\"m2 4 4 4 4-4\"/></svg>
@@ -185,22 +186,25 @@ accountMode = true
 
 [node name="AutoRerollExcludeList" type="Button" parent="." unique_id=501659057 node_paths=PackedStringArray("menu")]
 layout_mode = 2
-text = "Exclude Quests from Rerolls (1)"
+text = "Quests to keep (1)"
 icon = SubResource("DPITexture_lfi4x")
 alignment = 0
 icon_alignment = 2
 script = ExtResource("4_n42fp")
-textPrefix = "Exclude Quests from Rerolls"
+textPrefix = "Quests to keep"
 menu = NodePath("PopupMenu")
 templatePrefix = "Quest:daily_"
 key = "questRerollExcludeList"
 accountMode = true
 tooltipMode = 2
+swapIcon = ExtResource("5_3tlj3")
 
 [node name="PopupMenu" type="PopupMenu" parent="AutoRerollExcludeList" unique_id=98510451]
 oversampling_override = 1.0
 size = Vector2i(149, 72)
-max_size = Vector2i(32768, 250)
+max_size = Vector2i(32768, 350)
+theme_override_constants/icon_max_width = 20
+theme_override_constants/gutter_compact = 1
 hide_on_item_selection = false
 hide_on_checkable_item_selection = false
 shrink_width = false

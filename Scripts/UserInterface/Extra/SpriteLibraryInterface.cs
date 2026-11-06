@@ -1,6 +1,6 @@
 using Godot;
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -22,7 +22,7 @@ public partial class SpriteLibraryInterface : Control
 	[Export]
 	LineEdit searchBar;
 	[Export]
-	VirtualTabBar generationFilter;
+	OptionButton generationButton;
 	[Export]
 	VirtualTabBar ownershipFilter;
 	[Export]
@@ -75,16 +75,27 @@ public partial class SpriteLibraryInterface : Control
 
 		searchBar.TextChanged += _ => UpdateSearch();
 
-		generationFilter.SetTabContents([..modules.Keys.Select(gen => new VirtualTabBar.TabData()
+		//generationFilter.SetTabContents([..modules.Keys.Select(gen => new VirtualTabBar.TabData()
+		//{
+		//	text = gen
+		//})]);
+		//generationFilter.ClearTabs();
+		//generationFilter.Visible = modules.Count > 0;
+		//generationFilter.TabsChanged += FilterSprites;
+
+		generationButton.Clear();
+		generationButton.AddItem("All Seasons");
+		generationButton.AddSeparator();
+		foreach (var gen in modules.Keys.Reverse())
 		{
-			text = gen
-		})]);
-		generationFilter.ClearTabs();
-		generationFilter.Visible = modules.Count > 0;
-		generationFilter.TabsChanged += FilterSprites;
+			generationButton.AddItem(gen);
+		}
+		generationButton.Selected = 0;
+		generationButton.ItemSelected += _ => FilterSprites();
+
 		ownershipFilter.TabsChanged += FilterSprites;
 		masteryFilter.TabsChanged += FilterSprites;
-		neededToggle.Disabled = true;
+		neededToggle.Visible = false;
 		neededToggle.Toggled += _ => FilterSprites();
 
 		manualImporter.FileSelected += ManualImport;
@@ -110,7 +121,7 @@ public partial class SpriteLibraryInterface : Control
 	void ClearComparison()
 	{
 		compareArchive = null;
-		neededToggle.Disabled = true;
+		neededToggle.Disabled = false;
 		compareInfo.Visible = false;
 		UpdateComparison();
 	}
@@ -120,7 +131,7 @@ public partial class SpriteLibraryInterface : Control
 		if (archive.Generation != currentGen)
 			return; // show error for outdated archive
 		compareArchive = archive;
-		neededToggle.Disabled = false;
+		neededToggle.Disabled = true;
 		compareInfo.Visible = true;
 		compareOwner.Text = archive.DisplayName;
 		UpdateComparison();
@@ -308,7 +319,9 @@ public partial class SpriteLibraryInterface : Control
 	{
 		if (accountSprites.Count == 0)
 			return;
-		var genFilters = generationFilter.PressedTabs.Select(t => t.Text.ToLower()).ToHashSet();
+		//var genFilters = generationFilter.PressedTabs.Select(t => t.Text.ToLower()).ToHashSet();
+		var genIndex = generationButton.Selected - 2;
+		var genNames = modules.Keys.ToArray();
 		var quantityFilters = ownershipFilter.PressedTabIndexes.Select(i => i switch
 		{
 			0 => 3,
@@ -321,7 +334,7 @@ public partial class SpriteLibraryInterface : Control
 		sprites.Clear();
 		sprites.AddRange(accountSprites.Where(s =>
 		{
-			if (genFilters.Count > 0 && !genFilters.Contains(s.template?["Generation"]?.ToString().ToLower()))
+			if (genIndex >= 0 && s.template?["Generation"]?.ToString().Equals(genNames[genNames.Length - 1 - genIndex], StringComparison.OrdinalIgnoreCase) != true)
 				return false;
 			if (quantityFilters.Count > 0 && !quantityFilters.Contains(s.quantity))
 				return false;

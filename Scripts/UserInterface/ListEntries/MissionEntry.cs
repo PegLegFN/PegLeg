@@ -19,7 +19,11 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 	[Signal]
 	public delegate void IconChangedEventHandler(Texture2D icon);
 	[Signal]
+	public delegate void AlertIconChangedEventHandler(Texture2D icon);
+	[Signal]
 	public delegate void BackgroundChangedEventHandler(Texture2D background);
+	[Signal]
+	public delegate void DifficultyColorChangedEventHandler(Color difficultyColor);
 	[Signal]
 	public delegate void BackgroundVisibleEventHandler(bool visible);
 	[Signal]
@@ -36,6 +40,12 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 	public delegate void MissionCompleteEventHandler(bool complete);
 	[Signal]
 	public delegate void IsToDoEventHandler(bool todo);
+	[Signal]
+	public delegate void MissionSelectedEventHandler(string guid);
+	[Signal]
+	public delegate void MissionHoveredEventHandler(string guid);
+	[Signal]
+	public delegate void MissionUnhoveredEventHandler(string guid);
 
 	[Export]
 	bool controlModifierParentLayoutProps = true;
@@ -43,6 +53,10 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 	bool fullItems = false;
 	[Export]
 	bool ignoreAccountStatus = false;
+	[Export]
+	bool useBackgroundTexture = false;
+	[Export]
+	bool useBackgroundTextureWithConfig = false;
 
 	[Export]
 	Control alertModifierLayout;
@@ -67,6 +81,18 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 
 	[Export]
 	Texture2D defaultBackground;
+
+	[ExportGroup("Alert Icons")]
+	[Export]
+	Texture2D minibossIcon;
+	[Export]
+	Texture2D fireIcon;
+	[Export]
+	Texture2D waterIcon;
+	[Export]
+	Texture2D natureIcon;
+	[Export]
+	Texture2D fallbackIcon;
 
 	public GameMission currentMission { get; private set; } = null;
 	IMissionHighlightProvider highlightedItemProvider;
@@ -149,6 +175,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 		EmitSignalDescriptionChanged(null);
 		EmitSignalLocationChanged(null);
 		EmitSignalIconChanged(null);
+		EmitSignalAlertIconChanged(null);
 		EmitSignalPowerLevelChanged(null);
 		EmitSignalBackgroundChanged(null);
 		EmitSignalIsToDo(false);
@@ -180,10 +207,29 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 		EmitSignalNameChanged(currentMission.DisplayName);
 		EmitSignalDescriptionChanged(currentMission.Description);
 		EmitSignalLocationChanged(currentMission.Location);
-		EmitSignalIconChanged(currentMission.missionGenerator.GetTexture(FnItemTextureType.Icon));
+		EmitSignalIconChanged(currentMission.iconTexture);
 		EmitSignalPowerLevelChanged(currentMission.PowerLevel.ToString());
-		EmitSignalBackgroundChanged(currentMission.backgroundTexture ?? defaultBackground);
+		bool useBG = useBackgroundTexture || (useBackgroundTextureWithConfig && AppConfig.Get("missions", "show_background", true));
+		EmitSignalBackgroundChanged(useBG ? currentMission.backgroundTexture ?? defaultBackground: defaultBackground);
 		EmitSignalIsToDo(IsFullyOnToDo());
+
+		var element = currentMission.alertModifiers.FirstOrDefault(m => m.templateId.StartsWith("GameplayModifier:elementalzone"))?.templateId[30..^10];
+		var isMiniboss = currentMission.alertModifiers.Any(m => m.templateId == "GameplayModifier:minibossenableprimarymissionitem");
+		if (element is not null || isMiniboss)
+		{
+			EmitSignalAlertIconChanged(element switch
+			{
+				"fire" => fireIcon,
+				"water" => waterIcon,
+				"nature" => natureIcon,
+				_ when isMiniboss => minibossIcon,
+				_ => fallbackIcon
+			});
+		}
+		else
+		{
+			EmitSignalAlertIconChanged(null);
+		}
 
 		EmitSignalMissionLocked(
 			!AppConfig.Get("missions", "hide_lock", false) &&
@@ -191,10 +237,8 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 			!ignoreAccountStatus
 		);
 
-		EmitSignalMissionComplete(
-			currentMission?.AlertIsCompleteFor(GameAccount.ActiveAccount) == true &&
-			!ignoreAccountStatus
-		);
+		bool isComplete = currentMission?.AlertIsCompleteFor(GameAccount.ActiveAccount) == true && !ignoreAccountStatus;
+		EmitSignalMissionComplete(isComplete);
 
 		EmitSignalTheaterNameChanged(currentMission.TheaterName);
 		EmitSignalVenturesIndicatorVisible(currentMission.TheaterCat == "v");
@@ -210,7 +254,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 			currentMission.Description ?? "",
 			//"Item Id: " + item.templateId,
 		];
-		if (mission.searchTags.Count > 0)
+		if ((mission.searchTags?.Count ?? 0) > 0)
 			tooltipDescriptions.Add("Search Tags: " + mission.searchTags.Select(n => n.ToString()).Where(t => !t.StartsWith("hidetag_")).ToArray().Join(", "));
 
 		EmitSignalTooltipChanged(
@@ -242,7 +286,7 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 					{
 						var modifierTemplate = currentMission.alertModifiers[i].template;
 						textureChild.Texture = modifierTemplate.GetTexture();
-						textureChild.TooltipText = modifierTemplate.ItemName;
+						textureChild.TooltipText = CustomTooltip.GenerateSimpleTooltip(modifierTemplate.ItemName, description: [modifierTemplate.ItemDescription]);
 					}
 					else if (alertChild is GameItemEntry gameItemChild)
 					{
@@ -382,6 +426,35 @@ public partial class MissionEntry : Control, IRecyclableEntry, IListEntry<GameMi
 	public void InspectMission()
 	{
 		MissionViewer.ShowMission(currentMission);
+	}
+
+	public void SelectMission()
+	{
+		if (currentMission is null)
+			return;
+		EmitSignalMissionSelected(currentMission?.Guid);
+	}
+
+	public void HoverMissionState(bool state)
+	{
+		if (state)
+			HoverMission();
+		else
+			UnhoverMission();
+	}
+
+	public void HoverMission()
+	{
+		if (currentMission is null)
+			return;
+		EmitSignalMissionHovered(currentMission?.Guid);
+	}
+
+	public void UnhoverMission()
+	{
+		if (currentMission is null)
+			return;
+		EmitSignalMissionUnhovered(currentMission?.Guid);
 	}
 
 	public void AddToList()

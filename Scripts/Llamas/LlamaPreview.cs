@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -38,6 +37,9 @@ public partial class LlamaPreview : Control
 	SpinBox quantitySpinner;
 
 	[Export]
+	Control resultContent;
+
+	[Export]
 	Control resultEntriesParent;
 
 	[Export]
@@ -50,10 +52,19 @@ public partial class LlamaPreview : Control
 	Control choicePanel;
 
 	[Export]
+	Control shareBtn;
+
+	[Export]
 	GameItemEntry firstChoice;
 
 	[Export]
 	GameItemEntry secondChoice;
+
+	[Export]
+	VirtualTabBar rewardMode;
+
+	[Export]
+	LlamaRewardViewer rewardPool;
 
 	GameOffer currentOffer;
 	GameOffer tokenUpgradeOffer;
@@ -128,10 +139,12 @@ public partial class LlamaPreview : Control
 		purchaseButton?.Visible = false;
 		quantitySpinner?.Visible = false;
 
-		resultEntriesParent?.Visible = false;
+		rewardMode?.Visible = false;
+		resultContent?.Visible = false;
 		surpriseResultPanel?.Visible = false;
 		soldOutResultPanel?.Visible = false;
 		choicePanel?.Visible = false;
+		shareBtn?.Visible = false;
 
 		currentOffer = null;
 		currentCardpacks = null;
@@ -203,18 +216,45 @@ public partial class LlamaPreview : Control
 
 		purchaseButton?.Visible = true;
 
+		bool hasLootPool = false;
+		if(rewardPool is not null)
+		{
+			rewardMode.Visible = false;
+			rewardMode.SetTabPressed(0);
+			if (PegLegResourceManager.LlamaData.TryGetContents(offer.itemGrants[0].templateId, out var contentGroups))
+			{
+				rewardPool.SetRewardsForLlama(contentGroups);
+				hasLootPool = true;
+			}
+		}
+
 		var items = prerollData?.GetPrerollItems();
 		if (items is null)
 		{
-			//it's a surprise
 			quantitySpinner?.MaxValue = Mathf.Max(purchaseLimit, 1);
 			quantitySpinner?.Visible = purchaseLimit > 1;
-			surpriseResultPanel?.Visible = true;
+			resultContent?.Visible = hasLootPool;
+			if (hasLootPool)
+			{
+				//loot pool only
+				rewardMode.SetTabPressed(1);
+			}
+			else
+			{
+				//it's a surprise
+				surpriseResultPanel?.Visible = true;
+			}
 			return;
 		}
 
+		resultContent?.Visible = hasLootPool || items.Length > 0;
+
+		if (hasLootPool)
+			rewardMode.Visible = true;//both loot pool & contents
+
 		//fill out item list
 		SetLlamaContents(items);
+		shareBtn?.Visible = true;
 	}
 
 	private void OnQuantityChanged(double value)
@@ -244,9 +284,14 @@ public partial class LlamaPreview : Control
 		currentCardpacks = items;
 		GameItem.MarkItemsSeen(items);
 
+		rewardMode?.Visible = false;
+		resultContent?.Visible = false;
+
 		if (items.Length > 1 && items.Any(i => i.CardPackChoices is not null))
 		{
 			//stack of choices
+			resultContent?.Visible = true;
+			rewardMode?.SetTabPressed(0);
 			SetLlamaContents(items);
 		}
 		else
@@ -267,9 +312,21 @@ public partial class LlamaPreview : Control
 		topCardpack = topItem;
 		currentCardpackEntry.SetItem(topItem);
 
+		rewardMode?.Visible = false;
+		resultContent?.Visible = false;
+
 		if (topItem.CardPackChoices is not GameItem[] choices)
 		{
-			surpriseResultPanel.Visible = true;
+			if (rewardPool is not null && PegLegResourceManager.LlamaData.TryGetContents(topItem.templateId, out var contentGroups))
+			{
+				resultContent?.Visible = true;
+				rewardPool.SetRewardsForLlama(contentGroups);
+				rewardMode.SetTabPressed(1);
+			}
+			else
+			{
+				surpriseResultPanel.Visible = true;
+			}
 			return;
 		}
 
@@ -280,9 +337,7 @@ public partial class LlamaPreview : Control
 
 	void SetLlamaContents(GameItem[] items)
 	{
-		resultEntriesParent.Visible = (items?.Length ?? 0) > 0;
-		if (!resultEntriesParent.Visible)
-			return;
+		items ??= [];
 		while (llamaResultEntries.Count <= items.Length)
 		{
 			var newEntry = itemEntryScene.Instantiate<GameItemEntry>();

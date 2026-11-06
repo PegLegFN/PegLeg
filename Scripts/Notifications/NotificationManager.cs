@@ -54,7 +54,7 @@ public partial class NotificationManager : Control
 		UpdateWindowTangibility();
 		baseSize = window.Size;
 		window.Visible = AppConfig.Get("experimental", "notifications", false);
-		SetScale((float)AppConfig.Get("notification", "scale", 1.0));
+		RefreshPositionAndScale();
 
 		foreach (var notification in notificationInstances)
 		{
@@ -119,17 +119,32 @@ public partial class NotificationManager : Control
 		instance = null;
 	}
 
+	void RefreshPositionAndScale() => SetScale((float)AppConfig.Get("notification", "scale", 1.0));
 	void SetScale(float scaleAmt)
 	{
-		var newSize = (Vector2I)((Vector2)baseSize * scaleAmt);
+		var targetSize = (Vector2I)((Vector2)baseSize * scaleAmt);
 		window.ContentScaleFactor = scaleAmt;
+
+		Vector2 hint = new(1, 1);//todo: allow customising
+
+		//TODO: when set to auto, use first display in which there are no fullscreen windows
+		var targetScreen = AppConfig.Get("ui", "preferred_notif_screen", -1);
+		var safeRect = DisplayServer.ScreenGetUsableRect(targetScreen == -1 ? (int)DisplayServer.ScreenWithMouseFocus : targetScreen);
+
+		Vector2I edgePadding = new(5, 5);
+		window.Position = safeRect.Position + edgePadding + (Vector2I)(
+			(
+				safeRect.Size 
+				- targetSize 
+				- edgePadding * 2 
+				+ Vector2I.Down * (int)(9 * scaleAmt)
+			) * hint
+		);
+
 		//the window size is acting weird... perhaps one of the aspect ratio containers is messing things up?
 		for (int i = 0; i < 15; i++)
 		{
-			window.Size = newSize;
-			var safeRect = DisplayServer.ScreenGetUsableRect();
-			window.Position = safeRect.Position + safeRect.Size - (newSize + new Vector2I(5, 5 - (int)(9 * scaleAmt)));
-			//await Helpers.WaitForFrame();
+			window.Size = targetSize;
 		}
 		//GD.Print(baseSize);
 		//GD.Print(newSize);
@@ -153,9 +168,9 @@ public partial class NotificationManager : Control
 		//show window if not already visible
 		if (activeNotifications.Count == 0)
 		{
-			//TODO: move window to first display in which there are no boarderless fullscreen windows
 			window.MousePassthroughPolygon = [];
 			TrayIcon.RegisterResponsiveWindow(notificationWindowTag);
+			RefreshPositionAndScale();
 			GD.Print("open notifs");
 		}
 		isListChanging = true;
@@ -282,6 +297,8 @@ public partial class NotificationManager : Control
 		int animCount = Mathf.Min(notificationInstances.Length - 1, offsets.Count);
 		for (int i = 0; i < animCount; i++)
 		{
+			if (offsets[i] == i)
+				continue;//already at correct offset
 			GD.Print($"{offsets[i]}=>{i}");
 			notificationInstances[i + 1].AnimateStage(i, 0.15, 0.05 * i, offsets[i]);
 		}
@@ -298,8 +315,11 @@ public partial class NotificationManager : Control
 
 	void ResetList()
 	{
-		if (currentListIdx == activeNotifications.Count || currentListIdx == -1)
+		//TODO: at some point activeNotifications.Count becomes less than or equal currentListIdx without clamping it
+		//if this isnt fixed, notifs will start jumping around in the list
+		if (currentListIdx >= activeNotifications.Count || currentListIdx == -1 || activeNotifications.Count == 1)
 			return;
+		//GD.Print($"CurIDX:{currentListIdx}, CurLen:{activeNotifications.Count}");
 		//make foreground notification be at last index
 		var beforeCurrent = activeNotifications[..(currentListIdx + 1)];
 		activeNotifications.RemoveRange(0, currentListIdx + 1);

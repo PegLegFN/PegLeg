@@ -7,8 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="3_f2ac1"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="3_fwu0d"]
 [ext_resource type="PackedScene" uid="uid://4cmc4075yf4i" path="res://Scenes/GameItemEntry/reward_entry_large.tscn" id="4_3eqpi"]
+[ext_resource type="Texture2D" uid="uid://bt2w7fddx2cn3" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_UpArrow_128.png" id="4_any1v"]
 [ext_resource type="Script" uid="uid://dw6lwakpu0oka" path="res://Scripts/Overlays/GameItemViewer/PerkViewer.cs" id="7_14t7q"]
 [ext_resource type="StyleBox" uid="uid://c2skfgtbdx32l" path="res://GodotThemes/Styleboxes/Light/LightBox.tres" id="8_70ac8"]
+[ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="9_o1oot"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItem/GameItemEntry.cs" id="10_c8yg2"]
 [ext_resource type="Shader" uid="uid://daqt1dkh0x2ew" path="res://Shaders/GradientShader.gdshader" id="11_1kdmv"]
 [ext_resource type="PackedScene" uid="uid://cb15vvccjgrdk" path="res://Scenes/PerkAndAbilityEntries/hero_ability_entry.tscn" id="11_bxa5o"]
@@ -31,6 +33,8 @@
 [ext_resource type="Texture2D" uid="uid://cubygayq8llga" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Crystal-Red-L.png" id="21_t7ylf"]
 [ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="22_bdxh4"]
 [ext_resource type="Texture2D" uid="uid://d8v0v7pbda3c" path="res://Images/InterfaceIcons/T-Icon-S-Loot-Metal-Brightcore-L.png" id="23_avs1q"]
+[ext_resource type="PackedScene" uid="uid://ddnvljsxlpo0m" path="res://Scenes/ViewElements/Llamas/llama_reward_group.tscn" id="25_wnany"]
+[ext_resource type="Script" uid="uid://by47xsjqm1plu" path="res://Scripts/Llamas/LlamaRewardViewer.cs" id="27_any1v"]
 [ext_resource type="Script" uid="uid://di06wvvqgj620" path="res://Scripts/ItemTierDisplay.cs" id="29_hrq73"]
 [ext_resource type="Texture2D" uid="uid://b206b4woetnac" path="res://Images/InterfaceIcons/T-Stars-Full-M.png" id="30_36phr"]
 [ext_resource type="Texture2D" uid="uid://tpjage78y2k4" path="res://Images/InterfaceIcons/OrArrowHDRight.png" id="30_agup8"]
@@ -42,50 +46,32 @@
 [ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="45_y1f50"]
 [ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="46_xtyni"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bxkk5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o5brr"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(200, 200)
+shader_parameter/ControlSize = Vector2(19, 19)
 shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = false
+shader_parameter/Fit = true
 shader_parameter/IsHero = false
-shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
+shader_parameter/IsSchematic = false
 shader_parameter/IsPack = false
-shader_parameter/IsChoice = true
-shader_parameter/MainIcon = ExtResource("19_ictwk")
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("18_dqphe")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = true
+shader_parameter/AltHero = false
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
-shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = false
 shader_parameter/HideBar = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o1oot"]
-resource_local_to_scene = true
-shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(64, 64)
-shader_parameter/CornerRadius = 5.0
-shader_parameter/Fit = true
-shader_parameter/IsHero = false
-shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
-shader_parameter/IsPack = false
-shader_parameter/IsChoice = false
-shader_parameter/MainIcon = ExtResource("19_ictwk")
-shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
-shader_parameter/AltHero = false
-shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
-shader_parameter/AltPack = false
-shader_parameter/HeroBeamsOnly = false
-shader_parameter/ChoiceShift = 0.0
-shader_parameter/HideRarity = false
-shader_parameter/HideBar = false
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51cgl"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.40234375, 0.40234375, 0.40234375, 0.67058825)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_any1v"]
 bg_color = Color(0, 0, 0, 1)
@@ -122,22 +108,20 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_detail = 5
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wnany"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bdju2"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
@@ -148,22 +132,20 @@ shader_parameter/HideBar = false
 [sub_resource type="ButtonGroup" id="ButtonGroup_wrarj"]
 resource_name = "ItemViewerChoices"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_any1v"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8ene"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
@@ -171,22 +153,20 @@ shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = false
 shader_parameter/HideBar = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1kdmv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1f50"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
@@ -194,22 +174,20 @@ shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = false
 shader_parameter/HideBar = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bdju2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xtyni"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
-shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/ControlSize = Vector2(0, 0)
 shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
@@ -239,7 +217,7 @@ fill_from = Vector2(0, 0.5)
 fill_to = Vector2(0.90000004, 0.5)
 metadata/_snap_enabled = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8ene"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6msva"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
 shader_parameter/ControlSize = Vector2(0, 0)
@@ -247,14 +225,12 @@ shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
@@ -262,7 +238,7 @@ shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = false
 shader_parameter/HideBar = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_y1f50"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1s4w4"]
 resource_local_to_scene = true
 shader = ExtResource("14_6bwx2")
 shader_parameter/ControlSize = Vector2(0, 0)
@@ -270,14 +246,12 @@ shader_parameter/CornerRadius = 5.0
 shader_parameter/Fit = false
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = true
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = true
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/AltIcon = ExtResource("18_dqphe")
 shader_parameter/HeroBeamsOnly = false
@@ -293,14 +267,12 @@ shader_parameter/CornerRadius = 3.0
 shader_parameter/Fit = true
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = false
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
@@ -315,26 +287,23 @@ shader_parameter/CornerRadius = 3.0
 shader_parameter/Fit = true
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("19_ictwk")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = false
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = false
 shader_parameter/HideBar = false
 
-[node name="GameItemViewer" unique_id=1687330932 node_paths=PackedStringArray("displayUUID", "displayItemEntry", "defenderEquipmentEntry", "inventoryItemPanel", "upgrader", "tabRoot", "tabBar", "perkTab", "perkDetailsPanel", "heroTab", "heroAbilityEntries", "heroPerkEntry", "heroCommanderPerkEntry", "teamPerkEntry", "tierSlider", "levelSlider", "statsTab", "statsTree", "devTab", "devText", "searchTextEdit", "searchResult", "itemChoiceParent", "itemChoiceEntries", "itemChoiceOrTextures", "currentOfferEntry", "purchaseSpinner", "cardPackOpenPanel", "cardPackSource") instance=ExtResource("1_iqrw2")]
+[node name="GameItemViewer" unique_id=1687330932 node_paths=PackedStringArray("displayItemEntry", "defenderEquipmentEntry", "inventoryItemPanel", "upgrader", "tabRoot", "tabBar", "perkTab", "perkDetailsPanel", "heroTab", "heroAbilityEntries", "heroPerkEntry", "heroCommanderPerkEntry", "teamPerkEntry", "tierSlider", "levelSlider", "statsTab", "statsTree", "devTab", "devText", "searchTextEdit", "searchResult", "itemChoiceParent", "itemChoiceEntries", "itemChoiceOrTextures", "currentOfferEntry", "purchaseSpinner", "cardPackOpenPanel", "cardPackSource", "llamaContentsTab", "llamaRewardViewer", "prevButtonLayout", "prevButtonEntry") instance=ExtResource("1_iqrw2")]
 theme = ExtResource("1_croo3")
 script = ExtResource("1_5fxot")
-displayUUID = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/LineEdit")
-displayItemEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem")
-defenderEquipmentEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderEquipment")
+displayItemEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem")
+defenderEquipmentEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DefenderEquipment")
 inventoryItemPanel = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier")
 upgrader = NodePath("Control/WindowContents/CenterContainer/window/Upgrades")
 tabRoot = NodePath("Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer")
@@ -361,6 +330,10 @@ currentOfferEntry = NodePath("Control/WindowContents/CenterContainer/window/Purc
 purchaseSpinner = NodePath("Control/WindowContents/CenterContainer/window/PurchasePanel/InStockContent/PurchaseButtonContainer/HBoxContainer/PurchaseSpinBox")
 cardPackOpenPanel = NodePath("Control/WindowContents/CenterContainer/window/OpenPanel")
 cardPackSource = NodePath("Control/WindowContents/CenterContainer/window/MainContent")
+llamaContentsTab = NodePath("Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer/LlamaContentsTab")
+llamaRewardViewer = NodePath("Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/LlamaContents/ScrollContainer/MarginContainer/LlamaPool")
+prevButtonLayout = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn")
+prevButtonEntry = NodePath("Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer")
 isUserClosable = true
 
 [node name="CenterContainer" type="CenterContainer" parent="Control/WindowContents" parent_id_path=PackedInt32Array(1567660947) index="0" unique_id=655177042]
@@ -388,6 +361,7 @@ size_flags_horizontal = 4
 columns = 2
 
 [node name="CommonItemDetails" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent" index="0" unique_id=546236768]
+custom_maximum_size = Vector2(-1, 516)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -401,74 +375,104 @@ custom_minimum_size = Vector2(250, 0)
 clip_contents = true
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="0" unique_id=579410808]
+[node name="BackBtn" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="0" unique_id=2142235286]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn" index="0" unique_id=1329560940]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 3
+script = ExtResource("10_c8yg2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer" index="0" unique_id=2010314222]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer" index="0" unique_id=463370687]
+custom_minimum_size = Vector2(19, 0)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_rotation = -1.5707964
+texture = ExtResource("4_any1v")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer" index="1" unique_id=1198355386]
+layout_mode = 2
+text = "Back"
+
+[node name="Item" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer" index="2" unique_id=749059860]
+material = SubResource("ShaderMaterial_o5brr")
+custom_minimum_size = Vector2(19, 0)
+layout_mode = 2
+texture = ExtResource("18_dqphe")
+expand_mode = 1
+script = ExtResource("22_bdxh4")
+
+[node name="Label2" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer" index="3" unique_id=1875920981]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Item Name Item Name Item Name "
+text_overrun_behavior = 3
+
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn" index="1" unique_id=1584398681]
+show_behind_parent = true
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="1" unique_id=579410808]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer" index="0" unique_id=566688263]
-layout_mode = 2
-
-[node name="LineEdit" type="LineEdit" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer" index="0" unique_id=321715253]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "uuid"
-alignment = 1
-editable = false
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer" index="1" unique_id=289519734]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer" index="0" unique_id=289519734]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
 
-[node name="DisplayItem" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="0" unique_id=1774023433 instance=ExtResource("4_3eqpi")]
+[node name="DisplayItem" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0" unique_id=1774023433 instance=ExtResource("4_3eqpi")]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 compactifyAmount = false
 useLargePreview = true
 preventInteractability = true
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_bxkk5")
-
-[node name="Overlays" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" index="1" unique_id=894561848]
+[node name="Overlays" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" index="1" unique_id=894561848]
 mouse_filter = 0
 
-[node name="RightIcon" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="0" unique_id=2033524404]
+[node name="RightIcon" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="0" unique_id=2033524404]
 custom_minimum_size = Vector2(32, 32)
 
-[node name="Control" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="1" unique_id=1209516326]
+[node name="Control" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="1" unique_id=1209516326]
 visible = false
 
-[node name="LeftIcon" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="2" unique_id=1152878404]
+[node name="LeftIcon" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="2" unique_id=1152878404]
 custom_minimum_size = Vector2(32, 32)
 
-[node name="Control2" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="3" unique_id=1053544463]
+[node name="Control2" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays/AmountContainer" parent_id_path=PackedInt32Array(1774023433, 814566120) index="3" unique_id=1053544463]
 visible = true
 
-[node name="PowerLevelIndicator" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays" index="4" unique_id=123897073]
+[node name="PowerLevelIndicator" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays" index="4" unique_id=123897073]
 offset_top = 30.0
 offset_right = 39.0
 offset_bottom = 52.0
 
-[node name="PowerLevelLabel" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/PowerLevelIndicator/HBoxContainer" parent_id_path=PackedInt32Array(1774023433, 123897073, 530720272) index="0" unique_id=1940135083]
+[node name="PowerLevelLabel" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays/PowerLevelIndicator/HBoxContainer" parent_id_path=PackedInt32Array(1774023433, 123897073, 530720272) index="0" unique_id=1940135083]
 theme_override_font_sizes/font_size = 20
 
-[node name="CtxNoInteract" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays" index="5" unique_id=436060735]
+[node name="CtxNoInteract" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays" index="5" unique_id=436060735]
 componentList = null
 
-[node name="Ctx" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Responsive Button Area" parent_id_path=PackedInt32Array(1774023433, 58375908) index="1" unique_id=1878635780]
+[node name="Ctx" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Responsive Button Area" parent_id_path=PackedInt32Array(1774023433, 58375908) index="1" unique_id=1878635780]
 componentList = null
 
-[node name="DefenderEquipment" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1" unique_id=1336454575 instance=ExtResource("15_8sk0j")]
+[node name="DefenderEquipment" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1" unique_id=1336454575 instance=ExtResource("15_8sk0j")]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderEquipment" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_o1oot")
-
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderEquipment/Overlays" parent_id_path=PackedInt32Array(1336454575, 894561848) index="0" unique_id=1121744076]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DefenderEquipment/Overlays" parent_id_path=PackedInt32Array(1336454575, 894561848) index="0" unique_id=1121744076]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -478,8 +482,39 @@ theme_override_font_sizes/font_size = 14
 text = "Equipped:"
 horizontal_alignment = 1
 
-[node name="Item Name" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="1" unique_id=886346814]
-custom_minimum_size = Vector2(0, 64)
+[node name="FunnyWarning" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer" index="1" unique_id=804470567]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+offset_transform_enabled = true
+offset_transform_scale = Vector2(1.81, 1.81)
+offset_transform_rotation = -0.60039324
+offset_transform_visual_only = false
+mouse_filter = 2
+mouse_behavior_recursive = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/FunnyWarning" index="0" unique_id=303973922]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/FunnyWarning/HBoxContainer" index="0" unique_id=1800171679]
+self_modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("9_o1oot")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/FunnyWarning/HBoxContainer" index="1" unique_id=1426286028]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/line_spacing = -2
+text = "Item has achieved
+maximum level"
+
+[node name="Item Name" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer" index="2" unique_id=886346814]
+custom_minimum_size = Vector2(1, 64)
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_font_sizes/font_size = 32
@@ -489,7 +524,6 @@ autowrap_mode = 2
 text_overrun_behavior = 3
 
 [node name="DescriptionAndUpgradeCosts" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer" index="1" unique_id=1619689312]
-custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -720,9 +754,13 @@ mouse_filter = 2
 color = Color(0.5933223, 0, 1, 1)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer" index="2" unique_id=1619486428]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/scroll_hint_vertical_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 5
+scroll_hint_mode = 1
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/ScrollContainer" index="0" unique_id=822375055]
 custom_minimum_size = Vector2(100, 0)
@@ -748,19 +786,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 Mode = -1
 Text = "Perks"
-IsPressed = true
 
 [node name="AbilityTab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=1024198875 instance=ExtResource("19_agup8")]
 layout_mode = 2
 size_flags_horizontal = 3
 Text = "Abilities"
 
-[node name="StatTab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer" index="2" unique_id=1464773374 instance=ExtResource("19_agup8")]
+[node name="LlamaContentsTab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer" index="2" unique_id=473421915 instance=ExtResource("19_agup8")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Llama Loot"
+IsPressed = true
+
+[node name="StatTab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer" index="3" unique_id=1464773374 instance=ExtResource("19_agup8")]
 layout_mode = 2
 size_flags_horizontal = 3
 Text = "Stats"
 
-[node name="DevTab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer" index="3" unique_id=776400591 instance=ExtResource("19_agup8")]
+[node name="DevTab" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar/HBoxContainer" index="4" unique_id=776400591 instance=ExtResource("19_agup8")]
 layout_mode = 2
 size_flags_horizontal = 3
 Mode = 1
@@ -771,6 +814,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Perks" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="0" unique_id=1053041289 node_paths=PackedStringArray("realPerkArea", "optionalPerkArea", "interactionBlocker", "currentPerkEntries", "perkUpArea", "perkUpEntry", "reperkEntries", "costArea", "costEntries", "perkApplyButton")]
+custom_minimum_size = Vector2(0, 488)
 layout_mode = 2
 theme_type_variation = &"Panel5Pad"
 script = ExtResource("7_14t7q")
@@ -802,6 +846,7 @@ grow_vertical = 2
 [node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector" index="0" unique_id=1297879808]
 layout_mode = 2
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 5
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Slot Selector/ScrollContainer" index="0" unique_id=783634392]
 layout_mode = 2
@@ -1063,7 +1108,46 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Blakebeards Stash"
 
-[node name="Stats" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="2" unique_id=1086565378]
+[node name="LlamaContents" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="2" unique_id=999779897]
+visible = false
+layout_mode = 2
+theme_type_variation = &"Panel5Pad"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/LlamaContents" index="0" unique_id=1136922527]
+layout_mode = 2
+theme_override_colors/scroll_hint_vertical_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/LlamaContents/ScrollContainer" index="0" unique_id=194377831]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 2
+
+[node name="LlamaPool" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/LlamaContents/ScrollContainer/MarginContainer" index="0" unique_id=1124891525 node_paths=PackedStringArray("llamaRewardGroupParent")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("27_any1v")
+llamaRewardGroupParent = NodePath("GridContainer")
+llamaRewardGroupScene = ExtResource("25_wnany")
+
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/LlamaContents/ScrollContainer/MarginContainer/LlamaPool" index="0" unique_id=171078451]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Primary Rewards"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/LlamaContents/ScrollContainer/MarginContainer/LlamaPool" index="1" unique_id=1578032936]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="Stats" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="3" unique_id=1086565378]
 visible = false
 layout_mode = 2
 
@@ -1097,7 +1181,7 @@ rounded = true
 tick_count = 7
 ticks_on_borders = true
 
-[node name="Dev" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="3" unique_id=1560064366]
+[node name="Dev" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs" index="4" unique_id=1560064366]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -1162,6 +1246,7 @@ size_flags_vertical = 3
 theme_override_constants/line_spacing = 2
 
 [node name="ItemChoiceSelector" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="1" unique_id=2023102]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -1183,7 +1268,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("Overlays/CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_wnany")
+material = SubResource("ShaderMaterial_bdju2")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal/Overlays" parent_id_path=PackedInt32Array(249909613, 894561848) index="5" unique_id=895210744]
 self_modulate = Color(1, 1, 1, 0)
@@ -1247,7 +1332,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("Overlays/CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal2" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_any1v")
+material = SubResource("ShaderMaterial_b8ene")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal2/Overlays" parent_id_path=PackedInt32Array(1929620437, 894561848) index="5" unique_id=1897317201]
 self_modulate = Color(1, 1, 1, 0)
@@ -1311,7 +1396,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("Overlays/CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal3" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_1kdmv")
+material = SubResource("ShaderMaterial_y1f50")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal3/Overlays" parent_id_path=PackedInt32Array(120210783, 894561848) index="5" unique_id=1007817772]
 self_modulate = Color(1, 1, 1, 0)
@@ -1375,7 +1460,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("Overlays/CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal4" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_bdju2")
+material = SubResource("ShaderMaterial_xtyni")
 
 [node name="CheckButton" type="CheckButton" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal4/Overlays" parent_id_path=PackedInt32Array(1483141880, 894561848) index="5" unique_id=571658869]
 self_modulate = Color(1, 1, 1, 0)
@@ -1446,7 +1531,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("../../../../HBoxContainer/RewardEntryHorizontal/Overlays/CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer/HBoxContainer/RewardEntryHorizontal" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_b8ene")
+material = SubResource("ShaderMaterial_6msva")
 
 [node name="Responsive Button Area" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer" index="2" unique_id=807018181 instance=ExtResource("3_f2ac1")]
 layout_mode = 2
@@ -1480,7 +1565,7 @@ autoLinkToViewer = false
 selectionGraphics = NodePath("../../../../HBoxContainer/RewardEntryHorizontal/Overlays/CheckButton")
 
 [node name="TextureRect" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer/RewardEntryHorizontal2" index="0" unique_id=1323663121]
-material = SubResource("ShaderMaterial_y1f50")
+material = SubResource("ShaderMaterial_1s4w4")
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer2/MarginContainer2/HBoxContainer" index="1" unique_id=812051151]
 layout_mode = 2
@@ -1627,6 +1712,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="OpenPanel" type="MarginContainer" parent="Control/WindowContents/CenterContainer/window" index="3" unique_id=1479645418]
+visible = false
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1642,7 +1728,6 @@ layout_mode = 2
 useHold = true
 
 [node name="Upgrades" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/window" index="4" unique_id=352512016 node_paths=PackedStringArray("modeSelector", "upgradePanel", "increaseRarityPanel", "confirmPanel", "confirmLabel", "confirmButton", "upgradeControls", "levelSliderMin", "levelSlider", "levelSliderMax", "tierSelector", "weaponCoreSelector", "currentWeaponCore", "currentLevelLabel", "currentTierDisplay", "nextWeaponCore", "nextLevelLabel", "nextTierDisplay", "fromRarity", "toRarity", "costItems")]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1689,7 +1774,7 @@ Text = " Upgrade "
 layout_mode = 2
 size_flags_horizontal = 3
 Mode = 1
-Text = " Increase Rarirty "
+Text = " Increase Rarity "
 IsPressed = true
 
 [node name="PanelContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/window/Upgrades" index="1" unique_id=626059531]
@@ -2110,22 +2195,28 @@ layout_mode = 2
 [node name="CostItem7" parent="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer3/GridContainer" index="6" unique_id=514104900 instance=ExtResource("41_1kdmv")]
 layout_mode = 2
 
-[connection signal="CanBeLeveledChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier" method="set_visible"]
-[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/ScrollContainer/Label" method="set_text"]
-[connection signal="InitLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/Label" method="set_text"]
-[connection signal="InitRarityChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/ColorRect" method="set_color"]
-[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
-[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
-[connection signal="InitVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier" method="set_visible"]
-[connection signal="LevelProgressChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer/MarginContainer/ProgressBar" method="set_value"]
-[connection signal="LevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/Lv" method="set_text"]
-[connection signal="MaxTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
-[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/Item Name" method="set_text"]
-[connection signal="SuperchargeChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetSuperchargedTier"]
-[connection signal="TierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
-[connection signal="UncappedLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2/DesiredLv" method="set_text"]
-[connection signal="UncappedVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" method="set_visible"]
-[connection signal="WeaponCoreIconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/WeaponCore" method="set_texture"]
+[connection signal="IconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer/Item" method="SetShaderTexture" binds= ["MainIcon"]]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer/Label2" method="set_text"]
+[connection signal="RarityChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/MarginContainer/HBoxContainer/Item" method="set_self_modulate"]
+[connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/BackBtn/Button" to="." method="ShowPrevious"]
+[connection signal="CanBeLeveledChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier" method="set_visible"]
+[connection signal="DescriptionChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/ScrollContainer/Label" method="set_text"]
+[connection signal="InitLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/Label" method="set_text"]
+[connection signal="InitRarityChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/ColorRect" method="set_color"]
+[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
+[connection signal="InitTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
+[connection signal="InitVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/InitLvAndTier" method="set_visible"]
+[connection signal="LevelCapWarningText" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/FunnyWarning/HBoxContainer/Label" method="set_text"]
+[connection signal="LevelCapWarningVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/FunnyWarning" method="set_visible"]
+[connection signal="LevelProgressChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer/MarginContainer/ProgressBar" method="set_value"]
+[connection signal="LevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/Lv" method="set_text"]
+[connection signal="MaxTierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetMaxTier"]
+[connection signal="NameChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/Item Name" method="set_text"]
+[connection signal="SuperchargeChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetSuperchargedTier"]
+[connection signal="TierChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/TierController" method="SetTier"]
+[connection signal="UncappedLevelTextChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2/DesiredLv" method="set_text"]
+[connection signal="UncappedVisible" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/HBoxContainer2" method="set_visible"]
+[connection signal="WeaponCoreIconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem" to="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/DescriptionAndUpgradeCosts/VBoxContainer/LvAndTier/VBoxContainer/MarginContainer/WeaponCore" method="set_texture"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/HBoxContainer/BackButton" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks" method="ClosePerkChanger"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks/Perks/Perk Option Selector/VBoxContainer/HBoxContainer/ApplyButton" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Perks" method="ApplyReplacementPerk"]
 [connection signal="IconChanged" from="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Abilities/VBoxContainer/TeamPerk" to="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/Tabs/Abilities/VBoxContainer/TeamPerk/VBoxContainer/HBoxContainer/TextureRect" method="set_texture"]
@@ -2172,9 +2263,9 @@ layout_mode = 2
 [connection signal="TooltipChanged" from="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2" to="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2/Icon/Responsive Button Area" method="set_tooltip_text"]
 [connection signal="pressed" from="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2/Icon/Responsive Button Area" to="Control/WindowContents/CenterContainer/window/Upgrades/PanelContainer/VBoxContainer/HBoxContainer/IncreaseRarity/HBoxContainer/MarginContainer2" method="Inspect"]
 
-[editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem"]
-[editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DisplayItem/Overlays/PowerLevelIndicator"]
-[editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderEquipment"]
+[editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem"]
+[editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DisplayItem/Overlays/PowerLevelIndicator"]
+[editable path="Control/WindowContents/CenterContainer/window/MainContent/CommonItemDetails/GridContainer/VBoxContainer/MarginContainer/HBoxContainer/DefenderEquipment"]
 [editable path="Control/WindowContents/CenterContainer/window/MainContent/VBoxContainer/VirtualTabBar"]
 [editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal"]
 [editable path="Control/WindowContents/CenterContainer/window/ItemChoiceSelector/ChoiceItemSelector/HBoxContainer/RewardEntryHorizontal2"]

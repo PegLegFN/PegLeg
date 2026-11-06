@@ -305,6 +305,7 @@ public partial class GameOfferEntry : Control
 			priceEntry?.ClearItem(null);
 			priceInInventoryEntry?.ClearItem(null);
 		}
+		grantedItem?.SetSeenLocal(true);
 		grantedItem?.NotifyChanged();
 		grantedItemEntry?.SetItem(grantedItem);
 	}

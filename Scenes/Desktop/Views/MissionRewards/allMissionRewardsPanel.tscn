@@ -158,7 +158,7 @@ excludeTodo = true
 isPrimary = true
 newMissionListNode = NodePath("VBoxContainer/VBoxContainer/MarginContainer/RecycleContainer")
 loadingIcon = NodePath("VBoxContainer/VBoxContainer/MarginContainer/SmallLoadingIcon")
-searchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SearchBox")
+searchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/BeastMissionSearch")
 itemSearchBar = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/BeastItemSearch")
 sortMode = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer4/OptionButton")
 filterNotable = NodePath("VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/HBoxContainer/NotableFilter/CheckButton")
@@ -245,17 +245,15 @@ theme_override_constants/margin_right = 2
 layout_mode = 2
 theme_override_constants/separation = 2
 
+[node name="BeastMissionSearch" type="LineEdit" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1684986801]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+placeholder_text = "Search missions"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=2007388593]
 layout_mode = 2
 theme_override_constants/separation = 2
-
-[node name="SearchBox" type="LineEdit" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=88566526]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Search missions"
-context_menu_enabled = false
-clear_button_enabled = true
 
 [node name="BeastItemSearch" type="LineEdit" parent="AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1837025997]
 layout_mode = 2
@@ -1211,6 +1209,7 @@ color = Color(1, 1, 1, 0)
 
 [node name="BeastConfig" type="Control" parent="." unique_id=730135688]
 layout_mode = 2
+size_flags_vertical = 0
 mouse_filter = 2
 script = ExtResource("3_qvb47")
 section = "missions"

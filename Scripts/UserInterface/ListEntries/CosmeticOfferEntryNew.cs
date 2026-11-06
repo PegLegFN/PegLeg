@@ -342,7 +342,7 @@ public partial class CosmeticOfferEntryNew : Control, IListEntry<GameOffer>
 		//if (((currentOffer.OutDate ?? DateTime.MaxValue) - DateTime.UtcNow).TotalDays < 1)
 		if(timeData.isLeavingSoon)
 		{
-			bonusText = "LEAVES AT RESET";
+			bonusText = "LEAVES TODAY";
 		}
 		else if (timeData.isRecentlyNew && timeData.isAddedToday)
 		{

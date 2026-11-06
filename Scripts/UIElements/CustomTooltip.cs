@@ -1,4 +1,6 @@
 using Godot;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.Json.Nodes;
 
@@ -38,13 +40,24 @@ public partial class CustomTooltip : Control
 	HeroAbilityEntry supportPerk;
 	[Export]
 	HeroAbilityEntry commanderPerk;
+	[ExportGroup("Survivor")]
+	[Export]
+	Control survivorContent;
+	[Export]
+	TextureRect personalityIcon;
+	[Export]
+	Label personalityLabel;
+	[Export]
+	TextureRect survivorSecondIcon;
+	[Export]
+	Label survivorSecondLabel;
 
 	public override void _Ready()
 	{
 		abilityContent.Size = abilityContent.GetCombinedMinimumSize() * Vector2.Right;
 	}
 
-	public static string GenerateSimpleTooltip(string title, string quantity = null, string[] description = null, string bannerCol = null, string offerId = null, string[] abilities = null, JsonObject extra = null)
+	public static string GenerateSimpleTooltip(string title, string quantity = null, string[] description = null, string bannerCol = null, string offerId = null, string[] abilities = null, JsonObject survivorData = null, JsonObject extra = null)
 	{
 		JsonObject content = new()
 		{
@@ -75,6 +88,9 @@ public partial class CustomTooltip : Control
 
 		if (abilities is not null)
 			content["abilities"] = new JsonArray([..abilities]);
+
+		if (survivorData is not null)
+			content["survivorData"] = survivorData.SafeDeepClone();
 
 		return content.ToString();
 	}
@@ -208,6 +224,31 @@ public partial class CustomTooltip : Control
 
 			commanderPerk.Visible = command is not null;
 			commanderPerk.SetAbility(command);
+		}
+
+		survivorContent.Visible = false;
+		if (contentObject["survivorData"] is JsonObject survivorObj)
+		{
+			survivorContent.Visible = true;
+			var personality = survivorObj["personality"]?.ToString();
+			var setBonus = survivorObj["setBonus"]?.ToString();
+			var subType = survivorObj["subType"]?.ToString();
+
+			personalityIcon.Texture = PegLegResourceManager.supplimentaryData.PersonalityIcons.GetValueOrDefault(personality, PegLegResourceManager.defaultIcon);
+			personalityLabel.Text = GameItem.ParseSurvivorAttribute(personality);
+
+			survivorSecondIcon.Visible = setBonus is not null || subType is not null;
+			survivorSecondLabel.Visible = survivorSecondIcon.Visible;
+			if (setBonus is not null)
+			{
+				survivorSecondIcon.Texture = PegLegResourceManager.supplimentaryData.SetBonusIcons.GetValueOrDefault(setBonus, PegLegResourceManager.defaultIcon);
+				survivorSecondLabel.Text = GameItem.ParseSurvivorAttribute(setBonus);
+			}
+			else if (subType is not null)
+			{
+				survivorSecondIcon.Texture = GameItemTemplate.GetSubtypeTexture(subType == "Martial Artist" ? "MartialArtist" : subType);
+				survivorSecondLabel.Text = subType;
+			}
 		}
 	}
 }

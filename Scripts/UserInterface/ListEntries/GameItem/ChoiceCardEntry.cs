@@ -27,14 +27,18 @@ public partial class ChoiceCardEntry : GameItemEntry
 			ownedLabel.Text = "";
 			return;
 		}
+
 		var prefix = updatedItem.template.GetTemplatePrefix();
 		var rarityLevel = updatedItem.template.RarityLevel;
+		GD.Print($"Looking for prefix \"{prefix}\" at rarity {updatedItem.template.Rarity} or higher");
 		var matchCount = GameAccount.ActiveAccount.GetProfile("campaign").GetItems(updatedItem.template.Type, i =>
 		{
 			if (i.template?.GetTemplatePrefix() != prefix)
 				return false;
+			GD.Print($"Possible candidate \"{i.templateId}\" at rarity {i.template.Rarity} ({i.template.RarityLevel}>={rarityLevel} = {(i.template.RarityLevel >= rarityLevel ? "pass" : "fail")})");
 			return i.template.RarityLevel >= rarityLevel;
 		}).Length;
+		GD.Print($"Found {matchCount} matches");
 		ownedLabel.Text = $"You own {matchCount} of equal or better rarity";
 	}
 

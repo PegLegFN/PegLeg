@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -275,7 +276,6 @@ public partial class GameAccount
 	static GameAccount _activeAccount;
 	static GameAccount emptyAccount = new(null);
 	public static GameAccount ActiveAccount => _activeAccount ??= emptyAccount;
-	public static event Action ActiveAccountChangedEarly;
 	public static event Action ActiveAccountChanged;
 	public static event Action RemindersChanged;
 
@@ -298,7 +298,6 @@ public partial class GameAccount
 		await account.CheckCalender();
 		progress?.Invoke("");
 		_activeAccount = account;
-		ActiveAccountChangedEarly?.Invoke();
 		RemindersChanged?.Invoke();
 		var keys = account.localData.Select(x => x.Key).ToArray();
 		foreach (var key in keys)
@@ -312,12 +311,11 @@ public partial class GameAccount
 
 	public static void ClearActiveAccount() => _activeAccount = emptyAccount;
 
-	public static TriggerInstance refreshTrigger = new("refreshActiveAccount", RefreshActiveAccountWithOverlay);
-	static async void RefreshActiveAccountWithOverlay()
+	public static TriggerInstance refreshTrigger = new("refreshActiveAccount", async () =>
 	{
 		using var _ = LoadingOverlay.CreateToken();
-		await GameAccount.RefreshActiveAccount();
-	}
+		await RefreshActiveAccount();
+	});
 
 	public static async Task RefreshActiveAccount()
 	{
@@ -330,13 +328,15 @@ public partial class GameAccount
 		_activeAccount.ventureRatingData = null;
 		_activeAccount.localData = null;
 		_activeAccount.localPinnedQuests = [];
-		foreach (var profile in _activeAccount.profiles.Values)
-		{
-			profile.InvalidateProfile();
-		}
+		//foreach (var profile in _activeAccount.profiles.Values)
+		//{
+		//	profile.InvalidateProfile();
+		//}
 		await _activeAccount.QueryAllProfiles(true);
 		await _activeAccount.CheckLocalPinnedQuests();
-		await SetActiveAccount(_activeAccount.accountId);
+		await _activeAccount.CheckCalender();
+		ActiveAccountChanged?.Invoke();
+		//await SetActiveAccount(_activeAccount.accountId);
 	}
 
 	public static GameAccount LoginToAccount(JsonObject accountAuthResponse)
@@ -488,7 +488,10 @@ public partial class GameAccount
 
 		using var _ = await authSemaphore.AwaitToken();
 
-		if (!assumeValid)
+		if (isAuthed && assumeValid)
+			return true;
+
+		if (!assumeValid && isAuthed)
 		{
 			using var req = await FnWebAddresses.EpicAccount
 				.MakeRequest("account/api/oauth/verify")
@@ -511,6 +514,7 @@ public partial class GameAccount
 				return true;
 			}
 		}
+
 		var dd = GetLocalData("DeviceDetails")?.AsArray().Select(n => n.GetValue<byte>()).ToArray();
 		var ddJson = DecryptDeviceDetails(dd);
 		string failMsg = "";

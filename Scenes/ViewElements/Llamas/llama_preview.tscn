@@ -16,9 +16,13 @@
 [ext_resource type="Texture2D" uid="uid://dmki0jynk48ik" path="res://Images/InterfaceIcons/T-SlotIcon-Remove-64.png" id="12_dgltu"]
 [ext_resource type="Script" uid="uid://q13wuucummom" path="res://Scripts/Triggers/TriggerButton.cs" id="12_f2kye"]
 [ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="13_a5bbv"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="13_a18ys"]
 [ext_resource type="PackedScene" uid="uid://bgr0eeg3fek2e" path="res://Scenes/GameItemEntry/reward_entry_xl.tscn" id="14_2sn7c"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="14_v4kfe"]
 [ext_resource type="Texture2D" uid="uid://oo036o6whl2w" path="res://Images/InterfaceIcons/OrArrowHD.png" id="15_fus83"]
+[ext_resource type="Script" uid="uid://by47xsjqm1plu" path="res://Scripts/Llamas/LlamaRewardViewer.cs" id="16_biuhq"]
 [ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItem/GameItemEntry.cs" id="16_xstle"]
+[ext_resource type="PackedScene" uid="uid://bj6ld3cm150y" path="res://Scenes/ViewElements/Llamas/llama_reward_group_large.tscn" id="17_biuhq"]
 [ext_resource type="Texture2D" uid="uid://da88fnanf35ju" path="res://Images/InterfaceIcons/T-Items-Currency-X-RayLlama.png" id="17_gxh0d"]
 [ext_resource type="Script" uid="uid://b2rq4djulgv6m" path="res://Scripts/UIElements/Signal Logic/BooleanPair.cs" id="18_bwxlf"]
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="19_fqv1c"]
@@ -54,7 +58,7 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="Llama Contents" type="MarginContainer" unique_id=831886700 node_paths=PackedStringArray("llamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "openButton", "quantitySpinner", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
+[node name="Llama Contents" type="MarginContainer" unique_id=831886700 node_paths=PackedStringArray("llamaPanel", "currentOfferEntry", "currentCardpackEntry", "purchaseButton", "openButton", "quantitySpinner", "resultContent", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice", "rewardMode", "rewardPool")]
 custom_minimum_size = Vector2(430, 0)
 offset_right = 430.0
 offset_bottom = 532.0
@@ -66,12 +70,15 @@ currentCardpackEntry = NodePath("MarginContainer/CardPackEntry")
 purchaseButton = NodePath("MarginContainer/CardPackEntry/VBoxContainer/Buttons/PurchaseButton")
 openButton = NodePath("MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton")
 quantitySpinner = NodePath("MarginContainer/CardPackEntry/VBoxContainer/QuantitySpinBox")
-resultEntriesParent = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContainer")
+resultContent = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent")
+resultEntriesParent = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent/RewardsContainer")
 surpriseResultPanel = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SurpriseContainer")
 soldOutResultPanel = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/SoldOutContainer")
 choicePanel = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer")
 firstChoice = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect/RewardEntry2")
 secondChoice = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/ChoiceContainer/AspectRatioContainer/Control/TextureRect2/RewardEntry2")
+rewardMode = NodePath("MarginContainer/CardPackEntry/LRewardMode")
+rewardPool = NodePath("MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent/LootPool")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=111009675]
 material = SubResource("ShaderMaterial_108qr")
@@ -147,16 +154,33 @@ expand_icon = true
 script = ExtResource("12_f2kye")
 name = "llamaContents_copy"
 
+[node name="LRewardMode" parent="MarginContainer/CardPackEntry" unique_id=2093616903 node_paths=PackedStringArray("useAsTabContainer") instance=ExtResource("13_a18ys")]
+layout_mode = 2
+useAsTabContainer = NodePath("../MarginContainer/Items/HBoxContainer/RewardsContent")
+
+[node name="Tab" parent="MarginContainer/CardPackEntry/LRewardMode/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("14_v4kfe")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = "Current X-Ray Rewards"
+IsPressed = true
+
+[node name="Tab2" parent="MarginContainer/CardPackEntry/LRewardMode/HBoxContainer" index="1" unique_id=403406189 instance=ExtResource("14_v4kfe")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = "Loot Pool"
+
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry" unique_id=660517761]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_top = 30
 theme_override_constants/margin_bottom = 30
 
 [node name="Items" type="ScrollContainer" parent="MarginContainer/CardPackEntry/MarginContainer" unique_id=1715806242]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+scroll_hint_mode = 1
 
 [node name="HBoxContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items" unique_id=1848558636]
 layout_mode = 2
@@ -167,14 +191,54 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="RewardsContainer" type="Container" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=1088193766]
-visible = false
+[node name="RewardsContent" type="MarginContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=113627452]
+layout_mode = 2
+
+[node name="RewardsContainer" type="Container" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent" unique_id=1088193766]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 script = ExtResource("10_oiegs")
 CompressSpacing = true
 Spacing = Vector2(5, 0)
+
+[node name="LootPool" type="VBoxContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent" unique_id=498686351 node_paths=PackedStringArray("llamaRewardGroupParent")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+script = ExtResource("16_biuhq")
+llamaRewardGroupParent = NodePath("GridContainer")
+llamaRewardGroupScene = ExtResource("17_biuhq")
+
+[node name="Label" type="Label" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent/LootPool" unique_id=2129806170]
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "Event Items that can appear in this Llama"
+horizontal_alignment = 1
+
+[node name="Container" type="Container" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent/LootPool" unique_id=1413627084]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("10_oiegs")
+CompressSpacing = true
+Spacing = Vector2(5, 0)
+UseLargestChild = true
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent/LootPool" unique_id=1205077914]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+mouse_filter = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 3
 
 [node name="SurpriseContainer" type="VBoxContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=574243503]
 visible = false
@@ -211,6 +275,7 @@ text = "Sold Out"
 horizontal_alignment = 1
 
 [node name="ChoiceContainer" type="MarginContainer" parent="MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" unique_id=348352731]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 60
@@ -571,3 +636,5 @@ value = 1.0
 [connection signal="HoldPressed" from="MarginContainer/CardPackEntry/VBoxContainer/Buttons/OpenButton/Responsive Button Area" to="." method="OpenSelectedCardpack"]
 [connection signal="AmountChanged" from="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" to="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory/MarginContainer/HBoxContainer/AmountText" method="set_text"]
 [connection signal="TooltipChanged" from="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" to="MarginContainer/CardPackEntry/VBoxContainer/AltPurchaseButton/Control/HBoxContainer/AltInInventory" method="set_tooltip_text"]
+
+[editable path="MarginContainer/CardPackEntry/LRewardMode"]

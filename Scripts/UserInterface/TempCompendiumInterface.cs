@@ -32,9 +32,18 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 			newItemList = newListHandler;
 			newItemList.LinkListProvider(filteredEntries);
 		}
+		GameAccount.ActiveAccountChanged += ActiveAccountChanged;
 		//itemList. += InspectItem;
 	}
 
+	private void ActiveAccountChanged()
+	{
+		foreach (var item in compendiumEntries)
+		{
+			item.SetRewardNotification();
+		}
+		FilterItems(null);
+	}
 
 	bool generated = false;
 	List<GameItem> compendiumEntries = [];
@@ -97,7 +106,7 @@ public partial class TempCompendiumInterface : Control, IRecyclableElementProvid
 		});
 		compendiumEntries = orderedItems ?? [];
 		//compendiumTemplates.ForEach(i => i.GenerateSearchTags());
-		FilterItems("");
+		FilterItems(null);
 		searchBox.Editable = true;
 		loadingIcon.Visible = false;
 		itemList?.Visible = true;

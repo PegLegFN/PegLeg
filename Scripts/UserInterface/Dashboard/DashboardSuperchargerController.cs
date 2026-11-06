@@ -36,15 +36,10 @@ public partial class DashboardSuperchargerController : Control
 		RefreshTimerController.OnDayChanged -= AccountChanged;
 	}
 
+	GameItem currentQuest;
+
 	private async void AccountChanged()
 	{
-		bool isRefreshDay = (Timeline.EndOfCurrentWeek - DateTime.UtcNow).TotalDays > 6.1;
-		if (onlyShowOnResetDay)
-		{
-			Visible = false;
-			if (!isRefreshDay)
-				return;
-		}
 		entry.ClearItem();
 		content.Visible = false;
 		checkmark.Visible = false;
@@ -52,36 +47,43 @@ public partial class DashboardSuperchargerController : Control
 		noSuperchargerMessage.Visible = false;
 
 		if (!GameAccount.ActiveAccount.isOwned)
+		{
+			loading.Visible = false;
+			SetQuest(null);
 			return;
-
-		var targetAccount = GameAccount.ActiveAccount;
-		if (tryUseSummaryFallback && AppConfig.TryGet("automation", "summary_160_fallback", out string accountId))
-		{
-			targetAccount = GameAccount.GetOrCreateAccount(accountId);
-			await Helpers.WaitForTimer(5);
 		}
 
-		await Helpers.WaitForFrame();
-		await Helpers.WaitForFrame();
-		var profile = await targetAccount.GetProfile(FnProfileTypes.AccountItems).Query();
+		var profile = await GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems).Query();
 		var possibleQuest = profile.GetFirstItem("Quest", q => q.templateId.StartsWith("Quest:weekly_elder"));
-		GD.Print(possibleQuest?.template?.ItemName ?? "NoSupercharger");
+		SetQuest(possibleQuest);
 
-
-		if (onlyShowOnResetDay)
-		{
-			Visible = isRefreshDay && possibleQuest is not null;
-		}
+		bool isRefreshDay = (Timeline.EndOfCurrentWeek - DateTime.UtcNow).TotalDays > 6.1;
+		Visible = !onlyShowOnResetDay || (isRefreshDay && possibleQuest is not null);
 
 		loading.Visible = false;
-		checkmark.Visible = possibleQuest?.QuestComplete ?? false;
-		content.Visible = possibleQuest is not null;
-		noSuperchargerMessage.Visible = possibleQuest is null;
-		entry.SetItem(possibleQuest?.template?.GetVisibleQuestRewards()?.FirstOrDefault());
-		if (possibleQuest is not null && progressBar is not null)
+	}
+
+	private void SetQuest(GameItem newQuest)
+	{
+		if (currentQuest != newQuest)
 		{
-			var objective = possibleQuest.template["Objectives"][0].AsObject();
-			progressBar.Value = (possibleQuest.attributes["completion_"+objective["BackendName"].ToString()]?.GetValue<int>() ?? 0) / (float)objective["Count"].GetValue<int>();
+			currentQuest?.OnChanged -= UpdateQuest;
+			currentQuest = newQuest;
+			currentQuest?.OnChanged += UpdateQuest;
 		}
+		UpdateQuest();
+	}
+
+	private void UpdateQuest()
+	{
+		checkmark.Visible = currentQuest?.QuestComplete ?? false;
+		content.Visible = currentQuest is not null;
+		noSuperchargerMessage.Visible = currentQuest is null; //show different message if user has qualified for 160 quest
+		entry.SetItem(currentQuest?.template?.GetVisibleQuestRewards()?.FirstOrDefault());
+
+		if (currentQuest is null || progressBar is null)
+			return;
+		var objective = currentQuest.template["Objectives"][0];
+		progressBar.Value = (currentQuest.attributes["completion_" + objective["BackendName"].ToString()]?.GetValue<int>() ?? 0) / (float)objective["Count"].GetValue<int>();
 	}
 }

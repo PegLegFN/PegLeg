@@ -29,6 +29,8 @@ public partial class MissionAnalytics : Control
 	Label averageLabel;
 	[Export]
 	Button downloadMissing;
+	[Export]
+	Tree totalTree;
 
 	List<MissionAnalyticsDataPoint> dataPointEntries = [];
 
@@ -103,7 +105,8 @@ public partial class MissionAnalytics : Control
 		if (prompt != true)
 			return;
 
-		using var _ = LoadingOverlay.CreateToken();
+		using var download = LoadingOverlay.CreateToken();
+		download.SetLoadingProgress(0, missingDates.Count);
 
 		var indexResult = await ApiWebAddresses.lycanRocks.MakeRequest($"api/fortnite/stw/daily_archive/").Send();
 		if (await indexResult.CheckForError())
@@ -135,6 +138,7 @@ public partial class MissionAnalytics : Control
 				GD.Print($"Downloaded {dateFile}");
 				GameMission.ImportArchive(archive);
 			}
+			download.SetLoadingProgress(download.progress+1);
 		}
 
 		await Task.WhenAll(downloadTasks);
@@ -162,6 +166,11 @@ public partial class MissionAnalytics : Control
 
 	bool ItemValidator(GameItem item) => PLSearch.EvaluateInstructions(itemSearchInstructions, item.RawData);
 
+	record struct TotalMeta
+	{
+		public string type { get; init; }
+		public string subtype { get; init; }
+	}
 	public void UpdateAnalytics()
 	{
 		if (fromDate.Year < 2025 || toDate.Year < 2025)
@@ -171,6 +180,10 @@ public partial class MissionAnalytics : Control
 		int dayCount = ((int)(toDate - fromDate).TotalDays) + 1;
 		Dictionary<DateTime, int> dataResults = [];
 
+		Dictionary<string, long> templateTotals = [];
+		Dictionary<string, TotalMeta> templateMetas = [];
+		long allTotals = 0;
+
 		for (int i = 0; i < dayCount; i++)
 		{
 			DateTime date = fromDate.AddDays(i);
@@ -179,16 +192,46 @@ public partial class MissionAnalytics : Control
 			int value = -1;
 			if (sampleItems.ButtonPressed)
 			{
-				value = archive.Missions
+				var items = archive.Missions
 					.Where(MissionValidator)
 					.SelectMany(m => m.allItems)
 					.Where(ItemValidator)
-					.Select(i => i.quantity)
-					.Sum();
+					.ToArray();
+				value = items.Sum(i => i.quantity);
+				allTotals += value;
+				var groupedTypes = items.GroupBy(i =>
+				{
+					var name = i.template?.ItemName;
+					if (name == "Survivor XP" || name == "Hero XP")
+						name = "People XP";
+					return name;
+				});
+				foreach (var typeGroup in groupedTypes)
+				{
+					if (typeGroup.Key is null)
+						continue;
+					templateTotals[typeGroup.Key] = templateTotals.GetValueOrDefault(typeGroup.Key) + typeGroup.Sum(i => i.quantity);
+					if (templateMetas.ContainsKey(typeGroup.Key))
+					{
+						var template = typeGroup.FirstOrDefault().template;
+						templateMetas[typeGroup.Key] = new()
+						{
+							type = template.Type,
+							subtype = template.SubType
+						};
+					}
+				}
 			}
 			else
 			{
-				value = archive.Missions.Count(MissionValidator);
+				var missions = archive.Missions.Where(MissionValidator).ToArray();
+				value = missions.Length;
+				allTotals += missions.Length;
+				var groupedTypes = missions.GroupBy(m => m.missionGenerator.ItemName);
+				foreach (var typeGroup in groupedTypes)
+				{
+					templateTotals[typeGroup.Key] = templateTotals.GetValueOrDefault(typeGroup.Key) + typeGroup.Count();
+				}
 			}
 			dataResults.Add(date, value);
 		}
@@ -218,7 +261,63 @@ public partial class MissionAnalytics : Control
 		int total = dataResults.Count > 0 ? dataResults.Values.Where(v => v >= 0).Sum() : 0;
 		float average = total / Mathf.Max(dataResults.Count(kvp => kvp.Value >= 0), 1);
 
+		var mostCommon = templateTotals.OrderByDescending(kvp => kvp.Value).FirstOrDefault().Key;
+
 		totalLabel.Text = $"Total: {total}";
 		averageLabel.Text = $"Average: {average:0.##}/day";
+		if (mostCommon is not null && templateTotals.Count > 1)
+			averageLabel.Text += $"   Most Common Type: {mostCommon}";
+
+		totalTree.Visible = templateTotals.Count > 1;
+		totalTree.Clear();
+		if (!totalTree.Visible)
+			return;
+		totalTree.Columns = 2;
+		totalTree.SetColumnExpand(1, false);
+		//totalTree.SetColumnCustomMinimumWidth(1, 30);
+		var root = totalTree.CreateItem();
+		//Dictionary<string, TreeItem> treeItemTypes = [];
+		//Dictionary<string, TreeItem> treeItemSubTypes = [];
+		foreach (var item in templateTotals.OrderByDescending(kvp => kvp.Value))
+		{
+			TreeItem parent = root;
+			//if (templateMetas.TryGetValue(item.Key, out var meta))
+			//{
+			//	if(!treeItemTypes.TryGetValue(meta.type, out var treeType))
+			//	{
+			//		treeType = root.CreateChild();
+			//		treeType.SetText(0, meta.type);
+			//		treeItemTypes[meta.type] = treeType;
+			//	}
+			//	parent = treeType;
+
+			//	if (meta.subtype is string subtype)
+			//	{
+			//		if (!treeItemSubTypes.TryGetValue(subtype, out var treeSubType))
+			//		{
+			//			treeSubType = root.CreateChild();
+			//			treeSubType.SetText(0, subtype);
+			//			treeItemSubTypes[subtype] = treeSubType;
+			//		}
+			//		parent = treeSubType;
+			//	}
+
+			//}
+			var treeItem = parent.CreateChild();
+			treeItem.SetText(0, item.Key);
+			treeItem.SetText(1, $" {item.Value.Compactify()} ");
+			treeItem.SetTextOverrunBehavior(1, TextServer.OverrunBehavior.NoTrimming);
+			treeItem.SetTooltipText(1, item.Value.Notate());
+		}
+
+		if (Bootstrap.IsEditor)
+		{
+			int count = 0;
+			foreach (var item in templateTotals.OrderByDescending(kvp => kvp.Value))
+			{
+				count++;
+				GD.Print($"{count}. {item.Key}: {item.Value}");
+			}
+		}
 	}
 }

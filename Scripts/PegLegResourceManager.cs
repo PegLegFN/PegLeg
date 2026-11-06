@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static GameStorefront.CosmeticSectionData;
 using FileAccess = Godot.FileAccess;
 
 public class PegLegResourceManager
@@ -639,6 +641,9 @@ public class PegLegResourceManager
 	static JsonObject magicNumbers;
 	public static JsonObject MagicNumbers => (magicNumbers ??= LoadResourceObj("magicNumbers.json")) ?? [];
 
+	static LlamaDataContainer fallbackLlamaData;
+	public static LlamaDataContainer LlamaData => (field ??= LoadResourceObj<LlamaDataContainer>("llamaData.json")) ?? (fallbackLlamaData ??= new());
+
 	//public static bool TryGetDataSource(string dataType, out JsonObject source)
 	//{
 	//    bool exists = dataSources.ContainsKey(dataType);
@@ -694,6 +699,76 @@ public class PegLegResourceManager
 	//    //GD.Print(fileName + " file loaded");
 	//    return true;
 	//}
+
+	public class LlamaDataContainer
+	{
+		[JsonInclude]
+		[JsonPropertyName("colors")]
+		Dictionary<string, string[]> colorStrings { get; init; } = [];
+
+		[JsonIgnore]
+		public Dictionary<string, Color[]> LlamaColors => field ??= colorStrings.ToDictionary(
+			kvp => kvp.Key, 
+			kvp => (kvp.Value?.Length ?? 0) > 3 ?
+			[
+				Color.HtmlIsValid(kvp.Value[0]) ? Color.FromHtml(kvp.Value[0]) : fallbackColors[0],
+				Color.HtmlIsValid(kvp.Value[1]) ? Color.FromHtml(kvp.Value[1]) : fallbackColors[1],
+				Color.HtmlIsValid(kvp.Value[2]) ? Color.FromHtml(kvp.Value[2]) : fallbackColors[2],
+				Color.HtmlIsValid(kvp.Value[3]) ? Color.FromHtml(kvp.Value[3]) : fallbackColors[3],
+			] : fallbackColors
+		);
+
+		static Color[] fallbackColors = [
+			new("#0073ffff"),
+			new("#e600c3e3"),
+			new("#aa00ffd4"),
+			new("#00eaff8f"),
+		];
+		public Color[] FindColours(string name) => LlamaColors.FirstOrDefault(kvp => name?.StartsWith(kvp.Key) == true).Value ?? fallbackColors;
+
+		[JsonInclude]
+		[JsonPropertyName("contents")]
+		Dictionary<string, string[]> llamaContentsBaseIDs { get; init; } = [];
+		Dictionary<string, GameItem[][]> llamaContentsItems = [];
+
+		public bool HasContents(string key) => llamaContentsBaseIDs.ContainsKey(key);
+
+		public bool TryGetContents(string key, out GameItem[][] contents)
+		{
+			if (llamaContentsItems.TryGetValue(key, out contents))
+				return true;
+
+			contents = null;
+			if (!llamaContentsBaseIDs.TryGetValue(key, out var baseIDs))
+				return false;
+
+			contents = llamaContentsItems[key] = [.. baseIDs.SelectMany(tid =>
+				{
+					var curItem = GameItemTemplate.Get(tid);
+					if (curItem is null)
+						return [];
+					List<GameItemTemplate> rarities = [curItem];
+					while (curItem.TryGetNextRarity() is { } nextItem)
+					{
+						rarities.Add(nextItem);
+						curItem = nextItem;
+					}
+					return rarities;
+				})
+				.Where(t => t is not null)
+				.GroupBy(t => t.ItemName)
+				.OrderBy(g => g.FirstOrDefault().Type is string type ? type switch
+				{
+					"Hero" => "YYYYYY",
+					"Worker" => "ZZZZZZ",
+					_ => type
+				} : "")
+				.ThenBy(g => g.FirstOrDefault().SortingName)
+				.Select(g => g.OrderBy(t => t.RarityLevel).Select(t => t.CreateInstance()).ToArray())
+			];
+			return true;
+		}
+	}
 }
 
 

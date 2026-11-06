@@ -84,7 +84,7 @@ public partial class HeroEntry : GameItemEntry
 			null,
 			perkTemplateId is not null ? null : [.. tooltipDescriptions],
 			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),
-			abilities: perkTemplateId is not null ? [perkTemplateId] : null
+			abilities: perkTemplateId is not null ? (useHeroPerkDescription ? [perkTemplateId] : [null, perkTemplateId]) : null
 		);
 		EmitSignalTooltipChanged(tooltip);
 	}

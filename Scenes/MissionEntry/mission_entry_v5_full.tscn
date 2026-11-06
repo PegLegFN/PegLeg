@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="10_fbhlq"]
 [ext_resource type="Texture2D" uid="uid://bi5xbptwfjs5l" path="res://Images/InterfaceIcons/T-Icon-SeasonalReward-L.png" id="11_t00et"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drqcc"]
 shader = ExtResource("3_we2l2")
 shader_parameter/ControlSize = Vector2(371, 125)
@@ -31,20 +30,21 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
-[node name="MissionEntryV5_0" type="MarginContainer" node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "alertRewardLayout", "alertRewardParent")]
+[node name="MissionEntryV5_0" type="MarginContainer" unique_id=2146114801 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "alertRewardLayout", "alertRewardParent")]
 custom_minimum_size = Vector2(270, 125)
 offset_right = 270.0
 offset_bottom = 125.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("1_u3oq0")
+useBackgroundTextureWithConfig = true
 alertModifierLayout = NodePath("HBoxContainer/VBoxContainer/AlertModifiers")
 alertModifierParent = NodePath("HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer")
 alertRewardLayout = NodePath("HBoxContainer/AlertRewards")
 alertRewardParent = NodePath("HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer")
 defaultBackground = ExtResource("2_sjkog")
 
-[node name="BGTexture" type="TextureRect" parent="."]
+[node name="BGTexture" type="TextureRect" parent="." unique_id=1427735596]
 modulate = Color(0.75, 0.75, 0.75, 1)
 material = SubResource("ShaderMaterial_drqcc")
 layout_mode = 2
@@ -53,14 +53,14 @@ expand_mode = 1
 script = ExtResource("5_r84qw")
 syncControlSize = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1696175600]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=404136813]
 layout_mode = 2
 alignment = 1
 
-[node name="IconContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="IconContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=448764200]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 4
@@ -69,14 +69,14 @@ theme_override_constants/margin_top = -10
 theme_override_constants/margin_right = -10
 theme_override_constants/margin_bottom = -10
 
-[node name="IconBG" type="TextureRect" parent="HBoxContainer/VBoxContainer/IconContainer"]
+[node name="IconBG" type="TextureRect" parent="HBoxContainer/VBoxContainer/IconContainer" unique_id=1158425249]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_4yvdq")
 expand_mode = 5
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/IconContainer/IconBG"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/IconContainer/IconBG" unique_id=708333316]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -90,12 +90,12 @@ grow_vertical = 2
 texture = ExtResource("6_bx0x4")
 expand_mode = 1
 
-[node name="AlertModifiers" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="AlertModifiers" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=1544425854]
 layout_mode = 2
 theme_override_constants/margin_top = -20
 theme_override_constants/margin_bottom = -10
 
-[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/VBoxContainer/AlertModifiers"]
+[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/VBoxContainer/AlertModifiers" unique_id=1780319601]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -104,123 +104,123 @@ theme_override_constants/h_separation = -4
 theme_override_constants/v_separation = -10
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer" unique_id=1572378760]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("7_4ivn3")
 expand_mode = 1
 
-[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer"]
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer" unique_id=1279233635]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("7_4ivn3")
 expand_mode = 1
 
-[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer"]
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer" unique_id=475455258]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("7_4ivn3")
 expand_mode = 1
 
-[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer"]
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer" unique_id=959552431]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("7_4ivn3")
 expand_mode = 1
 
-[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer"]
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer" unique_id=1750807780]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("7_4ivn3")
 expand_mode = 1
 
-[node name="TextureRect6" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer"]
+[node name="TextureRect6" type="TextureRect" parent="HBoxContainer/VBoxContainer/AlertModifiers/HFlowContainer" unique_id=64297267]
 visible = false
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("7_4ivn3")
 expand_mode = 1
 
-[node name="MissionRewards" type="MarginContainer" parent="HBoxContainer"]
+[node name="MissionRewards" type="MarginContainer" parent="HBoxContainer" unique_id=669493363]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MissionRewards"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MissionRewards" unique_id=825719387]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/MissionRewards/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/MissionRewards/VBoxContainer" unique_id=2082426342]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 12
 text = "Rewards:"
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MissionRewards/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MissionRewards/VBoxContainer" unique_id=409749746]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 
-[node name="Panel" type="Panel" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer"]
+[node name="Panel" type="Panel" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer" unique_id=981740195]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = ExtResource("8_u4sp1")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer" unique_id=1662749344]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HFlowContainer" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HFlowContainer" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer" unique_id=158426147]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="RewardEntryHorizontalSmall" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=2063244979 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall2" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall2" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=728083066 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall3" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall3" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=250651343 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall4" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall4" parent="HBoxContainer/MissionRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1032320117 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="AlertRewards" type="MarginContainer" parent="HBoxContainer"]
+[node name="AlertRewards" type="MarginContainer" parent="HBoxContainer" unique_id=760814966]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/AlertRewards"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/AlertRewards" unique_id=389604891]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/AlertRewards/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/AlertRewards/VBoxContainer" unique_id=149054395]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 12
 text = "Alert Rewards:"
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/AlertRewards/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/AlertRewards/VBoxContainer" unique_id=486782043]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 6
 
-[node name="Panel" type="Panel" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer"]
+[node name="Panel" type="Panel" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer" unique_id=436901532]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = ExtResource("8_u4sp1")
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer" unique_id=704694918]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -229,45 +229,45 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="HBoxContainer" type="HFlowContainer" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HFlowContainer" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer" unique_id=649850182]
 custom_minimum_size = Vector2(152, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="RewardEntryHorizontalSmall" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1954027801 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall2" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall2" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1776253609 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall3" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall3" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1506459304 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall4" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall4" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1956130972 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall5" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall5" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=439719802 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="RewardEntryHorizontalSmall6" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" instance=ExtResource("9_1grew")]
+[node name="RewardEntryHorizontalSmall6" parent="HBoxContainer/AlertRewards/VBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=976689380 instance=ExtResource("9_1grew")]
 layout_mode = 2
 
-[node name="PowerLevel" type="Control" parent="."]
+[node name="PowerLevel" type="Control" parent="." unique_id=1216810647]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="PowerLevelIndicator" parent="PowerLevel" instance=ExtResource("10_fbhlq")]
+[node name="PowerLevelIndicator" parent="PowerLevel" unique_id=310357661 instance=ExtResource("10_fbhlq")]
 layout_mode = 0
 offset_top = 17.0
 offset_bottom = 46.0
 
-[node name="VenturesIndicator" type="Control" parent="."]
+[node name="VenturesIndicator" type="Control" parent="." unique_id=898890850]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="TextureRect" type="TextureRect" parent="VenturesIndicator"]
+[node name="TextureRect" type="TextureRect" parent="VenturesIndicator" unique_id=1012566746]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
 anchors_preset = -1

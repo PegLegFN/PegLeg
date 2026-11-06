@@ -409,10 +409,13 @@ public static partial class PLSearch
 						{
 							comparisonTrue = true;
 						}
-						else if (checkString == "NEW" && target["attributes"] is JsonObject itemAttributes)
+						else if (checkString == "NEW")
 						{
-							//special query that checks an items isSeen property
-							comparisonTrue = !(itemAttributes["item_seen"]?.GetValue<bool>() ?? false);
+							//special query that checks an items item_seen attribute or newReward custom data
+							if (target["attributes"] is JsonObject itemAttributes) 
+								comparisonTrue |= !(itemAttributes["item_seen"]?.GetValue<bool>() ?? false);
+							if (target["custom"] is JsonObject customData)
+								comparisonTrue |= customData["newReward"]?.GetValue<bool>() ?? false;
 						}
 						else if (checkString == "REMINDER" && GameAccount.ActiveAccount.HasReminder(target["templateId"]?.ToString()))
 						{

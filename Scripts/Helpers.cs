@@ -534,6 +534,19 @@ public static partial class Helpers
 			node.Disconnect(signalName, callable);
 	}
 
+	//runs each invocation safely in a try catch statement. Not useful here, but prob will be in BlakebeardLib
+	internal static void SafeInvoke<T>(this T deleagte, params object?[]? parameters) where T : Delegate
+	{
+		foreach (var actDelegate in deleagte.GetInvocationList())
+		{
+			try
+			{
+				actDelegate.Method.Invoke(deleagte, parameters);
+			}
+			catch { }
+		}
+	}
+
 	public static T GetMetaOrDefault<[MustBeVariant] T>(this Node node, string name)
 	{
 		if (!node.HasMeta(name))

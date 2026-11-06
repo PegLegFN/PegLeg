@@ -1,58 +1,127 @@
 [gd_scene format=3 uid="uid://cxeel4f7ncwoi"]
 
 [ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="1_b78nm"]
-[ext_resource type="Material" uid="uid://cxd71emn05wt3" path="res://Shaders/Materials/MissionHexMat.tres" id="2_8x3w4"]
-[ext_resource type="Texture2D" uid="uid://b0xsnmot53y1w" path="res://Images/AppIcons/PegLegIcon432BG.png" id="3_g48d7"]
+[ext_resource type="Shader" uid="uid://bm10xu01bs2lp" path="res://Shaders/MissionPing.gdshader" id="2_4njum"]
+[ext_resource type="Texture2D" uid="uid://kmf5aln2mb6p" path="res://Images/InterfaceIcons/T-Icon-Miniboss-64.png" id="2_umvap"]
+[ext_resource type="Texture2D" uid="uid://c2nggq70clip5" path="res://Images/InterfaceIcons/Elements/Greyscale/T-Icon-Element-Fire.png" id="3_vsb2e"]
+[ext_resource type="Texture2D" uid="uid://dnf333mqjinma" path="res://Images/InterfaceIcons/Elements/Greyscale/T-Icon-Element-Water.png" id="4_18vkm"]
+[ext_resource type="Shader" uid="uid://s05exwnu1w8b" path="res://Shaders/ShadowImage.gdshader" id="4_sasnl"]
+[ext_resource type="Texture2D" uid="uid://by5pqbi3e65ps" path="res://Images/InterfaceIcons/Elements/Greyscale/T-Icon-Element-Nature.png" id="5_1h5pu"]
 [ext_resource type="Texture2D" uid="uid://byufr1xhmmhxp" path="res://Images/InterfaceIcons/T-Icon-Unknown-128.png" id="5_8x3w4"]
-[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="5_g48d7"]
 [ext_resource type="Texture2D" uid="uid://c1evt872olbra" path="res://Images/InterfaceIcons/Icon-Mission-Critical-XL.png" id="6_g48d7"]
+[ext_resource type="Script" uid="uid://b0kobrw53uq3d" path="res://Scripts/UIElements/Signal Logic/InvertBoolean.cs" id="6_sasnl"]
+[ext_resource type="PackedScene" uid="uid://bdpcqsytlgikh" path="res://Scenes/responsive_button_circle.tscn" id="7_4njum"]
+[ext_resource type="Texture2D" uid="uid://0dsm5rygx6qr" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_checkmark_64.png" id="7_sasnl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g48d7"]
+shader = ExtResource("2_4njum")
+
+[sub_resource type="Gradient" id="Gradient_4njum"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4njum"]
+gradient = SubResource("Gradient_4njum")
+width = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6q0pf"]
+shader = ExtResource("4_sasnl")
+shader_parameter/inset = 0.0
+shader_parameter/shade = 0.0
+shader_parameter/shadeAlpha = 0.350000016625
+shader_parameter/base = 0.0
+shader_parameter/scalar = 2.0
+shader_parameter/power = 2.0
 
 [node name="MissionEntryHex" type="MarginContainer" unique_id=649549700]
+custom_minimum_size = Vector2(126, 110)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -63.0
+offset_top = -63.0
+offset_right = 63.0
+offset_bottom = 47.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_b78nm")
+minibossIcon = ExtResource("2_umvap")
+fireIcon = ExtResource("3_vsb2e")
+waterIcon = ExtResource("4_18vkm")
+natureIcon = ExtResource("5_1h5pu")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1620881004]
-layout_mode = 2
-theme_override_constants/margin_left = -9
-theme_override_constants/margin_top = -1
-theme_override_constants/margin_right = -9
-theme_override_constants/margin_bottom = -1
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=1643664327]
-material = ExtResource("2_8x3w4")
-custom_minimum_size = Vector2(128, 128)
-layout_mode = 2
-texture = ExtResource("3_g48d7")
-expand_mode = 1
-
-[node name="TextureRect2" type="TextureRect" parent="." unique_id=1609328616]
-material = ExtResource("5_g48d7")
-custom_minimum_size = Vector2(64, 64)
+[node name="SelectionPing" type="TextureRect" parent="." unique_id=328298727]
+self_modulate = Color(1, 0.9416766, 0, 1)
+material = SubResource("ShaderMaterial_g48d7")
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+texture = SubResource("GradientTexture1D_4njum")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1609328616]
+material = SubResource("ShaderMaterial_6q0pf")
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
 texture = ExtResource("5_8x3w4")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TextureRect3" type="TextureRect" parent="TextureRect2" unique_id=1248927642]
-material = ExtResource("5_g48d7")
+[node name="AlertType" type="TextureRect" parent="Icon" unique_id=1831590389]
+visible = false
+material = SubResource("ShaderMaterial_6q0pf")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -16.0
-offset_bottom = 16.0
-grow_horizontal = 0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
+mouse_filter = 2
 texture = ExtResource("6_g48d7")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="InvertVisible" type="Node" parent="Icon/AlertType" unique_id=2108699706]
+script = ExtResource("6_sasnl")
+
+[node name="AlertComplete" type="TextureRect" parent="Icon" unique_id=24521854]
+self_modulate = Color(0, 1, 0, 1)
+material = SubResource("ShaderMaterial_6q0pf")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+mouse_filter = 2
+texture = ExtResource("7_sasnl")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Responsive Button Circle" parent="." unique_id=1340334125 instance=ExtResource("7_4njum")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+baseLineSize = 0
+hoverLineSize = 5
+pressLineSize = 5
+
+[connection signal="AlertIconChanged" from="." to="Icon/AlertType" method="set_texture"]
+[connection signal="IconChanged" from="." to="Icon" method="set_texture"]
+[connection signal="MissionComplete" from="." to="Icon/AlertComplete" method="set_visible"]
+[connection signal="MissionComplete" from="." to="Icon/AlertType/InvertVisible" method="EmitInverted"]
+[connection signal="InvertedValue" from="Icon/AlertType/InvertVisible" to="Icon/AlertType" method="set_visible"]
+[connection signal="HoverChanged" from="Responsive Button Circle" to="." method="HoverMissionState"]
+[connection signal="pressed" from="Responsive Button Circle" to="." method="SelectMission"]

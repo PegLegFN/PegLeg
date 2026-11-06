@@ -1,12 +1,10 @@
-﻿using Amazon.S3;
-using Godot;
+﻿using Godot;
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -14,7 +12,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static GameItem;
-using static GameMission;
 
 public partial class GameMission
 {
@@ -24,6 +21,7 @@ public partial class GameMission
 	public static event Action OnMissionsInvalidated;
 	public static Dictionary<string, GameMission> MissionDict { get; private set; }
 	public static GameMission[] MissionList { get; private set; }
+	public static TheaterInfo[] TheaterList { get; private set; }
 	public static DateTime missionReset { get; private set; }
 	public static ImageTexture DailyCat { get; private set; }
 
@@ -142,7 +140,7 @@ public partial class GameMission
 				}
 				missionData = null;
 			}
-			GD.Print($"Requesting Missions...");
+			GD.Print($"[{DateTime.UtcNow}] Requesting Missions...");
 
 			FetchDailyCat();
 			var missionResponse = await RequestMissions();
@@ -158,24 +156,25 @@ public partial class GameMission
 			GD.Print($"[{DateTime.UtcNow}] {missionHash?.ToString() ?? "{No Missions}"} >> {newHash}");
 			await Helpers.WaitForFrame();
 			missionHash = newHash;
-			var resetString = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
-			missionReset = DateTime.Parse(resetString, CultureInfo.InvariantCulture);
+			missionReset = missionData["missionAlerts"][0]["nextRefresh"].Deserialize<DateTime>();
 
 			List<GameMission> generatedMissions;
+			List<TheaterInfo> generatedTheaters;
 			try
 			{
 				foolsAlerts = null;
 				foolsAlertsDistinct = null;
-				generatedMissions = GenerateMissions(missionData);
+				(generatedMissions, generatedTheaters) = GenerateMissions(missionData);
 				GD.Print("missions parsed");
 			}
 			catch (Exception e)
 			{
 				GD.PushWarning(e);
 				generatedMissions = [];
+				generatedTheaters = [];
 			}
 
-			//edge case where missions expire after being requested but before the response is returned
+			//edge case where returned missions have expired
 			if (!ignoreExpiry && missionReset < DateTime.UtcNow)
 			{
 				if (totalRetries < 3 && isWithin30sOfReset)
@@ -234,6 +233,17 @@ public partial class GameMission
 				.ThenBy(m => m.IsFourPlayer)
 				.ThenBy(m => m.missionGenerator?.ItemName ?? "AAAAA")
 			];
+			generatedTheaters =
+			[
+				generatedTheaters.FirstOrDefault(t=>t.category=="s"),
+				generatedTheaters.FirstOrDefault(t=>t.category=="p"),
+				generatedTheaters.FirstOrDefault(t=>t.category=="c"),
+				generatedTheaters.FirstOrDefault(t=>t.category=="t"),
+				generatedTheaters.FirstOrDefault(t=>t.category=="v"),
+			];
+			TheaterList = [.. generatedTheaters.Where(t => t is not null)];
+
+
 
 			ArchiveMissions();
 
@@ -318,7 +328,7 @@ public partial class GameMission
 	{
 		var resetString = missionData["missionAlerts"][0]["nextRefresh"].ToString()[..^1]; //the Z messes with daylight savings time
 		var resetDateTime = DateTime.Parse(resetString, CultureInfo.InvariantCulture);
-		var missions = GenerateMissions(missionData);
+		(var missions, _) = GenerateMissions(missionData);
 		ArchiveMissions(missions, resetDateTime, out _, out _);
 	}
 
@@ -617,6 +627,8 @@ public partial class GameMission
 		public Region[] regions;
 		[JsonIgnore]
 		public Tile[] tiles;
+		[JsonIgnore]
+		public GameMission[] missions;
 
 		public Requirements requirements;
 		[JsonInclude]
@@ -733,7 +745,7 @@ public partial class GameMission
 		_ => "v"
 	};
 
-	static List<GameMission> GenerateMissions(JsonNode rootNode)
+	static (List<GameMission>, List<TheaterInfo>) GenerateMissions(JsonNode rootNode)
 	{
 		//Theaters
 		List<string> allowedTheaterIDs =
@@ -755,6 +767,7 @@ public partial class GameMission
 		JsonArray allMissionAlerts = rootNode["missionAlerts"].AsArray();
 
 		List<GameMission> missionList = [];
+		List<TheaterInfo> theaterList = [];
 
 		//int counter = 0;
 		foreach (var theaterID in allowedTheaterIDs)
@@ -772,9 +785,10 @@ public partial class GameMission
 				displayName = theaterName,
 				category = theaterCat,
 			};
+			theaterList.Add(theaterInfo);
 
 			//Missions
-			var theaterMissions = allMissions
+			var theaterMissionData = allMissions
 				.FirstOrDefault(t => t["theaterId"].ToString() == theaterID)
 				["availableMissions"]
 				.Deserialize<MissionData[]>(Helpers.JsonOptions.Fields);
@@ -792,11 +806,12 @@ public partial class GameMission
 			theaterInfo.tiles = theater["tiles"].Deserialize<Tile[]>(Helpers.JsonOptions.Fields);
 			theaterInfo.regions = theater["regions"].Deserialize<Region[]>(Helpers.JsonOptions.Fields);
 
-			foreach (var missionData in theaterMissions)
+			List<GameMission> theaterMissions = [];
+			foreach (var missionData in theaterMissionData)
 			{
 				if (missionData.missionGenerator.Contains("_TheOutpost_"))
 					continue;
-				missionList.Add(new(
+				theaterMissions.Add(new(
 					theaterInfo,
 					[.. theaterInfo.regions.Where(r => r.IncludesTile(missionData.tileIndex) == true)],
 					theaterInfo.tiles[missionData.tileIndex],
@@ -804,8 +819,10 @@ public partial class GameMission
 					missionAlertDict.TryGetValue(missionData.tileIndex, out var alertData) ? alertData : null
 				));
 			}
+			theaterInfo.missions = [..theaterMissions];
+			missionList.AddRange(theaterMissions);
 		}
-		return missionList;
+		return (missionList, theaterList);
 	}
 
 	#endregion
@@ -862,9 +879,10 @@ public partial class GameMission
 
 	public GameItemTemplate missionGenerator { get; private set; }
 	public GameItemTemplate zoneTheme { get; private set; }
+	public Texture2D iconTexture => missionGenerator?.GetTexture(FnItemTextureType.Icon, null) ?? PegLegResourceManager.defaultIcon;
 	public Texture2D backgroundTexture =>
-			missionGenerator.GetTexture(FnItemTextureType.LoadingScreen, null) ??
-			zoneTheme.GetTexture(FnItemTextureType.LoadingScreen, null);
+			missionGenerator?.GetTexture(FnItemTextureType.LoadingScreen, null) ??
+			zoneTheme?.GetTexture(FnItemTextureType.LoadingScreen, null);
 
 	public GameItem[] rewardItems { get; private set; }
 	public GameItem[] alertModifiers { get; private set; }

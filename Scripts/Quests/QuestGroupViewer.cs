@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 public partial class QuestGroupViewer : Control
 {
@@ -80,6 +81,49 @@ public partial class QuestGroupViewer : Control
 			questNodeList[i].Pressed += () => OnQuestPressed(index);
 		}
 		ClearQuestNodes();
+		UpdateProfile();
+		GameAccount.ActiveAccountChanged += UpdateProfile;
+	}
+
+	public override void _ExitTree()
+	{
+		GameAccount.ActiveAccountChanged -= UpdateProfile;
+	}
+
+	bool hasQuests = false;
+	GameProfile currentProfile;
+
+	void UpdateProfile()
+	{
+		refreshQueued = true;
+		var newProfile = GameAccount.ActiveAccount.GetProfile(FnProfileTypes.AccountItems);
+		if (newProfile == currentProfile)
+			return;
+		currentProfile?.OnItemAdded -= CheckItem;
+		currentProfile?.OnItemUpdated -= CheckItem;
+		currentProfile?.OnItemRemoved -= CheckItem;
+		currentProfile = newProfile;
+		currentProfile?.OnItemAdded += CheckItem;
+		currentProfile?.OnItemUpdated += CheckItem;
+		currentProfile.OnItemRemoved += CheckItem;
+	}
+
+	bool refreshQueued;
+	private void CheckItem(GameItem item)
+	{
+		if (questDataList?.Any(slot => slot.questTemplate == item.template) == true)
+			refreshQueued = true;
+	}
+
+	public override void _Process(double delta)
+	{
+		if (refreshQueued)
+		{
+			refreshQueued = false;
+			RefreshPage();
+			if (hasQuests)
+				OnQuestPressed(currentNodeIndex);
+		}
 	}
 
 	public void ClearQuestNodes()
@@ -92,9 +136,9 @@ public partial class QuestGroupViewer : Control
 		}
 		leftButtonParent.Visible = false;
 		rightButtonParent.Visible = false;
+		hasQuests = false;
 		//clear selected quest
 	}
-
 
 	public void SetQuestNodes(QuestGroupEntry questGroup)
 	{
@@ -155,15 +199,17 @@ public partial class QuestGroupViewer : Control
 		questViewer.SetupQuest(questDataList[currentQuestIndex]);
 		if (questDataList[currentQuestIndex].isUnlocked)
 			questDataList[currentQuestIndex].questItem.MarkItemSeen();
-		EmitSignal(SignalName.Pressed);
+		EmitSignalPressed();
 	}
 
 	public void NextPage() => AddPage(1);
 	public void PrevPage() => AddPage(-1);
 	public void AddPage(int offset) => SetPage(currentPage + offset);
-
+	void RefreshPage() => SetPage(currentPage);
 	public async void SetPage(int newPage)
 	{
+		if (questDataList is null)
+			return;
 		int prevPage = currentPage;
 		currentPage = Mathf.Clamp(newPage, 0, maxPage);
 

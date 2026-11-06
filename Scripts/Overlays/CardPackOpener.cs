@@ -369,6 +369,7 @@ public partial class CardPackOpener : Control
 			{
 				await WaitForCardPackBurstStart();
 				await Helpers.WaitForTimer(0.2);
+				nextPullIndex = 0;
 				StartSingleChoice();
 				return;
 			}
@@ -936,7 +937,15 @@ public partial class CardPackOpener : Control
 			cancelChoiceButton.Visible = false;
 
 			int nextChoiceIndex = choicesOnly ? nextPullIndex - 1 : nextPullIndex - (queuedItems.Count + 1);
-			//start the request now and await later, asynchronism baby!
+
+			GD.Print($"ChoiceIndex: {nextChoiceIndex} ChoiceID:{(nextChoiceIndex < 0 ? "Err: below 0" : (nextChoiceIndex >= queuedChoices.Count ? $"Err: above {queuedChoices.Count - 1}" : queuedChoices[nextChoiceIndex].uuid))}");
+
+			if (nextChoiceIndex < 0 || nextChoiceIndex >= queuedChoices.Count)
+			{
+				nextChoiceIndex = Mathf.Clamp(nextChoiceIndex, 0, queuedChoices.Count);
+				GD.Print($"Falling back to clamped: {queuedChoices[nextChoiceIndex].uuid}");
+			}
+
 			JsonObject body = new()
 			{
 				["cardPackItemId"] = queuedChoices[nextChoiceIndex].uuid,
@@ -1092,7 +1101,7 @@ public partial class CardPackOpener : Control
 		cancelChoiceButton.Visible = false;
 		if (singleChoiceMode)
 		{
-			choiceClose.Finished += CloseMenu;
+			Helpers.DeferTimer(CloseMenu, 0.25f);
 		}
 		else
 		{

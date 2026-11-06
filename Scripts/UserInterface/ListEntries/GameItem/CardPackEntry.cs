@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 
@@ -22,7 +23,7 @@ public partial class CardPackEntry : GameItemEntry
 	public bool debug = false;
 
 	const string defaultPreviewImage = "PinataStandardPack";
-	static JsonObject llamaColorData;
+	//static JsonObject llamaColorData;
 
 	Color[] currentLlamaColors;
 	public Gradient currentLlamaGradient { get; private set; }
@@ -62,6 +63,7 @@ public partial class CardPackEntry : GameItemEntry
 		EmitSignalNameChanged((includeAmountInName && amount >= 0) ? nameWithAmount : name);
 		EmitSignalDescriptionChanged(description);
 		EmitSignalNotificationChanged(!item.IsSeen);
+		SetInteractable(DefaultInteractable(displayItem));
 
 		string amountText = amount.ToString();
 		if (addXToAmount)
@@ -87,27 +89,19 @@ public partial class CardPackEntry : GameItemEntry
 			};
 		}
 
-		Color? rarityColor = null;
-		if (item.attributes?.ContainsKey("options") ?? false)
-			rarityColor = item.template.RarityColor;
+		var colors = PegLegResourceManager.LlamaData.FindColours(llamaPinataName);
 
-		llamaColorData ??= PegLegResourceManager.LoadResourceObj("llamaColors.json");
-		JsonArray colorData = llamaColorData?.FirstOrDefault(kvp => llamaPinataName?.StartsWith(kvp.Key) ?? false).Value?.AsArray();
+		if (item.attributes?.ContainsKey("options") == true)
+			colors[0] = item?.template?.RarityColor ?? colors[0];
 
-		SetColours([
-			rarityColor ?? Color.FromString(colorData?[0]?.ToString() ?? "", new("#0073ffff")),
-			Color.FromString(colorData?[1]?.ToString() ?? "", new("#e600c3e3")),
-			Color.FromString(colorData?[2]?.ToString() ?? "", new("#aa00ffd4")),
-			Color.FromString(colorData?[3]?.ToString() ?? "", new("#00eaff8f"))
-		]);
-
+		SetColours(colors);
 
 		EmitSignalTooltipChanged(
 			CustomTooltip.GenerateSimpleTooltip(
 				name,
 				amountText,
 				[description],
-				currentLlamaColors[0].ToHtml()
+				colors[0].ToHtml()
 			)
 		);
 

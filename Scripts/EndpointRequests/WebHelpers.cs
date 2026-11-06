@@ -256,24 +256,10 @@ public static class WebHelpers
 		}
 		catch (HttpRequestException ex)
 		{
-			var accountURI = FnWebAddresses.EpicAccount;
-			//if (ex.Message.StartsWith("No such host is known "))
-			//{
-			//	GD.Print("HttpRequest Ex");
-			//}
 			GD.PushWarning("HttpRequest Exception: " + ex.ToString());
 		}
 		catch (SocketException ex)
 		{
-			var accountURI = FnWebAddresses.EpicAccount;
-			//if (ex.Message.StartsWith("No such host is known "))
-			//{
-			//	GD.Print("Socket Ex: Unknown Host");
-			//}
-			//if (ex.Message.StartsWith("No route to host "))
-			//{
-			//	GD.Print("Socket Ex: No Route");
-			//}
 			GD.PushWarning("Socket Exception: " + ex.ToString());
 		}
 		catch (TaskCanceledException)
@@ -281,6 +267,7 @@ public static class WebHelpers
 			GD.Print("Request Timed Out");
 			return new HttpResponseMessage() { StatusCode = HttpStatusCode.GatewayTimeout };
 		}
+		//ServiceUnavailable prompts a retry
 		return new() { StatusCode = HttpStatusCode.ServiceUnavailable };
 	}
 

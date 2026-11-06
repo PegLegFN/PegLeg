@@ -82,7 +82,7 @@ devAllButton = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/ShowDev/Marg
 tabBar = NodePath("VBoxContainer/HBoxContainer2/HBoxContainer/TypeFilters2")
 creatorImageParent = NodePath("CreatorEasterEggs")
 inMissionIndicator = NodePath("VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer2/TextureRect")
-heavySearchWarning = NodePath("VBoxContainer/HBoxContainer/PanelContainer")
+heavySearchWarning = NodePath("VBoxContainer/PanelContainer")
 powerLevel = NodePath("VBoxContainer/HBoxContainer/PowerLevel")
 researchTokenArea = NodePath("SchematicTokenButtonArea")
 researchTokenButton = NodePath("SchematicTokenButtonArea/MarginContainer/Button")
@@ -99,15 +99,6 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1810676757]
 layout_mode = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer" unique_id=1741400407]
-layout_mode = 2
-size_flags_vertical = 0
-theme_type_variation = &"Panel3Pad"
-
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/PanelContainer" unique_id=1986585382]
-layout_mode = 2
-text = "Press Enter to filter longer lists"
 
 [node name="Search" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=1125003705]
 custom_minimum_size = Vector2(400, 0)
@@ -752,6 +743,16 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Test Hero"
 
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1741400407]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"Panel3Pad"
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer" unique_id=1986585382]
+layout_mode = 2
+text = "!!! Press Enter to filter longer lists !!!"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=317467257 node_paths=PackedStringArray("linkedGrid", "offsetControl", "paddingControl", "elementParent")]
 visible = false
 layout_mode = 2
@@ -800,9 +801,9 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 80
 
 [node name="RecycleContainer" type="Container" parent="VBoxContainer/ScrollContainer2/MarginContainer" unique_id=1670778527 node_paths=PackedStringArray("viewportParent")]

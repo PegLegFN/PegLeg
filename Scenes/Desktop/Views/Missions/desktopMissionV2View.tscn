@@ -1,0 +1,719 @@
+[gd_scene format=3 uid="uid://ca1mi3xemwvv4"]
+
+[ext_resource type="Script" uid="uid://cfmc22322upwr" path="res://Scripts/UserInterface/Missions/MissionInterfaceNew.cs" id="1_5rs2q"]
+[ext_resource type="PackedScene" uid="uid://mocwxx3hkrl3" path="res://Scenes/Desktop/Views/MissionRewards/missionToDoListPanel.tscn" id="2_pe553"]
+[ext_resource type="PackedScene" uid="uid://dwkncmg0uq77i" path="res://Scenes/Desktop/Views/MissionRewards/allMissionRewardsPanel.tscn" id="3_7v5cx"]
+[ext_resource type="Texture2D" uid="uid://dl05qp6bcrs5c" path="res://Images/InterfaceIcons/T_UI_Icon_Search.png" id="4_7v5cx"]
+[ext_resource type="PackedScene" uid="uid://c3uijhkj8mpwg" path="res://Scenes/UI/TabBar/virtualTabBar.tscn" id="4_mykl5"]
+[ext_resource type="Shader" uid="uid://cp5nmpscp3y0j" path="res://Shaders/MissionStormClouds.gdshader" id="4_nju5o"]
+[ext_resource type="Script" uid="uid://bhwlrkfas35vt" path="res://Scripts/UserInterface/Missions/MissionMapInput.cs" id="4_x3tut"]
+[ext_resource type="PackedScene" uid="uid://bk6022q8aea17" path="res://Scenes/UI/TabBar/virtualTab.tscn" id="5_nju5o"]
+[ext_resource type="Texture2D" uid="uid://dh3sechhtdvue" path="res://Images/Missions/T_StormCloudDetail01_M.png" id="5_x3tut"]
+[ext_resource type="Texture2D" uid="uid://4e28scn244ie" path="res://Images/Missions/T_StormCloudDetail01_N.png" id="6_l0yir"]
+[ext_resource type="PackedScene" uid="uid://die50fb03kyxn" path="res://Scenes/Desktop/Views/Missions/missionTheaterGrid.tscn" id="6_x3tut"]
+[ext_resource type="Texture2D" uid="uid://cv0vjxncl4653" path="res://Images/Missions/T_Swirl_Flowmap.png" id="7_glr3s"]
+[ext_resource type="PackedScene" uid="uid://doqd0pil1e51r" path="res://Scenes/Desktop/Views/Extra/venturesBar.tscn" id="7_tn4dx"]
+[ext_resource type="Texture2D" uid="uid://diyph5qafrk1q" path="res://Images/Missions/T_StormSwirlNormal.png" id="8_nt3sa"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="9_f6rry"]
+[ext_resource type="Script" uid="uid://xl6hodssfg7i" path="res://Scripts/UserInterface/ListEntries/MissionEntry.cs" id="12_fhmuw"]
+[ext_resource type="Texture2D" uid="uid://uip5g34801wx" path="res://Images/Wallpapers/Fortnite_-_Unknown_Location.png" id="13_ojt1p"]
+[ext_resource type="Shader" uid="uid://dwr30ie6yoste" path="res://Shaders/AdaptivePanel.tres" id="14_puat1"]
+[ext_resource type="Texture2D" uid="uid://cafi24mcdg78p" path="res://Images/Wallpapers/FORT_Load_Missions_Outpost.png" id="15_mmknk"]
+[ext_resource type="Texture2D" uid="uid://baml037l0hwl6" path="res://Images/InterfaceIcons/BanjoPlaceholders/T_UI_ICON_S22_SR_SupplyDropMin.png" id="16_pe553"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="17_7v5cx"]
+[ext_resource type="Texture2D" uid="uid://dsvwnhaykngi8" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Modifier-Neg-Enemy-OnDmgDealt-MetalCorrosion-64.png" id="18_tn4dx"]
+[ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="20_g8ui8"]
+[ext_resource type="Texture2D" uid="uid://bi5xbptwfjs5l" path="res://Images/InterfaceIcons/T-Icon-SeasonalReward-L.png" id="21_q6jsn"]
+[ext_resource type="Material" uid="uid://cwag018nxlpqn" path="res://Shaders/Materials/ShadowImageMat.tres" id="22_t8npv"]
+[ext_resource type="PackedScene" uid="uid://dqjthg7kvcf2m" path="res://Scenes/itemRatingIndicator.tscn" id="23_bt1kv"]
+[ext_resource type="PackedScene" uid="uid://dpveu5kduik4r" path="res://Scenes/GameItemEntry/reward_entry_alert_list.tscn" id="24_ojt1p"]
+[ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="25_mmknk"]
+[ext_resource type="Texture2D" uid="uid://oswq7qnr3vbd" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Play_128.png" id="26_pe553"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_owuw5"]
+frequency = 0.1
+offset = Vector3(1000, 0, 0)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vo5os"]
+noise = SubResource("FastNoiseLite_owuw5")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nju5o"]
+shader = ExtResource("4_nju5o")
+shader_parameter/ControlSize = Vector2(1000, 1000)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/noise = SubResource("NoiseTexture2D_vo5os")
+shader_parameter/swirl = ExtResource("8_nt3sa")
+shader_parameter/flow = ExtResource("7_glr3s")
+shader_parameter/detailMask = ExtResource("5_x3tut")
+shader_parameter/detailNormal = ExtResource("6_l0yir")
+
+[sub_resource type="Gradient" id="Gradient_lcfiv"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_51cgl"]
+gradient = SubResource("Gradient_lcfiv")
+width = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6gy5n"]
+bg_color = Color(0.145098, 0.145098, 0.145098, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.145098, 0.145098, 0.145098, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drqcc"]
+shader = ExtResource("14_puat1")
+shader_parameter/ControlSize = Vector2(214, 100)
+shader_parameter/Fit = false
+shader_parameter/shiftDirection = Vector2(0.5, 0.5)
+shader_parameter/UseCorners = true
+shader_parameter/CornerRadius = 5.0
+
+[sub_resource type="Gradient" id="Gradient_5svkw"]
+colors = PackedColorArray(0.1, 0.1, 0.1, 0, 0.101961, 0.101961, 0.101961, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_51cgl"]
+gradient = SubResource("Gradient_5svkw")
+width = 10
+fill_to = Vector2(0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fhmuw"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.33179998, 0.34944, 0.42, 1)
+skew = Vector2(-0.3, 0)
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51cgl"]
+bg_color = Color(0.32941177, 0.34901962, 0.41960785, 1)
+
+[node name="DesktopMissionV2View" type="MarginContainer" unique_id=470633722 node_paths=PackedStringArray("scrollBox", "mapInputSource", "dragBlocker", "theaterScaler", "theaterContainer", "zoneTabs", "venturesBar", "previewMission", "theaters")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 1
+script = ExtResource("1_5rs2q")
+scrollBox = NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer")
+mapInputSource = NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer")
+dragBlocker = NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/DragInputBlocker")
+theaterScaler = NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale")
+theaterContainer = NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer")
+zoneTabs = NodePath("HSplitContainer/Map/MarginContainer/ZoneTabBar")
+venturesBar = NodePath("HSplitContainer/Map/VenturesBar")
+previewMission = NodePath("HSplitContainer/Map/PanelContainer/Overlays/MissionPreview")
+theaters = [NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer/T_Stonewood"), NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer/T_Plankerton"), NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer/T_Canny"), NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer/T_Twine"), NodePath("HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer/T_Ventures")]
+minZoom = 0.4
+
+[node name="HSplitContainer" type="HBoxContainer" parent="." unique_id=388916013]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Rewards" type="ScrollContainer" parent="HSplitContainer" unique_id=34291014]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Rewards" unique_id=762682732]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ToDoList" parent="HSplitContainer/Rewards/VBoxContainer" unique_id=1403873334 instance=ExtResource("2_pe553")]
+layout_mode = 2
+
+[node name="LocateContainer" type="MarginContainer" parent="HSplitContainer/Rewards/VBoxContainer/ToDoList/VBoxContainer/HBoxContainer" parent_id_path=PackedInt32Array(1403873334, 986725128) index="2" unique_id=537200813]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Locate" type="CheckButton" parent="HSplitContainer/Rewards/VBoxContainer/ToDoList/VBoxContainer/HBoxContainer/LocateContainer" unique_id=911679446]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+tooltip_text = "Highlight Missions on Mission Map"
+mouse_filter = 1
+theme_type_variation = &"EmptySquareCheckButton"
+icon_alignment = 1
+expand_icon = true
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Rewards/VBoxContainer/ToDoList/VBoxContainer/HBoxContainer/LocateContainer/Locate" unique_id=1482831210]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_7v5cx")
+expand_mode = 3
+
+[node name="AllRewards" parent="HSplitContainer/Rewards/VBoxContainer" unique_id=454438386 instance=ExtResource("3_7v5cx")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="All" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards" index="0" unique_id=887790858 node_paths=PackedStringArray("zoneFilters")]
+zoneFilters = [NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6/CheckButton")]
+
+[node name="AllBeast" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards" index="1" unique_id=1299315515 node_paths=PackedStringArray("zoneFilters")]
+zoneFilters = [NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5/CheckButton"), NodePath("../../../../Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6/CheckButton")]
+
+[node name="LocateContainer" type="MarginContainer" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards/AllBeast/VBoxContainer/HBoxContainer2" parent_id_path=PackedInt32Array(454438386, 2084678876) index="2" unique_id=1767206119]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="Locate" type="CheckButton" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards/AllBeast/VBoxContainer/HBoxContainer2/LocateContainer" unique_id=934250185]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+tooltip_text = "Highlight Missions on Mission Map"
+mouse_filter = 1
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards/AllBeast/VBoxContainer/HBoxContainer2/LocateContainer/Locate" unique_id=1202012762]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_7v5cx")
+expand_mode = 3
+
+[node name="ZoneFilters" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards/AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" parent_id_path=PackedInt32Array(454438386, 1960802790) index="0" unique_id=348498989]
+visible = false
+
+[node name="VSeparator" parent="HSplitContainer/Rewards/VBoxContainer/AllRewards/AllBeast/VBoxContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3" parent_id_path=PackedInt32Array(454438386, 1960802790) index="1" unique_id=1091204744]
+visible = false
+
+[node name="Map" type="VBoxContainer" parent="HSplitContainer" unique_id=2005614833]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Map" unique_id=1648530997]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 3
+
+[node name="ZoneTabBar" parent="HSplitContainer/Map/MarginContainer" unique_id=250675196 instance=ExtResource("4_mykl5")]
+layout_mode = 2
+
+[node name="Tab" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer" index="0" unique_id=473421915 instance=ExtResource("5_nju5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = -1
+Text = "All"
+IsPressed = true
+
+[node name="Tab2" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer" index="1" unique_id=2062663326 instance=ExtResource("5_nju5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Stonewood"
+
+[node name="CheckButton" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2" index="0" unique_id=1785206194]
+metadata/zone = "s"
+
+[node name="LabelPadding2" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2062663326, 2018855118) index="1" unique_id=1872764813]
+visible = true
+
+[node name="Label" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2062663326, 2018855118) index="2" unique_id=1433270987]
+visible = true
+text = "Stonewood"
+
+[node name="LabelPadding" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2062663326, 2018855118) index="3" unique_id=574386466]
+visible = true
+
+[node name="Tab3" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer" index="2" unique_id=718317920 instance=ExtResource("5_nju5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Plankerton"
+
+[node name="CheckButton" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3" index="0" unique_id=1785206194]
+metadata/zone = "p"
+
+[node name="LabelPadding2" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(718317920, 2018855118) index="1" unique_id=1872764813]
+visible = true
+
+[node name="Label" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(718317920, 2018855118) index="2" unique_id=1433270987]
+visible = true
+text = "Plankerton"
+
+[node name="LabelPadding" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(718317920, 2018855118) index="3" unique_id=574386466]
+visible = true
+
+[node name="Tab4" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer" index="3" unique_id=164871016 instance=ExtResource("5_nju5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Canny Valley"
+
+[node name="CheckButton" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4" index="0" unique_id=1785206194]
+metadata/zone = "c"
+
+[node name="LabelPadding2" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(164871016, 2018855118) index="1" unique_id=1872764813]
+visible = true
+
+[node name="Label" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(164871016, 2018855118) index="2" unique_id=1433270987]
+visible = true
+text = "Canny Valley"
+
+[node name="LabelPadding" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(164871016, 2018855118) index="3" unique_id=574386466]
+visible = true
+
+[node name="Tab5" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer" index="4" unique_id=1708632215 instance=ExtResource("5_nju5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+Text = "Twine Peaks"
+
+[node name="CheckButton" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5" index="0" unique_id=1785206194]
+metadata/zone = "t"
+
+[node name="LabelPadding2" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708632215, 2018855118) index="1" unique_id=1872764813]
+visible = true
+
+[node name="Label" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708632215, 2018855118) index="2" unique_id=1433270987]
+visible = true
+text = "Twine Peaks"
+
+[node name="LabelPadding" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708632215, 2018855118) index="3" unique_id=574386466]
+visible = true
+
+[node name="Tab6" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer" index="5" unique_id=1505493026 instance=ExtResource("5_nju5o")]
+layout_mode = 2
+size_flags_horizontal = 3
+Mode = 1
+Text = "Ventures"
+
+[node name="CheckButton" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6" index="0" unique_id=1785206194]
+theme_type_variation = &"RightCheckButton"
+metadata/zone = "v"
+
+[node name="LabelPadding2" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1505493026, 2018855118) index="1" unique_id=1872764813]
+visible = true
+
+[node name="Label" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1505493026, 2018855118) index="2" unique_id=1433270987]
+visible = true
+text = "Ventures"
+
+[node name="LabelPadding" parent="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1505493026, 2018855118) index="3" unique_id=574386466]
+visible = true
+
+[node name="VenturesBar" parent="HSplitContainer/Map" unique_id=642820266 instance=ExtResource("7_tn4dx")]
+visible = false
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/Map" unique_id=1087268859]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"Panel3PadB"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/Map/PanelContainer" unique_id=1059312430]
+layout_mode = 2
+theme_override_colors/scroll_hint_vertical_color = Color(0, 0, 0, 1)
+theme_override_colors/scroll_hint_horizontal_color = Color(0, 0, 0, 1)
+follow_focus = true
+horizontal_scroll_mode = 4
+vertical_scroll_mode = 4
+scroll_hint_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Map/PanelContainer/ScrollContainer" unique_id=739353973]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_constants/margin_right = -10
+theme_override_constants/margin_bottom = -10
+script = ExtResource("4_x3tut")
+
+[node name="MapScale" type="Control" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer" unique_id=469414227]
+custom_minimum_size = Vector2(1000, 1000)
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_pivot_ratio = Vector2(0, 0)
+offset_transform_visual_only = false
+mouse_filter = 1
+
+[node name="TheaterContainer" type="Control" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale" unique_id=1816476094]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="StormClouds" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer" unique_id=434434264]
+self_modulate = Color(0.470115, 0.024052227, 0.64453125, 1)
+material = SubResource("ShaderMaterial_nju5o")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture1D_51cgl")
+expand_mode = 1
+script = ExtResource("9_f6rry")
+syncControlSize = true
+
+[node name="T_Stonewood" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer" unique_id=1048263427 instance=ExtResource("6_x3tut")]
+layout_mode = 0
+testTargetCat = "s"
+
+[node name="T_Plankerton" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer" unique_id=1280797984 instance=ExtResource("6_x3tut")]
+layout_mode = 0
+testTargetCat = "p"
+prespawnNodes = 70
+
+[node name="T_Canny" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer" unique_id=1398377757 instance=ExtResource("6_x3tut")]
+layout_mode = 0
+prespawnNodes = 180
+
+[node name="T_Twine" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer" unique_id=1554483896 instance=ExtResource("6_x3tut")]
+layout_mode = 0
+testTargetCat = "t"
+prespawnNodes = 105
+
+[node name="T_Ventures" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer/MapScale/TheaterContainer" unique_id=1774799263 instance=ExtResource("6_x3tut")]
+layout_mode = 0
+testTargetCat = "v"
+prespawnNodes = 180
+
+[node name="DragInputBlocker" type="Control" parent="HSplitContainer/Map/PanelContainer/ScrollContainer/MarginContainer" unique_id=513855635]
+visible = false
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="HSplitContainer/Map/PanelContainer" unique_id=1002003985]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6gy5n")
+
+[node name="Overlays" type="MarginContainer" parent="HSplitContainer/Map/PanelContainer" unique_id=2029929119]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="MissionPreview" type="PanelContainer" parent="HSplitContainer/Map/PanelContainer/Overlays" unique_id=1855391303 node_paths=PackedStringArray("alertModifierLayout", "alertModifierParent", "missionRewardLayout", "missionRewardParent", "alertRewardLayout", "alertRewardParent")]
+z_index = 1
+custom_minimum_size = Vector2(220, 0)
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_type_variation = &"Panel3Pad"
+script = ExtResource("12_fhmuw")
+controlModifierParentLayoutProps = false
+fullItems = true
+useBackgroundTexture = true
+alertModifierLayout = NodePath("VBoxContainer/LongAlerts")
+alertModifierParent = NodePath("VBoxContainer/LongAlerts")
+missionRewardLayout = NodePath("VBoxContainer/RepeatableRewards")
+missionRewardParent = NodePath("VBoxContainer/RepeatableRewards")
+alertRewardLayout = NodePath("VBoxContainer/AlertRewards")
+alertRewardParent = NodePath("VBoxContainer/AlertRewards")
+defaultBackground = ExtResource("13_ojt1p")
+
+[node name="BGTexture" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" unique_id=2144975663]
+self_modulate = Color(0.75, 0.75, 0.75, 1)
+material = SubResource("ShaderMaterial_drqcc")
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("15_mmknk")
+expand_mode = 1
+script = ExtResource("9_f6rry")
+syncControlSize = true
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/BGTexture" unique_id=1035932684]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+texture = SubResource("GradientTexture2D_51cgl")
+expand_mode = 1
+
+[node name="VenturesIndicator" type="Control" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" unique_id=327365329]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 1
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VenturesIndicator" unique_id=212797292]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "Ventures"
+texture = ExtResource("21_q6jsn")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" unique_id=528389050]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer" unique_id=253433153]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer" unique_id=2058319420]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1663956807]
+material = ExtResource("22_t8npv")
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("16_pe553")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2008788855]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="MissionName" type="Label" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=563581744]
+custom_maximum_size = Vector2(134, -1)
+layout_mode = 2
+theme_override_constants/line_spacing = -2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "Resupply"
+autowrap_mode = 3
+uppercase = true
+
+[node name="MissionZone" type="Label" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1052081461]
+custom_minimum_size = Vector2(134, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+text = "The Grasslands"
+autowrap_mode = 3
+
+[node name="MissionTheater" type="Label" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=262827345]
+visible = false
+layout_mode = 2
+text = "Twine Peaks"
+
+[node name="Responsive Button Area" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer" unique_id=630867259 instance=ExtResource("17_7v5cx")]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer" unique_id=703248745]
+layout_mode = 2
+
+[node name="PowerLevelIndicator" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/HBoxContainer2" unique_id=446152960 instance=ExtResource("23_bt1kv")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = -3
+
+[node name="Label" type="Label" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/HBoxContainer2" unique_id=1909108642]
+layout_mode = 2
+text = "Reccomended Power"
+
+[node name="LongAlerts" type="HBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer" unique_id=907671204]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/LongAlerts" unique_id=258448570]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("18_tn4dx")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/LongAlerts" unique_id=1327766929]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("18_tn4dx")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/LongAlerts" unique_id=620745031]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("18_tn4dx")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/LongAlerts" unique_id=1037167719]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("18_tn4dx")
+expand_mode = 1
+
+[node name="TextureRect5" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/LongAlerts" unique_id=522571409]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("18_tn4dx")
+expand_mode = 1
+
+[node name="TextureRect6" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/LongAlerts" unique_id=2061787441]
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("18_tn4dx")
+expand_mode = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer" unique_id=926601439]
+layout_mode = 2
+theme_override_constants/margin_left = -8
+theme_override_constants/margin_right = -3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer2" unique_id=1275166668]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1638220447]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fhmuw")
+
+[node name="Label" type="Label" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer2/VBoxContainer/PanelContainer" unique_id=730218377]
+z_index = 1
+layout_mode = 2
+text = "REWARDS"
+
+[node name="Panel" type="Panel" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=790170706]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_51cgl")
+
+[node name="AlertRewards" type="VBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer" unique_id=1594948128]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="RewardEntryAlertList" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/AlertRewards" unique_id=519063180 instance=ExtResource("24_ojt1p")]
+layout_mode = 2
+
+[node name="RewardEntryAlertList2" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/AlertRewards" unique_id=41901727 instance=ExtResource("24_ojt1p")]
+layout_mode = 2
+
+[node name="RewardEntryAlertList3" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/AlertRewards" unique_id=1089876659 instance=ExtResource("24_ojt1p")]
+layout_mode = 2
+
+[node name="RewardEntryAlertList4" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/AlertRewards" unique_id=1066346355 instance=ExtResource("24_ojt1p")]
+layout_mode = 2
+
+[node name="RewardEntryAlertList5" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/AlertRewards" unique_id=699419082 instance=ExtResource("24_ojt1p")]
+layout_mode = 2
+
+[node name="RewardEntryAlertList6" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/AlertRewards" unique_id=1763873001 instance=ExtResource("24_ojt1p")]
+layout_mode = 2
+
+[node name="RepeatableRewards" type="HBoxContainer" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer" unique_id=1323195663]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="RewardEntry" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/RepeatableRewards" unique_id=1696346027 instance=ExtResource("20_g8ui8")]
+layout_mode = 2
+
+[node name="RewardEntry2" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/RepeatableRewards" unique_id=1099121084 instance=ExtResource("20_g8ui8")]
+layout_mode = 2
+
+[node name="RewardEntry3" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/RepeatableRewards" unique_id=1378067394 instance=ExtResource("20_g8ui8")]
+layout_mode = 2
+
+[node name="RewardEntry4" parent="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/RepeatableRewards" unique_id=1954692649 instance=ExtResource("20_g8ui8")]
+layout_mode = 2
+
+[node name="NavToggle" type="CheckButton" parent="HSplitContainer/Map/PanelContainer/Overlays" unique_id=658705290]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"EmptySquareCheckButton"
+button_pressed = true
+script = ExtResource("25_mmknk")
+section = "missions"
+key = "v2_nav_visible"
+defaultValue = true
+
+[node name="Icon" type="TextureRect" parent="HSplitContainer/Map/PanelContainer/Overlays/NavToggle" unique_id=1366678926]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("26_pe553")
+expand_mode = 1
+flip_h = true
+
+[connection signal="BackgroundChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/BGTexture" method="set_texture"]
+[connection signal="BackgroundVisible" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/BGTexture" method="set_visible"]
+[connection signal="IconChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer/Icon" method="set_texture"]
+[connection signal="LocationChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/MissionZone" method="set_text"]
+[connection signal="NameChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/MissionName" method="set_text"]
+[connection signal="PowerLevelChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/HBoxContainer2/PowerLevelIndicator/HBoxContainer/PowerLevelLabel" method="set_text"]
+[connection signal="TooltipChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/HBoxContainer" method="set_tooltip_text"]
+[connection signal="TooltipChanged" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/Responsive Button Area" method="set_tooltip_text"]
+[connection signal="pressed" from="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/MarginContainer/Responsive Button Area" to="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview" method="InspectMission"]
+[connection signal="ConfigValueChanged" from="HSplitContainer/Map/PanelContainer/Overlays/NavToggle" to="HSplitContainer/Rewards" method="set_visible"]
+[connection signal="ConfigValueChanged" from="HSplitContainer/Map/PanelContainer/Overlays/NavToggle" to="HSplitContainer/Map/PanelContainer/Overlays/NavToggle/Icon" method="set_flip_h"]
+
+[editable path="HSplitContainer/Rewards/VBoxContainer/ToDoList"]
+[editable path="HSplitContainer/Rewards/VBoxContainer/AllRewards"]
+[editable path="HSplitContainer/Rewards/VBoxContainer/AllRewards/All"]
+[editable path="HSplitContainer/Map/MarginContainer/ZoneTabBar"]
+[editable path="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab2"]
+[editable path="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab3"]
+[editable path="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab4"]
+[editable path="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab5"]
+[editable path="HSplitContainer/Map/MarginContainer/ZoneTabBar/HBoxContainer/Tab6"]
+[editable path="HSplitContainer/Map/PanelContainer/Overlays/MissionPreview/VBoxContainer/HBoxContainer2/PowerLevelIndicator"]

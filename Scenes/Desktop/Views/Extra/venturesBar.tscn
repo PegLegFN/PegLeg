@@ -1,0 +1,267 @@
+[gd_scene format=3 uid="uid://doqd0pil1e51r"]
+
+[ext_resource type="Script" uid="uid://dw6254vnxbhxk" path="res://Scripts/UserInterface/Extra/VenturesInterface.cs" id="1_0fft7"]
+[ext_resource type="PackedScene" uid="uid://cs4uqvp2hvjpe" path="res://Scenes/powerLevelIndicatorV2Large.tscn" id="2_mtwmk"]
+[ext_resource type="Texture2D" uid="uid://bugl5pyr0s7op" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Reset_128.png" id="3_evjyv"]
+[ext_resource type="PackedScene" uid="uid://cg2qqkx3wm41t" path="res://Scenes/GameItemEntry/reward_entry_tiny.tscn" id="4_yj1ys"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxhgi"]
+bg_color = Color(0.29411766, 0.24313726, 0.91764706, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color(0.15900443, 0.13144363, 0.49609375, 1)
+corner_radius_top_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j35r5"]
+bg_color = Color(0.29411766, 0.24313726, 0.91764706, 1)
+skew = Vector2(0.33, 0)
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15900443, 0.13144363, 0.49609375, 1)
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c04xt"]
+bg_color = Color(0.39215687, 0.4509804, 0.60784316, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.15900443, 0.13144363, 0.49609375, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51cgl"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bp4h1"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnkow"]
+bg_color = Color(0.39215687, 0.4509804, 0.60784316, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.16078432, 0.12941177, 0.49803922, 1)
+
+[node name="VenturesBar" type="PanelContainer" unique_id=642820266 node_paths=PackedStringArray("currentLevelLabel", "levelProgress", "nextLevelLabel", "nextReward", "majorLevelSection", "nextMajorLevelLabel", "nextMajorReward", "customXP", "customXPSection", "autoXPSection", "fullXPLabel", "modifierEntries", "mainItemEntries", "extraItemEntries")]
+theme_type_variation = &"Panel3PadB"
+script = ExtResource("1_0fft7")
+barOnly = true
+currentLevelLabel = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/Label")
+levelProgress = NodePath("HBoxContainer/VBoxContainer/MarginContainer/ProgressBar")
+nextLevelLabel = NodePath("HBoxContainer/HBoxContainer/VBoxContainer2/Label2")
+nextReward = NodePath("HBoxContainer/HBoxContainer/RewardEntry")
+majorLevelSection = NodePath("HBoxContainer/HBoxContainer/NextMajor")
+nextMajorLevelLabel = NodePath("HBoxContainer/HBoxContainer/NextMajor/VBoxContainer3/Label2")
+nextMajorReward = NodePath("HBoxContainer/HBoxContainer/NextMajor/RewardEntry2")
+customXP = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/ManualXP/LineEdit")
+customXPSection = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/ManualXP")
+autoXPSection = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AutoXP")
+fullXPLabel = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/AutoXP/Label")
+modifierEntries = []
+mainItemEntries = []
+extraItemEntries = []
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2031770354]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PowerLevelIndicatorV2L" parent="HBoxContainer" unique_id=1952626507 instance=ExtResource("2_mtwmk")]
+layout_mode = 2
+ventures = true
+
+[node name="Panel" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 770299496) index="0" unique_id=1402179337]
+theme_override_styles/panel = SubResource("StyleBoxFlat_jxhgi")
+
+[node name="Panel2" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer/HBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1952626507, 1892792438) index="0" unique_id=426845704]
+theme_override_styles/panel = SubResource("StyleBoxFlat_j35r5")
+
+[node name="Panel" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="0" unique_id=1626611112]
+theme_override_styles/panel = SubResource("StyleBoxFlat_c04xt")
+
+[node name="Panel2" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="1" unique_id=312613005]
+theme_override_styles/panel = SubResource("StyleBoxFlat_c04xt")
+
+[node name="Panel3" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="2" unique_id=2124727635]
+theme_override_styles/panel = SubResource("StyleBoxFlat_c04xt")
+
+[node name="Panel4" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="3" unique_id=1372308516]
+theme_override_styles/panel = SubResource("StyleBoxFlat_c04xt")
+
+[node name="Panel5" parent="HBoxContainer/PowerLevelIndicatorV2L/MarginContainer2/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1952626507, 1384297685) index="4" unique_id=1168463852]
+theme_override_styles/panel = SubResource("StyleBoxFlat_c04xt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1881395573]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=158685117]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1676180017]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Level ???"
+
+[node name="ManualXP" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=113339252]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer/ManualXP" unique_id=944156617]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.58, 0.58, 1)
+text = "Enter your XP amount here -->"
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/HBoxContainer/ManualXP" unique_id=1268856623]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 16
+text = "1565565"
+placeholder_text = "0"
+alignment = 2
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer/ManualXP" unique_id=1793399874]
+layout_mode = 2
+text = "XP  "
+
+[node name="AutoXP" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=430320218]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer/AutoXP" unique_id=1084215405]
+layout_mode = 2
+text = "1,565,565"
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer/AutoXP" unique_id=287805449]
+layout_mode = 2
+text = "XP  "
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer/AutoXP" unique_id=1294817267]
+visible = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_type_variation = &"LargeButton"
+icon = ExtResource("3_evjyv")
+expand_icon = true
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer" unique_id=2062656686]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=15069007]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_51cgl")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bp4h1")
+max_value = 10.0
+value = 2.46
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer" unique_id=199452751]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=582614454]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel2" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1383113977]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel3" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1700824887]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel4" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1333764065]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel5" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1957127017]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel6" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=191978249]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel7" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=198420282]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="Panel8" type="Panel" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=477354356]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnkow")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer" unique_id=1886817243]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/HBoxContainer" unique_id=1018799094]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer2" unique_id=589421192]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1909536915]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "20"
+horizontal_alignment = 1
+
+[node name="RewardEntry" parent="HBoxContainer/HBoxContainer" unique_id=1679564155 instance=ExtResource("4_yj1ys")]
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+
+[node name="NextMajor" type="HBoxContainer" parent="HBoxContainer/HBoxContainer" unique_id=562520956]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer/HBoxContainer/NextMajor" unique_id=1814492464]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer/HBoxContainer/NextMajor" unique_id=283501594]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="HBoxContainer/HBoxContainer/NextMajor/VBoxContainer3" unique_id=956504379]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="HBoxContainer/HBoxContainer/NextMajor/VBoxContainer3" unique_id=2118713449]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "50"
+horizontal_alignment = 1
+
+[node name="RewardEntry2" parent="HBoxContainer/HBoxContainer/NextMajor" unique_id=1917826203 instance=ExtResource("4_yj1ys")]
+custom_minimum_size = Vector2(39, 39)
+layout_mode = 2
+
+[editable path="HBoxContainer/PowerLevelIndicatorV2L"]

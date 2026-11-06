@@ -93,7 +93,7 @@ size_flags_vertical = 8
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(600, 348)
-render_target_update_mode = 1
+render_target_update_mode = 0
 script = ExtResource("32_jh7eq")
 uniqueName = "llamaContents"
 matchSize = NodePath("PegLegWatermark")
@@ -114,9 +114,6 @@ custom_minimum_size = Vector2(600, 0)
 offset_right = 64.0
 offset_bottom = 64.0
 
-[node name="TextureRect" parent="SubViewportContainer/SubViewport/PegLegWatermark/Background" parent_id_path=PackedInt32Array(1912781604, 818777283) index="0" unique_id=757635141]
-visible = false
-
 [node name="MarginContainer2" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark" unique_id=1530953236]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
@@ -130,7 +127,7 @@ expand_mode = 1
 script = ExtResource("15_woqfw")
 syncControlSize = true
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2" unique_id=9620967 node_paths=PackedStringArray("llamaPanel", "currentOfferEntry", "currentCardpackEntry", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
+[node name="MarginContainer" type="MarginContainer" parent="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2" unique_id=9620967 node_paths=PackedStringArray("llamaPanel", "currentOfferEntry", "currentCardpackEntry", "resultContent", "resultEntriesParent", "surpriseResultPanel", "soldOutResultPanel", "choicePanel", "firstChoice", "secondChoice")]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -142,6 +139,7 @@ itemEntryScene = ExtResource("11_wcog2")
 llamaPanel = NodePath(".")
 currentOfferEntry = NodePath("OfferEntry")
 currentCardpackEntry = NodePath("CardPackEntry")
+resultContent = NodePath("VBoxContainer/MarginContainer/HBoxContainer/Dummy")
 resultEntriesParent = NodePath("VBoxContainer/MarginContainer/HBoxContainer/RewardsContainer")
 surpriseResultPanel = NodePath("VBoxContainer/MarginContainer/HBoxContainer/Dummy")
 soldOutResultPanel = NodePath("VBoxContainer/MarginContainer/HBoxContainer/Dummy")
@@ -334,4 +332,5 @@ vertical_alignment = 1
 [connection signal="IconChanged" from="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price" to="SubViewportContainer/SubViewport/PegLegWatermark/MarginContainer2/MarginContainer/VBoxContainer/Price/Icon" method="set_texture"]
 
 [editable path="HSplitContainer/Llama Contents"]
+[editable path="HSplitContainer/Llama Contents/MarginContainer/CardPackEntry/LRewardMode"]
 [editable path="SubViewportContainer/SubViewport/PegLegWatermark"]

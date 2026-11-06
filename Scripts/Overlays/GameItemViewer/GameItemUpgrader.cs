@@ -151,7 +151,7 @@ public partial class GameItemUpgrader : Control
 		showCores = currentItem.template.Type == "Schematic" && (currentItem.template.Category ?? "Trap") != "Trap";
 		isShardable = showCores && (currentItem.template.SubType ?? "Explosive") != "Explosive";
 		canLevel = currentItem.template.CanBeLeveled == true && level < maxLevel;
-		canSupercharge = currentItem.template.CanBeSupercharged == true && level >= 50 && level < 60;
+		canSupercharge = currentItem.template.CanBeSupercharged == true && level >= 50 && level < 60 && tier == 5;
 
 		if (campaign.GetFirstTemplateItem("HomebaseNode:questreward_evolution4") is not null)
 			maxTier = 5;
@@ -341,7 +341,7 @@ public partial class GameItemUpgrader : Control
 		if (canSupercharge)
 		{
 			var currentSuperchargeStage = (level - 50) / 2;
-			var costDict = currentItem.template["PromotionCosts"]?[currentSuperchargeStage].Deserialize<Dictionary<string, int>>();
+			var costDict = currentItem.template["PromotionCosts"]?[currentSuperchargeStage].Deserialize<Dictionary<string, int>>() ?? [];
 			var promotionCosts = GameItem.ItemData.FromDict(costDict);
 
 			SetUpgradeCostItems(promotionCosts, campaignProfile, out canAfford);

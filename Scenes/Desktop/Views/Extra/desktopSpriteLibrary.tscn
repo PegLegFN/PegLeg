@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bg8tqds2ynv72" path="res://Images/TextureResources/GradientShadow.tres" id="8_row8w"]
 [ext_resource type="Texture2D" uid="uid://dffqg6jtdu38u" path="res://Images/InterfaceIcons/Icon_Seach_Close.png" id="9_x2nkr"]
 
-[node name="Sprite Library" type="MarginContainer" unique_id=448158228 node_paths=PackedStringArray("listHandlerNode", "searchBar", "generationFilter", "ownershipFilter", "masteryFilter", "compareInfo", "compareOwner", "neededToggle", "manualImporter")]
+[node name="Sprite Library" type="MarginContainer" unique_id=448158228 node_paths=PackedStringArray("listHandlerNode", "searchBar", "generationButton", "ownershipFilter", "masteryFilter", "compareInfo", "compareOwner", "neededToggle", "manualImporter")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -19,7 +19,7 @@ grow_vertical = 2
 script = ExtResource("1_uolwn")
 listHandlerNode = NodePath("VBoxContainer/ScrollContainer/MarginContainer/Container2")
 searchBar = NodePath("VBoxContainer/HBoxContainer/LineEdit")
-generationFilter = NodePath("VBoxContainer/HBoxContainer/VirtualTabBar")
+generationButton = NodePath("VBoxContainer/HBoxContainer/OptionButton")
 ownershipFilter = NodePath("VBoxContainer/HBoxContainer/VirtualTabBar2")
 masteryFilter = NodePath("VBoxContainer/HBoxContainer/VirtualTabBar4")
 compareInfo = NodePath("CompareInfo")
@@ -39,6 +39,7 @@ size_flags_horizontal = 3
 placeholder_text = "Search"
 
 [node name="VirtualTabBar" parent="VBoxContainer/HBoxContainer" unique_id=1710060875 instance=ExtResource("1_6wfsn")]
+visible = false
 layout_mode = 2
 singleTabMode = false
 
@@ -51,6 +52,22 @@ Text = "Ch7S3"
 layout_mode = 2
 Mode = 1
 Text = "Ch7S3"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer" unique_id=1533890217]
+layout_mode = 2
+alignment = 1
+selected = 0
+item_count = 5
+popup/item_0/text = "All Seasons"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Gen1"
+popup/item_2/id = 3
+popup/item_3/text = "Gen2"
+popup/item_3/id = 4
+popup/item_4/text = "GenMS"
+popup/item_4/id = 5
 
 [node name="VirtualTabBar2" parent="VBoxContainer/HBoxContainer" unique_id=863463719 instance=ExtResource("1_6wfsn")]
 layout_mode = 2
@@ -128,8 +145,8 @@ Mode = 1
 Text = "Mastered"
 
 [node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer" unique_id=1396623347]
+visible = false
 layout_mode = 2
-disabled = true
 text = "Needed Only"
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1571635969]

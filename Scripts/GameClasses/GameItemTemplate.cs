@@ -601,7 +601,7 @@ public partial class GameItemTemplate
 				continue;
 			if (tid.EndsWith($"_{rarity.ToLower()}_"))
 			{
-				tid = tid[..^(rarity.Length)];
+				tid = tid[..^(rarity.Length+1)];
 				break;
 			}
 		}

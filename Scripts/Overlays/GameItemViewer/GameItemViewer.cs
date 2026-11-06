@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -8,9 +9,6 @@ using System.Threading;
 public partial class GameItemViewer : ModalWindow
 {
 	public static GameItemViewer Instance { get; private set; }
-
-	[Export]
-	LineEdit displayUUID;
 
 	[Export]
 	GameItemEntry displayItemEntry;
@@ -94,6 +92,16 @@ public partial class GameItemViewer : ModalWindow
 	Control cardPackOpenPanel;
 	[Export]
 	Control cardPackSource;
+	[Export]
+	VirtualTab llamaContentsTab;
+	[Export]
+	LlamaRewardViewer llamaRewardViewer;
+
+	[ExportGroup("Previous")]
+	[Export]
+	Control prevButtonLayout;
+	[Export]
+	GameItemEntry prevButtonEntry;
 
 	public override void _Ready()
 	{
@@ -149,6 +157,13 @@ public partial class GameItemViewer : ModalWindow
 		}
 
 
+		if (currentItem.uuid is not null)
+		{
+			contents.Insert(0,
+				["UUID", currentItem.uuid]
+			);
+		}
+
 		if (displayedItem.customData.Count > 0)
 		{
 			contents.Insert(2,
@@ -178,6 +193,35 @@ public partial class GameItemViewer : ModalWindow
 		DevTextOverlay.ShowTabs([.. contents]);
 	}
 
+	protected override void CloseWindowViaInput()
+	{
+		if (itemHistory.Count > 0) 
+			ShowPrevious();
+		else
+			base.CloseWindowViaInput();
+	}
+
+	public override void SetWindowOpen(bool openState)
+	{
+		if (openState == IsOpen || !IsInstanceValid(this))
+			return;
+		base.SetWindowOpen(openState);
+		if (!openState)
+		{
+			SetDisplayItem(null);
+
+			currentItem = null;
+			currentOffer = null;
+			currentOfferEntry.ClearOffer();
+
+			itemHistory.Clear();
+			prevButtonLayout.Visible = false;
+			prevButtonEntry.ClearItem();
+		}
+	}
+
+	Stack<GameItem> itemHistory = [];
+
 	GameItem currentItem;
 	GameOffer currentOffer;
 
@@ -185,9 +229,25 @@ public partial class GameItemViewer : ModalWindow
 	int itemTier = 1;
 	int itemLevel = 1;
 
+	public void ShowPrevious() => ShowItem(itemHistory.Peek());
+
 	public void ShowItem(GameItem newItem, int prioritiseChoice = 0, bool preserveUnseen = false, bool rawInspect = false)
 	{
 		itemChoiceParent.Visible = false;
+		prevButtonLayout.Visible = false;
+		if (currentItem is not null && newItem != currentItem)
+		{
+			if (itemHistory.Contains(newItem))
+			{
+				while (itemHistory.Contains(newItem))
+					itemHistory.Pop();
+			}
+			else if(!itemHistory.Contains(currentItem))
+				itemHistory.Push(currentItem);
+
+			prevButtonLayout.Visible = itemHistory.TryPeek(out var prevItem);
+			prevButtonEntry.SetItem(prevItem);
+		}
 		currentItem = newItem;
 		SetWindowOpen(true);
 		currentOfferEntry.Visible = false;
@@ -198,8 +258,8 @@ public partial class GameItemViewer : ModalWindow
 		if (!preserveUnseen && newItem.profile?.account.isOwned == true && newItem.profile.profileId == "campaign")
 			newItem.MarkItemSeen();
 
-		displayUUID.Visible = AppConfig.Get("advanced", "developer", false) && newItem.profile is not null;
-		displayUUID.Text = newItem.uuid;
+		//displayUUID.Visible = AppConfig.Get("advanced", "developer", false) && newItem.profile is not null;
+		//displayUUID.Text = newItem.uuid;
 
 		upgrader.Visible = currentItem.attributes?["level"] is not null;
 		upgrader.SetItem(currentItem);
@@ -226,7 +286,7 @@ public partial class GameItemViewer : ModalWindow
 	public async void ShowOffer(GameOffer offer)
 	{
 		upgrader.Visible = false;
-		displayUUID.Visible = false;
+		//displayUUID.Visible = false;
 		itemChoiceParent.Visible = false;
 		defenderEquipmentEntry.Visible = false;
 		cardPackOpenPanel?.Visible = false;
@@ -272,9 +332,9 @@ public partial class GameItemViewer : ModalWindow
 	GameItem displayedItem = null;
 	void SetDisplayItem(GameItem item)
 	{
-		Visible = true;
+		//Visible = true;
 		displayItemEntry.SetItem(item);
-		item.SetRewardNotification();
+		item?.SetRewardNotification();
 		displayedItem = item;
 
 		tabRoot.Visible = false;
@@ -282,10 +342,11 @@ public partial class GameItemViewer : ModalWindow
 		tabBar.SetTabHidden(heroTab);
 		tabBar.SetTabHidden(perkTab);
 		tabBar.SetTabHidden(statsTab);
+		tabBar.SetTabHidden(llamaContentsTab);
 
 		statsTree.HideFolding = true;
 
-		var type = item.template?.Type;
+		var type = item?.template?.Type;
 		if (type == "Hero")
 		{
 			//parse hero stuff
@@ -363,6 +424,15 @@ public partial class GameItemViewer : ModalWindow
 				tabRoot.Visible = true;
 				tabBar.SetTabHidden(perkTab, false);
 				perkDetailsPanel.SetItem(item);
+			}
+		}
+		else if (type == "CardPack")
+		{
+			if (PegLegResourceManager.LlamaData.TryGetContents(displayedItem.templateId, out var contentGroups))
+			{
+				tabRoot.Visible = true;
+				tabBar.SetTabHidden(llamaContentsTab, false);
+				llamaRewardViewer.SetRewardsForLlama(contentGroups);
 			}
 		}
 
@@ -509,6 +579,7 @@ public partial class GameItemViewer : ModalWindow
 			currentOfferEntry.currentPurchaseQuantity,
 			async () =>
 			{
+				GameProfile.printChanges = true;
 				var res = await GameAccount.ActiveAccount.PurchaseOffer(targetOffer, workaround ? 1 : targetQuantity, workaround);
 				//targetOffer.NotifyChanged();
 				return res;

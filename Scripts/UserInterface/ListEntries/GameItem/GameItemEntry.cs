@@ -1,3 +1,4 @@
+using Amazon.Runtime.Telemetry;
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,13 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	public delegate void IconChangedEventHandler(Texture2D icon);
 
 	[Signal]
+	public delegate void AltIconChangedEventHandler(Texture2D icon);
+
+	[Signal]
 	public delegate void IconFitEventHandler(bool value);
+
+	[Signal]
+	public delegate void DisplayChoicesEventHandler(bool value);
 
 	[Signal]
 	public delegate void TypeChangedEventHandler(string type);
@@ -37,6 +44,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 	[Signal]
 	public delegate void PackIconChangedEventHandler(Texture2D icon);
+
+	[Signal]
+	public delegate void AltPackIconChangedEventHandler(Texture2D icon);
 
 	[Signal]
 	public delegate void AmmoIconChangedEventHandler(Texture2D icon); //also used for trap subtype
@@ -64,6 +74,12 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 	[Signal]
 	public delegate void LevelChangedEventHandler(float level);
+
+	[Signal]
+	public delegate void LevelCapWarningVisibleEventHandler(bool visible);
+
+	[Signal]
+	public delegate void LevelCapWarningTextEventHandler(string text);
 
 	[Signal]
 	public delegate void InitLevelChangedEventHandler(float level);
@@ -106,6 +122,9 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 	[Signal]
 	public delegate void RarityChangedEventHandler(Color rarityColour);
+
+	[Signal]
+	public delegate void AltRarityChangedEventHandler(Color rarityColour);
 
 	[Signal]
 	public delegate void InitRarityChangedEventHandler(Color rarityColour);
@@ -159,6 +178,15 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	public delegate void IsPackEventHandler(bool value);
 
 	[Signal]
+	public delegate void AltIsHeroEventHandler(bool value);
+
+	[Signal]
+	public delegate void AltIsSchematicEventHandler(bool value);
+
+	[Signal]
+	public delegate void AltIsPackEventHandler(bool value);
+
+	[Signal]
 	public delegate void PressedEventHandler();
 
 	[Export]
@@ -200,6 +228,10 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	[Export]
 	public bool packImageAsSubtype = true;
 	[Export]
+	public bool usePackChoices = false;
+	[Export]
+	public bool autoCheckReward = false;
+	[Export]
 	public bool ignoreLevelCap = false;
 	[Export]
 	public bool ignoreCollectable = false;
@@ -239,6 +271,8 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		if (section == "missions" && key == "showLiteVbucks" && currentItem?.templateId == "AccountResource:currency_mtxswap")
 			UpdateItem();
 		if (section == "ui" && key == "hero_tooltips")
+			SetTooltip();
+		if (section == "ui" && key == "survivor_tooltips")
 			SetTooltip();
 		//SetInteractable();
 	}
@@ -356,7 +390,6 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 
 		string name = displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1];
 		string displayType = displayItem.template?.Type;
-		Texture2D mainIcon = displayItem.GetTexture(missingIcon, useLargePreview);
 
 		if (displayType == "Worker")
 			displayType = "Survivor";
@@ -389,6 +422,10 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		int maxLevel = Mathf.Clamp(tier * 10, 1, 50) + bonusMaxLevel;
 		int minLevel = Mathf.Max(maxLevel - 10, 1);
 		float levelProgress = minLevel == maxLevel ? 1 : ((float)level - minLevel) / (maxLevel - minLevel);
+
+		bool canBeLeveled = displayItem.template?.CanBeLeveled == true;
+		EmitSignalLevelCapWarningVisible(AppConfig.Get("ui", "funny_warning", false) && (!canBeLeveled || level == maxLevel));
+		EmitSignalLevelCapWarningText(canBeLeveled ? "Item has achieved\nmaximum level" : "Item does not\nlevel up");
 
 		int initLevel = displayItem.attributes?["starting_level"]?.GetValue<int>() ?? 0;
 		int initTier = displayItem.attributes?["starting_tier"]?.GetValue<string>() switch
@@ -443,28 +480,56 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		EmitSignalNameChanged(name);
 		EmitSignalDescriptionChanged(DisplayDescription);
 		EmitSignalTypeChanged(displayType ?? displayItem.templateId?.Split(":")[0]);
-		EmitSignalRarityChanged(displayItem.template?.RarityColor ?? missingRarityColor);
 
 		SetTooltip();
 
-		var subtypeIcon = displayItem.template?.GetSubtypeTexture();
-		var packIcon = displayItem.GetTexture(FnItemTextureType.PackImage, null);
 
-		if (packImageAsSubtype && displayType == "CardPack")
-			subtypeIcon = packIcon;
+		if (usePackChoices && currentItem.CardPackChoices is GameItem[] itemChoices)
+		{
+			//choice mode (assume array has exactly 2 elements)
+			EmitSignalDisplayChoices(true);
+			EmitSignalIconFit(false);
+			EmitSignalSubtypeIconChanged(null);
+			EmitSignalAmmoIconChanged(null);
+			EmitSignalWeaponCoreIconChanged(null);
 
-		EmitSignalIconChanged(mainIcon ?? missingIcon);
-		EmitSignalIconFit(!(displayType == "Hero" || displayType == "Survivor" || displayType == "Defender"));
-		EmitSignalSubtypeIconChanged(subtypeIcon);
-		EmitSignalPackIconChanged(packIcon);
-		EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
-		EmitSignalWeaponCoreIconChanged(displayItem.template?.GetWeaponCoreTexture());
+			EmitSignalRarityChanged(itemChoices[0].template?.RarityColor ?? missingRarityColor);
+			EmitSignalIconChanged(itemChoices[0].GetTexture(missingIcon, useLargePreview) ?? missingIcon);
+			EmitSignalPackIconChanged(itemChoices[0].GetTexture(FnItemTextureType.PackImage, null));
+			EmitSignalIsPack(itemChoices[0].template?.Type == "CardPack");
+			EmitSignalIsSchematic(itemChoices[0].template?.Type == "Schematic");
+			EmitSignalIsHero(itemChoices[0].template?.Type == "Hero");
 
-		//bool lowQuality = OS.HasFeature("mobile") && AppConfig.Get("ui", "mobile_performance_mode", true);
-		bool lowQuality = false;
-		EmitSignalIsPack(displayType == "CardPack");
-		EmitSignalIsSchematic(displayType == "Schematic" && !lowQuality);
-		EmitSignalIsHero(displayType == "Hero" && !lowQuality);
+
+			EmitSignalAltRarityChanged(itemChoices[1].template?.RarityColor ?? missingRarityColor);
+			EmitSignalAltIconChanged(itemChoices[1].GetTexture(missingIcon, useLargePreview) ?? missingIcon);
+			EmitSignalAltPackIconChanged(itemChoices[1].GetTexture(FnItemTextureType.PackImage, null));
+			EmitSignalAltIsPack(itemChoices[1].template?.Type == "CardPack");
+			EmitSignalAltIsSchematic(itemChoices[1].template?.Type == "Schematic");
+			EmitSignalAltIsHero(itemChoices[1].template?.Type == "Hero");
+		}
+		else
+		{
+			EmitSignalDisplayChoices(false);
+			EmitSignalRarityChanged(displayItem.template?.RarityColor ?? missingRarityColor);
+			EmitSignalIconChanged(displayItem.GetTexture(missingIcon, useLargePreview));
+			EmitSignalIconFit(!(displayType == "Hero" || displayType == "Survivor" || displayType == "Defender"));
+
+			var subtypeIcon = displayItem.template?.GetSubtypeTexture();
+			var packIcon = displayItem.GetTexture(FnItemTextureType.PackImage, null);
+
+			if (packImageAsSubtype && displayType == "CardPack")
+				subtypeIcon = packIcon;
+
+			EmitSignalSubtypeIconChanged(subtypeIcon);
+			EmitSignalPackIconChanged(packIcon);
+			EmitSignalAmmoIconChanged(displayItem.template?.GetAmmoTexture());
+			EmitSignalWeaponCoreIconChanged(displayItem.template?.GetWeaponCoreTexture());
+
+			EmitSignalIsPack(displayType == "CardPack");
+			EmitSignalIsSchematic(displayType == "Schematic");
+			EmitSignalIsHero(displayType == "Hero");
+		}
 
 		EmitSignalAmountVisibility(amountNeeded);
 		EmitSignalAmountChanged(amountText);
@@ -511,7 +576,7 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		//    rarity = 0;
 
 		EmitSignalOverflowWarning(displayItem.attributes?["inventory_overflow_date"]?.GetValueKind() == System.Text.Json.JsonValueKind.String);
-		EmitSignalNotificationChanged(!displayItem.IsSeen);
+		EmitSignalNotificationChanged(!displayItem.IsSeen || (autoCheckReward && displayItem.HasRewardNotification()));
 		EmitSignalBookmarkChanged(GameAccount.ActiveAccount.HasReminder(displayItem.template));
 		EmitSignalFavoriteChanged(displayItem.IsFavourited);
 		EmitSignalMaxTierChanged(displayItem.template?.MaxTier ?? 0);
@@ -584,15 +649,41 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 		if (displayItem.template is null)
 			tooltipDescriptions[0] = "Err: Missing Template";
 
-		bool heroTooltip = AppConfig.Get("ui", "hero_tooltips", true);
-		heroTooltip &= displayItem.template?.Type == "Hero";
+		int heroTooltipMode = AppConfig.Get("ui", "hero_tooltips", 0); //0:both, 1:specialOnly, 2: descriptionOnly
+		string[] heroAbilities = null;
+		if (displayItem.template?.Type == "Hero")
+		{
+			if (heroTooltipMode < 2)
+				heroAbilities = displayItem.template?.GetHeroAbilities()?.Select(a => a.TemplateId)?.ToArray();
+			if (heroTooltipMode == 1)
+				tooltipDescriptions[0] = null;
+		}
+
+		int survivorTooltipMode = AppConfig.Get("ui", "survivor_tooltips", 0); //0:both, 1:specialOnly, 2: descriptionOnly
+		JsonObject survivorData = null;
+		string survivorPersonality = displayItem.attributes?["personality"]?.ToString()?.Split(".")?[^1] ?? displayItem.template?.Personality;
+		if (displayItem.template?.Type == "Worker" && survivorPersonality is not null)
+		{
+			if(survivorTooltipMode < 2)
+			{
+				survivorData = new()
+				{
+					["personality"] = survivorPersonality,
+					["setBonus"] = displayItem.attributes?["set_bonus"]?.ToString()?.Split(".")?[^1],
+					["subType"] = displayItem.template.SubType
+				};
+			}
+			if (survivorTooltipMode == 1)
+				tooltipDescriptions[0] = null;
+		}
 
 		var tooltip = CustomTooltip.GenerateSimpleTooltip(
 			displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1],
 			tooltipAmount,
-			heroTooltip ? null : [.. tooltipDescriptions],
+			[.. tooltipDescriptions],
 			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),
-			abilities: heroTooltip ? displayItem.template?.GetHeroAbilities()?.Select(a => a.TemplateId)?.ToArray() : null
+			abilities: heroAbilities,
+			survivorData : survivorData
 		);
 		EmitSignalTooltipChanged(tooltip);
 	}
@@ -601,19 +692,24 @@ public partial class GameItemEntry : Control, IRecyclableEntry, IListEntry<GameI
 	{
 		if (unlinkOnInvalidHandle)
 			ClearItem();
+		else
+			UpdateItem();
 	}
 
 	public Control node => this;
 
 	public Vector2 GetBasisSize() => CustomMinimumSize;
 
-	static bool DefaultInteractable(GameItem item) => item?.template?.Type switch
+	public static bool DefaultInteractable(GameItem item) => item?.template?.Type switch
 	{
 		null => false,
+		"CardPack" =>
+			item.profile?.account?.isOwned == true ||
+			item.CardPackChoices is not null ||
+			PegLegResourceManager.LlamaData.HasContents(item.templateId),
 		_ when item.template?.HasLevel == true => true,
 		"Schematic" or "Weapon" or "Trap" or "Hero" or "Defender" => true,
-		"Worker" when item.profile?.account?.isOwned == true => true,
-		"CardPack" => true,
+		"Worker" => item.profile?.account?.isOwned == true,
 		_ => false
 	};
 

@@ -8,7 +8,7 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-public class GameItem
+public partial class GameItem
 {
 	#region Statics
 
@@ -284,14 +284,19 @@ public class GameItem
 					return choiceItem;
 				})
 				.ToArray();
-	static string ParseSurvivorAttribute(string survivorAttr)
+
+	[GeneratedRegex("[A-Z]")]
+	private static partial Regex AnyCapitalLetter();
+	public static string ParseSurvivorAttribute(string survivorAttr)
 	{
+		if (survivorAttr is null)
+			return null;
 		survivorAttr = survivorAttr.Split(".")[^1][2..];
 		if (survivorAttr.EndsWith("Low"))
 			survivorAttr = survivorAttr[..^3];
 		if (survivorAttr.EndsWith("High"))
 			survivorAttr = survivorAttr[..^4];
-		return Regex.Replace(survivorAttr, "[A-Z]", " $&").Trim();
+		return AnyCapitalLetter().Replace(survivorAttr, " $&").Trim();
 	}
 
 	JsonArray _searchTags;
@@ -391,14 +396,14 @@ public class GameItem
 
 	bool? isSeenLocal = null;
 	public bool IsSeen => isSeenLocal ?? attributes?["item_seen"]?.GetValue<bool>() ?? false || template?.CanBeUnseen != true;
-	public void SetSeenLocal(bool? newVal = true)
+	public void SetSeenLocal(bool? newVal = true, bool notify = true)
 	{
 		if (isSeenLocal == newVal || template?.CanBeUnseen != true)
 			return;
 		bool realVal = attributes?["item_seen"]?.GetValue<bool>() ?? false;
 		bool update = (newVal ?? realVal) != (isSeenLocal ?? realVal);
 		isSeenLocal = newVal;
-		if (update)
+		if (update && notify)
 			NotifyChanged();
 	}
 
@@ -458,23 +463,45 @@ public class GameItem
 
 		if (!IsSeen)
 			SetSeenLocal(true);
+		customData.Remove("newReward");
 
 		if (!account.isOwned)
 			return;
 
 		bool hideNotif = IsCollected(account) ?? true;
 
-		if (!hideNotif && account.GetProfile(FnProfileTypes.AccountItems) is GameProfile accountItems)
-		{
-			hideNotif = accountItems
-				.GetFirstItem(template.Type, item =>
-					item.template?.ItemName == (template.ItemName ?? "nope") &&
-					item.template?.RarityLevel >= template.RarityLevel
-				) is not null;
-		}
+		hideNotif |= account.GetProfile(FnProfileTypes.AccountItems)
+			.GetFirstItem(template.Type, item =>
+				item.template?.ItemName == (template.ItemName ?? "nope") &&
+				item.template?.RarityLevel >= template.RarityLevel
+			) is not null;
 
 		if (!hideNotif)
+		{
 			SetSeenLocal(false);
+			customData["newReward"] = true;
+		}
+	}
+
+	public bool HasRewardNotification(GameAccount account = null)
+	{
+		if (profile is not null)
+			return false;
+		account ??= GameAccount.ActiveAccount;
+		if (!account.isOwned)
+			return false;
+
+		//todo: handle ownership check in GameAccount, and have it cache results by hashing the template id with the attributes. cache resets when campaign or collection books change
+
+		bool accountOwnsReward = IsCollected(account) ?? true;
+
+		accountOwnsReward |= account.GetProfile(FnProfileTypes.AccountItems)
+			.GetFirstItem(template.Type, item =>
+				item.template?.ItemName == (template.ItemName ?? "nope") &&
+				item.template?.RarityLevel >= template.RarityLevel
+			) is not null;
+
+		return !accountOwnsReward;
 	}
 
 	public async Task TransferStorage(int amount = 0)
@@ -796,7 +823,7 @@ public class GameItem
 			}
 		}
 
-		return template?.GetTexture(textureType, fallbackIcon, largePreview);
+		return template?.GetTexture(textureType, fallbackIcon, largePreview) ?? fallbackIcon;
 	}
 
 	Texture2D GetPersonalityTexture(Texture2D fallbackIcon = null)
@@ -806,8 +833,8 @@ public class GameItem
 
 		var personalityId = template.Personality ?? attributes?["personality"]?.ToString()?.Split(".")?[^1];
 
-		if (personalityId is not null && PegLegResourceManager.supplimentaryData.PersonalityIcons.ContainsKey(personalityId))
-			return PegLegResourceManager.supplimentaryData.PersonalityIcons[personalityId];
+		if (PegLegResourceManager.supplimentaryData.PersonalityIcons.TryGetValue(personalityId, out Texture2D value))
+			return value;
 
 		return fallbackIcon;
 	}
@@ -819,14 +846,14 @@ public class GameItem
 
 		if (template.SubType is string subType)
 		{
-			subType = subType.Replace("Martial Artist", "MartialArtist");
-			if (PegLegResourceManager.supplimentaryData.SquadIcons.ContainsKey(subType))
-				return PegLegResourceManager.supplimentaryData.SquadIcons[subType];
+			subType = subType == "Martial Artist" ? "MartialArtist" : subType;
+			if (PegLegResourceManager.supplimentaryData.SquadIcons.TryGetValue(subType, out Texture2D value))
+				return value;
 		}
 		else if (attributes?["set_bonus"]?.ToString()?.Split(".")?[^1] is string setBonus)
 		{
-			if (PegLegResourceManager.supplimentaryData.SetBonusIcons.ContainsKey(setBonus))
-				return PegLegResourceManager.supplimentaryData.SetBonusIcons[setBonus];
+			if (PegLegResourceManager.supplimentaryData.SetBonusIcons.TryGetValue(setBonus, out Texture2D value))
+				return value;
 		}
 
 		return fallbackIcon;
@@ -881,4 +908,5 @@ public class GameItem
 		uuid = null;
 		OnRemoved?.Invoke();
 	}
+
 }

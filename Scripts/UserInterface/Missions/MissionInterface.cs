@@ -173,13 +173,26 @@ public partial class MissionInterface : Control, IRecyclableElementProvider<Game
 		}
 	}
 
-	public void FakeUnexpectedReset()
+	public async void FakeUnexpectedReset()
 	{
-		//NotificationManager.Push([UnexpectedResetNotif with {
-		//	expires = DateTime.UtcNow.AddSeconds(5)
-		//}]);
-		//NotificationManager.PushNotification(unexpectedResetNotif);
-		//NotificationManager.PushNotification(unexpectedResetNotif);
+		var unexpectedReset = new NotificationData
+		{
+			header = "Test Notification",
+			body = "Lasts 30 Seconds\n(There should be a 10 second notification behind me)",
+			sound = unexpectedResetSound,
+			icon = unexpectedResetNotifIcon,
+			expires = DateTime.UtcNow.AddSeconds(30),
+		};
+		NotificationManager.Push([unexpectedReset with {
+			expires = DateTime.UtcNow.AddSeconds(5),
+			body = "Last 5 seconds"
+		}]);
+		NotificationManager.PushOne(unexpectedReset);
+		await Helpers.WaitForTimer(1.5f);
+		NotificationManager.Push([unexpectedReset with {
+			expires = DateTime.UtcNow.AddSeconds(10),
+			body = "Last 10 seconds"
+		}]);
 	}
 
 	void OnMissionsInvalidated()

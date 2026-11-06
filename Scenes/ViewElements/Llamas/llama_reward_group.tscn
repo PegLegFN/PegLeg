@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://ddnvljsxlpo0m"]
+
+[ext_resource type="PackedScene" uid="uid://fcp6vypncmbj" path="res://Scenes/GameItemEntry/reward_entry_small.tscn" id="1_ci457"]
+[ext_resource type="Script" uid="uid://da6qeak6fuq0i" path="res://Scripts/Llamas/LlamaRewardGroup.cs" id="1_gk325"]
+
+[node name="LlamaRewardGroup" type="PanelContainer" unique_id=1642513507 node_paths=PackedStringArray("displayName", "entries")]
+custom_minimum_size = Vector2(205, 0)
+size_flags_horizontal = 3
+theme_type_variation = &"Panel3PadB"
+script = ExtResource("1_gk325")
+displayName = NodePath("VBoxContainer/Label")
+entries = [NodePath("VBoxContainer/HBoxContainer/RewardEntry"), NodePath("VBoxContainer/HBoxContainer/RewardEntry2"), NodePath("VBoxContainer/HBoxContainer/RewardEntry3"), NodePath("VBoxContainer/HBoxContainer/RewardEntry4")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=884559771]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1289336628]
+layout_mode = 2
+text = "Grouped Item Name"
+text_overrun_behavior = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1437031171]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="RewardEntry" parent="VBoxContainer/HBoxContainer" unique_id=1696346027 instance=ExtResource("1_ci457")]
+layout_mode = 2
+
+[node name="RewardEntry2" parent="VBoxContainer/HBoxContainer" unique_id=2098901792 instance=ExtResource("1_ci457")]
+layout_mode = 2
+
+[node name="RewardEntry3" parent="VBoxContainer/HBoxContainer" unique_id=1614917267 instance=ExtResource("1_ci457")]
+layout_mode = 2
+
+[node name="RewardEntry4" parent="VBoxContainer/HBoxContainer" unique_id=1423299845 instance=ExtResource("1_ci457")]
+layout_mode = 2

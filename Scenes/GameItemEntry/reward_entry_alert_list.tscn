@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://dpveu5kduik4r"]
+
+[ext_resource type="Script" uid="uid://dfa7e1y4fpvp2" path="res://Scripts/UserInterface/ListEntries/GameItem/GameItemEntry.cs" id="1_ymj2u"]
+[ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="2_qk6so"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="3_12bup"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="4_agvlp"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="5_qk6so"]
+[ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="6_12bup"]
+[ext_resource type="Script" uid="uid://cti7ijxybv3iw" path="res://Scripts/ContextMenu/ContextMenuHook.cs" id="7_agvlp"]
+[ext_resource type="Resource" uid="uid://bdw3rbaif6srh" path="res://Scripts/ContextMenu/ComponentLists/RewardItemCtxList.tres" id="8_x8g5b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g8ui8"]
+resource_local_to_scene = true
+shader = ExtResource("3_12bup")
+shader_parameter/ControlSize = Vector2(32, 32)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = false
+shader_parameter/IsFancy = false
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = false
+shader_parameter/MainIcon = ExtResource("4_agvlp")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = false
+shader_parameter/AltSchematic = false
+shader_parameter/AltFancy = false
+shader_parameter/AltPack = false
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+shader_parameter/HideBar = false
+
+[node name="RewardEntryAlertList" type="HBoxContainer" unique_id=519063180]
+offset_right = 209.0
+offset_bottom = 32.0
+script = ExtResource("1_ymj2u")
+
+[node name="AlertTimer" type="TextureRect" parent="." unique_id=1709215107]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_qk6so")
+expand_mode = 1
+
+[node name="Item" type="TextureRect" parent="." unique_id=1248237444]
+material = SubResource("ShaderMaterial_g8ui8")
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_agvlp")
+expand_mode = 1
+script = ExtResource("5_qk6so")
+
+[node name="Responsive Button Area" parent="Item" unique_id=571757732 instance=ExtResource("6_12bup")]
+layout_mode = 1
+
+[node name="Quantity" type="Label" parent="Item" unique_id=298516152]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = -14.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 10
+text = "100"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Name" type="Label" parent="." unique_id=1687160283]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Long Item Name Goes Hereeee"
+text_overrun_behavior = 3
+
+[node name="Level" type="Label" parent="." unique_id=706591262]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lv 47"
+
+[node name="Spacer" type="Control" parent="." unique_id=1386853285]
+layout_mode = 2
+
+[node name="Node" type="Node" parent="." unique_id=257508163 node_paths=PackedStringArray("itemSource")]
+script = ExtResource("7_agvlp")
+itemSource = NodePath("..")
+componentList = ExtResource("8_x8g5b")
+
+[connection signal="AmountChanged" from="." to="Item/Quantity" method="set_text"]
+[connection signal="AmountVisibility" from="." to="Item/Quantity" method="set_visible"]
+[connection signal="CanBeLeveledChanged" from="." to="Level" method="set_visible"]
+[connection signal="IconChanged" from="." to="Item" method="SetShaderTexture" binds= ["MainIcon"]]
+[connection signal="InteractableChanged" from="." to="Item/Responsive Button Area" method="set_visible"]
+[connection signal="LevelTextChanged" from="." to="Level" method="set_text"]
+[connection signal="NameChanged" from="." to="Name" method="set_text"]
+[connection signal="RarityChanged" from="." to="Item" method="set_self_modulate"]
+[connection signal="TooltipChanged" from="." to="." method="set_tooltip_text"]
+[connection signal="pressed" from="Item/Responsive Button Area" to="." method="Inspect"]

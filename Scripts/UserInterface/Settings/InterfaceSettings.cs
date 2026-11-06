@@ -5,25 +5,33 @@ public partial class InterfaceSettings : Control
 {
 	[Export]
 	OptionButton preferredScreenOptions;
+	[Export]
+	OptionButton preferredNotifScreenOptions;
 
 	public override void _Ready()
 	{
-		if (preferredScreenOptions is null)
-			return;
+#if GODOT_PC
 		int count = DisplayServer.GetScreenCount();
 		string[] screenNames = ["Auto", .. Enumerable.Range(1, count).Select(i => $"Display {i}")];
-		int currentIdx = AppConfig.Get("ui", "preferred_screen", -1) + 1;
-		preferredScreenOptions.Clear();
-		for ( int i = 0; i < screenNames.Length; i++)
-		{
-			preferredScreenOptions.AddItem(screenNames[i]);
-		}
-		preferredScreenOptions.Selected = currentIdx;
-		preferredScreenOptions.ItemSelected += SelectPreferredScreen;
+
+		SetupOptions(preferredScreenOptions, screenNames, "preferred_screen");
+		SetupOptions(preferredNotifScreenOptions, screenNames, "preferred_notif_screen");
+#else
+		preferredScreenOptions?.Disabled = true;
+		preferredNotifScreenOptions?.Disabled = true;
+#endif
 	}
 
-	private void SelectPreferredScreen(long index)
+	void SetupOptions(OptionButton button, string[] names, string config)
 	{
-		AppConfig.Set("ui", "preferred_screen", (int)(index - 1));
+		if (button is null)
+			return;
+		button.Clear();
+		for (int i = 0; i < names.Length; i++)
+		{
+			button.AddItem(names[i]);
+		}
+		button.Selected = AppConfig.Get("ui", config, -1) + 1;
+		button.ItemSelected += index => AppConfig.Set("ui", config, (int)(index - 1));
 	}
 }
