@@ -95,7 +95,7 @@ public partial class SubViewportScreenshotter : SubViewport
 	public async Task<Image> CaptureScreenshot(bool opaque = false)
 	{
 		//ensures multiple concurrent screenshots dont collide
-		using var _ = screenshotSemaphore.AwaitToken();
+		using var _ = await screenshotSemaphore.AwaitToken();
 		opaqueBG?.Visible = opaque;
 		await QueueRenderTask();
 		opaqueBG?.Visible = false;

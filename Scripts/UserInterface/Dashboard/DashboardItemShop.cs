@@ -56,7 +56,7 @@ public partial class DashboardItemShop : Control
 			.Where(o => o.itemGrants.FirstOrDefault()?.templateId.StartsWith("AccountResource") == true)
 			.GroupBy(o => o.itemGrants[0].templateId)
 			.FirstOrDefault(g => g.Count() > 1)?
-			.OrderByDescending(o => o.itemGrants[0].quantity)
+			.OrderByDescending(o => o.WeeklyLimit)
 			.FirstOrDefault() ??
 			offers.FirstOrDefault(o => o.itemGrants.FirstOrDefault()?.templateId == "AccountResource:reagent_alteration_upgrade_sr") ??
 			offers.FirstOrDefault(o => o.itemGrants.FirstOrDefault()?.templateId == "AccountResource:reagent_alteration_upgrade_vr");
