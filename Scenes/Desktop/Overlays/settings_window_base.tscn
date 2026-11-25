@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dedxnr814fng7" path="res://Scenes/verticalTab.tscn" id="3_8p80j"]
 [ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="4_av3kb"]
 [ext_resource type="Texture2D" uid="uid://lm8pxd0yohte" path="res://Images/SDF/T_UI_Icon_UIKit_LeaveParty_DF.png" id="5_83n65"]
+[ext_resource type="PackedScene" uid="uid://3hpsab3i2y51" path="res://Scenes/ViewElements/Settings/Sponsors/sponsorList.tscn" id="7_83n65"]
 [ext_resource type="Script" uid="uid://cdjdgbb3ere1f" path="res://Scripts/Config/ConfigToggleHook.cs" id="11_mv5ol"]
 
 [sub_resource type="Gradient" id="Gradient_c1ulb"]
@@ -44,7 +45,10 @@ custom_minimum_size = Vector2(350, 450)
 layout_mode = 2
 tab_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer" index="1" unique_id=1440013733 node_paths=PackedStringArray("tabParent", "pageParent")]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer" index="1" unique_id=2071182707]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer" index="0" unique_id=1440013733 node_paths=PackedStringArray("tabParent", "pageParent")]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = -1
@@ -53,25 +57,25 @@ tabScene = ExtResource("3_8p80j")
 tabParent = NodePath("SettingsTabs/MarginContainer/MarginContainer/VBoxContainer")
 pageParent = NodePath("MarginContainer/VBoxContainer/ScrollContainer/SettingsPages")
 
-[node name="SettingsTabs" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer" index="0" unique_id=714228011]
+[node name="SettingsTabs" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer" index="0" unique_id=714228011]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 10
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs" index="0" unique_id=1447137334]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs" index="0" unique_id=1447137334]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = -20
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer" index="0" unique_id=1870429794]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer" index="0" unique_id=1870429794]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 texture = SubResource("GradientTexture2D_w03hs")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer" index="1" unique_id=504913814]
+[node name="MarginContainer" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer" index="1" unique_id=504913814]
 clip_contents = true
 layout_mode = 2
 theme_override_constants/margin_left = 20
@@ -79,39 +83,39 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 30
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer" index="0" unique_id=1884723315]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer" index="0" unique_id=1884723315]
 layout_mode = 2
 size_flags_vertical = 0
 mouse_filter = 0
 theme_override_constants/separation = 1
 
-[node name="MarginContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer" index="1" unique_id=1014905788]
+[node name="MarginContainer" type="PanelContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer" index="1" unique_id=1014905788]
 custom_minimum_size = Vector2(400, 410)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Panel5Pad"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer" index="0" unique_id=731467896]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer" index="0" unique_id=731467896]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="0" unique_id=170416486]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" index="0" unique_id=170416486]
 layout_mode = 2
 
-[node name="Header" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="0" unique_id=323864074]
+[node name="Header" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="0" unique_id=323864074]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="Version" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1" unique_id=1818962882]
+[node name="Version" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1" unique_id=1818962882]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 theme_override_font_sizes/font_size = 12
 text = "v0.3.25"
 
-[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="2" unique_id=824966834]
+[node name="Button" type="Button" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="2" unique_id=824966834]
 custom_minimum_size = Vector2(34, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -119,7 +123,7 @@ tooltip_text = "Close PegLeg"
 theme_type_variation = &"LargeButton"
 expand_icon = true
 
-[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Button" index="0" unique_id=1083247903]
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Button" index="0" unique_id=1083247903]
 material = SubResource("ShaderMaterial_51cgl")
 layout_mode = 1
 anchors_preset = 15
@@ -133,19 +137,19 @@ mouse_filter = 2
 texture = ExtResource("5_83n65")
 expand_mode = 1
 
-[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="1" unique_id=1036040142]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" index="1" unique_id=1036040142]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="2" unique_id=1521662883]
+[node name="HSeparator" type="HSeparator" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" index="2" unique_id=1521662883]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer" index="3" unique_id=348554290]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer" index="3" unique_id=348554290]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SettingsPages" type="MarginContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer" index="0" unique_id=1233063541]
+[node name="SettingsPages" type="MarginContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer" index="0" unique_id=1233063541]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -154,92 +158,92 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Interface" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0" unique_id=1356957304]
+[node name="Interface" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="0" unique_id=1356957304]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0" unique_id=1241369757]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Interface" index="0" unique_id=1241369757]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Interface"
 
-[node name="Theme" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="1" unique_id=694641182]
+[node name="Theme" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="1" unique_id=694641182]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" index="0" unique_id=1296838185]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" index="0" unique_id=1296838185]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Theme"
 
-[node name="Audio" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="2" unique_id=780730376]
+[node name="Audio" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="2" unique_id=780730376]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio" index="0" unique_id=51971077]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Audio" index="0" unique_id=51971077]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Audio"
 
-[node name="Missions" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="3" unique_id=1645099196]
+[node name="Missions" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="3" unique_id=1645099196]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions" index="0" unique_id=1945049970]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Missions" index="0" unique_id=1945049970]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Missions"
 
-[node name="Misc" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4" unique_id=1420176608]
+[node name="Misc" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="4" unique_id=1420176608]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" index="0" unique_id=968330655]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Misc" index="0" unique_id=968330655]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Misc"
 
-[node name="Filter Info" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="5" unique_id=446691890]
+[node name="Filter Info" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="5" unique_id=446691890]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Filter Info" index="0" unique_id=223686068]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Filter Info" index="0" unique_id=223686068]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Filter Info"
 
-[node name="Advanced" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="6" unique_id=789085913]
+[node name="Advanced" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="6" unique_id=789085913]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" index="0" unique_id=757024598]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Advanced" index="0" unique_id=757024598]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Advanced"
 
-[node name="Automation" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" unique_id=700977941]
+[node name="Automation" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="7" unique_id=700977941]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Automation" index="0" unique_id=1933612898]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Automation" index="0" unique_id=1933612898]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Automation"
 
-[node name="Accessibility" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="8" unique_id=183301825 groups=["HideTab"]]
+[node name="Accessibility" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="8" unique_id=183301825 groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Accessibility" index="0" unique_id=1792923602]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Accessibility" index="0" unique_id=1792923602]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Advanced"
 
-[node name="Publishing" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" unique_id=187348734 groups=["HideTab"]]
+[node name="Publishing" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="9" unique_id=187348734 groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
-[node name="PublishingTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" index="0" unique_id=1194858583]
+[node name="PublishingTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" index="0" unique_id=1194858583]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -254,16 +258,16 @@ section = "advanced"
 key = "publishing"
 logChanges = true
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" index="1" unique_id=139789950]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" index="1" unique_id=139789950]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Publishing"
 
-[node name="Archive" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="10" unique_id=108618715 groups=["HideTab"]]
+[node name="Archive" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="10" unique_id=108618715 groups=["HideTab"]]
 visible = false
 layout_mode = 2
 
-[node name="ArchiveTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="0" unique_id=303293712]
+[node name="ArchiveTabVisibility" type="CheckBox" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="0" unique_id=303293712]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -278,47 +282,78 @@ section = "advanced"
 key = "archive_missions"
 logChanges = true
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="1" unique_id=1863407653]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" index="1" unique_id=1863407653]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Mission Archive"
 
-[node name="Updates" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="11" unique_id=169247733]
+[node name="Updates" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="11" unique_id=169247733]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" index="0" unique_id=1641968220]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Updates" index="0" unique_id=1641968220]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Updates"
 
-[node name="Core" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="12" unique_id=1107420082]
+[node name="Core" type="VBoxContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages" index="12" unique_id=1107420082]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" index="0" unique_id=2074768116]
+[node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Core" index="0" unique_id=2074768116]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Core"
 
-[connection signal="WindowOpened" from="." to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="UpdateActiveTheme"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ThemeTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ThemeTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AudioTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AudioTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MissionsTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MissionsTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AutomationTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AutomationTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/MarginContainer/Control" method="set_visible"]
-[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab" to="Control/WindowContents/CenterContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab/MarginContainer/Control" method="set_visible"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" method="add_to_group" binds= ["HideTab"]]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" method="remove_from_group" binds= ["HideTab"]]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="add_to_group" binds= ["HideTab"]]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer" method="RefreshTabs"]
-[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="remove_from_group" binds= ["HideTab"]]
+[node name="Control" type="Control" parent="Control/WindowContents/CenterContainer/MarginContainer" index="1" unique_id=226957407]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/WindowContents/CenterContainer/MarginContainer/Control" index="0" unique_id=51339832]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_w03hs")
+expand_mode = 1
+flip_h = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WindowContents/CenterContainer/MarginContainer/Control" index="1" unique_id=962139041]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_top = 8.0
+offset_bottom = -8.0
+grow_vertical = 2
+horizontal_scroll_mode = 0
+scroll_hint_mode = 1
+
+[node name="SponsorList" parent="Control/WindowContents/CenterContainer/MarginContainer/Control/ScrollContainer" index="0" unique_id=1426052888 instance=ExtResource("7_83n65")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="WindowOpened" from="." to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Theme" method="UpdateActiveTheme"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/InterfaceTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ThemeTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ThemeTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AudioTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AudioTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MissionsTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MissionsTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/MiscTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/Filter InfoTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AdvancedTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AutomationTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AutomationTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/AccessibilityTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/PublishingTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/ArchiveTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/UpdatesTab/MarginContainer/Control" method="set_visible"]
+[connection signal="IsUpdate" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/SettingsTabs/MarginContainer/MarginContainer/VBoxContainer/CoreTab/MarginContainer/Control" method="set_visible"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" method="add_to_group" binds= ["HideTab"]]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing/PublishingTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Publishing" method="remove_from_group" binds= ["HideTab"]]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnFalse" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="add_to_group" binds= ["HideTab"]]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer" method="RefreshTabs"]
+[connection signal="OnTrue" from="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive/ArchiveTabVisibility" to="Control/WindowContents/CenterContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsPages/Archive" method="remove_from_group" binds= ["HideTab"]]

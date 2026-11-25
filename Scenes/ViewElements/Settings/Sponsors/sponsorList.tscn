@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://3hpsab3i2y51"]
+
+[ext_resource type="Script" uid="uid://bqe0v1wgb06l6" path="res://Scripts/UserInterface/Settings/SponsorDisplay.cs" id="1_fejw2"]
+[ext_resource type="Script" uid="uid://bcltpw76lalug" path="res://Scripts/UIElements/NewRecycleListContainer.cs" id="1_gw8bl"]
+[ext_resource type="PackedScene" uid="uid://b8kp6cm1hql7x" path="res://Scenes/ViewElements/Settings/Sponsors/mythicSponsorEntry.tscn" id="2_fmv2n"]
+[ext_resource type="PackedScene" uid="uid://rdyod47487qy" path="res://Scenes/ViewElements/Settings/Sponsors/legendarySponsorEntry.tscn" id="3_fmv2n"]
+[ext_resource type="PackedScene" uid="uid://7qupmnvobxm3" path="res://Scenes/ViewElements/Settings/Sponsors/epicSponsorEntry.tscn" id="4_s6a84"]
+
+[node name="SponsorList" type="MarginContainer" unique_id=1426052888 node_paths=PackedStringArray("epicListSection", "epicListNode", "legListSection", "legListNode", "mythicListSection", "mythicListNode", "errorContent")]
+script = ExtResource("1_fejw2")
+epicListSection = NodePath("VBoxContainer/Epics")
+epicListNode = NodePath("VBoxContainer/Epics/EpicEntries")
+legListSection = NodePath("VBoxContainer/Legendaries")
+legListNode = NodePath("VBoxContainer/Legendaries/LegEntries")
+mythicListSection = NodePath("VBoxContainer/Mythics")
+mythicListNode = NodePath("VBoxContainer/Mythics/MarginContainer/MythEntries")
+errorContent = NodePath("Label")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=164077633]
+layout_mode = 2
+
+[node name="Mythics" type="VBoxContainer" parent="VBoxContainer" unique_id=1447130432]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Mythics" unique_id=1801976252]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 22
+text = " Mythic Sponsors "
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Mythics" unique_id=2018133297]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="MythEntries" type="Container" parent="VBoxContainer/Mythics/MarginContainer" unique_id=1256110351]
+layout_mode = 2
+script = ExtResource("1_gw8bl")
+recycleEntryScene = ExtResource("2_fmv2n")
+layoutMode = 2
+spacing = Vector2(8, 8)
+shift = Vector2(0, 0.5)
+
+[node name="Legendaries" type="VBoxContainer" parent="VBoxContainer" unique_id=1276514156]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Legendaries" unique_id=337872601]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 20
+text = " Legendary Sponsors "
+
+[node name="LegEntries" type="Container" parent="VBoxContainer/Legendaries" unique_id=4668262]
+layout_mode = 2
+script = ExtResource("1_gw8bl")
+recycleEntryScene = ExtResource("3_fmv2n")
+layoutMode = 2
+shift = Vector2(0, 0.5)
+
+[node name="Epics" type="VBoxContainer" parent="VBoxContainer" unique_id=1708298966]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Epics" unique_id=963945839]
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 18
+text = " Epic Sponsors "
+
+[node name="EpicEntries" type="Container" parent="VBoxContainer/Epics" unique_id=36880104]
+layout_mode = 2
+script = ExtResource("1_gw8bl")
+recycleEntryScene = ExtResource("4_s6a84")
+layoutMode = 2
+spacing = Vector2(2, 2)
+shift = Vector2(0, 0.5)
+
+[node name="Label" type="Label" parent="." unique_id=519686432]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.546875, 0.546875, 0.546875, 1)
+theme_override_constants/line_spacing = 0
+text = "Could not retrieve
+Sponsors, please try
+again later"

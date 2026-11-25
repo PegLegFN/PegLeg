@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://7qupmnvobxm3"]
+
+[ext_resource type="Script" uid="uid://0xobclyb7xoy" path="res://Scripts/UserInterface/Settings/SponsorEntry.cs" id="1_lq2y2"]
+[ext_resource type="Shader" uid="uid://cywwx8uiiquwc" path="res://Shaders/sponsorShader.gdshader" id="1_tr5jb"]
+[ext_resource type="Shader" uid="uid://bwjb0dpm2clix" path="res://Shaders/FlipbookAnimation.gdshader" id="2_ptx10"]
+[ext_resource type="Texture2D" uid="uid://qfp8atpjqj8m" path="res://Images/Flipbook/LoadingIconV2/BlugloLoadSheet.png" id="3_lq2y2"]
+[ext_resource type="Texture2D" uid="uid://mv7ibkfn58qo" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Defenders-Defender-Pistol-L.png" id="5_ptx10"]
+
+[sub_resource type="Gradient" id="Gradient_i5if5"]
+offsets = PackedFloat32Array(0.955128, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2icy2"]
+gradient = SubResource("Gradient_i5if5")
+width = 90
+height = 90
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lq2y2"]
+shader = ExtResource("2_ptx10")
+shader_parameter/ControlSize = Vector2(64, 64)
+shader_parameter/SliceAmount = Vector2(6, 5)
+shader_parameter/FPS = 20.0
+shader_parameter/CellCount = 0
+shader_parameter/Fit = true
+shader_parameter/Repeat = false
+shader_parameter/HorizontalMask = 0.0
+shader_parameter/VerticalMask = 0.0
+shader_parameter/Frame = -1
+shader_parameter/scriptTime = false
+shader_parameter/time = 0.0
+shader_parameter/UseShadow = true
+shader_parameter/shadowBrightness = 0.0
+shader_parameter/shadowOpacity = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lxrfc"]
+shader = ExtResource("1_tr5jb")
+shader_parameter/feather = 0.110000005225
+
+[node name="SponsorEntry" type="MarginContainer" unique_id=520452355]
+custom_minimum_size = Vector2(34, 34)
+offset_right = 60.0
+offset_bottom = 60.0
+script = ExtResource("1_lq2y2")
+
+[node name="Rarity" type="TextureRect" parent="." unique_id=908668144]
+self_modulate = Color(0.7882353, 0.30980393, 1, 1)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_2icy2")
+expand_mode = 1
+
+[node name="Loading" type="TextureRect" parent="." unique_id=1151276307]
+visible = false
+material = SubResource("ShaderMaterial_lq2y2")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_lq2y2")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1563317738]
+z_index = 1
+material = SubResource("ShaderMaterial_lxrfc")
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(0.9, 0.9)
+mouse_filter = 2
+texture = ExtResource("5_ptx10")
+expand_mode = 1
+
+[node name="Fallback" type="Label" parent="." unique_id=665101356]
+visible = false
+layout_mode = 2
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "S"
+horizontal_alignment = 1
+
+[connection signal="IconChanged" from="." to="Icon" method="set_texture"]
+[connection signal="InitialChanged" from="." to="Fallback" method="set_text"]
+[connection signal="LoadingChanged" from="." to="Loading" method="set_visible"]
+[connection signal="TooltipChanged" from="." to="." method="set_tooltip_text"]

@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://4fogvp3kkhkf" path="res://Scenes/Desktop/Views/desktopTimelineView.tscn" id="32_aqo04"]
 [ext_resource type="PackedScene" uid="uid://b6k4ahn0pth81" path="res://Scenes/Desktop/Overlays/timeline_event_viewer.tscn" id="33_llww6"]
 [ext_resource type="PackedScene" uid="uid://q7ic84srvgy5" path="res://Scenes/Desktop/Views/desktopCompendiumView.tscn" id="33_xs1ek"]
+[ext_resource type="Texture2D" uid="uid://cvwtk44p8tt24" path="res://Images/BanjoSuppliments/FORTIcons/T-Icon-Fortitude-128.png" id="36_6ysvb"]
 [ext_resource type="Texture2D" uid="uid://dvaxtvga1xl7j" path="res://Images/InterfaceIcons/T-Icon-Warning-32.png" id="36_36vak"]
 [ext_resource type="Script" uid="uid://b5oshbajlo4j7" path="res://Scripts/ShellOpen.cs" id="37_6ysvb"]
 [ext_resource type="Shader" uid="uid://c5oru18lxnh54" path="res://Shaders/Curtain.gdshader" id="38_psdk2"]
@@ -55,7 +56,7 @@
 [ext_resource type="Script" uid="uid://dm71w4vxgja3" path="res://Scripts/Config/VolumeHook.cs" id="45_pbdue"]
 [ext_resource type="Texture2D" uid="uid://ctvcvfsr34w3e" path="res://Images/InterfaceIcons/T-Icon-Sound-Off-L.png" id="46_hiis4"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_36vak"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wt277"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(200, 341)
@@ -73,10 +74,10 @@ shader_parameter/UseShadow = false
 shader_parameter/shadowBrightness = 0.0
 shader_parameter/shadowOpacity = 1.0
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_6ysvb"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_6vfrm"]
 resource_name = "CosmeticTimeFilter"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wt277"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_egmgj"]
 resource_local_to_scene = true
 shader = ExtResource("26_ilmvy")
 shader_parameter/ControlSize = Vector2(0, 20)
@@ -294,25 +295,25 @@ visible = false
 visible = false
 
 [node name="LoadingIcon6" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/BigScrollContainer/MarginContainer/NewLoadingIcon" parent_id_path=PackedInt32Array(1968674659, 244303536) index="1" unique_id=285240235]
-material = SubResource("ShaderMaterial_36vak")
+material = SubResource("ShaderMaterial_wt277")
 
 [node name="VeryNew" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="0" unique_id=2050379603]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="New" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="1" unique_id=1886976013]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="Any" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="2" unique_id=1457088269]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="Old" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="3" unique_id=423896336]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="Popular" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/HBoxContainer/TimeFilters/HBoxContainer" parent_id_path=PackedInt32Array(1968674659, 730406113) index="4" unique_id=34668795]
-button_group = SubResource("ButtonGroup_6ysvb")
+button_group = SubResource("ButtonGroup_6vfrm")
 
 [node name="LoadingIcon5" parent="Content/MainTabs/Item Shop/Cosmetic Shop OLD/HSplitContainer/VBoxContainer/MarginContainer/MarginContainer/MouseBlocker/FilterBar/FilterBlocker" parent_id_path=PackedInt32Array(1968674659, 1161231320) index="0" unique_id=1782587914]
-material = SubResource("ShaderMaterial_wt277")
+material = SubResource("ShaderMaterial_egmgj")
 
 [node name="CosmeticFallbackCheck" type="Node" parent="Content/MainTabs/Item Shop" unique_id=742926138 node_paths=PackedStringArray("tabs")]
 script = ExtResource("32_3l2jb")
@@ -337,9 +338,6 @@ layout_mode = 2
 metadata/_tab_index = 4
 
 [node name="PowerLevel" parent="Content/MainTabs/Ventures/VBoxContainer/PanelContainer/HBoxContainer" parent_id_path=PackedInt32Array(1941486358, 737440351) index="0" unique_id=340666660]
-visible = false
-
-[node name="PowerLevelIndicatorV2L" parent="Content/MainTabs/Ventures/NewContent/PanelContainer/HBoxContainer" parent_id_path=PackedInt32Array(1941486358, 1401056248) index="0" unique_id=1952626507]
 visible = false
 
 [node name="Node" type="Node" parent="Content/MainTabs" unique_id=1006831519]
@@ -373,6 +371,18 @@ size_flags_horizontal = 8
 mouse_filter = 0
 theme_override_constants/separation = 2
 alignment = 2
+
+[node name="SupportButton" type="Button" parent="Content/StatusBar/Right" unique_id=1806314858]
+custom_minimum_size = Vector2(80, 25)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Support PegLegs Development!"
+theme_type_variation = &"LargeButton"
+text = "Donate"
+icon = ExtResource("36_6ysvb")
+expand_icon = true
+script = ExtResource("37_6ysvb")
+defaultURI = "https://github.com/sponsors/PegLegFN"
 
 [node name="ReportButton" type="Button" parent="Content/StatusBar/Right" unique_id=1725533274]
 custom_minimum_size = Vector2(25, 25)
@@ -538,6 +548,5 @@ curtain = NodePath("..")
 [editable path="Content/MainTabs/Item Shop/Event Shop"]
 [editable path="Content/MainTabs/Item Shop/Cosmetic Shop OLD"]
 [editable path="Content/MainTabs/Ventures"]
-[editable path="Content/MainTabs/Ventures/NewContent/PanelContainer/HBoxContainer/PowerLevelIndicatorV2L"]
 [editable path="Content/MainTabs/Ventures/NewContent/ScrollContainer/HBoxContainer/VBoxContainer/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry"]
 [editable path="Content/MainTabs/Ventures/NewContent/ScrollContainer/HBoxContainer/VBoxContainer/NewMain/VBoxContainer/MarginContainer/HBoxContainer2/DesktopVenturesLevelEntry50"]

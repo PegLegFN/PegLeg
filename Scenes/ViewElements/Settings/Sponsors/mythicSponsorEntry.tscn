@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://b8kp6cm1hql7x"]
+
+[ext_resource type="PackedScene" uid="uid://7qupmnvobxm3" path="res://Scenes/ViewElements/Settings/Sponsors/epicSponsorEntry.tscn" id="1_j2o42"]
+[ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="2_ot3lj"]
+[ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="3_dd353"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21fe7"]
+shader = ExtResource("2_ot3lj")
+shader_parameter/rotationSpeed = 0.3
+
+[node name="SponsorEntry" unique_id=520452355 instance=ExtResource("1_j2o42")]
+custom_minimum_size = Vector2(70, 70)
+offset_right = 150.0
+offset_bottom = 150.0
+
+[node name="Rarity" parent="." index="0" unique_id=908668144]
+self_modulate = Color(0.67, 0.6476667, 0, 1)
+
+[node name="Glow" type="TextureRect" parent="." index="1" unique_id=565529180]
+material = SubResource("ShaderMaterial_21fe7")
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(6, 6)
+mouse_filter = 2
+texture = ExtResource("3_dd353")
+expand_mode = 1
