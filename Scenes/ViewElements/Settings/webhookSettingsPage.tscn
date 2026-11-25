@@ -64,8 +64,18 @@ section = "advanced"
 key = "archive_missions"
 logChanges = true
 
+[node name="AppLogs" parent="." unique_id=533445945 instance=ExtResource("3_tpr6t")]
+layout_mode = 2
+internalName = "appLogs"
+displayName = "PegLeg Logs"
+
+[node name="Tab2" parent="AppLogs/MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=331075993]
+Disabled = true
+
 [connection signal="pressed" from="HBoxContainer/Button" to="HBoxContainer" method="FetchOrgsAndChannels"]
 [connection signal="ConfigValueChanged" from="MissionArchive/ArchiveWhVisibility" to="MissionArchive" method="set_visible"]
 
 [editable path="MissionArchive"]
 [editable path="MissionArchive/MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar"]
+[editable path="AppLogs"]
+[editable path="AppLogs/MarginContainer/PanelContainer/VBoxContainer/VirtualTabBar"]

@@ -209,6 +209,8 @@ public partial class MissionInterfaceNew : Control
 		if (theaters.Length < 5)
 			return;
 
+		theaterPadding = 100;
+
 		var origin = Vector2.One * theaterPadding;
 
 		if (zoneTabs.LatestTab == 0)

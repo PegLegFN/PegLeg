@@ -45,15 +45,11 @@ public partial class TimelineEventStrip : Control
 		var items = marker.KeyGameItems;
 		for (int i = 0; i < displayItems.Length; i++)
 		{
-			if (items.Length > i)
-			{
+			displayItems[i].Visible = items.Length > i;
+			if (displayItems[i].Visible)
 				displayItems[i].SetItem(items[i]);
-				displayItems[i].Visible = true;
-			}
 			else
-			{
-				displayItems[i].Visible = false;
-			}
+				displayItems[i].ClearItem();
 		}
 	}
 

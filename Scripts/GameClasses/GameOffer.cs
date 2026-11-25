@@ -4,7 +4,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -43,6 +42,9 @@ public partial class GameOffer
 	public string Color0 => GetMeta("textBackgroundColor");
 	public string Color1 => GetMeta("color1");
 	public string Color2 => GetMeta("color2");
+
+	public string[] EncryptionKeys => field ??= [.. GetMeta("EncryptionKey")?.Split(',') ?? []];
+	string FirstAESKey => EncryptionKeys.FirstOrDefault()?.Split(':')[1];
 
 	public DateTime? InDate => GetMeta("inDate") is string inDate ? DateTime.Parse(inDate) : null;
 	public DateTime? OutDate => GetMeta("outDate") is string outDate ? DateTime.Parse(outDate) : null;
@@ -275,12 +277,14 @@ public partial class GameOffer
 	{
 		get
 		{
+			if (field is not null)
+				return field;
 			if (CosmeticNewDisplayAssetPath is not string path)
 				return null;
 			var split = path.Split('.');
 			if (split.Length != 2)
 				return null;
-			return CosmoRequests.GetDisplayAsset(split[^1]);
+			return field ??= CosmoRequests.GetDisplayAsset(split[^1], aes: FirstAESKey);
 		}
 	}
 	public Color[] CosmeticBGColours

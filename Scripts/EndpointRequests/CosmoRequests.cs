@@ -38,8 +38,8 @@ public partial class CosmoRequests
 
 		public static readonly Config FallbackConfig = new()
 		{
-			Version = "41.30",
-			Key = "OE4VTg8RVeDrg28sI23J6cClN\u002BROG0fVeEJTy6\u002BlAnI=",
+			Version = "43.11",
+			Key = "WvZrlCTeEGZslMa6RT29x3432+ONpfk/qju6vCTicwU=",
 			BaseURL = "https://cosmo.fdeb.live.use1a.on.epicgames.com/v1/item/"
 		};
 	}
@@ -105,7 +105,7 @@ public partial class CosmoRequests
 	[GeneratedRegex("=+$")]
 	private static partial Regex B64Ending();
 
-	public static CosmoImageData GetDisplayAsset(string displayAssetName, int index = 0)
+	public static CosmoImageData GetDisplayAsset(string displayAssetName, int index = 0, string aes = null)
 	{
 		if (displayAssetName is null)
 			return default;
@@ -113,7 +113,8 @@ public partial class CosmoRequests
 			$"AthenaItemShopOfferDisplayData:{displayAssetName.ToLower()}",
 			"store_image",
 			[index],
-			"2048x2048"
+			"2048x2048",
+			aes
 		);
 	}
 		
@@ -147,7 +148,7 @@ public partial class CosmoRequests
 		string descriptorSuffix,
 		int[] styles = null,
 		string urlSuffix = "png",
-		//string templateIdExtra = null,
+		string aes = null,
 		Config? config = null
 	)
 	{
@@ -166,8 +167,8 @@ public partial class CosmoRequests
 
 		byte[] hashDescriptorBytes = baseDescriptor.ToUtf8Buffer();
 		byte[] releaseKeyBytes = B64ToBytes(config?.Key);
-		byte[] projectKeyBytes = [];// projectKey is null ? [] : B64ToBytes(projectKey);
-		byte[] mergedBytes = [.. hashDescriptorBytes, .. releaseKeyBytes, .. projectKeyBytes];
+		byte[] encryptionBytes = aes is null ? [] : B64ToBytes(aes);
+		byte[] mergedBytes = [.. hashDescriptorBytes, .. releaseKeyBytes, .. encryptionBytes];
 
 		var hashDescriptor = BytesToB64(SHA256.HashData(new MemoryStream(mergedBytes)));
 		//var publicDescriptor = BytesToB64(SHA256.HashData(new MemoryStream($"{baseDescriptor}/{config.key[..4]}nullnull".ToUtf8Buffer())));
@@ -219,13 +220,9 @@ public partial class CosmoRequests
 		}
 
 		static bool hasAlertedNotFound = false;
+
 		public async Task<Image> FetchImage(float resolutionScale = 1)
 		{
-			if (url is null || uniqueName is null)
-				return null;
-			if (CatalogRequests.TryGetCosmeticImage(uniqueName, resolutionScale) is Image existingTexture)
-				return existingTexture;
-
 			using var result = await WebHelpers.MakeRequest(url).Accepts(WebMedia.Image.Any).Send();
 
 			if(!hasAlertedNotFound && result.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -246,7 +243,7 @@ public partial class CosmoRequests
 			return CatalogRequests.TryGetCosmeticImage(uniqueName);
 		}
 
-		public void ShellOpenRemote() => OS.ShellOpen(url);
+		public void ShellOpenRemote() => OS.ShellOpen(url);//wont work with encrypted stuff
 		public void ShellOpenLocal() => OS.ShellOpen(ProjectSettings.GlobalizePath(CatalogRequests.LocalCosmeticResourcePathFromId(uniqueName)));
 	}
 }

@@ -145,10 +145,24 @@ public partial class MissionTheaterTiles : Control
 		Rect2I? portalRect = null;
 		foreach (var tile in tiles)
 		{
+			bool foundBiome = false;
 			var colour = defaultBiomeColour;
+
+			string ztId = tile.zoneTheme?.Split('.')[^1] ?? "";
+			foreach (var biome in biomeRuleList)
+			{
+				if (biome.rules.Contains(ztId))
+				{
+					colour = biome.colour;
+					foundBiome = true;
+					break;
+				}
+			}
 			string zoneTheme = tile.GetZoneTheme()?.ItemName ?? tile.zoneTheme?.Split('.')[^1] ?? "";
 			foreach (var biome in biomeRuleList)
 			{
+				if (foundBiome)
+					break;
 				if (biome.rules.Any(r => Regex.IsMatch(zoneTheme, r)))
 				{
 					colour = biome.colour;
@@ -199,7 +213,7 @@ public partial class MissionTheaterTiles : Control
 
 			var tileCell = missions[i].tile.Coordinates - boundsStart;
 			tileCell.Y = boundsSize.Y - 1 - tileCell.Y;
-			var extraOffset = (tileCell.X % 2 == 1) ? nodeSize.Y * -0.5f : 0;
+			var extraOffset = (tileCell.X % 2 == 1) ? nodeSize.Y * 0.5f : 0;
 			missionEntry.Position = (Vector2.Down * extraOffset) + (tileCell * (nodeSize * new Vector2(0.75f, 1) + nodePadding));
 
 			missionEntry.Visible = true;
@@ -215,7 +229,7 @@ public partial class MissionTheaterTiles : Control
 	Rect2I GetStampRect(Vector2I cell)
 	{
 		var paddingAmount = envCellSize.X * envPaddingFactor;
-		var extraOffset = (cell.X % 2 == 1) ? envCellSize.Y * -0.5f : 0;
+		var extraOffset = (cell.X % 2 == 1) ? envCellSize.Y * 0.5f : 0; ;
 		var blitPos = envOffset + (Vector2.Down * extraOffset) + (cell * envCellSize * new Vector2(0.75f, 1)) - (Vector2.One * paddingAmount);
 		var blitSize = (int)(envCellSize.X + paddingAmount * 2);
 		return new((Vector2I)blitPos / envDownsampling, Vector2I.One * blitSize / envDownsampling);

@@ -113,6 +113,8 @@ public partial class SpriteEntry : GameItemEntry
 		if (displayItem is null)
 			return;
 
+		EmitSignalNameChanged($"#{displayItem.template?["SpriteDex"]?.GetValue<int>().ToString() ?? "??"}: {displayItem.template?.ItemName}");
+
 		var augments = displayItem.template?["Augments"]?.Deserialize<string[]>() ?? [];
 
 		bgShader.SetShaderBool(augments.Length > 1, "special");
@@ -185,11 +187,12 @@ public partial class SpriteEntry : GameItemEntry
 
 		var tooltip = CustomTooltip.GenerateSimpleTooltip(
 			displayItem.template?.ItemName ?? displayItem.templateId?.Split(":")[1],
-			null,
+			displayItem.template?["SpriteDex"]?.GetValue<int>() is int dex ? $"#{dex}" : null,
 			[.. tooltipDescriptions],
 			(displayItem.template?.RarityColor ?? missingRarityColor).ToHtml(),
-			extra: new() {
-				["rainbow"]= (displayItem.template?["Augments"]?.AsArray().Count ?? 0) > 1
+			extra: new()
+			{
+				["rainbow"] = (displayItem.template?["Augments"]?.AsArray().Count ?? 0) > 1
 			}
 		);
 		EmitSignalTooltipChanged(tooltip);

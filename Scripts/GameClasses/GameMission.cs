@@ -303,7 +303,7 @@ public partial class GameMission
 	};
 
 	//static DiscordWebhookProxy archiveWebhook;
-	static PublisherProxy publisher;
+	static PublisherProxy archivePublisher = PublisherProxy.GetOrCreatePublisher(new("missionArchive", "PegLeg Mission Archive"));
 	static void ArchiveMissions()
 	{
 		if (!AppConfig.Get("advanced", "archive_missions", false))
@@ -312,16 +312,11 @@ public partial class GameMission
 		if (!didArchive)
 			return;
 		//optionally post a webhook message for each new file generated
-		publisher ??= PublisherProxy.GetOrCreatePublisher(new("missionArchive", "PegLeg Mission Archive"));
-		publisher.AttemptPublish(platform => platform switch
+		archivePublisher.AttemptPublish(platform => platform switch
 		{
 			"Discord" => new(archiveName, [archivePath]),
 			_ => null
 		}).StartTask();
-		//archiveWebhook.Execute(
-		//	() => Task.FromResult(archiveName),
-		//	() => Task.FromResult<string[]>([archivePath])
-		//).StartTask();
 	}
 
 	public static void ManuallyCreateArchive(JsonNode missionData)
@@ -874,7 +869,12 @@ public partial class GameMission
 	public bool HasDoubleLegendary { get; private set; }
 
 	JsonObject searchObject;
-	public JsonObject SearchObject => searchTags is null ? [] : (searchObject ??= new() { ["searchTags"] = searchTags });
+	public JsonObject SearchObject => searchObject ??= new()
+	{
+		["generator"] = missionGenerator?.rawData?.SafeDeepClone(),
+		["zoneTheme"] = zoneTheme?.rawData?.SafeDeepClone(),
+		["searchTags"] = searchTags
+	};
 	public JsonArray searchTags { get; private set; }
 
 	public GameItemTemplate missionGenerator { get; private set; }

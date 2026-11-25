@@ -1,0 +1,320 @@
+[gd_scene format=3 uid="uid://cqog3m6i3khtk"]
+
+[ext_resource type="Shader" uid="uid://dy7q5y2jo0yox" path="res://Shaders/GlowSpin.gdshader" id="1_jfsex"]
+[ext_resource type="Shader" uid="uid://b1l14dgcp134i" path="res://Shaders/FortSDF.gdshader" id="1_qdhqb"]
+[ext_resource type="Texture2D" uid="uid://bc8n5bh6cc05o" path="res://Images/InterfaceIcons/T_Flare_Streaks.png" id="2_7kwar"]
+[ext_resource type="Texture2D" uid="uid://bm1hnskm3ifvc" path="res://Images/SDF/MSDF/T_UI_DelilahTreasureHuntUI_Bracket_Thunder_64.png" id="2_0467f"]
+[ext_resource type="Texture2D" uid="uid://ckgnojd5ctwtv" path="res://Images/SDF/MSDF/T_UI_DelilahTreasureHuntUI_ThunderLine.png" id="3_lxruw"]
+[ext_resource type="Texture2D" uid="uid://k8jqshvbqkl4" path="res://Images/TextureResources/GradientCircle.tres" id="4_lxruw"]
+[ext_resource type="Texture2D" uid="uid://by5pqbi3e65ps" path="res://Images/InterfaceIcons/Elements/Greyscale/T-Icon-Element-Nature.png" id="5_42e0w"]
+[ext_resource type="Script" uid="uid://cf1wi6mkqvf8" path="res://Scripts/ShaderHook.cs" id="8_7kwar"]
+[ext_resource type="Shader" uid="uid://bdpcmp5bfbjj2" path="res://Shaders/PirateGradient.gdshader" id="8_timr2"]
+[ext_resource type="Texture2D" uid="uid://4gudg1raxie8" path="res://Images/AspectRatios/1x1Aspect.png" id="9_gxdlh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_timr2"]
+shader = ExtResource("1_jfsex")
+shader_parameter/rotationSpeed = 0.5
+
+[sub_resource type="Gradient" id="Gradient_jfsex"]
+colors = PackedColorArray(0.99215686, 0.7490196, 0.105882354, 1, 1, 0.98039216, 0.6313726, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ddr8"]
+gradient = SubResource("Gradient_jfsex")
+
+[sub_resource type="Curve" id="Curve_vc53c"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.427866, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_evgyu"]
+curve = SubResource("Curve_vc53c")
+
+[sub_resource type="Curve" id="Curve_7kwar"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.2480228, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_enabled = true
+
+[sub_resource type="Curve" id="Curve_timr2"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_enabled = true
+
+[sub_resource type="Curve" id="Curve_gxdlh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_bp4h1"]
+curve_x = SubResource("Curve_7kwar")
+curve_y = SubResource("Curve_timr2")
+curve_z = SubResource("Curve_gxdlh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_51cgl"]
+particle_flag_align_y = true
+particle_flag_disable_z = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 80.83
+emission_ring_inner_radius = 30.82
+emission_ring_cone_angle = 90.0
+radial_velocity_min = -200.00002
+radial_velocity_max = -2.2351742e-05
+radial_velocity_curve = SubResource("CurveTexture_evgyu")
+gravity = Vector3(0, 0, 0)
+use_scale_3d = true
+scale_3d_min = Vector3(0.03, 0.03, 0.03)
+scale_3d_max = Vector3(0.03, 0.03, 0.03)
+scale_min = 0.099999994
+scale_max = 0.099999994
+scale_curve = SubResource("CurveXYZTexture_bp4h1")
+color_initial_ramp = SubResource("GradientTexture1D_7ddr8")
+
+[sub_resource type="Curve" id="Curve_lxruw"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0.5), 0.0, -0.9846047, 0, 0, Vector2(1, -0.5), -0.99662185, 0.0, 0, 0]
+point_count = 2
+metadata/_snap_enabled = true
+metadata/_snap_count = 20
+
+[sub_resource type="CurveTexture" id="CurveTexture_jfsex"]
+curve = SubResource("Curve_lxruw")
+
+[sub_resource type="Curve" id="Curve_siurx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1e-05, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 0.1), 0.0, 0.0, 0, 0]
+point_count = 3
+metadata/_snap_enabled = true
+
+[sub_resource type="CurveTexture" id="CurveTexture_kj0j1"]
+curve = SubResource("Curve_siurx")
+
+[sub_resource type="Curve" id="Curve_42e0w"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.1, 1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), -4.955066, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+metadata/_snap_enabled = true
+
+[sub_resource type="CurveTexture" id="CurveTexture_vbqjc"]
+curve = SubResource("Curve_42e0w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_siurx"]
+lifetime_randomness = 0.5
+particle_flag_disable_z = true
+angle_min = -71.99999
+angle_max = 648.0
+angle_curve = SubResource("CurveTexture_jfsex")
+direction = Vector3(0, 1, 0)
+spread = 180.0
+flatness = 1.0
+radial_velocity_min = 99.99998
+radial_velocity_max = 299.99997
+radial_velocity_curve = SubResource("CurveTexture_kj0j1")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.29999998
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_vbqjc")
+color_initial_ramp = SubResource("GradientTexture1D_7ddr8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_42e0w"]
+shader = ExtResource("1_qdhqb")
+shader_parameter/blendAmount = 1.0
+shader_parameter/threshold = 0.50000002375
+shader_parameter/smoothness = 0.10000000475
+shader_parameter/msdf = true
+shader_parameter/skipSDF = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jfsex"]
+shader = ExtResource("1_qdhqb")
+shader_parameter/blendAmount = 1.0
+shader_parameter/threshold = 0.50000002375
+shader_parameter/smoothness = 0.2000000095
+shader_parameter/msdf = true
+shader_parameter/skipSDF = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7kwar"]
+shader = ExtResource("8_timr2")
+shader_parameter/ControlSize = Vector2(80, 25.325998)
+shader_parameter/ratio = 15.0
+shader_parameter/offset = 15.0
+shader_parameter/scalingRange = 11.68
+shader_parameter/posThreshold = 15.0
+shader_parameter/posPushdown = 0.090000004275
+
+[sub_resource type="Gradient" id="Gradient_qdhqb"]
+colors = PackedColorArray(0.99, 0.9599351, 0.30129313, 1, 0.4, 0.21399999, 0.027999997, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_51cgl"]
+gradient = SubResource("Gradient_qdhqb")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
+
+[node name="PirateGrantRemake" type="MarginContainer" unique_id=979559945]
+
+[node name="Bracket" type="Control" parent="." unique_id=1068921644]
+layout_mode = 2
+offset_transform_enabled = true
+mouse_filter = 2
+mouse_behavior_recursive = 1
+
+[node name="CenterGlow" type="AspectRatioContainer" parent="Bracket" unique_id=1214072813]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 1
+
+[node name="Glow" type="TextureRect" parent="Bracket/CenterGlow" unique_id=1842554566]
+self_modulate = Color(0.83, 0.60866666, 0, 1)
+material = SubResource("ShaderMaterial_timr2")
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(15, 15)
+mouse_filter = 2
+texture = ExtResource("2_7kwar")
+expand_mode = 1
+
+[node name="Center" type="Control" parent="Bracket" unique_id=1993719892]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ParticleBuildup" type="GPUParticles2D" parent="Bracket/Center" unique_id=969571886]
+emitting = false
+amount = 80
+texture = ExtResource("4_lxruw")
+process_material = SubResource("ParticleProcessMaterial_51cgl")
+
+[node name="ParticleBurst" type="GPUParticles2D" parent="Bracket/Center" unique_id=1178546386]
+emitting = false
+amount = 100
+texture = ExtResource("5_42e0w")
+lifetime = 4.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_siurx")
+
+[node name="RightBracket" type="AspectRatioContainer" parent="Bracket" unique_id=817391009]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = -0.6
+anchor_right = 1.0
+anchor_bottom = 1.5
+offset_left = 2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="Bracket/RightBracket" unique_id=2082184996]
+self_modulate = Color(0.99215686, 0.7490196, 0.105882354, 1)
+material = SubResource("ShaderMaterial_42e0w")
+layout_mode = 2
+texture = ExtResource("2_0467f")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Bracket/RightBracket/TextureRect" unique_id=1075167533]
+self_modulate = Color(1, 0.98039216, 0.6313726, 1)
+material = SubResource("ShaderMaterial_jfsex")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3125
+anchor_top = -0.1375
+anchor_right = 1.225
+anchor_bottom = 0.7125
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lxruw")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="Bracket/RightBracket/TextureRect" unique_id=1636774931]
+self_modulate = Color(0.4375, 0.33028656, 0.046689726, 1)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_7kwar")
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.754
+anchor_top = 0.15
+anchor_right = 0.754
+anchor_bottom = 0.83
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("9_gxdlh")
+expand_mode = 1
+script = ExtResource("8_7kwar")
+syncControlSize = true
+
+[node name="LeftBracket" type="AspectRatioContainer" parent="Bracket" unique_id=1946080306]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.6
+anchor_bottom = 1.5
+offset_left = -2.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="Bracket/LeftBracket" unique_id=1802245157]
+self_modulate = Color(0.99215686, 0.7490196, 0.105882354, 1)
+material = SubResource("ShaderMaterial_42e0w")
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(-1, 1)
+texture = ExtResource("2_0467f")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Bracket/LeftBracket/TextureRect" unique_id=645481902]
+self_modulate = Color(1, 0.98039216, 0.6313726, 1)
+material = SubResource("ShaderMaterial_jfsex")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3125
+anchor_top = -0.1375
+anchor_right = 1.225
+anchor_bottom = 0.7125
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lxruw")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TextureRect" type="TextureRect" parent="Bracket/LeftBracket/TextureRect" unique_id=164049270]
+self_modulate = Color(0.4375, 0.33028656, 0.046689726, 1)
+show_behind_parent = true
+material = SubResource("ShaderMaterial_7kwar")
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.754
+anchor_top = 0.15
+anchor_right = 0.754
+anchor_bottom = 0.82
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("9_gxdlh")
+expand_mode = 1
+script = ExtResource("8_7kwar")
+syncControlSize = true
+
+[node name="TextureRect" type="TextureRect" parent="Bracket" unique_id=1074248243]
+layout_mode = 0
+offset_right = 152.0
+offset_bottom = 18.0
+texture = SubResource("GradientTexture2D_51cgl")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=1266644809]
+layout_mode = 2
+text = "This is Dummy Content
+"

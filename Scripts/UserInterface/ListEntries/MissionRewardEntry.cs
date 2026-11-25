@@ -24,6 +24,8 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	Control todoReorderContent;
 	[Export]
 	Control missionInspectDependancy;
+	[Export]
+	Control mythicLeadContent;
 
 	public Control node => this;
 
@@ -117,6 +119,10 @@ public partial class MissionRewardEntry : Control, IRecyclableEntry, IListEntry<
 	{
 		pair.item?.SetRewardNotification();
 		itemEntry.SetItem(pair.item);
+		mythicLeadContent?.Visible = 
+			pair.item.templateId.StartsWith("Worker:") && 
+			pair.item.template.SubType is not null && 
+			pair.item.template.Rarity == "Mythic";
 		missionEntry.SetMission(pair.mission);
 		currentItems = [pair.item];
 		EmitSignalIsToDo(MissionToDoListController.IsOnToDoList(itemEntry.currentItem));

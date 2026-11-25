@@ -4,7 +4,7 @@ class FnWebAddresses
 {
 	Uri fortService = new("https://fortnite-public-service-prod11.ol.epicgames.com");
 	Uri fortContent = new("https://fortnitecontent-website-prod07.ol.epicgames.com");
-	Uri fortGame = new("https://fngw-mcp-gc-livefn.ol.epicgames.com");
+	Uri fortGame = new("https://mcp-gc.live.fngw.ol.epicgames.com");
 	Uri epicAccount = new("https://account-public-service-prod.ol.epicgames.com");
 	Uri epicFriends = new("https://friends-public-service-prod.ol.epicgames.com");
 	Uri epicAvatar = new("https://avatar-service-prod.identity.live.on.epicgames.com");

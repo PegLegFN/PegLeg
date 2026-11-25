@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bhgnqhybnnlvq" path="res://Images/InterfaceIcons/T_CardPack_Weapon_IconMask.png" id="4_gaglc"]
 [ext_resource type="Texture2D" uid="uid://dmy0erct67y5k" path="res://Images/InterfaceIcons/OrArrowHDVertical.png" id="5_gaglc"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ar2sl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gaglc"]
 resource_local_to_scene = true
 shader = ExtResource("3_tfddq")
 shader_parameter/packIcon = ExtResource("4_gaglc")
@@ -30,10 +30,13 @@ grow_vertical = 2
 overlayWindow = NodePath("../../..")
 
 [node name="Pinata" parent="Control/WindowContents/Llama Contents/MarginContainer" parent_id_path=PackedInt32Array(831886700, 1168303491) index="0" unique_id=208809737]
-material = SubResource("ShaderMaterial_ar2sl")
+material = SubResource("ShaderMaterial_gaglc")
 
-[node name="MarginContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry" parent_id_path=PackedInt32Array(831886700, 367128623) index="1" unique_id=660517761]
+[node name="MarginContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry" parent_id_path=PackedInt32Array(831886700, 367128623) index="2" unique_id=660517761]
 theme_override_constants/margin_top = 0
+
+[node name="GridContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer/RewardsContent/LootPool" parent_id_path=PackedInt32Array(831886700, 498686351) index="2" unique_id=1205077914]
+columns = 2
 
 [node name="ChoiceContainer" parent="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/MarginContainer/Items/HBoxContainer" parent_id_path=PackedInt32Array(831886700, 1848558636) index="3" unique_id=348352731]
 theme_override_constants/margin_left = 60
@@ -61,3 +64,4 @@ texture = ExtResource("5_gaglc")
 expand_mode = 5
 
 [editable path="Control/WindowContents/Llama Contents"]
+[editable path="Control/WindowContents/Llama Contents/MarginContainer/CardPackEntry/LRewardMode"]

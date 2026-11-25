@@ -134,6 +134,8 @@ public partial class Bootstrap : Node
 		GD.Print($"Types: [{string.Join(", ", types)}], Large Icons: {uniqueLarge}, Small Icons: {uniqueNonLarge}");
 	}
 
+	static PublisherProxy logPublisher = PublisherProxy.GetOrCreatePublisher(new("appLogs", "PegLeg Log File"));
+
 	public override void _Ready()
 	{
 		var window = GetWindow();
@@ -151,7 +153,6 @@ public partial class Bootstrap : Node
 			AppConfig.MigrateAndPreloadConfig();
 
 #if GODOT_WINDOWS
-
 			if (GameLauncher.TryQuickLaunch(ShowLaunchAccountSelector))
 			{
 				window.Win64SetVisible(false);
@@ -165,11 +166,17 @@ public partial class Bootstrap : Node
 			{
 				preferredScreen = DisplayServer.GetScreenFromRect(
 					new(
-						window.GetMousePosition() + window.Position,
+						DisplayServer.MouseGetPosition(),
 						Vector2.One
 					)
 				);
-				GD.Print($"Auto Screen: {preferredScreen}");
+				if (preferredScreen <= -1)
+				{
+					preferredScreen = 0;
+					GD.Print($"Fallback Screen: {preferredScreen}");
+				}
+				else
+					GD.Print($"Auto Screen: {preferredScreen}");
 			}
 			else
 			{
@@ -179,6 +186,23 @@ public partial class Bootstrap : Node
 			window.CurrentScreen = preferredScreen;
 			BufferKeySetting.LoadLocalOrgsAndChannels();
 			CatalogRequests.CleanCosmeticResourceCache();
+
+			if (logPublisher.IsEnabled && DirAccess.DirExistsAbsolute("user://logs"))
+			{
+				var topFile = DirAccess.GetFilesAt("user://logs")
+					.Except(["godot.log"])
+					.OrderByDescending(f => DateTime.TryParse(f[5..^4], out var dt) ? dt : DateTime.MinValue) //godot{datetime}.log
+					.FirstOrDefault();
+				if (topFile is not null)
+				{
+					GD.Print($"Archiving log {topFile}");
+					logPublisher.AttemptPublish(platform => platform switch
+					{
+						"Discord" => new(topFile, [$"user://logs/{topFile}"]),
+						_ => null
+					}).StartTask();
+				}
+			}
 		}
 
 #if GODOT_ANDROID
@@ -358,6 +382,7 @@ public partial class Bootstrap : Node
 			//await CosmoRequests.LoadConfigOverride();
 
 #if GODOT_PC
+			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_shoes_runnernova", "store_image", [0], "2048x2048"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_character_hammervice", "store_image", [0], "2048x2048"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:DAv2_Bundle_Featured_Wheel_EvilOrnament01", "preview_image"));
 			PrintCosmo(CosmoRequests.GetImageData("AthenaItemShopOfferDisplayData:dav2_cid_387_f_golf", "store_image", [1], "2048x2048"));

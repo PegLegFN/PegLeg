@@ -19,6 +19,8 @@ public partial class CosmeticShopInterfaceNew : Control
 	float sectionHeightPerRow = 225 + 28;
 	[Export]
 	Vector2 extendViewportBounds = new(100, 100);
+	[Export]
+	Texture2D navNewIndicator;
 
 	[ExportGroup("Nodes")]
 	[Export]
@@ -375,6 +377,9 @@ public partial class CosmeticShopInterfaceNew : Control
 		//var sidebarGroups = filteredSectionGroups.GroupBy(g => g.sectionData?.category);
 		//var ungrouped = sidebarGroups.FirstOrDefault(cg => cg.Key == null).ToArray();
 		navTree.Clear();
+		//navTree.Columns = 2;
+		//navTree.SetColumnExpand(1, false);
+		//navTree.SetColumnCustomMinimumWidth(1, 24);
 		lastCategory = null;
 		treeRoot = navTree.CreateItem();
 		float navCurrentHeight = 0;
@@ -398,6 +403,10 @@ public partial class CosmeticShopInterfaceNew : Control
 			var secItem = parent.CreateChild();
 			secItem.SetText(0, " "+(section.sectionData?.displayName ?? section.sectionId));
 			secItem.SetMetadata(0, navCurrentHeight);
+
+			//secItem.SetIcon(1, navNewIndicator);
+			//secItem.SetSelectable(1, false);
+			//secItem.SetMetadata(1, navCurrentHeight);
 			navCurrentHeight += sectionHeights[i];
 		}
 

@@ -44,7 +44,7 @@ styleTarget = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/Mar
 questButton = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer/Button")
 keyItemPanel = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer")
 seasonPanel = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2")
-keyItems = [NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry2"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry3"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry4"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry5")]
+keyItems = [NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry2"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry3"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry4"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry5"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry6"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry7"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry8"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry9"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry10"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry11"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry12"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry13"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry14"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry15"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry16"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry17"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry18"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry19"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry20"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry21"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry22"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry23"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/RewardEntry24")]
 seasonLlama = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2/RewardEntry")
 seasonModifier = NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer2/MissionAlertItemEntry")
 ventureModifiers = [NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry2"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry3"), NodePath("Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer/MissionAlertItemEntry4")]
@@ -135,21 +135,13 @@ virtualTabScene = ExtResource("12_eivch")
 
 [node name="Tab" parent="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="0" unique_id=1142860893 instance=ExtResource("12_eivch")]
 layout_mode = 2
-mode = -1
-text = "First"
 IsPressed = true
-Tint = Color(1, 1, 1, 1)
 
 [node name="Tab2" parent="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="1" unique_id=1162656554 instance=ExtResource("12_eivch")]
 layout_mode = 2
-text = "Second"
-Tint = Color(1, 1, 1, 1)
 
 [node name="Tab3" parent="Control/WindowContents/CenterContainer/VBoxContainer/VirtualTabBar/HBoxContainer" index="2" unique_id=1065568556 instance=ExtResource("12_eivch")]
 layout_mode = 2
-mode = 1
-text = "Third"
-Tint = Color(1, 1, 1, 1)
 
 [node name="QuestGroupViewer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="2" unique_id=1764257090 instance=ExtResource("7_oefnn")]
 custom_minimum_size = Vector2(900, 450)
@@ -173,9 +165,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Key Items:"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer" index="1" unique_id=1994573576]
+[node name="HBoxContainer" type="Container" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer" index="1" unique_id=1704100628]
 layout_mode = 2
-alignment = 1
+script = ExtResource("18_wpvld")
+CompressSpacing = true
 
 [node name="RewardEntry" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="0" unique_id=1865002607 instance=ExtResource("8_4n3dc")]
 layout_mode = 2
@@ -190,6 +183,63 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="RewardEntry5" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="4" unique_id=683154747 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry6" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="5" unique_id=1479818569 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry7" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="6" unique_id=1952621299 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry8" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="7" unique_id=1861890070 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry9" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="8" unique_id=1332032084 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry10" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="9" unique_id=2027951107 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry11" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="10" unique_id=1626267408 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry12" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="11" unique_id=214203561 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry13" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="12" unique_id=1727339470 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry14" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="13" unique_id=10289573 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry15" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="14" unique_id=319628395 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry16" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="15" unique_id=538770649 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry17" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="16" unique_id=977010600 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry18" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="17" unique_id=276157907 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry19" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="18" unique_id=209091262 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry20" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="19" unique_id=562987824 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry21" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="20" unique_id=1236484467 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry22" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="21" unique_id=1874452212 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry23" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="22" unique_id=1522364477 instance=ExtResource("8_4n3dc")]
+layout_mode = 2
+
+[node name="RewardEntry24" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" index="23" unique_id=1359026532 instance=ExtResource("8_4n3dc")]
 layout_mode = 2
 
 [node name="PanelContainer2" type="PanelContainer" parent="Control/WindowContents/CenterContainer/VBoxContainer" index="4" unique_id=1865793020]
@@ -221,6 +271,7 @@ alignment = 1
 layout_mode = 2
 script = ExtResource("16_eivch")
 includeAmountInName = false
+debug = false
 
 [node name="Label" type="Label" parent="Control/WindowContents/CenterContainer/VBoxContainer/PanelContainer2/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer2" index="1" unique_id=80251811]
 layout_mode = 2

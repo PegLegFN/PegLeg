@@ -48,7 +48,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3i5hk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2qn34"]
 resource_local_to_scene = true
 shader = ExtResource("8_xxymo")
 shader_parameter/ControlSize = Vector2(26, 26)
@@ -56,21 +56,19 @@ shader_parameter/CornerRadius = 3.0
 shader_parameter/Fit = true
 shader_parameter/IsHero = false
 shader_parameter/IsSchematic = false
-shader_parameter/IsFancy = false
 shader_parameter/IsPack = false
 shader_parameter/IsChoice = false
 shader_parameter/MainIcon = ExtResource("9_2fn55")
 shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
 shader_parameter/AltHero = false
 shader_parameter/AltSchematic = false
-shader_parameter/AltFancy = false
 shader_parameter/AltPack = false
 shader_parameter/HeroBeamsOnly = false
 shader_parameter/ChoiceShift = 0.0
 shader_parameter/HideRarity = true
 shader_parameter/HideBar = false
 
-[node name="MissionRewardEntry" type="MarginContainer" unique_id=512148745 node_paths=PackedStringArray("missionEntry", "itemEntry", "missionInspectDependancy")]
+[node name="MissionRewardEntry" type="MarginContainer" unique_id=512148745 node_paths=PackedStringArray("missionEntry", "itemEntry", "missionInspectDependancy", "mythicLeadContent")]
 custom_minimum_size = Vector2(260, 30)
 offset_right = 556.0
 offset_bottom = 30.0
@@ -78,6 +76,7 @@ script = ExtResource("1_woexs")
 missionEntry = NodePath("MissionEntry")
 itemEntry = NodePath("MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem")
 missionInspectDependancy = NodePath("Button/MissionTooltip")
+mythicLeadContent = NodePath("MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MythicLead")
 
 [node name="Button" type="Button" parent="." unique_id=2035664014]
 show_behind_parent = true
@@ -231,7 +230,7 @@ preventInteractability = true
 levelTextPrefix = " Lv "
 
 [node name="Icon" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" index="0" unique_id=68041144]
-material = SubResource("ShaderMaterial_3i5hk")
+material = SubResource("ShaderMaterial_2qn34")
 mouse_filter = 2
 
 [node name="Responsive Button Area" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem/Icon" index="3" unique_id=1415142387]
@@ -243,6 +242,24 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "Shadowshard Shadowshard Shadowshard "
 text_overrun_behavior = 3
+
+[node name="MythicLead" type="HBoxContainer" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=750297532]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Personality" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MythicLead" unique_id=103427932]
+material = SubResource("ShaderMaterial_023hd")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_qt2jc")
+expand_mode = 3
+
+[node name="Subtype" type="TextureRect" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MythicLead" unique_id=2105609563]
+material = SubResource("ShaderMaterial_023hd")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_qt2jc")
+expand_mode = 3
 
 [node name="MarginContainer3" type="MarginContainer" parent="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer" unique_id=1703440662]
 layout_mode = 2
@@ -351,7 +368,9 @@ expand_mode = 1
 [connection signal="IsCollectable" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/CollectableIcon" method="set_visible"]
 [connection signal="LevelTextChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/ItemLv" method="set_text"]
 [connection signal="NameChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/Label" method="set_text"]
+[connection signal="PersonalityIconChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MythicLead/Personality" method="set_texture"]
 [connection signal="RarityChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/ColorRect" method="set_self_modulate"]
+[connection signal="SubtypeIconChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MythicLead/Subtype" method="set_texture"]
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="Button" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Control" method="set_tooltip_text"]
 [connection signal="TooltipChanged" from="MissionEntry/HBoxContainer/MarginContainer/MarginContainer/HBoxContainer/MarginContainer/MissionCollectionHighlightItem" to="MissionEntry/HBoxContainer/MarginContainer/Responsive Button Area2" method="set_tooltip_text"]

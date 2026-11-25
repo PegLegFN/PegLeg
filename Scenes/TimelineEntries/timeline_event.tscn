@@ -13,6 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://xvc01jygcwse" path="res://Scenes/responsive_button_area.tscn" id="7_1nqvp"]
 [ext_resource type="Texture2D" uid="uid://b2eay80hawr6j" path="res://Images/InterfaceIcons/T-Icon-Replay-Timeline-L.png" id="8_djiff"]
 [ext_resource type="Script" uid="uid://bm5sma44lxciv" path="res://Scripts/RefreshTimerHook.cs" id="9_s5dn3"]
+[ext_resource type="Shader" uid="uid://cy6bew7uegfyu" path="res://Shaders/RewardItem.gdshader" id="11_126vd"]
+[ext_resource type="Texture2D" uid="uid://cs2v3mt4il1o2" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Soldier-HID-Commando-GunTough-R-T01-L.png" id="12_otfrr"]
+[ext_resource type="Texture2D" uid="uid://fu8u7pasyjfx" path="res://Images/InterfaceIcons/FNIconLib/T_UI_IconLibrary_Swap_128.png" id="13_4bvvo"]
+[ext_resource type="Texture2D" uid="uid://b4bvadxmolhkq" path="res://Images/InterfaceIcons/BanjoPlaceholders/T-Icon-Weapons-SK-SCAR-L.png" id="14_8k87n"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_djiff"]
 resource_local_to_scene = true
@@ -24,6 +28,28 @@ shader_parameter/HeaderSpace = 250.0
 shader_parameter/SkySpace = 0.4
 shader_parameter/ParallaxScale = 200.0
 shader_parameter/background = ExtResource("4_xd1r2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ir4df"]
+resource_local_to_scene = true
+shader = ExtResource("11_126vd")
+shader_parameter/ControlSize = Vector2(64, 57)
+shader_parameter/CornerRadius = 5.0
+shader_parameter/Fit = true
+shader_parameter/IsHero = false
+shader_parameter/IsSchematic = true
+shader_parameter/IsPack = false
+shader_parameter/IsChoice = true
+shader_parameter/MainIcon = ExtResource("14_8k87n")
+shader_parameter/AltRarity = Color(0.66, 0, 0.594, 1)
+shader_parameter/AltHero = true
+shader_parameter/AltSchematic = false
+shader_parameter/AltPack = false
+shader_parameter/AltIcon = ExtResource("12_otfrr")
+shader_parameter/ChoiceIcon = ExtResource("13_4bvvo")
+shader_parameter/HeroBeamsOnly = false
+shader_parameter/ChoiceShift = 0.0
+shader_parameter/HideRarity = false
+shader_parameter/HideBar = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2y6x"]
 content_margin_left = 2.0
@@ -74,7 +100,7 @@ theme_override_constants/margin_left = 2
 theme_override_constants/margin_right = 1
 script = ExtResource("1_s5dn3")
 displayName = NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/Label")
-displayItems = [NodePath("MarginContainer2/Control/HBoxContainer/RewardEntry"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry2"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry3"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry4")]
+displayItems = [NodePath("MarginContainer2/Control/HBoxContainer/RewardEntry"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry2"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry3"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry4"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry5"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry6"), NodePath("MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer/RewardEntry7")]
 freeMarker = NodePath("MarginContainer2/Control/HBoxContainer/RewardEntry/Label")
 styles = Dictionary[String, Texture2D]({
 "arid": ExtResource("6_awf16"),
@@ -125,6 +151,9 @@ theme_override_constants/margin_top = -14
 autoCheckReward = true
 placeholderItem = "Hero:hid_outlander_036_dino_outlander_sr_t01"
 
+[node name="TextureRect" parent="MarginContainer2/Control/HBoxContainer/RewardEntry" index="0" unique_id=1323663121]
+material = SubResource("ShaderMaterial_ir4df")
+
 [node name="Label" type="Label" parent="MarginContainer2/Control/HBoxContainer/RewardEntry" unique_id=305856894]
 z_index = 1
 layout_mode = 2
@@ -171,14 +200,30 @@ autoCheckReward = true
 placeholderItem = "Weapon:peglegweapon_t01"
 
 [node name="RewardEntry3" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1061402009 instance=ExtResource("5_eucja")]
-visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "amongus"
 autoCheckReward = true
 
 [node name="RewardEntry4" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1398848687 instance=ExtResource("5_eucja")]
-visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "amongus"
+autoCheckReward = true
+
+[node name="RewardEntry5" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1679564155 instance=ExtResource("5_eucja")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "amongus"
+autoCheckReward = true
+
+[node name="RewardEntry6" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=919891154 instance=ExtResource("5_eucja")]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "amongus"
+autoCheckReward = true
+
+[node name="RewardEntry7" parent="MarginContainer2/Control/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=655290643 instance=ExtResource("5_eucja")]
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "amongus"
