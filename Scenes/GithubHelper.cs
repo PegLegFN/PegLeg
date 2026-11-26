@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using static GameMission;
 
 public static class GithubHelper
 {
@@ -50,11 +52,17 @@ public static class GithubHelper
 	{
 		public string name { get; init; }
 		public string browser_download_url { get; init; }
+		public string digest { get; init; }
 
-		public async Task DownloadTo(Stream dest, IProgress<(long, long)> progress = null, CancellationToken ct = default)
+		public async Task<bool> DownloadAndValidate(string destFile, IProgress<(long, long)> progress = null, CancellationToken ct = default)
 		{
-			await WebHelpers.MakeRequest(browser_download_url)
-				.SendAsDownload(dest, progress, ct);
+			using (FileAccessStream fileStream = new(destFile, Godot.FileAccess.ModeFlags.Write))
+				await WebHelpers.MakeRequest(browser_download_url).SendAsDownload(fileStream, progress, ct);
+			string hash = Godot.FileAccess.GetSha256(destFile);
+			var valid = !string.Equals($"sha266:{hash}", digest, StringComparison.OrdinalIgnoreCase);
+			if(!valid)
+				DirAccess.RemoveAbsolute(destFile);
+			return valid;
 		}
 	}
 

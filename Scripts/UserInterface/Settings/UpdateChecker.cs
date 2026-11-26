@@ -206,9 +206,10 @@ public partial class UpdateChecker : Control
 				{
 					if (!DirAccess.DirExistsAbsolute(updateFolder))
 						DirAccess.MakeDirAbsolute(updateFolder);
-					using (FileAccessStream fileStream = new(Helpers.GlobalisePath(updatePath), FileAccess.ModeFlags.Write))
+					if (!await asset.DownloadAndValidate(Helpers.GlobalisePath(updatePath), overlay))
 					{
-						await asset.DownloadTo(fileStream, overlay);
+						await GenericConfirmationWindow.ShowInfo("Failed to verify update integrity");
+						return;
 					}
 					await Helpers.WaitForTimer(1);
 				}
@@ -219,35 +220,10 @@ public partial class UpdateChecker : Control
 				await GenericConfirmationWindow.ShowError("An error occured when downloading the update");
 				return;
 			}
-			//await GenericConfirmationWindow.ShowInfo("The Update has been downloaded. PegLeg will close, and the \"Updates\" folder will be opened. Run the .msi file to Install the Update", "Update Downloaded");
-			//await GenericConfirmationWindow.ShowInfo("The Update has been downloaded. PegLeg will close, and the Installer will be run", "Update Downloaded");
+
 			OS.ShellOpen(updatePath);
 			GetTree().Quit();
-			/* Disabled until I figure out how to run MSI installers from within PegLeg
-            var batchPath = Helpers.GlobalisePath("user://update.bat");
-            using (var batFile = FileAccess.Open(batchPath, FileAccess.ModeFlags.Write))
-            {
-                batFile.StoreString("""
-                rem Batch script to elevate permissions for installing updates to work
-                rem checks if permissions 
-                %SystemRoot%\System32\net.exe file 1>NUL 2>NUL
-                if errorlevel 1 (
-                    %SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe Start-Process -FilePath "%0" -ArgumentList "%cd%" -verb runas >NUL 2>&1
-                    exit /b
-                )
-                cd /d %1
-                msiexec /i update.msi
-                """);
-            }
-            int pid = OS.CreateProcess(batchPath, []);
-            if (pid != -1)
-            {
-                GetTree().Quit();
-                return;
-            }
-            OS.ShellOpen(Helpers.GlobalisePath("user://"));
-            await GenericConfirmationWindow.ShowError("Could not run update.msi automatically.\nPlease run update.msi manually.", "Update failed");
-            */
+
 		}
 		catch (Exception e)
 		{
@@ -264,7 +240,7 @@ public partial class UpdateChecker : Control
         try
         {
             OS.ShellOpen(asset.browser_download_url);
-            await GenericConfirmationWindow.ShowError("The App Package (.apk file) is being downloaded in your browser. Running it will install the update", "Download Started     ");
+            await GenericConfirmationWindow.ShowError("The App Package (.apk file) is being downloaded in your browser. Running it will install the update", "Download Started");
         }
 		catch(Exception e)
         {

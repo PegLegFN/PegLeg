@@ -168,8 +168,11 @@ public class PegLegResourceManager
 			}
 			WebHelpers.DownloadProgressHandle downloadProgress = new();
 			downloadProgress.OnProgress += () => onProgress?.Invoke($"Downloading Resource Pack\n{requirement.version}", downloadProgress.ProgressPercent / 100);
-			using FileAccessStream fileStream = new(requirement.LocalPackagePath, FileAccess.ModeFlags.Write);
-			await asset.DownloadTo(fileStream, downloadProgress);
+			if (!await asset.DownloadAndValidate(requirement.LocalPackagePath, downloadProgress))
+			{
+				GD.PushWarning($"Version list requirement failed to validate: \"{requirement}\"");
+				continue;
+			}
 		}
 		await Helpers.WaitForFrame();
 		onProgress?.Invoke("Applying Resource Packs", -1);
